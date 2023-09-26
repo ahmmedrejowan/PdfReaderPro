@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7372C3</color>
+    <color name="colorPrimaryDark">#7372C3</color>
+    <color name="colorAccent">#7372C3</color>
+    <color name="textColor">#DADADA</color>
+    <color name="textColorSecondary">#CACACA</color>
+    <color name="backgroundColor">#181818</color>
+    <color name="backgroundColorSecondary">#212121</color>
+    <color name="white">#ffffff</color>
+    <color name="grey">#919191</color>
+    <color name="red">#E64A19</color>
+    <color name="green">#689F38</color>
+
+    <color name="colorPrimary_grey">#7F7F98</color>
+
+    <color name="reverse_white">#121212</color>
+
+    <color name="_white">#efefef</color>
+
+    <color name="wave_background">#515151</color>
+
+
+</resources>
