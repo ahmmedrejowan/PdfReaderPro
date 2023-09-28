@@ -1,7 +1,8 @@
-package com.androvine.pdfreaderpro
+package com.androvine.pdfreaderpro.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.androvine.pdfreaderpro.R
 
 class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
