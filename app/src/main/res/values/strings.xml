@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">PDF Reader Pro</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="intro_title_1">Explore PDFs Seamlessly</string>
+    <string name="intro_sub_title_1">Dive into the world of PDFs with effortless reading</string>
+
+    <string name="intro_title_2">Your PDF Collection</string>
+    <string name="intro_sub_title_2">Efficiently locate and access any PDF you want</string>
+
+    <string name="intro_title_3">Tailor Your PDF Experience</string>
+    <string name="intro_sub_title_3">Customize, search, and explore advanced PDF features.</string>
+
 </resources>

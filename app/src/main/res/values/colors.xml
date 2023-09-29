@@ -3,7 +3,6 @@
     <color name="colorPrimary">#8062D6</color>
     <color name="colorPrimaryDark">#8062D6</color>
     <color name="colorAccent">#8062D6</color>
-
     <color name="textColor">#212121</color>
     <color name="textColorSecondary">#656565</color>
     <color name="backgroundColor">#FFFFFF</color>
@@ -11,17 +10,11 @@
     <color name="white">#ffffff</color>
     <color name="lite_white">#cccccc</color>
     <color name="_white">#eeeeee</color>
-
     <color name="textGrey">#77789A</color>
-
     <color name="colorPrimary_grey">#C6C6EA</color>
-
     <color name="reverse_white">#ffffff</color>
-
     <color name="grey">#919191</color>
     <color name="red">#E64A19</color>
     <color name="green">#689F38</color>
-
     <color name="wave_background">#D1D1D1</color>
-
 </resources>
