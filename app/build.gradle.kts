@@ -22,8 +22,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -54,4 +53,6 @@ dependencies {
     // lottie animation
     implementation("com.airbnb.android:lottie:5.2.0")
 
+    // koin for dependency injection
+    implementation("io.insert-koin:koin-android:3.5.0")
 }

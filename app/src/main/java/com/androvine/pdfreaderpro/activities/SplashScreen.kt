@@ -46,8 +46,8 @@ class SplashScreen : AppCompatActivity() {
 //                    if (PermSAFUtils.verifySAF(this)) {
 //                        handleIntent(intent)
 //                    } else {
-//                        startActivity(Intent(this@SplashScreen, PermissionManage::class.java))
-//                        finish()
+                        startActivity(Intent(this@SplashScreen, PermissionManage::class.java))
+                        finish()
 //                    }
 //                } else {
 //                    if (PermStorageUtils.isStoragePermissionGranted(this)) {

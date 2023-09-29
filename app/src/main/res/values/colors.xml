@@ -10,11 +10,13 @@
     <color name="white">#ffffff</color>
     <color name="lite_white">#cccccc</color>
     <color name="_white">#eeeeee</color>
-    <color name="textGrey">#77789A</color>
+    <color name="textGrey">#86879E</color>
     <color name="colorPrimary_grey">#C6C6EA</color>
     <color name="reverse_white">#ffffff</color>
     <color name="grey">#919191</color>
     <color name="red">#E64A19</color>
     <color name="green">#689F38</color>
     <color name="wave_background">#D1D1D1</color>
+    <color name="linkColor">#3192E6</color>
+
 </resources>

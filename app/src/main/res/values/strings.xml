@@ -11,6 +11,16 @@
 
     <string name="intro_title_3">Tailor Your PDF Experience</string>
     <string name="intro_sub_title_3">Customize, search, and explore advanced PDF features.</string>
+
+
     <string name="let_s_start">Let\'s Start</string>
+
+    <string name="permission_below_11_normal_title">Let’s Get those PDFs</string>
+    <string name="permission_below_11_normal_sub_title">Allow storage access, PDF Reader Pro will allow you to access, search and filter as you want and many more.</string>
+    <string name="permission_below_11_normal_description">Please click Allow button in the next dialog.</string>
+    <string name="allow_access">Allow Access</string>
+    <string name="app_settings">App Settings</string>
+    <string name="how_to_allow_access">How To Allow Access</string>
+
 
 </resources>
