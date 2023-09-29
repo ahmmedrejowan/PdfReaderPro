@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_nav"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_files"
+        android:icon="@drawable/ic_file_nav"
+        android:title="Files" />
+
+    <item
+        android:id="@+id/nav_folder"
+        android:icon="@drawable/ic_folder_nav"
+        android:title="Folders" />
+
+
+</menu>
