@@ -44,6 +44,9 @@ class PermissionManage : AppCompatActivity() {
         if (permissionRepository.hasStoragePermission()) {
             viewModel.handlePermissionResult(true)
             return@registerForActivityResult
+        } else {
+            viewModel.handlePermissionResult(false)
+            return@registerForActivityResult
         }
 
 
