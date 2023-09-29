@@ -67,43 +67,6 @@ class PermissionManage : AppCompatActivity() {
 
     }
 
-    private fun setupClicks() {
-
-        binding.allowAccessButton.setOnClickListener {
-            if (currentStatus == PermissionStatus.INITIAL || currentStatus == PermissionStatus.DENIED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val manageFilesIntent =
-                        Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
-                            data = Uri.parse("package:${packageName}")
-                        }
-                    manageFilesLauncher.launch(manageFilesIntent)
-                } else {
-                    val permissions = permissionRepository.getRequiredPermissions()
-                    runtimePermissionsLauncher.launch(permissions.toTypedArray())
-
-                }
-            } else if (currentStatus == PermissionStatus.GRANTED) {
-                goToHome()
-            }
-        }
-
-        binding.appSettings.setOnClickListener {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.fromParts("package", packageName, null)
-            }
-            startActivity(intent)
-        }
-
-
-        val htmlStringHowToAllow = "<u>How to allow access?</u>"
-        binding.howToAllowAccess.text =
-            Html.fromHtml(htmlStringHowToAllow, Html.FROM_HTML_MODE_COMPACT)
-
-        binding.howToAllowAccess.setOnClickListener {
-            // TODO how to allow dialog
-        }
-
-    }
 
     private fun setupViewModel() {
         viewModel.checkStoragePermission()
@@ -133,6 +96,40 @@ class PermissionManage : AppCompatActivity() {
 
     }
 
+    private fun setupClicks() {
+
+        binding.allowAccessButton.setOnClickListener {
+            if (currentStatus == PermissionStatus.INITIAL || currentStatus == PermissionStatus.DENIED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val manageFilesIntent = permissionRepository.getStoragePermissionIntent()
+                    manageFilesLauncher.launch(manageFilesIntent)
+                } else {
+                    val permissions = permissionRepository.getRequiredPermissions()
+                    runtimePermissionsLauncher.launch(permissions.toTypedArray())
+
+                }
+            } else if (currentStatus == PermissionStatus.GRANTED) {
+                goToHome()
+            }
+        }
+
+        binding.appSettings.setOnClickListener {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", packageName, null)
+            }
+            startActivity(intent)
+        }
+
+
+        val htmlStringHowToAllow = "<u>How to allow access?</u>"
+        binding.howToAllowAccess.text =
+            Html.fromHtml(htmlStringHowToAllow, Html.FROM_HTML_MODE_COMPACT)
+
+        binding.howToAllowAccess.setOnClickListener {
+            // TODO how to allow dialog
+        }
+
+    }
 
     private fun initialUI() {
 
