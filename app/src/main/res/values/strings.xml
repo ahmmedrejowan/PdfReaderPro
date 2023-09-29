@@ -15,12 +15,29 @@
 
     <string name="let_s_start">Let\'s Start</string>
 
-    <string name="permission_below_11_normal_title">Let’s Get those PDFs</string>
-    <string name="permission_below_11_normal_sub_title">Allow storage access, PDF Reader Pro will allow you to access, search and filter as you want and many more.</string>
+    <string name="permission_normal_title">Let’s Get those PDFs</string>
+    <string name="permission_allowed_title">We\'re all set</string>
+    <string name="permission_error_title">Some Error Occurred</string>
+
+    <string name="permission_normal_sub_title">Allow storage access, and we will allow you to access, search and filter as you want and many more.</string>
+    <string name="permission_allowed_sub_title">Let’s Jump into the app</string>
+    <string name="permission_error_sub_title">We couldn\'t get the permission properly. May be something went wrong.</string>
+
+
     <string name="permission_below_11_normal_description">Please click Allow button in the next dialog.</string>
+    <string name="permission_above_11_normal_description">Please turn on the Switch in the next Page</string>
+
+    <string name="permission_error_description">Please turn on the Switch in the next Page</string>
+
+
     <string name="allow_access">Allow Access</string>
+    <string name="lets_go">Let\'s Go</string>
+    <string name="try_again">Try Again</string>
+
     <string name="app_settings">App Settings</string>
     <string name="how_to_allow_access">How To Allow Access</string>
+
+
 
 
 </resources>

@@ -12,10 +12,13 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.repoModels.IntroRepository
+import com.androvine.pdfreaderpro.repoModels.PermissionRepository
+import org.koin.android.ext.android.inject
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreen : AppCompatActivity() {
 
+    private val permissionRepository: PermissionRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,21 +45,14 @@ class SplashScreen : AppCompatActivity() {
                 finish()
             } else {
 
-//                if (PermUtils.isAndroidR()) {
-//                    if (PermSAFUtils.verifySAF(this)) {
-//                        handleIntent(intent)
-//                    } else {
-                        startActivity(Intent(this@SplashScreen, PermissionManage::class.java))
-                        finish()
-//                    }
-//                } else {
-//                    if (PermStorageUtils.isStoragePermissionGranted(this)) {
-//                        handleIntent(intent)
-//                    } else {
-//                        startActivity(Intent(this@SplashScreen, PermissionManage::class.java))
-//                        finish()
-//                    }
-//                }
+                if (permissionRepository.hasStoragePermission()){
+                    startActivity(Intent(this@SplashScreen, Home::class.java))
+                    finish()
+                } else {
+                    startActivity(Intent(this@SplashScreen, PermissionManage::class.java))
+                    finish()
+                }
+
             }
         }, 2000)
 

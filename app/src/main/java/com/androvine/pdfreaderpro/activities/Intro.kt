@@ -16,6 +16,8 @@ import androidx.viewpager.widget.ViewPager
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.databinding.ActivityIntroBinding
 import com.androvine.pdfreaderpro.repoModels.IntroRepository
+import com.androvine.pdfreaderpro.repoModels.PermissionRepository
+import org.koin.android.ext.android.inject
 
 class Intro : AppCompatActivity() {
 
@@ -26,6 +28,8 @@ class Intro : AppCompatActivity() {
     private lateinit var layouts: IntArray
 
     private lateinit var introUtils: IntroRepository
+
+    private val permissionRepository: PermissionRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,9 +135,13 @@ class Intro : AppCompatActivity() {
     private fun goToHome() {
         introUtils.setFirstTimeLaunch(false)
 
-        // TODO Permission Check or Go Home
-        startActivity(Intent(this, PermissionManage::class.java))
-        finish()
+        if (permissionRepository.hasStoragePermission()){
+            startActivity(Intent(this@Intro, Home::class.java))
+            finish()
+        } else {
+            startActivity(Intent(this@Intro, PermissionManage::class.java))
+            finish()
+        }
 
     }
 

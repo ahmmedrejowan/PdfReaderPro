@@ -24,7 +24,7 @@
             android:layout_marginBottom="15dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="@string/permission_below_11_normal_title"
+            android:text="@string/permission_normal_title"
             android:textColor="@color/textColor"
             android:textSize="18sp" />
 
@@ -36,7 +36,7 @@
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             android:gravity="center"
-            android:text="@string/permission_below_11_normal_sub_title"
+            android:text="@string/permission_normal_sub_title"
             android:textColor="@color/textColorSecondary"
             android:textSize="16sp" />
 

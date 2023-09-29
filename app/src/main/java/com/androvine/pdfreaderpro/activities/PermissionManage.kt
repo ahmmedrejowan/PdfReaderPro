@@ -1,13 +1,16 @@
 package com.androvine.pdfreaderpro.activities
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Html
+import android.util.Log
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.databinding.ActivityPermissionManageBinding
 import com.androvine.pdfreaderpro.enums.PermissionStatus
 import com.androvine.pdfreaderpro.repoModels.PermissionRepository
@@ -36,13 +39,17 @@ class PermissionManage : AppCompatActivity() {
     // For Android 11 and above
     private val manageFilesLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+    ) { _ ->
+
+        if (permissionRepository.hasStoragePermission()) {
             viewModel.handlePermissionResult(true)
-        } else {
-            viewModel.handlePermissionResult(false)
+            return@registerForActivityResult
         }
+
+
     }
+
+    private var currentStatus = PermissionStatus.INITIAL
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,40 +57,150 @@ class PermissionManage : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        setupViewModel()
+
+        setupClicks()
+
+
+    }
+
+    private fun setupClicks() {
+
+        binding.allowAccessButton.setOnClickListener {
+            if (currentStatus == PermissionStatus.INITIAL || currentStatus == PermissionStatus.DENIED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val manageFilesIntent =
+                        Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                            data = Uri.parse("package:${packageName}")
+                        }
+                    manageFilesLauncher.launch(manageFilesIntent)
+                } else {
+                    val permissions = permissionRepository.getRequiredPermissions()
+                    runtimePermissionsLauncher.launch(permissions.toTypedArray())
+
+                }
+            } else if (currentStatus == PermissionStatus.GRANTED) {
+                goToHome()
+            }
+        }
+
+        binding.appSettings.setOnClickListener {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", packageName, null)
+            }
+            startActivity(intent)
+        }
+
+
+        val htmlStringHowToAllow = "<u>How to allow access?</u>"
+        binding.howToAllowAccess.text =
+            Html.fromHtml(htmlStringHowToAllow, Html.FROM_HTML_MODE_COMPACT)
+
+        binding.howToAllowAccess.setOnClickListener {
+            // TODO how to allow dialog
+        }
+
+    }
+
+    private fun setupViewModel() {
+        viewModel.checkStoragePermission()
+
         viewModel.permissionStatus.observe(this) { status ->
             when (status) {
                 PermissionStatus.INITIAL -> {
-                    // Initial UI state (e.g. show permission request button)
+                    currentStatus = PermissionStatus.INITIAL
+                    initialUI()
                 }
 
                 PermissionStatus.GRANTED -> {
-                    // Update UI for granted permission (e.g. show next page button)
+                    currentStatus = PermissionStatus.GRANTED
+                    allowedUI()
                 }
 
                 PermissionStatus.DENIED -> {
-                    // Update UI to show permission denied message or explanation
+                    currentStatus = PermissionStatus.DENIED
+                    deniedUI()
                 }
 
                 null -> {
-                    // No-op
+                    initialUI()
                 }
             }
         }
 
+    }
 
-        binding.allowAccessButton.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val manageFilesIntent =
-                    Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
-                        data = Uri.parse("package:${packageName}")
-                    }
-                manageFilesLauncher.launch(manageFilesIntent)
-            } else {
-                val permissions = permissionRepository.getRequiredPermissions()
-                runtimePermissionsLauncher.launch(permissions.toTypedArray())
 
-            }
+    private fun initialUI() {
+
+        Log.e("TAG", "initialUI: ")
+
+        binding.permissionTitle.text = getString(R.string.permission_normal_title)
+        binding.permissionSubTitle.text = getString(R.string.permission_normal_sub_title)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            binding.permissionDescription.text =
+                getString(R.string.permission_above_11_normal_description)
+            binding.howToAllowAccess.visibility = View.VISIBLE
+        } else {
+            binding.permissionTitle.text =
+                getString(R.string.permission_below_11_normal_description)
+            binding.howToAllowAccess.visibility = View.INVISIBLE
         }
+
+        binding.permissionImage.setImageResource(R.drawable.ic_folder_permission)
+
+        binding.allowAccessButton.text = getString(R.string.allow_access)
+
+        binding.appSettings.visibility = View.INVISIBLE
+
+    }
+
+
+    private fun allowedUI() {
+
+        Log.e("TAG", "allowedUI: ")
+
+        binding.permissionTitle.text = getString(R.string.permission_allowed_title)
+        binding.permissionSubTitle.text = getString(R.string.permission_allowed_sub_title)
+
+        binding.allowAccessButton.text = getString(R.string.lets_go)
+
+        binding.permissionImage.setImageResource(R.drawable.ic_checkmark_permission)
+
+        binding.permissionDescription.visibility = View.INVISIBLE
+        binding.appSettings.visibility = View.INVISIBLE
+        binding.howToAllowAccess.visibility = View.INVISIBLE
+
+
+    }
+
+
+    private fun deniedUI() {
+
+
+        Log.e("TAG", "deniedUI: ")
+
+        binding.permissionTitle.text = getString(R.string.permission_error_title)
+        binding.permissionSubTitle.text = getString(R.string.permission_error_sub_title)
+        binding.permissionDescription.text = getString(R.string.permission_error_description)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            binding.howToAllowAccess.visibility = View.VISIBLE
+        } else {
+            binding.howToAllowAccess.visibility = View.INVISIBLE
+
+        }
+
+        binding.appSettings.visibility = View.VISIBLE
+        binding.permissionImage.setImageResource(R.drawable.ic_warning_permission)
+        binding.allowAccessButton.text = getString(R.string.try_again)
+
+    }
+
+    private fun goToHome() {
+        startActivity(Intent(this, Home::class.java))
+        finish()
     }
 
 

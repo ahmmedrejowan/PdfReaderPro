@@ -13,7 +13,7 @@ class PermissionViewModel(private val permissionRepository: PermissionRepository
 
     fun checkStoragePermission() {
         val hasPermission = permissionRepository.hasStoragePermission()
-        _permissionStatus.value = if (hasPermission) PermissionStatus.GRANTED else PermissionStatus.DENIED
+        _permissionStatus.value = if (hasPermission) PermissionStatus.GRANTED else PermissionStatus.INITIAL
     }
 
     fun handlePermissionResult(granted: Boolean) {
