@@ -22,7 +22,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="@color/colorSecondary"
+            app:cardBackgroundColor="@color/colorPrimary"
             app:cardCornerRadius="50dp">
 
 
@@ -60,31 +60,43 @@
             android:layout_weight="1">
 
 
-            <TextView
-                android:id="@+id/usernameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:text="@string/overview"
-                android:textColor="@color/textGrey"
-                android:textSize="16sp" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/usernameTextView"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_alignParentTop="true"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:layout_marginEnd="20dp"-->
+            <!--                android:text="@string/overview"-->
+            <!--                android:textColor="@color/textGrey"-->
+            <!--                android:textSize="16sp" />-->
 
 
             <TextView
                 android:id="@+id/pdfSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/progressBar"
+                android:layout_above="@id/pdfSizeTitle"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="1024.54"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/pdfSizeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/progressBar"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="15dp"
+                android:text="PDF Size"
+                android:textColor="@color/textGrey"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/pdfSizeUnit"
@@ -94,13 +106,13 @@
                 android:layout_toEndOf="@id/pdfSize"
                 android:text="MB"
                 android:textColor="@color/textGrey"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
 
 
             <View
                 android:id="@+id/divider"
                 android:layout_width="1dp"
-                android:layout_height="25dp"
+                android:layout_height="70dp"
                 android:layout_above="@id/progressBar"
                 android:layout_marginStart="30dp"
                 android:layout_marginBottom="15dp"
@@ -111,14 +123,25 @@
                 android:id="@+id/totalSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/progressBar"
+                android:layout_above="@id/totalSizeTitle"
                 android:layout_marginStart="30dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:layout_toEndOf="@id/divider"
                 android:fontFamily="sans-serif-medium"
                 android:text="128"
                 android:textColor="@color/colorSecondary"
                 android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/totalSizeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/progressBar"
+                android:layout_alignStart="@id/totalSize"
+                android:layout_marginBottom="15dp"
+                android:text="Storage"
+                android:textColor="@color/textGrey"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/totalSizeUnit"
@@ -128,7 +151,7 @@
                 android:layout_toEndOf="@id/totalSize"
                 android:text="GB"
                 android:textColor="@color/textGrey"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
 
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -145,11 +168,6 @@
         </RelativeLayout>
 
     </LinearLayout>
-
-    <com.google.android.material.search.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
 
 
 </LinearLayout>
