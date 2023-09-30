@@ -10,13 +10,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
         android:orientation="horizontal">
 
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
@@ -24,6 +25,31 @@
             app:cardBackgroundColor="@color/colorSecondary"
             app:cardCornerRadius="50dp">
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="128"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="PDFs"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -43,7 +69,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="@string/overview"
-                android:textColor="@color/textColorSecondary"
+                android:textColor="@color/textGrey"
                 android:textSize="16sp" />
 
 
@@ -57,8 +83,19 @@
                 android:layout_marginBottom="15dp"
                 android:text="1024.54"
                 android:textColor="@color/colorPrimary"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/pdfSizeUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/pdfSize"
+                android:layout_toEndOf="@id/pdfSize"
+                android:text="MB"
+                android:textColor="@color/textGrey"
+                android:textSize="12sp" />
+
 
             <View
                 android:id="@+id/divider"
@@ -81,7 +118,18 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="128"
                 android:textColor="@color/colorSecondary"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/totalSizeUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/totalSize"
+                android:layout_toEndOf="@id/totalSize"
+                android:text="GB"
+                android:textColor="@color/textGrey"
+                android:textSize="12sp" />
+
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/progressBar"
@@ -97,6 +145,11 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    <com.google.android.material.search.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 
 
 </LinearLayout>
