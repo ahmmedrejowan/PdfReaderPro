@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomListGridSwitchView">
+        <attr name="setMode" format="enum">
+            <enum name="list" value="0"/>
+            <enum name="grid" value="1"/>
+        </attr>
+        <attr name="iconColor" format="color"/>
+        <attr name="listIcon" format="reference"/>
+        <attr name="gridIcon" format="reference"/>
+    </declare-styleable>
+</resources>

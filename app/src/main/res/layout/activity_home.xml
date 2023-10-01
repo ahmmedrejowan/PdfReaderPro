@@ -26,17 +26,6 @@
             android:textSize="20sp" />
 
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/searchImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="15dp"
-            android:layout_toStartOf="@id/settingsImageView"
-            android:contentDescription="@string/search_pdf"
-            android:src="@drawable/ic_search"
-            app:tint="@color/textColorSecondary" />
 
         <ImageView
             android:id="@+id/settingsImageView"

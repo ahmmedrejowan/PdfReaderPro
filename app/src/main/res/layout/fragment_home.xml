@@ -13,7 +13,6 @@
         android:layout_height="130dp"
         android:orientation="horizontal">
 
-
         <com.google.android.material.card.MaterialCardView
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -53,24 +52,10 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/usernameTextView"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_alignParentTop="true"-->
-            <!--                android:layout_alignParentEnd="true"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                android:layout_marginEnd="20dp"-->
-            <!--                android:text="@string/overview"-->
-            <!--                android:textColor="@color/textGrey"-->
-            <!--                android:textSize="16sp" />-->
 
 
             <TextView
@@ -166,6 +151,43 @@
                 app:trackThickness="10dp" />
 
         </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:tabSelectedTextAppearance="@style/TabLayoutTextAppearanceSelected"
+            app:tabTextAppearance="@style/TabLayoutTextAppearance" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end|center"
+            android:orientation="horizontal">
+
+
+            <com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
+                android:id="@+id/switchView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="20dp"
+                app:iconColor="@color/colorPrimary"
+                app:setMode="list" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
