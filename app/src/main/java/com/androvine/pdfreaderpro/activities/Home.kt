@@ -1,5 +1,6 @@
 package com.androvine.pdfreaderpro.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -30,11 +31,22 @@ class Home : AppCompatActivity() {
         )
 
         binding.bottomNavView.setOnItemSelectedListener { item ->
-            itemToPageMap[item.itemId]?.let {
-                binding.viewPager.currentItem = it
-                true
-            } ?: false
+            when (item.itemId) {
+                R.id.nav_search -> {
+                    val intent = Intent(this@Home, SearchPDF::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                else -> {
+                    itemToPageMap[item.itemId]?.let {
+                        binding.viewPager.currentItem = it
+                        true
+                    } ?: false
+                }
+            }
         }
+
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
