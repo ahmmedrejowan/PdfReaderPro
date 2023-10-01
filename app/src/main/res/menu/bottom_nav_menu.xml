@@ -17,4 +17,12 @@
         android:title="Folders" />
 
 
+    <item
+        android:id="@+id/nav_search"
+        android:icon="@drawable/ic_search_nav"
+        android:title="Search" />
+
+
+
+
 </menu>
