@@ -35,7 +35,7 @@ class Home : AppCompatActivity() {
                 R.id.nav_search -> {
                     val intent = Intent(this@Home, SearchPDF::class.java)
                     startActivity(intent)
-                    true
+                    false
                 }
 
                 else -> {
