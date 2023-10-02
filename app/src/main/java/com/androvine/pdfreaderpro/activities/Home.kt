@@ -53,10 +53,25 @@ class Home : AppCompatActivity() {
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.bottomNavView.menu.getItem(position).isChecked = true
+                updateTitle(position)
             }
         })
 
 
+    }
+
+    private fun updateTitle(position: Int) {
+        when (position) {
+            0 -> {
+                title = "PDF Reader Pro"
+            }
+            1 -> {
+                title = "Files"
+            }
+            2 -> {
+                title = "Folders"
+            }
+        }
     }
 
 
