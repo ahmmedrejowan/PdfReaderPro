@@ -1,25 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.FilesFragment">
+
+    <LinearLayout
+        android:id="@+id/sortLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:tabSelectedTextAppearance="@style/TabLayoutTextAppearanceSelected"
+            app:tabTextAppearance="@style/TabLayoutTextAppearance" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end|center"
+            android:orientation="horizontal">
+
+
+            <com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
+                android:id="@+id/switchView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="20dp"
+                app:iconColor="@color/colorPrimary"
+                app:setMode="list" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/single_pdf_item_file" />
+        android:layout_below="@id/sortLayout"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        tools:listitem="@layout/single_pdf_item_file_grid" />
 
 
     <LinearLayout
         android:id="@+id/noFileLayout"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
+        android:visibility="gone"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
