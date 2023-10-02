@@ -26,6 +26,8 @@ class Home : AppCompatActivity() {
 
         binding.viewPager.adapter = FragmentAdapter(supportFragmentManager, lifecycle)
 
+        binding.viewPager.isUserInputEnabled = false
+
         val itemToPageMap = mapOf(
             R.id.nav_home to 0, R.id.nav_files to 1, R.id.nav_folder to 2
         )
