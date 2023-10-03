@@ -1,7 +1,6 @@
 package com.androvine.pdfreaderpro.adapter
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.Log
@@ -71,11 +70,14 @@ class PdfAdapter(
                             thumbnailCache.put(pdfFilePath, thumbnail)
                         }
                     }
-                    binding.fileIcon.setImageBitmap(
-                        thumbnail ?: BitmapFactory.decodeResource(
-                            binding.root.resources, R.drawable.ic_pdf_file
-                        )
-                    )
+
+                    if (thumbnail != null) {
+                        binding.fileIcon.setImageBitmap(thumbnail)
+                    } else {
+                        binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
+                    }
+
+
                 } catch (e: Exception) {
                     Log.e("ThumbnailLoad", "Failed to load thumbnail", e)
                     binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
@@ -86,7 +88,7 @@ class PdfAdapter(
 
         fun clear() {
             viewHolderJob.cancel()
-        //    viewHolderScope.cancel() // cancel ongoing thumbnail generation if any
+            //    viewHolderScope.cancel() // cancel ongoing thumbnail generation if any
             binding.fileIcon.setImageResource(R.drawable.ic_pdf_file) // set placeholder
         }
     }
@@ -120,11 +122,11 @@ class PdfAdapter(
                             thumbnailCache.put(pdfFilePath, thumbnail)
                         }
                     }
-                    binding.fileIcon.setImageBitmap(
-                        thumbnail ?: BitmapFactory.decodeResource(
-                            binding.root.resources, R.drawable.ic_pdf_file
-                        )
-                    )
+                    if (thumbnail != null) {
+                        binding.fileIcon.setImageBitmap(thumbnail)
+                    } else {
+                        binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
+                    }
                 } catch (e: Exception) {
                     Log.e("ThumbnailLoad", "Failed to load thumbnail", e)
                     binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
@@ -247,16 +249,17 @@ class PdfAdapter(
 
             // Use the first page to generate the thumbnail
             currentPage = pdfRenderer.openPage(0)
-            val bitmap: Bitmap =
-                Bitmap.createBitmap(currentPage.width / 4, currentPage.height / 4, Bitmap.Config.ARGB_8888)
+            val bitmap: Bitmap = Bitmap.createBitmap(
+                currentPage.width / 4, currentPage.height / 4, Bitmap.Config.ARGB_8888
+            )
             currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
 
             bitmap
         } catch (ex: OutOfMemoryError) {
-            Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
+           // Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
             null
         } catch (ex: Exception) {
-            Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
+          //  Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
             null
         } finally {
             currentPage?.close()

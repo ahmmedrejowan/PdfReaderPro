@@ -2,6 +2,7 @@ package com.androvine.pdfreaderpro.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.androvine.pdfreaderpro.R
@@ -43,17 +44,18 @@ class Home : AppCompatActivity() {
                 else -> {
                     itemToPageMap[item.itemId]?.let {
                         binding.viewPager.currentItem = it
+                        updateTitle(it)
                         true
                     } ?: false
                 }
             }
+
         }
 
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.bottomNavView.menu.getItem(position).isChecked = true
-                updateTitle(position)
             }
         })
 
@@ -61,15 +63,16 @@ class Home : AppCompatActivity() {
     }
 
     private fun updateTitle(position: Int) {
+        Log.e("Home", "updateTitle: $position")
         when (position) {
             0 -> {
-                title = "PDF Reader Pro"
+                binding.title.text = getString(R.string.app_name)
             }
             1 -> {
-                title = "Files"
+                binding.title.text = getString(R.string.files)
             }
             2 -> {
-                title = "Folders"
+                binding.title.text = getString(R.string.folders)
             }
         }
     }

@@ -44,6 +44,8 @@
     <string name="no_file_image">No File Image</string>
     <string name="sorry_no_file">Sorry! We couldn’t find any PDF in your device.</string>
     <string name="option_menu">Option Menu</string>
+    <string name="files">Files</string>
+    <string name="folders">Folders</string>
 
 
 </resources>
