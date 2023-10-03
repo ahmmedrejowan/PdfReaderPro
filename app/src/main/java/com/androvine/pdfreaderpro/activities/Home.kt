@@ -43,8 +43,7 @@ class Home : AppCompatActivity() {
 
                 else -> {
                     itemToPageMap[item.itemId]?.let {
-                        binding.viewPager.currentItem = it
-                        updateTitle(it)
+                        binding.viewPager.setCurrentItem(it, false)
                         true
                     } ?: false
                 }
@@ -62,20 +61,7 @@ class Home : AppCompatActivity() {
 
     }
 
-    private fun updateTitle(position: Int) {
-        Log.e("Home", "updateTitle: $position")
-        when (position) {
-            0 -> {
-                binding.title.text = getString(R.string.app_name)
-            }
-            1 -> {
-                binding.title.text = getString(R.string.files)
-            }
-            2 -> {
-                binding.title.text = getString(R.string.folders)
-            }
-        }
-    }
+
 
 
 }

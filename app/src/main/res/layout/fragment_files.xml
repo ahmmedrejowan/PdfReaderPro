@@ -6,11 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".fragments.FilesFragment">
 
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/files"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+
+
+
+        <ImageView
+            android:id="@+id/settingsImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/ic_settings"
+            app:tint="@color/textColorSecondary" />
+
+
+    </RelativeLayout>
+
+
     <LinearLayout
         android:id="@+id/sortLayout"
+        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:orientation="horizontal">
 
         <com.google.android.material.tabs.TabLayout
