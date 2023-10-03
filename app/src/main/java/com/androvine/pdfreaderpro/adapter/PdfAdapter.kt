@@ -1,13 +1,26 @@
 package com.androvine.pdfreaderpro.adapter
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
+import android.util.Log
+import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.utils.PdfFileDiffCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -21,24 +34,120 @@ class PdfAdapter(
         private const val VIEW_TYPE_LIST = 2
     }
 
+    private val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
+    private val cacheSize =
+        maxMemory / 8  // Use 1/8th of the available memory for this memory cache.
+
+    private val thumbnailCache: LruCache<String, Bitmap> = LruCache(cacheSize)
+
+
     inner class GridViewHolder(private val binding: SinglePdfItemFileGridBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private var viewHolderJob = Job()
+        private var viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
+
         fun bind(pdfFile: PdfFile) {
             binding.fileName.text = resizeName(pdfFile.name)
             binding.date.text = formattedDate(pdfFile.dateModified)
             binding.size.text = formattedFileSize(pdfFile.size)
+
+            viewHolderJob = Job()
+            viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
+
+
+            loadThumbnail(pdfFile.path)
+        }
+
+        private fun loadThumbnail(pdfFilePath: String) {
+            viewHolderScope.launch {
+                try {
+                    var thumbnail = thumbnailCache.get(pdfFilePath)
+                    if (thumbnail == null) {
+                        thumbnail = withContext(Dispatchers.IO) {
+                            generateThumbnail(pdfFilePath)
+                        }
+                        if (thumbnail != null) {
+                            thumbnailCache.put(pdfFilePath, thumbnail)
+                        }
+                    }
+                    binding.fileIcon.setImageBitmap(
+                        thumbnail ?: BitmapFactory.decodeResource(
+                            binding.root.resources, R.drawable.ic_pdf_file
+                        )
+                    )
+                } catch (e: Exception) {
+                    Log.e("ThumbnailLoad", "Failed to load thumbnail", e)
+                    binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
+                }
+            }
+        }
+
+
+        fun clear() {
+            viewHolderJob.cancel()
+        //    viewHolderScope.cancel() // cancel ongoing thumbnail generation if any
+            binding.fileIcon.setImageResource(R.drawable.ic_pdf_file) // set placeholder
         }
     }
 
     inner class ListViewHolder(private val binding: SinglePdfItemFileBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private var viewHolderJob = Job()
+        private var viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
+
         fun bind(pdfFile: PdfFile) {
             binding.fileName.text = resizeName(pdfFile.name)
             binding.date.text = formattedDate(pdfFile.dateModified)
             binding.size.text = formattedFileSize(pdfFile.size)
 
+            viewHolderJob = Job()
+            viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
+
+
+            loadThumbnail(pdfFile.path)
+        }
+
+        private fun loadThumbnail(pdfFilePath: String) {
+            viewHolderScope.launch {
+                try {
+                    var thumbnail = thumbnailCache.get(pdfFilePath)
+                    if (thumbnail == null) {
+                        thumbnail = withContext(Dispatchers.IO) {
+                            generateThumbnail(pdfFilePath)
+                        }
+                        if (thumbnail != null) {
+                            thumbnailCache.put(pdfFilePath, thumbnail)
+                        }
+                    }
+                    binding.fileIcon.setImageBitmap(
+                        thumbnail ?: BitmapFactory.decodeResource(
+                            binding.root.resources, R.drawable.ic_pdf_file
+                        )
+                    )
+                } catch (e: Exception) {
+                    Log.e("ThumbnailLoad", "Failed to load thumbnail", e)
+                    binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
+                }
+            }
+        }
+
+
+        fun clear() {
+            viewHolderJob.cancel()
+            //    viewHolderScope.cancel() // cancel ongoing thumbnail generation if any
+            binding.fileIcon.setImageResource(R.drawable.ic_pdf_file) // set placeholder
         }
     }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        when (holder) {
+            is GridViewHolder -> holder.clear()
+            is ListViewHolder -> holder.clear()
+        }
+    }
+
 
     override fun getItemViewType(position: Int): Int {
         return if (isGridView) VIEW_TYPE_GRID else VIEW_TYPE_LIST
@@ -78,6 +187,9 @@ class PdfAdapter(
     }
 
     fun updatePdfFiles(newPdfFiles: List<PdfFile>) {
+
+        thumbnailCache.evictAll() // clear thumbnail cache
+
         val diffCallback = PdfFileDiffCallback(pdfFiles, newPdfFiles)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
@@ -117,6 +229,39 @@ class PdfAdapter(
         val first = s.substring(0, 18)
         val last = s.substring(s.length - 10, s.length)
         return "$first...$last"
+    }
+
+    suspend fun generateThumbnail(pdfFilePath: String): Bitmap? = withContext(Dispatchers.IO) {
+        var pdfRenderer: PdfRenderer? = null
+        var currentPage: PdfRenderer.Page? = null
+        try {
+            val file = File(pdfFilePath)
+            if (!file.exists()) {
+                Log.e("ThumbnailGenerator", "File does not exist: $pdfFilePath")
+                return@withContext null
+            }
+
+            val fileDescriptor =
+                ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            pdfRenderer = PdfRenderer(fileDescriptor)
+
+            // Use the first page to generate the thumbnail
+            currentPage = pdfRenderer.openPage(0)
+            val bitmap: Bitmap =
+                Bitmap.createBitmap(currentPage.width / 4, currentPage.height / 4, Bitmap.Config.ARGB_8888)
+            currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+
+            bitmap
+        } catch (ex: OutOfMemoryError) {
+            Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
+            null
+        } catch (ex: Exception) {
+            Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
+            null
+        } finally {
+            currentPage?.close()
+            pdfRenderer?.close()
+        }
     }
 
 

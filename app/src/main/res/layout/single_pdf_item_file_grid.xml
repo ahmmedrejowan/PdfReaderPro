@@ -41,9 +41,9 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:maxLines="2"
                 android:fontFamily="sans-serif-medium"
-                android:text="A nce pdf dl f k j dj dfk dkf dfjkdkfj k"
+                android:maxLines="2"
+                android:text=""
                 android:textColor="@color/textColor"
                 android:textSize="15sp"
                 tools:ignore="NestedWeights" />
@@ -53,7 +53,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
                 android:contentDescription="@string/option_menu"
                 android:padding="3dp"
                 android:src="@drawable/ic_option"
@@ -68,27 +67,27 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/size"
+                android:id="@+id/date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="10dp"
+                android:layout_weight="1"
                 android:maxLines="1"
-                android:text="10/03/2020"
+                android:text=""
                 android:textColor="@color/textColorSecondary"
                 android:textSize="12sp" />
 
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/size"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:layout_marginEnd="10dp"
                 android:maxLines="1"
-                android:text="1204.53 KB"
+                android:text=""
                 android:textColor="@color/textColorSecondary"
                 android:textSize="12sp" />
 
