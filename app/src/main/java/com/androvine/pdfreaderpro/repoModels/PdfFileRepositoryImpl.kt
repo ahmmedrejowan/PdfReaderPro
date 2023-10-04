@@ -11,18 +11,14 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
         val pdfFiles = mutableListOf<PdfFile>()
 
         val cursor = context.contentResolver.query(
-            MediaStore.Files.getContentUri("external"),
-            arrayOf(
+            MediaStore.Files.getContentUri("external"), arrayOf(
                 MediaStore.Files.FileColumns._ID,
                 MediaStore.Files.FileColumns.TITLE,
                 MediaStore.Files.FileColumns.DATA,
                 MediaStore.Files.FileColumns.SIZE,
                 MediaStore.Files.FileColumns.DATE_MODIFIED,
                 MediaStore.Files.FileColumns.PARENT
-            ),
-            MediaStore.Files.FileColumns.MIME_TYPE + "=?",
-            arrayOf("application/pdf"),
-            null
+            ), MediaStore.Files.FileColumns.MIME_TYPE + "=?", arrayOf("application/pdf"), null
         )
 
         cursor?.use {
@@ -37,9 +33,9 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
 
                 Log.d("PdfFileRepositoryImpl", "getAllPdfFiles: indexName: $indexName")
 
-//                if (indexName == -1 || indexData == -1 || indexSize == -1 || indexDateModified == -1 || indexParent == -1) {
-//                    continue
-//                }
+                if (indexName == -1 || indexData == -1 || indexSize == -1 || indexDateModified == -1 || indexParent == -1) {
+                    continue
+                }
 
                 val name = cursor.getString(indexName)
                 val path = cursor.getString(indexData)
@@ -61,11 +57,7 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
         val selectionArgs = arrayOf(parentId)
 
         val cursor = context.contentResolver.query(
-            MediaStore.Files.getContentUri("external"),
-            projection,
-            selection,
-            selectionArgs,
-            null
+            MediaStore.Files.getContentUri("external"), projection, selection, selectionArgs, null
         )
 
         var folderName: String? = null

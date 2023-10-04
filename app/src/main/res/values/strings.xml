@@ -46,6 +46,10 @@
     <string name="option_menu">Option Menu</string>
     <string name="files">Files</string>
     <string name="folders">Folders</string>
+    <string name="sort_by">Sort By</string>
+    <string name="date">Date</string>
+    <string name="name">Name</string>
+    <string name="size">Size</string>
 
 
 </resources>

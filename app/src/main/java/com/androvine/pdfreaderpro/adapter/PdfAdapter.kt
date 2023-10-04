@@ -25,7 +25,7 @@ import java.util.Date
 import java.util.Locale
 
 class PdfAdapter(
-    private val pdfFiles: MutableList<PdfFile>, var isGridView: Boolean = false
+    private val pdfFiles: MutableList<PdfFile>, var isGridView: Boolean = false, val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -199,6 +199,8 @@ class PdfAdapter(
         pdfFiles.addAll(newPdfFiles)
 
         diffResult.dispatchUpdatesTo(this)
+        recyclerView.layoutManager?.scrollToPosition(0)
+
     }
 
     private fun formattedDate(lastModified: Long): String {

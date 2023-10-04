@@ -25,7 +25,6 @@
             android:textSize="20sp" />
 
 
-
         <ImageView
             android:id="@+id/settingsImageView"
             android:layout_width="wrap_content"
@@ -43,18 +42,41 @@
 
     <LinearLayout
         android:id="@+id/sortLayout"
-        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
         android:orientation="horizontal">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_weight="1"
-            app:tabSelectedTextAppearance="@style/TabLayoutTextAppearanceSelected"
-            app:tabTextAppearance="@style/TabLayoutTextAppearance" />
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/sort_by"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/sortBy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@string/name"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                app:drawableEndCompat="@drawable/ic_arrow_down"
+                app:drawableTint="@color/colorPrimary" />
+
+
+        </LinearLayout>
 
 
         <LinearLayout

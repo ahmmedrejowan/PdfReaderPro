@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.adapter.PdfAdapter
 import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
+import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import com.androvine.pdfreaderpro.databinding.BottomSheetSortingBinding
 import com.androvine.pdfreaderpro.databinding.FragmentFilesBinding
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -35,7 +40,7 @@ class FilesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pdfAdapter = PdfAdapter(mutableListOf())
+        pdfAdapter = PdfAdapter(mutableListOf(), false, binding.recyclerView)
 
         if (binding.switchView.getCurrentMode() == CustomListGridSwitchView.SwitchMode.GRID) {
             binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -47,7 +52,11 @@ class FilesFragment : Fragment() {
         binding.recyclerView.adapter = pdfAdapter
 
         pdfListViewModel.pdfFiles.observe(viewLifecycleOwner) { pdfFiles ->
-            pdfAdapter.updatePdfFiles(pdfFiles)
+
+            val sortedList = pdfListViewModel.pdfFiles.value?.sortedWith(PdfFile.SortByName)
+            sortedList?.let {
+                pdfAdapter.updatePdfFiles(it)
+            }
 
             if (pdfFiles.isEmpty()) {
                 binding.noFileLayout.visibility = View.VISIBLE
@@ -75,6 +84,56 @@ class FilesFragment : Fragment() {
 
         binding.switchView.shouldRememberState(true)
 
+
+        binding.sortBy.setOnClickListener {
+            showSortingDialog()
+        }
+
+
     }
+
+    private fun showSortingDialog() {
+
+
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val sortingBinding: BottomSheetSortingBinding = BottomSheetSortingBinding.inflate(
+            layoutInflater
+        )
+        bottomSheetDialog.setContentView(sortingBinding.root)
+        bottomSheetDialog.setCancelable(true)
+        bottomSheetDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        bottomSheetDialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+        )
+
+        sortingBinding.tvName.setOnClickListener {
+            binding.sortBy.text = getString(R.string.name)
+            sortList(PdfFile.SortByName)
+            bottomSheetDialog.dismiss()
+        }
+
+        sortingBinding.tvDate.setOnClickListener {
+            binding.sortBy.text = getString(R.string.date)
+            sortList(PdfFile.SortByDate)
+            bottomSheetDialog.dismiss()
+        }
+
+        sortingBinding.tvSize.setOnClickListener {
+            binding.sortBy.text = getString(R.string.size)
+            sortList(PdfFile.SortBySize)
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.show()
+    }
+
+
+    private fun sortList(comparator: Comparator<PdfFile>) {
+        val sortedList = pdfListViewModel.pdfFiles.value?.sortedWith(comparator)
+        sortedList?.let {
+            pdfAdapter.updatePdfFiles(it)
+        }
+    }
+
 
 }
