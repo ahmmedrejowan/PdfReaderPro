@@ -45,13 +45,41 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
                 val path = cursor.getString(indexData)
                 val size = cursor.getLong(indexSize)
                 val dateModified = cursor.getLong(indexDateModified)
-                val parent = cursor.getString(indexParent)
+                val parent = getFolderNameFromParentId(cursor.getString(indexParent)) ?: "Unknown"
 
                 pdfFiles.add(PdfFile(name, path, size, dateModified, parent))
             }
         }
 
         return pdfFiles
+    }
+
+
+    private fun getFolderNameFromParentId(parentId: String): String? {
+        val projection = arrayOf(MediaStore.Files.FileColumns.TITLE)
+        val selection = MediaStore.Files.FileColumns._ID + "=?"
+        val selectionArgs = arrayOf(parentId)
+
+        val cursor = context.contentResolver.query(
+            MediaStore.Files.getContentUri("external"),
+            projection,
+            selection,
+            selectionArgs,
+            null
+        )
+
+        var folderName: String? = null
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val indexName = it.getColumnIndex(MediaStore.Files.FileColumns.TITLE)
+                if (indexName == -1) {
+                    return null
+                }
+                folderName = it.getString(indexName)
+            }
+        }
+
+        return folderName
     }
 
 

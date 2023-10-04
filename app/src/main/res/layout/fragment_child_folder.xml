@@ -20,7 +20,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
             android:fontFamily="sans-serif-medium"
-            android:text="@string/files"
+            android:text="@string/folders"
             android:textColor="@color/textColor"
             android:textSize="20sp" />
 
@@ -83,10 +83,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/sortLayout"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
-        tools:listitem="@layout/single_folder_item_grid" />
+        android:layout_below="@id/sortLayout" />
 
 
     <LinearLayout
