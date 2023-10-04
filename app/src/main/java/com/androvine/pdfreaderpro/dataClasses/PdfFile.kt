@@ -10,9 +10,6 @@ data class PdfFile(
 ) {
     companion object {
         val SortByName = Comparator<PdfFile> { o1, o2 -> o1.name.compareTo(o2.name) }
-
-        //        val SortByDate = Comparator<PdfFile> { o1, o2 -> o1.dateModified.compareTo(o2.dateModified) }
-        //        val SortBySize = Comparator<PdfFile> { o1, o2 -> o1.size.compareTo(o2.size) }
         val SortByDate =
             Comparator<PdfFile> { o1, o2 -> o2.dateModified.compareTo(o1.dateModified) }
         val SortBySize = Comparator<PdfFile> { o1, o2 -> o2.size.compareTo(o1.size) }
