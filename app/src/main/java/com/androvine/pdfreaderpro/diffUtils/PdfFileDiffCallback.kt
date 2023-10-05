@@ -9,7 +9,6 @@ class PdfFileDiffCallback(
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        // Assuming PdfFile has an id or some unique property
         return oldList[oldItemPosition].path == newList[newItemPosition].path
     }
 

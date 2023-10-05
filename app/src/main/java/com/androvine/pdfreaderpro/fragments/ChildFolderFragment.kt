@@ -1,5 +1,6 @@
 package com.androvine.pdfreaderpro.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
+@SuppressLint("NotifyDataSetChanged")
 class ChildFolderFragment : Fragment() {
 
     private val binding: FragmentChildFolderBinding by lazy {
