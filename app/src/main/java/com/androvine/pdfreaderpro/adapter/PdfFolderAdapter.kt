@@ -1,16 +1,21 @@
 package com.androvine.pdfreaderpro.adapter
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.dataClasses.PdfFolder
 import com.androvine.pdfreaderpro.databinding.SingleFolderItemBinding
 import com.androvine.pdfreaderpro.databinding.SingleFolderItemGridBinding
+import com.androvine.pdfreaderpro.diffUtils.PdfFolderDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnPdfFolderClicked
 
+@SuppressLint("SetTextI18n")
 class PdfFolderAdapter(
-    private val pdfFolders: MutableList<PdfFolder>, var isGridView: Boolean = false, var onPdfFolderClicked: OnPdfFolderClicked
+    private val pdfFolders: MutableList<PdfFolder>,
+    var isGridView: Boolean = false,
+    var onPdfFolderClicked: OnPdfFolderClicked
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -98,22 +103,11 @@ class PdfFolderAdapter(
     }
 
     fun updateList(newPdfFolders: List<PdfFolder>) {
-        Log.e("PdfFolderAdapter", "updateList: new list" + newPdfFolders.size)
-        Log.e("PdfFolderAdapter", "updateList: old list" + pdfFolders.size)
-
+        val diffCallback = PdfFolderDiffCallback(pdfFolders, newPdfFolders)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         pdfFolders.clear()
         pdfFolders.addAll(newPdfFolders)
-        Log.e("PdfFolderAdapter", "updateList after update list: " + pdfFolders.size)
-
-        notifyDataSetChanged()
-
-//        val diffCallback = PdfFolderDiffCallback(pdfFolders, newPdfFolders)
-//        val diffResult = DiffUtil.calculateDiff(diffCallback)
-//
-//        pdfFolders.clear()
-//        pdfFolders.addAll(newPdfFolders)
-//
-//        diffResult.dispatchUpdatesTo(this)
+        diffResult.dispatchUpdatesTo(this)
     }
 
 

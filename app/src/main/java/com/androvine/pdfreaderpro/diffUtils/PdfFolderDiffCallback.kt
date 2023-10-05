@@ -1,4 +1,4 @@
-package com.androvine.pdfreaderpro.utils
+package com.androvine.pdfreaderpro.diffUtils
 
 import androidx.recyclerview.widget.DiffUtil
 import com.androvine.pdfreaderpro.dataClasses.PdfFolder

@@ -3,7 +3,6 @@ package com.androvine.pdfreaderpro.adapter
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
-import android.util.Log
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
-import com.androvine.pdfreaderpro.utils.PdfFileDiffCallback
+import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,7 +24,9 @@ import java.util.Date
 import java.util.Locale
 
 class PdfAdapter(
-    private val pdfFiles: MutableList<PdfFile>, var isGridView: Boolean = false, val recyclerView: RecyclerView
+    private val pdfFiles: MutableList<PdfFile>,
+    var isGridView: Boolean = false,
+    private val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -79,7 +80,6 @@ class PdfAdapter(
 
 
                 } catch (e: Exception) {
-                    Log.e("ThumbnailLoad", "Failed to load thumbnail", e)
                     binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
                 }
             }
@@ -128,7 +128,6 @@ class PdfAdapter(
                         binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
                     }
                 } catch (e: Exception) {
-                    Log.e("ThumbnailLoad", "Failed to load thumbnail", e)
                     binding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
                 }
             }
@@ -241,7 +240,6 @@ class PdfAdapter(
         try {
             val file = File(pdfFilePath)
             if (!file.exists()) {
-                Log.e("ThumbnailGenerator", "File does not exist: $pdfFilePath")
                 return@withContext null
             }
 
@@ -258,10 +256,10 @@ class PdfAdapter(
 
             bitmap
         } catch (ex: OutOfMemoryError) {
-           // Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
+            // Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
             null
         } catch (ex: Exception) {
-          //  Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
+            //  Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
             null
         } finally {
             currentPage?.close()

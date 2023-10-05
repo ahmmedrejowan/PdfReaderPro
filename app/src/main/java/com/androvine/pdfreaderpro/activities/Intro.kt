@@ -135,7 +135,7 @@ class Intro : AppCompatActivity() {
     private fun goToHome() {
         introUtils.setFirstTimeLaunch(false)
 
-        if (permissionRepository.hasStoragePermission()){
+        if (permissionRepository.hasStoragePermission()) {
             startActivity(Intent(this@Intro, Home::class.java))
             finish()
         } else {

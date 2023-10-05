@@ -45,7 +45,7 @@ class SplashScreen : AppCompatActivity() {
                 finish()
             } else {
 
-                if (permissionRepository.hasStoragePermission()){
+                if (permissionRepository.hasStoragePermission()) {
                     startActivity(Intent(this@SplashScreen, Home::class.java))
                     finish()
                 } else {
