@@ -27,4 +27,18 @@ class PdfListViewModel(private val repo: PdfFileRepository) : ViewModel() {
             _pdfFiles.value = files
         }
     }
+
+    fun deletePdfFile(pdfFile: PdfFile) {
+        viewModelScope.launch {
+            val isDeleted = withContext(Dispatchers.IO) {
+                repo.deletePdfFile(pdfFile)
+            }
+            if (isDeleted) {
+                // Remove the file from the list
+                val updatedList = _pdfFiles.value?.filter { it.path != pdfFile.path }
+                _pdfFiles.value = updatedList ?: emptyList()
+            }
+        }
+    }
+
 }

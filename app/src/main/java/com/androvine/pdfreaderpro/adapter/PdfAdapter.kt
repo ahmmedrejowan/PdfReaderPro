@@ -1,5 +1,6 @@
 package com.androvine.pdfreaderpro.adapter
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
@@ -252,7 +254,35 @@ class PdfAdapter(
             optionBinding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
         }
 
+        optionBinding.optionDelete.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showDeleteDialog(context, pdfFile)
+        }
+
         bottomSheetDialog.show()
+
+    }
+
+    private fun showDeleteDialog(context: Context, pdfFile: PdfFile) {
+
+        val dialog = Dialog(context)
+        val dialogBinding : DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(
+            LayoutInflater.from(context)
+        )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialogBinding.fileName.text = pdfFile.name
+        dialogBinding.fileSize.text = formattedFileSize(pdfFile.size)
+        dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
+
+
+
+        dialog.show()
 
     }
 

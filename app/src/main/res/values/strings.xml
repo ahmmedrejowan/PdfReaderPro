@@ -56,6 +56,8 @@
     <string name="add_to_favorite">Add to Favorite</string>
     <string name="remove_from_recent">Remove from Recent</string>
     <string name="delete">Delete</string>
+    <string name="do_you_want_to_delete_this_file">Do you want to Delete this file?</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>

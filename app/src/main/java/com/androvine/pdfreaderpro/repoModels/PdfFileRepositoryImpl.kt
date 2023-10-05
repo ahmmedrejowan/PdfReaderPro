@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.MediaStore
 import android.util.Log
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import java.io.File
 
 class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
 
@@ -47,6 +48,12 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
 
         return pdfFiles
     }
+
+    override suspend fun deletePdfFile(pdfFile: PdfFile): Boolean {
+        val file = File(pdfFile.path)
+        return file.delete()
+    }
+
 
     private fun getFolderNameFromPath(path: String): String {
         val folders = path.split("/")
