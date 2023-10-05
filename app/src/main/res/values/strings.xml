@@ -58,6 +58,7 @@
     <string name="delete">Delete</string>
     <string name="do_you_want_to_delete_this_file">Do you want to Delete this file?</string>
     <string name="cancel">Cancel</string>
+    <string name="dismiss">Dismiss</string>
 
 
 </resources>
