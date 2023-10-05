@@ -2,11 +2,9 @@ package com.androvine.pdfreaderpro.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.adapter.FragmentAdapter
@@ -27,37 +25,26 @@ class Home : AppCompatActivity() {
         setupBottomNav()
 
 
-//        onBackPressedDispatcher.addCallback(this) {
-//            if (binding.viewPager.currentItem == 2 && supportFragmentManager.backStackEntryCount > 0) {
-//                supportFragmentManager.popBackStack()
-//                true // Return true to indicate that the back press was handled
-//            } else {
-//                false // Return false to allow the system to handle the back press
-//            }
-//        }
-
-
-
-    }
-
-    override fun onBackPressed() {
-        val currentFragment = getCurrentFragment()
-
-        if (currentFragment is FolderFragment) {
-            Log.d("BACK_PRESS", "Found FolderFragment")
-            if (currentFragment.handleFragmentBackPressed()) {
-                Log.d("BACK_PRESS", "Handled by FolderFragment")
-                return
+        onBackPressedDispatcher.addCallback(this) {
+            val currentFragment = getCurrentFragment()
+            if (currentFragment is FolderFragment) {
+                if (currentFragment.handleFragmentBackPressed()) {
+                    return@addCallback
+                }
+            }
+            if (binding.viewPager.currentItem != 0) {
+                binding.viewPager.setCurrentItem(0, false)
+                return@addCallback
             }
         }
 
-        super.onBackPressed()
+
     }
+
 
     private fun getCurrentFragment(): Fragment? {
         return supportFragmentManager.findFragmentByTag("f${binding.viewPager.currentItem}")
     }
-
 
 
     private fun setupBottomNav() {
@@ -97,8 +84,6 @@ class Home : AppCompatActivity() {
 
 
     }
-
-
 
 
 }
