@@ -136,4 +136,21 @@ class FilesFragment : Fragment() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        if (binding.switchView.getSavedMode() == CustomListGridSwitchView.SwitchMode.GRID) {
+            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            pdfAdapter.isGridView = true
+            pdfAdapter.notifyDataSetChanged()
+            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.GRID)
+
+        } else {
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            pdfAdapter.isGridView = false
+            pdfAdapter.notifyDataSetChanged()
+            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.LIST)
+
+        }
+    }
+
 }

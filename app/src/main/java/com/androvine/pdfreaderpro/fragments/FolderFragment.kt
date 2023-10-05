@@ -1,7 +1,6 @@
 package com.androvine.pdfreaderpro.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,5 +52,7 @@ class FolderFragment : Fragment(), ChildFragmentsCommunication {
         }
         return false // Back press was not handled by the fragment
     }
+
+
 
 }

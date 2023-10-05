@@ -115,7 +115,7 @@ class CustomListGridSwitchView @JvmOverloads constructor(
         onModeChangedListener = listener
     }
 
-    private fun getSavedMode(): SwitchMode? {
+    fun getSavedMode(): SwitchMode? {
         val savedModeOrdinal = sharedPreferences.getInt(KEY_MODE, -1)
         if (savedModeOrdinal != -1) {
             return SwitchMode.values()[savedModeOrdinal]

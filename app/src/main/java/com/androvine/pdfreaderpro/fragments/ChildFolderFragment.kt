@@ -1,7 +1,6 @@
 package com.androvine.pdfreaderpro.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,7 @@ class ChildFolderFragment : Fragment() {
     private val pdfListViewModel: PdfListViewModel by viewModel()
     private val mutableListOfFolders = mutableListOf<PdfFolder>()
 
-    lateinit var pdfFolderAdapter: PdfFolderAdapter
+    private lateinit var pdfFolderAdapter: PdfFolderAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -147,4 +146,22 @@ class ChildFolderFragment : Fragment() {
             pdfFolderAdapter.updateList(it)
         }
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        if (binding.switchView.getSavedMode() == CustomListGridSwitchView.SwitchMode.GRID) {
+            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            pdfFolderAdapter.isGridView = true
+            pdfFolderAdapter.notifyDataSetChanged()
+            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.GRID)
+
+        } else {
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            pdfFolderAdapter.isGridView = false
+            pdfFolderAdapter.notifyDataSetChanged()
+            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.LIST)
+        }
+    }
+
 }
