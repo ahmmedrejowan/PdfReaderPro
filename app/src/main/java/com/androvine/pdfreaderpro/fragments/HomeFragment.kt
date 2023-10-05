@@ -32,11 +32,18 @@ class HomeFragment : Fragment() {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Recent"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Favorite"))
 
+        setUpInitialView()
+
         pdfListViewModel.pdfFiles.observe(viewLifecycleOwner) { pdfFiles ->
 
             Log.e("HomeFragment", "onViewCreated: total pdf files: ${pdfFiles.size}")
 
         }
+
+    }
+
+    private fun setUpInitialView() {
+
 
     }
 

@@ -26,7 +26,6 @@
             android:textSize="20sp" />
 
 
-
         <ImageView
             android:id="@+id/settingsImageView"
             android:layout_width="wrap_content"
@@ -65,7 +64,17 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
+
+                <ProgressBar
+                    android:id="@+id/loadingFileCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+
                 <TextView
+                    android:id="@+id/totalFiles"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -75,6 +84,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/totalFilesTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
@@ -87,10 +97,11 @@
         </com.google.android.material.card.MaterialCardView>
 
         <RelativeLayout
+            android:id="@+id/storageLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
+            android:layout_weight="1"
+            android:visibility="invisible">
 
             <TextView
                 android:id="@+id/pdfSize"
