@@ -2,7 +2,6 @@ package com.androvine.pdfreaderpro.fragments
 
 import android.os.Bundle
 import android.text.format.Formatter.formatFileSize
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

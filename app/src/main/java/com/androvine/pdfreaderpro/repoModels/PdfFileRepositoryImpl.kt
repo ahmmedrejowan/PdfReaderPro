@@ -17,7 +17,6 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
                 MediaStore.Files.FileColumns.DATA,
                 MediaStore.Files.FileColumns.SIZE,
                 MediaStore.Files.FileColumns.DATE_MODIFIED,
-                MediaStore.Files.FileColumns.PARENT
             ), MediaStore.Files.FileColumns.MIME_TYPE + "=?", arrayOf("application/pdf"), null
         )
 
@@ -29,11 +28,10 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
                 val indexSize = cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE)
                 val indexDateModified =
                     cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED)
-                val indexParent = cursor.getColumnIndex(MediaStore.Files.FileColumns.PARENT)
 
                 Log.d("PdfFileRepositoryImpl", "getAllPdfFiles: indexName: $indexName")
 
-                if (indexName == -1 || indexData == -1 || indexSize == -1 || indexDateModified == -1 || indexParent == -1) {
+                if (indexName == -1 || indexData == -1 || indexSize == -1 || indexDateModified == -1) {
                     continue
                 }
 
@@ -41,38 +39,21 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
                 val path = cursor.getString(indexData)
                 val size = cursor.getLong(indexSize)
                 val dateModified = cursor.getLong(indexDateModified)
-                val parent = getFolderNameFromParentId(cursor.getString(indexParent)) ?: "Unknown"
+                val folderName = getFolderNameFromPath(path)
 
-                pdfFiles.add(PdfFile(name, path, size, dateModified, parent))
+                pdfFiles.add(PdfFile(name, path, size, dateModified, folderName))
             }
         }
 
         return pdfFiles
     }
 
-
-    private fun getFolderNameFromParentId(parentId: String): String? {
-        val projection = arrayOf(MediaStore.Files.FileColumns.TITLE)
-        val selection = MediaStore.Files.FileColumns._ID + "=?"
-        val selectionArgs = arrayOf(parentId)
-
-        val cursor = context.contentResolver.query(
-            MediaStore.Files.getContentUri("external"), projection, selection, selectionArgs, null
-        )
-
-        var folderName: String? = null
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val indexName = it.getColumnIndex(MediaStore.Files.FileColumns.TITLE)
-                if (indexName == -1) {
-                    return null
-                }
-                folderName = it.getString(indexName)
-            }
-        }
-
-        return folderName
+    private fun getFolderNameFromPath(path: String): String {
+        val folders = path.split("/")
+        return folders[folders.size - 2]
     }
+
+
 
 
 }
