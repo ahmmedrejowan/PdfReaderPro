@@ -35,6 +35,8 @@ class Home : AppCompatActivity() {
             if (binding.viewPager.currentItem != 0) {
                 binding.viewPager.setCurrentItem(0, false)
                 return@addCallback
+            } else {
+                finish()
             }
         }
 

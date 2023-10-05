@@ -1,18 +1,22 @@
 package com.androvine.pdfreaderpro.adapter
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,8 +39,7 @@ class PdfAdapter(
     }
 
     private val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
-    private val cacheSize =
-        maxMemory / 8
+    private val cacheSize = maxMemory / 8
 
     private val thumbnailCache: LruCache<String, Bitmap> = LruCache(cacheSize)
 
@@ -55,6 +58,9 @@ class PdfAdapter(
             viewHolderJob = Job()
             viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
+            binding.ivOption.setOnClickListener {
+                showOptionsDialog(it.context, pdfFile)
+            }
 
             loadThumbnail(pdfFile.path)
         }
@@ -93,6 +99,7 @@ class PdfAdapter(
         }
     }
 
+
     inner class ListViewHolder(private val binding: SinglePdfItemFileBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private var viewHolderJob = Job()
@@ -106,6 +113,9 @@ class PdfAdapter(
             viewHolderJob = Job()
             viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
+            binding.ivOption.setOnClickListener {
+                showOptionsDialog(it.context, pdfFile)
+            }
 
             loadThumbnail(pdfFile.path)
         }
@@ -208,6 +218,43 @@ class PdfAdapter(
         return sdf.format(date)
     }
 
+    private fun showOptionsDialog(context: Context, pdfFile: PdfFile) {
+        val bottomSheetDialog = BottomSheetDialog(context)
+        val optionBinding: BottomSheetMenuFilesBinding = BottomSheetMenuFilesBinding.inflate(
+            LayoutInflater.from(context)
+        )
+        bottomSheetDialog.setContentView(optionBinding.root)
+        bottomSheetDialog.setCancelable(true)
+        bottomSheetDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        bottomSheetDialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+        )
+
+        val name = pdfFile.name
+        val path = pdfFile.path
+
+        val customFolder = extractParentFolders(path)
+
+        optionBinding.fileName.text = name
+        optionBinding.filePath.text = customFolder
+
+        try {
+            var thumbnail = thumbnailCache.get(path)
+            if (thumbnail == null) {
+                thumbnail = generateNormalThumbnail(path)
+            }
+            if (thumbnail != null) {
+                optionBinding.fileIcon.setImageBitmap(thumbnail)
+            } else {
+                optionBinding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
+            }
+        } catch (e: Exception) {
+            optionBinding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
+        }
+
+        bottomSheetDialog.show()
+
+    }
 
     private fun formattedFileSize(length: Long): String {
         // to kb, mb , gb
@@ -267,5 +314,49 @@ class PdfAdapter(
         }
     }
 
+    private fun generateNormalThumbnail(pdfFilePath: String): Bitmap? {
+        var pdfRenderer: PdfRenderer? = null
+        var currentPage: PdfRenderer.Page? = null
+        try {
+            val file = File(pdfFilePath)
+            if (!file.exists()) {
+                return null
+            }
+
+            val fileDescriptor =
+                ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            pdfRenderer = PdfRenderer(fileDescriptor)
+
+            // Use the first page to generate the thumbnail
+            currentPage = pdfRenderer.openPage(0)
+            val bitmap: Bitmap = Bitmap.createBitmap(
+                currentPage.width / 4, currentPage.height / 4, Bitmap.Config.ARGB_8888
+            )
+            currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+
+            return bitmap
+        } catch (ex: OutOfMemoryError) {
+            // Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
+            return null
+        } catch (ex: Exception) {
+            //  Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
+            return null
+        } finally {
+            currentPage?.close()
+            pdfRenderer?.close()
+        }
+    }
+
+    private fun extractParentFolders(fullPath: String): String {
+        val path: String = if (fullPath.startsWith("/")) {
+            fullPath.substring(1)
+        } else {
+            fullPath
+        }
+        val parts = path.split("/")
+        if (parts.size < 4) return "Storage"
+        val relevantParts = parts.drop(3).dropLast(1)
+        return relevantParts.joinToString(" > ")
+    }
 
 }

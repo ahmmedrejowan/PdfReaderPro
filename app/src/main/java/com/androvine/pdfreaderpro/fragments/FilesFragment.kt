@@ -94,8 +94,6 @@ class FilesFragment : Fragment() {
     }
 
     private fun showSortingDialog() {
-
-
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val sortingBinding: BottomSheetSortingBinding = BottomSheetSortingBinding.inflate(
             layoutInflater
