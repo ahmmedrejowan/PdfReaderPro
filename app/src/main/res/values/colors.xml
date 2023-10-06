@@ -7,7 +7,7 @@
     <color name="textColor">#212121</color>
     <color name="textColorSecondary">#656565</color>
     <color name="backgroundColor">#FFFFFF</color>
-    <color name="backgroundColorSecondary">#FAFAFA</color>
+    <color name="backgroundColorSecondary">#F5F5F5</color>
     <color name="white">#ffffff</color>
     <color name="lite_white">#cccccc</color>
     <color name="_white">#eeeeee</color>

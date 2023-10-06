@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.MediaStore
 import android.util.Log
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import com.androvine.pdfreaderpro.interfaces.PdfFileRepository
 import java.io.File
 
 class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {

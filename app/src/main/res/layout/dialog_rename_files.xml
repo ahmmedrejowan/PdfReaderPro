@@ -32,46 +32,26 @@
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/fileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+
+        <EditText
+            android:id="@+id/renameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:gravity="center"
-            android:text=""
+            android:layout_marginBottom="5dp"
+            android:background="@color/backgroundColorSecondary"
+            android:gravity="start|center_vertical"
+            android:hint="@string/enter_file_name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/fileSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/textColorSecondary"
-            android:textSize="13sp" />
-
-
-        <TextView
-            android:id="@+id/filePath"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/textColorSecondary"
-            android:textSize="13sp" />
+            android:textColorHint="@color/textGrey"
+            android:textSize="16sp"
+            tools:ignore="Autofill" />
 
 
         <LinearLayout
@@ -112,7 +92,7 @@
                 android:layout_weight="1">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/delete"
+                    android:id="@+id/rename"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"

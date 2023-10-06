@@ -1,4 +1,4 @@
-package com.androvine.pdfreaderpro.repoModels
+package com.androvine.pdfreaderpro.interfaces
 
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 

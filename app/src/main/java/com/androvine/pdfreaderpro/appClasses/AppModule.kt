@@ -1,6 +1,6 @@
 package com.androvine.pdfreaderpro.appClasses
 
-import com.androvine.pdfreaderpro.repoModels.PdfFileRepository
+import com.androvine.pdfreaderpro.interfaces.PdfFileRepository
 import com.androvine.pdfreaderpro.repoModels.PdfFileRepositoryImpl
 import com.androvine.pdfreaderpro.repoModels.PermissionRepository
 import com.androvine.pdfreaderpro.vms.PdfListViewModel

@@ -3,21 +3,30 @@ package com.androvine.pdfreaderpro.adapter
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.pdf.PdfRenderer
-import android.os.ParcelFileDescriptor
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogInfoFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
+import com.androvine.pdfreaderpro.utils.FormattingUtils
+import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
+import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
+import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedFileSize
+import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateNormalThumbnail
+import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateThumbnail
+import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.resizeName
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,9 +34,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class PdfAdapter(
     private val pdfFiles: MutableList<PdfFile>,
@@ -42,7 +48,6 @@ class PdfAdapter(
 
     private val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
     private val cacheSize = maxMemory / 8
-
     private val thumbnailCache: LruCache<String, Bitmap> = LruCache(cacheSize)
 
 
@@ -62,6 +67,11 @@ class PdfAdapter(
 
             binding.ivOption.setOnClickListener {
                 showOptionsDialog(it.context, pdfFile)
+            }
+
+            binding.fileLayout.setOnLongClickListener {
+                showOptionsDialog(it.context, pdfFile)
+                true
             }
 
             loadThumbnail(pdfFile.path)
@@ -117,6 +127,11 @@ class PdfAdapter(
 
             binding.ivOption.setOnClickListener {
                 showOptionsDialog(it.context, pdfFile)
+            }
+
+            binding.fileLayout.setOnLongClickListener {
+                showOptionsDialog(it.context, pdfFile)
+                true
             }
 
             loadThumbnail(pdfFile.path)
@@ -214,11 +229,6 @@ class PdfAdapter(
 
     }
 
-    private fun formattedDate(lastModified: Long): String {
-        val date = Date(lastModified * 1000)
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        return sdf.format(date)
-    }
 
     private fun showOptionsDialog(context: Context, pdfFile: PdfFile) {
         val bottomSheetDialog = BottomSheetDialog(context)
@@ -259,6 +269,16 @@ class PdfAdapter(
             showDeleteDialog(context, pdfFile)
         }
 
+        optionBinding.optionInfo.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showInfoDialog(context, pdfFile)
+        }
+
+        optionBinding.optionRename.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showRenameDialog(context, pdfFile)
+        }
+
         bottomSheetDialog.show()
 
     }
@@ -266,7 +286,7 @@ class PdfAdapter(
     private fun showDeleteDialog(context: Context, pdfFile: PdfFile) {
 
         val dialog = Dialog(context)
-        val dialogBinding : DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(
+        val dialogBinding: DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(
             LayoutInflater.from(context)
         )
         dialog.setContentView(dialogBinding.root)
@@ -281,112 +301,112 @@ class PdfAdapter(
         dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
 
 
+        dialog.show()
+
+    }
+
+    private fun showRenameDialog(context: Context, pdfFile: PdfFile) {
+
+        val dialog = Dialog(context)
+        val dialogBinding: DialogRenameFilesBinding = DialogRenameFilesBinding.inflate(
+            LayoutInflater.from(context)
+        )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+
+        val oldName = pdfFile.name
+        var finalNewName = ""
+        var hasError = true
+
+        oldName.let {
+            dialogBinding.renameEditText.setText(it)
+            dialogBinding.renameEditText.setSelection(it.length)
+        }
+
+        dialogBinding.renameEditText.addTextChangedListener {
+            // show error if name is empty
+            if (it.toString().isEmpty()) {
+                dialogBinding.renameEditText.error = "Name cannot be empty"
+                hasError = true
+                return@addTextChangedListener
+            }
+
+            // show error if name contains invalid characters
+            if (it.toString().contains("[\\\\/:*?\"<>|]".toRegex())) {
+                dialogBinding.renameEditText.error = "Name cannot contain special characters"
+                hasError = true
+                return@addTextChangedListener
+            }
+
+
+            // show error if name already exists in the same folder with same extension
+            val pdfFolderPath = pdfFile.path.substringBeforeLast("/")
+            val newName = "$pdfFolderPath/${it.toString()}.pdf"
+            val file = File(newName)
+            if (file.exists() && newName != pdfFile.path) {
+                dialogBinding.renameEditText.error = "File already exists"
+                hasError = true
+                return@addTextChangedListener
+            }
+
+
+            // if no error, set newName
+            dialogBinding.renameEditText.error = null
+            finalNewName = it.toString()
+            hasError = false
+
+        }
+
+        dialogBinding.cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.rename.setOnClickListener {
+            if (!hasError) {
+
+            } else {
+                Toast.makeText(context, "Please enter a valid name", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
         dialog.show()
 
     }
 
-    private fun formattedFileSize(length: Long): String {
-        // to kb, mb , gb
-        val kb = 1024
-        val mb = kb * 1024
-        val gb = mb * 1024
-        return if (length >= gb) {
-            String.format("%.1f GB", length / gb.toFloat())
-        } else if (length >= mb) {
-            String.format("%.1f MB", length / mb.toFloat())
-        } else if (length >= kb) {
-            String.format("%.1f KB", length / kb.toFloat())
-        } else {
-            String.format("%d B", length)
+
+    fun showInfoDialog(context: Context, pdfFile: PdfFile) {
+
+        val dialog = Dialog(context)
+        val dialogBinding: DialogInfoFilesBinding = DialogInfoFilesBinding.inflate(
+            LayoutInflater.from(context)
+        )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialogBinding.fileName.text = pdfFile.name
+        dialogBinding.fileSize.text = formattedFileSize(pdfFile.size)
+        dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
+        dialogBinding.lastModified.text = formattedDate(pdfFile.dateModified)
+        dialogBinding.pages.text = FormattingUtils.getPdfPageCount(pdfFile.path).toString()
+
+
+        dialogBinding.dismiss.setOnClickListener {
+            dialog.dismiss()
         }
+
+        dialog.show()
+
     }
 
-    private fun resizeName(s: String): String {
-        if (s.length <= 32) {
-            return s
-        }
-        val first = s.substring(0, 18)
-        val last = s.substring(s.length - 10, s.length)
-        return "$first...$last"
-    }
-
-    suspend fun generateThumbnail(pdfFilePath: String): Bitmap? = withContext(Dispatchers.IO) {
-        var pdfRenderer: PdfRenderer? = null
-        var currentPage: PdfRenderer.Page? = null
-        try {
-            val file = File(pdfFilePath)
-            if (!file.exists()) {
-                return@withContext null
-            }
-
-            val fileDescriptor =
-                ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-            pdfRenderer = PdfRenderer(fileDescriptor)
-
-            // Use the first page to generate the thumbnail
-            currentPage = pdfRenderer.openPage(0)
-            val bitmap: Bitmap = Bitmap.createBitmap(
-                currentPage.width / 4, currentPage.height / 4, Bitmap.Config.ARGB_8888
-            )
-            currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-
-            bitmap
-        } catch (ex: OutOfMemoryError) {
-            // Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
-            null
-        } catch (ex: Exception) {
-            //  Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
-            null
-        } finally {
-            currentPage?.close()
-            pdfRenderer?.close()
-        }
-    }
-
-    private fun generateNormalThumbnail(pdfFilePath: String): Bitmap? {
-        var pdfRenderer: PdfRenderer? = null
-        var currentPage: PdfRenderer.Page? = null
-        try {
-            val file = File(pdfFilePath)
-            if (!file.exists()) {
-                return null
-            }
-
-            val fileDescriptor =
-                ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-            pdfRenderer = PdfRenderer(fileDescriptor)
-
-            // Use the first page to generate the thumbnail
-            currentPage = pdfRenderer.openPage(0)
-            val bitmap: Bitmap = Bitmap.createBitmap(
-                currentPage.width / 4, currentPage.height / 4, Bitmap.Config.ARGB_8888
-            )
-            currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-
-            return bitmap
-        } catch (ex: OutOfMemoryError) {
-            // Log.e("ThumbnailGenerator", "Memory issue generating thumbnail", ex)
-            return null
-        } catch (ex: Exception) {
-            //  Log.e("ThumbnailGenerator", "Error generating thumbnail", ex)
-            return null
-        } finally {
-            currentPage?.close()
-            pdfRenderer?.close()
-        }
-    }
-
-    private fun extractParentFolders(fullPath: String): String {
-        val path: String = if (fullPath.startsWith("/")) {
-            fullPath.substring(1)
-        } else {
-            fullPath
-        }
-        val parts = path.split("/")
-        if (parts.size < 4) return "Storage"
-        val relevantParts = parts.drop(3).dropLast(1)
-        return relevantParts.joinToString(" > ")
-    }
 
 }

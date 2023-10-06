@@ -23,6 +23,7 @@
             android:src="@drawable/ic_pdf_file" />
 
         <LinearLayout
+            android:id="@+id/fileLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -80,12 +81,12 @@
 
         <ImageView
             android:id="@+id/ivOption"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/option_menu"
-            android:padding="3dp"
+            android:padding="6dp"
             android:src="@drawable/ic_option"
             app:tint="@color/textColorSecondary" />
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
-import com.androvine.pdfreaderpro.repoModels.PdfFileRepository
+import com.androvine.pdfreaderpro.interfaces.PdfFileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
