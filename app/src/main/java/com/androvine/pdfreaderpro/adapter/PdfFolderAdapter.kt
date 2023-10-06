@@ -1,15 +1,20 @@
 package com.androvine.pdfreaderpro.adapter
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.dataClasses.PdfFolder
+import com.androvine.pdfreaderpro.databinding.DialogInfoFolderBinding
 import com.androvine.pdfreaderpro.databinding.SingleFolderItemBinding
 import com.androvine.pdfreaderpro.databinding.SingleFolderItemGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFolderDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnPdfFolderClicked
+import com.androvine.pdfreaderpro.utils.FormattingUtils
 
 @SuppressLint("SetTextI18n")
 class PdfFolderAdapter(
@@ -35,6 +40,10 @@ class PdfFolderAdapter(
                 onPdfFolderClicked.onPdfFolderClicked(pdfFolder.name)
             }
 
+            binding.ivOption.setOnClickListener {
+                showInfoDialog(binding.root.context, pdfFolder)
+            }
+
         }
 
     }
@@ -48,6 +57,10 @@ class PdfFolderAdapter(
 
             binding.root.setOnClickListener {
                 onPdfFolderClicked.onPdfFolderClicked(pdfFolder.name)
+            }
+
+            binding.ivOption.setOnClickListener {
+                showInfoDialog(binding.root.context, pdfFolder)
             }
 
         }
@@ -108,6 +121,32 @@ class PdfFolderAdapter(
         pdfFolders.clear()
         pdfFolders.addAll(newPdfFolders)
         diffResult.dispatchUpdatesTo(this)
+    }
+
+
+    private fun showInfoDialog(context: Context, pdfFolder: PdfFolder) {
+        val dialog = Dialog(context)
+        val dialogBinding: DialogInfoFolderBinding = DialogInfoFolderBinding.inflate(
+            LayoutInflater.from(context)
+        )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialogBinding.folderName.text = pdfFolder.name
+        dialogBinding.fileSize.text = FormattingUtils.formattedFileSize(pdfFolder.pdfFiles.sumOf { it.size })
+        dialogBinding.pdfCount.text = pdfFolder.pdfFiles.size.toString()
+        dialogBinding.folderPath.text = pdfFolder.pdfFiles[0].path.substringBeforeLast("/")
+
+
+        dialogBinding.dismiss.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 

@@ -64,6 +64,8 @@
     <string name="pages_t">Pages:</string>
     <string name="path_t">Path:</string>
     <string name="enter_file_name">Enter File Name</string>
+    <string name="total_pdfs">Total PDFs</string>
+    <string name="total_size">Total Size</string>
 
 
 </resources>

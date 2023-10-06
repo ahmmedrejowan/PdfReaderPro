@@ -1,13 +1,16 @@
 package com.androvine.pdfreaderpro.adapter
 
 import android.app.Dialog
+import android.content.ClipData
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -217,7 +220,7 @@ class PdfAdapter(
 
     fun updatePdfFiles(newPdfFiles: List<PdfFile>) {
 
-        thumbnailCache.evictAll() // clear thumbnail cache
+        thumbnailCache.evictAll()
 
         val diffCallback = PdfFileDiffCallback(pdfFiles, newPdfFiles)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -280,8 +283,32 @@ class PdfAdapter(
             showRenameDialog(context, pdfFile)
         }
 
+        optionBinding.optionShare.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            sharePDF(context, pdfFile)
+        }
+
         bottomSheetDialog.show()
 
+    }
+
+    private fun sharePDF(context: Context, pdfFile: PdfFile) {
+
+        try {
+            val file = File(pdfFile.path)
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.type = "application/pdf"
+            val fileUri = FileProvider.getUriForFile(
+                context, context.packageName + ".provider", file
+            )
+            shareIntent.clipData = ClipData.newRawUri("", fileUri)
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.startActivity(Intent.createChooser(shareIntent, "Share File"))
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun showDeleteDialog(context: Context, pdfFile: PdfFile) {
