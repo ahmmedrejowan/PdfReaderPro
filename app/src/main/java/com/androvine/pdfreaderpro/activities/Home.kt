@@ -43,6 +43,16 @@ class Home : AppCompatActivity() {
 
     }
 
+//    fun refreshMediaStore(context: Context) {
+//        // Use MediaScannerConnection to scan the entire external storage directory
+//        MediaScannerConnection.scanFile(
+//            context,
+//            arrayOf(Environment.getExternalStorageDirectory().toString()),
+//            null
+//        ) { _, _ ->
+//        }
+//    }
+
 
     private fun getCurrentFragment(): Fragment? {
         return supportFragmentManager.findFragmentByTag("f${binding.viewPager.currentItem}")

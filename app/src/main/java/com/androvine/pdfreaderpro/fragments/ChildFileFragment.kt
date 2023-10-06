@@ -15,6 +15,7 @@ import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.BottomSheetSortingBinding
 import com.androvine.pdfreaderpro.databinding.FragmentChildFileBinding
+import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,7 +32,7 @@ class ChildFileFragment : Fragment() {
     private lateinit var pdfAdapter: PdfAdapter
 
 
-    private val filteredList : MutableList<PdfFile> = mutableListOf()
+    private val filteredList: MutableList<PdfFile> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,7 +48,17 @@ class ChildFileFragment : Fragment() {
 
             binding.title.text = folder
 
-            pdfAdapter = PdfAdapter(mutableListOf(), false, binding.recyclerView)
+            pdfAdapter =
+                PdfAdapter(mutableListOf(), false, binding.recyclerView, object : OnPdfFileClicked {
+                    override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
+                        pdfListViewModel.renamePdfFile(pdfFile, newName)
+                    }
+
+                    override fun onPdfFileDeleted(pdfFile: PdfFile) {
+                        pdfListViewModel.deletePdfFile(pdfFile)
+                    }
+
+                })
 
             if (binding.switchView.getCurrentMode() == CustomListGridSwitchView.SwitchMode.GRID) {
                 binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -106,7 +117,6 @@ class ChildFileFragment : Fragment() {
         binding.sortBy.setOnClickListener {
             showSortingDialog()
         }
-
 
 
     }

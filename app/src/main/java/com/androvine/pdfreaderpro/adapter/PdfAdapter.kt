@@ -20,6 +20,7 @@ import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
+import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.utils.FormattingUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
@@ -38,7 +39,7 @@ import java.io.File
 class PdfAdapter(
     private val pdfFiles: MutableList<PdfFile>,
     var isGridView: Boolean = false,
-    private val recyclerView: RecyclerView
+    private val recyclerView: RecyclerView, private val onPdfFileClicked: OnPdfFileClicked
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -300,13 +301,21 @@ class PdfAdapter(
         dialogBinding.fileSize.text = formattedFileSize(pdfFile.size)
         dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
 
+        dialogBinding.cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.delete.setOnClickListener {
+            dialog.dismiss()
+            onPdfFileClicked.onPdfFileDeleted(pdfFile)
+        }
+
 
         dialog.show()
 
     }
 
     private fun showRenameDialog(context: Context, pdfFile: PdfFile) {
-
         val dialog = Dialog(context)
         val dialogBinding: DialogRenameFilesBinding = DialogRenameFilesBinding.inflate(
             LayoutInflater.from(context)
@@ -318,7 +327,6 @@ class PdfAdapter(
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
         )
 
-
         val oldName = pdfFile.name
         var finalNewName = ""
         var hasError = true
@@ -329,22 +337,18 @@ class PdfAdapter(
         }
 
         dialogBinding.renameEditText.addTextChangedListener {
-            // show error if name is empty
             if (it.toString().isEmpty()) {
                 dialogBinding.renameEditText.error = "Name cannot be empty"
                 hasError = true
                 return@addTextChangedListener
             }
 
-            // show error if name contains invalid characters
             if (it.toString().contains("[\\\\/:*?\"<>|]".toRegex())) {
                 dialogBinding.renameEditText.error = "Name cannot contain special characters"
                 hasError = true
                 return@addTextChangedListener
             }
 
-
-            // show error if name already exists in the same folder with same extension
             val pdfFolderPath = pdfFile.path.substringBeforeLast("/")
             val newName = "$pdfFolderPath/${it.toString()}.pdf"
             val file = File(newName)
@@ -354,8 +358,6 @@ class PdfAdapter(
                 return@addTextChangedListener
             }
 
-
-            // if no error, set newName
             dialogBinding.renameEditText.error = null
             finalNewName = it.toString()
             hasError = false
@@ -368,20 +370,19 @@ class PdfAdapter(
 
         dialogBinding.rename.setOnClickListener {
             if (!hasError) {
-
+                dialog.dismiss()
+                onPdfFileClicked.onPdfFileRenamed(pdfFile, finalNewName)
             } else {
                 Toast.makeText(context, "Please enter a valid name", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         dialog.show()
 
     }
 
 
-    fun showInfoDialog(context: Context, pdfFile: PdfFile) {
-
+    private fun showInfoDialog(context: Context, pdfFile: PdfFile) {
         val dialog = Dialog(context)
         val dialogBinding: DialogInfoFilesBinding = DialogInfoFilesBinding.inflate(
             LayoutInflater.from(context)
@@ -405,7 +406,6 @@ class PdfAdapter(
         }
 
         dialog.show()
-
     }
 
 

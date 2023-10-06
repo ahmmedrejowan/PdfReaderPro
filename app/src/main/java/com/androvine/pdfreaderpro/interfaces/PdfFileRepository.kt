@@ -5,4 +5,6 @@ import com.androvine.pdfreaderpro.dataClasses.PdfFile
 interface PdfFileRepository {
     suspend fun getAllPdfFiles(): List<PdfFile>
     suspend fun deletePdfFile(pdfFile: PdfFile): Boolean
+    suspend fun renamePdfFile(pdfFile: PdfFile, newName: String): PdfFile?
+
 }

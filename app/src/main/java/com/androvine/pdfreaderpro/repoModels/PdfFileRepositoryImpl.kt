@@ -1,8 +1,8 @@
 package com.androvine.pdfreaderpro.repoModels
 
 import android.content.Context
+import android.media.MediaScannerConnection
 import android.provider.MediaStore
-import android.util.Log
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.interfaces.PdfFileRepository
 import java.io.File
@@ -31,8 +31,6 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
                 val indexDateModified =
                     cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED)
 
-                Log.d("PdfFileRepositoryImpl", "getAllPdfFiles: indexName: $indexName")
-
                 if (indexName == -1 || indexData == -1 || indexSize == -1 || indexDateModified == -1) {
                     continue
                 }
@@ -43,7 +41,10 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
                 val dateModified = cursor.getLong(indexDateModified)
                 val folderName = getFolderNameFromPath(path)
 
-                pdfFiles.add(PdfFile(name, path, size, dateModified, folderName))
+                val file = File(path)
+                if (file.exists()) {
+                    pdfFiles.add(PdfFile(name, path, size, dateModified, folderName))
+                }
             }
         }
 
@@ -61,7 +62,31 @@ class PdfFileRepositoryImpl(private val context: Context) : PdfFileRepository {
         return folders[folders.size - 2]
     }
 
+    override suspend fun renamePdfFile(pdfFile: PdfFile, newName: String): PdfFile? {
+        val oldFile = File(pdfFile.path)
+        val newFile = File(oldFile.parent, "$newName.pdf")
 
+        // Check if the destination file name already exists
+        if (newFile.exists()) return null
 
+        if (oldFile.renameTo(newFile)) {
+            // Update MediaStore entries after renaming
+            MediaScannerConnection.scanFile(
+                context,
+                arrayOf(oldFile.absolutePath, newFile.absolutePath),
+                null,
+                null
+            )
 
+            return PdfFile(
+                name = newName,
+                path = newFile.path,
+                size = newFile.length(),
+                dateModified = newFile.lastModified(),
+                parentFolderName = getFolderNameFromPath(newFile.path)
+            )
+        } else {
+            return null
+        }
+    }
 }

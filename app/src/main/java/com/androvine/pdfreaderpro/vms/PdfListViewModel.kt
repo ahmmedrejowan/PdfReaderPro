@@ -41,4 +41,19 @@ class PdfListViewModel(private val repo: PdfFileRepository) : ViewModel() {
         }
     }
 
+    fun renamePdfFile(pdfFile: PdfFile, newName: String) {
+        viewModelScope.launch {
+            val updatedPdfFile = withContext(Dispatchers.IO) {
+                repo.renamePdfFile(pdfFile, newName)
+            }
+
+            updatedPdfFile?.let {
+                val updatedList =
+                    _pdfFiles.value?.map { if (it.path == pdfFile.path) updatedPdfFile else it }
+                _pdfFiles.value = updatedList ?: emptyList()
+            }
+        }
+    }
+
+
 }
