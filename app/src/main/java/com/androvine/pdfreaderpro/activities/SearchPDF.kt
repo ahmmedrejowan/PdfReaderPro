@@ -2,7 +2,8 @@ package com.androvine.pdfreaderpro.activities
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.text.TextUtils
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -26,6 +27,13 @@ class SearchPDF : AppCompatActivity() {
 
     private val pdfListViewModel: PdfListViewModel by viewModel()
     private lateinit var pdfAdapter: PdfAdapter
+    private var currentPdfFiles: List<PdfFile> = emptyList()
+
+
+    private var mQueryString: String? = null
+    private val mHandler = Handler(
+        Looper.getMainLooper()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +42,13 @@ class SearchPDF : AppCompatActivity() {
         binding.backButton.setOnClickListener {
             onBackPressed()
         }
+
+        pdfListViewModel.pdfFiles.observe(this) {
+            currentPdfFiles = it
+        }
+
+
+        binding.searchView.requestFocus()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -58,27 +73,41 @@ class SearchPDF : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (TextUtils.isEmpty(newText)) {
-                    pdfAdapter.updatePdfFiles(emptyList())
-                    binding.noFileLayout.visibility = View.GONE
-                } else {
-                    val searchResults = pdfListViewModel.pdfFiles.value?.filter {
-                        it.name.contains(
-                            newText!!, true
-                        )
-                    } ?: emptyList()
-                    if (searchResults.isEmpty()) {
-                        binding.noFileLayout.visibility = View.VISIBLE
-                        pdfAdapter.updatePdfFiles(emptyList())
-                    } else {
-                        binding.noFileLayout.visibility = View.GONE
-                        pdfAdapter.updatePdfFiles(searchResults)
-                    }
-                }
+                mQueryString = newText
+                mHandler.removeCallbacksAndMessages(null)
+
+                mHandler.postDelayed({
+
+                    startPDFSearch(mQueryString)
+
+
+                }, 300)
                 return true
             }
 
         })
+
+    }
+
+    private fun startPDFSearch(mQueryString: String?) {
+
+        if (mQueryString.isNullOrEmpty()) {
+            pdfAdapter.updatePdfFiles(emptyList())
+            binding.noFileLayout.visibility = View.GONE
+        } else {
+            val searchResults = currentPdfFiles.filter {
+                it.name.contains(
+                    mQueryString, true
+                )
+            }
+            if (searchResults.isEmpty()) {
+                binding.noFileLayout.visibility = View.VISIBLE
+                pdfAdapter.updatePdfFiles(emptyList())
+            } else {
+                binding.noFileLayout.visibility = View.GONE
+                pdfAdapter.updatePdfFiles(searchResults)
+            }
+        }
 
     }
 
