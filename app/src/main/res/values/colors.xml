@@ -16,6 +16,7 @@
     <color name="reverse_white">#ffffff</color>
     <color name="grey">#919191</color>
     <color name="red">#DC4C4C</color>
+    <color name="red_light">#D65555</color>
     <color name="green">#689F38</color>
     <color name="wave_background">#D1D1D1</color>
     <color name="linkColor">#3192E6</color>
