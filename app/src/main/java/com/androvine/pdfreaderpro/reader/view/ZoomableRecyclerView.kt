@@ -28,6 +28,10 @@ open class ZoomableRecyclerView(
     private var focusX = 0f
     private var focusY = 0f
 
+    private var lastTouchX = 0f
+    private var lastTouchY = 0f
+
+
     private val linearLayoutManager by lazy { ExtraSpaceLinearLayoutManager(context) }
     private val scaleDetector: ScaleGestureDetector by lazy { ScaleGestureDetector(context, this) }
 
@@ -41,23 +45,53 @@ open class ZoomableRecyclerView(
     }
 
     override fun onTouchEvent(ev: MotionEvent): Boolean {
+        val action = ev.actionMasked
+        when (action) {
+            MotionEvent.ACTION_DOWN -> {
+                lastTouchX = ev.x
+                lastTouchY = ev.y
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (scaleFactor > 1f && !isScaling) {  // Add the !isScaling check
+                    val dx = ev.x - lastTouchX
+                    val dy = ev.y - lastTouchY
+
+                    translationX += dx / scaleFactor
+                    translationY += dy / scaleFactor
+
+                    // Ensure translation doesn't go out of bounds
+                    translationX = translationX.coerceIn(
+                        -width * (scaleFactor - 1),
+                        0f
+                    )
+                    translationY = translationY.coerceIn(
+                        -height * (scaleFactor - 1),
+                        0f
+                    )
+
+                    lastTouchX = ev.x
+                    lastTouchY = ev.y
+                    invalidate() // Add this to redraw after translating
+                }
+            }
+        }
         super.onTouchEvent(ev)
         performClick()
         scaleDetector.onTouchEvent(ev)
         return true
     }
 
+
     override fun dispatchDraw(canvas: Canvas) {
-        updateCanvas(canvas)
+        canvas.save()
+        canvas.translate(translationX / scaleFactor, translationY / scaleFactor)
+        canvas.scale(scaleFactor, scaleFactor, width / 2f, height / 2f)
         super.dispatchDraw(canvas)
-        invalidate()
+        canvas.restore()
     }
 
-    private fun updateCanvas(canvas: Canvas) {
-        if (!isScaling) {
-            decreaseScale()
-        }
 
+    private fun updateCanvas(canvas: Canvas) {
         translationX = calcTranslationX(canvas)
         translationY = calcTranslationY()
 
@@ -124,8 +158,8 @@ open class ZoomableRecyclerView(
 
     override fun onScaleEnd(detector: ScaleGestureDetector) {
         isScaling = false
-        if (scaleFactor <= minZoom) {
-            onScaleChanged()
-        }
+        linearLayoutManager.isScrollEnabled = true
     }
+
+
 }

@@ -4,11 +4,10 @@ import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.androvine.pdfreaderpro.reader.view.ZoomableRecyclerView
-import com.androvine.pdfreaderpro.reader.view.adapter.DefaultPdfPageAdapter
 import com.androvine.pdfreaderpro.reader.interfaces.OnPageChangedListener
 import com.androvine.pdfreaderpro.reader.interfaces.PdfViewController
 import com.androvine.pdfreaderpro.reader.utils.PdfPageQuality
+import com.androvine.pdfreaderpro.reader.view.adapter.DefaultPdfPageAdapter
 import java.io.File
 
 class PdfViewControllerImpl(
