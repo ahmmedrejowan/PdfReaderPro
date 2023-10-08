@@ -69,5 +69,5 @@
     <string name="no_pdf_found_by_that_name">No PDF found by that name</string>
     <string name="back_press">BackPress</string>
 
-
+    <string name="pdf_page_counter">%d / %d</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
+import com.androvine.pdfreaderpro.activities.PDFReader
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
@@ -42,7 +43,8 @@ import java.io.File
 class PdfAdapter(
     private val pdfFiles: MutableList<PdfFile>,
     var isGridView: Boolean = false,
-    private val recyclerView: RecyclerView, private val onPdfFileClicked: OnPdfFileClicked
+    private val recyclerView: RecyclerView,
+    private val onPdfFileClicked: OnPdfFileClicked
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -76,6 +78,10 @@ class PdfAdapter(
             binding.fileLayout.setOnLongClickListener {
                 showOptionsDialog(it.context, pdfFile)
                 true
+            }
+
+            binding.fileLayout.setOnClickListener {
+                openPDF(it.context, pdfFile)
             }
 
             loadThumbnail(pdfFile.path)
@@ -136,6 +142,10 @@ class PdfAdapter(
             binding.fileLayout.setOnLongClickListener {
                 showOptionsDialog(it.context, pdfFile)
                 true
+            }
+
+            binding.fileLayout.setOnClickListener {
+                openPDF(it.context, pdfFile)
             }
 
             loadThumbnail(pdfFile.path)
@@ -217,6 +227,14 @@ class PdfAdapter(
     override fun getItemCount(): Int {
         return pdfFiles.size
     }
+
+    private fun openPDF(context: Context, pdfFile: PdfFile) {
+        context.startActivity(Intent(context, PDFReader::class.java).apply {
+            putExtra("pdfName", pdfFile.name)
+            putExtra("pdfPath", pdfFile.path)
+        })
+    }
+
 
     fun updatePdfFiles(newPdfFiles: List<PdfFile>) {
 
