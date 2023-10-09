@@ -56,7 +56,7 @@ dependencies {
     // koin for dependency injection
     implementation("io.insert-koin:koin-android:3.5.0")
 
-    // pdfium for pdf rendering
-  //  api("com.github.barteksc:pdfium-android:1.9.0")
+    // pdf reader
+    implementation(project(":pdfium-android"))
 
 }

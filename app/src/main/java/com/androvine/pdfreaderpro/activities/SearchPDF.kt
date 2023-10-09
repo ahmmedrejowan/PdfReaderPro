@@ -40,7 +40,7 @@ class SearchPDF : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.backButton.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         pdfListViewModel.pdfFiles.observe(this) {
