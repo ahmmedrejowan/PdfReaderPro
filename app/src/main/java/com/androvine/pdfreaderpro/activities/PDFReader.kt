@@ -30,13 +30,26 @@ class PDFReader : AppCompatActivity() {
             setupPdfView()
         }
 
+
     }
+
 
     private fun setupPdfView() {
 
         binding.title.text = resizeName(pdfName)
 
         val file = File(pdfPath)
+        binding.customPdfView.fromFile(file)
+            .enableSwipe(true)
+            .swipeHorizontal(false)
+            .enableDoubletap(true)
+            .defaultPage(0)
+            .enableAnnotationRendering(true)
+            .password(null)
+            .scrollHandle(null)
+            .enableAntialiasing(true)
+            .spacing(0)
+            .load()
 
 
     }

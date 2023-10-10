@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+//ext {
+//    bintrayRepo = 'maven'
+//    bintrayName = 'android-pdf-viewer'
+//
+//    publishedGroupId = 'com.github.barteksc'
+//    libraryName = 'AndroidPdfViewer'
+//    artifact = 'android-pdf-viewer'
+//
+//    libraryDescription = 'Android view for displaying PDFs rendered with PdfiumAndroid'
+//
+//    siteUrl = 'https://github.com/barteksc/AndroidPdfViewer'
+//    gitUrl = 'https://github.com/barteksc/AndroidPdfViewer.git'
+//
+//    libraryVersion = '3.2.0-beta.1'
+//
+//    developerId = 'barteksc'
+//    developerName = 'Bartosz Schiller'
+//    developerEmail = 'barteksch@boo.pl'
+//
+//    licenseName = 'The Apache Software License, Version 2.0'
+//    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//    allLicenses = ["Apache-2.0"]
+//}
+
+android {
+    namespace 'com.github.barteksc.pdfviewer'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+}
+
+dependencies {
+    api 'com.github.DineroRegnskab:PdfiumAndroid:pdfium-android-1.9.2'
+
+    implementation 'androidx.core:core:1.12.0'
+}
+

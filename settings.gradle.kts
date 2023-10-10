@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "PDF Reader Pro"
 include(":app")
-include(":pdfium-android")
+include(":android-pdf-viewer")
