@@ -143,7 +143,7 @@ class PDFReader : AppCompatActivity() {
         }
 
         val totalPage = binding.customPdfView.pageCount
-        val currentPage = binding.customPdfView.currentPage
+        val currentPage = binding.customPdfView.currentPage + 1
 
         dialogBinding.pageNumbers.text = "($currentPage - $totalPage)"
 
