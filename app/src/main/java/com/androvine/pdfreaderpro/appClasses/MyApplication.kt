@@ -2,6 +2,7 @@ package com.androvine.pdfreaderpro.appClasses
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
 class MyApplication : Application() {
@@ -11,8 +12,9 @@ class MyApplication : Application() {
         super.onCreate()
 
         startKoin {
+            androidLogger()
             androidContext(this@MyApplication)
-            modules(appModule)
+            modules(listOf(appModule, recentModule))
         }
 
 

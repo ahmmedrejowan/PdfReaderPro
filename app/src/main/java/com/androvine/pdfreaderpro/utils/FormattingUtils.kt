@@ -133,7 +133,7 @@ class FormattingUtils {
 
 
         fun getPdfPageCount(path: String): Int {
-            var pageCount: Int = 0
+            val pageCount: Int
 
             var pdfRenderer: PdfRenderer? = null
             try {

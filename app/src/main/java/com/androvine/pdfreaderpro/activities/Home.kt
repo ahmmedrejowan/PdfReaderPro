@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.adapter.FragmentAdapter
+import com.androvine.pdfreaderpro.databaseRecent.RecentDBVM
 import com.androvine.pdfreaderpro.databinding.ActivityHomeBinding
 import com.androvine.pdfreaderpro.fragments.FolderFragment
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
@@ -21,6 +22,7 @@ class Home : AppCompatActivity() {
     }
 
     private val pdfListViewModel: PdfListViewModel by viewModel()
+    private val recentViewModel : RecentDBVM by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +30,8 @@ class Home : AppCompatActivity() {
 
 
         setupBottomNav()
+
+        recentViewModel.getAllRecent()
 
 
         onBackPressedDispatcher.addCallback(this) {
