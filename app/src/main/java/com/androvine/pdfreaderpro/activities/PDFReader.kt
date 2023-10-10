@@ -7,17 +7,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.PopupWindow
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.androvine.pdfreaderpro.R
+import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.ActivityPdfreaderBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetBrightnessBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetJumpBinding
+import com.androvine.pdfreaderpro.databinding.PopupMenuReaderBinding
+import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
+import com.androvine.pdfreaderpro.utils.DialogUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.resizeName
+import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 class PDFReader : AppCompatActivity() {
@@ -37,6 +44,11 @@ class PDFReader : AppCompatActivity() {
     var isDarkMode = false
     var currentPage = 0
 
+    private val pdfListViewModel: PdfListViewModel by viewModel()
+
+
+    var pdfFile: PdfFile? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +67,9 @@ class PDFReader : AppCompatActivity() {
         }
 
         if (pdfName.isNotEmpty() && pdfPath.isNotEmpty()) {
+            pdfListViewModel.pdfFiles.observe(this) { pdfFiles ->
+                pdfFile = pdfFiles.find { it.path == pdfPath }
+            }
             setupPdfView()
         }
 
@@ -127,6 +142,80 @@ class PDFReader : AppCompatActivity() {
             showJumpDialog()
         }
 
+        binding.ivOption.setOnClickListener {
+            showOptionPopup()
+        }
+
+
+    }
+
+    private fun showOptionPopup() {
+        val popupBinding = PopupMenuReaderBinding.inflate(
+            LayoutInflater.from(this)
+        )
+        val popupWindow = PopupWindow(
+            popupBinding.root,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        popupBinding.optionInfo.setOnClickListener {
+
+            if (pdfFile != null) {
+                DialogUtils.showInfoDialog(this, pdfFile!!)
+            } else {
+                Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show()
+            }
+
+
+            popupWindow.dismiss()
+        }
+
+        popupBinding.optionShare.setOnClickListener {
+            if (pdfFile != null) {
+                DialogUtils.sharePDF(this, pdfFile!!)
+            } else {
+                Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show()
+            }
+            popupWindow.dismiss()
+        }
+
+        popupBinding.optionDelete.setOnClickListener {
+            if (pdfFile != null) {
+                DialogUtils.showDeleteDialog(this, pdfFile!!, object : OnPdfFileClicked {
+                    override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
+                        // Do nothing
+                    }
+
+                    override fun onPdfFileDeleted(pdfFile: PdfFile) {
+                        pdfListViewModel.deletePdfFile(pdfFile)
+                        finish()
+                    }
+
+                })
+                finish()
+            } else {
+                Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show()
+            }
+            popupWindow.dismiss()
+        }
+
+        popupBinding.optionFavorite.setOnClickListener {
+//            if (pdfFile != null) {
+//                DialogUtils.addToFavorite(this, pdfFile!!)
+//                finish()
+//            } else {
+//                Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show()
+//            }
+            Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
+            popupWindow.dismiss()
+        }
+
+
+
+        popupWindow.isOutsideTouchable = true
+        popupWindow.showAsDropDown(binding.ivOption)
 
     }
 

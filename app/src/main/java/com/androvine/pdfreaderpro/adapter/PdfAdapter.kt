@@ -25,6 +25,8 @@ import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
+import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.sharePDF
+import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showInfoDialog
 import com.androvine.pdfreaderpro.utils.FormattingUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
@@ -310,24 +312,7 @@ class PdfAdapter(
 
     }
 
-    private fun sharePDF(context: Context, pdfFile: PdfFile) {
 
-        try {
-            val file = File(pdfFile.path)
-            val shareIntent = Intent()
-            shareIntent.action = Intent.ACTION_SEND
-            shareIntent.type = "application/pdf"
-            val fileUri = FileProvider.getUriForFile(
-                context, context.packageName + ".provider", file
-            )
-            shareIntent.clipData = ClipData.newRawUri("", fileUri)
-            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            context.startActivity(Intent.createChooser(shareIntent, "Share File"))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-    }
 
     private fun showDeleteDialog(context: Context, pdfFile: PdfFile) {
 
@@ -426,32 +411,6 @@ class PdfAdapter(
 
     }
 
-
-    private fun showInfoDialog(context: Context, pdfFile: PdfFile) {
-        val dialog = Dialog(context)
-        val dialogBinding: DialogInfoFilesBinding = DialogInfoFilesBinding.inflate(
-            LayoutInflater.from(context)
-        )
-        dialog.setContentView(dialogBinding.root)
-        dialog.setCancelable(true)
-        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.window!!.setLayout(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-
-        dialogBinding.fileName.text = pdfFile.name
-        dialogBinding.fileSize.text = formattedFileSize(pdfFile.size)
-        dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
-        dialogBinding.lastModified.text = formattedDate(pdfFile.dateModified)
-        dialogBinding.pages.text = FormattingUtils.getPdfPageCount(pdfFile.path).toString()
-
-
-        dialogBinding.dismiss.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
-    }
 
 
 }

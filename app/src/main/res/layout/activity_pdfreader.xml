@@ -45,7 +45,7 @@
 
 
             <ImageView
-                android:id="@+id/settingsImageView"
+                android:id="@+id/ivOption"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_alignParentEnd="true"

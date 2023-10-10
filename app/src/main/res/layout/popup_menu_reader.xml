@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundColor"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/option_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp"
+        android:drawablePadding="15dp"
+        android:gravity="center_vertical"
+        android:text="@string/info"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_info" />
+
+
+    <TextView
+        android:id="@+id/option_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp"
+        android:drawablePadding="15dp"
+        android:gravity="center_vertical"
+        android:text="@string/share"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_share" />
+
+
+    <TextView
+        android:id="@+id/option_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp"
+        android:drawablePadding="15dp"
+        android:gravity="center_vertical"
+        android:text="@string/add_to_favorite"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_favorite" />
+
+
+    <TextView
+        android:id="@+id/option_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp"
+        android:drawablePadding="15dp"
+        android:gravity="center_vertical"
+        android:text="@string/delete"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_delete" />
+
+
+</LinearLayout>
