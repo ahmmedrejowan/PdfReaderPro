@@ -7,57 +7,171 @@
     tools:context=".activities.PDFReader">
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true">
-
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:contentDescription="@string/back_press"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@color/textColorSecondary" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/ivBack"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/files"
-            android:textColor="@color/textColor"
-            android:textSize="17sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/back_press"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/textColorSecondary" />
 
 
-        <ImageView
-            android:id="@+id/settingsImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="20dp"
-            android:contentDescription="@string/option_menu"
-            android:src="@drawable/ic_option"
-            app:tint="@color/textColorSecondary" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/ivBack"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/files"
+                android:textColor="@color/textColor"
+                android:textSize="17sp" />
 
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/settingsImageView"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:contentDescription="@string/option_menu"
+                android:padding="2dp"
+                android:src="@drawable/ic_option"
+                app:tint="@color/textColorSecondary" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/dividerLine"
+            android:layout_width="match_parent"
+            android:layout_height=".2dp"
+            android:background="@color/textGrey" />
+
+    </LinearLayout>
 
 
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/customPdfView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/bottomToolbar"
         android:layout_below="@id/toolbar" />
+
+
+    <LinearLayout
+        android:id="@+id/bottomToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/dividerLine2"
+            android:layout_width="match_parent"
+            android:layout_height=".3dp"
+            android:background="@color/textGrey" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/rotateAction"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/rotate"
+                    android:src="@drawable/ic_rotate" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/darkModeAction"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/dark_mode"
+                    android:src="@drawable/ic_dark_mode" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/brightnessAction"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/brightness"
+                    android:src="@drawable/ic_brightness" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/jumpAction"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/jump"
+                    android:src="@drawable/ic_jump" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/scrollChangeAction"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/scroll_orient"
+                    android:src="@drawable/ic_scroll_change" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 
 </RelativeLayout>

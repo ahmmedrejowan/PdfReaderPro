@@ -42,7 +42,7 @@ class PDFReader : AppCompatActivity() {
         binding.customPdfView.fromFile(file)
             .enableSwipe(true)
             .swipeHorizontal(false)
-            .enableDoubletap(true)
+            .enableDoubletap  (true)
             .defaultPage(0)
             .enableAnnotationRendering(true)
             .password(null)
