@@ -1,5 +1,6 @@
 package com.androvine.pdfreaderpro.vms
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,10 +34,13 @@ class PdfListViewModel(private val repo: PdfFileRepository) : ViewModel() {
             val isDeleted = withContext(Dispatchers.IO) {
                 repo.deletePdfFile(pdfFile)
             }
-            if (isDeleted) {
-                // Remove the file from the list
-                val updatedList = _pdfFiles.value?.filter { it.path != pdfFile.path }
-                _pdfFiles.value = updatedList ?: emptyList()
+
+            withContext(Dispatchers.Main) {
+                if (isDeleted) {
+                    // Remove the file from the list
+                    val updatedList = _pdfFiles.value?.filter { it.path != pdfFile.path }?.toList()
+                    _pdfFiles.value = updatedList ?: emptyList()
+                }
             }
         }
     }

@@ -19,6 +19,7 @@
     <color name="wave_background">#515151</color>
     <color name="lite_white">#444444</color>
     <color name="textGrey">#9B9CA8</color>
-    <color name="dark_backgroundColor">#FFFFFF</color>
+    <color name="dark_backgroundColor">#181818</color>
+    <color name="light_backgroundColor">#ffffff</color>
 
 </resources>

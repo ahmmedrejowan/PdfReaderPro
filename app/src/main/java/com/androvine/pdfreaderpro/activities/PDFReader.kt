@@ -98,7 +98,7 @@ class PDFReader : AppCompatActivity() {
         binding.darkModeAction.setOnClickListener {
             isDarkMode = if (isDarkMode) {
                 binding.customPdfView.setNightMode(false)
-                binding.customPdfView.setBackgroundColor(resources.getColor(R.color.white))
+                binding.customPdfView.setBackgroundColor(resources.getColor(R.color.light_backgroundColor))
                 binding.darkModeAction.setImageResource(R.drawable.ic_dark_mode)
                 false
             } else {

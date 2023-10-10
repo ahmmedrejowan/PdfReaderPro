@@ -1,13 +1,18 @@
 package com.androvine.pdfreaderpro.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.format.Formatter.formatFileSize
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.androvine.pdfreaderpro.databinding.FragmentHomeBinding
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -17,7 +22,7 @@ class HomeFragment : Fragment() {
         FragmentHomeBinding.inflate(layoutInflater)
     }
 
-    private val pdfListViewModel: PdfListViewModel by viewModel()
+    private val pdfListViewModel: PdfListViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -66,6 +71,7 @@ class HomeFragment : Fragment() {
         binding.totalFiles.visibility = View.GONE
         binding.totalFilesTitle.visibility = View.GONE
     }
+
 
 
 }

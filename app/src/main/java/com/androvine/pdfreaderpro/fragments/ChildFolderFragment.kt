@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androvine.pdfreaderpro.R
@@ -20,6 +21,7 @@ import com.androvine.pdfreaderpro.interfaces.ChildFragmentsCommunication
 import com.androvine.pdfreaderpro.interfaces.OnPdfFolderClicked
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -29,7 +31,7 @@ class ChildFolderFragment : Fragment() {
     private val binding: FragmentChildFolderBinding by lazy {
         FragmentChildFolderBinding.inflate(layoutInflater)
     }
-    private val pdfListViewModel: PdfListViewModel by viewModel()
+    private val pdfListViewModel: PdfListViewModel by activityViewModel()
     private val mutableListOfFolders = mutableListOf<PdfFolder>()
 
     private lateinit var pdfFolderAdapter: PdfFolderAdapter
@@ -152,17 +154,20 @@ class ChildFolderFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (binding.switchView.getSavedMode() == CustomListGridSwitchView.SwitchMode.GRID) {
-            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-            pdfFolderAdapter.isGridView = true
-            pdfFolderAdapter.notifyDataSetChanged()
-            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.GRID)
 
-        } else {
-            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-            pdfFolderAdapter.isGridView = false
-            pdfFolderAdapter.notifyDataSetChanged()
-            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.LIST)
+        if (binding.switchView.getCurrentMode() != binding.switchView.getSavedMode()) {
+            if (binding.switchView.getSavedMode() == CustomListGridSwitchView.SwitchMode.GRID) {
+                binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+                pdfFolderAdapter.isGridView = true
+                pdfFolderAdapter.notifyDataSetChanged()
+                binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.GRID)
+
+            } else {
+                binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                pdfFolderAdapter.isGridView = false
+                pdfFolderAdapter.notifyDataSetChanged()
+                binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.LIST)
+            }
         }
     }
 

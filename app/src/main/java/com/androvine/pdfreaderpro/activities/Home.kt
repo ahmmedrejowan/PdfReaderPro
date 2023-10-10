@@ -10,6 +10,8 @@ import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.adapter.FragmentAdapter
 import com.androvine.pdfreaderpro.databinding.ActivityHomeBinding
 import com.androvine.pdfreaderpro.fragments.FolderFragment
+import com.androvine.pdfreaderpro.vms.PdfListViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class Home : AppCompatActivity() {
@@ -17,6 +19,8 @@ class Home : AppCompatActivity() {
     private val binding: ActivityHomeBinding by lazy {
         ActivityHomeBinding.inflate(layoutInflater)
     }
+
+    private val pdfListViewModel: PdfListViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androvine.pdfreaderpro.R
@@ -18,6 +19,7 @@ import com.androvine.pdfreaderpro.databinding.FragmentFilesBinding
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("NotifyDataSetChanged")
@@ -28,7 +30,7 @@ class FilesFragment : Fragment() {
         FragmentFilesBinding.inflate(layoutInflater)
     }
 
-    private val pdfListViewModel: PdfListViewModel by viewModel()
+    private val pdfListViewModel: PdfListViewModel by activityViewModel()
     private lateinit var pdfAdapter: PdfAdapter
 
 
@@ -149,19 +151,24 @@ class FilesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (binding.switchView.getSavedMode() == CustomListGridSwitchView.SwitchMode.GRID) {
-            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-            pdfAdapter.isGridView = true
-            pdfAdapter.notifyDataSetChanged()
-            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.GRID)
 
-        } else {
-            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-            pdfAdapter.isGridView = false
-            pdfAdapter.notifyDataSetChanged()
-            binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.LIST)
+        if (binding.switchView.getCurrentMode() != binding.switchView.getSavedMode()) {
+            if (binding.switchView.getSavedMode() == CustomListGridSwitchView.SwitchMode.GRID) {
+                binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+                pdfAdapter.isGridView = true
+                pdfAdapter.notifyDataSetChanged()
+                binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.GRID)
 
+            } else {
+                binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                pdfAdapter.isGridView = false
+                pdfAdapter.notifyDataSetChanged()
+                binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.LIST)
+
+            }
         }
+
+
     }
 
 }
