@@ -71,8 +71,10 @@
     <string name="rotate">Rotate</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="brightness">Brightness</string>
-    <string name="jump">Jump to Page</string>
+    <string name="jump_to_page">Jump to Page</string>
     <string name="scroll_orient">Scroll Orientation</string>
+    <string name="jump">Jump</string>
+    <string name="enter_page_number">Enter Page Number</string>
 
 
 </resources>
