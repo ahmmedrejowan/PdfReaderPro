@@ -182,6 +182,7 @@ class PDFReader : AppCompatActivity() {
         }
 
         popupBinding.optionDelete.setOnClickListener {
+
             if (pdfFile != null) {
                 DialogUtils.showDeleteDialog(this, pdfFile!!, object : OnPdfFileClicked {
                     override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
@@ -194,7 +195,6 @@ class PDFReader : AppCompatActivity() {
                     }
 
                 })
-                finish()
             } else {
                 Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show()
             }
@@ -202,12 +202,7 @@ class PDFReader : AppCompatActivity() {
         }
 
         popupBinding.optionFavorite.setOnClickListener {
-//            if (pdfFile != null) {
-//                DialogUtils.addToFavorite(this, pdfFile!!)
-//                finish()
-//            } else {
-//                Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show()
-//            }
+
             Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
             popupWindow.dismiss()
         }
