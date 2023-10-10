@@ -74,6 +74,9 @@
         android:layout_below="@id/toolbar" />
 
 
+
+
+
     <LinearLayout
         android:id="@+id/bottomToolbar"
         android:layout_width="match_parent"
@@ -160,11 +163,11 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/scrollChangeAction"
+                    android:id="@+id/swipeAction"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:contentDescription="@string/scroll_orient"
-                    android:src="@drawable/ic_scroll_change" />
+                    android:src="@drawable/ic_multi_swipe" />
 
             </LinearLayout>
 

@@ -21,7 +21,9 @@
         android:theme="@style/Theme.PDFReaderPro"
         tools:targetApi="31">
         <activity
+            android:screenOrientation="sensorPortrait"
             android:name=".activities.PDFReader"
+            android:configChanges="orientation|screenSize"
             android:exported="false" />
 
         <provider

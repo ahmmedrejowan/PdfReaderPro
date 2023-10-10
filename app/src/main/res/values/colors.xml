@@ -20,5 +20,7 @@
     <color name="green">#689F38</color>
     <color name="wave_background">#D1D1D1</color>
     <color name="linkColor">#3192E6</color>
+    <color name="dark_backgroundColor">#181818</color>
+
 
 </resources>
