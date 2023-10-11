@@ -9,7 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.androvine.pdfreaderpro.adapter.PdfAdapter
+import com.androvine.pdfreaderpro.adapter.RecentPdfAdapter
+import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
+import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import com.androvine.pdfreaderpro.databaseRecent.RecentDBVM
 import com.androvine.pdfreaderpro.databinding.FragmentHomeBinding
+import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -23,6 +31,10 @@ class HomeFragment : Fragment() {
     }
 
     private val pdfListViewModel: PdfListViewModel by activityViewModel()
+    private val recentViewModel : RecentDBVM by activityViewModel()
+
+    private lateinit var recentAdapter: RecentPdfAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -62,6 +74,55 @@ class HomeFragment : Fragment() {
             binding.totalSize.text = totalFormatted.substring(0, totalFormatted.length - 2)
             binding.totalSizeUnit.text = totalFormatted.substring(totalFormatted.length - 2)
         }
+
+        recentAdapter  = RecentPdfAdapter(mutableListOf(), false, binding.recyclerView, object : OnPdfFileClicked {
+            override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
+               // do later
+            }
+
+            override fun onPdfFileDeleted(pdfFile: PdfFile) {
+               // do later
+
+            }
+
+        })
+
+        if (binding.switchView.getCurrentMode() == CustomListGridSwitchView.SwitchMode.GRID) {
+            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            recentAdapter.isGridView = true
+        } else {
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            recentAdapter.isGridView = false
+
+        }
+
+        binding.recyclerView.adapter = recentAdapter
+
+
+        recentViewModel.allRecent.observe(viewLifecycleOwner) { recentEntities ->
+            recentAdapter.updatePdfFiles(recentEntities)
+
+        }
+
+        binding.switchView.setListener {
+            when (it) {
+                CustomListGridSwitchView.SwitchMode.GRID -> {
+                    binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+                    recentAdapter.isGridView = true
+                    recentAdapter.notifyDataSetChanged()
+                }
+
+                CustomListGridSwitchView.SwitchMode.LIST -> {
+                    binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                    recentAdapter.isGridView = false
+                    recentAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
+        binding.switchView.shouldRememberState(true)
+
+
 
     }
 
