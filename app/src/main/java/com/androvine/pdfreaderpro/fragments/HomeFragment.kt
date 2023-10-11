@@ -1,27 +1,20 @@
 package com.androvine.pdfreaderpro.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.text.format.Formatter.formatFileSize
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.androvine.pdfreaderpro.adapter.PdfAdapter
 import com.androvine.pdfreaderpro.adapter.RecentPdfAdapter
 import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
-import com.androvine.pdfreaderpro.databaseRecent.RecentDBVM
 import com.androvine.pdfreaderpro.databinding.FragmentHomeBinding
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HomeFragment : Fragment() {
@@ -31,7 +24,6 @@ class HomeFragment : Fragment() {
     }
 
     private val pdfListViewModel: PdfListViewModel by activityViewModel()
-    private val recentViewModel : RecentDBVM by activityViewModel()
 
     private lateinit var recentAdapter: RecentPdfAdapter
 
@@ -75,17 +67,21 @@ class HomeFragment : Fragment() {
             binding.totalSizeUnit.text = totalFormatted.substring(totalFormatted.length - 2)
         }
 
-        recentAdapter  = RecentPdfAdapter(mutableListOf(), false, binding.recyclerView, object : OnPdfFileClicked {
-            override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
-               // do later
-            }
+        recentAdapter = RecentPdfAdapter(
+            mutableListOf(),
+            false,
+            binding.recyclerView,
+            object : OnPdfFileClicked {
+                override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
+                    // do later
+                }
 
-            override fun onPdfFileDeleted(pdfFile: PdfFile) {
-               // do later
+                override fun onPdfFileDeleted(pdfFile: PdfFile) {
+                    // do later
 
-            }
+                }
 
-        })
+            })
 
         if (binding.switchView.getCurrentMode() == CustomListGridSwitchView.SwitchMode.GRID) {
             binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -99,10 +95,10 @@ class HomeFragment : Fragment() {
         binding.recyclerView.adapter = recentAdapter
 
 
-        recentViewModel.allRecent.observe(viewLifecycleOwner) { recentEntities ->
-            recentAdapter.updatePdfFiles(recentEntities)
-
-        }
+//        recentViewModel.allRecent.observe(viewLifecycleOwner) { recentEntities ->
+//            recentAdapter.updatePdfFiles(recentEntities)
+//
+//        }
 
         binding.switchView.setListener {
             when (it) {
@@ -123,7 +119,6 @@ class HomeFragment : Fragment() {
         binding.switchView.shouldRememberState(true)
 
 
-
     }
 
     private fun setUpInitialView() {
@@ -132,7 +127,6 @@ class HomeFragment : Fragment() {
         binding.totalFiles.visibility = View.GONE
         binding.totalFilesTitle.visibility = View.GONE
     }
-
 
 
 }

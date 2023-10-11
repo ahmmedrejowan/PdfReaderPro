@@ -2,7 +2,6 @@ package com.androvine.pdfreaderpro.activities
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,8 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
-import com.androvine.pdfreaderpro.databaseRecent.RecentDBVM
-import com.androvine.pdfreaderpro.databaseRecent.RecentEntity
 import com.androvine.pdfreaderpro.databinding.ActivityPdfreaderBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetBrightnessBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetJumpBinding
@@ -48,11 +45,11 @@ class PDFReader : AppCompatActivity() {
     var currentPage = 0
 
     private val pdfListViewModel: PdfListViewModel by viewModel()
-    private val recentViewModel: RecentDBVM by viewModel()
+    //  private val recentViewModel: RecentDBVM by viewModel()
 
 
     var pdfFile: PdfFile? = null
-    var pdfRecentEntity: RecentEntity? = null
+    // var pdfRecentEntity: RecentEntity? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -171,28 +168,28 @@ class PDFReader : AppCompatActivity() {
 
     private fun setUpRecentDB() {
 
-        val file = File(pdfPath)
-        recentViewModel.allRecent.observe(this) { allRecentList ->
-            Log.e("PDFReader", "Recent List: " + allRecentList.size)
-            pdfRecentEntity = allRecentList?.find { it.path == pdfPath }
-            Log.e("PDFReader", "Recent Entity from DB: " + pdfRecentEntity?.name)
-
-            if (pdfRecentEntity == null) {
-                Log.e("PDFReader", "Recent new creation")
-                pdfRecentEntity = RecentEntity(
-                    name = file.name,
-                    path = file.path,
-                    size = file.length(),
-                    dateModified = file.lastModified(),
-                    parentFolderName = getFolderNameFromPath(file.path),
-                    lastOpened = System.currentTimeMillis(),
-                    totalPageCount = binding.customPdfView.pageCount,
-                    lastPageOpened = 1
-                )
-                Log.e("PDFReader", "Recent New Entity Name: " + pdfRecentEntity!!.name)
-                recentViewModel.insertRecent(pdfRecentEntity!!)
-            }
-        }
+//        val file = File(pdfPath)
+//        recentViewModel.allRecent.observe(this) { allRecentList ->
+//            Log.e("PDFReader", "Recent List: " + allRecentList.size)
+//            pdfRecentEntity = allRecentList?.find { it.path == pdfPath }
+//            Log.e("PDFReader", "Recent Entity from DB: " + pdfRecentEntity?.name)
+//
+//            if (pdfRecentEntity == null) {
+//                Log.e("PDFReader", "Recent new creation")
+//                pdfRecentEntity = RecentEntity(
+//                    name = file.name,
+//                    path = file.path,
+//                    size = file.length(),
+//                    dateModified = file.lastModified(),
+//                    parentFolderName = getFolderNameFromPath(file.path),
+//                    lastOpened = System.currentTimeMillis(),
+//                    totalPageCount = binding.customPdfView.pageCount,
+//                    lastPageOpened = 1
+//                )
+//                Log.e("PDFReader", "Recent New Entity Name: " + pdfRecentEntity!!.name)
+//                recentViewModel.insertRecent(pdfRecentEntity!!)
+//            }
+//        }
 
 
     }
@@ -370,17 +367,6 @@ class PDFReader : AppCompatActivity() {
         binding.toolbar.visibility = View.GONE
         binding.bottomToolbar.visibility = View.GONE
         window.decorView.systemUiVisibility = fullScreenFlags
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        if (pdfRecentEntity != null) {
-            pdfRecentEntity!!.lastPageOpened = binding.customPdfView.currentPage
-            pdfRecentEntity!!.lastOpened = System.currentTimeMillis()
-            recentViewModel.updateRecent(pdfRecentEntity!!)
-        }
-
     }
 
 }

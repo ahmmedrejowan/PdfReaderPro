@@ -1,12 +1,11 @@
 package com.androvine.pdfreaderpro.diffUtils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.androvine.pdfreaderpro.dataClasses.PdfFile
-import com.androvine.pdfreaderpro.databaseRecent.RecentEntity
+import com.androvine.pdfreaderpro.dataClasses.RecentModel
 
 class RecentPdfFileDiffCallback(
-    private val oldList: List<RecentEntity>,
-    private val newList: List<RecentEntity>
+    private val oldList: List<RecentModel>,
+    private val newList: List<RecentModel>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

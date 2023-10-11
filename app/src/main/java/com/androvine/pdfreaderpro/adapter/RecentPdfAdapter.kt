@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.activities.PDFReader
-import com.androvine.pdfreaderpro.databaseRecent.RecentEntity
+import com.androvine.pdfreaderpro.dataClasses.RecentModel
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
@@ -38,7 +38,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class RecentPdfAdapter(
-    private val pdfFiles: MutableList<RecentEntity>,
+    private val pdfFiles: MutableList<RecentModel>,
     var isGridView: Boolean = false,
     private val recyclerView: RecyclerView,
     private val onPdfFileClicked: OnPdfFileClicked
@@ -60,7 +60,7 @@ class RecentPdfAdapter(
         private var viewHolderJob = Job()
         private var viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
-        fun bind(pdfFile: RecentEntity) {
+        fun bind(pdfFile: RecentModel) {
             binding.fileName.text = resizeName(pdfFile.name)
             binding.date.text = formattedDate(pdfFile.dateModified)
             binding.size.text = formattedFileSize(pdfFile.size)
@@ -132,7 +132,7 @@ class RecentPdfAdapter(
         private var viewHolderJob = Job()
         private var viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
-        fun bind(pdfFile: RecentEntity) {
+        fun bind(pdfFile: RecentModel) {
             binding.fileName.text = resizeName(pdfFile.name)
             binding.date.text = formattedDate(pdfFile.dateModified)
             binding.size.text = formattedFileSize(pdfFile.size)
@@ -240,7 +240,7 @@ class RecentPdfAdapter(
         return pdfFiles.size
     }
 
-    private fun openPDF(context: Context, pdfFile: RecentEntity) {
+    private fun openPDF(context: Context, pdfFile: RecentModel) {
         context.startActivity(Intent(context, PDFReader::class.java).apply {
             putExtra("pdfName", pdfFile.name)
             putExtra("pdfPath", pdfFile.path)
@@ -248,7 +248,7 @@ class RecentPdfAdapter(
     }
 
 
-    fun updatePdfFiles(newPdfFiles: List<RecentEntity>) {
+    fun updatePdfFiles(newPdfFiles: List<RecentModel>) {
 
         thumbnailCache.evictAll()
 
@@ -264,7 +264,7 @@ class RecentPdfAdapter(
     }
 
 
-    private fun showOptionsDialog(context: Context, pdfFile: RecentEntity) {
+    private fun showOptionsDialog(context: Context, pdfFile: RecentModel) {
         val bottomSheetDialog = BottomSheetDialog(context)
         val optionBinding: BottomSheetMenuFilesBinding = BottomSheetMenuFilesBinding.inflate(
             LayoutInflater.from(context)
@@ -323,7 +323,7 @@ class RecentPdfAdapter(
     }
 
 
-    private fun showDeleteDialog(context: Context, pdfFile: RecentEntity) {
+    private fun showDeleteDialog(context: Context, pdfFile: RecentModel) {
 
         val dialog = Dialog(context)
         val dialogBinding: DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(
@@ -354,7 +354,7 @@ class RecentPdfAdapter(
 
     }
 
-    private fun showRenameDialog(context: Context, pdfFile: RecentEntity) {
+    private fun showRenameDialog(context: Context, pdfFile: RecentModel) {
         val dialog = Dialog(context)
         val dialogBinding: DialogRenameFilesBinding = DialogRenameFilesBinding.inflate(
             LayoutInflater.from(context)
