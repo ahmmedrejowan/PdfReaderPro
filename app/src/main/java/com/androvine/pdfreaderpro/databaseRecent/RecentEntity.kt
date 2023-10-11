@@ -13,5 +13,6 @@ data class RecentEntity (
     @ColumnInfo(name = "dateModified") var dateModified: Long,
     @ColumnInfo(name = "parentFolderName") var parentFolderName: String,
     @ColumnInfo(name = "lastOpened") var lastOpened: Long,
+    @ColumnInfo(name = "totalPageCount") var totalPageCount: Int,
     @ColumnInfo(name = "lastPageOpened") var lastPageOpened: Int
     )

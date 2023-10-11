@@ -2,6 +2,7 @@ package com.androvine.pdfreaderpro.activities
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -10,9 +11,12 @@ import android.widget.PopupWindow
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import com.androvine.pdfreaderpro.databaseRecent.RecentDBVM
+import com.androvine.pdfreaderpro.databaseRecent.RecentEntity
 import com.androvine.pdfreaderpro.databinding.ActivityPdfreaderBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetBrightnessBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetJumpBinding
@@ -44,9 +48,11 @@ class PDFReader : AppCompatActivity() {
     var currentPage = 0
 
     private val pdfListViewModel: PdfListViewModel by viewModel()
+    private val recentViewModel: RecentDBVM by viewModel()
 
 
     var pdfFile: PdfFile? = null
+    var pdfRecentEntity: RecentEntity? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,12 +103,20 @@ class PDFReader : AppCompatActivity() {
         binding.darkModeAction.setOnClickListener {
             isDarkMode = if (isDarkMode) {
                 binding.customPdfView.setNightMode(false)
-                binding.customPdfView.setBackgroundColor(resources.getColor(R.color.light_backgroundColor))
+                binding.customPdfView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this, R.color.light_backgroundColor
+                    )
+                )
                 binding.darkModeAction.setImageResource(R.drawable.ic_dark_mode)
                 false
             } else {
                 binding.customPdfView.setNightMode(true)
-                binding.customPdfView.setBackgroundColor(resources.getColor(R.color.dark_backgroundColor))
+                binding.customPdfView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this, R.color.dark_backgroundColor
+                    )
+                )
                 binding.darkModeAction.setImageResource(R.drawable.ic_light_mode)
                 true
             }
@@ -143,6 +157,41 @@ class PDFReader : AppCompatActivity() {
 
         binding.ivOption.setOnClickListener {
             showOptionPopup()
+        }
+
+        setUpRecentDB()
+
+
+    }
+
+    private fun getFolderNameFromPath(path: String): String {
+        val folders = path.split("/")
+        return folders[folders.size - 2]
+    }
+
+    private fun setUpRecentDB() {
+
+        val file = File(pdfPath)
+        recentViewModel.allRecent.observe(this) { allRecentList ->
+            Log.e("PDFReader", "Recent List: " + allRecentList.size)
+            pdfRecentEntity = allRecentList?.find { it.path == pdfPath }
+            Log.e("PDFReader", "Recent Entity from DB: " + pdfRecentEntity?.name)
+
+            if (pdfRecentEntity == null) {
+                Log.e("PDFReader", "Recent new creation")
+                pdfRecentEntity = RecentEntity(
+                    name = file.name,
+                    path = file.path,
+                    size = file.length(),
+                    dateModified = file.lastModified(),
+                    parentFolderName = getFolderNameFromPath(file.path),
+                    lastOpened = System.currentTimeMillis(),
+                    totalPageCount = binding.customPdfView.pageCount,
+                    lastPageOpened = 1
+                )
+                Log.e("PDFReader", "Recent New Entity Name: " + pdfRecentEntity!!.name)
+                recentViewModel.insertRecent(pdfRecentEntity!!)
+            }
         }
 
 
@@ -243,8 +292,7 @@ class PDFReader : AppCompatActivity() {
                     binding.customPdfView.jumpTo(pageNumber - 1, true)
                     bottomSheetDialog.dismiss()
                 } else {
-                    Toast.makeText(this@PDFReader, "Invalid Page Number", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(this@PDFReader, "Invalid Page Number", Toast.LENGTH_SHORT).show()
                 }
             }
             false
@@ -324,48 +372,15 @@ class PDFReader : AppCompatActivity() {
         window.decorView.systemUiVisibility = fullScreenFlags
     }
 
-    /* ways to add room database
-    val newRecentEntry = RecentEntity(
-    name = "example.pdf",
-    path = "/path/to/example.pdf",
-    size = 1024L,
-    dateModified = System.currentTimeMillis(),
-    parentFolderName = "/path/to/",
-    lastOpened = System.currentTimeMillis(),
-    lastPageOpened = 1
-    )
+    override fun onDestroy() {
+        super.onDestroy()
 
-    viewModel.insertRecent(newRecentEntry)
+        if (pdfRecentEntity != null) {
+            pdfRecentEntity!!.lastPageOpened = binding.customPdfView.currentPage
+            pdfRecentEntity!!.lastOpened = System.currentTimeMillis()
+            recentViewModel.updateRecent(pdfRecentEntity!!)
+        }
 
-
-     // Let's say you've got an instance of RecentEntity you wish to delete:
-   val entryToDelete = ... // fetched or selected somehow
-
-   viewModel.deleteRecent(entryToDelete)
-
-
-
-
-   // Let's say you've got an instance of RecentEntity you wish to update:
-   val entryToUpdate = ... // fetched or selected somehow
-
-   entryToUpdate.name = "newName.pdf"
-   // make other changes as needed
-
-   viewModel.updateRecent(entryToUpdate)
-
-
-   viewModel.allRecent.observe(viewLifecycleOwner, Observer { recentEntities ->
-       // Update your UI with the list of recentEntities.
-       // For instance, you might update an adapter of a RecyclerView.
-   })
-
-
-
-
-
-
-       */
-
+    }
 
 }

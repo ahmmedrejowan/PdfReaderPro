@@ -1,17 +1,24 @@
 package com.androvine.pdfreaderpro.databaseRecent
 
-import kotlinx.coroutines.flow.Flow
+import android.util.Log
+
 
 class RecentRepository(private val recentDao: RecentDao) {
 
     fun getAllRecent() = recentDao.getAllRecent()
 
+    fun getRecentByPath(path: String): RecentEntity {
+        return recentDao.getRecentByPath(path)
+    }
+
     fun insertRecent(recentEntity: RecentEntity) {
-        recentDao.insertRecent(recentEntity)
+        val result = recentDao.insertRecent(recentEntity)
+        Log.e("Recent", "Recent Insert: $result")
     }
 
     fun updateRecent(recentEntity: RecentEntity) {
-        recentDao.updateRecent(recentEntity)
+       val result =  recentDao.updateRecent(recentEntity)
+        Log.e("Recent", "Recent Update: $result")
     }
 
     fun deleteRecent(recentEntity: RecentEntity) {

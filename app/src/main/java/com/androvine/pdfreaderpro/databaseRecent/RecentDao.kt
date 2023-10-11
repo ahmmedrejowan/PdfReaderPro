@@ -12,16 +12,19 @@ import kotlinx.coroutines.flow.Flow
 interface RecentDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRecent(recentEntity: RecentEntity)
+    fun insertRecent(recentEntity: RecentEntity) : Long
 
     @Update
-    fun updateRecent(recentEntity: RecentEntity)
+    fun updateRecent(recentEntity: RecentEntity) : Int
 
     @Query("SELECT * FROM recent_models ORDER BY lastOpened DESC")
     fun getAllRecent(): Flow<MutableList<RecentEntity>>
 
     @Query("SELECT * FROM recent_models WHERE id = :id")
     fun getRecentById(id: Long): RecentEntity
+
+    @Query("SELECT * FROM recent_models WHERE path = :path")
+    fun getRecentByPath(path: String): RecentEntity
 
     @Delete
     fun deleteRecent(recentEntity: RecentEntity)

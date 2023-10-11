@@ -2,6 +2,7 @@ package com.androvine.pdfreaderpro.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -31,7 +32,15 @@ class Home : AppCompatActivity() {
 
         setupBottomNav()
 
-        recentViewModel.getAllRecent()
+        recentViewModel.allRecent.observe(this) { recentEntities ->
+            // Update your UI with the list of recentEntities.
+            // For instance, you might update an adapter of a RecyclerView.
+
+            Log.e("Home", "Recent Size: " + recentEntities.size)
+            if (recentEntities.isNotEmpty()) {
+                Log.e("Recent", "Recent 0 Name: " + recentEntities[0].name)
+            }
+        }
 
 
         onBackPressedDispatcher.addCallback(this) {
@@ -105,6 +114,64 @@ class Home : AppCompatActivity() {
 
 
     }
+
+
+
+
+
+
+    /* ways to add room database
+ val newRecentEntry = RecentEntity(
+ name = "example.pdf",
+ path = "/path/to/example.pdf",
+ size = 1024L,
+ dateModified = System.currentTimeMillis(),
+ parentFolderName = "/path/to/",
+ lastOpened = System.currentTimeMillis(),
+ lastPageOpened = 1
+ )
+
+ viewModel.insertRecent(newRecentEntry)
+
+
+  // Let's say you've got an instance of RecentEntity you wish to delete:
+val entryToDelete = ... // fetched or selected somehow
+
+viewModel.deleteRecent(entryToDelete)
+
+
+
+
+// Let's say you've got an instance of RecentEntity you wish to update:
+val entryToUpdate = ... // fetched or selected somehow
+
+entryToUpdate.name = "newName.pdf"
+// make other changes as needed
+
+viewModel.updateRecent(entryToUpdate)
+
+
+viewModel.allRecent.observe(viewLifecycleOwner, Observer { recentEntities ->
+    // Update your UI with the list of recentEntities.
+    // For instance, you might update an adapter of a RecyclerView.
+})
+
+
+
+
+
+
+    */
+
+
+
+
+
+
+
+
+
+
 
 
 }
