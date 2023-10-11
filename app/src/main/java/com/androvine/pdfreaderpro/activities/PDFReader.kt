@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.androvine.pdfreaderpro.activities
 
 import android.content.pm.ActivityInfo
@@ -10,7 +8,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.SeekBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -327,48 +324,48 @@ class PDFReader : AppCompatActivity() {
         window.decorView.systemUiVisibility = fullScreenFlags
     }
 
- /* ways to add room database
- val newRecentEntry = RecentEntity(
- name = "example.pdf",
- path = "/path/to/example.pdf",
- size = 1024L,
- dateModified = System.currentTimeMillis(),
- parentFolderName = "/path/to/",
- lastOpened = System.currentTimeMillis(),
- lastPageOpened = 1
- )
+    /* ways to add room database
+    val newRecentEntry = RecentEntity(
+    name = "example.pdf",
+    path = "/path/to/example.pdf",
+    size = 1024L,
+    dateModified = System.currentTimeMillis(),
+    parentFolderName = "/path/to/",
+    lastOpened = System.currentTimeMillis(),
+    lastPageOpened = 1
+    )
 
- viewModel.insertRecent(newRecentEntry)
-
-
-  // Let's say you've got an instance of RecentEntity you wish to delete:
-val entryToDelete = ... // fetched or selected somehow
-
-viewModel.deleteRecent(entryToDelete)
+    viewModel.insertRecent(newRecentEntry)
 
 
+     // Let's say you've got an instance of RecentEntity you wish to delete:
+   val entryToDelete = ... // fetched or selected somehow
 
-
-// Let's say you've got an instance of RecentEntity you wish to update:
-val entryToUpdate = ... // fetched or selected somehow
-
-entryToUpdate.name = "newName.pdf"
-// make other changes as needed
-
-viewModel.updateRecent(entryToUpdate)
-
-
-viewModel.allRecent.observe(viewLifecycleOwner, Observer { recentEntities ->
-    // Update your UI with the list of recentEntities.
-    // For instance, you might update an adapter of a RecyclerView.
-})
+   viewModel.deleteRecent(entryToDelete)
 
 
 
 
+   // Let's say you've got an instance of RecentEntity you wish to update:
+   val entryToUpdate = ... // fetched or selected somehow
+
+   entryToUpdate.name = "newName.pdf"
+   // make other changes as needed
+
+   viewModel.updateRecent(entryToUpdate)
 
 
-    */
+   viewModel.allRecent.observe(viewLifecycleOwner, Observer { recentEntities ->
+       // Update your UI with the list of recentEntities.
+       // For instance, you might update an adapter of a RecyclerView.
+   })
+
+
+
+
+
+
+       */
 
 
 }
