@@ -1,7 +1,10 @@
 package com.androvine.pdfreaderpro.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.format.Formatter.formatFileSize
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androvine.pdfreaderpro.adapter.RecentPdfAdapter
 import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
-import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import com.androvine.pdfreaderpro.dataClasses.RecentModel
+import com.androvine.pdfreaderpro.database.RecentDBHelper
 import com.androvine.pdfreaderpro.databinding.FragmentHomeBinding
-import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
+import com.androvine.pdfreaderpro.interfaces.OnRecentClicked
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -26,6 +30,7 @@ class HomeFragment : Fragment() {
     private val pdfListViewModel: PdfListViewModel by activityViewModel()
 
     private lateinit var recentAdapter: RecentPdfAdapter
+    private lateinit var recentDBHelper: RecentDBHelper
 
 
     override fun onCreateView(
@@ -67,21 +72,39 @@ class HomeFragment : Fragment() {
             binding.totalSizeUnit.text = totalFormatted.substring(totalFormatted.length - 2)
         }
 
-        recentAdapter = RecentPdfAdapter(
-            mutableListOf(),
+
+
+        recentAdapter = RecentPdfAdapter(mutableListOf(),
             false,
             binding.recyclerView,
-            object : OnPdfFileClicked {
-                override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
-                    // do later
+            object : OnRecentClicked {
+                override fun onInfo(recentModel: RecentModel) {
+                    //
                 }
 
-                override fun onPdfFileDeleted(pdfFile: PdfFile) {
-                    // do later
-
+                override fun onShare(recentModel: RecentModel) {
+                    //
                 }
+
+                override fun onFavorite(recentModel: RecentModel) {
+                    //
+                }
+
+                override fun onRename(recentModel: RecentModel, newName: String) {
+                    //
+                }
+
+                override fun onRemoveFromRecent(recentModel: RecentModel) {
+                    //
+                }
+
+                override fun onDeleted(recentModel: RecentModel) {
+                    //
+                }
+
 
             })
+
 
         if (binding.switchView.getCurrentMode() == CustomListGridSwitchView.SwitchMode.GRID) {
             binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -91,14 +114,9 @@ class HomeFragment : Fragment() {
             recentAdapter.isGridView = false
 
         }
-
         binding.recyclerView.adapter = recentAdapter
 
 
-//        recentViewModel.allRecent.observe(viewLifecycleOwner) { recentEntities ->
-//            recentAdapter.updatePdfFiles(recentEntities)
-//
-//        }
 
         binding.switchView.setListener {
             when (it) {
@@ -117,7 +135,10 @@ class HomeFragment : Fragment() {
         }
 
         binding.switchView.shouldRememberState(true)
+        recentDBHelper = RecentDBHelper(requireContext())
 
+        val recentList = recentDBHelper.getAllRecentItem()
+        recentAdapter.updatePdfFiles(recentList)
 
     }
 
@@ -128,5 +149,34 @@ class HomeFragment : Fragment() {
         binding.totalFilesTitle.visibility = View.GONE
     }
 
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.e("TAG", "onResume: ")
+
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val recentList = recentDBHelper.getAllRecentItem()
+            recentAdapter.updatePdfFiles(recentList)
+        }, 1000)
+
+
+        if (binding.switchView.getCurrentMode() != binding.switchView.getSavedMode()) {
+            if (binding.switchView.getSavedMode() == CustomListGridSwitchView.SwitchMode.GRID) {
+                binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+                recentAdapter.isGridView = true
+                recentAdapter.notifyDataSetChanged()
+                binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.GRID)
+
+            } else {
+                binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                recentAdapter.isGridView = false
+                recentAdapter.notifyDataSetChanged()
+                binding.switchView.setMode(CustomListGridSwitchView.SwitchMode.LIST)
+
+            }
+        }
+    }
 
 }

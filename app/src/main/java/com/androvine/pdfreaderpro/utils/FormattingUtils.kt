@@ -46,7 +46,7 @@ class FormattingUtils {
         }
 
         fun formattedDate(lastModified: Long): String {
-            val date = Date(lastModified * 1000)
+            val date = Date(lastModified)
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             return sdf.format(date)
         }

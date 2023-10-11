@@ -22,7 +22,7 @@ import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentGridBinding
 import com.androvine.pdfreaderpro.diffUtils.RecentPdfFileDiffCallback
-import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
+import com.androvine.pdfreaderpro.interfaces.OnRecentClicked
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedFileSize
@@ -41,7 +41,7 @@ class RecentPdfAdapter(
     private val pdfFiles: MutableList<RecentModel>,
     var isGridView: Boolean = false,
     private val recyclerView: RecyclerView,
-    private val onPdfFileClicked: OnPdfFileClicked
+    private val onRecentClicked: OnRecentClicked
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -60,36 +60,36 @@ class RecentPdfAdapter(
         private var viewHolderJob = Job()
         private var viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
-        fun bind(pdfFile: RecentModel) {
-            binding.fileName.text = resizeName(pdfFile.name)
-            binding.date.text = formattedDate(pdfFile.dateModified)
-            binding.size.text = formattedFileSize(pdfFile.size)
+        fun bind(recentModel: RecentModel) {
+            binding.fileName.text = resizeName(recentModel.name)
+            binding.date.text = formattedDate(recentModel.dateModified)
+            binding.size.text = formattedFileSize(recentModel.size)
 
             viewHolderJob = Job()
             viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
             binding.ivOption.setOnClickListener {
-                showOptionsDialog(it.context, pdfFile)
+                showOptionsDialog(it.context, recentModel)
             }
 
             binding.fileLayout.setOnLongClickListener {
-                showOptionsDialog(it.context, pdfFile)
+                showOptionsDialog(it.context, recentModel)
                 true
             }
 
             binding.fileLayout.setOnClickListener {
-                openPDF(it.context, pdfFile)
+                openPDF(it.context, recentModel)
             }
 
-            val totalPage = pdfFile.totalPageCount
-            val currentPage = pdfFile.lastPageOpened
+            val totalPage = recentModel.totalPageCount
+            val currentPage = recentModel.lastPageOpened
 
             binding.progressBar.max = totalPage
-            binding.progressBar.progress = currentPage
-            Log.e("TAG", "bind: $totalPage $currentPage")
+            binding.progressBar.progress = currentPage + 1
 
 
-            loadThumbnail(pdfFile.path)
+
+            loadThumbnail(recentModel.path)
         }
 
         private fun loadThumbnail(pdfFilePath: String) {
@@ -132,35 +132,36 @@ class RecentPdfAdapter(
         private var viewHolderJob = Job()
         private var viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
-        fun bind(pdfFile: RecentModel) {
-            binding.fileName.text = resizeName(pdfFile.name)
-            binding.date.text = formattedDate(pdfFile.dateModified)
-            binding.size.text = formattedFileSize(pdfFile.size)
+        fun bind(recentModel: RecentModel) {
+            binding.fileName.text = resizeName(recentModel.name)
+            binding.date.text = formattedDate(recentModel.dateModified)
+            binding.size.text = formattedFileSize(recentModel.size)
 
             viewHolderJob = Job()
             viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
 
             binding.ivOption.setOnClickListener {
-                showOptionsDialog(it.context, pdfFile)
+                showOptionsDialog(it.context, recentModel)
             }
 
             binding.fileLayout.setOnLongClickListener {
-                showOptionsDialog(it.context, pdfFile)
+                showOptionsDialog(it.context, recentModel)
                 true
             }
 
             binding.fileLayout.setOnClickListener {
-                openPDF(it.context, pdfFile)
+                openPDF(it.context, recentModel)
             }
 
-            val totalPage = pdfFile.totalPageCount
-            val currentPage = pdfFile.lastPageOpened
+            val totalPage = recentModel.totalPageCount
+            val currentPage = recentModel.lastPageOpened
 
             binding.progressBar.max = totalPage
-            binding.progressBar.progress = currentPage
+            binding.progressBar.progress = currentPage + 1
 
 
-            loadThumbnail(pdfFile.path)
+
+            loadThumbnail(recentModel.path)
         }
 
         private fun loadThumbnail(pdfFilePath: String) {
@@ -248,15 +249,15 @@ class RecentPdfAdapter(
     }
 
 
-    fun updatePdfFiles(newPdfFiles: List<RecentModel>) {
+    fun updatePdfFiles(newRecentFiles: List<RecentModel>) {
 
         thumbnailCache.evictAll()
 
-        val diffCallback = RecentPdfFileDiffCallback(pdfFiles, newPdfFiles)
+        val diffCallback = RecentPdfFileDiffCallback(pdfFiles, newRecentFiles)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         pdfFiles.clear()
-        pdfFiles.addAll(newPdfFiles)
+        pdfFiles.addAll(newRecentFiles)
 
         diffResult.dispatchUpdatesTo(this)
         recyclerView.layoutManager?.scrollToPosition(0)
