@@ -6,9 +6,11 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -236,6 +238,20 @@ class PDFReader : AppCompatActivity() {
         }
 
         dialogBinding.editText.setText(currentPage.toString())
+
+        dialogBinding.editText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val pageNumber = dialogBinding.editText.text.toString().toInt()
+                if (pageNumber in 1..totalPage) {
+                    binding.customPdfView.jumpTo(pageNumber - 1, true)
+                    bottomSheetDialog.dismiss()
+                } else {
+                    Toast.makeText(this@PDFReader, "Invalid Page Number", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            false
+        }
 
         dialogBinding.jump.setOnClickListener {
             val pageNumber = dialogBinding.editText.text.toString().toInt()
