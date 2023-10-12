@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.util.Log
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,6 +22,9 @@ import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentGridBinding
 import com.androvine.pdfreaderpro.diffUtils.RecentPdfFileDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnRecentClicked
+import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.sharePDF
+import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showDeleteDialog
+import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showInfoDialog
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedFileSize
@@ -121,7 +123,6 @@ class RecentPdfAdapter(
 
         fun clear() {
             viewHolderJob.cancel()
-            //    viewHolderScope.cancel() // cancel ongoing thumbnail generation if any
             binding.fileIcon.setImageResource(R.drawable.ic_pdf_file) // set placeholder
         }
     }
@@ -190,7 +191,6 @@ class RecentPdfAdapter(
 
         fun clear() {
             viewHolderJob.cancel()
-            //    viewHolderScope.cancel() // cancel ongoing thumbnail generation if any
             binding.fileIcon.setImageResource(R.drawable.ic_pdf_file) // set placeholder
         }
     }
@@ -265,7 +265,7 @@ class RecentPdfAdapter(
     }
 
 
-    private fun showOptionsDialog(context: Context, pdfFile: RecentModel) {
+    private fun showOptionsDialog(context: Context, recentModel: RecentModel) {
         val bottomSheetDialog = BottomSheetDialog(context)
         val optionBinding: BottomSheetMenuFilesBinding = BottomSheetMenuFilesBinding.inflate(
             LayoutInflater.from(context)
@@ -277,8 +277,8 @@ class RecentPdfAdapter(
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
         )
 
-        val name = pdfFile.name
-        val path = pdfFile.path
+        val name = recentModel.name
+        val path = recentModel.path
 
         val customFolder = extractParentFolders(path)
 
@@ -301,22 +301,32 @@ class RecentPdfAdapter(
 
         optionBinding.optionDelete.setOnClickListener {
             bottomSheetDialog.dismiss()
-            showDeleteDialog(context, pdfFile)
+            showDeleteDialog(context, recentModel, onRecentClicked)
         }
 
         optionBinding.optionInfo.setOnClickListener {
             bottomSheetDialog.dismiss()
-            //   showInfoDialog(context, pdfFile)
+            showInfoDialog(context, recentModel)
         }
 
         optionBinding.optionRename.setOnClickListener {
             bottomSheetDialog.dismiss()
-            showRenameDialog(context, pdfFile)
+            showRenameDialog(context, recentModel)
         }
 
         optionBinding.optionShare.setOnClickListener {
             bottomSheetDialog.dismiss()
-            //    sharePDF(context, pdfFile)
+            sharePDF(context, recentModel)
+        }
+
+        optionBinding.optionRecent.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            onRecentClicked.onRemoveFromRecent(recentModel)
+        }
+
+        optionBinding.optionFavorite.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            onRecentClicked.onFavorite(recentModel)
         }
 
         bottomSheetDialog.show()
@@ -324,36 +334,7 @@ class RecentPdfAdapter(
     }
 
 
-    private fun showDeleteDialog(context: Context, pdfFile: RecentModel) {
 
-        val dialog = Dialog(context)
-        val dialogBinding: DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(
-            LayoutInflater.from(context)
-        )
-        dialog.setContentView(dialogBinding.root)
-        dialog.setCancelable(true)
-        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.window!!.setLayout(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-
-        dialogBinding.fileName.text = pdfFile.name
-        dialogBinding.fileSize.text = formattedFileSize(pdfFile.size)
-        dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
-
-        dialogBinding.cancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialogBinding.delete.setOnClickListener {
-            dialog.dismiss()
-            //  onPdfFileClicked.onPdfFileDeleted(pdfFile)
-        }
-
-
-        dialog.show()
-
-    }
 
     private fun showRenameDialog(context: Context, pdfFile: RecentModel) {
         val dialog = Dialog(context)
@@ -411,7 +392,7 @@ class RecentPdfAdapter(
         dialogBinding.rename.setOnClickListener {
             if (!hasError) {
                 dialog.dismiss()
-                //   onPdfFileClicked.onPdfFileRenamed(pdfFile, finalNewName)
+                onRecentClicked.onRename(pdfFile, finalNewName)
             } else {
                 Toast.makeText(context, "Please enter a valid name", Toast.LENGTH_SHORT).show()
             }

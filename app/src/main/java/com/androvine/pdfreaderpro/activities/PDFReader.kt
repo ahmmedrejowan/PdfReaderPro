@@ -90,7 +90,7 @@ class PDFReader : AppCompatActivity() {
             recentModel = recentDBHelper.getGetRecentByPath(pdfPath)!!
         } else {
             recentModel = RecentModel(
-                name = file.name,
+                name = file.name.replace(".pdf", ""),
                 path = file.path,
                 size = file.length(),
                 dateModified = file.lastModified(),

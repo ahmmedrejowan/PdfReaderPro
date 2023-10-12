@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var recentAdapter: RecentPdfAdapter
     private lateinit var recentDBHelper: RecentDBHelper
-
+    val recentList: MutableList<RecentModel> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,6 +41,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        recentDBHelper = RecentDBHelper(requireContext())
+        recentList.clear()
+        recentList.addAll(recentDBHelper.getAllRecentItem())
 
 
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Recent"))
@@ -78,14 +82,6 @@ class HomeFragment : Fragment() {
             false,
             binding.recyclerView,
             object : OnRecentClicked {
-                override fun onInfo(recentModel: RecentModel) {
-                    //
-                }
-
-                override fun onShare(recentModel: RecentModel) {
-                    //
-                }
-
                 override fun onFavorite(recentModel: RecentModel) {
                     //
                 }
@@ -95,7 +91,9 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onRemoveFromRecent(recentModel: RecentModel) {
-                    //
+                    recentDBHelper.deleteRecentItem(recentModel.path)
+                    recentList.remove(recentModel)
+                    recentAdapter.updatePdfFiles(recentList)
                 }
 
                 override fun onDeleted(recentModel: RecentModel) {
@@ -115,7 +113,7 @@ class HomeFragment : Fragment() {
 
         }
         binding.recyclerView.adapter = recentAdapter
-
+        recentAdapter.updatePdfFiles(recentList)
 
 
         binding.switchView.setListener {
@@ -135,10 +133,6 @@ class HomeFragment : Fragment() {
         }
 
         binding.switchView.shouldRememberState(true)
-        recentDBHelper = RecentDBHelper(requireContext())
-
-        val recentList = recentDBHelper.getAllRecentItem()
-        recentAdapter.updatePdfFiles(recentList)
 
     }
 
@@ -157,7 +151,8 @@ class HomeFragment : Fragment() {
 
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val recentList = recentDBHelper.getAllRecentItem()
+            recentList.clear()
+            recentList.addAll(recentDBHelper.getAllRecentItem())
             recentAdapter.updatePdfFiles(recentList)
         }, 1000)
 

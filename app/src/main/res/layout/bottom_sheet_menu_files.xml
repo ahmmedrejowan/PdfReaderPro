@@ -135,7 +135,7 @@
         android:text="@string/remove_from_recent"
         android:textColor="@color/textColor"
         android:textSize="16sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:drawableStartCompat="@drawable/ic_recent_remove" />
 
 

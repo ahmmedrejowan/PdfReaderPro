@@ -53,9 +53,9 @@
                 android:id="@+id/ivOption"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:layout_gravity="center"
+                android:layout_gravity="top"
                 android:contentDescription="@string/option_menu"
-                android:padding="6dp"
+                android:padding="7dp"
                 android:src="@drawable/ic_option"
                 app:tint="@color/textColorSecondary" />
         </LinearLayout>
