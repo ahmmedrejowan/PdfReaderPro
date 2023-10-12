@@ -1,24 +1,25 @@
 package com.androvine.pdfreaderpro.adapter
 
 import android.app.Dialog
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.util.LruCache
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.activities.PDFReader
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
-import com.androvine.pdfreaderpro.database.FavoriteDBHelper
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogInfoFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
@@ -26,6 +27,7 @@ import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.sharePDF
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showInfoDialog
+import com.androvine.pdfreaderpro.utils.FormattingUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedFileSize
@@ -40,7 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class PdfAdapter(
+class FavoriteAdapter(
     private val pdfFiles: MutableList<PdfFile>,
     var isGridView: Boolean = false,
     private val recyclerView: RecyclerView,
@@ -264,16 +266,6 @@ class PdfAdapter(
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
         )
 
-        optionBinding.optionRecent.visibility = View.GONE
-
-        val favoriteDBHelper = FavoriteDBHelper(context)
-        val isFavorite = favoriteDBHelper.checkIfExists(pdfFile.path)
-        if (isFavorite) {
-            optionBinding.optionFavorite.text = "Remove from favorites"
-        } else {
-            optionBinding.optionFavorite.text = "Add to favorites"
-        }
-
         val name = pdfFile.name
         val path = pdfFile.path
 
@@ -314,18 +306,6 @@ class PdfAdapter(
         optionBinding.optionShare.setOnClickListener {
             bottomSheetDialog.dismiss()
             sharePDF(context, pdfFile)
-        }
-
-        optionBinding.optionFavorite.setOnClickListener {
-            bottomSheetDialog.dismiss()
-            if (isFavorite) {
-                favoriteDBHelper.deleteFavorite(pdfFile.path)
-                Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()
-            } else {
-                favoriteDBHelper.addFavoriteItem(pdfFile)
-                Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
-            }
-
         }
 
         bottomSheetDialog.show()

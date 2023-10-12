@@ -41,7 +41,7 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
 
     //  ------------------------------CREATE---------------------------------
 
-    fun addRecentItem(pdfFile: PdfFile): Long {
+    fun addFavoriteItem(pdfFile: PdfFile): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put(COLUMN_FILE_NAME, pdfFile.name)
@@ -179,40 +179,6 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
 
 
 
-//    fun checkIfExists(path: String): Boolean {
-//
-//        val db = this.readableDatabase
-//        val cursor = db.query(
-//            FAVORITE_TABLE_NAME, arrayOf(
-//                COLUMN_ID,
-//                COLUMN_FILE_NAME,
-//                COLUMN_FILE_PATH,
-//                COLUMN_FILE_SIZE,
-//                COLUMN_DATE_MODIFIED,
-//                COLUMN_PARENT_FOLDER_NAME,
-//                COLUMN_LAST_OPENED_DATE,
-//                COLUMN_TOTAL_PAGE_COUNT,
-//                COLUMN_LAST_PAGE_OPENED
-//            ), "$COLUMN_FILE_PATH = ?", arrayOf(path), null, null, null
-//        )
-//        var recentModel: PdfFile? = null
-//        with(cursor) {
-//            while (moveToNext()) {
-//                recentModel = PdfFile(
-//                    getInt(getColumnIndexOrThrow(COLUMN_ID)),
-//                    getString(getColumnIndexOrThrow(COLUMN_FILE_NAME)),
-//                    getString(getColumnIndexOrThrow(COLUMN_FILE_PATH)),
-//                    getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
-//                    getLong(getColumnIndexOrThrow(COLUMN_DATE_MODIFIED)),
-//                    getString(getColumnIndexOrThrow(COLUMN_PARENT_FOLDER_NAME)),
-//                    getLong(getColumnIndexOrThrow(COLUMN_LAST_OPENED_DATE)),
-//                    getInt(getColumnIndexOrThrow(COLUMN_TOTAL_PAGE_COUNT)),
-//                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED))
-//                )
-//            }
-//        }
-//        return recentModel != null
-//    }
 
 
 }
