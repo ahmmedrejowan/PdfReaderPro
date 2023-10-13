@@ -6,24 +6,21 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.util.LruCache
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.activities.PDFReader
 import com.androvine.pdfreaderpro.dataClasses.RecentModel
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
-import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
-import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogRecentRemoveFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentGridBinding
 import com.androvine.pdfreaderpro.diffUtils.RecentPdfFileDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnRecentClicked
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.sharePDF
-import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showDeleteDialog
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showInfoDialog
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
@@ -37,7 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class RecentPdfAdapter(
     private val pdfFiles: MutableList<RecentModel>,
@@ -299,19 +295,15 @@ class RecentPdfAdapter(
             optionBinding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
         }
 
-        optionBinding.optionDelete.setOnClickListener {
-            bottomSheetDialog.dismiss()
-            showDeleteDialog(context, recentModel, onRecentClicked)
-        }
+        optionBinding.optionRename.visibility = View.GONE
+        optionBinding.optionDelete.visibility = View.GONE
+        optionBinding.optionFavorite.visibility = View.GONE
+
+
 
         optionBinding.optionInfo.setOnClickListener {
             bottomSheetDialog.dismiss()
             showInfoDialog(context, recentModel)
-        }
-
-        optionBinding.optionRename.setOnClickListener {
-            bottomSheetDialog.dismiss()
-            showRenameDialog(context, recentModel)
         }
 
         optionBinding.optionShare.setOnClickListener {
@@ -321,26 +313,20 @@ class RecentPdfAdapter(
 
         optionBinding.optionRecent.setOnClickListener {
             bottomSheetDialog.dismiss()
-            onRecentClicked.onRemoveFromRecent(recentModel)
+            showRecentDialog(context, recentModel)
         }
 
-        optionBinding.optionFavorite.setOnClickListener {
-            bottomSheetDialog.dismiss()
-            onRecentClicked.onFavorite(recentModel)
-        }
 
         bottomSheetDialog.show()
 
     }
 
-
-
-
-    private fun showRenameDialog(context: Context, pdfFile: RecentModel) {
+    private fun showRecentDialog(context: Context, recentModel: RecentModel) {
         val dialog = Dialog(context)
-        val dialogBinding: DialogRenameFilesBinding = DialogRenameFilesBinding.inflate(
-            LayoutInflater.from(context)
-        )
+        val dialogBinding: DialogRecentRemoveFilesBinding =
+            DialogRecentRemoveFilesBinding.inflate(
+                LayoutInflater.from(context)
+            )
         dialog.setContentView(dialogBinding.root)
         dialog.setCancelable(true)
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
@@ -348,58 +334,21 @@ class RecentPdfAdapter(
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
         )
 
-        val oldName = pdfFile.name
-        var finalNewName = ""
-        var hasError = true
-
-        oldName.let {
-            dialogBinding.renameEditText.setText(it)
-            dialogBinding.renameEditText.setSelection(it.length)
-        }
-
-        dialogBinding.renameEditText.addTextChangedListener {
-            if (it.toString().isEmpty()) {
-                dialogBinding.renameEditText.error = "Name cannot be empty"
-                hasError = true
-                return@addTextChangedListener
-            }
-
-            if (it.toString().contains("[\\\\/:*?\"<>|]".toRegex())) {
-                dialogBinding.renameEditText.error = "Name cannot contain special characters"
-                hasError = true
-                return@addTextChangedListener
-            }
-
-            val pdfFolderPath = pdfFile.path.substringBeforeLast("/")
-            val newName = "$pdfFolderPath/${it.toString()}.pdf"
-            val file = File(newName)
-            if (file.exists() && newName != pdfFile.path) {
-                dialogBinding.renameEditText.error = "File already exists"
-                hasError = true
-                return@addTextChangedListener
-            }
-
-            dialogBinding.renameEditText.error = null
-            finalNewName = it.toString()
-            hasError = false
-
-        }
+        dialogBinding.fileName.text = recentModel.name
+        dialogBinding.fileSize.text = formattedFileSize(recentModel.size)
+        dialogBinding.filePath.text = recentModel.path.substringBeforeLast("/")
 
         dialogBinding.cancel.setOnClickListener {
             dialog.dismiss()
         }
 
-        dialogBinding.rename.setOnClickListener {
-            if (!hasError) {
-                dialog.dismiss()
-                onRecentClicked.onRename(pdfFile, finalNewName)
-            } else {
-                Toast.makeText(context, "Please enter a valid name", Toast.LENGTH_SHORT).show()
-            }
+        dialogBinding.remove.setOnClickListener {
+            dialog.dismiss()
+            onRecentClicked.onRemoveFromRecent(recentModel)
         }
 
-        dialog.show()
 
+        dialog.show()
     }
 
 
