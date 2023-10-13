@@ -24,6 +24,7 @@ import com.androvine.pdfreaderpro.interfaces.OnRecentClicked
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import com.google.android.material.tabs.TabLayout
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import java.io.File
 
 
 class HomeFragment : Fragment() {
@@ -74,7 +75,7 @@ class HomeFragment : Fragment() {
         binding.recyclerViewRecent.visibility = View.VISIBLE
         binding.recyclerViewFavorite.visibility = View.GONE
 
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab?.position == 0) {
                     binding.recyclerViewRecent.visibility = View.VISIBLE
@@ -116,10 +117,10 @@ class HomeFragment : Fragment() {
         }
 
         binding.recyclerViewRecent.adapter = recentAdapter
-        recentAdapter.updatePdfFiles(recentList)
+        checkAndUpdateListRecent()
 
         binding.recyclerViewFavorite.adapter = favoriteAdapter
-        favoriteAdapter.updatePdfFiles(favoriteList)
+        checkAndUpdateListFavorite()
 
 
 
@@ -142,7 +143,8 @@ class HomeFragment : Fragment() {
                     recentAdapter.isGridView = false
                     recentAdapter.notifyDataSetChanged()
 
-                    binding.recyclerViewFavorite.layoutManager = LinearLayoutManager(requireContext())
+                    binding.recyclerViewFavorite.layoutManager =
+                        LinearLayoutManager(requireContext())
                     favoriteAdapter.isGridView = false
                     favoriteAdapter.notifyDataSetChanged()
 
@@ -256,11 +258,12 @@ class HomeFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             recentList.clear()
             recentList.addAll(recentDBHelper.getAllRecentItem())
-            recentAdapter.updatePdfFiles(recentList)
+            checkAndUpdateListRecent()
 
             favoriteList.clear()
             favoriteList.addAll(favoriteDBHelper.getAllFavoriteItem())
-            favoriteAdapter.updatePdfFiles(favoriteList)
+            checkAndUpdateListFavorite()
+
         }, 1000)
 
 
@@ -289,6 +292,32 @@ class HomeFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun checkAndUpdateListFavorite() {
+
+        favoriteList.forEach {
+            val file = File(it.path)
+            if (!file.exists()) {
+                favoriteDBHelper.deleteFavorite(it.path)
+            }
+
+        }
+
+        favoriteAdapter.updatePdfFiles(favoriteList)
+    }
+
+    private fun checkAndUpdateListRecent() {
+        recentList.forEach {
+            val file = File(it.path)
+            if (!file.exists()) {
+                recentDBHelper.deleteRecentItem(it.path)
+            }
+
+        }
+
+        recentAdapter.updatePdfFiles(recentList)
+
     }
 
 }

@@ -14,6 +14,8 @@ import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.adapter.PdfAdapter
 import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
+import com.androvine.pdfreaderpro.database.FavoriteDBHelper
+import com.androvine.pdfreaderpro.database.RecentDBHelper
 import com.androvine.pdfreaderpro.databinding.BottomSheetSortingBinding
 import com.androvine.pdfreaderpro.databinding.FragmentFilesBinding
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
@@ -33,6 +35,8 @@ class FilesFragment : Fragment() {
     private val pdfListViewModel: PdfListViewModel by activityViewModel()
     private lateinit var pdfAdapter: PdfAdapter
 
+    private lateinit var recentDBHelper: RecentDBHelper
+    private lateinit var favoriteDBHelper: FavoriteDBHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,14 +48,34 @@ class FilesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        recentDBHelper = RecentDBHelper(requireContext())
+        favoriteDBHelper = FavoriteDBHelper(requireContext())
+
         pdfAdapter =
             PdfAdapter(mutableListOf(), false, binding.recyclerView, object : OnPdfFileClicked {
                 override fun onPdfFileRenamed(pdfFile: PdfFile, newName: String) {
                     pdfListViewModel.renamePdfFile(pdfFile, newName)
+
+                    if (recentDBHelper.checkIfExists(pdfFile.path)){
+                        recentDBHelper.deleteRecentItem(pdfFile.path)
+                    }
+
+                    if (favoriteDBHelper.checkIfExists(pdfFile.path)){
+                        favoriteDBHelper.deleteFavorite(pdfFile.path)
+                    }
+
                 }
 
                 override fun onPdfFileDeleted(pdfFile: PdfFile) {
                     pdfListViewModel.deletePdfFile(pdfFile)
+
+                    if (recentDBHelper.checkIfExists(pdfFile.path)){
+                        recentDBHelper.deleteRecentItem(pdfFile.path)
+                    }
+
+                    if (favoriteDBHelper.checkIfExists(pdfFile.path)){
+                        favoriteDBHelper.deleteFavorite(pdfFile.path)
+                    }
 
                 }
 

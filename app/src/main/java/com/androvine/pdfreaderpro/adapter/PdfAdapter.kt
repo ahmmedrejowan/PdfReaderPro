@@ -19,6 +19,7 @@ import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.database.FavoriteDBHelper
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogFavoriteRemoveFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
@@ -270,8 +271,20 @@ class PdfAdapter(
         val isFavorite = favoriteDBHelper.checkIfExists(pdfFile.path)
         if (isFavorite) {
             optionBinding.optionFavorite.text = "Remove from favorites"
+            optionBinding.optionFavorite.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_no_favorite,
+                0,
+                0,
+                0
+            )
         } else {
             optionBinding.optionFavorite.text = "Add to favorites"
+            optionBinding.optionFavorite.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_favorite,
+                0,
+                0,
+                0
+            )
         }
 
         val name = pdfFile.name
@@ -319,8 +332,7 @@ class PdfAdapter(
         optionBinding.optionFavorite.setOnClickListener {
             bottomSheetDialog.dismiss()
             if (isFavorite) {
-                favoriteDBHelper.deleteFavorite(pdfFile.path)
-                Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()
+                showFavoriteDialog(context, favoriteDBHelper, pdfFile)
             } else {
                 favoriteDBHelper.addFavoriteItem(pdfFile)
                 Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
@@ -332,6 +344,40 @@ class PdfAdapter(
 
     }
 
+    private fun showFavoriteDialog(
+        context: Context,
+        favoriteDBHelper: FavoriteDBHelper,
+        pdfFile: PdfFile
+    ) {
+
+        val dialog = Dialog(context)
+        val dialogBinding: DialogFavoriteRemoveFilesBinding =
+            DialogFavoriteRemoveFilesBinding.inflate(
+                LayoutInflater.from(context)
+            )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialogBinding.fileName.text = pdfFile.name
+        dialogBinding.fileSize.text = formattedFileSize(pdfFile.size)
+        dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
+
+        dialogBinding.cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.remove.setOnClickListener {
+            dialog.dismiss()
+            favoriteDBHelper.deleteFavorite(pdfFile.path)
+        }
+
+        dialog.show()
+
+    }
 
 
     private fun showDeleteDialog(context: Context, pdfFile: PdfFile) {
