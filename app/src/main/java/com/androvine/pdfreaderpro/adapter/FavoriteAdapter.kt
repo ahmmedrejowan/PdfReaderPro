@@ -1,35 +1,28 @@
 package com.androvine.pdfreaderpro.adapter
 
 import android.app.Dialog
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.util.LruCache
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.core.content.FileProvider
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.activities.PDFReader
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
-import com.androvine.pdfreaderpro.databinding.DialogDeleteFilesBinding
-import com.androvine.pdfreaderpro.databinding.DialogInfoFilesBinding
-import com.androvine.pdfreaderpro.databinding.DialogRenameFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogFavoriteRemoveFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.sharePDF
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showInfoDialog
-import com.androvine.pdfreaderpro.utils.FormattingUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
-import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedFileSize
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateNormalThumbnail
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateThumbnail
@@ -40,7 +33,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FavoriteAdapter(
     private val pdfFiles: MutableList<PdfFile>,
@@ -274,6 +269,13 @@ class FavoriteAdapter(
         optionBinding.fileName.text = name
         optionBinding.filePath.text = customFolder
 
+
+        optionBinding.optionRename.visibility = View.GONE
+        optionBinding.optionRecent.visibility = View.GONE
+        optionBinding.optionDelete.visibility = View.GONE
+
+
+
         try {
             var thumbnail = thumbnailCache.get(path)
             if (thumbnail == null) {
@@ -288,9 +290,17 @@ class FavoriteAdapter(
             optionBinding.fileIcon.setImageResource(R.drawable.ic_pdf_file)
         }
 
-        optionBinding.optionDelete.setOnClickListener {
+        optionBinding.optionFavorite.text = "Remove from favorites"
+        optionBinding.optionFavorite.setCompoundDrawablesWithIntrinsicBounds(
+            R.drawable.ic_no_favorite,
+            0,
+            0,
+            0
+        )
+
+        optionBinding.optionFavorite.setOnClickListener {
             bottomSheetDialog.dismiss()
-            showDeleteDialog(context, pdfFile)
+            showFavoriteDialog(context, pdfFile)
         }
 
         optionBinding.optionInfo.setOnClickListener {
@@ -298,10 +308,6 @@ class FavoriteAdapter(
             showInfoDialog(context, pdfFile)
         }
 
-        optionBinding.optionRename.setOnClickListener {
-            bottomSheetDialog.dismiss()
-            showRenameDialog(context, pdfFile)
-        }
 
         optionBinding.optionShare.setOnClickListener {
             bottomSheetDialog.dismiss()
@@ -312,14 +318,12 @@ class FavoriteAdapter(
 
     }
 
-
-
-    private fun showDeleteDialog(context: Context, pdfFile: PdfFile) {
-
+    private fun showFavoriteDialog(context: Context, pdfFile: PdfFile) {
         val dialog = Dialog(context)
-        val dialogBinding: DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(
-            LayoutInflater.from(context)
-        )
+        val dialogBinding: DialogFavoriteRemoveFilesBinding =
+            DialogFavoriteRemoveFilesBinding.inflate(
+                LayoutInflater.from(context)
+            )
         dialog.setContentView(dialogBinding.root)
         dialog.setCancelable(true)
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
@@ -335,7 +339,7 @@ class FavoriteAdapter(
             dialog.dismiss()
         }
 
-        dialogBinding.delete.setOnClickListener {
+        dialogBinding.remove.setOnClickListener {
             dialog.dismiss()
             onPdfFileClicked.onPdfFileDeleted(pdfFile)
         }
@@ -345,72 +349,11 @@ class FavoriteAdapter(
 
     }
 
-    private fun showRenameDialog(context: Context, pdfFile: PdfFile) {
-        val dialog = Dialog(context)
-        val dialogBinding: DialogRenameFilesBinding = DialogRenameFilesBinding.inflate(
-            LayoutInflater.from(context)
-        )
-        dialog.setContentView(dialogBinding.root)
-        dialog.setCancelable(true)
-        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.window!!.setLayout(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
-        )
 
-        val oldName = pdfFile.name
-        var finalNewName = ""
-        var hasError = true
-
-        oldName.let {
-            dialogBinding.renameEditText.setText(it)
-            dialogBinding.renameEditText.setSelection(it.length)
-        }
-
-        dialogBinding.renameEditText.addTextChangedListener {
-            if (it.toString().isEmpty()) {
-                dialogBinding.renameEditText.error = "Name cannot be empty"
-                hasError = true
-                return@addTextChangedListener
-            }
-
-            if (it.toString().contains("[\\\\/:*?\"<>|]".toRegex())) {
-                dialogBinding.renameEditText.error = "Name cannot contain special characters"
-                hasError = true
-                return@addTextChangedListener
-            }
-
-            val pdfFolderPath = pdfFile.path.substringBeforeLast("/")
-            val newName = "$pdfFolderPath/${it.toString()}.pdf"
-            val file = File(newName)
-            if (file.exists() && newName != pdfFile.path) {
-                dialogBinding.renameEditText.error = "File already exists"
-                hasError = true
-                return@addTextChangedListener
-            }
-
-            dialogBinding.renameEditText.error = null
-            finalNewName = it.toString()
-            hasError = false
-
-        }
-
-        dialogBinding.cancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialogBinding.rename.setOnClickListener {
-            if (!hasError) {
-                dialog.dismiss()
-                onPdfFileClicked.onPdfFileRenamed(pdfFile, finalNewName)
-            } else {
-                Toast.makeText(context, "Please enter a valid name", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        dialog.show()
-
+    private fun formattedDate(lastModified: Long): String {
+        val date = Date(lastModified * 1000)
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+        return sdf.format(date)
     }
-
-
 
 }

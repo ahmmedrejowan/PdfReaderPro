@@ -192,7 +192,9 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onPdfFileDeleted(pdfFile: PdfFile) {
-                    //
+                    favoriteDBHelper.deleteFavorite(pdfFile.path)
+                    favoriteList.remove(pdfFile)
+                    favoriteAdapter.updatePdfFiles(favoriteList)
                 }
 
             })

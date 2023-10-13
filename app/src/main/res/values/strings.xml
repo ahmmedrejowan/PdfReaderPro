@@ -75,6 +75,7 @@
     <string name="scroll_orient">Scroll Orientation</string>
     <string name="jump">Jump</string>
     <string name="enter_page_number">Enter Page Number</string>
+    <string name="remove">Remove</string>
 
 
 </resources>
