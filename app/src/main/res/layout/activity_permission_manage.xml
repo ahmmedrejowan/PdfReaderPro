@@ -85,6 +85,7 @@
             android:padding="15dp"
             android:text="@string/allow_access"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="18sp"
             app:cornerRadius="30dp" />
 
