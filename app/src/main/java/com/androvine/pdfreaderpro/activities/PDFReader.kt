@@ -1,5 +1,7 @@
 package com.androvine.pdfreaderpro.activities
 
+import android.app.Dialog
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,13 +17,16 @@ import androidx.core.view.isVisible
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.dataClasses.RecentModel
+import com.androvine.pdfreaderpro.database.FavoriteDBHelper
 import com.androvine.pdfreaderpro.database.RecentDBHelper
 import com.androvine.pdfreaderpro.databinding.ActivityPdfreaderBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetBrightnessBinding
 import com.androvine.pdfreaderpro.databinding.BottomSheetJumpBinding
+import com.androvine.pdfreaderpro.databinding.DialogFavoriteRemoveFilesBinding
 import com.androvine.pdfreaderpro.databinding.PopupMenuReaderBinding
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.utils.DialogUtils
+import com.androvine.pdfreaderpro.utils.FormattingUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.resizeName
 import com.androvine.pdfreaderpro.vms.PdfListViewModel
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle
@@ -52,6 +57,8 @@ class PDFReader : AppCompatActivity() {
     private lateinit var recentDBHelper: RecentDBHelper
     lateinit var recentModel: RecentModel
 
+    private lateinit var favoriteDBHelper: FavoriteDBHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +68,8 @@ class PDFReader : AppCompatActivity() {
         pdfName = intent.getStringExtra("pdfName").toString()
 
         recentDBHelper = RecentDBHelper(this)
+        favoriteDBHelper = FavoriteDBHelper(this)
+
 
         if (savedInstanceState != null) {
             currentPage = savedInstanceState.getInt("CURRENT_PAGE", 0)
@@ -200,6 +209,8 @@ class PDFReader : AppCompatActivity() {
 
 
     private fun showOptionPopup() {
+
+
         val popupBinding = PopupMenuReaderBinding.inflate(
             LayoutInflater.from(this)
         )
@@ -209,6 +220,25 @@ class PDFReader : AppCompatActivity() {
             FrameLayout.LayoutParams.WRAP_CONTENT,
             true
         )
+
+        val isFavorite = favoriteDBHelper.checkIfExists(pdfFile!!.path)
+        if (isFavorite) {
+            popupBinding.optionFavorite.text = "Remove from favorites"
+            popupBinding.optionFavorite.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_no_favorite,
+                0,
+                0,
+                0
+            )
+        } else {
+            popupBinding.optionFavorite.text = "Add to favorites"
+            popupBinding.optionFavorite.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_favorite,
+                0,
+                0,
+                0
+            )
+        }
 
         popupBinding.optionInfo.setOnClickListener {
 
@@ -241,6 +271,15 @@ class PDFReader : AppCompatActivity() {
 
                     override fun onPdfFileDeleted(pdfFile: PdfFile) {
                         pdfListViewModel.deletePdfFile(pdfFile)
+
+                        if (recentDBHelper.checkIfExists(pdfFile.path)) {
+                            recentDBHelper.deleteRecentItem(pdfFile.path)
+                        }
+
+                        if (favoriteDBHelper.checkIfExists(pdfFile.path)) {
+                            favoriteDBHelper.deleteFavorite(pdfFile.path)
+                        }
+
                         finish()
                     }
 
@@ -253,7 +292,13 @@ class PDFReader : AppCompatActivity() {
 
         popupBinding.optionFavorite.setOnClickListener {
 
-            Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
+            if (isFavorite) {
+                showFavoriteDialog(this, favoriteDBHelper, pdfFile!!)
+            } else {
+                favoriteDBHelper.addFavoriteItem(pdfFile!!)
+                Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show()
+            }
+
             popupWindow.dismiss()
         }
 
@@ -263,6 +308,44 @@ class PDFReader : AppCompatActivity() {
         popupWindow.showAsDropDown(binding.ivOption)
 
     }
+
+
+    private fun showFavoriteDialog(
+        context: Context,
+        favoriteDBHelper: FavoriteDBHelper,
+        pdfFile: PdfFile
+    ) {
+
+        val dialog = Dialog(context)
+        val dialogBinding: DialogFavoriteRemoveFilesBinding =
+            DialogFavoriteRemoveFilesBinding.inflate(
+                LayoutInflater.from(context)
+            )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+
+        dialogBinding.fileName.text = pdfFile.name
+        dialogBinding.fileSize.text = FormattingUtils.formattedFileSize(pdfFile.size)
+        dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
+
+        dialogBinding.cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.remove.setOnClickListener {
+            dialog.dismiss()
+            favoriteDBHelper.deleteFavorite(pdfFile.path)
+        }
+
+        dialog.show()
+
+    }
+
 
     private fun showJumpDialog() {
         val bottomSheetDialog = BottomSheetDialog(this)
