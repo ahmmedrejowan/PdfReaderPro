@@ -15,6 +15,8 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.androvine.pdfreaderpro.R
+import com.androvine.pdfreaderpro.database.FavoriteDBHelper
+import com.androvine.pdfreaderpro.database.RecentDBHelper
 import com.androvine.pdfreaderpro.repoModels.IntroRepository
 import com.androvine.pdfreaderpro.repoModels.PermissionRepository
 import org.koin.android.ext.android.inject
@@ -40,6 +42,7 @@ class SplashScreen : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+
 
 
         Handler(Looper.getMainLooper()).postDelayed({

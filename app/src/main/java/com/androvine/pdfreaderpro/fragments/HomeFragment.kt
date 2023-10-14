@@ -297,6 +297,7 @@ class HomeFragment : Fragment() {
     private fun checkAndUpdateListFavorite() {
 
         favoriteList.forEach {
+
             val file = File(it.path)
             if (!file.exists()) {
                 favoriteDBHelper.deleteFavorite(it.path)
@@ -309,11 +310,12 @@ class HomeFragment : Fragment() {
 
     private fun checkAndUpdateListRecent() {
         recentList.forEach {
-            val file = File(it.path)
-            if (!file.exists()) {
-                recentDBHelper.deleteRecentItem(it.path)
-            }
-
+//            if (!it.isUri){
+//                val file = File(it.path)
+//                if (!file.exists()) {
+//                    recentDBHelper.deleteRecentItem(it.path)
+//                }
+//            }
         }
 
         recentAdapter.updatePdfFiles(recentList)

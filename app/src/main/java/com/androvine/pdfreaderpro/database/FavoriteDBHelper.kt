@@ -10,19 +10,19 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
     companion object {
         const val FAVORITE_TABLE_NAME = "favorite"
 
-        const val COLUMN_ID = "id_favorite"
-        const val COLUMN_FILE_NAME = "file_name_favorite"
-        const val COLUMN_FILE_PATH = "file_path_favorite"
-        const val COLUMN_FILE_SIZE = "file_size_favorite"
-        const val COLUMN_DATE_MODIFIED = "date_modified_favorite"
-        const val COLUMN_PARENT_FOLDER_NAME = "parent_folder_name_favorite"
+        private const val COLUMN_ID = "id_favorite"
+        private const val COLUMN_FILE_NAME = "file_name_favorite"
+        private const val COLUMN_FILE_PATH = "file_path_favorite"
+        private const val COLUMN_FILE_SIZE = "file_size_favorite"
+        private const val COLUMN_DATE_MODIFIED = "date_modified_favorite"
+        private const val COLUMN_PARENT_FOLDER_NAME = "parent_folder_name_favorite"
 
 
-        const val SQL_CREATE_FAVORITE_TABLE =
+        private const val SQL_CREATE_FAVORITE_TABLE =
             "CREATE TABLE IF NOT EXISTS $FAVORITE_TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COLUMN_FILE_NAME TEXT,$COLUMN_FILE_PATH TEXT,$COLUMN_FILE_SIZE INTEGER,$COLUMN_DATE_MODIFIED INTEGER,$COLUMN_PARENT_FOLDER_NAME TEXT)"
 
 
-        const val SQL_DELETE_FAVORITE_TABLE = "DROP TABLE IF EXISTS $FAVORITE_TABLE_NAME"
+        private const val SQL_DELETE_FAVORITE_TABLE = "DROP TABLE IF EXISTS $FAVORITE_TABLE_NAME"
 
 
     }

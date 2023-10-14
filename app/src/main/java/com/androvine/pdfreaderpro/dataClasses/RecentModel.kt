@@ -5,10 +5,8 @@ data class RecentModel(
     var name: String,
     var path: String,
     var size: Long,
-    var dateModified: Long,
-    var parentFolderName: String,
     var lastOpenedDate: Long,
     var totalPageCount: Int,
     var lastPageOpened: Int,
-    var isUri: Boolean = false
+    var isUri: Boolean
 )

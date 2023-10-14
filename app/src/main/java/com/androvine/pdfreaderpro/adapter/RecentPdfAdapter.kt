@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +61,6 @@ class RecentPdfAdapter(
 
         fun bind(recentModel: RecentModel) {
             binding.fileName.text = resizeName(recentModel.name)
-            binding.date.text = formattedDate(recentModel.dateModified)
             binding.size.text = formattedFileSize(recentModel.size)
 
             viewHolderJob = Job()
@@ -131,7 +131,6 @@ class RecentPdfAdapter(
 
         fun bind(recentModel: RecentModel) {
             binding.fileName.text = resizeName(recentModel.name)
-            binding.date.text = formattedDate(recentModel.dateModified)
             binding.size.text = formattedFileSize(recentModel.size)
 
             viewHolderJob = Job()
@@ -238,10 +237,23 @@ class RecentPdfAdapter(
     }
 
     private fun openPDF(context: Context, pdfFile: RecentModel) {
-        context.startActivity(Intent(context, PDFReader::class.java).apply {
-            putExtra("pdfName", pdfFile.name)
-            putExtra("pdfPath", pdfFile.path)
-        })
+
+        if (pdfFile.isUri){
+            context.startActivity(Intent(context, PDFReader::class.java).apply {
+                putExtra("pdfUri", Uri.parse(pdfFile.path))
+            })
+
+        } else {
+            context.startActivity(Intent(context, PDFReader::class.java).apply {
+                putExtra("pdfName", pdfFile.name)
+                putExtra("pdfPath", pdfFile.path)
+            })
+        }
+
+
+
+
+
     }
 
 

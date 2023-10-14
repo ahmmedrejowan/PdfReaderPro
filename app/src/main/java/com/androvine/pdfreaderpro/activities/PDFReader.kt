@@ -2,6 +2,7 @@ package com.androvine.pdfreaderpro.activities
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
@@ -36,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
+@Suppress("DEPRECATION")
 class PDFReader : AppCompatActivity() {
 
     private val binding: ActivityPdfreaderBinding by lazy {
@@ -62,7 +64,7 @@ class PDFReader : AppCompatActivity() {
     var pdfFile: PdfFile? = null
 
     private lateinit var recentDBHelper: RecentDBHelper
-    lateinit var recentModel: RecentModel
+    var recentModel: RecentModel? = null
 
     private lateinit var favoriteDBHelper: FavoriteDBHelper
 
@@ -79,6 +81,8 @@ class PDFReader : AppCompatActivity() {
         isFromShare = intent.getBooleanExtra("isFromShare", false)
         isOutside = intent.getBooleanExtra("isOutside", false)
 
+        Log.e("Intent", "pdf path: $pdfPath")
+        Log.e("Intent", "pdf uri: $pdfUri")
 
         recentDBHelper = RecentDBHelper(this)
         favoriteDBHelper = FavoriteDBHelper(this)
@@ -109,9 +113,6 @@ class PDFReader : AppCompatActivity() {
     }
 
     private fun setupPdfViewWithUri() {
-
-
-        Log.e("TAG", "setupPdfViewWithUri: $pdfUri")
 
         binding.customPdfView
             .fromUri(pdfUri)
@@ -152,8 +153,6 @@ class PDFReader : AppCompatActivity() {
         )
         var title: String? = null
         var size: Long = 0
-        var dateModified: Long = 0
-
 
         if (cursor != null) {
             cursor.moveToFirst()
@@ -167,31 +166,16 @@ class PDFReader : AppCompatActivity() {
             cursor.close()
         }
 
-        Log.e("TAG", "setupPdfViewWithUri: $title $size $dateModified")
+        binding.title.text = resizeName(title!!)
 
-        if (recentDBHelper.checkIfExists(pdfUri!!.toString())) {
-            recentModel = recentDBHelper.getGetRecentByPath(pdfUri!!.toString())!!
-        } else {
-            recentModel = RecentModel(
-                name = title!!,
-                path = pdfUri!!.toString(),
-                size = size,
-                dateModified = dateModified,
-                parentFolderName = "",
-                lastOpenedDate = System.currentTimeMillis(),
-                totalPageCount = binding.customPdfView.pageCount,
-                lastPageOpened = 0,
-                isUri = true
-            )
-            recentDBHelper.addRecentItem(recentModel)
-        }
+
 
     }
 
 
     private fun setupPdfViewWithFile() {
 
-        val file = File(pdfPath)
+        val file = File(pdfPath!!)
 
         if (recentDBHelper.checkIfExists(pdfPath!!)) {
             recentModel = recentDBHelper.getGetRecentByPath(pdfPath!!)!!
@@ -200,21 +184,19 @@ class PDFReader : AppCompatActivity() {
                 name = file.name.replace(".pdf", ""),
                 path = file.path,
                 size = file.length(),
-                dateModified = file.lastModified(),
-                parentFolderName = getFolderNameFromPath(file.path),
                 lastOpenedDate = System.currentTimeMillis(),
                 totalPageCount = binding.customPdfView.pageCount,
                 lastPageOpened = 0,
                 isUri = false
             )
-            recentDBHelper.addRecentItem(recentModel)
+            recentDBHelper.addRecentItem(recentModel!!)
         }
 
 
         binding.title.text = resizeName(pdfName!!)
 
-        if (recentModel.lastPageOpened != 0) {
-            currentPage = recentModel.lastPageOpened
+        if (recentModel!!.lastPageOpened != 0) {
+            currentPage = recentModel!!.lastPageOpened
         }
 
         binding.customPdfView
@@ -471,7 +453,7 @@ class PDFReader : AppCompatActivity() {
 
         dialogBinding.editText.setText(currentPage.toString())
 
-        dialogBinding.editText.setOnEditorActionListener { v, actionId, event ->
+        dialogBinding.editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val pageNumber = dialogBinding.editText.text.toString().toInt()
                 if (pageNumber in 1..totalPage) {
@@ -560,13 +542,29 @@ class PDFReader : AppCompatActivity() {
 
     override fun onDestroy() {
 
-        recentModel.totalPageCount = binding.customPdfView.pageCount
-        recentModel.lastPageOpened = binding.customPdfView.currentPage
-        recentModel.lastOpenedDate = System.currentTimeMillis()
-        recentDBHelper.updateRecent(recentModel)
+
+        if (recentModel != null) {
+            recentModel!!.totalPageCount = binding.customPdfView.pageCount
+            recentModel!!.lastPageOpened = binding.customPdfView.currentPage
+            recentModel!!.lastOpenedDate = System.currentTimeMillis()
+            recentDBHelper.updateRecent(recentModel!!)
+        }
+
+
 
         super.onDestroy()
 
+    }
+
+    override fun onBackPressed() {
+        if (isOutside) {
+            startActivity(Intent(this, Home::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            })
+            finish()
+        } else {
+            super.onBackPressed()
+        }
     }
 
 }

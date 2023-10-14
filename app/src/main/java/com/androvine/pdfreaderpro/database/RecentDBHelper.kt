@@ -9,20 +9,19 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
     companion object {
         const val RECENT_TABLE_NAME = "recent_table"
 
-        const val COLUMN_ID = "id_recent"
-        const val COLUMN_FILE_NAME = "file_name_recent"
-        const val COLUMN_FILE_PATH = "file_path_recent"
-        const val COLUMN_FILE_SIZE = "file_size_recent"
-        const val COLUMN_DATE_MODIFIED = "date_modified_recent"
-        const val COLUMN_PARENT_FOLDER_NAME = "parent_folder_name_recent"
-        const val COLUMN_LAST_OPENED_DATE = "last_opened_date_recent"
-        const val COLUMN_TOTAL_PAGE_COUNT = "total_page_count_recent"
-        const val COLUMN_LAST_PAGE_OPENED = "last_page_opened_recent"
+      private  const val COLUMN_ID = "id_recent"
+        private  const val COLUMN_FILE_NAME = "file_name_recent"
+        private  const val COLUMN_FILE_PATH = "file_path_recent"
+        private  const val COLUMN_FILE_SIZE = "file_size_recent"
+        private  const val COLUMN_LAST_OPENED_DATE = "last_opened_date_recent"
+        private  const val COLUMN_TOTAL_PAGE_COUNT = "total_page_count_recent"
+        private  const val COLUMN_LAST_PAGE_OPENED = "last_page_opened_recent"
+        private const val COLUMN_IS_URI = "is_uri_recent"
 
-        const val SQL_CREATE_RECENT_TABLE =
-            "CREATE TABLE IF NOT EXISTS $RECENT_TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COLUMN_FILE_NAME TEXT,$COLUMN_FILE_PATH TEXT,$COLUMN_FILE_SIZE INTEGER,$COLUMN_DATE_MODIFIED INTEGER,$COLUMN_PARENT_FOLDER_NAME TEXT,$COLUMN_LAST_OPENED_DATE INTEGER,$COLUMN_TOTAL_PAGE_COUNT INTEGER,$COLUMN_LAST_PAGE_OPENED INTEGER)"
+        private const val SQL_CREATE_RECENT_TABLE =
+            "CREATE TABLE IF NOT EXISTS $RECENT_TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COLUMN_FILE_NAME TEXT,$COLUMN_FILE_PATH TEXT,$COLUMN_FILE_SIZE INTEGER,$COLUMN_LAST_OPENED_DATE INTEGER,$COLUMN_TOTAL_PAGE_COUNT INTEGER,$COLUMN_LAST_PAGE_OPENED INTEGER,$COLUMN_IS_URI INTEGER)"
 
-        const val SQL_DELETE_RECENT_TABLE = "DROP TABLE IF EXISTS $RECENT_TABLE_NAME"
+        private const val SQL_DELETE_RECENT_TABLE = "DROP TABLE IF EXISTS $RECENT_TABLE_NAME"
 
 
     }
@@ -47,11 +46,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_FILE_NAME, recentModel.name)
             put(COLUMN_FILE_PATH, recentModel.path)
             put(COLUMN_FILE_SIZE, recentModel.size)
-            put(COLUMN_DATE_MODIFIED, recentModel.dateModified)
-            put(COLUMN_PARENT_FOLDER_NAME, recentModel.parentFolderName)
             put(COLUMN_LAST_OPENED_DATE, recentModel.lastOpenedDate)
             put(COLUMN_TOTAL_PAGE_COUNT, recentModel.totalPageCount)
             put(COLUMN_LAST_PAGE_OPENED, recentModel.lastPageOpened)
+            put(COLUMN_IS_URI, recentModel.isUri)
         }
         val returnValue =  db.insert(RECENT_TABLE_NAME, null, values)
         db.close()
@@ -69,11 +67,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 COLUMN_FILE_NAME,
                 COLUMN_FILE_PATH,
                 COLUMN_FILE_SIZE,
-                COLUMN_DATE_MODIFIED,
-                COLUMN_PARENT_FOLDER_NAME,
                 COLUMN_LAST_OPENED_DATE,
                 COLUMN_TOTAL_PAGE_COUNT,
-                COLUMN_LAST_PAGE_OPENED
+                COLUMN_LAST_PAGE_OPENED,
+                COLUMN_IS_URI
             ), null, null, null, null, "$COLUMN_LAST_OPENED_DATE DESC"
         )
         val recentList = mutableListOf<RecentModel>()
@@ -84,11 +81,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                     getString(getColumnIndexOrThrow(COLUMN_FILE_NAME)),
                     getString(getColumnIndexOrThrow(COLUMN_FILE_PATH)),
                     getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
-                    getLong(getColumnIndexOrThrow(COLUMN_DATE_MODIFIED)),
-                    getString(getColumnIndexOrThrow(COLUMN_PARENT_FOLDER_NAME)),
                     getLong(getColumnIndexOrThrow(COLUMN_LAST_OPENED_DATE)),
                     getInt(getColumnIndexOrThrow(COLUMN_TOTAL_PAGE_COUNT)),
-                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED))
+                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED)),
+                    getInt(getColumnIndexOrThrow(COLUMN_IS_URI)) == 1
                 )
                 recentList.add(recentModel)
             }
@@ -106,11 +102,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 COLUMN_FILE_NAME,
                 COLUMN_FILE_PATH,
                 COLUMN_FILE_SIZE,
-                COLUMN_DATE_MODIFIED,
-                COLUMN_PARENT_FOLDER_NAME,
                 COLUMN_LAST_OPENED_DATE,
                 COLUMN_TOTAL_PAGE_COUNT,
-                COLUMN_LAST_PAGE_OPENED
+                COLUMN_LAST_PAGE_OPENED,
+                COLUMN_IS_URI
             ), "$COLUMN_FILE_PATH = ?", arrayOf(path), null, null, null
         )
         var recentModel: RecentModel? = null
@@ -121,11 +116,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                     getString(getColumnIndexOrThrow(COLUMN_FILE_NAME)),
                     getString(getColumnIndexOrThrow(COLUMN_FILE_PATH)),
                     getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
-                    getLong(getColumnIndexOrThrow(COLUMN_DATE_MODIFIED)),
-                    getString(getColumnIndexOrThrow(COLUMN_PARENT_FOLDER_NAME)),
                     getLong(getColumnIndexOrThrow(COLUMN_LAST_OPENED_DATE)),
                     getInt(getColumnIndexOrThrow(COLUMN_TOTAL_PAGE_COUNT)),
-                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED))
+                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED)),
+                    getInt(getColumnIndexOrThrow(COLUMN_IS_URI)) == 1
                 )
             }
         }
@@ -142,11 +136,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_FILE_NAME, recentModel.name)
             put(COLUMN_FILE_PATH, recentModel.path)
             put(COLUMN_FILE_SIZE, recentModel.size)
-            put(COLUMN_DATE_MODIFIED, recentModel.dateModified)
-            put(COLUMN_PARENT_FOLDER_NAME, recentModel.parentFolderName)
             put(COLUMN_LAST_OPENED_DATE, recentModel.lastOpenedDate)
             put(COLUMN_TOTAL_PAGE_COUNT, recentModel.totalPageCount)
             put(COLUMN_LAST_PAGE_OPENED, recentModel.lastPageOpened)
+            put(COLUMN_IS_URI, recentModel.isUri)
         }
         val returnValue = db.update(
             RECENT_TABLE_NAME, values, "$COLUMN_FILE_PATH = ?", arrayOf(recentModel.path)
@@ -181,11 +174,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 COLUMN_FILE_NAME,
                 COLUMN_FILE_PATH,
                 COLUMN_FILE_SIZE,
-                COLUMN_DATE_MODIFIED,
-                COLUMN_PARENT_FOLDER_NAME,
                 COLUMN_LAST_OPENED_DATE,
                 COLUMN_TOTAL_PAGE_COUNT,
-                COLUMN_LAST_PAGE_OPENED
+                COLUMN_LAST_PAGE_OPENED,
+                COLUMN_IS_URI
             ), "$COLUMN_FILE_PATH = ?", arrayOf(path), null, null, null
         )
         var recentModel: RecentModel? = null
@@ -196,11 +188,10 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                     getString(getColumnIndexOrThrow(COLUMN_FILE_NAME)),
                     getString(getColumnIndexOrThrow(COLUMN_FILE_PATH)),
                     getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
-                    getLong(getColumnIndexOrThrow(COLUMN_DATE_MODIFIED)),
-                    getString(getColumnIndexOrThrow(COLUMN_PARENT_FOLDER_NAME)),
                     getLong(getColumnIndexOrThrow(COLUMN_LAST_OPENED_DATE)),
                     getInt(getColumnIndexOrThrow(COLUMN_TOTAL_PAGE_COUNT)),
-                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED))
+                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED)),
+                    getInt(getColumnIndexOrThrow(COLUMN_IS_URI)) == 1
                 )
             }
         }

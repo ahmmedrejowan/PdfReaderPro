@@ -61,7 +61,6 @@ class DialogUtils {
             dialogBinding.fileName.text = recentModel.name
             dialogBinding.fileSize.text = FormattingUtils.formattedFileSize(recentModel.size)
             dialogBinding.filePath.text = recentModel.path.substringBeforeLast("/")
-            dialogBinding.lastModified.text = FormattingUtils.formattedDate(recentModel.dateModified)
             dialogBinding.pages.text = FormattingUtils.getPdfPageCount(recentModel.path).toString()
 
 
