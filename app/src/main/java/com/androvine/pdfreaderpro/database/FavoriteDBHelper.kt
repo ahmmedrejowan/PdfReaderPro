@@ -32,6 +32,7 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
     init {
         val db = this.writableDatabase
         db.execSQL(SQL_CREATE_FAVORITE_TABLE)
+
     }
 
     fun dropRecentTable() {
@@ -50,7 +51,10 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_DATE_MODIFIED, pdfFile.dateModified)
             put(COLUMN_PARENT_FOLDER_NAME, pdfFile.parentFolderName)
         }
-        return db.insert(FAVORITE_TABLE_NAME, null, values)
+        val mLong = db.insert(FAVORITE_TABLE_NAME, null, values)
+        db.close()
+        return mLong
+
     }
 
 
@@ -82,6 +86,8 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
                 recentList.add(recentModel)
             }
         }
+        cursor.close()
+        db.close()
         return recentList
     }
 
@@ -110,6 +116,8 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
                 )
             }
         }
+        cursor.close()
+        db.close()
         return recentModel
     }
 
@@ -125,9 +133,12 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_DATE_MODIFIED, pdfFile.dateModified)
             put(COLUMN_PARENT_FOLDER_NAME, pdfFile.parentFolderName)
         }
-        return db.update(
+        val mLong = db.update(
             FAVORITE_TABLE_NAME, values, "$COLUMN_FILE_PATH = ?", arrayOf(pdfFile.path)
         ).toLong()
+
+        db.close()
+        return mLong
     }
 
 
@@ -135,7 +146,9 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
 
     fun deleteFavorite(path: String): Int {
         val db = this.writableDatabase
-        return db.delete(FAVORITE_TABLE_NAME, "$COLUMN_FILE_PATH = ?", arrayOf(path))
+        val mInt = db.delete(FAVORITE_TABLE_NAME, "$COLUMN_FILE_PATH = ?", arrayOf(path))
+        db.close()
+        return mInt
     }
 
     fun deleteAllFavorite(): Int {
@@ -144,41 +157,38 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
     }
 
 
-
-
     // ------------------------------OTHERS---------------------------------
 
 
-    fun checkIfExists(path : String) : Boolean {
+    fun checkIfExists(path: String): Boolean {
 
-            val db = this.readableDatabase
-            val cursor = db.query(
-                FAVORITE_TABLE_NAME, arrayOf(
-                    COLUMN_ID,
-                    COLUMN_FILE_NAME,
-                    COLUMN_FILE_PATH,
-                    COLUMN_FILE_SIZE,
-                    COLUMN_DATE_MODIFIED,
-                    COLUMN_PARENT_FOLDER_NAME
-                ), "$COLUMN_FILE_PATH = ?", arrayOf(path), null, null, null
-            )
-            var recentModel: PdfFile? = null
-            with(cursor) {
-                while (moveToNext()) {
-                    recentModel = PdfFile(
-                        getString(getColumnIndexOrThrow(COLUMN_FILE_NAME)),
-                        getString(getColumnIndexOrThrow(COLUMN_FILE_PATH)),
-                        getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
-                        getLong(getColumnIndexOrThrow(COLUMN_DATE_MODIFIED)),
-                        getString(getColumnIndexOrThrow(COLUMN_PARENT_FOLDER_NAME))
-                    )
-                }
+        val db = this.readableDatabase
+        val cursor = db.query(
+            FAVORITE_TABLE_NAME, arrayOf(
+                COLUMN_ID,
+                COLUMN_FILE_NAME,
+                COLUMN_FILE_PATH,
+                COLUMN_FILE_SIZE,
+                COLUMN_DATE_MODIFIED,
+                COLUMN_PARENT_FOLDER_NAME
+            ), "$COLUMN_FILE_PATH = ?", arrayOf(path), null, null, null
+        )
+        var recentModel: PdfFile? = null
+        with(cursor) {
+            while (moveToNext()) {
+                recentModel = PdfFile(
+                    getString(getColumnIndexOrThrow(COLUMN_FILE_NAME)),
+                    getString(getColumnIndexOrThrow(COLUMN_FILE_PATH)),
+                    getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
+                    getLong(getColumnIndexOrThrow(COLUMN_DATE_MODIFIED)),
+                    getString(getColumnIndexOrThrow(COLUMN_PARENT_FOLDER_NAME))
+                )
             }
-            return recentModel != null
+        }
+        cursor.close()
+        db.close()
+        return recentModel != null
     }
-
-
-
 
 
 }

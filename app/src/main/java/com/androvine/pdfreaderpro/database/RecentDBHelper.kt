@@ -53,7 +53,9 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_TOTAL_PAGE_COUNT, recentModel.totalPageCount)
             put(COLUMN_LAST_PAGE_OPENED, recentModel.lastPageOpened)
         }
-        return db.insert(RECENT_TABLE_NAME, null, values)
+        val returnValue =  db.insert(RECENT_TABLE_NAME, null, values)
+        db.close()
+        return returnValue
     }
 
 
@@ -91,6 +93,8 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 recentList.add(recentModel)
             }
         }
+        cursor.close()
+        db.close()
         return recentList
     }
 
@@ -125,6 +129,8 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 )
             }
         }
+        cursor.close()
+        db.close()
         return recentModel
     }
 
@@ -142,16 +148,20 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_TOTAL_PAGE_COUNT, recentModel.totalPageCount)
             put(COLUMN_LAST_PAGE_OPENED, recentModel.lastPageOpened)
         }
-        return db.update(
+        val returnValue = db.update(
             RECENT_TABLE_NAME, values, "$COLUMN_FILE_PATH = ?", arrayOf(recentModel.path)
         ).toLong()
+        db.close()
+        return returnValue
     }
 
     //  ------------------------------DELETE---------------------------------
 
     fun deleteRecentItem(path: String): Int {
         val db = this.writableDatabase
-        return db.delete(RECENT_TABLE_NAME, "$COLUMN_FILE_PATH = ?", arrayOf(path))
+        val returnValue = db.delete(RECENT_TABLE_NAME, "$COLUMN_FILE_PATH = ?", arrayOf(path))
+        db.close()
+        return returnValue
     }
 
     fun deleteAllRecentItem(): Int {
@@ -194,6 +204,8 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 )
             }
         }
+        cursor.close()
+        db.close()
         return recentModel != null
     }
 

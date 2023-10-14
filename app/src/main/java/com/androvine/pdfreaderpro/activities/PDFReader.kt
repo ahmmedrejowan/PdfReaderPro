@@ -231,7 +231,9 @@ class PDFReader : AppCompatActivity() {
                 0
             )
         } else {
-            popupBinding.optionFavorite.text = "Add to favorites"
+            popupBinding.optionFavorite.text = "Add to" +
+                    "" +
+                    " favorites"
             popupBinding.optionFavorite.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.ic_favorite,
                 0,
