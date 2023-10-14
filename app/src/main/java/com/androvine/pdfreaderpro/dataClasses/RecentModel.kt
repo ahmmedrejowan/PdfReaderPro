@@ -9,5 +9,6 @@ data class RecentModel(
     var parentFolderName: String,
     var lastOpenedDate: Long,
     var totalPageCount: Int,
-    var lastPageOpened: Int
+    var lastPageOpened: Int,
+    var isUri: Boolean = false
 )

@@ -3,7 +3,9 @@ package com.androvine.pdfreaderpro.activities
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -40,8 +42,13 @@ class PDFReader : AppCompatActivity() {
         ActivityPdfreaderBinding.inflate(layoutInflater)
     }
 
-    private var pdfPath: String = ""
-    private var pdfName: String = "null"
+    private var pdfPath: String? = null
+    private var pdfName: String? = null
+    private var pdfUri: Uri? = null
+    private var isFromShare = false
+    private var isFromView = false
+    private var isOutside = false
+
 
     private val fullScreenFlags =
         View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -64,8 +71,14 @@ class PDFReader : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        pdfPath = intent.getStringExtra("pdfPath").toString()
-        pdfName = intent.getStringExtra("pdfName").toString()
+        pdfPath = intent.getStringExtra("pdfPath")
+        pdfName = intent.getStringExtra("pdfName")
+
+        pdfUri = intent.parcelable("pdfUri")
+        isFromView = intent.getBooleanExtra("isFromView", false)
+        isFromShare = intent.getBooleanExtra("isFromShare", false)
+        isOutside = intent.getBooleanExtra("isOutside", false)
+
 
         recentDBHelper = RecentDBHelper(this)
         favoriteDBHelper = FavoriteDBHelper(this)
@@ -75,28 +88,113 @@ class PDFReader : AppCompatActivity() {
             currentPage = savedInstanceState.getInt("CURRENT_PAGE", 0)
         }
 
-
         binding.ivBack.setOnClickListener {
             finish()
         }
 
-        if (pdfName.isNotEmpty() && pdfPath.isNotEmpty()) {
+
+        if (pdfName != null && pdfPath != null) {
             pdfListViewModel.pdfFiles.observe(this) { pdfFiles ->
                 pdfFile = pdfFiles.find { it.path == pdfPath }
             }
-            setupPdfView()
+            setupPdfViewWithFile()
+        } else if (pdfUri != null) {
+            setupPdfViewWithUri()
+        } else {
+            Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show()
+            finish()
         }
 
 
     }
 
+    private fun setupPdfViewWithUri() {
 
-    private fun setupPdfView() {
+
+        Log.e("TAG", "setupPdfViewWithUri: $pdfUri")
+
+        binding.customPdfView
+            .fromUri(pdfUri)
+            .onTap {
+                if (binding.toolbar.isVisible) {
+                    hideActionUI()
+                } else {
+                    showActionUI()
+                }
+                true
+            }
+            .enableSwipe(true)
+            .swipeHorizontal(false)
+            .enableDoubletap(true)
+            .defaultPage(currentPage)
+            .enableAnnotationRendering(true)
+            .password(null)
+            .scrollHandle(DefaultScrollHandle(this))
+            .enableAntialiasing(true)
+            .spacing(0)
+            .load()
+
+        val contentResolver = contentResolver
+        val projection = {
+            arrayOf(
+                android.provider.MediaStore.Files.FileColumns._ID,
+                android.provider.MediaStore.Files.FileColumns.DISPLAY_NAME,
+                android.provider.MediaStore.Files.FileColumns.SIZE,
+                android.provider.MediaStore.Files.FileColumns.DATE_ADDED
+            )
+        }
+        val cursor = contentResolver.query(
+            pdfUri!!,
+            projection(),
+            null,
+            null,
+            null
+        )
+        var title: String? = null
+        var size: Long = 0
+        var dateModified: Long = 0
+
+
+        if (cursor != null) {
+            cursor.moveToFirst()
+
+            title =
+                cursor.getString(cursor.getColumnIndexOrThrow(android.provider.MediaStore.Files.FileColumns.DISPLAY_NAME))
+            size =
+                cursor.getLong(cursor.getColumnIndexOrThrow(android.provider.MediaStore.Files.FileColumns.SIZE))
+
+
+            cursor.close()
+        }
+
+        Log.e("TAG", "setupPdfViewWithUri: $title $size $dateModified")
+
+        if (recentDBHelper.checkIfExists(pdfUri!!.toString())) {
+            recentModel = recentDBHelper.getGetRecentByPath(pdfUri!!.toString())!!
+        } else {
+            recentModel = RecentModel(
+                name = title!!,
+                path = pdfUri!!.toString(),
+                size = size,
+                dateModified = dateModified,
+                parentFolderName = "",
+                lastOpenedDate = System.currentTimeMillis(),
+                totalPageCount = binding.customPdfView.pageCount,
+                lastPageOpened = 0,
+                isUri = true
+            )
+            recentDBHelper.addRecentItem(recentModel)
+        }
+
+    }
+
+
+    private fun setupPdfViewWithFile() {
 
         val file = File(pdfPath)
 
-        if (recentDBHelper.checkIfExists(pdfPath)) {
-            recentModel = recentDBHelper.getGetRecentByPath(pdfPath)!!
+        if (recentDBHelper.checkIfExists(pdfPath!!)) {
+            recentModel = recentDBHelper.getGetRecentByPath(pdfPath!!)!!
         } else {
             recentModel = RecentModel(
                 name = file.name.replace(".pdf", ""),
@@ -106,13 +204,14 @@ class PDFReader : AppCompatActivity() {
                 parentFolderName = getFolderNameFromPath(file.path),
                 lastOpenedDate = System.currentTimeMillis(),
                 totalPageCount = binding.customPdfView.pageCount,
-                lastPageOpened = 0
+                lastPageOpened = 0,
+                isUri = false
             )
             recentDBHelper.addRecentItem(recentModel)
         }
 
 
-        binding.title.text = resizeName(pdfName)
+        binding.title.text = resizeName(pdfName!!)
 
         if (recentModel.lastPageOpened != 0) {
             currentPage = recentModel.lastPageOpened

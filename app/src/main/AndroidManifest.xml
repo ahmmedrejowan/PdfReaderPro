@@ -21,10 +21,10 @@
         android:theme="@style/Theme.PDFReaderPro"
         tools:targetApi="31">
         <activity
-            android:screenOrientation="fullSensor"
             android:name=".activities.PDFReader"
             android:configChanges="orientation|screenSize"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="fullSensor" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -51,15 +51,31 @@
         <activity
             android:name=".activities.Home"
             android:exported="false" />
+
         <activity
             android:name=".activities.SplashScreen"
             android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/pdf" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/pdf" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
