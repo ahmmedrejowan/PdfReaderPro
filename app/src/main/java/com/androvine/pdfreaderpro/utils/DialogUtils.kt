@@ -18,7 +18,7 @@ import java.io.File
 class DialogUtils {
 
 
-    companion object{
+    companion object {
         fun showInfoDialog(context: Context, pdfFile: PdfFile) {
             val dialog = Dialog(context)
             val dialogBinding: DialogInfoFilesBinding = DialogInfoFilesBinding.inflate(
@@ -44,33 +44,6 @@ class DialogUtils {
 
             dialog.show()
         }
-
-
-        fun showInfoDialog(context: Context, recentModel: RecentModel) {
-            val dialog = Dialog(context)
-            val dialogBinding: DialogInfoFilesBinding = DialogInfoFilesBinding.inflate(
-                LayoutInflater.from(context)
-            )
-            dialog.setContentView(dialogBinding.root)
-            dialog.setCancelable(true)
-            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-            dialog.window!!.setLayout(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            dialogBinding.fileName.text = recentModel.name
-            dialogBinding.fileSize.text = FormattingUtils.formattedFileSize(recentModel.size)
-            dialogBinding.filePath.text = recentModel.path.substringBeforeLast("/")
-            dialogBinding.pages.text = FormattingUtils.getPdfPageCount(recentModel.path).toString()
-
-
-            dialogBinding.dismiss.setOnClickListener {
-                dialog.dismiss()
-            }
-
-            dialog.show()
-        }
-
 
 
         fun sharePDF(context: Context, pdfFile: PdfFile) {
@@ -113,9 +86,11 @@ class DialogUtils {
         }
 
 
-
-
-        fun showDeleteDialog(context: Context, pdfFile: PdfFile, onPdfFileClicked: OnPdfFileClicked) {
+        fun showDeleteDialog(
+            context: Context,
+            pdfFile: PdfFile,
+            onPdfFileClicked: OnPdfFileClicked
+        ) {
 
             val dialog = Dialog(context)
             val dialogBinding: DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(
@@ -147,7 +122,11 @@ class DialogUtils {
         }
 
 
-        fun showDeleteDialog(context: Context, recentModel: RecentModel , onRecentClicked: OnRecentClicked) {
+        fun showDeleteDialog(
+            context: Context,
+            recentModel: RecentModel,
+            onRecentClicked: OnRecentClicked
+        ) {
 
             val dialog = Dialog(context)
             val dialogBinding: DialogDeleteFilesBinding = DialogDeleteFilesBinding.inflate(

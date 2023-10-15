@@ -35,7 +35,7 @@ class FavoriteDBHelper(context: Context) : DBHelper(context) {
 
     }
 
-    fun dropRecentTable() {
+    fun dropFavoriteTable() {
         val db = this.writableDatabase
         db.execSQL(SQL_DELETE_FAVORITE_TABLE)
     }

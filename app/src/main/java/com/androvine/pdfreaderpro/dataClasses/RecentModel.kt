@@ -8,5 +8,4 @@ data class RecentModel(
     var lastOpenedDate: Long,
     var totalPageCount: Int,
     var lastPageOpened: Int,
-    var isUri: Boolean
 )

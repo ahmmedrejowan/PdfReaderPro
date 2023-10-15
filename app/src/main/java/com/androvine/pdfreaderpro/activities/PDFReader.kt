@@ -47,8 +47,6 @@ class PDFReader : AppCompatActivity() {
     private var pdfPath: String? = null
     private var pdfName: String? = null
     private var pdfUri: Uri? = null
-    private var isFromShare = false
-    private var isFromView = false
     private var isOutside = false
 
 
@@ -77,8 +75,6 @@ class PDFReader : AppCompatActivity() {
         pdfName = intent.getStringExtra("pdfName")
 
         pdfUri = intent.parcelable("pdfUri")
-        isFromView = intent.getBooleanExtra("isFromView", false)
-        isFromShare = intent.getBooleanExtra("isFromShare", false)
         isOutside = intent.getBooleanExtra("isOutside", false)
 
         Log.e("Intent", "pdf path: $pdfPath")
@@ -93,7 +89,7 @@ class PDFReader : AppCompatActivity() {
         }
 
         binding.ivBack.setOnClickListener {
-            finish()
+            onBackPressed()
         }
 
 
@@ -169,58 +165,13 @@ class PDFReader : AppCompatActivity() {
         binding.title.text = resizeName(title!!)
 
 
+        binding.ivOption.visibility = View.GONE
+
+        setUpViewActions()
 
     }
 
-
-    private fun setupPdfViewWithFile() {
-
-        val file = File(pdfPath!!)
-
-        if (recentDBHelper.checkIfExists(pdfPath!!)) {
-            recentModel = recentDBHelper.getGetRecentByPath(pdfPath!!)!!
-        } else {
-            recentModel = RecentModel(
-                name = file.name.replace(".pdf", ""),
-                path = file.path,
-                size = file.length(),
-                lastOpenedDate = System.currentTimeMillis(),
-                totalPageCount = binding.customPdfView.pageCount,
-                lastPageOpened = 0,
-                isUri = false
-            )
-            recentDBHelper.addRecentItem(recentModel!!)
-        }
-
-
-        binding.title.text = resizeName(pdfName!!)
-
-        if (recentModel!!.lastPageOpened != 0) {
-            currentPage = recentModel!!.lastPageOpened
-        }
-
-        binding.customPdfView
-            .fromFile(file)
-            .onTap {
-                if (binding.toolbar.isVisible) {
-                    hideActionUI()
-                } else {
-                    showActionUI()
-                }
-                true
-            }
-            .enableSwipe(true)
-            .swipeHorizontal(false)
-            .enableDoubletap(true)
-            .defaultPage(currentPage)
-            .enableAnnotationRendering(true)
-            .password(null)
-            .scrollHandle(DefaultScrollHandle(this))
-            .enableAntialiasing(true)
-            .spacing(0)
-            .load()
-
-
+    private fun setUpViewActions() {
         binding.darkModeAction.setOnClickListener {
             isDarkMode = if (isDarkMode) {
                 binding.customPdfView.setNightMode(false)
@@ -276,18 +227,65 @@ class PDFReader : AppCompatActivity() {
             showJumpDialog()
         }
 
+    }
+
+
+    private fun setupPdfViewWithFile() {
+
+        val file = File(pdfPath!!)
+
+        if (recentDBHelper.checkIfExists(pdfPath!!)) {
+            recentModel = recentDBHelper.getGetRecentByPath(pdfPath!!)!!
+        } else {
+            recentModel = RecentModel(
+                name = file.name.replace(".pdf", ""),
+                path = file.path,
+                size = file.length(),
+                lastOpenedDate = System.currentTimeMillis(),
+                totalPageCount = binding.customPdfView.pageCount,
+                lastPageOpened = 0
+            )
+            recentDBHelper.addRecentItem(recentModel!!)
+        }
+
+
+        binding.title.text = resizeName(pdfName!!)
+
+        if (recentModel!!.lastPageOpened != 0) {
+            currentPage = recentModel!!.lastPageOpened
+        }
+
+        binding.customPdfView
+            .fromFile(file)
+            .onTap {
+                if (binding.toolbar.isVisible) {
+                    hideActionUI()
+                } else {
+                    showActionUI()
+                }
+                true
+            }
+            .enableSwipe(true)
+            .swipeHorizontal(false)
+            .enableDoubletap(true)
+            .defaultPage(currentPage)
+            .enableAnnotationRendering(true)
+            .password(null)
+            .scrollHandle(DefaultScrollHandle(this))
+            .enableAntialiasing(true)
+            .spacing(0)
+            .load()
+
+
+
         binding.ivOption.setOnClickListener {
             showOptionPopup()
         }
 
+        setUpViewActions()
+
 
     }
-
-    private fun getFolderNameFromPath(path: String): String {
-        val folders = path.split("/")
-        return folders[folders.size - 2]
-    }
-
 
     private fun showOptionPopup() {
 
@@ -312,9 +310,7 @@ class PDFReader : AppCompatActivity() {
                 0
             )
         } else {
-            popupBinding.optionFavorite.text = "Add to" +
-                    "" +
-                    " favorites"
+            popupBinding.optionFavorite.text = "Add to favorites"
             popupBinding.optionFavorite.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.ic_favorite,
                 0,

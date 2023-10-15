@@ -43,6 +43,10 @@ class SplashScreen : AppCompatActivity() {
             )
         }
 
+//        val recentDBHelper = RecentDBHelper(this)
+//        val favoriteDBHelper = FavoriteDBHelper(this)
+//        recentDBHelper.dropRecentTable()
+//        favoriteDBHelper.dropFavoriteTable()
 
 
         Handler(Looper.getMainLooper()).postDelayed({

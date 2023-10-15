@@ -1,14 +1,8 @@
 package com.androvine.pdfreaderpro.utils
 
-import android.app.Dialog
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
-import android.view.LayoutInflater
-import android.widget.FrameLayout
-import com.androvine.pdfreaderpro.dataClasses.PdfFile
-import com.androvine.pdfreaderpro.databinding.DialogInfoFilesBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -46,7 +40,7 @@ class FormattingUtils {
         }
 
         fun formattedDate(lastModified: Long): String {
-            val date = Date(lastModified)
+            val date = Date(lastModified * 1000)
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             return sdf.format(date)
         }
@@ -128,8 +122,6 @@ class FormattingUtils {
                 pdfRenderer?.close()
             }
         }
-
-
 
 
         fun getPdfPageCount(path: String): Int {

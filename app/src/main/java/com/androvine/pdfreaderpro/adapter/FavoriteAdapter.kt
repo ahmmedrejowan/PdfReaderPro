@@ -16,13 +16,15 @@ import com.androvine.pdfreaderpro.activities.PDFReader
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogFavoriteRemoveFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogInfoFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileGridBinding
 import com.androvine.pdfreaderpro.diffUtils.PdfFileDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnPdfFileClicked
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.sharePDF
-import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showInfoDialog
+import com.androvine.pdfreaderpro.utils.FormattingUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
+import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedFileSize
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateNormalThumbnail
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateThumbnail
@@ -33,9 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class FavoriteAdapter(
     private val pdfFiles: MutableList<PdfFile>,
@@ -318,6 +317,32 @@ class FavoriteAdapter(
 
     }
 
+    private fun showInfoDialog(context: Context, pdfFile: PdfFile) {
+        val dialog = Dialog(context)
+        val dialogBinding: DialogInfoFilesBinding = DialogInfoFilesBinding.inflate(
+            LayoutInflater.from(context)
+        )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        dialogBinding.fileName.text = pdfFile.name
+        dialogBinding.fileSize.text = formattedFileSize(pdfFile.size)
+        dialogBinding.filePath.text = pdfFile.path.substringBeforeLast("/")
+        dialogBinding.lastModified.text = formattedDate(pdfFile.dateModified)
+        dialogBinding.pages.text = FormattingUtils.getPdfPageCount(pdfFile.path).toString()
+
+
+        dialogBinding.dismiss.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     private fun showFavoriteDialog(context: Context, pdfFile: PdfFile) {
         val dialog = Dialog(context)
         val dialogBinding: DialogFavoriteRemoveFilesBinding =
@@ -349,11 +374,5 @@ class FavoriteAdapter(
 
     }
 
-
-    private fun formattedDate(lastModified: Long): String {
-        val date = Date(lastModified * 1000)
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        return sdf.format(date)
-    }
 
 }

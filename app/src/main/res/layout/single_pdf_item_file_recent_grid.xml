@@ -68,7 +68,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/pages"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"

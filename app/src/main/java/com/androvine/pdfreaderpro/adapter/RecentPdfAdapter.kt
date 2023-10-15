@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.activities.PDFReader
 import com.androvine.pdfreaderpro.dataClasses.RecentModel
 import com.androvine.pdfreaderpro.databinding.BottomSheetMenuFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogInfoFilesBinding
 import com.androvine.pdfreaderpro.databinding.DialogRecentRemoveFilesBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentBinding
 import com.androvine.pdfreaderpro.databinding.SinglePdfItemFileRecentGridBinding
@@ -23,8 +23,8 @@ import com.androvine.pdfreaderpro.diffUtils.RecentPdfFileDiffCallback
 import com.androvine.pdfreaderpro.interfaces.OnRecentClicked
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.sharePDF
 import com.androvine.pdfreaderpro.utils.DialogUtils.Companion.showInfoDialog
+import com.androvine.pdfreaderpro.utils.FormattingUtils
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.extractParentFolders
-import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedDate
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.formattedFileSize
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateNormalThumbnail
 import com.androvine.pdfreaderpro.utils.FormattingUtils.Companion.generateThumbnail
@@ -62,6 +62,7 @@ class RecentPdfAdapter(
         fun bind(recentModel: RecentModel) {
             binding.fileName.text = resizeName(recentModel.name)
             binding.size.text = formattedFileSize(recentModel.size)
+            binding.pages.text = recentModel.totalPageCount.toString() + " pages"
 
             viewHolderJob = Job()
             viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
@@ -132,6 +133,7 @@ class RecentPdfAdapter(
         fun bind(recentModel: RecentModel) {
             binding.fileName.text = resizeName(recentModel.name)
             binding.size.text = formattedFileSize(recentModel.size)
+            binding.pages.text = recentModel.totalPageCount.toString() + " pages"
 
             viewHolderJob = Job()
             viewHolderScope = CoroutineScope(Dispatchers.Main + viewHolderJob)
@@ -238,21 +240,11 @@ class RecentPdfAdapter(
 
     private fun openPDF(context: Context, pdfFile: RecentModel) {
 
-        if (pdfFile.isUri){
-            context.startActivity(Intent(context, PDFReader::class.java).apply {
-                putExtra("pdfUri", Uri.parse(pdfFile.path))
-            })
 
-        } else {
-            context.startActivity(Intent(context, PDFReader::class.java).apply {
-                putExtra("pdfName", pdfFile.name)
-                putExtra("pdfPath", pdfFile.path)
-            })
-        }
-
-
-
-
+        context.startActivity(Intent(context, PDFReader::class.java).apply {
+            putExtra("pdfName", pdfFile.name)
+            putExtra("pdfPath", pdfFile.path)
+        })
 
     }
 
@@ -315,7 +307,7 @@ class RecentPdfAdapter(
 
         optionBinding.optionInfo.setOnClickListener {
             bottomSheetDialog.dismiss()
-            showInfoDialog(context, recentModel)
+            showInfoDialogRecent(context, recentModel)
         }
 
         optionBinding.optionShare.setOnClickListener {
@@ -331,6 +323,33 @@ class RecentPdfAdapter(
 
         bottomSheetDialog.show()
 
+    }
+
+   private fun showInfoDialogRecent(context: Context, recentModel: RecentModel) {
+        val dialog = Dialog(context)
+        val dialogBinding: DialogInfoFilesBinding = DialogInfoFilesBinding.inflate(
+            LayoutInflater.from(context)
+        )
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window!!.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+       dialogBinding.lastModified.visibility = View.GONE
+
+        dialogBinding.fileName.text = recentModel.name
+        dialogBinding.fileSize.text = formattedFileSize(recentModel.size)
+        dialogBinding.filePath.text = recentModel.path.substringBeforeLast("/")
+        dialogBinding.pages.text = FormattingUtils.getPdfPageCount(recentModel.path).toString()
+
+
+        dialogBinding.dismiss.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun showRecentDialog(context: Context, recentModel: RecentModel) {

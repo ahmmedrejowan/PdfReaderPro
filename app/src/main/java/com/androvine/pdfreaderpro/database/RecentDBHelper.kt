@@ -16,10 +16,9 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
         private  const val COLUMN_LAST_OPENED_DATE = "last_opened_date_recent"
         private  const val COLUMN_TOTAL_PAGE_COUNT = "total_page_count_recent"
         private  const val COLUMN_LAST_PAGE_OPENED = "last_page_opened_recent"
-        private const val COLUMN_IS_URI = "is_uri_recent"
 
         private const val SQL_CREATE_RECENT_TABLE =
-            "CREATE TABLE IF NOT EXISTS $RECENT_TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COLUMN_FILE_NAME TEXT,$COLUMN_FILE_PATH TEXT,$COLUMN_FILE_SIZE INTEGER,$COLUMN_LAST_OPENED_DATE INTEGER,$COLUMN_TOTAL_PAGE_COUNT INTEGER,$COLUMN_LAST_PAGE_OPENED INTEGER,$COLUMN_IS_URI INTEGER)"
+            "CREATE TABLE IF NOT EXISTS $RECENT_TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COLUMN_FILE_NAME TEXT,$COLUMN_FILE_PATH TEXT,$COLUMN_FILE_SIZE INTEGER,$COLUMN_LAST_OPENED_DATE INTEGER,$COLUMN_TOTAL_PAGE_COUNT INTEGER,$COLUMN_LAST_PAGE_OPENED INTEGER)"
 
         private const val SQL_DELETE_RECENT_TABLE = "DROP TABLE IF EXISTS $RECENT_TABLE_NAME"
 
@@ -49,7 +48,6 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_LAST_OPENED_DATE, recentModel.lastOpenedDate)
             put(COLUMN_TOTAL_PAGE_COUNT, recentModel.totalPageCount)
             put(COLUMN_LAST_PAGE_OPENED, recentModel.lastPageOpened)
-            put(COLUMN_IS_URI, recentModel.isUri)
         }
         val returnValue =  db.insert(RECENT_TABLE_NAME, null, values)
         db.close()
@@ -69,8 +67,7 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 COLUMN_FILE_SIZE,
                 COLUMN_LAST_OPENED_DATE,
                 COLUMN_TOTAL_PAGE_COUNT,
-                COLUMN_LAST_PAGE_OPENED,
-                COLUMN_IS_URI
+                COLUMN_LAST_PAGE_OPENED
             ), null, null, null, null, "$COLUMN_LAST_OPENED_DATE DESC"
         )
         val recentList = mutableListOf<RecentModel>()
@@ -84,7 +81,6 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                     getLong(getColumnIndexOrThrow(COLUMN_LAST_OPENED_DATE)),
                     getInt(getColumnIndexOrThrow(COLUMN_TOTAL_PAGE_COUNT)),
                     getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED)),
-                    getInt(getColumnIndexOrThrow(COLUMN_IS_URI)) == 1
                 )
                 recentList.add(recentModel)
             }
@@ -104,8 +100,7 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 COLUMN_FILE_SIZE,
                 COLUMN_LAST_OPENED_DATE,
                 COLUMN_TOTAL_PAGE_COUNT,
-                COLUMN_LAST_PAGE_OPENED,
-                COLUMN_IS_URI
+                COLUMN_LAST_PAGE_OPENED
             ), "$COLUMN_FILE_PATH = ?", arrayOf(path), null, null, null
         )
         var recentModel: RecentModel? = null
@@ -118,8 +113,7 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                     getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
                     getLong(getColumnIndexOrThrow(COLUMN_LAST_OPENED_DATE)),
                     getInt(getColumnIndexOrThrow(COLUMN_TOTAL_PAGE_COUNT)),
-                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED)),
-                    getInt(getColumnIndexOrThrow(COLUMN_IS_URI)) == 1
+                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED))
                 )
             }
         }
@@ -139,7 +133,6 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
             put(COLUMN_LAST_OPENED_DATE, recentModel.lastOpenedDate)
             put(COLUMN_TOTAL_PAGE_COUNT, recentModel.totalPageCount)
             put(COLUMN_LAST_PAGE_OPENED, recentModel.lastPageOpened)
-            put(COLUMN_IS_URI, recentModel.isUri)
         }
         val returnValue = db.update(
             RECENT_TABLE_NAME, values, "$COLUMN_FILE_PATH = ?", arrayOf(recentModel.path)
@@ -176,8 +169,7 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                 COLUMN_FILE_SIZE,
                 COLUMN_LAST_OPENED_DATE,
                 COLUMN_TOTAL_PAGE_COUNT,
-                COLUMN_LAST_PAGE_OPENED,
-                COLUMN_IS_URI
+                COLUMN_LAST_PAGE_OPENED
             ), "$COLUMN_FILE_PATH = ?", arrayOf(path), null, null, null
         )
         var recentModel: RecentModel? = null
@@ -190,8 +182,7 @@ class RecentDBHelper(context: Context) : DBHelper(context) {
                     getLong(getColumnIndexOrThrow(COLUMN_FILE_SIZE)),
                     getLong(getColumnIndexOrThrow(COLUMN_LAST_OPENED_DATE)),
                     getInt(getColumnIndexOrThrow(COLUMN_TOTAL_PAGE_COUNT)),
-                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED)),
-                    getInt(getColumnIndexOrThrow(COLUMN_IS_URI)) == 1
+                    getInt(getColumnIndexOrThrow(COLUMN_LAST_PAGE_OPENED))
                 )
             }
         }
