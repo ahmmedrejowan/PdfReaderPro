@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="General"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/app_theme_mode"
+            android:entryValues="@array/app_theme_mode_values"
+            android:icon="@drawable/ic_brightness"
+            android:key="pref_dark_theme"
+            android:summary="Enable dark theme"
+            android:title="Dark theme" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_dark_mode"
+            android:key="pref_dark_pdf"
+            android:summary="Enable dark theme for PDF by default"
+            android:title="PDF Dark Mode" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="About"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:icon="@drawable/ic_pref_version"
+            android:key="pref_version"
+            android:summary="Version 1.0"
+            android:title="App Version" />
+
+        <Preference
+            android:icon="@drawable/ic_pref_contact"
+            android:key="pref_contact"
+            android:summary="Share your thoughts with us"
+            android:title="Contact Us" />
+
+        <Preference
+            android:icon="@drawable/ic_pref_rate"
+            android:key="pref_rate"
+            android:summary="Rate us on Play Store"
+            android:title="Rate Us" />
+
+        <Preference
+            android:icon="@drawable/ic_pref_privacy"
+            android:key="pref_privacy"
+            android:summary="Read our privacy policy"
+            android:title="Privacy Policy" />
+
+        <Preference
+            android:icon="@drawable/ic_pref_creator"
+            android:key="pref_creator"
+            android:summary="Androvine"
+            android:title="Created by" />
+
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
