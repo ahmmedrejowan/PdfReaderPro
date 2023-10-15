@@ -89,9 +89,8 @@ class AppSettings : AppCompatActivity() {
 
 
             val darkThemePref = findPreference<androidx.preference.ListPreference>("pref_dark_theme")
-            darkThemePref?.setOnPreferenceChangeListener { preference, newValue ->
-                val themeMode = newValue as String
-                when (themeMode) {
+            darkThemePref?.setOnPreferenceChangeListener { _, newValue ->
+                when (newValue as String) {
                     "light_theme" -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     }
