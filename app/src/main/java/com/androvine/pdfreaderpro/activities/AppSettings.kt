@@ -3,6 +3,7 @@ package com.androvine.pdfreaderpro.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.constants.Constants
@@ -83,6 +84,25 @@ class AppSettings : AppCompatActivity() {
                     android.net.Uri.parse(Constants.privacyPolicyUrl)
                 )
                 startActivity(browserIntent)
+                true
+            }
+
+
+            val darkThemePref = findPreference<androidx.preference.ListPreference>("pref_dark_theme")
+            darkThemePref?.setOnPreferenceChangeListener { preference, newValue ->
+                val themeMode = newValue as String
+                when (themeMode) {
+                    "light_theme" -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                    "dark_theme" -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    }
+                    else -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    }
+                }
+                requireActivity().recreate()
                 true
             }
 
