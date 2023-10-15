@@ -7,7 +7,7 @@
         app:iconSpaceReserved="false">
 
         <ListPreference
-            android:defaultValue="-1"
+            android:defaultValue="system_default"
             android:entries="@array/app_theme_mode"
             android:entryValues="@array/app_theme_mode_values"
             android:icon="@drawable/ic_brightness"

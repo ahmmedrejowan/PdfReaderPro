@@ -1,6 +1,7 @@
 package com.androvine.pdfreaderpro.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androvine.pdfreaderpro.R
+import com.androvine.pdfreaderpro.activities.AppSettings
 import com.androvine.pdfreaderpro.adapter.PdfAdapter
 import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
@@ -50,6 +52,10 @@ class ChildFileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.settingsImageView.setOnClickListener {
+            startActivity(Intent(requireContext(), AppSettings::class.java))
+        }
 
         recentDBHelper = RecentDBHelper(requireContext())
         favoriteDBHelper = FavoriteDBHelper(requireContext())

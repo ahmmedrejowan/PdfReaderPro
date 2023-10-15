@@ -1,5 +1,6 @@
 package com.androvine.pdfreaderpro.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.androvine.pdfreaderpro.activities.AppSettings
 import com.androvine.pdfreaderpro.adapter.FavoriteAdapter
 import com.androvine.pdfreaderpro.adapter.RecentPdfAdapter
 import com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
@@ -57,6 +59,9 @@ class HomeFragment : Fragment() {
         setupDB()
         setupList()
 
+        binding.settingsImageView.setOnClickListener {
+            startActivity(Intent(requireContext(),AppSettings::class.java))
+        }
 
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Recent"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Favorite"))

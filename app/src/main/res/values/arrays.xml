@@ -8,9 +8,9 @@
     </array>
 
     <array name="app_theme_mode_values">
-        <item>0</item>
-        <item>1</item>
-        <item>-1</item>
+        <item>light_theme</item>
+        <item>dark_theme</item>
+        <item>system_default</item>
     </array>
 
 
