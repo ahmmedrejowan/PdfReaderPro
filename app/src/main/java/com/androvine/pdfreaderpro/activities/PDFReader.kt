@@ -148,16 +148,12 @@ class PDFReader : AppCompatActivity() {
             null
         )
         var title: String? = null
-        var size: Long = 0
 
         if (cursor != null) {
             cursor.moveToFirst()
 
             title =
                 cursor.getString(cursor.getColumnIndexOrThrow(android.provider.MediaStore.Files.FileColumns.DISPLAY_NAME))
-            size =
-                cursor.getLong(cursor.getColumnIndexOrThrow(android.provider.MediaStore.Files.FileColumns.SIZE))
-
 
             cursor.close()
         }
