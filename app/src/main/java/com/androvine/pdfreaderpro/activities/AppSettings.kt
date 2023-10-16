@@ -1,13 +1,21 @@
 package com.androvine.pdfreaderpro.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.constants.Constants
+import com.androvine.pdfreaderpro.database.FavoriteDBHelper
+import com.androvine.pdfreaderpro.database.RecentDBHelper
 import com.androvine.pdfreaderpro.databinding.ActivityAppSettingsBinding
+import com.androvine.pdfreaderpro.databinding.DialogFavoriteRemoveAllFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogRecentRemoveAllFilesBinding
+import com.androvine.pdfreaderpro.databinding.DialogRecentRemoveFilesBinding
 
 @Suppress("DEPRECATION")
 class AppSettings : AppCompatActivity() {
@@ -88,15 +96,18 @@ class AppSettings : AppCompatActivity() {
             }
 
 
-            val darkThemePref = findPreference<androidx.preference.ListPreference>("pref_dark_theme")
+            val darkThemePref =
+                findPreference<androidx.preference.ListPreference>("pref_dark_theme")
             darkThemePref?.setOnPreferenceChangeListener { _, newValue ->
                 when (newValue as String) {
                     "light_theme" -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     }
+
                     "dark_theme" -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
+
                     else -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                     }
@@ -104,6 +115,78 @@ class AppSettings : AppCompatActivity() {
                 requireActivity().recreate()
                 true
             }
+
+
+            val clearFavoritesPref =
+                findPreference<androidx.preference.Preference>("pref_clear_favorite")
+            val clearRecentPref =
+                findPreference<androidx.preference.Preference>("pref_clear_recent")
+
+            clearFavoritesPref?.setOnPreferenceClickListener {
+                showClearFavoritesDialog()
+                true
+            }
+
+            clearRecentPref?.setOnPreferenceClickListener {
+                showClearRecentDialog()
+                true
+            }
+        }
+
+        private fun showClearRecentDialog() {
+
+            val dialog = Dialog(requireContext())
+            val dialogBinding: DialogRecentRemoveAllFilesBinding =
+                DialogRecentRemoveAllFilesBinding.inflate(
+                    LayoutInflater.from(context)
+                )
+            dialog.setContentView(dialogBinding.root)
+            dialog.setCancelable(true)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.window!!.setLayout(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            val recentDBHelper = RecentDBHelper(requireContext())
+
+            dialogBinding.cancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialogBinding.remove.setOnClickListener {
+                dialog.dismiss()
+                recentDBHelper.deleteAllRecentItem()
+            }
+
+            dialog.show()
+
+        }
+
+        private fun showClearFavoritesDialog() {
+            val dialog = Dialog(requireContext())
+            val dialogBinding: DialogFavoriteRemoveAllFilesBinding =
+                DialogFavoriteRemoveAllFilesBinding.inflate(
+                    LayoutInflater.from(context)
+                )
+            dialog.setContentView(dialogBinding.root)
+            dialog.setCancelable(true)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.window!!.setLayout(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            val favoriteDBHelper = FavoriteDBHelper(requireContext())
+
+            dialogBinding.cancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialogBinding.remove.setOnClickListener {
+                dialog.dismiss()
+                favoriteDBHelper.deleteAllFavorite()
+            }
+
+            dialog.show()
 
         }
 

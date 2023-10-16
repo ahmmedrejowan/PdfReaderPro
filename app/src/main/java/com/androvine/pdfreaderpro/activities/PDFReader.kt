@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.preference.PreferenceManager
 import com.androvine.pdfreaderpro.R
 import com.androvine.pdfreaderpro.dataClasses.PdfFile
 import com.androvine.pdfreaderpro.dataClasses.RecentModel
@@ -66,6 +67,7 @@ class PDFReader : AppCompatActivity() {
 
     private lateinit var favoriteDBHelper: FavoriteDBHelper
 
+    var isPDFDarkEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +84,17 @@ class PDFReader : AppCompatActivity() {
 
         recentDBHelper = RecentDBHelper(this)
         favoriteDBHelper = FavoriteDBHelper(this)
+
+        isPDFDarkEnabled = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_dark_pdf", false)
+        isDarkMode = isPDFDarkEnabled
+        if (isPDFDarkEnabled){
+            binding.customPdfView.setBackgroundColor(
+                ContextCompat.getColor(
+                    this, R.color.dark_backgroundColor
+                )
+            )
+            binding.darkModeAction.setImageResource(R.drawable.ic_light_mode)
+        }
 
 
         if (savedInstanceState != null) {
@@ -128,6 +141,7 @@ class PDFReader : AppCompatActivity() {
             .password(null)
             .scrollHandle(DefaultScrollHandle(this))
             .enableAntialiasing(true)
+            .nightMode(isPDFDarkEnabled)
             .spacing(0)
             .load()
 
@@ -265,6 +279,7 @@ class PDFReader : AppCompatActivity() {
             .swipeHorizontal(false)
             .enableDoubletap(true)
             .defaultPage(currentPage)
+            .nightMode(isPDFDarkEnabled)
             .enableAnnotationRendering(true)
             .password(null)
             .scrollHandle(DefaultScrollHandle(this))

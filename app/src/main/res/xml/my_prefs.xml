@@ -25,6 +25,27 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Data" app:iconSpaceReserved="false">
+
+
+        <Preference
+            android:icon="@drawable/ic_pref_recent"
+            android:key="pref_clear_recent"
+            android:summary="Clear all recent files"
+            android:title="Clear Recent" />
+
+
+        <Preference
+            android:icon="@drawable/ic_pref_favorite"
+            android:key="pref_clear_favorite"
+            android:summary="Clear all favorite files"
+            android:title="Clear Favorite" />
+
+
+
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="About"
         app:iconSpaceReserved="false">
