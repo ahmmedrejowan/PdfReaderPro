@@ -226,9 +226,25 @@ class HomeFragment : Fragment() {
         val blockSize = stat.blockSizeLong
         val totalBlocks = stat.blockCountLong
         val total = totalBlocks * blockSize
-        val totalFormatted = formatFileSize(requireContext(), total)
-        binding.totalSize.text = totalFormatted.substring(0, totalFormatted.length - 2)
-        binding.totalSizeUnit.text = totalFormatted.substring(totalFormatted.length - 2)
+        val totalFree = stat.availableBlocksLong * blockSize
+        val totalUsed = total - totalFree
+        val usedFormatted = formatFileSize(requireContext(), totalUsed)
+        binding.totalSize.text = usedFormatted.substring(0, usedFormatted.length - 2)
+        binding.totalSizeUnit.text = usedFormatted.substring(usedFormatted.length - 2)
+
+        var pdfSizeInPercentage = (pdfFiles.sumOf { it.size } * 100) / totalUsed
+        Log.e("Storage Details", "Total: $total , Total Free: $totalFree , Total Used: $totalUsed , pdfSize: ${pdfFiles.sumOf { it.size }}, pdfSizeInPercentage: $pdfSizeInPercentage")
+
+
+        if (pdfSizeInPercentage < 3){
+            pdfSizeInPercentage = 3
+        } else {
+            pdfSizeInPercentage += 3
+        }
+
+        binding.progressBar.progress = pdfSizeInPercentage.toInt()
+
+
     }
 
     private fun setupList() {
@@ -251,6 +267,7 @@ class HomeFragment : Fragment() {
         binding.loadingFileCount.visibility = View.VISIBLE
         binding.totalFiles.visibility = View.GONE
         binding.totalFilesTitle.visibility = View.GONE
+
     }
 
 

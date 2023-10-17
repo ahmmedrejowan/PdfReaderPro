@@ -66,8 +66,4 @@ dependencies {
     // shared preferences
     implementation("androidx.preference:preference-ktx:1.2.1")
 
-    // ssp and sdp for responsive ui
-    implementation("com.intuit.ssp:ssp-android:1.1.0")
-    implementation("com.intuit.sdp:sdp-android:1.1.0")
-
 }

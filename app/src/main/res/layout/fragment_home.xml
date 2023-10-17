@@ -90,7 +90,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="PDFs"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -170,7 +170,7 @@
                 android:layout_above="@id/progressBar"
                 android:layout_alignStart="@id/totalSize"
                 android:layout_marginBottom="15dp"
-                android:text="Storage"
+                android:text="Storage Used"
                 android:textColor="@color/textGrey"
                 android:textSize="13sp" />
 
