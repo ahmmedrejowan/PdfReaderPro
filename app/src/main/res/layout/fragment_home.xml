@@ -224,7 +224,7 @@
             android:orientation="horizontal">
 
 
-            <com.androvine.pdfreaderpro.customView.CustomListGridSwitchView
+            <com.rejowan.pdfreaderpro.customView.CustomListGridSwitchView
                 android:id="@+id/switchView"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
