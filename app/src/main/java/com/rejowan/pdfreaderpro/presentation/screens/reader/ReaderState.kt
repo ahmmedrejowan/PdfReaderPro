@@ -58,7 +58,16 @@ data class ReaderState(
     val isPageJumpDialogVisible: Boolean = false,
 
     // Settings panel
-    val isSettingsPanelVisible: Boolean = false
+    val isSettingsPanelVisible: Boolean = false,
+
+    // PDF info dialog
+    val isInfoDialogVisible: Boolean = false,
+
+    // Delete confirmation dialog
+    val isDeleteDialogVisible: Boolean = false,
+
+    // Rotation lock
+    val isRotationLocked: Boolean = false
 ) {
     val hasSearchResults: Boolean get() = searchResults.isNotEmpty()
 
@@ -95,6 +104,7 @@ sealed class ReaderEvent {
     data class ShowMessage(val message: String) : ReaderEvent()
     data class NavigateToPage(val page: Int) : ReaderEvent()
     data object DocumentClosed : ReaderEvent()
+    data object DocumentDeleted : ReaderEvent()
     data object ShareDocument : ReaderEvent()
     data class Error(val message: String) : ReaderEvent()
 }
@@ -146,4 +156,16 @@ sealed class ReaderAction {
     data object ToggleFavorite : ReaderAction()
     data object ShareDocument : ReaderAction()
     data object CloseDocument : ReaderAction()
+
+    // PDF info dialog
+    data object ShowInfoDialog : ReaderAction()
+    data object HideInfoDialog : ReaderAction()
+
+    // Delete dialog
+    data object ShowDeleteDialog : ReaderAction()
+    data object HideDeleteDialog : ReaderAction()
+    data object ConfirmDelete : ReaderAction()
+
+    // Rotation lock
+    data object ToggleRotationLock : ReaderAction()
 }

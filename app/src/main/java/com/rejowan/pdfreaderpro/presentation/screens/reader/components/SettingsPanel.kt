@@ -17,7 +17,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness6
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.ScreenLockRotation
+import androidx.compose.material.icons.filled.ScreenRotation
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -45,11 +49,15 @@ fun SettingsPanel(
     brightness: Float,
     scrollDirection: ScrollDirection,
     keepScreenOn: Boolean,
+    isRotationLocked: Boolean,
     onColorModeChange: (ColorMode) -> Unit,
     onBrightnessChange: (Float) -> Unit,
     onScrollDirectionChange: (ScrollDirection) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
+    onRotationLockChange: () -> Unit,
     onFullScreenClick: () -> Unit,
+    onInfoClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -208,6 +216,42 @@ fun SettingsPanel(
                 )
             }
 
+            // Rotation lock
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (isRotationLocked) {
+                        Icons.Default.ScreenLockRotation
+                    } else {
+                        Icons.Default.ScreenRotation
+                    },
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Lock Rotation",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = if (isRotationLocked) "Rotation locked" else "Auto-rotate enabled",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Switch(
+                    checked = isRotationLocked,
+                    onCheckedChange = { onRotationLockChange() }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalDivider()
             Spacer(modifier = Modifier.height(8.dp))
 
             // Full screen button
@@ -224,6 +268,36 @@ fun SettingsPanel(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Full Screen Mode")
+            }
+
+            // PDF info button
+            TextButton(
+                onClick = onInfoClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("PDF Information")
+            }
+
+            // Delete button
+            TextButton(
+                onClick = onDeleteClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Delete PDF",
+                    color = MaterialTheme.colorScheme.error
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))

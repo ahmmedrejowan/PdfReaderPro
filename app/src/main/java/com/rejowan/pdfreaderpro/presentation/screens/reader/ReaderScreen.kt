@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.presentation.screens.reader
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -42,9 +43,12 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorState
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpDialog
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageThumbnailStrip
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfPageView
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderBottomBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
@@ -109,6 +113,27 @@ fun ReaderScreen(
         }
     }
 
+    // Handle rotation lock
+    DisposableEffect(state.isRotationLocked) {
+        activity?.let {
+            it.requestedOrientation = if (state.isRotationLocked) {
+                // Lock to current orientation
+                when (it.resources.configuration.orientation) {
+                    android.content.res.Configuration.ORIENTATION_LANDSCAPE ->
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                    else ->
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                }
+            } else {
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            }
+        }
+
+        onDispose {
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
+
     // Handle events
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -120,6 +145,9 @@ fun ReaderScreen(
                     // Handled internally
                 }
                 is ReaderEvent.DocumentClosed -> {
+                    navController.popBackStack()
+                }
+                is ReaderEvent.DocumentDeleted -> {
                     navController.popBackStack()
                 }
                 is ReaderEvent.ShareDocument -> {
@@ -219,7 +247,8 @@ fun ReaderScreen(
                     currentPage = state.currentPage,
                     totalPages = state.totalPages,
                     onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
-                    onPageJumpClick = { viewModel.onAction(ReaderAction.ShowPageJumpDialog) }
+                    onPageJumpClick = { viewModel.onAction(ReaderAction.ShowPageJumpDialog) },
+                    onThumbnailsClick = { viewModel.onAction(ReaderAction.ShowPageThumbnails) }
                 )
             }
         },
@@ -359,12 +388,53 @@ fun ReaderScreen(
             brightness = state.brightness,
             scrollDirection = state.scrollDirection,
             keepScreenOn = state.keepScreenOn,
+            isRotationLocked = state.isRotationLocked,
             onColorModeChange = { viewModel.onAction(ReaderAction.SetColorMode(it)) },
             onBrightnessChange = { viewModel.onAction(ReaderAction.SetBrightness(it)) },
             onScrollDirectionChange = { viewModel.onAction(ReaderAction.SetScrollDirection(it)) },
             onKeepScreenOnChange = { viewModel.onAction(ReaderAction.SetKeepScreenOn(it)) },
+            onRotationLockChange = { viewModel.onAction(ReaderAction.ToggleRotationLock) },
             onFullScreenClick = { viewModel.onAction(ReaderAction.ToggleFullScreen) },
+            onInfoClick = {
+                viewModel.onAction(ReaderAction.HideSettingsPanel)
+                viewModel.onAction(ReaderAction.ShowInfoDialog)
+            },
+            onDeleteClick = {
+                viewModel.onAction(ReaderAction.HideSettingsPanel)
+                viewModel.onAction(ReaderAction.ShowDeleteDialog)
+            },
             onDismiss = { viewModel.onAction(ReaderAction.HideSettingsPanel) }
+        )
+    }
+
+    // Page thumbnail strip
+    if (state.isPageThumbnailsVisible) {
+        PageThumbnailStrip(
+            totalPages = state.totalPages,
+            currentPage = state.currentPage,
+            viewModel = viewModel,
+            onPageClick = { page ->
+                viewModel.onAction(ReaderAction.GoToPage(page))
+                viewModel.onAction(ReaderAction.HidePageThumbnails)
+            },
+            onDismiss = { viewModel.onAction(ReaderAction.HidePageThumbnails) }
+        )
+    }
+
+    // PDF info dialog
+    if (state.isInfoDialogVisible) {
+        PdfInfoDialog(
+            info = viewModel.getPdfInfo(),
+            onDismiss = { viewModel.onAction(ReaderAction.HideInfoDialog) }
+        )
+    }
+
+    // Delete confirmation dialog
+    if (state.isDeleteDialogVisible) {
+        DeleteConfirmDialog(
+            fileName = state.documentTitle ?: "this PDF",
+            onConfirm = { viewModel.onAction(ReaderAction.ConfirmDelete) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideDeleteDialog) }
         )
     }
 }

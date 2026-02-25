@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rejowan.pdfreaderpro.data.local.PasswordStorage
 import com.rejowan.pdfreaderpro.data.pdf.ColorMode
 import com.rejowan.pdfreaderpro.data.pdf.MuPdfDocument
 import com.rejowan.pdfreaderpro.data.pdf.PasswordRequiredException
@@ -13,6 +14,7 @@ import com.rejowan.pdfreaderpro.data.pdf.PdfRenderer
 import com.rejowan.pdfreaderpro.data.pdf.SearchResult
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -30,7 +32,8 @@ class ReaderViewModel(
     private val recentRepository: RecentRepository,
     private val favoriteRepository: FavoriteRepository,
     private val applicationContext: Context,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
 ) : ViewModel() {
 
     // Get path and initial page from navigation arguments
@@ -63,7 +66,17 @@ class ReaderViewModel(
     private var pageSaveJob: Job? = null
 
     init {
-        loadDocument()
+        loadDocumentWithSavedPassword()
+    }
+
+    /**
+     * Try to load with saved password first.
+     */
+    private fun loadDocumentWithSavedPassword() {
+        viewModelScope.launch {
+            val savedPassword = passwordStorage.getPassword(pdfPath)
+            loadDocument(savedPassword)
+        }
     }
 
     /**
@@ -175,6 +188,18 @@ class ReaderViewModel(
             is ReaderAction.ToggleFavorite -> toggleFavorite()
             is ReaderAction.ShareDocument -> shareDocument()
             is ReaderAction.CloseDocument -> closeDocument()
+
+            // PDF info dialog
+            is ReaderAction.ShowInfoDialog -> _state.update { it.copy(isInfoDialogVisible = true) }
+            is ReaderAction.HideInfoDialog -> _state.update { it.copy(isInfoDialogVisible = false) }
+
+            // Delete dialog
+            is ReaderAction.ShowDeleteDialog -> _state.update { it.copy(isDeleteDialogVisible = true) }
+            is ReaderAction.HideDeleteDialog -> _state.update { it.copy(isDeleteDialogVisible = false) }
+            is ReaderAction.ConfirmDelete -> deleteDocument()
+
+            // Rotation lock
+            is ReaderAction.ToggleRotationLock -> _state.update { it.copy(isRotationLocked = !it.isRotationLocked) }
         }
     }
 
@@ -302,8 +327,61 @@ class ReaderViewModel(
     }
 
     private fun submitPassword(password: String, remember: Boolean) {
-        loadDocument(password)
-        // TODO: If remember is true, store password securely
+        viewModelScope.launch {
+            if (remember) {
+                passwordStorage.savePassword(pdfPath, password)
+            }
+            loadDocument(password)
+        }
+    }
+
+    /**
+     * Delete the current PDF document.
+     */
+    private fun deleteDocument() {
+        viewModelScope.launch {
+            _state.update { it.copy(isDeleteDialogVisible = false) }
+
+            try {
+                // Close the document first
+                renderer?.clearCache()
+                document?.close()
+                document = null
+                renderer = null
+
+                // Delete the file
+                val file = File(pdfPath)
+                if (file.exists() && file.delete()) {
+                    // Remove from recent and favorites
+                    recentRepository.removeRecent(pdfPath)
+                    favoriteRepository.removeFavorite(pdfPath)
+
+                    // Remove saved password if any
+                    passwordStorage.removePassword(pdfPath)
+
+                    _events.send(ReaderEvent.DocumentDeleted)
+                } else {
+                    _events.send(ReaderEvent.Error("Failed to delete file"))
+                }
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Error deleting file: ${e.message}"))
+            }
+        }
+    }
+
+    /**
+     * Get PDF information for the info dialog.
+     */
+    fun getPdfInfo(): PdfInfo {
+        val file = File(pdfPath)
+        return PdfInfo(
+            title = document?.title,
+            author = document?.author,
+            path = pdfPath,
+            pageCount = _state.value.totalPages,
+            fileSize = file.length(),
+            lastModified = file.lastModified()
+        )
     }
 
     private fun toggleFavorite() {

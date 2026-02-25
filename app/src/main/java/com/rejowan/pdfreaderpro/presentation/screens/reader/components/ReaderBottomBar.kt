@@ -9,7 +9,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -30,6 +35,7 @@ fun ReaderBottomBar(
     totalPages: Int,
     onPageChange: (Int) -> Unit,
     onPageJumpClick: () -> Unit,
+    onThumbnailsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var sliderPosition by remember(currentPage) { mutableFloatStateOf(currentPage.toFloat()) }
@@ -54,6 +60,16 @@ fun ReaderBottomBar(
                     .clickable(onClick = onPageJumpClick)
                     .padding(8.dp)
             )
+
+            // Thumbnails button
+            IconButton(onClick = onThumbnailsClick) {
+                Icon(
+                    imageVector = Icons.Default.GridView,
+                    contentDescription = "Page Thumbnails",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(4.dp))
