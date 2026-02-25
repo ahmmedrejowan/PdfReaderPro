@@ -1,7 +1,11 @@
 package com.rejowan.pdfreaderpro.presentation.screens.onboarding
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -29,13 +33,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.Home
 import kotlinx.coroutines.launch
@@ -70,20 +83,39 @@ fun OnboardingScreen(
     navController: NavController,
     onOnboardingComplete: () -> Unit
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { onboardingPages.size + 1 } // +1 for permission page
     )
 
-    val permissionLauncher = rememberLauncherForActivityResult(
+    // Track if we're waiting for the user to return from settings
+    var waitingForManagePermission by remember { mutableStateOf(false) }
+
+    // For Android 10 and below - use runtime permission launcher
+    val legacyPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val allGranted = permissions.values.all { it }
-        if (allGranted) {
-            onOnboardingComplete()
-            navController.navigate(Home) {
-                popUpTo(0) { inclusive = true }
+    ) { _ ->
+        // Always proceed after permission request (granted or denied)
+        onOnboardingComplete()
+        navController.navigate(Home) {
+            popUpTo(0) { inclusive = true }
+        }
+    }
+
+    // Check permission when returning from settings (for MANAGE_EXTERNAL_STORAGE)
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            if (waitingForManagePermission) {
+                waitingForManagePermission = false
+                // User returned from settings, proceed regardless of result
+                onOnboardingComplete()
+                navController.navigate(Home) {
+                    popUpTo(0) { inclusive = true }
+                }
             }
         }
     }
@@ -151,16 +183,31 @@ fun OnboardingScreen(
             Button(
                 onClick = {
                     if (pagerState.currentPage == pagerState.pageCount - 1) {
-                        // Request permissions
-                        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            // Android 11+ (R): Need MANAGE_EXTERNAL_STORAGE
+                            // Check if already granted
+                            if (Environment.isExternalStorageManager()) {
+                                onOnboardingComplete()
+                                navController.navigate(Home) {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            } else {
+                                // Open settings to grant "All Files Access"
+                                waitingForManagePermission = true
+                                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                                    data = Uri.parse("package:${context.packageName}")
+                                }
+                                context.startActivity(intent)
+                            }
                         } else {
-                            arrayOf(
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            // Android 10 and below: Use runtime permissions
+                            legacyPermissionLauncher.launch(
+                                arrayOf(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                )
                             )
                         }
-                        permissionLauncher.launch(permissions)
                     } else {
                         scope.launch {
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)

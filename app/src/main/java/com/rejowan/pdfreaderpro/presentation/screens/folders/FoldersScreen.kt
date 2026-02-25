@@ -1,4 +1,4 @@
-package com.rejowan.pdfreaderpro.presentation.screens.home.tabs
+package com.rejowan.pdfreaderpro.presentation.screens.folders
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,6 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -15,15 +17,20 @@ import com.rejowan.pdfreaderpro.presentation.components.EmptyState
 import com.rejowan.pdfreaderpro.presentation.components.FolderItem
 import com.rejowan.pdfreaderpro.presentation.components.LoadingState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoldersTab(
+fun FoldersScreen(
     folders: List<PdfFolder>,
     isLoading: Boolean,
     onFolderClick: (PdfFolder) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    PullToRefreshBox(
+        isRefreshing = isLoading,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
+    ) {
         when {
             isLoading && folders.isEmpty() -> {
                 LoadingState()

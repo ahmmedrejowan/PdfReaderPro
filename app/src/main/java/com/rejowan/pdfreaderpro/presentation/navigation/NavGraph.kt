@@ -35,7 +35,7 @@ fun PdfReaderNavGraph() {
 @Composable
 fun PdfReaderNavHost(
     navController: NavHostController,
-    startDestination: Any = Home,
+    startDestination: Any = Splash,
     onShowSnackbar: (String) -> Unit = {}
 ) {
     NavHost(
