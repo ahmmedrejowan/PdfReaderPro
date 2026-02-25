@@ -14,7 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.FolderOff
+import androidx.compose.material.icons.outlined.FolderOpen
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.rounded.Folder
@@ -32,120 +32,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+// Soft accent colors for different states
+private val SoftBlue = Color(0xFF64B5F6)
+private val SoftPurple = Color(0xFF9575CD)
+private val SoftPink = Color(0xFFF06292)
+private val SoftTeal = Color(0xFF4DB6AC)
+private val SoftAmber = Color(0xFFFFB74D)
+
 @Composable
 fun EmptyState(
     icon: ImageVector,
     title: String,
     message: String,
+    accentColor: Color = SoftPurple,
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
-
-        if (actionLabel != null && onAction != null) {
-            Spacer(modifier = Modifier.height(24.dp))
-            Button(onClick = onAction) {
-                Text(text = actionLabel)
-            }
-        }
-    }
-}
-
-@Composable
-fun EmptyFilesState(
-    onScanClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    EmptyState(
-        icon = Icons.Outlined.Description,
-        title = "No PDFs Found",
-        message = "We couldn't find any PDF files on your device.",
-        actionLabel = "Scan for PDFs",
-        onAction = onScanClick,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun EmptyRecentState(
-    onBrowseClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    EmptyState(
-        icon = Icons.Outlined.History,
-        title = "No Recent Files",
-        message = "PDFs you open will appear here for quick access.",
-        actionLabel = "Browse All Files",
-        onAction = onBrowseClick,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun EmptyFavoritesState(
-    onBrowseClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    EmptyState(
-        icon = Icons.Outlined.FavoriteBorder,
-        title = "No Favorites Yet",
-        message = "Tap the star icon on any PDF to add it to your favorites.",
-        actionLabel = "Browse All Files",
-        onAction = onBrowseClick,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun EmptySearchState(
-    query: String,
-    modifier: Modifier = Modifier
-) {
-    EmptyState(
-        icon = Icons.Outlined.SearchOff,
-        title = "No Results for \"$query\"",
-        message = "Try a different search term or check the spelling.",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun PermissionRequiredState(
-    onGrantClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val softPurple = Color(0xFF9575CD)
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -159,7 +62,155 @@ fun PermissionRequiredState(
             modifier = Modifier
                 .size(100.dp)
                 .background(
-                    color = softPurple.copy(alpha = 0.12f),
+                    color = accentColor.copy(alpha = 0.12f),
+                    shape = RoundedCornerShape(28.dp)
+                )
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                tint = accentColor
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        if (actionLabel != null && onAction != null) {
+            Spacer(modifier = Modifier.height(28.dp))
+            Button(
+                onClick = onAction,
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = accentColor
+                ),
+                contentPadding = PaddingValues(horizontal = 28.dp, vertical = 12.dp)
+            ) {
+                Text(
+                    text = actionLabel,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun EmptyFilesState(
+    onScanClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    EmptyState(
+        icon = Icons.Outlined.Description,
+        title = "No PDFs here yet",
+        message = "We couldn't find any PDF files on your device. Try scanning again or add some PDFs to get started!",
+        accentColor = SoftBlue,
+        actionLabel = "Scan for PDFs",
+        onAction = onScanClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun EmptyRecentState(
+    onBrowseClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    EmptyState(
+        icon = Icons.Outlined.History,
+        title = "Your reading journey starts here",
+        message = "PDFs you open will show up here for quick access. Start exploring your files!",
+        accentColor = SoftTeal,
+        actionLabel = "Browse Files",
+        onAction = onBrowseClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun EmptyFavoritesState(
+    onBrowseClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    EmptyState(
+        icon = Icons.Outlined.FavoriteBorder,
+        title = "No favorites yet",
+        message = "Tap the heart icon on any PDF to save it here for easy access later.",
+        accentColor = SoftPink,
+        actionLabel = "Browse Files",
+        onAction = onBrowseClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun EmptySearchState(
+    query: String,
+    modifier: Modifier = Modifier
+) {
+    EmptyState(
+        icon = Icons.Outlined.SearchOff,
+        title = "No matches found",
+        message = "We couldn't find anything for \"$query\". Try a different search term.",
+        accentColor = SoftAmber,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun EmptyFoldersState(
+    onScanClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    EmptyState(
+        icon = Icons.Outlined.FolderOpen,
+        title = "No folders yet",
+        message = "PDF folders will appear here once your files are scanned. Let's find them!",
+        accentColor = SoftPurple,
+        actionLabel = "Scan for PDFs",
+        onAction = onScanClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun PermissionRequiredState(
+    onGrantClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Soft icon container
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(100.dp)
+                .background(
+                    color = SoftPurple.copy(alpha = 0.12f),
                     shape = RoundedCornerShape(28.dp)
                 )
         ) {
@@ -167,7 +218,7 @@ fun PermissionRequiredState(
                 imageVector = Icons.Rounded.Folder,
                 contentDescription = null,
                 modifier = Modifier.size(48.dp),
-                tint = softPurple
+                tint = SoftPurple
             )
         }
 
@@ -198,7 +249,7 @@ fun PermissionRequiredState(
             onClick = onGrantClick,
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = softPurple
+                containerColor = SoftPurple
             ),
             contentPadding = PaddingValues(horizontal = 28.dp, vertical = 12.dp)
         ) {

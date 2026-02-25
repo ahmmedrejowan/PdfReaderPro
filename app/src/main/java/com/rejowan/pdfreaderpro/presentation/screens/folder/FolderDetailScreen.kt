@@ -166,8 +166,9 @@ fun FolderDetailScreen(
                 files.isEmpty() -> {
                     EmptyState(
                         icon = Icons.Outlined.Description,
-                        title = "No PDFs",
-                        message = "This folder doesn't contain any PDF files."
+                        title = "This folder is empty",
+                        message = "No PDF files found in this folder. They might be in a different location.",
+                        accentColor = androidx.compose.ui.graphics.Color(0xFF64B5F6)
                     )
                 }
                 viewMode == ViewMode.LIST -> {
