@@ -20,11 +20,14 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Sort
+import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -76,20 +79,23 @@ fun WelcomeHeader(
     totalPdfs: Int,
     totalSize: Long,
     favoritesCount: Int,
+    onSortClick: () -> Unit,
+    onStatsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val greeting = getGreeting()
     val emoji = getGreetingEmoji()
 
-    var isStatsExpanded by rememberSaveable { mutableStateOf(false) }
-    val rotationAngle by animateFloatAsState(
-        targetValue = if (isStatsExpanded) 180f else 0f,
-        label = "arrow rotation"
-    )
+    // Stats section commented out for now
+    // var isStatsExpanded by rememberSaveable { mutableStateOf(false) }
+    // val rotationAngle by animateFloatAsState(
+    //     targetValue = if (isStatsExpanded) 180f else 0f,
+    //     label = "arrow rotation"
+    // )
 
-    val softPurple = Color(0xFF9575CD)
-    val softBlue = Color(0xFF64B5F6)
-    val softPink = Color(0xFFF06292)
+    // val softPurple = Color(0xFF9575CD)
+    // val softBlue = Color(0xFF64B5F6)
+    // val softPink = Color(0xFFF06292)
 
     Column(
         modifier = modifier
@@ -98,102 +104,124 @@ fun WelcomeHeader(
             .windowInsetsPadding(WindowInsets.statusBars)
             .padding(start = 20.dp, end = 12.dp, top = 8.dp, bottom = 12.dp)
     ) {
-        // Greeting
-        Column {
-            Text(
-                text = "$greeting $emoji",
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = "Welcome to your PDF library",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-            )
-        }
+        // Greeting with stats action
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "$greeting $emoji",
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "Welcome to your PDF library",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                )
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Stats Section - Collapsible
-        AnimatedContent(
-            targetState = isStatsExpanded,
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
-            label = "stats toggle"
-        ) { expanded ->
-            if (expanded) {
-                // Expanded: Full stat cards
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    StatCard(
-                        icon = Icons.Outlined.Folder,
-                        value = totalPdfs.toString(),
-                        label = "PDFs",
-                        accentColor = softPurple,
-                        modifier = Modifier.weight(1f)
-                    )
-                    StatCard(
-                        icon = Icons.Outlined.Storage,
-                        value = formatFileSize(totalSize),
-                        label = "Size",
-                        accentColor = softBlue,
-                        modifier = Modifier.weight(1f)
-                    )
-                    StatCard(
-                        icon = Icons.Outlined.FavoriteBorder,
-                        value = favoritesCount.toString(),
-                        label = "Favorites",
-                        accentColor = softPink,
-                        modifier = Modifier.weight(1f)
-                    )
-                    // Collapse arrow
-                    ExpandCollapseButton(
-                        isExpanded = true,
-                        rotationAngle = rotationAngle,
-                        onClick = { isStatsExpanded = false }
+            Row {
+                IconButton(onClick = onSortClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.Sort,
+                        contentDescription = "Sort",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-            } else {
-                // Collapsed: Compact bar with accent backgrounds
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CompactStat(
-                        icon = Icons.Outlined.Folder,
-                        value = totalPdfs.toString(),
-                        accentColor = softPurple
-                    )
-                    CompactStat(
-                        icon = Icons.Outlined.Storage,
-                        value = formatFileSize(totalSize),
-                        accentColor = softBlue
-                    )
-                    CompactStat(
-                        icon = Icons.Outlined.FavoriteBorder,
-                        value = favoritesCount.toString(),
-                        accentColor = softPink
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    // Expand arrow
-                    ExpandCollapseButton(
-                        isExpanded = false,
-                        rotationAngle = rotationAngle,
-                        onClick = { isStatsExpanded = true }
+                IconButton(onClick = onStatsClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.Analytics,
+                        contentDescription = "Stats",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
         }
+
+        // Stats Section - Commented out for now
+        // Spacer(modifier = Modifier.height(16.dp))
+        // AnimatedContent(
+        //     targetState = isStatsExpanded,
+        //     transitionSpec = { fadeIn() togetherWith fadeOut() },
+        //     label = "stats toggle"
+        // ) { expanded ->
+        //     if (expanded) {
+        //         // Expanded: Full stat cards
+        //         Row(
+        //             modifier = Modifier
+        //                 .fillMaxWidth()
+        //                 .padding(end = 8.dp),
+        //             horizontalArrangement = Arrangement.spacedBy(10.dp),
+        //             verticalAlignment = Alignment.CenterVertically
+        //         ) {
+        //             StatCard(
+        //                 icon = Icons.Outlined.Folder,
+        //                 value = totalPdfs.toString(),
+        //                 label = "PDFs",
+        //                 accentColor = softPurple,
+        //                 modifier = Modifier.weight(1f)
+        //             )
+        //             StatCard(
+        //                 icon = Icons.Outlined.Storage,
+        //                 value = formatFileSize(totalSize),
+        //                 label = "Size",
+        //                 accentColor = softBlue,
+        //                 modifier = Modifier.weight(1f)
+        //             )
+        //             StatCard(
+        //                 icon = Icons.Outlined.FavoriteBorder,
+        //                 value = favoritesCount.toString(),
+        //                 label = "Favorites",
+        //                 accentColor = softPink,
+        //                 modifier = Modifier.weight(1f)
+        //             )
+        //             // Collapse arrow
+        //             ExpandCollapseButton(
+        //                 isExpanded = true,
+        //                 rotationAngle = rotationAngle,
+        //                 onClick = { isStatsExpanded = false }
+        //             )
+        //         }
+        //     } else {
+        //         // Collapsed: Compact bar with accent backgrounds
+        //         Row(
+        //             modifier = Modifier
+        //                 .fillMaxWidth()
+        //                 .padding(end = 8.dp),
+        //             horizontalArrangement = Arrangement.spacedBy(10.dp),
+        //             verticalAlignment = Alignment.CenterVertically
+        //         ) {
+        //             CompactStat(
+        //                 icon = Icons.Outlined.Folder,
+        //                 value = totalPdfs.toString(),
+        //                 accentColor = softPurple
+        //             )
+        //             CompactStat(
+        //                 icon = Icons.Outlined.Storage,
+        //                 value = formatFileSize(totalSize),
+        //                 accentColor = softBlue
+        //             )
+        //             CompactStat(
+        //                 icon = Icons.Outlined.FavoriteBorder,
+        //                 value = favoritesCount.toString(),
+        //                 accentColor = softPink
+        //             )
+        //             Spacer(modifier = Modifier.weight(1f))
+        //             // Expand arrow
+        //             ExpandCollapseButton(
+        //                 isExpanded = false,
+        //                 rotationAngle = rotationAngle,
+        //                 onClick = { isStatsExpanded = true }
+        //             )
+        //         }
+        //     }
+        // }
 
     }
 }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material3.Icon
@@ -33,7 +32,6 @@ fun CompactTabRow(
     onTabSelected: (Int) -> Unit,
     isGridView: Boolean,
     onViewModeToggle: () -> Unit,
-    onSortClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val softPurple = Color(0xFF9575CD)
@@ -60,7 +58,7 @@ fun CompactTabRow(
             }
         }
 
-        // View Mode Toggle & Sort - Right aligned
+        // View Mode Toggle - Right aligned
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -85,17 +83,6 @@ fun CompactTabRow(
                     modifier = Modifier.size(18.dp)
                 )
             }
-            // Sort button
-            ViewModeIcon(
-                isSelected = false,
-                onClick = onSortClick
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.Sort,
-                    contentDescription = "Sort",
-                    modifier = Modifier.size(18.dp)
-                )
-            }
         }
     }
 }
@@ -109,28 +96,28 @@ private fun CompactTab(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor.copy(alpha = 0.15f) else Color.Transparent,
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.18f) else Color.Transparent,
         label = "tab background"
     )
     val textColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+        targetValue = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
         label = "tab text"
     )
 
     Surface(
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(10.dp))
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(10.dp),
         color = backgroundColor
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.labelMedium.copy(
-                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
             ),
             color = textColor,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
         )
     }
 }

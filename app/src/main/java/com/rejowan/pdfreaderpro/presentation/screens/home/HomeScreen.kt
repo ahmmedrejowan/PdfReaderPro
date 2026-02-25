@@ -42,6 +42,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.presentation.components.AnimatedBottomNav
+import com.rejowan.pdfreaderpro.presentation.components.ClickableSearchBar
 import com.rejowan.pdfreaderpro.presentation.components.CompactTabRow
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
@@ -200,10 +201,17 @@ fun HomeScreen(
                             WelcomeHeader(
                                 totalPdfs = allFiles.size,
                                 totalSize = allFiles.sumOf { it.size },
-                                favoritesCount = favoriteFiles.size
+                                favoritesCount = favoriteFiles.size,
+                                onSortClick = { showSortSheet = true },
+                                onStatsClick = { /* TODO: Show stats dialog or screen */ }
                             )
 
-                            // Compact tabs with view mode toggle and sort
+                            // Search bar
+                            ClickableSearchBar(
+                                onClick = { navController.navigateToSearch() }
+                            )
+
+                            // Compact tabs with view mode toggle
                             CompactTabRow(
                                 tabs = HomeSubTab.entries.map { it.title },
                                 selectedIndex = homeSubTabPagerState.currentPage,
@@ -220,8 +228,7 @@ fun HomeScreen(
                                         else
                                             com.rejowan.pdfreaderpro.domain.model.ViewMode.GRID
                                     )
-                                },
-                                onSortClick = { showSortSheet = true }
+                                }
                             )
 
                             HorizontalPager(
