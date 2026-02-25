@@ -91,7 +91,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // PDF Libraries
-    implementation(libs.mupdf.fitz)
+    // TODO: Add PdfViewer library
 
     // Image Loading
     implementation(libs.coil.compose)

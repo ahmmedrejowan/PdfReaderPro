@@ -10,32 +10,23 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.VerticalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.net.toUri
@@ -46,16 +37,11 @@ import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorState
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpDialog
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageThumbnailStrip
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfPageView
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderBottomBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SearchOverlay
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SettingsPanel
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.TableOfContentsSheet
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -67,14 +53,13 @@ fun ReaderScreen(
 ) {
     val context = LocalContext.current
     val view = LocalView.current
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val state by viewModel.state.collectAsState()
-    val currentPageBitmap by viewModel.currentPageBitmap.collectAsState()
+
+    val activity = context as? Activity
 
     // Handle full screen mode
-    val activity = context as? Activity
     DisposableEffect(state.isFullScreen) {
         activity?.let {
             val window = it.window
@@ -117,7 +102,6 @@ fun ReaderScreen(
     DisposableEffect(state.isRotationLocked) {
         activity?.let {
             it.requestedOrientation = if (state.isRotationLocked) {
-                // Lock to current orientation
                 when (it.resources.configuration.orientation) {
                     android.content.res.Configuration.ORIENTATION_LANDSCAPE ->
                         ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
@@ -141,9 +125,7 @@ fun ReaderScreen(
                 is ReaderEvent.ShowMessage -> {
                     snackbarHostState.showSnackbar(event.message)
                 }
-                is ReaderEvent.NavigateToPage -> {
-                    // Handled internally
-                }
+                is ReaderEvent.NavigateToPage -> { }
                 is ReaderEvent.DocumentClosed -> {
                     navController.popBackStack()
                 }
@@ -162,25 +144,6 @@ fun ReaderScreen(
                     snackbarHostState.showSnackbar(event.message)
                 }
             }
-        }
-    }
-
-    // Pager state for page navigation
-    val pagerState = rememberPagerState(
-        initialPage = state.currentPage,
-        pageCount = { state.totalPages.coerceAtLeast(1) }
-    )
-
-    // Sync pager with state
-    LaunchedEffect(state.currentPage) {
-        if (pagerState.currentPage != state.currentPage) {
-            pagerState.animateScrollToPage(state.currentPage)
-        }
-    }
-
-    LaunchedEffect(pagerState.currentPage) {
-        if (pagerState.currentPage != state.currentPage && !pagerState.isScrollInProgress) {
-            viewModel.onAction(ReaderAction.GoToPage(pagerState.currentPage))
         }
     }
 
@@ -215,7 +178,7 @@ fun ReaderScreen(
     state.error?.let { error ->
         ErrorState(
             message = error,
-            onRetry = { /* Retry logic */ },
+            onRetry = { },
             onBack = { navController.popBackStack() }
         )
         return
@@ -258,102 +221,15 @@ fun ReaderScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center
         ) {
-            // PDF Page Display
-            var scale by remember { mutableFloatStateOf(1f) }
-            var offsetX by remember { mutableFloatStateOf(0f) }
-            var offsetY by remember { mutableFloatStateOf(0f) }
-
-            if (state.scrollDirection == ScrollDirection.HORIZONTAL) {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxSize(),
-                    beyondViewportPageCount = 1 // Pre-render adjacent pages
-                ) { page ->
-                    PdfPageView(
-                        pageIndex = page,
-                        viewModel = viewModel,
-                        colorMode = state.colorMode,
-                        zoom = state.zoom,
-                        searchResults = state.searchResultsOnCurrentPage,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = { viewModel.onAction(ReaderAction.ToggleToolbar) },
-                                    onDoubleTap = {
-                                        if (state.zoom > 1f) {
-                                            viewModel.onAction(ReaderAction.ResetZoom)
-                                        } else {
-                                            viewModel.onAction(ReaderAction.SetZoom(2f))
-                                        }
-                                    }
-                                )
-                            }
-                            .pointerInput(Unit) {
-                                detectTransformGestures { _, pan, gestureZoom, _ ->
-                                    val newZoom = (state.zoom * gestureZoom)
-                                        .coerceIn(state.minZoom, state.maxZoom)
-                                    viewModel.onAction(ReaderAction.SetZoom(newZoom))
-                                }
-                            }
-                    )
-                }
-            } else {
-                VerticalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxSize(),
-                    beyondViewportPageCount = 1 // Pre-render adjacent pages
-                ) { page ->
-                    PdfPageView(
-                        pageIndex = page,
-                        viewModel = viewModel,
-                        colorMode = state.colorMode,
-                        zoom = state.zoom,
-                        searchResults = state.searchResultsOnCurrentPage,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = { viewModel.onAction(ReaderAction.ToggleToolbar) },
-                                    onDoubleTap = {
-                                        if (state.zoom > 1f) {
-                                            viewModel.onAction(ReaderAction.ResetZoom)
-                                        } else {
-                                            viewModel.onAction(ReaderAction.SetZoom(2f))
-                                        }
-                                    }
-                                )
-                            }
-                            .pointerInput(Unit) {
-                                detectTransformGestures { _, pan, gestureZoom, _ ->
-                                    val newZoom = (state.zoom * gestureZoom)
-                                        .coerceIn(state.minZoom, state.maxZoom)
-                                    viewModel.onAction(ReaderAction.SetZoom(newZoom))
-                                }
-                            }
-                    )
-                }
-            }
-
-            // Search overlay
-            AnimatedVisibility(
-                visible = state.isSearchActive,
-                enter = slideInVertically { -it } + fadeIn(),
-                exit = slideOutVertically { -it } + fadeOut()
-            ) {
-                SearchOverlay(
-                    query = state.searchQuery,
-                    isSearching = state.isSearching,
-                    resultCount = state.searchResults.size,
-                    currentIndex = state.currentSearchIndex,
-                    onQueryChange = { viewModel.onAction(ReaderAction.Search(it)) },
-                    onPreviousResult = { viewModel.onAction(ReaderAction.PreviousSearchResult) },
-                    onNextResult = { viewModel.onAction(ReaderAction.NextSearchResult) },
-                    onClose = { viewModel.onAction(ReaderAction.ClearSearch) }
-                )
-            }
+            // TODO: Integrate PdfViewer library here
+            Text(
+                text = "PDF Viewer will be integrated here",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 
@@ -370,28 +246,13 @@ fun ReaderScreen(
         )
     }
 
-    // Table of contents sheet
-    if (state.isTableOfContentsVisible) {
-        TableOfContentsSheet(
-            items = state.tableOfContents,
-            currentPage = state.currentPage,
-            onItemClick = { item ->
-                viewModel.onAction(ReaderAction.GoToPage(item.page))
-                viewModel.onAction(ReaderAction.HideTableOfContents)
-            },
-            onDismiss = { viewModel.onAction(ReaderAction.HideTableOfContents) }
-        )
-    }
-
     // Settings panel
     if (state.isSettingsPanelVisible) {
         SettingsPanel(
-            colorMode = state.colorMode,
             brightness = state.brightness,
             scrollDirection = state.scrollDirection,
             keepScreenOn = state.keepScreenOn,
             isRotationLocked = state.isRotationLocked,
-            onColorModeChange = { viewModel.onAction(ReaderAction.SetColorMode(it)) },
             onBrightnessChange = { viewModel.onAction(ReaderAction.SetBrightness(it)) },
             onScrollDirectionChange = { viewModel.onAction(ReaderAction.SetScrollDirection(it)) },
             onKeepScreenOnChange = { viewModel.onAction(ReaderAction.SetKeepScreenOn(it)) },
@@ -406,20 +267,6 @@ fun ReaderScreen(
                 viewModel.onAction(ReaderAction.ShowDeleteDialog)
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideSettingsPanel) }
-        )
-    }
-
-    // Page thumbnail strip
-    if (state.isPageThumbnailsVisible) {
-        PageThumbnailStrip(
-            totalPages = state.totalPages,
-            currentPage = state.currentPage,
-            viewModel = viewModel,
-            onPageClick = { page ->
-                viewModel.onAction(ReaderAction.GoToPage(page))
-                viewModel.onAction(ReaderAction.HidePageThumbnails)
-            },
-            onDismiss = { viewModel.onAction(ReaderAction.HidePageThumbnails) }
         )
     }
 

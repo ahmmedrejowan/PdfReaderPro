@@ -1,9 +1,5 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader
 
-import com.rejowan.pdfreaderpro.data.pdf.ColorMode
-import com.rejowan.pdfreaderpro.data.pdf.OutlineItem
-import com.rejowan.pdfreaderpro.data.pdf.SearchResult
-
 /**
  * Complete state for the PDF Reader screen.
  */
@@ -19,7 +15,6 @@ data class ReaderState(
 
     // Navigation
     val currentPage: Int = 0,
-    val targetPage: Int? = null, // For smooth navigation
 
     // Zoom and scroll
     val zoom: Float = 1f,
@@ -31,20 +26,16 @@ data class ReaderState(
     val isToolbarVisible: Boolean = true,
     val isFullScreen: Boolean = false,
 
-    // Reader theme/appearance
-    val colorMode: ColorMode = ColorMode.NORMAL,
+    // Reader settings
     val brightness: Float = 1f,
     val keepScreenOn: Boolean = true,
 
     // Search
     val isSearchActive: Boolean = false,
     val searchQuery: String = "",
-    val searchResults: List<SearchResult> = emptyList(),
-    val currentSearchIndex: Int = 0,
     val isSearching: Boolean = false,
 
     // Table of Contents
-    val tableOfContents: List<OutlineItem> = emptyList(),
     val isTableOfContentsVisible: Boolean = false,
 
     // Page thumbnails
@@ -69,22 +60,6 @@ data class ReaderState(
     // Rotation lock
     val isRotationLocked: Boolean = false
 ) {
-    val hasSearchResults: Boolean get() = searchResults.isNotEmpty()
-
-    val currentSearchResult: SearchResult?
-        get() = if (searchResults.isNotEmpty() && currentSearchIndex in searchResults.indices) {
-            searchResults[currentSearchIndex]
-        } else null
-
-    val searchResultsOnCurrentPage: List<SearchResult>
-        get() = searchResults.filter { it.page == currentPage }
-
-    val canGoToPreviousSearchResult: Boolean
-        get() = currentSearchIndex > 0
-
-    val canGoToNextSearchResult: Boolean
-        get() = currentSearchIndex < searchResults.size - 1
-
     val pageLabel: String
         get() = "${currentPage + 1} / $totalPages"
 }
@@ -137,7 +112,6 @@ sealed class ReaderAction {
     data object HideSettingsPanel : ReaderAction()
 
     // Reading settings
-    data class SetColorMode(val mode: ColorMode) : ReaderAction()
     data class SetBrightness(val brightness: Float) : ReaderAction()
     data class SetScrollDirection(val direction: ScrollDirection) : ReaderAction()
     data class SetKeepScreenOn(val enabled: Boolean) : ReaderAction()

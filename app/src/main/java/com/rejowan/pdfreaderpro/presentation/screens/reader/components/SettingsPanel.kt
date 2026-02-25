@@ -1,20 +1,13 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.Delete
@@ -36,21 +29,16 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.rejowan.pdfreaderpro.data.pdf.ColorMode
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPanel(
-    colorMode: ColorMode,
     brightness: Float,
     scrollDirection: ScrollDirection,
     keepScreenOn: Boolean,
     isRotationLocked: Boolean,
-    onColorModeChange: (ColorMode) -> Unit,
     onBrightnessChange: (Float) -> Unit,
     onScrollDirectionChange: (ScrollDirection) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
@@ -76,57 +64,6 @@ fun SettingsPanel(
                 style = MaterialTheme.typography.titleLarge
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Color mode section
-            Text(
-                text = "Theme",
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                ColorModeButton(
-                    mode = ColorMode.NORMAL,
-                    label = "Light",
-                    backgroundColor = Color.White,
-                    textColor = Color.Black,
-                    isSelected = colorMode == ColorMode.NORMAL,
-                    onClick = { onColorModeChange(ColorMode.NORMAL) }
-                )
-                ColorModeButton(
-                    mode = ColorMode.SEPIA,
-                    label = "Sepia",
-                    backgroundColor = Color(0xFFF4ECD8),
-                    textColor = Color(0xFF5B4636),
-                    isSelected = colorMode == ColorMode.SEPIA,
-                    onClick = { onColorModeChange(ColorMode.SEPIA) }
-                )
-                ColorModeButton(
-                    mode = ColorMode.DARK,
-                    label = "Dark",
-                    backgroundColor = Color(0xFF2D2D2D),
-                    textColor = Color.White,
-                    isSelected = colorMode == ColorMode.DARK,
-                    onClick = { onColorModeChange(ColorMode.DARK) }
-                )
-                ColorModeButton(
-                    mode = ColorMode.INVERTED,
-                    label = "Black",
-                    backgroundColor = Color.Black,
-                    textColor = Color.White,
-                    isSelected = colorMode == ColorMode.INVERTED,
-                    onClick = { onColorModeChange(ColorMode.INVERTED) }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider()
             Spacer(modifier = Modifier.height(16.dp))
 
             // Brightness section
@@ -302,59 +239,5 @@ fun SettingsPanel(
 
             Spacer(modifier = Modifier.height(16.dp))
         }
-    }
-}
-
-@Composable
-private fun ColorModeButton(
-    mode: ColorMode,
-    label: String,
-    backgroundColor: Color,
-    textColor: Color,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable(onClick = onClick)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
-                .background(backgroundColor)
-                .then(
-                    if (isSelected) {
-                        Modifier.border(
-                            width = 2.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = CircleShape
-                        )
-                    } else {
-                        Modifier.border(
-                            width = 1.dp,
-                            color = Color.Gray,
-                            shape = CircleShape
-                        )
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "A",
-                style = MaterialTheme.typography.titleMedium,
-                color = textColor
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = if (isSelected) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            }
-        )
     }
 }

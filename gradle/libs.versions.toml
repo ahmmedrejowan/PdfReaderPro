@@ -29,7 +29,7 @@ koinCompose = "4.1.1"
 kotlinxSerialization = "1.10.0"
 
 # PDF Libraries
-mupdf = "1.24.9"
+# TODO: Add PdfViewer library
 
 # Image Loading
 coil = "2.7.0"
@@ -82,7 +82,7 @@ koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navig
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 # PDF Libraries
-mupdf-fitz = { module = "com.artifex.mupdf:fitz", version.ref = "mupdf" }
+# TODO: Add PdfViewer library
 
 # Image Loading
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
