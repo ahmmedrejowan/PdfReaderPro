@@ -11,9 +11,10 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = uri("https://jitpack.io") }
+        // MuPDF repository
+        maven { url = uri("https://maven.ghostscript.com") }
     }
 }
 
 rootProject.name = "PDF Reader Pro"
 include(":app")
-include(":android-pdf-viewer")
