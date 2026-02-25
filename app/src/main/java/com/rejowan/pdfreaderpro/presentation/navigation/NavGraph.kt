@@ -12,6 +12,7 @@ import androidx.navigation.toRoute
 import com.rejowan.pdfreaderpro.presentation.screens.home.HomeScreen
 import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingScreen
 import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashScreen
+import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
 import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -71,7 +72,10 @@ fun PdfReaderNavHost(
         // Search Screen
         composable<Search> { backStackEntry ->
             val search: Search = backStackEntry.toRoute()
-            // TODO: SearchScreen(navController, search.query)
+            SearchScreen(
+                navController = navController,
+                initialQuery = search.query
+            )
         }
 
         // Settings Screen

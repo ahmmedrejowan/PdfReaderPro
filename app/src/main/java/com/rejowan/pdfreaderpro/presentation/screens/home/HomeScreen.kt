@@ -26,11 +26,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
-import com.rejowan.pdfreaderpro.domain.model.PdfFolder
-import com.rejowan.pdfreaderpro.domain.model.RecentFile
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameDialog
+import com.rejowan.pdfreaderpro.util.FileOperations
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.ViewModeToggle
 import com.rejowan.pdfreaderpro.presentation.navigation.Settings
@@ -56,6 +59,7 @@ fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -74,6 +78,12 @@ fun HomeScreen(
     var showSortSheet by remember { mutableStateOf(false) }
     var selectedFile by remember { mutableStateOf<PdfFile?>(null) }
     var selectedFileFavorite by remember { mutableStateOf(false) }
+
+    // Dialog states
+    var showRenameDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var showInfoDialog by remember { mutableStateOf(false) }
+    var fileForDialog by remember { mutableStateOf<PdfFile?>(null) }
 
     Scaffold(
         topBar = {
@@ -210,17 +220,67 @@ fun HomeScreen(
             onDismiss = { selectedFile = null },
             onFavoriteClick = { viewModel.toggleFavorite(file) },
             onShareClick = {
-                // TODO: Implement share
+                FileOperations.sharePdf(context, file.path)
             },
             onRenameClick = {
-                // TODO: Implement rename
+                fileForDialog = file
+                showRenameDialog = true
             },
             onInfoClick = {
-                // TODO: Navigate to file info
+                fileForDialog = file
+                showInfoDialog = true
             },
             onDeleteClick = {
-                // TODO: Implement delete
+                fileForDialog = file
+                showDeleteDialog = true
             }
         )
+    }
+
+    // Rename Dialog
+    if (showRenameDialog) {
+        fileForDialog?.let { file ->
+            RenameDialog(
+                pdfFile = file,
+                onDismiss = {
+                    showRenameDialog = false
+                    fileForDialog = null
+                },
+                onRename = { newName ->
+                    FileOperations.renameFile(file.path, newName)
+                    viewModel.refresh()
+                }
+            )
+        }
+    }
+
+    // Delete Confirmation Dialog
+    if (showDeleteDialog) {
+        fileForDialog?.let { file ->
+            DeleteConfirmDialog(
+                pdfFile = file,
+                onDismiss = {
+                    showDeleteDialog = false
+                    fileForDialog = null
+                },
+                onConfirm = {
+                    FileOperations.deleteFile(file.path)
+                    viewModel.refresh()
+                }
+            )
+        }
+    }
+
+    // File Info Dialog
+    if (showInfoDialog) {
+        fileForDialog?.let { file ->
+            FileInfoDialog(
+                pdfFile = file,
+                onDismiss = {
+                    showInfoDialog = false
+                    fileForDialog = null
+                }
+            )
+        }
     }
 }
