@@ -23,6 +23,12 @@ data class Search(val query: String = "")
 object Settings
 
 @Serializable
+data class FolderDetail(
+    val folderPath: String,
+    val folderName: String
+)
+
+@Serializable
 data class Reader(
     val path: String,
     val page: Int = 0,

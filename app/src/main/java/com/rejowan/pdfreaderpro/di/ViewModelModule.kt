@@ -1,5 +1,6 @@
 package com.rejowan.pdfreaderpro.di
 
+import com.rejowan.pdfreaderpro.presentation.screens.folder.FolderDetailViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.home.HomeViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsViewModel
@@ -11,6 +12,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModelOf(::HomeViewModel)
+    viewModelOf(::FolderDetailViewModel)
     viewModelOf(::SearchViewModel)
     viewModelOf(::SettingsViewModel)
     viewModel { SplashViewModel(get(), androidContext()) }

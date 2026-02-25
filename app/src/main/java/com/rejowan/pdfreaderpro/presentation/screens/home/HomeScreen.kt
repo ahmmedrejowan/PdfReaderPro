@@ -37,6 +37,7 @@ import com.rejowan.pdfreaderpro.util.FileOperations
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.ViewModeToggle
 import com.rejowan.pdfreaderpro.presentation.navigation.Settings
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToFolderDetail
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSearch
 import com.rejowan.pdfreaderpro.presentation.screens.home.tabs.FavoritesTab
@@ -194,7 +195,7 @@ fun HomeScreen(
                         folders = folders,
                         isLoading = isLoading,
                         onFolderClick = { folder ->
-                            // TODO: Navigate to folder detail screen
+                            navController.navigateToFolderDetail(folder.path, folder.name)
                         },
                         onRefresh = { viewModel.refresh() }
                     )

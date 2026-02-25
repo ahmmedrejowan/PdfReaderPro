@@ -9,11 +9,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.rejowan.pdfreaderpro.presentation.screens.folder.FolderDetailScreen
 import com.rejowan.pdfreaderpro.presentation.screens.home.HomeScreen
 import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingScreen
-import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashScreen
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
+import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashScreen
 import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -81,6 +82,16 @@ fun PdfReaderNavHost(
         // Settings Screen
         composable<Settings> {
             SettingsScreen(navController = navController)
+        }
+
+        // Folder Detail Screen
+        composable<FolderDetail> { backStackEntry ->
+            val folderDetail: FolderDetail = backStackEntry.toRoute()
+            FolderDetailScreen(
+                navController = navController,
+                folderPath = folderDetail.folderPath,
+                folderName = folderDetail.folderName
+            )
         }
 
         // PDF Reader Screen
@@ -154,6 +165,13 @@ fun NavController.navigateToOnboarding() {
     navigate(Onboarding) {
         popUpTo(0) { inclusive = true }
     }
+}
+
+/**
+ * Navigate to folder detail screen.
+ */
+fun NavController.navigateToFolderDetail(folderPath: String, folderName: String) {
+    navigate(FolderDetail(folderPath = folderPath, folderName = folderName))
 }
 
 /**
