@@ -95,7 +95,7 @@ class MuPdfDocument private constructor(
 
     /**
      * Search for text in a specific page.
-     * Returns list of search results with their bounding boxes.
+     * Returns list of search results with count (bounds extraction requires native access).
      */
     fun searchPage(pageIndex: Int, query: String): List<SearchResult> {
         if (query.isBlank()) return emptyList()
@@ -105,13 +105,13 @@ class MuPdfDocument private constructor(
             val hits = page.search(query)
             page.destroy()
 
-            hits?.mapIndexed { index, quad ->
-                // Quad is an array of 4 points (8 floats)
-                // ul, ur, lr, ll - we'll approximate bounding box
+            // Return results with placeholder bounds - actual highlighting
+            // would need proper native JNI access to Quad fields
+            hits?.mapIndexed { index, _ ->
                 SearchResult(
                     page = pageIndex,
                     resultIndex = index,
-                    bounds = SearchBounds(0f, 0f, 0f, 0f) // Simplified - quad coords complex
+                    bounds = SearchBounds(0f, 0f, 0f, 0f)
                 )
             } ?: emptyList()
         } catch (e: Exception) {
@@ -123,8 +123,8 @@ class MuPdfDocument private constructor(
      * Get text content from a page (simplified).
      */
     fun getPageText(pageIndex: Int): String {
-        // Text extraction requires proper StructuredText traversal
-        // For now, return empty - full implementation in Phase 2.5
+        // Full text extraction would require traversing StructuredText blocks
+        // This is a placeholder - proper implementation needs JNI work
         return ""
     }
 
