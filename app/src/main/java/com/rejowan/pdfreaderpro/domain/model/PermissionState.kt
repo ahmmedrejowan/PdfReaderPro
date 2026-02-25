@@ -4,5 +4,6 @@ enum class PermissionState {
     INITIAL,
     GRANTED,
     DENIED,
-    PERMANENTLY_DENIED
+    PERMANENTLY_DENIED,
+    LIMITED
 }
