@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary brand color for splash screen -->
     <color name="colorPrimary">#7A59DA</color>
-    <color name="colorSecondary">#AB98E3</color>
-    <color name="colorPrimaryDark">#7A59DA</color>
     <color name="colorAccent">#7A59DA</color>
-    <color name="textColor">#212121</color>
-    <color name="textColorSecondary">#656565</color>
-    <color name="backgroundColor">#FFFFFF</color>
-    <color name="backgroundColorSecondary">#F5F5F5</color>
-    <color name="white">#ffffff</color>
-    <color name="lite_white">#cccccc</color>
-    <color name="_white">#eeeeee</color>
-    <color name="textGrey">#86879E</color>
-    <color name="colorPrimary_grey">#C6C6EA</color>
-    <color name="reverse_white">#ffffff</color>
-    <color name="grey">#919191</color>
-    <color name="red">#DC4C4C</color>
-    <color name="red_light">#D65555</color>
-    <color name="green">#689F38</color>
-    <color name="wave_background">#D1D1D1</color>
-    <color name="linkColor">#3192E6</color>
-    <color name="dark_backgroundColor">#181818</color>
-    <color name="light_backgroundColor">#ffffff</color>
-
-
 </resources>

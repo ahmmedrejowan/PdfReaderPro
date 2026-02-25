@@ -1,43 +1,51 @@
 package com.rejowan.pdfreaderpro.appClasses
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceManager
+import com.rejowan.pdfreaderpro.BuildConfig
+import com.rejowan.pdfreaderpro.di.dataStoreModule
+import com.rejowan.pdfreaderpro.di.databaseModule
+import com.rejowan.pdfreaderpro.di.repositoryModule
+import com.rejowan.pdfreaderpro.di.viewModelModule
+import com.rejowan.pdfreaderpro.util.GlobalErrorHandler
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import timber.log.Timber
 
 class MyApplication : Application() {
-
 
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidLogger()
-            androidContext(this@MyApplication)
-            modules(listOf(appModule))
-        }
+        // Initialize Timber for logging
+        initTimber()
 
+        // Setup global error handler
+        GlobalErrorHandler.setup(this)
 
-        // set app dark or light mode based on user preference
-        val themeMode = PreferenceManager.getDefaultSharedPreferences(this)
-            .getString("pref_dark_theme", "system_default")
+        // Initialize Koin
+        initKoin()
 
-
-        when (themeMode) {
-            "light_theme" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            "dark_theme" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-            else -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            }
-        }
-
-
+        Timber.d("Application initialized successfully")
     }
 
+    private fun initTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+    }
+
+    private fun initKoin() {
+        startKoin {
+            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.ERROR)
+            androidContext(this@MyApplication)
+            modules(
+                databaseModule,
+                dataStoreModule,
+                repositoryModule,
+                viewModelModule
+            )
+        }
+    }
 }

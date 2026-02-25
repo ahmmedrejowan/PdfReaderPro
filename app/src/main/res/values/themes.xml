@@ -1,32 +1,18 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.PDFReaderPro" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/textColor</item>
-        <item name="android:textColorHint">@color/textColorSecondary</item>
-        <item name="backgroundColor">@color/backgroundColor</item>
-        <item name="android:statusBarColor">@color/backgroundColorSecondary</item>
-        <item name="android:windowLightStatusBar" >true</item>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
 
+    <!-- Base app theme - minimal for Compose app -->
+    <style name="Theme.PDFReaderPro" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.PDFReaderPro.Splash" parent="Theme.PDFReaderPro">
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges
-        </item>
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-
-    <style name="TabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">13sp</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="TabLayoutTextAppearanceSelected" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">15sp</item>
-        <item name="textAllCaps">false</item>
-        <item name="fontFamily">sans-serif-medium</item>
+    <!-- Splash screen theme for Android 12+ Splash Screen API -->
+    <style name="Theme.PDFReaderPro.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.PDFReaderPro</item>
     </style>
 
 </resources>

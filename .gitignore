@@ -20,3 +20,6 @@ local.properties
 
 # Claude
 .claude/
+
+# Documentation (local only)
+/doc/
