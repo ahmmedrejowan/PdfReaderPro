@@ -46,6 +46,7 @@ import com.rejowan.pdfreaderpro.presentation.components.ClickableSearchBar
 import com.rejowan.pdfreaderpro.presentation.components.CompactTabRow
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
+import com.rejowan.pdfreaderpro.presentation.components.StatsSheet
 import com.rejowan.pdfreaderpro.presentation.components.WelcomeHeader
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
@@ -152,6 +153,7 @@ fun HomeScreen(
     val folders by viewModel.folders.collectAsState()
 
     var showSortSheet by remember { mutableStateOf(false) }
+    var showStatsSheet by remember { mutableStateOf(false) }
     var selectedFile by remember { mutableStateOf<PdfFile?>(null) }
     var selectedFileFavorite by remember { mutableStateOf(false) }
 
@@ -197,13 +199,10 @@ fun HomeScreen(
                 when (BottomNavItem.entries[selectedNavItem]) {
                     BottomNavItem.HOME -> {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            // Welcome Header with greeting and stats
+                            // Welcome Header with greeting
                             WelcomeHeader(
-                                totalPdfs = allFiles.size,
-                                totalSize = allFiles.sumOf { it.size },
-                                favoritesCount = favoriteFiles.size,
                                 onSortClick = { showSortSheet = true },
-                                onStatsClick = { /* TODO: Show stats dialog or screen */ }
+                                onStatsClick = { showStatsSheet = true }
                             )
 
                             // Search bar
@@ -341,6 +340,16 @@ fun HomeScreen(
             currentSort = sortOption,
             onSortSelected = { viewModel.setSortOption(it) },
             onDismiss = { showSortSheet = false }
+        )
+    }
+
+    // Stats Sheet
+    if (showStatsSheet) {
+        StatsSheet(
+            totalPdfs = allFiles.size,
+            totalSize = allFiles.sumOf { it.size },
+            favoritesCount = favoriteFiles.size,
+            onDismiss = { showStatsSheet = false }
         )
     }
 
