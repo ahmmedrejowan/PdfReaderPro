@@ -12,6 +12,7 @@ import androidx.navigation.toRoute
 import com.rejowan.pdfreaderpro.presentation.screens.folder.FolderDetailScreen
 import com.rejowan.pdfreaderpro.presentation.screens.home.HomeScreen
 import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingScreen
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderScreen
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
 import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashScreen
@@ -97,7 +98,11 @@ fun PdfReaderNavHost(
         // PDF Reader Screen
         composable<Reader> { backStackEntry ->
             val reader: Reader = backStackEntry.toRoute()
-            // TODO: ReaderScreen(navController, reader.path, reader.page)
+            ReaderScreen(
+                navController = navController,
+                path = reader.path,
+                initialPage = reader.page
+            )
         }
 
         // Tools Screen

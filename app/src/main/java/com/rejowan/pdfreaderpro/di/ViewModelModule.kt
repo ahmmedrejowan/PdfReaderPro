@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.di
 
 import com.rejowan.pdfreaderpro.presentation.screens.folder.FolderDetailViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.home.HomeViewModel
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashViewModel
@@ -16,4 +17,5 @@ val viewModelModule = module {
     viewModelOf(::SearchViewModel)
     viewModelOf(::SettingsViewModel)
     viewModel { SplashViewModel(get(), androidContext()) }
+    viewModel { params -> ReaderViewModel(get(), get(), androidContext(), params.get()) }
 }
