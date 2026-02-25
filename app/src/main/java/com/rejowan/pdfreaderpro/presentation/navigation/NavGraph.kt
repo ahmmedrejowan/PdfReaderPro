@@ -1,6 +1,8 @@
 package com.rejowan.pdfreaderpro.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,6 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.rejowan.pdfreaderpro.presentation.screens.home.HomeScreen
+import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingScreen
+import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashScreen
+import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
+import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashViewModel
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Main entry point for navigation.
@@ -35,14 +42,25 @@ fun PdfReaderNavHost(
     ) {
         // Splash Screen
         composable<Splash> {
-            // TODO: SplashScreen(navController)
-            // Placeholder - will be implemented in Phase 1
+            val viewModel: SplashViewModel = koinViewModel()
+            val state by viewModel.state.collectAsState()
+
+            if (!state.isLoading) {
+                SplashScreen(
+                    navController = navController,
+                    hasCompletedOnboarding = state.hasCompletedOnboarding,
+                    hasStoragePermission = state.hasStoragePermission
+                )
+            }
         }
 
         // Onboarding Screen
         composable<Onboarding> {
-            // TODO: OnboardingScreen(navController)
-            // Placeholder - will be implemented in Phase 1
+            val splashViewModel: SplashViewModel = koinViewModel()
+            OnboardingScreen(
+                navController = navController,
+                onOnboardingComplete = { splashViewModel.markOnboardingComplete() }
+            )
         }
 
         // Home Screen
@@ -58,7 +76,7 @@ fun PdfReaderNavHost(
 
         // Settings Screen
         composable<Settings> {
-            // TODO: SettingsScreen(navController)
+            SettingsScreen(navController = navController)
         }
 
         // PDF Reader Screen
