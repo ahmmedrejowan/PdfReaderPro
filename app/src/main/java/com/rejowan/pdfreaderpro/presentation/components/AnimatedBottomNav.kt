@@ -81,7 +81,7 @@ fun AnimatedBottomNav(
     onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val circleRadius = 22.dp
+    val circleRadius = 20.dp
     val items = NavItem.entries
 
     val isDarkMode = isSystemInDarkTheme()
@@ -158,7 +158,7 @@ fun AnimatedBottomNav(
                         clip = true
                     }
                     .fillMaxWidth()
-                    .height(64.dp)
+                    .height(56.dp)
                     .background(MaterialTheme.colorScheme.surfaceContainer),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically,
@@ -180,7 +180,7 @@ fun AnimatedBottomNav(
                                 imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
                                 contentDescription = item.label,
                                 modifier = Modifier
-                                    .size(20.dp)
+                                    .size(18.dp)
                                     .alpha(iconAlpha)
                             )
                         },
@@ -232,7 +232,7 @@ private fun FloatingCircle(
                 imageVector = targetIcon,
                 contentDescription = item.label,
                 tint = iconColor,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(18.dp)
             )
         }
     }

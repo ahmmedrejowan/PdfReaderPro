@@ -6,9 +6,9 @@ import androidx.compose.ui.graphics.Color
 // DARK THEME - DEFAULT (Purple/Violet) - Optimized for AMOLED
 // ============================================================================
 
-val primaryDark = Color(0xFF5648C6)
+val primaryDark = Color(0xFF9181F4)
 val onPrimaryDark = Color(0xFFFFFFFF)
-val primaryContainerDark = Color(0xFF6B5DD6)
+val primaryContainerDark = Color(0xFF7B6BE0)
 val onPrimaryContainerDark = Color(0xFFFFFFFF)
 
 val secondaryDark = Color(0xFFB8A5E3)
@@ -21,7 +21,7 @@ val onTertiaryDark = Color(0xFF003731)
 val tertiaryContainerDark = Color(0xFF00897B)
 val onTertiaryContainerDark = Color(0xFFFFFFFF)
 
-val inversePrimaryDark = Color(0xFF5648C6)
+val inversePrimaryDark = Color(0xFF9181F4)
 
 // ============================================================================
 // ACCENT THEMES
@@ -149,9 +149,9 @@ object LightSurfaces {
 // LIGHT THEME - DEFAULT
 // ============================================================================
 
-val primaryLight = Color(0xFF4A3BA0)
+val primaryLight = Color(0xFF7B68EE)
 val onPrimaryLight = Color(0xFFFFFFFF)
-val primaryContainerLight = Color(0xFFEADDFF)
+val primaryContainerLight = Color(0xFFEDE7FF)
 val onPrimaryContainerLight = Color(0xFF21005E)
 
 val secondaryLight = Color(0xFF625B71)
