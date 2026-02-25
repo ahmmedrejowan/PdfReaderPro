@@ -2,6 +2,8 @@ package com.rejowan.pdfreaderpro.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.LruCache
@@ -79,6 +81,10 @@ object PdfThumbnailManager {
                 }
 
                 val bitmap = createBitmap(width, height)
+
+                // Fill with white background (PDF pages often have transparent/no background)
+                val canvas = Canvas(bitmap)
+                canvas.drawColor(Color.WHITE)
 
                 // Render page to bitmap
                 page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
