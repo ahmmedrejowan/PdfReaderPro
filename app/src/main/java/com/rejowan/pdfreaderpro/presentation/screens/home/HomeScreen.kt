@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.presentation.screens.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -159,168 +160,174 @@ fun HomeScreen(
     var showInfoDialog by remember { mutableStateOf(false) }
     var fileForDialog by remember { mutableStateOf<PdfFile?>(null) }
 
-    Scaffold(
-        topBar = {
-            when (BottomNavItem.entries[selectedNavItem]) {
-                BottomNavItem.HOME -> {
-                    TopAppBar(
-                        title = { Text("PDF Reader Pro") },
-                        actions = {
-                            ViewModeToggle(
-                                currentMode = viewMode,
-                                onModeChange = { viewModel.setViewMode(it) }
-                            )
-                            IconButton(onClick = { showSortSheet = true }) {
-                                Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = "Sort")
-                            }
-                            IconButton(onClick = { navController.navigateToSearch() }) {
-                                Icon(Icons.Default.Search, contentDescription = "Search")
-                            }
-                        }
-                    )
-                }
-                BottomNavItem.FOLDERS -> {
-                    TopAppBar(
-                        title = { Text("Folders") },
-                        actions = {
-                            IconButton(onClick = { navController.navigateToSearch() }) {
-                                Icon(Icons.Default.Search, contentDescription = "Search")
-                            }
-                        }
-                    )
-                }
-                BottomNavItem.TOOLS -> {
-                    TopAppBar(title = { Text("PDF Tools") })
-                }
-                BottomNavItem.SETTINGS -> {
-                    TopAppBar(title = { Text("Settings") })
-                }
-            }
-        },
-        bottomBar = {
-            AnimatedBottomNav(
-                selectedIndex = selectedNavItem,
-                onItemClick = { index -> selectedNavItem = index }
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            when (BottomNavItem.entries[selectedNavItem]) {
-                BottomNavItem.HOME -> {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        // Sub-tabs for Home
-                        SecondaryTabRow(selectedTabIndex = homeSubTabPagerState.currentPage) {
-                            HomeSubTab.entries.forEachIndexed { index, tab ->
-                                Tab(
-                                    selected = homeSubTabPagerState.currentPage == index,
-                                    onClick = {
-                                        scope.launch {
-                                            homeSubTabPagerState.animateScrollToPage(index)
-                                        }
-                                    },
-                                    text = { Text(tab.title) }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
+                when (BottomNavItem.entries[selectedNavItem]) {
+                    BottomNavItem.HOME -> {
+                        TopAppBar(
+                            title = { Text("PDF Reader Pro") },
+                            actions = {
+                                ViewModeToggle(
+                                    currentMode = viewMode,
+                                    onModeChange = { viewModel.setViewMode(it) }
                                 )
+                                IconButton(onClick = { showSortSheet = true }) {
+                                    Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = "Sort")
+                                }
+                                IconButton(onClick = { navController.navigateToSearch() }) {
+                                    Icon(Icons.Default.Search, contentDescription = "Search")
+                                }
                             }
-                        }
+                        )
+                    }
+                    BottomNavItem.FOLDERS -> {
+                        TopAppBar(
+                            title = { Text("Folders") },
+                            actions = {
+                                IconButton(onClick = { navController.navigateToSearch() }) {
+                                    Icon(Icons.Default.Search, contentDescription = "Search")
+                                }
+                            }
+                        )
+                    }
+                    BottomNavItem.TOOLS -> {
+                        TopAppBar(title = { Text("PDF Tools") })
+                    }
+                    BottomNavItem.SETTINGS -> {
+                        TopAppBar(title = { Text("Settings") })
+                    }
+                }
+            },
+            // Content bleeds behind the bottom bar for the cutout effect
+            contentWindowInsets = WindowInsets(0, 0, 0, 0)
+        ) { paddingValues ->
+            // Only apply top padding - content goes behind bottom nav
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+            ) {
+                when (BottomNavItem.entries[selectedNavItem]) {
+                    BottomNavItem.HOME -> {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            // Sub-tabs for Home
+                            SecondaryTabRow(selectedTabIndex = homeSubTabPagerState.currentPage) {
+                                HomeSubTab.entries.forEachIndexed { index, tab ->
+                                    Tab(
+                                        selected = homeSubTabPagerState.currentPage == index,
+                                        onClick = {
+                                            scope.launch {
+                                                homeSubTabPagerState.animateScrollToPage(index)
+                                            }
+                                        },
+                                        text = { Text(tab.title) }
+                                    )
+                                }
+                            }
 
-                        HorizontalPager(
-                            state = homeSubTabPagerState,
-                            modifier = Modifier.fillMaxSize()
-                        ) { page ->
-                            when (HomeSubTab.entries[page]) {
-                                HomeSubTab.RECENT -> RecentTab(
-                                    recentFiles = recentFiles,
-                                    isLoading = isLoading,
-                                    hasPermission = hasPermission,
-                                    onFileClick = { recent ->
-                                        navController.navigateToReader(recent.path, recent.lastPage)
-                                    },
-                                    onFileOptionsClick = { recent ->
-                                        allFiles.find { it.path == recent.path }?.let { pdf ->
+                            HorizontalPager(
+                                state = homeSubTabPagerState,
+                                modifier = Modifier.fillMaxSize()
+                            ) { page ->
+                                when (HomeSubTab.entries[page]) {
+                                    HomeSubTab.RECENT -> RecentTab(
+                                        recentFiles = recentFiles,
+                                        isLoading = isLoading,
+                                        hasPermission = hasPermission,
+                                        onFileClick = { recent ->
+                                            navController.navigateToReader(recent.path, recent.lastPage)
+                                        },
+                                        onFileOptionsClick = { recent ->
+                                            allFiles.find { it.path == recent.path }?.let { pdf ->
+                                                selectedFile = pdf
+                                                scope.launch {
+                                                    selectedFileFavorite = viewModel.isFavorite(pdf.path)
+                                                }
+                                            }
+                                        },
+                                        onBrowseClick = {
+                                            scope.launch {
+                                                homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
+                                            }
+                                        },
+                                        onGrantPermissionClick = openPermissionSettings
+                                    )
+
+                                    HomeSubTab.FAVORITES -> FavoritesTab(
+                                        favorites = favoriteFiles,
+                                        viewMode = viewMode,
+                                        isLoading = isLoading,
+                                        hasPermission = hasPermission,
+                                        onFileClick = { pdf ->
+                                            navController.navigateToReader(pdf.path)
+                                        },
+                                        onFileOptionsClick = { pdf ->
+                                            selectedFile = pdf
+                                            selectedFileFavorite = true
+                                        },
+                                        onBrowseClick = {
+                                            scope.launch {
+                                                homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
+                                            }
+                                        },
+                                        onGrantPermissionClick = openPermissionSettings
+                                    )
+
+                                    HomeSubTab.ALL -> FilesTab(
+                                        files = allFiles,
+                                        viewMode = viewMode,
+                                        isLoading = isLoading,
+                                        hasPermission = hasPermission,
+                                        onFileClick = { pdf ->
+                                            navController.navigateToReader(pdf.path)
+                                        },
+                                        onFileOptionsClick = { pdf ->
                                             selectedFile = pdf
                                             scope.launch {
                                                 selectedFileFavorite = viewModel.isFavorite(pdf.path)
                                             }
-                                        }
-                                    },
-                                    onBrowseClick = {
-                                        scope.launch {
-                                            homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
-                                        }
-                                    },
-                                    onGrantPermissionClick = openPermissionSettings
-                                )
-
-                                HomeSubTab.FAVORITES -> FavoritesTab(
-                                    favorites = favoriteFiles,
-                                    viewMode = viewMode,
-                                    isLoading = isLoading,
-                                    hasPermission = hasPermission,
-                                    onFileClick = { pdf ->
-                                        navController.navigateToReader(pdf.path)
-                                    },
-                                    onFileOptionsClick = { pdf ->
-                                        selectedFile = pdf
-                                        selectedFileFavorite = true
-                                    },
-                                    onBrowseClick = {
-                                        scope.launch {
-                                            homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
-                                        }
-                                    },
-                                    onGrantPermissionClick = openPermissionSettings
-                                )
-
-                                HomeSubTab.ALL -> FilesTab(
-                                    files = allFiles,
-                                    viewMode = viewMode,
-                                    isLoading = isLoading,
-                                    hasPermission = hasPermission,
-                                    onFileClick = { pdf ->
-                                        navController.navigateToReader(pdf.path)
-                                    },
-                                    onFileOptionsClick = { pdf ->
-                                        selectedFile = pdf
-                                        scope.launch {
-                                            selectedFileFavorite = viewModel.isFavorite(pdf.path)
-                                        }
-                                    },
-                                    onRefresh = { viewModel.refresh() },
-                                    onGrantPermissionClick = openPermissionSettings
-                                )
+                                        },
+                                        onRefresh = { viewModel.refresh() },
+                                        onGrantPermissionClick = openPermissionSettings
+                                    )
+                                }
                             }
                         }
                     }
-                }
 
-                BottomNavItem.FOLDERS -> {
-                    FoldersScreen(
-                        folders = folders,
-                        isLoading = isLoading,
-                        hasPermission = hasPermission,
-                        onFolderClick = { folder ->
-                            navController.navigateToFolderDetail(folder.path, folder.name)
-                        },
-                        onRefresh = { viewModel.refresh() },
-                        onGrantPermissionClick = openPermissionSettings
-                    )
-                }
+                    BottomNavItem.FOLDERS -> {
+                        FoldersScreen(
+                            folders = folders,
+                            isLoading = isLoading,
+                            hasPermission = hasPermission,
+                            onFolderClick = { folder ->
+                                navController.navigateToFolderDetail(folder.path, folder.name)
+                            },
+                            onRefresh = { viewModel.refresh() },
+                            onGrantPermissionClick = openPermissionSettings
+                        )
+                    }
 
-                BottomNavItem.TOOLS -> {
-                    ToolsScreen(navController = navController)
-                }
+                    BottomNavItem.TOOLS -> {
+                        ToolsScreen(navController = navController)
+                    }
 
-                BottomNavItem.SETTINGS -> {
-                    SettingsScreenContent(
-                        onBackClick = null // No back button in bottom nav
-                    )
+                    BottomNavItem.SETTINGS -> {
+                        SettingsScreenContent(
+                            onBackClick = null // No back button in bottom nav
+                        )
+                    }
                 }
             }
         }
+
+        // Bottom navigation bar - outside Scaffold, floating on top
+        AnimatedBottomNav(
+            selectedIndex = selectedNavItem,
+            onItemClick = { index -> selectedNavItem = index },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 
     // Sort Options Sheet
