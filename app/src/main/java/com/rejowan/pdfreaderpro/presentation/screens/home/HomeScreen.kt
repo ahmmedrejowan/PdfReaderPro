@@ -19,8 +19,6 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
@@ -40,6 +38,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
+import com.rejowan.pdfreaderpro.presentation.components.AnimatedBottomNav
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.ViewModeToggle
@@ -168,21 +167,10 @@ fun HomeScreen(
             }
         },
         bottomBar = {
-            NavigationBar {
-                BottomNavItem.entries.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        selected = selectedNavItem == index,
-                        onClick = { selectedNavItem = index },
-                        icon = {
-                            Icon(
-                                imageVector = if (selectedNavItem == index) item.selectedIcon else item.unselectedIcon,
-                                contentDescription = item.label
-                            )
-                        },
-                        label = { Text(item.label) }
-                    )
-                }
-            }
+            AnimatedBottomNav(
+                selectedIndex = selectedNavItem,
+                onItemClick = { index -> selectedNavItem = index }
+            )
         }
     ) { paddingValues ->
         Box(
