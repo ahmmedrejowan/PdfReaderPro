@@ -7,10 +7,10 @@ import kotlinx.coroutines.sync.withLock
 
 /**
  * LRU cache for rendered PDF pages.
- * Caches bitmaps by page index and zoom level for quick retrieval.
+ * Caches bitmaps by page index, dimensions, and color mode for quick retrieval.
  */
 class PageCache(
-    maxMemoryMb: Int = 64
+    maxMemoryMb: Int = 128 // Increased for high-res pages
 ) {
     private val maxSize = maxMemoryMb * 1024 * 1024 // Convert to bytes
 
@@ -42,6 +42,13 @@ class PageCache(
     }
 
     /**
+     * Generate cache key from page index, dimensions, and color mode.
+     */
+    private fun cacheKey(pageIndex: Int, width: Int, height: Int, colorMode: String): String {
+        return "${pageIndex}_${width}x${height}_$colorMode"
+    }
+
+    /**
      * Get cached page bitmap if available.
      */
     suspend fun get(pageIndex: Int, zoom: Float): Bitmap? = mutex.withLock {
@@ -49,10 +56,35 @@ class PageCache(
     }
 
     /**
+     * Get cached high-res page bitmap if available.
+     */
+    suspend fun getHighRes(
+        pageIndex: Int,
+        width: Int,
+        height: Int,
+        colorMode: String
+    ): Bitmap? = mutex.withLock {
+        cache.get(cacheKey(pageIndex, width, height, colorMode))
+    }
+
+    /**
      * Put rendered page bitmap in cache.
      */
     suspend fun put(pageIndex: Int, zoom: Float, bitmap: Bitmap) = mutex.withLock {
         cache.put(cacheKey(pageIndex, zoom), bitmap)
+    }
+
+    /**
+     * Put high-res rendered page bitmap in cache.
+     */
+    suspend fun putHighRes(
+        pageIndex: Int,
+        width: Int,
+        height: Int,
+        colorMode: String,
+        bitmap: Bitmap
+    ) = mutex.withLock {
+        cache.put(cacheKey(pageIndex, width, height, colorMode), bitmap)
     }
 
     /**

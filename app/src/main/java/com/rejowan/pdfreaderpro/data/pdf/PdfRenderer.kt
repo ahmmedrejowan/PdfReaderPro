@@ -59,16 +59,27 @@ class PdfRenderer(
         maxHeight: Int,
         colorMode: ColorMode = ColorMode.NORMAL
     ): Bitmap = withContext(Dispatchers.Default) {
+        // Check cache first
+        val cached = cache.getHighRes(pageIndex, maxWidth, maxHeight, colorMode.name)
+        if (cached != null && !cached.isRecycled) {
+            return@withContext cached
+        }
+
         val page = document.loadPage(pageIndex)
         val bitmap = page.renderToSize(maxWidth, maxHeight)
         page.close()
 
-        when (colorMode) {
+        val finalBitmap = when (colorMode) {
             ColorMode.NORMAL -> bitmap
             ColorMode.DARK -> applyDarkMode(bitmap)
             ColorMode.SEPIA -> applySepiaMode(bitmap)
             ColorMode.INVERTED -> applyInvertedMode(bitmap)
         }
+
+        // Cache the result
+        cache.putHighRes(pageIndex, maxWidth, maxHeight, colorMode.name, finalBitmap)
+
+        finalBitmap
     }
 
     /**

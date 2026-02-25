@@ -268,7 +268,8 @@ fun ReaderScreen(
             if (state.scrollDirection == ScrollDirection.HORIZONTAL) {
                 HorizontalPager(
                     state = pagerState,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    beyondViewportPageCount = 1 // Pre-render adjacent pages
                 ) { page ->
                     PdfPageView(
                         pageIndex = page,
@@ -302,7 +303,8 @@ fun ReaderScreen(
             } else {
                 VerticalPager(
                     state = pagerState,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    beyondViewportPageCount = 1 // Pre-render adjacent pages
                 ) { page ->
                     PdfPageView(
                         pageIndex = page,
