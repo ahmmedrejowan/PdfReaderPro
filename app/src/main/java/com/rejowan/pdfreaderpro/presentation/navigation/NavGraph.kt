@@ -1,8 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,11 +10,10 @@ import androidx.navigation.toRoute
 import com.rejowan.pdfreaderpro.presentation.screens.folder.FolderDetailScreen
 import com.rejowan.pdfreaderpro.presentation.screens.home.HomeScreen
 import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingScreen
+import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderScreen
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
-import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashScreen
-import com.rejowan.pdfreaderpro.presentation.screens.splash.SplashViewModel
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -24,9 +21,9 @@ import org.koin.androidx.compose.koinViewModel
  * Creates its own NavController and hosts the NavGraph.
  */
 @Composable
-fun PdfReaderNavGraph() {
+fun PdfReaderNavGraph(startDestination: Any = Home) {
     val navController = rememberNavController()
-    PdfReaderNavHost(navController = navController)
+    PdfReaderNavHost(navController = navController, startDestination = startDestination)
 }
 
 /**
@@ -36,33 +33,19 @@ fun PdfReaderNavGraph() {
 @Composable
 fun PdfReaderNavHost(
     navController: NavHostController,
-    startDestination: Any = Splash,
+    startDestination: Any = Home,
     onShowSnackbar: (String) -> Unit = {}
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        // Splash Screen
-        composable<Splash> {
-            val viewModel: SplashViewModel = koinViewModel()
-            val state by viewModel.state.collectAsState()
-
-            if (!state.isLoading) {
-                SplashScreen(
-                    navController = navController,
-                    hasCompletedOnboarding = state.hasCompletedOnboarding,
-                    hasStoragePermission = state.hasStoragePermission
-                )
-            }
-        }
-
         // Onboarding Screen
         composable<Onboarding> {
-            val splashViewModel: SplashViewModel = koinViewModel()
+            val viewModel: OnboardingViewModel = koinViewModel()
             OnboardingScreen(
                 navController = navController,
-                onOnboardingComplete = { splashViewModel.markOnboardingComplete() }
+                onOnboardingComplete = { viewModel.markOnboardingComplete() }
             )
         }
 
