@@ -53,7 +53,9 @@ fun PdfGridItem(
             // Thumbnail with options button overlay
             Box {
                 PdfThumbnailGrid(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    pdfPath = pdfFile.path,
+                    pageCount = pdfFile.pageCount.takeIf { it > 0 }
                 )
 
                 // Options button

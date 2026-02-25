@@ -56,7 +56,11 @@ fun PdfListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // PDF Thumbnail
-            PdfThumbnail(size = 52.dp)
+            PdfThumbnail(
+                size = 52.dp,
+                pdfPath = pdfFile.path,
+                pageCount = pdfFile.pageCount.takeIf { it > 0 }
+            )
 
             Spacer(modifier = Modifier.width(14.dp))
 
