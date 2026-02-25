@@ -455,6 +455,38 @@ class ReaderViewModel(
     }
 
     /**
+     * Render a page at high resolution for display.
+     * This renders at screen resolution for crisp display.
+     */
+    fun renderPageHighRes(
+        pageIndex: Int,
+        maxWidth: Int,
+        maxHeight: Int,
+        colorMode: ColorMode,
+        onResult: (Result<Bitmap>) -> Unit
+    ) {
+        viewModelScope.launch {
+            val pageRenderer = renderer
+            if (pageRenderer == null) {
+                onResult(Result.failure(IllegalStateException("Document not loaded")))
+                return@launch
+            }
+
+            try {
+                val bitmap = pageRenderer.renderPageToFit(
+                    pageIndex = pageIndex,
+                    maxWidth = maxWidth,
+                    maxHeight = maxHeight,
+                    colorMode = colorMode
+                )
+                onResult(Result.success(bitmap))
+            } catch (e: Exception) {
+                onResult(Result.failure(e))
+            }
+        }
+    }
+
+    /**
      * Update recent files.
      */
     private fun updateRecentFile() {

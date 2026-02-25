@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.data.pdf.ColorMode
 import com.rejowan.pdfreaderpro.data.pdf.SearchResult
@@ -35,16 +37,11 @@ fun PdfPageView(
 ) {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var isLoading by remember { mutableStateOf(true) }
+    var renderError by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(pageIndex, colorMode) {
-        isLoading = true
-        viewModel.renderThumbnail(pageIndex) { renderedBitmap ->
-            bitmap = renderedBitmap
-            isLoading = false
-        }
-    }
+    val density = LocalDensity.current
 
-    Box(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
             .background(
@@ -57,14 +54,50 @@ fun PdfPageView(
             ),
         contentAlignment = Alignment.Center
     ) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(48.dp)
-            )
-        } else {
-            bitmap?.let { bmp ->
+        // Convert constraints to pixels with density
+        val maxWidthPx = with(density) { maxWidth.toPx().toInt() }
+        val maxHeightPx = with(density) { maxHeight.toPx().toInt() }
+
+        LaunchedEffect(pageIndex, colorMode, maxWidthPx, maxHeightPx) {
+            if (maxWidthPx > 0 && maxHeightPx > 0) {
+                isLoading = true
+                renderError = null
+                viewModel.renderPageHighRes(
+                    pageIndex = pageIndex,
+                    maxWidth = maxWidthPx,
+                    maxHeight = maxHeightPx,
+                    colorMode = colorMode
+                ) { result ->
+                    result.fold(
+                        onSuccess = { renderedBitmap ->
+                            bitmap = renderedBitmap
+                            isLoading = false
+                        },
+                        onFailure = { error ->
+                            renderError = error.message
+                            isLoading = false
+                        }
+                    )
+                }
+            }
+        }
+
+        when {
+            isLoading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+            renderError != null -> {
+                androidx.compose.material3.Text(
+                    text = "Failed to render page",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            bitmap != null -> {
                 Image(
-                    bitmap = bmp.asImageBitmap(),
+                    bitmap = bitmap!!.asImageBitmap(),
                     contentDescription = "Page ${pageIndex + 1}",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
@@ -76,8 +109,5 @@ fun PdfPageView(
                 )
             }
         }
-
-        // Search result highlights would be drawn here
-        // This is a simplified version - full implementation would use Canvas
     }
 }

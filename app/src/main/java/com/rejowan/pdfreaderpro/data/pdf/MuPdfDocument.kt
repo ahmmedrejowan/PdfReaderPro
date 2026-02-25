@@ -204,12 +204,19 @@ class MuPdfPage(
      */
     fun render(scale: Float = 1f): Bitmap {
         val bounds = page.bounds
-        val width = ((bounds.x1 - bounds.x0) * scale).toInt()
-        val height = ((bounds.y1 - bounds.y0) * scale).toInt()
+        val pageWidth = bounds.x1 - bounds.x0
+        val pageHeight = bounds.y1 - bounds.y0
+
+        // Ensure minimum dimensions and valid scale
+        val effectiveScale = scale.coerceAtLeast(0.1f)
+        val width = ((pageWidth * effectiveScale).toInt()).coerceAtLeast(1)
+        val height = ((pageHeight * effectiveScale).toInt()).coerceAtLeast(1)
 
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val matrix = Matrix(scale, scale)
+        // Fill with white background first
+        bitmap.eraseColor(android.graphics.Color.WHITE)
 
+        val matrix = Matrix(effectiveScale, effectiveScale)
         val device = AndroidDrawDevice(bitmap, 0, 0, 0, 0, width, height)
         page.run(device, matrix, null)
         device.close()
@@ -219,22 +226,29 @@ class MuPdfPage(
 
     /**
      * Render page to bitmap with specific dimensions.
+     * Maintains aspect ratio and centers content.
      */
     fun renderToSize(targetWidth: Int, targetHeight: Int): Bitmap {
         val bounds = page.bounds
         val pageWidth = bounds.x1 - bounds.x0
         val pageHeight = bounds.y1 - bounds.y0
 
-        val scaleX = targetWidth / pageWidth
-        val scaleY = targetHeight / pageHeight
+        // Validate inputs
+        require(targetWidth > 0 && targetHeight > 0) { "Target dimensions must be positive" }
+        require(pageWidth > 0 && pageHeight > 0) { "Page dimensions must be positive" }
+
+        val scaleX = targetWidth.toFloat() / pageWidth
+        val scaleY = targetHeight.toFloat() / pageHeight
         val scale = minOf(scaleX, scaleY)
 
-        val width = (pageWidth * scale).toInt()
-        val height = (pageHeight * scale).toInt()
+        val width = (pageWidth * scale).toInt().coerceAtLeast(1)
+        val height = (pageHeight * scale).toInt().coerceAtLeast(1)
 
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val matrix = Matrix(scale, scale)
+        // Fill with white background first
+        bitmap.eraseColor(android.graphics.Color.WHITE)
 
+        val matrix = Matrix(scale, scale)
         val device = AndroidDrawDevice(bitmap, 0, 0, 0, 0, width, height)
         page.run(device, matrix, null)
         device.close()
@@ -251,9 +265,9 @@ class MuPdfPage(
         val pageHeight = bounds.y1 - bounds.y0
 
         val scale = if (pageWidth > pageHeight) {
-            maxDimension / pageWidth
+            maxDimension.toFloat() / pageWidth
         } else {
-            maxDimension / pageHeight
+            maxDimension.toFloat() / pageHeight
         }
 
         return render(scale)
