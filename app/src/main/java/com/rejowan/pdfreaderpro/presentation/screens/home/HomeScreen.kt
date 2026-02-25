@@ -200,11 +200,10 @@ fun HomeScreen(
                             WelcomeHeader(
                                 totalPdfs = allFiles.size,
                                 totalSize = allFiles.sumOf { it.size },
-                                favoritesCount = favoriteFiles.size,
-                                onSortClick = { showSortSheet = true }
+                                favoritesCount = favoriteFiles.size
                             )
 
-                            // Compact tabs with view mode toggle
+                            // Compact tabs with view mode toggle and sort
                             CompactTabRow(
                                 tabs = HomeSubTab.entries.map { it.title },
                                 selectedIndex = homeSubTabPagerState.currentPage,
@@ -221,7 +220,8 @@ fun HomeScreen(
                                         else
                                             com.rejowan.pdfreaderpro.domain.model.ViewMode.GRID
                                     )
-                                }
+                                },
+                                onSortClick = { showSortSheet = true }
                             )
 
                             HorizontalPager(

@@ -20,13 +20,11 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -78,7 +76,6 @@ fun WelcomeHeader(
     totalPdfs: Int,
     totalSize: Long,
     favoritesCount: Int,
-    onSortClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val greeting = getGreeting()
@@ -101,36 +98,21 @@ fun WelcomeHeader(
             .windowInsetsPadding(WindowInsets.statusBars)
             .padding(start = 20.dp, end = 12.dp, top = 8.dp, bottom = 12.dp)
     ) {
-        // Greeting Row with actions
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "$greeting $emoji",
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                // Spacer(modifier = Modifier.height(2.dp))
-                // Text(
-                //     text = "Welcome to your PDF library",
-                //     style = MaterialTheme.typography.bodyMedium,
-                //     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-                // )
-            }
-
-            // Sort button
-            IconButton(onClick = onSortClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.Sort,
-                    contentDescription = "Sort",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+        // Greeting
+        Column {
+            Text(
+                text = "$greeting $emoji",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = "Welcome to your PDF library",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))

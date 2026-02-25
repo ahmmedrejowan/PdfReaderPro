@@ -37,8 +37,11 @@ fun LoadingIndicator(
     message: String = "Loading...",
     modifier: Modifier = Modifier
 ) {
+    // Use top bias to account for header above - content appears in upper-center
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(bottom = 120.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

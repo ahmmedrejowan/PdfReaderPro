@@ -49,10 +49,11 @@ fun EmptyState(
     onAction: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    // Use top bias to account for header above - content appears in upper-center
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(start = 32.dp, end = 32.dp, top = 32.dp, bottom = 120.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -197,10 +198,11 @@ fun PermissionRequiredState(
     onGrantClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Use top bias to account for header above - content appears in upper-center
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(start = 32.dp, end = 32.dp, top = 32.dp, bottom = 120.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material3.Icon
@@ -32,6 +33,7 @@ fun CompactTabRow(
     onTabSelected: (Int) -> Unit,
     isGridView: Boolean,
     onViewModeToggle: () -> Unit,
+    onSortClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val softPurple = Color(0xFF9575CD)
@@ -58,7 +60,7 @@ fun CompactTabRow(
             }
         }
 
-        // View Mode Toggle - Right aligned
+        // View Mode Toggle & Sort - Right aligned
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -80,6 +82,17 @@ fun CompactTabRow(
                 Icon(
                     imageVector = Icons.Outlined.GridView,
                     contentDescription = "Grid view",
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+            // Sort button
+            ViewModeIcon(
+                isSelected = false,
+                onClick = onSortClick
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.Sort,
+                    contentDescription = "Sort",
                     modifier = Modifier.size(18.dp)
                 )
             }
