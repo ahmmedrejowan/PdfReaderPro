@@ -25,6 +25,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -36,6 +37,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.presentation.components.AnimatedBottomNav
@@ -90,10 +94,37 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        Environment.isExternalStorageManager()
-    } else true
+    // Permission state that updates on lifecycle resume
+    var hasPermission by remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Environment.isExternalStorageManager()
+            } else true
+        )
+    }
+
+    // Re-check permission when returning from settings
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                val newPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    Environment.isExternalStorageManager()
+                } else true
+
+                if (newPermissionState && !hasPermission) {
+                    // Permission was just granted, refresh data
+                    viewModel.refresh()
+                }
+                hasPermission = newPermissionState
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     val openPermissionSettings = {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

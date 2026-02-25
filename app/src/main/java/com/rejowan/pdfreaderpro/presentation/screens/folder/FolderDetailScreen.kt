@@ -50,6 +50,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import androidx.compose.runtime.DisposableEffect
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -63,6 +67,37 @@ fun FolderDetailScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Permission state that updates on lifecycle resume
+    var hasPermission by remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Environment.isExternalStorageManager()
+            } else true
+        )
+    }
+
+    // Re-check permission when returning from settings
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                val newPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    Environment.isExternalStorageManager()
+                } else true
+
+                if (newPermissionState && !hasPermission) {
+                    // Permission was just granted, refresh data
+                    viewModel.loadFilesForFolder(folderPath)
+                }
+                hasPermission = newPermissionState
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     val files by viewModel.files.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -82,10 +117,6 @@ fun FolderDetailScreen(
     androidx.compose.runtime.LaunchedEffect(folderPath) {
         viewModel.loadFilesForFolder(folderPath)
     }
-
-    val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        Environment.isExternalStorageManager()
-    } else true
 
     Scaffold(
         topBar = {
