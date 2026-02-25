@@ -21,8 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SecondaryTabRow
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -44,9 +42,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.presentation.components.AnimatedBottomNav
+import com.rejowan.pdfreaderpro.presentation.components.CompactTabRow
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
-import com.rejowan.pdfreaderpro.presentation.components.ViewModeToggle
+import com.rejowan.pdfreaderpro.presentation.components.WelcomeHeader
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameDialog
@@ -165,21 +164,7 @@ fun HomeScreen(
             topBar = {
                 when (BottomNavItem.entries[selectedNavItem]) {
                     BottomNavItem.HOME -> {
-                        TopAppBar(
-                            title = { Text("PDF Reader Pro") },
-                            actions = {
-                                ViewModeToggle(
-                                    currentMode = viewMode,
-                                    onModeChange = { viewModel.setViewMode(it) }
-                                )
-                                IconButton(onClick = { showSortSheet = true }) {
-                                    Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = "Sort")
-                                }
-                                IconButton(onClick = { navController.navigateToSearch() }) {
-                                    Icon(Icons.Default.Search, contentDescription = "Search")
-                                }
-                            }
-                        )
+                        // No TopAppBar for HOME - using WelcomeHeader instead
                     }
                     BottomNavItem.FOLDERS -> {
                         TopAppBar(
@@ -211,20 +196,33 @@ fun HomeScreen(
                 when (BottomNavItem.entries[selectedNavItem]) {
                     BottomNavItem.HOME -> {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            // Sub-tabs for Home
-                            SecondaryTabRow(selectedTabIndex = homeSubTabPagerState.currentPage) {
-                                HomeSubTab.entries.forEachIndexed { index, tab ->
-                                    Tab(
-                                        selected = homeSubTabPagerState.currentPage == index,
-                                        onClick = {
-                                            scope.launch {
-                                                homeSubTabPagerState.animateScrollToPage(index)
-                                            }
-                                        },
-                                        text = { Text(tab.title) }
+                            // Welcome Header with greeting and stats
+                            WelcomeHeader(
+                                totalPdfs = allFiles.size,
+                                totalSize = allFiles.sumOf { it.size },
+                                favoritesCount = favoriteFiles.size,
+                                onSortClick = { showSortSheet = true }
+                            )
+
+                            // Compact tabs with view mode toggle
+                            CompactTabRow(
+                                tabs = HomeSubTab.entries.map { it.title },
+                                selectedIndex = homeSubTabPagerState.currentPage,
+                                onTabSelected = { index ->
+                                    scope.launch {
+                                        homeSubTabPagerState.animateScrollToPage(index)
+                                    }
+                                },
+                                isGridView = viewMode == com.rejowan.pdfreaderpro.domain.model.ViewMode.GRID,
+                                onViewModeToggle = {
+                                    viewModel.setViewMode(
+                                        if (viewMode == com.rejowan.pdfreaderpro.domain.model.ViewMode.GRID)
+                                            com.rejowan.pdfreaderpro.domain.model.ViewMode.LIST
+                                        else
+                                            com.rejowan.pdfreaderpro.domain.model.ViewMode.GRID
                                     )
                                 }
-                            }
+                            )
 
                             HorizontalPager(
                                 state = homeSubTabPagerState,
