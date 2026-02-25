@@ -39,11 +39,17 @@ import com.rejowan.pdfreaderpro.presentation.components.PdfGridItem
 import com.rejowan.pdfreaderpro.presentation.components.PdfListItem
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.ViewModeToggle
+import com.rejowan.pdfreaderpro.presentation.components.PermissionRequiredState
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameDialog
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import com.rejowan.pdfreaderpro.util.FileOperations
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.Settings
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -77,6 +83,10 @@ fun FolderDetailScreen(
         viewModel.loadFilesForFolder(folderPath)
     }
 
+    val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        Environment.isExternalStorageManager()
+    } else true
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -107,6 +117,18 @@ fun FolderDetailScreen(
                 .padding(paddingValues)
         ) {
             when {
+                !hasPermission -> {
+                    PermissionRequiredState(
+                        onGrantClick = {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                                    data = Uri.parse("package:${context.packageName}")
+                                }
+                                context.startActivity(intent)
+                            }
+                        }
+                    )
+                }
                 isLoading -> {
                     LoadingState()
                 }

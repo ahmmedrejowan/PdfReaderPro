@@ -56,6 +56,11 @@ import com.rejowan.pdfreaderpro.presentation.screens.home.tabs.RecentTab
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreenContent
 import com.rejowan.pdfreaderpro.presentation.screens.tools.ToolsScreen
 import com.rejowan.pdfreaderpro.util.FileOperations
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.Settings
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -86,6 +91,19 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        Environment.isExternalStorageManager()
+    } else true
+
+    val openPermissionSettings = {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                data = Uri.parse("package:${context.packageName}")
+            }
+            context.startActivity(intent)
+        }
+    }
 
     var selectedNavItem by remember { mutableIntStateOf(0) }
     val homeSubTabPagerState = rememberPagerState(
@@ -198,6 +216,7 @@ fun HomeScreen(
                                 HomeSubTab.RECENT -> RecentTab(
                                     recentFiles = recentFiles,
                                     isLoading = isLoading,
+                                    hasPermission = hasPermission,
                                     onFileClick = { recent ->
                                         navController.navigateToReader(recent.path, recent.lastPage)
                                     },
@@ -213,13 +232,15 @@ fun HomeScreen(
                                         scope.launch {
                                             homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
                                         }
-                                    }
+                                    },
+                                    onGrantPermissionClick = openPermissionSettings
                                 )
 
                                 HomeSubTab.FAVORITES -> FavoritesTab(
                                     favorites = favoriteFiles,
                                     viewMode = viewMode,
                                     isLoading = isLoading,
+                                    hasPermission = hasPermission,
                                     onFileClick = { pdf ->
                                         navController.navigateToReader(pdf.path)
                                     },
@@ -231,13 +252,15 @@ fun HomeScreen(
                                         scope.launch {
                                             homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
                                         }
-                                    }
+                                    },
+                                    onGrantPermissionClick = openPermissionSettings
                                 )
 
                                 HomeSubTab.ALL -> FilesTab(
                                     files = allFiles,
                                     viewMode = viewMode,
                                     isLoading = isLoading,
+                                    hasPermission = hasPermission,
                                     onFileClick = { pdf ->
                                         navController.navigateToReader(pdf.path)
                                     },
@@ -247,7 +270,8 @@ fun HomeScreen(
                                             selectedFileFavorite = viewModel.isFavorite(pdf.path)
                                         }
                                     },
-                                    onRefresh = { viewModel.refresh() }
+                                    onRefresh = { viewModel.refresh() },
+                                    onGrantPermissionClick = openPermissionSettings
                                 )
                             }
                         }
@@ -258,10 +282,12 @@ fun HomeScreen(
                     FoldersScreen(
                         folders = folders,
                         isLoading = isLoading,
+                        hasPermission = hasPermission,
                         onFolderClick = { folder ->
                             navController.navigateToFolderDetail(folder.path, folder.name)
                         },
-                        onRefresh = { viewModel.refresh() }
+                        onRefresh = { viewModel.refresh() },
+                        onGrantPermissionClick = openPermissionSettings
                     )
                 }
 

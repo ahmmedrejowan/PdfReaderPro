@@ -16,14 +16,17 @@ import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import com.rejowan.pdfreaderpro.presentation.components.EmptyState
 import com.rejowan.pdfreaderpro.presentation.components.FolderItem
 import com.rejowan.pdfreaderpro.presentation.components.LoadingState
+import com.rejowan.pdfreaderpro.presentation.components.PermissionRequiredState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoldersScreen(
     folders: List<PdfFolder>,
     isLoading: Boolean,
+    hasPermission: Boolean,
     onFolderClick: (PdfFolder) -> Unit,
     onRefresh: () -> Unit,
+    onGrantPermissionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     PullToRefreshBox(
@@ -32,6 +35,9 @@ fun FoldersScreen(
         modifier = modifier.fillMaxSize()
     ) {
         when {
+            !hasPermission -> {
+                PermissionRequiredState(onGrantClick = onGrantPermissionClick)
+            }
             isLoading && folders.isEmpty() -> {
                 LoadingState()
             }

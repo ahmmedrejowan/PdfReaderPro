@@ -11,19 +11,25 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.RecentFile
 import com.rejowan.pdfreaderpro.presentation.components.EmptyRecentState
 import com.rejowan.pdfreaderpro.presentation.components.LoadingState
+import com.rejowan.pdfreaderpro.presentation.components.PermissionRequiredState
 import com.rejowan.pdfreaderpro.presentation.components.RecentListItem
 
 @Composable
 fun RecentTab(
     recentFiles: List<RecentFile>,
     isLoading: Boolean,
+    hasPermission: Boolean,
     onFileClick: (RecentFile) -> Unit,
     onFileOptionsClick: (RecentFile) -> Unit,
     onBrowseClick: () -> Unit,
+    onGrantPermissionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         when {
+            !hasPermission -> {
+                PermissionRequiredState(onGrantClick = onGrantPermissionClick)
+            }
             isLoading && recentFiles.isEmpty() -> {
                 LoadingState()
             }

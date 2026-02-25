@@ -19,6 +19,7 @@ import com.rejowan.pdfreaderpro.presentation.components.EmptyFilesState
 import com.rejowan.pdfreaderpro.presentation.components.LoadingState
 import com.rejowan.pdfreaderpro.presentation.components.PdfGridItem
 import com.rejowan.pdfreaderpro.presentation.components.PdfListItem
+import com.rejowan.pdfreaderpro.presentation.components.PermissionRequiredState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,9 +27,11 @@ fun FilesTab(
     files: List<PdfFile>,
     viewMode: ViewMode,
     isLoading: Boolean,
+    hasPermission: Boolean,
     onFileClick: (PdfFile) -> Unit,
     onFileOptionsClick: (PdfFile) -> Unit,
     onRefresh: () -> Unit,
+    onGrantPermissionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     PullToRefreshBox(
@@ -37,6 +40,9 @@ fun FilesTab(
         modifier = modifier.fillMaxSize()
     ) {
         when {
+            !hasPermission -> {
+                PermissionRequiredState(onGrantClick = onGrantPermissionClick)
+            }
             isLoading && files.isEmpty() -> {
                 LoadingState()
             }
