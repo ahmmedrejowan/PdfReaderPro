@@ -45,7 +45,7 @@ fun FavoritesTab(
             viewMode == ViewMode.LIST -> {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 8.dp)
+                    contentPadding = PaddingValues(top = 8.dp, bottom = 80.dp)
                 ) {
                     items(
                         items = favorites,
@@ -63,7 +63,7 @@ fun FavoritesTab(
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp)
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp)
                 ) {
                     items(
                         items = favorites,

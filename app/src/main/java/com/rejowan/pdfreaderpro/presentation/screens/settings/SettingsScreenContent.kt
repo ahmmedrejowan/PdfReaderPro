@@ -45,6 +45,7 @@ fun SettingsScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .padding(bottom = 80.dp)
     ) {
         SettingsSection(title = "Appearance")
 

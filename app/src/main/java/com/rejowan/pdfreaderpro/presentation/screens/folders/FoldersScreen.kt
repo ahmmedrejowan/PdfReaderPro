@@ -45,7 +45,7 @@ fun FoldersScreen(
             else -> {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 8.dp)
+                    contentPadding = PaddingValues(top = 8.dp, bottom = 80.dp)
                 ) {
                     items(
                         items = folders,
