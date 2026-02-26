@@ -23,6 +23,10 @@ import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
 internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
     setBackgroundColor(Color.TRANSPARENT)
 
+    // Hide scrollbars - we use our own PageScrubber
+    isVerticalScrollBarEnabled = false
+    isHorizontalScrollBarEnabled = false
+
     if (isInEditMode) return@apply
 
     settings.run {
