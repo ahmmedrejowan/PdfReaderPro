@@ -297,14 +297,14 @@ fun ReaderScreen(
                     )
                 }
 
-                // Page scrubber on right side (auto-hides with toolbar)
+                // Page scrubber on right edge (auto-hides with toolbar)
                 PageScrubber(
                     currentPage = state.currentPage,
                     totalPages = state.totalPages,
                     isVisible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
                     onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
                     isDarkMode = isDarkMode,
-                    modifier = Modifier.align(Alignment.CenterEnd)
+                    modifier = Modifier.align(Alignment.TopEnd)
                 )
 
                 // Floating control bar at bottom
@@ -324,14 +324,9 @@ fun ReaderScreen(
                     ) + fadeOut()
                 ) {
                     FloatingControlBar(
-                        currentPage = state.currentPage,
-                        totalPages = state.totalPages,
                         currentZoom = state.zoom,
                         scrollDirection = state.scrollDirection,
-                        isExpanded = state.isControlBarExpanded,
                         isBookmarked = isBookmarked,
-                        onExpandToggle = { viewModel.onAction(ReaderAction.ToggleControlBarExpanded) },
-                        onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
                         onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
                         onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
                         onResetZoom = { viewModel.onAction(ReaderAction.ResetZoom) },
