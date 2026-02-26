@@ -43,7 +43,7 @@ fun RecentTab(
                 ) {
                     items(
                         items = recentFiles,
-                        key = { it.path }
+                        key = { it.id }
                     ) { file ->
                         RecentListItem(
                             recentFile = file,

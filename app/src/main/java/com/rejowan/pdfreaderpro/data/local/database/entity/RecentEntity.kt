@@ -1,13 +1,17 @@
 package com.rejowan.pdfreaderpro.data.local.database.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Entity for recently opened PDF files.
  * Maps from the legacy recent_table in SQLite.
  */
-@Entity(tableName = "recent")
+@Entity(
+    tableName = "recent",
+    indices = [Index(value = ["path"], unique = true)]
+)
 data class RecentEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

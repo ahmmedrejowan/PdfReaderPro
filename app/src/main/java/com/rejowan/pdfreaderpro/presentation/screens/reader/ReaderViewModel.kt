@@ -205,7 +205,9 @@ class ReaderViewModel(
             }
 
             is ReaderAction.ToggleToolbar -> _state.update { it.copy(isToolbarVisible = !it.isToolbarVisible) }
+            is ReaderAction.ToggleControlBarExpanded -> _state.update { it.copy(isControlBarExpanded = !it.isControlBarExpanded) }
             is ReaderAction.ToggleFullScreen -> _state.update { it.copy(isFullScreen = !it.isFullScreen, isToolbarVisible = it.isFullScreen) }
+            is ReaderAction.ToggleQuickActions -> _state.update { it.copy(showQuickActions = !it.showQuickActions) }
             is ReaderAction.ShowPageJumpDialog -> _state.update { it.copy(isPageJumpDialogVisible = true) }
             is ReaderAction.HidePageJumpDialog -> _state.update { it.copy(isPageJumpDialogVisible = false) }
             is ReaderAction.ShowTableOfContents -> _state.update { it.copy(isTableOfContentsVisible = true) }

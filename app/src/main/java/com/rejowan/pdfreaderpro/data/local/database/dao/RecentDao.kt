@@ -2,8 +2,9 @@ package com.rejowan.pdfreaderpro.data.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import com.rejowan.pdfreaderpro.data.local.database.entity.RecentEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -16,7 +17,7 @@ interface RecentDao {
     @Query("SELECT * FROM recent WHERE path = :path")
     suspend fun getByPath(path: String): RecentEntity?
 
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(recent: RecentEntity)
 
     @Query("UPDATE recent SET lastPage = :page, lastOpened = :timestamp WHERE path = :path")

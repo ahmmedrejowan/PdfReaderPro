@@ -5,14 +5,24 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,12 +33,16 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
@@ -37,15 +51,15 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DeleteConfirmDialog
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.EnhancedTableOfContents
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorState
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingControlBar
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingSearchBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderBottomBar
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SearchOverlay
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.QuickActionsColumn
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SettingsPanel
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.TableOfContentsSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -58,13 +72,18 @@ fun ReaderScreen(
     val context = LocalContext.current
     val view = LocalView.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val isDarkMode = isSystemInDarkTheme()
 
     val state by viewModel.state.collectAsState()
 
     val activity = context as? Activity
 
     // Background color for PdfViewer
-    val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+    val backgroundColor = if (isDarkMode) Color(0xFF121212) else Color(0xFFF5F5F5)
+    val backgroundColorArgb = backgroundColor.toArgb()
+
+    // Track if user is bookmarked (placeholder - can be connected to actual bookmark logic)
+    var isBookmarked by remember { mutableStateOf(false) }
 
     // Handle full screen mode
     DisposableEffect(state.isFullScreen) {
@@ -179,116 +198,166 @@ fun ReaderScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            AnimatedVisibility(
-                visible = state.isToolbarVisible && !state.isFullScreen,
-                enter = slideInVertically { -it } + fadeIn(),
-                exit = slideOutVertically { -it } + fadeOut()
-            ) {
-                ReaderTopBar(
-                    title = state.documentTitle ?: "PDF Reader",
-                    onBackClick = { navController.popBackStack() },
-                    onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
-                    onTableOfContentsClick = { viewModel.onAction(ReaderAction.ShowTableOfContents) },
-                    onSettingsClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) }
-                )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+    ) {
+        // PDF Viewer
+        AndroidView(
+            factory = { ctx ->
+                PdfViewer(ctx).apply {
+                    setBackgroundColor(backgroundColorArgb)
+
+                    onReady {
+                        ui.toolbarEnabled = false
+                        ui.isSideBarOpen = false
+                        loadFromFile(viewModel.pdfPath)
+                    }
+
+                    viewModel.setPdfViewer(this)
+                }
+            },
+            modifier = Modifier.fillMaxSize(),
+            update = { pdfViewer ->
+                val targetScrollMode = when (state.scrollDirection) {
+                    ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                }
+                if (pdfViewer.isInitialized && pdfViewer.pageScrollMode != targetScrollMode) {
+                    pdfViewer.pageScrollMode = targetScrollMode
+                }
             }
-        },
-        bottomBar = {
-            AnimatedVisibility(
-                visible = state.isToolbarVisible && !state.isFullScreen,
-                enter = slideInVertically { it } + fadeIn(),
-                exit = slideOutVertically { it } + fadeOut()
-            ) {
-                ReaderBottomBar(
-                    currentPage = state.currentPage,
-                    totalPages = state.totalPages,
-                    onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
-                    onPageJumpClick = { viewModel.onAction(ReaderAction.ShowPageJumpDialog) },
-                    onThumbnailsClick = { viewModel.onAction(ReaderAction.ShowPageThumbnails) }
-                )
-            }
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
+        )
+
+        // Loading overlay
+        AnimatedVisibility(
+            visible = state.isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-            // PDF Viewer using AndroidView
-            AndroidView(
-                factory = { ctx ->
-                    PdfViewer(ctx).apply {
-                        // Set up the viewer
-                        setBackgroundColor(backgroundColor)
-
-                        // Configure UI settings
-                        onReady {
-                            ui.toolbarEnabled = false
-                            ui.isSideBarOpen = false
-
-                            // Load the PDF file
-                            loadFromFile(viewModel.pdfPath)
-                        }
-
-                        // Register with ViewModel
-                        viewModel.setPdfViewer(this)
-                    }
-                },
-                modifier = Modifier.fillMaxSize(),
-                update = { pdfViewer ->
-                    // Update scroll mode when it changes
-                    val targetScrollMode = when (state.scrollDirection) {
-                        ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
-                        ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
-                    }
-                    if (pdfViewer.isInitialized && pdfViewer.pageScrollMode != targetScrollMode) {
-                        pdfViewer.pageScrollMode = targetScrollMode
-                    }
-                }
-            )
-
-            // Loading overlay
-            if (state.isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            // Search overlay
-            AnimatedVisibility(
-                visible = state.isSearchActive,
-                enter = slideInVertically { -it } + fadeIn(),
-                exit = slideOutVertically { -it } + fadeOut()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor.copy(alpha = 0.9f)),
+                contentAlignment = Alignment.Center
             ) {
-                SearchOverlay(
-                    query = state.searchQuery,
-                    isSearching = state.isSearching,
-                    resultCount = state.searchResultCount,
-                    currentIndex = state.currentSearchIndex,
-                    onQueryChange = { viewModel.onAction(ReaderAction.Search(it)) },
-                    onPreviousResult = { viewModel.onAction(ReaderAction.PreviousSearchResult) },
-                    onNextResult = { viewModel.onAction(ReaderAction.NextSearchResult) },
-                    onClose = {
-                        viewModel.onAction(ReaderAction.ClearSearch)
-                        viewModel.onAction(ReaderAction.ToggleSearch)
-                    }
+                CircularProgressIndicator(
+                    color = Color(0xFF9575CD)
                 )
             }
         }
+
+        // Main UI overlay
+        if (!state.isLoading && state.error == null) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                // Search bar at top
+                AnimatedVisibility(
+                    visible = state.isSearchActive,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 48.dp),
+                    enter = slideInVertically(
+                        initialOffsetY = { -it },
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                    ) + fadeIn(),
+                    exit = slideOutVertically(
+                        targetOffsetY = { -it },
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                    ) + fadeOut()
+                ) {
+                    FloatingSearchBar(
+                        query = state.searchQuery,
+                        isSearching = state.isSearching,
+                        resultCount = state.searchResultCount,
+                        currentIndex = state.currentSearchIndex,
+                        onQueryChange = { viewModel.onAction(ReaderAction.Search(it)) },
+                        onPreviousResult = { viewModel.onAction(ReaderAction.PreviousSearchResult) },
+                        onNextResult = { viewModel.onAction(ReaderAction.NextSearchResult) },
+                        onClose = {
+                            viewModel.onAction(ReaderAction.ClearSearch)
+                            viewModel.onAction(ReaderAction.ToggleSearch)
+                        },
+                        isDarkMode = isDarkMode
+                    )
+                }
+
+                // Quick actions on the right side
+                AnimatedVisibility(
+                    visible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(bottom = 80.dp),
+                    enter = fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
+                    exit = fadeOut(animationSpec = spring(stiffness = Spring.StiffnessLow))
+                ) {
+                    QuickActionsColumn(
+                        isVisible = state.showQuickActions,
+                        currentZoom = state.zoom,
+                        scrollDirection = state.scrollDirection,
+                        onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
+                        onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
+                        onResetZoom = { viewModel.onAction(ReaderAction.ResetZoom) },
+                        onScrollDirectionToggle = {
+                            viewModel.onAction(
+                                ReaderAction.SetScrollDirection(
+                                    if (state.scrollDirection == ScrollDirection.VERTICAL)
+                                        ScrollDirection.HORIZONTAL
+                                    else
+                                        ScrollDirection.VERTICAL
+                                )
+                            )
+                        },
+                        isDarkMode = isDarkMode
+                    )
+                }
+
+                // Floating control bar at bottom
+                AnimatedVisibility(
+                    visible = state.isToolbarVisible && !state.isFullScreen,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .windowInsetsPadding(WindowInsets.navigationBars)
+                        .padding(bottom = 16.dp),
+                    enter = slideInVertically(
+                        initialOffsetY = { it },
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                    ) + fadeIn(),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                    ) + fadeOut()
+                ) {
+                    FloatingControlBar(
+                        currentPage = state.currentPage,
+                        totalPages = state.totalPages,
+                        isExpanded = state.isControlBarExpanded,
+                        isBookmarked = isBookmarked,
+                        onExpandToggle = { viewModel.onAction(ReaderAction.ToggleControlBarExpanded) },
+                        onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
+                        onBackClick = { navController.popBackStack() },
+                        onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
+                        onTocClick = { viewModel.onAction(ReaderAction.ShowTableOfContents) },
+                        onBookmarkClick = { isBookmarked = !isBookmarked },
+                        onMoreClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) },
+                        isDarkMode = isDarkMode
+                    )
+                }
+            }
+        }
+
+        // Snackbar host
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 120.dp)
+        )
     }
 
-    // Table of Contents sheet
+    // Table of Contents sheet - using enhanced version
     if (state.isTableOfContentsVisible) {
-        TableOfContentsSheet(
+        EnhancedTableOfContents(
             items = state.outline,
             currentPage = state.currentPage,
             onItemClick = { item ->

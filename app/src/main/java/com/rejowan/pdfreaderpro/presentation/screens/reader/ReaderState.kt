@@ -26,7 +26,9 @@ data class ReaderState(
 
     // UI visibility
     val isToolbarVisible: Boolean = true,
+    val isControlBarExpanded: Boolean = false,
     val isFullScreen: Boolean = false,
+    val showQuickActions: Boolean = true,
 
     // Reader settings
     val brightness: Float = 1f,
@@ -106,7 +108,9 @@ sealed class ReaderAction {
 
     // UI
     data object ToggleToolbar : ReaderAction()
+    data object ToggleControlBarExpanded : ReaderAction()
     data object ToggleFullScreen : ReaderAction()
+    data object ToggleQuickActions : ReaderAction()
     data object ShowPageJumpDialog : ReaderAction()
     data object HidePageJumpDialog : ReaderAction()
     data object ShowTableOfContents : ReaderAction()

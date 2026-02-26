@@ -20,7 +20,7 @@ import com.rejowan.pdfreaderpro.data.local.database.entity.RecentEntity
         BookmarkEntity::class,
         AnnotationEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 abstract class PdfDatabase : RoomDatabase() {
@@ -41,6 +41,28 @@ abstract class PdfDatabase : RoomDatabase() {
          * 3. Drops old tables
          * 4. Creates new bookmark and annotation tables
          */
+        /**
+         * Migration from v5 to v6.
+         * Adds unique index on path column in recent table.
+         * First removes duplicate entries keeping the most recently opened one.
+         */
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Remove duplicates, keeping the entry with the highest lastOpened for each path
+                database.execSQL("""
+                    DELETE FROM recent
+                    WHERE id NOT IN (
+                        SELECT MAX(id)
+                        FROM recent
+                        GROUP BY path
+                    )
+                """)
+
+                // Create unique index on path
+                database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_recent_path ON recent (path)")
+            }
+        }
+
         val MIGRATION_4_5 = object : Migration(4, 5) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Create new recent table
@@ -134,6 +156,6 @@ abstract class PdfDatabase : RoomDatabase() {
             }
         }
 
-        val migrations = arrayOf(MIGRATION_4_5)
+        val migrations = arrayOf(MIGRATION_4_5, MIGRATION_5_6)
     }
 }
