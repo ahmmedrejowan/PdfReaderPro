@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.os.ParcelFileDescriptor
 import android.print.PageRange
@@ -6,7 +6,7 @@ import android.print.PrintAttributes
 import android.print.PrintDocumentInfo
 import android.util.Base64
 import android.util.Log
-import com.bhuvaneshw.pdf.print.PdfPrintBridge
+import com.rejowan.pdfreaderpro.presentation.components.pdf.print.PdfPrintBridge
 import org.json.JSONArray
 import java.io.FileOutputStream
 

@@ -1,13 +1,13 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.content.Context
 import android.net.Uri
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient.FileChooserParams
-import com.bhuvaneshw.pdf.model.SideBarTreeItem
-import com.bhuvaneshw.pdf.setting.PdfSettingsManager
-import com.bhuvaneshw.pdf.setting.SharedPreferencePdfSettingsSaver
+import com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem
+import com.rejowan.pdfreaderpro.presentation.components.pdf.setting.PdfSettingsManager
+import com.rejowan.pdfreaderpro.presentation.components.pdf.setting.SharedPreferencePdfSettingsSaver
 
 /**
  * Creates a [PdfSettingsManager] that stores settings in shared preferences.

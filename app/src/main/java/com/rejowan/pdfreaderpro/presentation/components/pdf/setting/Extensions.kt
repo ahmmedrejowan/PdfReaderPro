@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.setting
+package com.rejowan.pdfreaderpro.presentation.components.pdf.setting
 
 internal fun <T : Enum<T>> PdfSettingsSaver.save(key: String, value: T) {
     save(key, value.name)

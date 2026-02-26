@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.setting
+package com.rejowan.pdfreaderpro.presentation.components.pdf.setting
 
 import android.content.Context
 import android.content.SharedPreferences

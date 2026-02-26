@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.components.pdf;
 
-import com.bhuvaneshw.pdf.PdfViewer;
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer;
 
 import org.jetbrains.annotations.Nullable;
 

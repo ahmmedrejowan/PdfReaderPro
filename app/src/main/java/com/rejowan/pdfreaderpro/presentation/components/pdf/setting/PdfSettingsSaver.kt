@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.setting
+package com.rejowan.pdfreaderpro.presentation.components.pdf.setting
 
 /**
  * An interface for saving and retrieving PDF viewer settings.

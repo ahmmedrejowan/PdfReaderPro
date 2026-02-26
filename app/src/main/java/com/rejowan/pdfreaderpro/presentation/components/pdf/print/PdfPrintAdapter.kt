@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.print
+package com.rejowan.pdfreaderpro.presentation.components.pdf.print
 
 import android.content.Context
 import android.graphics.Bitmap

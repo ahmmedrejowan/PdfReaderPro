@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 /**
  * Represents the metadata and properties of a PDF document.

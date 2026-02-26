@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.js
+package com.rejowan.pdfreaderpro.presentation.components.pdf.js
 
 import android.content.Context
 import androidx.webkit.WebViewCompat

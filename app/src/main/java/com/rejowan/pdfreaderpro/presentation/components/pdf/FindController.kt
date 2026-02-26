@@ -1,9 +1,9 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.webkit.WebView
-import com.bhuvaneshw.pdf.js.callDirectly
-import com.bhuvaneshw.pdf.js.invoke
-import com.bhuvaneshw.pdf.js.toJsString
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsString
 
 /**
  * Manages the find functionality within the PDF viewer.

@@ -1,16 +1,16 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.content.Context
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.util.Base64
 import android.webkit.JavascriptInterface
-import com.bhuvaneshw.pdf.PdfViewer.Companion.PDF_VIEWER_URL
-import com.bhuvaneshw.pdf.PdfViewer.PageScrollMode
-import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
-import com.bhuvaneshw.pdf.js.getBoolean
-import com.bhuvaneshw.pdf.js.toJsHex
-import com.bhuvaneshw.pdf.model.SideBarTreeItem
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.Companion.PDF_VIEWER_URL
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.PageScrollMode
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.PageSpreadMode
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.getBoolean
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsHex
+import com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
 

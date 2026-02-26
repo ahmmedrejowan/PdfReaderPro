@@ -1,7 +1,7 @@
 @file:SuppressLint("UseKtx")
 @file:Suppress("unused")
 
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -25,27 +25,28 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import com.bhuvaneshw.pdf.PdfViewer.Companion.defaultHighlightEditorColors
-import com.bhuvaneshw.pdf.js.Body
-import com.bhuvaneshw.pdf.js.call
-import com.bhuvaneshw.pdf.js.callDirectly
-import com.bhuvaneshw.pdf.js.invoke
-import com.bhuvaneshw.pdf.js.set
-import com.bhuvaneshw.pdf.js.setDirectly
-import com.bhuvaneshw.pdf.js.toJsHex
-import com.bhuvaneshw.pdf.js.toJsRgba
-import com.bhuvaneshw.pdf.js.toJsString
-import com.bhuvaneshw.pdf.js.with
-import com.bhuvaneshw.pdf.model.SideBarTreeItem
-import com.bhuvaneshw.pdf.print.PdfPrintAdapter
-import com.bhuvaneshw.pdf.resource.AssetResourceLoader
-import com.bhuvaneshw.pdf.resource.ContentResourceLoader
-import com.bhuvaneshw.pdf.resource.FileResourceLoader
-import com.bhuvaneshw.pdf.resource.NetworkResourceHandler
-import com.bhuvaneshw.pdf.resource.NetworkResourceLoader
-import com.bhuvaneshw.pdf.resource.PdfViewerResourceLoader
-import com.bhuvaneshw.pdf.resource.ResourceLoader
-import com.bhuvaneshw.pdf.setting.UiSettings
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.Companion.defaultHighlightEditorColors
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.Body
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.call
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.set
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.setDirectly
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsHex
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsRgba
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsString
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.with
+import com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem
+import com.rejowan.pdfreaderpro.presentation.components.pdf.print.PdfPrintAdapter
+import com.rejowan.pdfreaderpro.presentation.components.pdf.resource.AssetResourceLoader
+import com.rejowan.pdfreaderpro.presentation.components.pdf.resource.ContentResourceLoader
+import com.rejowan.pdfreaderpro.presentation.components.pdf.resource.FileResourceLoader
+import com.rejowan.pdfreaderpro.presentation.components.pdf.resource.NetworkResourceHandler
+import com.rejowan.pdfreaderpro.presentation.components.pdf.resource.NetworkResourceLoader
+import com.rejowan.pdfreaderpro.presentation.components.pdf.resource.PdfViewerResourceLoader
+import com.rejowan.pdfreaderpro.presentation.components.pdf.resource.ResourceLoader
+import com.rejowan.pdfreaderpro.presentation.components.pdf.setting.UiSettings
+import com.rejowan.pdfreaderpro.R
 import java.io.File
 import kotlin.math.abs
 
@@ -276,7 +277,7 @@ class PdfViewer @JvmOverloads constructor(
      * ```
      *
      * @see printFile
-     * @see com.bhuvaneshw.pdf.print.PdfPrintAdapter
+     * @see com.rejowan.pdfreaderpro.presentation.components.pdf.print.PdfPrintAdapter
      * @throws RuntimeException if [printFile] is called when this property is `null`.
      */
     var pdfPrintAdapter: PdfPrintAdapter? = null
@@ -1456,7 +1457,7 @@ class PdfViewer @JvmOverloads constructor(
      *                        If provided, it will be set on the [PdfPrintAdapter.defaultFileName] property
      *                        before printing begins.
      * @see pdfPrintAdapter
-     * @see com.bhuvaneshw.pdf.print.PdfPrintAdapter
+     * @see com.rejowan.pdfreaderpro.presentation.components.pdf.print.PdfPrintAdapter
      * @throws RuntimeException if [pdfPrintAdapter] has not been set.
      */
     @JvmOverloads
@@ -2268,7 +2269,7 @@ class PdfViewer @JvmOverloads constructor(
         /**
          * Defines the list of default highlight colors for the editor's highlight color palette.
          *
-         * @see com.bhuvaneshw.pdf.PdfViewer.highlightEditorColors
+         * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.highlightEditorColors
          */
         val defaultHighlightEditorColors = listOf(
             "yellow" to Color.parseColor("#FFFF98"),

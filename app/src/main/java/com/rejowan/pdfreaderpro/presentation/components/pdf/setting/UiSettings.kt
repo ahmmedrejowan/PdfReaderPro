@@ -1,19 +1,19 @@
-package com.bhuvaneshw.pdf.setting
+package com.rejowan.pdfreaderpro.presentation.components.pdf.setting
 
 import android.webkit.WebView
-import com.bhuvaneshw.pdf.PdfEditorModeApi
-import com.bhuvaneshw.pdf.PdfException
-import com.bhuvaneshw.pdf.js.PdfFindBar
-import com.bhuvaneshw.pdf.js.PdfSideBar
-import com.bhuvaneshw.pdf.js.call
-import com.bhuvaneshw.pdf.js.callDirectly
-import com.bhuvaneshw.pdf.js.decode
-import com.bhuvaneshw.pdf.js.encode
-import com.bhuvaneshw.pdf.js.evaluate
-import com.bhuvaneshw.pdf.js.invoke
-import com.bhuvaneshw.pdf.js.set
-import com.bhuvaneshw.pdf.js.toJsString
-import com.bhuvaneshw.pdf.js.with
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfEditorModeApi
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfException
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.PdfFindBar
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.PdfSideBar
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.call
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.decode
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.encode
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.evaluate
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.set
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsString
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.with
 
 /**
  * Manages UI settings for the PDF viewer.
@@ -99,7 +99,7 @@ class UiSettings internal constructor(private val webView: WebView) {
      *
      * @param itemId The ID of the tree item to click.
      * @return `true` if the click was handled, `false` otherwise.
-     * @see com.bhuvaneshw.pdf.model.SideBarTreeItem
+     * @see com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem
      */
     suspend fun performSidebarTreeItemClick(itemId: String): Boolean {
         val result = webView evaluate "performTreeItemClick(`$itemId`)"

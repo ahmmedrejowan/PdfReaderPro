@@ -1,11 +1,11 @@
-package com.bhuvaneshw.pdf.resource
+package com.rejowan.pdfreaderpro.presentation.components.pdf.resource
 
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebResourceResponse
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewAssetLoader.PathHandler
-import com.bhuvaneshw.pdf.PdfException
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfException
 
 internal class AssetResourceLoader(
     context: Context,

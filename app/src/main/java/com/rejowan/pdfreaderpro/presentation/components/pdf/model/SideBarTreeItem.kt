@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.model
+package com.rejowan.pdfreaderpro.presentation.components.pdf.model
 
 import kotlinx.serialization.Serializable
 

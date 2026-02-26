@@ -1,13 +1,13 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.graphics.Color
 import android.os.SystemClock
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
-import com.bhuvaneshw.pdf.PdfViewer.Companion.defaultHighlightEditorColors
-import com.bhuvaneshw.pdf.js.callDirectly
-import com.bhuvaneshw.pdf.js.invoke
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.Companion.defaultHighlightEditorColors
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
 
 /**
  * Provides functionality to edit a PDF document.

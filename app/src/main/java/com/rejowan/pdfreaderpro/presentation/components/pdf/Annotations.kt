@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import kotlin.annotation.AnnotationTarget.ANNOTATION_CLASS
 import kotlin.annotation.AnnotationTarget.CLASS

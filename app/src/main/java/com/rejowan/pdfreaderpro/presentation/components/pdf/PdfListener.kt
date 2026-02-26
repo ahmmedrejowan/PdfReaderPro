@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.net.Uri
 import android.webkit.RenderProcessGoneDetail
@@ -7,7 +7,7 @@ import android.webkit.WebChromeClient.FileChooserParams
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import com.bhuvaneshw.pdf.model.SideBarTreeItem
+import com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem
 
 /**
  * Interface for listening to events from the PDF viewer.

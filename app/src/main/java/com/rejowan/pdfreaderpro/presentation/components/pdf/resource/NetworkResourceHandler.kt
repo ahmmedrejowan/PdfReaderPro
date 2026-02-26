@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.resource
+package com.rejowan.pdfreaderpro.presentation.components.pdf.resource
 
 import java.net.HttpURLConnection
 import java.net.URL

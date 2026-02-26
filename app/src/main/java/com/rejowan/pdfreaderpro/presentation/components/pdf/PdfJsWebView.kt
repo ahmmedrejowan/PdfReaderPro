@@ -1,6 +1,6 @@
 @file:SuppressLint("UseKtx")
 
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -15,8 +15,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.bhuvaneshw.pdf.js.callDirectly
-import com.bhuvaneshw.pdf.js.invoke
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
 
 @SuppressLint("SetJavaScriptEnabled")
 @Suppress("FunctionName")

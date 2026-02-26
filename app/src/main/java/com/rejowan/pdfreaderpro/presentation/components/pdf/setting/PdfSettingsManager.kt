@@ -1,8 +1,8 @@
-package com.bhuvaneshw.pdf.setting
+package com.rejowan.pdfreaderpro.presentation.components.pdf.setting
 
-import com.bhuvaneshw.pdf.PdfUnstableApi
-import com.bhuvaneshw.pdf.PdfViewer
-import com.bhuvaneshw.pdf.addListener
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfUnstableApi
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
+import com.rejowan.pdfreaderpro.presentation.components.pdf.addListener
 
 /**
  * Manages saving and restoring of [PdfViewer] settings.

@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf
+package com.rejowan.pdfreaderpro.presentation.components.pdf
 
 /**
  * Represents an error that occurred while loading a web page, analogous to `WebResourceError`.
