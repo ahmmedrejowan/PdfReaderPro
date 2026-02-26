@@ -19,9 +19,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -82,17 +80,6 @@ fun ReaderScreen(
 
     // Track if user is bookmarked (placeholder - can be connected to actual bookmark logic)
     var isBookmarked by remember { mutableStateOf(false) }
-
-    // Permanent padding for PDF viewer to avoid content being cut off by UI elements
-    val density = LocalDensity.current
-    val statusBarHeight = with(density) { WindowInsets.statusBars.getTop(density).toDp() }
-    val navBarHeight = with(density) { WindowInsets.navigationBars.getBottom(density).toDp() }
-
-    // Top padding: status bar + top bar space
-    val topPadding = statusBarHeight + 64.dp
-
-    // Bottom padding: floating control bar + nav bar + extra spacing
-    val bottomPadding = navBarHeight + 80.dp
 
     // Handle immersive mode - hide system bars when toolbar is hidden or in full screen
     val shouldBeImmersive = !state.isToolbarVisible || state.isFullScreen
@@ -228,9 +215,7 @@ fun ReaderScreen(
                     viewModel.setPdfViewer(this)
                 }
             },
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = topPadding, bottom = bottomPadding),
+            modifier = Modifier.fillMaxSize(),
             update = { pdfViewer ->
                 val targetScrollMode = when (state.scrollDirection) {
                     ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
