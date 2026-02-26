@@ -25,12 +25,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Toc
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
-import androidx.compose.material.icons.rounded.MoreVert
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.SwapHoriz
+import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -44,15 +46,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
 
 // Accent colors matching app design
 private val AccentPurple = Color(0xFF9575CD)
@@ -64,15 +65,19 @@ private val SurfaceLight = Color(0xFFF5F5F7)
 fun FloatingControlBar(
     currentPage: Int,
     totalPages: Int,
+    currentZoom: Float,
+    scrollDirection: ScrollDirection,
     isExpanded: Boolean,
     isBookmarked: Boolean,
     onExpandToggle: () -> Unit,
     onPageChange: (Int) -> Unit,
-    onBackClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onZoomIn: () -> Unit,
+    onZoomOut: () -> Unit,
+    onResetZoom: () -> Unit,
+    onScrollDirectionToggle: () -> Unit,
     onTocClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onMoreClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
 ) {
@@ -115,12 +120,13 @@ fun FloatingControlBar(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Left: Back button
-                    ControlButton(
-                        icon = Icons.AutoMirrored.Rounded.ArrowBack,
-                        onClick = onBackClick,
-                        contentColor = contentColor,
-                        contentDescription = "Back"
+                    // Left: Zoom controls
+                    ZoomControls(
+                        currentZoom = currentZoom,
+                        onZoomIn = onZoomIn,
+                        onZoomOut = onZoomOut,
+                        onResetZoom = onResetZoom,
+                        contentColor = contentColor
                     )
 
                     // Center: Page indicator pill (clickable to expand)
@@ -138,11 +144,13 @@ fun FloatingControlBar(
                         horizontalArrangement = Arrangement.spacedBy(2.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        // Scroll direction toggle
                         ControlButton(
-                            icon = Icons.Rounded.Search,
-                            onClick = onSearchClick,
-                            contentColor = contentColor,
-                            contentDescription = "Search"
+                            icon = if (scrollDirection == ScrollDirection.VERTICAL)
+                                Icons.Rounded.SwapVert else Icons.Rounded.SwapHoriz,
+                            onClick = onScrollDirectionToggle,
+                            contentColor = AccentBlue,
+                            contentDescription = "Toggle scroll direction"
                         )
                         ControlButton(
                             icon = Icons.AutoMirrored.Rounded.Toc,
@@ -157,10 +165,10 @@ fun FloatingControlBar(
                             contentDescription = "Bookmark"
                         )
                         ControlButton(
-                            icon = Icons.Rounded.MoreVert,
-                            onClick = onMoreClick,
+                            icon = Icons.Rounded.Settings,
+                            onClick = onSettingsClick,
                             contentColor = contentColor,
-                            contentDescription = "More options"
+                            contentDescription = "Settings"
                         )
                     }
                 }
@@ -224,6 +232,58 @@ fun FloatingControlBar(
 }
 
 @Composable
+private fun ZoomControls(
+    currentZoom: Float,
+    onZoomIn: () -> Unit,
+    onZoomOut: () -> Unit,
+    onResetZoom: () -> Unit,
+    contentColor: Color,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(0.dp)
+    ) {
+        // Zoom out
+        ControlButton(
+            icon = Icons.Rounded.Remove,
+            onClick = onZoomOut,
+            contentColor = contentColor,
+            contentDescription = "Zoom out",
+            size = 36
+        )
+
+        // Zoom percentage (clickable to reset)
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .clickable(onClick = onResetZoom)
+                .padding(horizontal = 6.dp, vertical = 4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "${(currentZoom * 100).toInt()}%",
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 11.sp
+                ),
+                color = contentColor.copy(alpha = 0.8f)
+            )
+        }
+
+        // Zoom in
+        ControlButton(
+            icon = Icons.Rounded.Add,
+            onClick = onZoomIn,
+            contentColor = contentColor,
+            contentDescription = "Zoom in",
+            size = 36
+        )
+    }
+}
+
+@Composable
 private fun PageIndicatorPill(
     currentPage: Int,
     totalPages: Int,
@@ -248,21 +308,21 @@ private fun PageIndicatorPill(
         color = backgroundColor
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             // Progress arc indicator
             Box(
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(22.dp)
                     .padding(2.dp),
                 contentAlignment = Alignment.Center
             ) {
                 // Background circle
                 Box(
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(18.dp)
                         .clip(CircleShape)
                         .background(accentColor.copy(alpha = 0.2f))
                 )
@@ -271,11 +331,11 @@ private fun PageIndicatorPill(
                     progress = progress,
                     color = accentColor,
                     strokeWidth = 2.5f,
-                    size = 20f
+                    size = 18f
                 )
             }
 
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             // Page numbers
             Row(
@@ -283,15 +343,15 @@ private fun PageIndicatorPill(
             ) {
                 Text(
                     text = "$currentPage",
-                    style = MaterialTheme.typography.titleMedium.copy(
+                    style = MaterialTheme.typography.titleSmall.copy(
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
+                        fontSize = 14.sp
                     ),
                     color = contentColor
                 )
                 Text(
                     text = " / $totalPages",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = contentColor.copy(alpha = 0.6f)
                 )
             }
@@ -335,11 +395,12 @@ private fun ControlButton(
     onClick: () -> Unit,
     contentColor: Color,
     contentDescription: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Int = 40
 ) {
     Box(
         modifier = modifier
-            .size(44.dp)
+            .size(size.dp)
             .clip(CircleShape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
@@ -348,7 +409,7 @@ private fun ControlButton(
             imageVector = icon,
             contentDescription = contentDescription,
             tint = contentColor,
-            modifier = Modifier.size(22.dp)
+            modifier = Modifier.size((size * 0.5).dp)
         )
     }
 }

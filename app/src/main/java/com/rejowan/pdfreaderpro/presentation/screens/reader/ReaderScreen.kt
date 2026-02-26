@@ -3,6 +3,7 @@ package com.rejowan.pdfreaderpro.presentation.screens.reader
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.print.PrintManager
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -13,19 +14,13 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -58,8 +53,8 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingS
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.QuickActionsColumn
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SettingsPanel
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderSidebar
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -251,7 +246,26 @@ fun ReaderScreen(
         // Main UI overlay
         if (!state.isLoading && state.error == null) {
             Box(modifier = Modifier.fillMaxSize()) {
-                // Search bar at top
+                // Top bar (auto-hide)
+                ReaderTopBar(
+                    title = state.documentTitle ?: "PDF Reader",
+                    isVisible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
+                    onBackClick = { navController.popBackStack() },
+                    onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
+                    onShareClick = { viewModel.onAction(ReaderAction.ShareDocument) },
+                    onPrintClick = {
+                        // Print functionality
+                        val printManager = context.getSystemService(PrintManager::class.java)
+                        // You can implement print adapter here
+                    },
+                    onInfoClick = { viewModel.onAction(ReaderAction.ShowInfoDialog) },
+                    onFullScreenClick = { viewModel.onAction(ReaderAction.ToggleFullScreen) },
+                    onDeleteClick = { viewModel.onAction(ReaderAction.ShowDeleteDialog) },
+                    isDarkMode = isDarkMode,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
+
+                // Search bar at top (replaces top bar when active)
                 AnimatedVisibility(
                     visible = state.isSearchActive,
                     modifier = Modifier
@@ -282,36 +296,6 @@ fun ReaderScreen(
                     )
                 }
 
-                // Quick actions on the right side
-                AnimatedVisibility(
-                    visible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(bottom = 80.dp),
-                    enter = fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
-                    exit = fadeOut(animationSpec = spring(stiffness = Spring.StiffnessLow))
-                ) {
-                    QuickActionsColumn(
-                        isVisible = state.showQuickActions,
-                        currentZoom = state.zoom,
-                        scrollDirection = state.scrollDirection,
-                        onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
-                        onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
-                        onResetZoom = { viewModel.onAction(ReaderAction.ResetZoom) },
-                        onScrollDirectionToggle = {
-                            viewModel.onAction(
-                                ReaderAction.SetScrollDirection(
-                                    if (state.scrollDirection == ScrollDirection.VERTICAL)
-                                        ScrollDirection.HORIZONTAL
-                                    else
-                                        ScrollDirection.VERTICAL
-                                )
-                            )
-                        },
-                        isDarkMode = isDarkMode
-                    )
-                }
-
                 // Floating control bar at bottom
                 AnimatedVisibility(
                     visible = state.isToolbarVisible && !state.isFullScreen,
@@ -331,20 +315,48 @@ fun ReaderScreen(
                     FloatingControlBar(
                         currentPage = state.currentPage,
                         totalPages = state.totalPages,
+                        currentZoom = state.zoom,
+                        scrollDirection = state.scrollDirection,
                         isExpanded = state.isControlBarExpanded,
                         isBookmarked = isBookmarked,
                         onExpandToggle = { viewModel.onAction(ReaderAction.ToggleControlBarExpanded) },
                         onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
-                        onBackClick = { navController.popBackStack() },
-                        onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
+                        onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
+                        onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
+                        onResetZoom = { viewModel.onAction(ReaderAction.ResetZoom) },
+                        onScrollDirectionToggle = {
+                            viewModel.onAction(
+                                ReaderAction.SetScrollDirection(
+                                    if (state.scrollDirection == ScrollDirection.VERTICAL)
+                                        ScrollDirection.HORIZONTAL
+                                    else
+                                        ScrollDirection.VERTICAL
+                                )
+                            )
+                        },
                         onTocClick = { viewModel.onAction(ReaderAction.ShowTableOfContents) },
                         onBookmarkClick = { isBookmarked = !isBookmarked },
-                        onMoreClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) },
+                        onSettingsClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) },
                         isDarkMode = isDarkMode
                     )
                 }
             }
         }
+
+        // Sidebar (settings panel)
+        ReaderSidebar(
+            isOpen = state.isSettingsPanelVisible,
+            currentPage = state.currentPage + 1,
+            totalPages = state.totalPages,
+            brightness = state.brightness,
+            keepScreenOn = state.keepScreenOn,
+            isRotationLocked = state.isRotationLocked,
+            onBrightnessChange = { viewModel.onAction(ReaderAction.SetBrightness(it)) },
+            onKeepScreenOnChange = { viewModel.onAction(ReaderAction.SetKeepScreenOn(it)) },
+            onRotationLockChange = { viewModel.onAction(ReaderAction.ToggleRotationLock) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideSettingsPanel) },
+            isDarkMode = isDarkMode
+        )
 
         // Snackbar host
         SnackbarHost(
@@ -378,30 +390,6 @@ fun ReaderScreen(
                 viewModel.onAction(ReaderAction.HidePageJumpDialog)
             },
             onDismiss = { viewModel.onAction(ReaderAction.HidePageJumpDialog) }
-        )
-    }
-
-    // Settings panel
-    if (state.isSettingsPanelVisible) {
-        SettingsPanel(
-            brightness = state.brightness,
-            scrollDirection = state.scrollDirection,
-            keepScreenOn = state.keepScreenOn,
-            isRotationLocked = state.isRotationLocked,
-            onBrightnessChange = { viewModel.onAction(ReaderAction.SetBrightness(it)) },
-            onScrollDirectionChange = { viewModel.onAction(ReaderAction.SetScrollDirection(it)) },
-            onKeepScreenOnChange = { viewModel.onAction(ReaderAction.SetKeepScreenOn(it)) },
-            onRotationLockChange = { viewModel.onAction(ReaderAction.ToggleRotationLock) },
-            onFullScreenClick = { viewModel.onAction(ReaderAction.ToggleFullScreen) },
-            onInfoClick = {
-                viewModel.onAction(ReaderAction.HideSettingsPanel)
-                viewModel.onAction(ReaderAction.ShowInfoDialog)
-            },
-            onDeleteClick = {
-                viewModel.onAction(ReaderAction.HideSettingsPanel)
-                viewModel.onAction(ReaderAction.ShowDeleteDialog)
-            },
-            onDismiss = { viewModel.onAction(ReaderAction.HideSettingsPanel) }
         )
     }
 
