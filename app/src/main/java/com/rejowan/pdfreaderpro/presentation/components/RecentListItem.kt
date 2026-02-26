@@ -50,7 +50,7 @@ fun RecentListItem(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "Page ${recentFile.lastPage} of ${recentFile.totalPages} • ${formatTimeAgo(recentFile.lastOpened)}",
+                text = "Page ${recentFile.lastPage + 1} of ${recentFile.totalPages} • ${formatTimeAgo(recentFile.lastOpened)}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -38,11 +38,19 @@ class ReaderViewModel(
     val events = _events.receiveAsFlow()
 
     private var pdfViewer: PdfViewer? = null
+    private var storedLastPage: Int? = null
+    private var isFirstOpen: Boolean = true
 
     init {
         // Set document title from file name
         val file = File(pdfPath)
         _state.update { it.copy(documentTitle = file.nameWithoutExtension) }
+
+        // Load last read page from recent history
+        viewModelScope.launch {
+            storedLastPage = recentRepository.getLastPage(pdfPath)
+            isFirstOpen = storedLastPage == null
+        }
     }
 
     fun setPdfViewer(viewer: PdfViewer) {
@@ -63,10 +71,24 @@ class ReaderViewModel(
                         error = null
                     )
                 }
-                // Navigate to initial page if specified
-                if (initialPage > 0 && initialPage < pagesCount) {
-                    viewer.goToPage(initialPage + 1) // Library uses 1-based indexing
+
+                // Determine which page to start on
+                val targetPage = when {
+                    // If explicitly passed a page (e.g., from recent list), use it
+                    initialPage > 0 && initialPage < pagesCount -> initialPage
+                    // If we have a stored last page from history, use it
+                    storedLastPage != null && storedLastPage!! > 0 && storedLastPage!! < pagesCount -> storedLastPage!!
+                    // First time opening - scroll to top to show padding
+                    else -> null
                 }
+
+                if (targetPage != null) {
+                    viewer.goToPage(targetPage + 1) // Library uses 1-based indexing
+                } else {
+                    // First time opening - scroll to absolute top to show the padding
+                    viewer.scrollTo(0)
+                }
+
                 // Add to recent files
                 viewModelScope.launch {
                     addToRecent()
@@ -82,7 +104,12 @@ class ReaderViewModel(
             },
             onPageChange = { pageNumber ->
                 // Library uses 1-based indexing, our state uses 0-based
-                _state.update { it.copy(currentPage = pageNumber - 1) }
+                val page = pageNumber - 1
+                _state.update { it.copy(currentPage = page) }
+                // Save last read page to database
+                viewModelScope.launch {
+                    recentRepository.updateLastPage(pdfPath, page)
+                }
             },
             onScaleChange = { scale ->
                 _state.update { it.copy(zoom = scale) }

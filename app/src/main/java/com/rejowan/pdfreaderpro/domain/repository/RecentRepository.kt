@@ -7,6 +7,7 @@ interface RecentRepository {
     fun getRecentFiles(): Flow<List<RecentFile>>
     suspend fun addOrUpdateRecent(path: String, name: String, size: Long, totalPages: Int, currentPage: Int)
     suspend fun updateLastPage(path: String, page: Int)
+    suspend fun getLastPage(path: String): Int?
     suspend fun removeRecent(path: String)
     suspend fun clearAllRecent()
     suspend fun getRecentCount(): Int

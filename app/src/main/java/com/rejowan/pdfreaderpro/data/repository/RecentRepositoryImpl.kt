@@ -39,6 +39,10 @@ class RecentRepositoryImpl(
         recentDao.updateLastPage(path, page)
     }
 
+    override suspend fun getLastPage(path: String): Int? {
+        return recentDao.getByPath(path)?.lastPage
+    }
+
     override suspend fun removeRecent(path: String) {
         recentDao.deleteByPath(path)
     }

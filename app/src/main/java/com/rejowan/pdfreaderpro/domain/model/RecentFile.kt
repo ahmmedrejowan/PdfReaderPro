@@ -10,7 +10,7 @@ data class RecentFile(
     val lastPage: Int
 ) {
     val progress: Float
-        get() = if (totalPages > 0) lastPage.toFloat() / totalPages else 0f
+        get() = if (totalPages > 0) (lastPage + 1).toFloat() / totalPages else 0f
 
     val progressPercent: Int
         get() = (progress * 100).toInt()
