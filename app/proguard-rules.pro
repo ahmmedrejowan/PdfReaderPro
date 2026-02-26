@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# PDF Viewer - WebView JavaScript interface
+-keepclassmembers class com.rejowan.pdfreaderpro.presentation.components.pdf.WebInterface {
+   public *;
+}
+
+# PDF Viewer - Exception classes
+-keep class com.rejowan.pdfreaderpro.presentation.components.pdf.PdfException
+-keep class * extends com.rejowan.pdfreaderpro.presentation.components.pdf.PdfException
