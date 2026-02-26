@@ -121,7 +121,7 @@ fun PageScrubber(
     ) {
         Column(
             modifier = Modifier
-                .padding(end = 6.dp, top = 80.dp, bottom = 80.dp),
+                .padding(end = 6.dp, top = 86.dp, bottom = 80.dp),
             horizontalAlignment = Alignment.End
         ) {
             // Track area with droplet
