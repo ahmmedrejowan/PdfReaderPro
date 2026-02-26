@@ -127,40 +127,44 @@ fun PageScrubber(
                     },
                 contentAlignment = Alignment.TopEnd
             ) {
-                // Track background
+                // Droplet thumb height
+                val thumbHeight = 36.dp
+                val thumbHeightPx = with(density) { thumbHeight.toPx() }
+                val trackPadding = thumbHeight / 2  // Track is shorter so tip aligns at edges
+
+                // Track background (shorter, so tip reaches both ends)
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
+                        .padding(vertical = trackPadding)
                         .width(4.dp)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(2.dp))
                         .background(trackColor)
                 )
 
-                // Progress fill
+                // Progress fill (within the shorter track)
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
+                        .padding(vertical = trackPadding)
                         .width(4.dp)
                         .fillMaxHeight(animatedProgress.coerceIn(0.001f, 1f))
                         .clip(RoundedCornerShape(2.dp))
                         .background(progressColor)
                 )
 
-                // Droplet thumb
-                val thumbHeight = 36.dp
-                val thumbHeightPx = with(density) { thumbHeight.toPx() }
-
+                // Droplet thumb - tip aligns with the shortened track (no clamping needed)
                 Box(
                     modifier = Modifier
                         .offset {
-                            val yOffset = (trackHeightPx * animatedProgress - thumbHeightPx / 2)
-                                .coerceIn(0f, trackHeightPx - thumbHeightPx)
-                                .roundToInt()
+                            // Map progress 0→1 to droplet position 0→(trackHeight-thumbHeight)
+                            // This makes tip align with shortened track: thumbHeight/2 → trackHeight-thumbHeight/2
+                            val yOffset = (animatedProgress * (trackHeightPx - thumbHeightPx)).roundToInt()
                             IntOffset(0, yOffset)
                         }
                         .align(Alignment.TopEnd)
-                        .padding(end = 8.dp)  // Space from edge so droplet isn't clipped
+                        .padding(end = 4.dp)
                 ) {
                     DropletThumb(
                         pageNumber = displayPage,
