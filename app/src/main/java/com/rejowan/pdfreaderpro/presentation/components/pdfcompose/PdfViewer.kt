@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.compose
+package com.rejowan.pdfreaderpro.presentation.components.pdfcompose
 
 import android.content.Context
 import android.widget.FrameLayout
@@ -8,12 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
-import com.bhuvaneshw.pdf.PdfViewer
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer as PdfViewerView
 
 /**
  * A composable for displaying PDF documents.
  *
- * This composable is a wrapper around the [com.bhuvaneshw.pdf.PdfViewer] view, which is built
+ * This composable is a wrapper around the [com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer] view, which is built
  * upon `WebView` and leverages Mozilla's [PDF.js](https://mozilla.github.io/pdf.js/)
  * library to render PDF files. It provides a comprehensive set of features for pdf viewing and interaction,
  * including navigation, zooming, text searching, and editing capabilities like highlighting.
@@ -45,12 +45,12 @@ import com.bhuvaneshw.pdf.PdfViewer
  * @param pdfState The state of the PDF viewer.
  * @param modifier The modifier to be applied to the composable.
  * @param containerColor The background color of the PDF viewer.
- * @param factory A function that creates a [com.bhuvaneshw.pdf.PdfViewer].
- * @param onCreateViewer A callback that is invoked when the [com.bhuvaneshw.pdf.PdfViewer] is created.
+ * @param factory A function that creates a [com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer].
+ * @param onCreateViewer A callback that is invoked when the [com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer] is created.
  * @param onReady A callback that is invoked when the PDF viewer is ready to load a document.
  * [DefaultOnReadyCallback] is the default callback.
  *
- * @see com.bhuvaneshw.pdf.PdfViewer
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
  * @see PdfState
  * @see PdfSource
  * @see OnReadyCallback
@@ -60,8 +60,8 @@ fun PdfViewer(
     pdfState: PdfState,
     modifier: Modifier = Modifier,
     containerColor: Color? = null,
-    factory: (context: Context) -> PdfViewer = { PdfViewer(context = it) },
-    onCreateViewer: (PdfViewer.() -> Unit)? = null,
+    factory: (context: Context) -> PdfViewerView = { PdfViewerView(it) },
+    onCreateViewer: (PdfViewerView.() -> Unit)? = null,
     onReady: OnReadyCallback = DefaultOnReadyCallback(),
 ) {
     LaunchedEffect(pdfState.source) {

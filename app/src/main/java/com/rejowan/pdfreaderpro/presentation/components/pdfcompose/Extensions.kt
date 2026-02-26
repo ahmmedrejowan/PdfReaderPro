@@ -1,17 +1,17 @@
 @file:Suppress("unused")
 
-package com.bhuvaneshw.pdf.compose
+package com.rejowan.pdfreaderpro.presentation.components.pdfcompose
 
 import android.net.Uri
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
-import com.bhuvaneshw.pdf.PdfDocumentProperties
-import com.bhuvaneshw.pdf.PdfEditor
-import com.bhuvaneshw.pdf.PdfListener
-import com.bhuvaneshw.pdf.PdfViewer
-import com.bhuvaneshw.pdf.WebViewError
-import com.bhuvaneshw.pdf.model.SideBarTreeItem
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfDocumentProperties
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfEditor
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfListener
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer as PdfViewerView
+import com.rejowan.pdfreaderpro.presentation.components.pdf.WebViewError
+import com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -214,12 +214,12 @@ fun PdfState.passwordDialogFlow(): Flow<Boolean> = flowIt { emit ->
 /**
  * A flow that emits the current scroll mode of the PDF document.
  *
- * @return A flow of [PdfViewer.PageScrollMode].
+ * @return A flow of [PdfViewerView.PageScrollMode].
  * @see PdfListener.onScrollModeChange
  */
-fun PdfState.scrollModeFlow(): Flow<PdfViewer.PageScrollMode> = flowIt { emit ->
+fun PdfState.scrollModeFlow(): Flow<PdfViewerView.PageScrollMode> = flowIt { emit ->
     object : PdfListener {
-        override fun onScrollModeChange(scrollMode: PdfViewer.PageScrollMode) {
+        override fun onScrollModeChange(scrollMode: PdfViewerView.PageScrollMode) {
             emit(scrollMode)
         }
     }
@@ -228,12 +228,12 @@ fun PdfState.scrollModeFlow(): Flow<PdfViewer.PageScrollMode> = flowIt { emit ->
 /**
  * A flow that emits the current spread mode of the PDF document.
  *
- * @return A flow of [PdfViewer.PageSpreadMode].
+ * @return A flow of [PdfViewerView.PageSpreadMode].
  * @see PdfListener.onSpreadModeChange
  */
-fun PdfState.spreadModeFlow(): Flow<PdfViewer.PageSpreadMode> = flowIt { emit ->
+fun PdfState.spreadModeFlow(): Flow<PdfViewerView.PageSpreadMode> = flowIt { emit ->
     object : PdfListener {
-        override fun onSpreadModeChange(spreadMode: PdfViewer.PageSpreadMode) {
+        override fun onSpreadModeChange(spreadMode: PdfViewerView.PageSpreadMode) {
             emit(spreadMode)
         }
     }
@@ -242,12 +242,12 @@ fun PdfState.spreadModeFlow(): Flow<PdfViewer.PageSpreadMode> = flowIt { emit ->
 /**
  * A flow that emits the current rotation of the PDF document.
  *
- * @return A flow of [PdfViewer.PageRotation].
+ * @return A flow of [PdfViewerView.PageRotation].
  * @see PdfListener.onRotationChange
  */
-fun PdfState.rotationFlow(): Flow<PdfViewer.PageRotation> = flowIt { emit ->
+fun PdfState.rotationFlow(): Flow<PdfViewerView.PageRotation> = flowIt { emit ->
     object : PdfListener {
-        override fun onRotationChange(rotation: PdfViewer.PageRotation) {
+        override fun onRotationChange(rotation: PdfViewerView.PageRotation) {
             emit(rotation)
         }
     }
@@ -579,15 +579,15 @@ fun PdfState.actualScaleLimitFlow(): Flow<Triple<Float, Float, Float>> = flowIt 
 /**
  * A flow that emits the requested and applied page alignment modes.
  *
- * @return A flow of a pair of [PdfViewer.PageAlignMode], where the first is the requested mode and the second is the applied mode.
+ * @return A flow of a pair of [PdfViewerView.PageAlignMode], where the first is the requested mode and the second is the applied mode.
  * @see PdfListener.onAlignModeChange
  */
-fun PdfState.alignModeFlow(): Flow<Pair<PdfViewer.PageAlignMode, PdfViewer.PageAlignMode>> =
+fun PdfState.alignModeFlow(): Flow<Pair<PdfViewerView.PageAlignMode, PdfViewerView.PageAlignMode>> =
     flowIt { emit ->
         object : PdfListener {
             override fun onAlignModeChange(
-                requestedMode: PdfViewer.PageAlignMode,
-                appliedMode: PdfViewer.PageAlignMode
+                requestedMode: PdfViewerView.PageAlignMode,
+                appliedMode: PdfViewerView.PageAlignMode
             ) {
                 emit(requestedMode to appliedMode)
             }
@@ -597,15 +597,15 @@ fun PdfState.alignModeFlow(): Flow<Pair<PdfViewer.PageAlignMode, PdfViewer.PageA
 /**
  * A flow that emits the requested and applied scroll speed limits.
  *
- * @return A flow of a pair of [PdfViewer.ScrollSpeedLimit], where the first is the requested limit and the second is the applied limit.
+ * @return A flow of a pair of [PdfViewerView.ScrollSpeedLimit], where the first is the requested limit and the second is the applied limit.
  * @see PdfListener.onScrollSpeedLimitChange
  */
-fun PdfState.scrollSpeedLimitFlow(): Flow<Pair<PdfViewer.ScrollSpeedLimit, PdfViewer.ScrollSpeedLimit>> =
+fun PdfState.scrollSpeedLimitFlow(): Flow<Pair<PdfViewerView.ScrollSpeedLimit, PdfViewerView.ScrollSpeedLimit>> =
     flowIt { emit ->
         object : PdfListener {
             override fun onScrollSpeedLimitChange(
-                requestedLimit: PdfViewer.ScrollSpeedLimit,
-                appliedLimit: PdfViewer.ScrollSpeedLimit
+                requestedLimit: PdfViewerView.ScrollSpeedLimit,
+                appliedLimit: PdfViewerView.ScrollSpeedLimit
             ) {
                 emit(requestedLimit to appliedLimit)
             }
@@ -660,7 +660,7 @@ fun PdfState.attachmentsFlow(): Flow<List<SideBarTreeItem>> = flowIt { emit ->
     }
 }
 
-internal fun PdfViewer.load(source: PdfSource) {
+internal fun PdfViewerView.load(source: PdfSource) {
     when (source) {
         is PdfSource.Asset -> loadFromAsset(source.assetPath)
         is PdfSource.ContentUri -> loadFromContentUri(source.contentUri)
@@ -674,10 +674,14 @@ private inline fun <T> PdfState.flowIt(
     crossinline createListener: ((T) -> Unit) -> PdfListener
 ): Flow<T> = callbackFlow {
     val listener = createListener { value -> trySend(value).isSuccess }
-    pdfViewer?.addListener(listener)
-        ?: onReady.add {
-            it.addListener(listener)
+    if (pdfViewer != null) {
+        pdfViewer?.addListener(listener)
+    } else {
+        val callback: (com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer) -> Unit = { v ->
+            v.addListener(listener)
         }
+        onReady.add(callback)
+    }
 
     awaitClose { pdfViewer?.removeListener(listener) }
 }

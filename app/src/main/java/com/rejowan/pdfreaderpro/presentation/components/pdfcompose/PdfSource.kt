@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.compose
+package com.rejowan.pdfreaderpro.presentation.components.pdfcompose
 
 import android.net.Uri
 import androidx.core.net.toUri

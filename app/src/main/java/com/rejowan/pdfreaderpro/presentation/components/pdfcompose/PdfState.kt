@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.bhuvaneshw.pdf.compose
+package com.rejowan.pdfreaderpro.presentation.components.pdfcompose
 
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
@@ -13,11 +13,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import com.bhuvaneshw.pdf.PdfDocumentProperties
-import com.bhuvaneshw.pdf.PdfListener
-import com.bhuvaneshw.pdf.PdfUnstableApi
-import com.bhuvaneshw.pdf.PdfViewer
-import com.bhuvaneshw.pdf.WebViewError
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfDocumentProperties
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfListener
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfUnstableApi
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer as PdfViewerView
+import com.rejowan.pdfreaderpro.presentation.components.pdf.WebViewError
 
 /**
  * Creates a [PdfState] that is remembered across compositions.
@@ -26,7 +26,7 @@ import com.bhuvaneshw.pdf.WebViewError
  * @param highlightEditorColors The colors to be used for highlighting text.
  * @param defaultHighlightColor The default color to be used for highlighting text.
  * @return A [PdfState] instance.
- * @see com.bhuvaneshw.pdf.compose.PdfViewer
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdfcompose.PdfViewer
  */
 @Composable
 fun rememberPdfState(
@@ -47,7 +47,7 @@ fun rememberPdfState(
  * @param highlightEditorColors The colors to be used for highlighting text.
  * @param defaultHighlightColor The default color to be used for highlighting text.
  * @return A [PdfState] instance.
- * @see com.bhuvaneshw.pdf.compose.PdfViewer
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdfcompose.PdfViewer
  * @see PdfSource
  */
 @Composable
@@ -70,8 +70,8 @@ fun rememberPdfState(
  * @param source The source of the PDF file.
  * @param highlightEditorColors The colors to be used for highlighting text.
  * @param defaultHighlightColor The default color to be used for highlighting text.
- * @see com.bhuvaneshw.pdf.compose.PdfViewer
- * @see com.bhuvaneshw.pdf.PdfViewer
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdfcompose.PdfViewer
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
  */
 class PdfState(
     source: PdfSource,
@@ -88,7 +88,7 @@ class PdfState(
     /**
      * The underlying [PdfViewer] instance. It is `null` until the composable is composed.
      */
-    var pdfViewer: PdfViewer? by mutableStateOf(null); internal set
+    var pdfViewer: PdfViewerView? by mutableStateOf(null); internal set
 
     /**
      * The current loading state of the PDF.
@@ -143,21 +143,21 @@ class PdfState(
 
     /**
      * The scroll mode of the PDF.
-     * @see PdfViewer.PageScrollMode
+     * @see PdfViewerView.PageScrollMode
      */
-    var scrollMode by mutableStateOf(PdfViewer.PageScrollMode.SINGLE_PAGE); internal set
+    var scrollMode by mutableStateOf(PdfViewerView.PageScrollMode.SINGLE_PAGE); internal set
 
     /**
      * The spread mode of the PDF.
-     * @see PdfViewer.PageSpreadMode
+     * @see PdfViewerView.PageSpreadMode
      */
-    var spreadMode by mutableStateOf(PdfViewer.PageSpreadMode.NONE); internal set
+    var spreadMode by mutableStateOf(PdfViewerView.PageSpreadMode.NONE); internal set
 
     /**
      * The rotation of the PDF.
-     * @see PdfViewer.PageRotation
+     * @see PdfViewerView.PageRotation
      */
-    var rotation by mutableStateOf(PdfViewer.PageRotation.R_0); internal set
+    var rotation by mutableStateOf(PdfViewerView.PageRotation.R_0); internal set
 
     /**
      * The scale limits of the PDF.
@@ -183,9 +183,9 @@ class PdfState(
 
     /**
      * The alignment of the pages.
-     * @see PdfViewer.PageAlignMode
+     * @see PdfViewerView.PageAlignMode
      */
-    var alignMode by mutableStateOf(PdfViewer.PageAlignMode.DEFAULT); internal set
+    var alignMode by mutableStateOf(PdfViewerView.PageAlignMode.DEFAULT); internal set
 
     /**
      * The current print state of the PDF.
@@ -197,7 +197,7 @@ class PdfState(
      * The scroll speed limit of the PDF.
      */
     @PdfUnstableApi
-    var scrollSpeedLimit: PdfViewer.ScrollSpeedLimit by mutableStateOf(PdfViewer.ScrollSpeedLimit.None); internal set
+    var scrollSpeedLimit: PdfViewerView.ScrollSpeedLimit by mutableStateOf(PdfViewerView.ScrollSpeedLimit.None); internal set
 
     /**
      * The editor for interacting with the PDF.
@@ -207,7 +207,7 @@ class PdfState(
 
     /**
      * The editor for interacting with the PDF.
-     * @see com.bhuvaneshw.pdf.PdfEditor
+     * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfEditor
      */
     inner class Editor internal constructor() {
         /**
@@ -255,7 +255,7 @@ class PdfState(
         var inkOpacity by mutableIntStateOf(100); internal set
     }
 
-    internal val onReady = mutableListOf<(PdfViewer) -> Unit>()
+    internal val onReady = mutableListOf<(PdfViewerView) -> Unit>()
 
     /**
      * Clears the find results.
@@ -264,7 +264,7 @@ class PdfState(
         matchState = MatchState.Initialized()
     }
 
-    internal fun setPdfViewerTo(viewer: PdfViewer) {
+    internal fun setPdfViewerTo(viewer: PdfViewerView) {
         if (pdfViewer == viewer) return
 
         this.pdfViewer = viewer
@@ -379,15 +379,15 @@ class PdfState(
             this@PdfState.passwordRequired = isOpen
         }
 
-        override fun onScrollModeChange(scrollMode: PdfViewer.PageScrollMode) {
+        override fun onScrollModeChange(scrollMode: PdfViewerView.PageScrollMode) {
             this@PdfState.scrollMode = scrollMode
         }
 
-        override fun onSpreadModeChange(spreadMode: PdfViewer.PageSpreadMode) {
+        override fun onSpreadModeChange(spreadMode: PdfViewerView.PageSpreadMode) {
             this@PdfState.spreadMode = spreadMode
         }
 
-        override fun onRotationChange(rotation: PdfViewer.PageRotation) {
+        override fun onRotationChange(rotation: PdfViewerView.PageRotation) {
             this@PdfState.rotation = rotation
         }
 
@@ -420,15 +420,15 @@ class PdfState(
         }
 
         override fun onAlignModeChange(
-            requestedMode: PdfViewer.PageAlignMode,
-            appliedMode: PdfViewer.PageAlignMode
+            requestedMode: PdfViewerView.PageAlignMode,
+            appliedMode: PdfViewerView.PageAlignMode
         ) {
             this@PdfState.alignMode = appliedMode
         }
 
         override fun onScrollSpeedLimitChange(
-            requestedLimit: PdfViewer.ScrollSpeedLimit,
-            appliedLimit: PdfViewer.ScrollSpeedLimit
+            requestedLimit: PdfViewerView.ScrollSpeedLimit,
+            appliedLimit: PdfViewerView.ScrollSpeedLimit
         ) {
             @OptIn(PdfUnstableApi::class)
             this@PdfState.scrollSpeedLimit = appliedLimit
@@ -511,7 +511,7 @@ sealed interface PdfLoadingState {
      * An error occurred while loading the PDF file.
      *
      * @param exception The exception that occurred.
-     * @see com.bhuvaneshw.pdf.PdfException
+     * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfException
      */
     data class Error(val exception: Exception) : PdfLoadingState {
         /**

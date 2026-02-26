@@ -1,7 +1,7 @@
-package com.bhuvaneshw.pdf.compose
+package com.rejowan.pdfreaderpro.presentation.components.pdfcompose
 
 import androidx.annotation.FloatRange
-import com.bhuvaneshw.pdf.PdfViewer.Zoom
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.Zoom
 
 /**
  * Defines the scale limits for the PDF viewer.
@@ -11,8 +11,8 @@ import com.bhuvaneshw.pdf.PdfViewer.Zoom
  * @property minPageScale The minimum page scale.
  * @property maxPageScale The maximum page scale.
  * @property defaultPageScale The default page scale.
- * @see com.bhuvaneshw.pdf.PdfViewer
- * @see com.bhuvaneshw.pdf.PdfViewer.Zoom
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewerView.Zoom
  */
 data class ScaleLimit(
     @param:FloatRange(-4.0, 10.0) val minPageScale: Float = 0.1f,
@@ -27,7 +27,7 @@ data class ScaleLimit(
  * @property maxPageScale The computed maximum page scale.
  * @property defaultPageScale The computed default page scale.
  * @see ScaleLimit
- * @see com.bhuvaneshw.pdf.PdfViewer
+ * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
  */
 data class ActualScaleLimit(
     @param:FloatRange(0.0, 10.0) val minPageScale: Float = 0.1f,

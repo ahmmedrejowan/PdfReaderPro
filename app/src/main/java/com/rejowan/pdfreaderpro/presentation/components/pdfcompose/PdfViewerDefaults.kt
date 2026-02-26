@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdf.compose
+package com.rejowan.pdfreaderpro.presentation.components.pdfcompose
 
 import androidx.compose.ui.graphics.Color
 
@@ -10,7 +10,7 @@ object PdfViewerDefaults {
     /**
      * Defines the list of default highlight colors for the editor's highlight color palette.
      *
-     * @see com.bhuvaneshw.pdf.PdfViewer.defaultHighlightEditorColors
+     * @see com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.defaultHighlightEditorColors
      */
     val highlightEditorColors: List<Pair<String, Color>> = listOf(
         "yellow" to Color(0xFFFFFF98),
