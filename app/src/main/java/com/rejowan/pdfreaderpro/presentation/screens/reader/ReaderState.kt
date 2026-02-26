@@ -1,5 +1,7 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader
 
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.OutlineItem
+
 /**
  * Complete state for the PDF Reader screen.
  */
@@ -34,9 +36,12 @@ data class ReaderState(
     val isSearchActive: Boolean = false,
     val searchQuery: String = "",
     val isSearching: Boolean = false,
+    val searchResultCount: Int = 0,
+    val currentSearchIndex: Int = 0,
 
     // Table of Contents
     val isTableOfContentsVisible: Boolean = false,
+    val outline: List<OutlineItem> = emptyList(),
 
     // Page thumbnails
     val isPageThumbnailsVisible: Boolean = false,

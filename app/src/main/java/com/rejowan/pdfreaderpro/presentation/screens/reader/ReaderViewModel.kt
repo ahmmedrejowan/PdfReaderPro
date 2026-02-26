@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.rejowan.pdfreaderpro.data.local.PasswordStorage
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
+import com.rejowan.pdfreaderpro.presentation.components.pdf.addListener
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.OutlineItem
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfo
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +28,8 @@ class ReaderViewModel(
     private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
 ) : ViewModel() {
 
-    private val pdfPath: String = savedStateHandle.get<String>("path") ?: ""
+    val pdfPath: String = savedStateHandle.get<String>("path") ?: ""
+    private val initialPage: Int = savedStateHandle.get<Int>("initialPage") ?: 0
 
     private val _state = MutableStateFlow(ReaderState(documentPath = pdfPath))
     val state: StateFlow<ReaderState> = _state.asStateFlow()
@@ -33,36 +37,172 @@ class ReaderViewModel(
     private val _events = Channel<ReaderEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
+    private var pdfViewer: PdfViewer? = null
+
     init {
-        loadDocument()
+        // Set document title from file name
+        val file = File(pdfPath)
+        _state.update { it.copy(documentTitle = file.nameWithoutExtension) }
     }
 
-    private fun loadDocument() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+    fun setPdfViewer(viewer: PdfViewer) {
+        pdfViewer = viewer
+        setupPdfViewerListeners(viewer)
+    }
 
-            // TODO: Integrate PdfViewer library
-            val file = File(pdfPath)
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    documentTitle = file.nameWithoutExtension,
-                    error = "PDF viewer not yet integrated"
-                )
+    private fun setupPdfViewerListeners(viewer: PdfViewer) {
+        viewer.addListener(
+            onPageLoadStart = {
+                _state.update { it.copy(isLoading = true, error = null) }
+            },
+            onPageLoadSuccess = { pagesCount ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        totalPages = pagesCount,
+                        error = null
+                    )
+                }
+                // Navigate to initial page if specified
+                if (initialPage > 0 && initialPage < pagesCount) {
+                    viewer.goToPage(initialPage + 1) // Library uses 1-based indexing
+                }
+                // Add to recent files
+                viewModelScope.launch {
+                    addToRecent()
+                }
+            },
+            onPageLoadFailed = { exception ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = exception.message ?: "Failed to load PDF"
+                    )
+                }
+            },
+            onPageChange = { pageNumber ->
+                // Library uses 1-based indexing, our state uses 0-based
+                _state.update { it.copy(currentPage = pageNumber - 1) }
+            },
+            onScaleChange = { scale ->
+                _state.update { it.copy(zoom = scale) }
+            },
+            onPasswordDialogChange = { isOpen ->
+                _state.update { it.copy(isPasswordRequired = isOpen) }
+            },
+            onSingleClick = {
+                onAction(ReaderAction.ToggleToolbar)
+            },
+            onDoubleClick = {
+                // Toggle zoom between PAGE_FIT and 2x
+                viewer.let { v ->
+                    if (v.currentPageScale > 1.5f) {
+                        v.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                    } else {
+                        v.scalePageTo(2f)
+                    }
+                }
+            },
+            onLoadOutline = { sidebarItems ->
+                // Convert SideBarTreeItem to OutlineItem
+                val outlineItems = flattenOutline(sidebarItems, 0)
+                _state.update { it.copy(outline = outlineItems) }
+            },
+            onFindMatchStart = {
+                _state.update { it.copy(isSearching = true) }
+            },
+            onFindMatchChange = { current, total ->
+                _state.update {
+                    it.copy(
+                        searchResultCount = total,
+                        currentSearchIndex = current
+                    )
+                }
+            },
+            onFindMatchComplete = { found ->
+                _state.update { it.copy(isSearching = false) }
+            },
+            onScrollModeChange = { scrollMode ->
+                val direction = when (scrollMode) {
+                    PdfViewer.PageScrollMode.HORIZONTAL -> ScrollDirection.HORIZONTAL
+                    else -> ScrollDirection.VERTICAL
+                }
+                _state.update { it.copy(scrollDirection = direction) }
             }
+        )
+    }
+
+    private fun flattenOutline(
+        items: List<com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem>,
+        level: Int
+    ): List<OutlineItem> {
+        val result = mutableListOf<OutlineItem>()
+        for (item in items) {
+            // Extract page number from dest if possible
+            // The dest is typically a named destination or page reference
+            val pageNum = extractPageFromDest(item.dest)
+            result.add(
+                OutlineItem(
+                    title = item.title ?: "",
+                    page = pageNum,
+                    level = level
+                )
+            )
+            // Recursively add children
+            result.addAll(flattenOutline(item.children, level + 1))
         }
+        return result
+    }
+
+    private fun extractPageFromDest(dest: String?): Int {
+        if (dest == null) return 0
+        // Try to parse page number from destination
+        // The dest might be in format like "page=5" or just a number
+        return try {
+            dest.toIntOrNull() ?: 0
+        } catch (e: Exception) {
+            0
+        }
+    }
+
+    private suspend fun addToRecent() {
+        val file = File(pdfPath)
+        recentRepository.addOrUpdateRecent(
+            path = pdfPath,
+            name = _state.value.documentTitle ?: file.name,
+            size = file.length(),
+            totalPages = _state.value.totalPages,
+            currentPage = _state.value.currentPage
+        )
     }
 
     fun onAction(action: ReaderAction) {
         when (action) {
-            is ReaderAction.GoToPage -> _state.update { it.copy(currentPage = action.page) }
-            is ReaderAction.NextPage -> _state.update { it.copy(currentPage = it.currentPage + 1) }
-            is ReaderAction.PreviousPage -> _state.update { it.copy(currentPage = (it.currentPage - 1).coerceAtLeast(0)) }
+            is ReaderAction.GoToPage -> {
+                // Our state uses 0-based, library uses 1-based
+                _state.update { it.copy(currentPage = action.page) }
+                pdfViewer?.goToPage(action.page + 1)
+            }
+            is ReaderAction.NextPage -> {
+                pdfViewer?.goToNextPage()
+            }
+            is ReaderAction.PreviousPage -> {
+                pdfViewer?.goToPreviousPage()
+            }
 
-            is ReaderAction.SetZoom -> _state.update { it.copy(zoom = action.zoom.coerceIn(it.minZoom, it.maxZoom)) }
-            is ReaderAction.ZoomIn -> _state.update { it.copy(zoom = (it.zoom * 1.25f).coerceAtMost(it.maxZoom)) }
-            is ReaderAction.ZoomOut -> _state.update { it.copy(zoom = (it.zoom / 1.25f).coerceAtLeast(it.minZoom)) }
-            is ReaderAction.ResetZoom -> _state.update { it.copy(zoom = 1f) }
+            is ReaderAction.SetZoom -> {
+                _state.update { it.copy(zoom = action.zoom.coerceIn(it.minZoom, it.maxZoom)) }
+                pdfViewer?.scalePageTo(action.zoom)
+            }
+            is ReaderAction.ZoomIn -> {
+                pdfViewer?.zoomIn()
+            }
+            is ReaderAction.ZoomOut -> {
+                pdfViewer?.zoomOut()
+            }
+            is ReaderAction.ResetZoom -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+            }
 
             is ReaderAction.ToggleToolbar -> _state.update { it.copy(isToolbarVisible = !it.isToolbarVisible) }
             is ReaderAction.ToggleFullScreen -> _state.update { it.copy(isFullScreen = !it.isFullScreen, isToolbarVisible = it.isFullScreen) }
@@ -76,13 +216,35 @@ class ReaderViewModel(
             is ReaderAction.HideSettingsPanel -> _state.update { it.copy(isSettingsPanelVisible = false) }
 
             is ReaderAction.SetBrightness -> _state.update { it.copy(brightness = action.brightness) }
-            is ReaderAction.SetScrollDirection -> _state.update { it.copy(scrollDirection = action.direction) }
+            is ReaderAction.SetScrollDirection -> {
+                _state.update { it.copy(scrollDirection = action.direction) }
+                val scrollMode = when (action.direction) {
+                    ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                }
+                pdfViewer?.pageScrollMode = scrollMode
+            }
             is ReaderAction.SetKeepScreenOn -> _state.update { it.copy(keepScreenOn = action.enabled) }
 
-            is ReaderAction.Search -> { /* TODO */ }
-            is ReaderAction.NextSearchResult -> { /* TODO */ }
-            is ReaderAction.PreviousSearchResult -> { /* TODO */ }
-            is ReaderAction.ClearSearch -> _state.update { it.copy(searchQuery = "", isSearching = false) }
+            is ReaderAction.Search -> {
+                _state.update { it.copy(searchQuery = action.query, isSearching = true) }
+                if (action.query.isNotBlank()) {
+                    pdfViewer?.findController?.startFind(action.query)
+                } else {
+                    pdfViewer?.findController?.stopFind()
+                    _state.update { it.copy(isSearching = false, searchResultCount = 0, currentSearchIndex = 0) }
+                }
+            }
+            is ReaderAction.NextSearchResult -> {
+                pdfViewer?.findController?.findNext()
+            }
+            is ReaderAction.PreviousSearchResult -> {
+                pdfViewer?.findController?.findPrevious()
+            }
+            is ReaderAction.ClearSearch -> {
+                pdfViewer?.findController?.stopFind()
+                _state.update { it.copy(searchQuery = "", isSearching = false, searchResultCount = 0, currentSearchIndex = 0) }
+            }
             is ReaderAction.ToggleSearch -> _state.update { it.copy(isSearchActive = !it.isSearchActive) }
 
             is ReaderAction.SubmitPassword -> submitPassword(action.password, action.remember)
@@ -106,7 +268,8 @@ class ReaderViewModel(
             if (remember) {
                 passwordStorage.savePassword(pdfPath, password)
             }
-            // TODO: Authenticate with PDF library
+            // Submit password to the library's password dialog
+            pdfViewer?.ui?.passwordDialog?.submitPassword(password)
         }
     }
 
@@ -149,9 +312,10 @@ class ReaderViewModel(
 
     fun getPdfInfo(): PdfInfo {
         val file = File(pdfPath)
+        val properties = pdfViewer?.properties
         return PdfInfo(
-            title = _state.value.documentTitle,
-            author = null,
+            title = properties?.title?.takeIf { it.isNotBlank() } ?: _state.value.documentTitle,
+            author = properties?.author?.takeIf { it.isNotBlank() },
             path = pdfPath,
             pageCount = _state.value.totalPages,
             fileSize = file.length(),

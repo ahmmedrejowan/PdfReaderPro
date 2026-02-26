@@ -38,10 +38,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun PasswordDialog(
     isError: Boolean,
+    initialPassword: String? = null,
     onSubmit: (password: String, remember: Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var password by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf(initialPassword ?: "") }
     var rememberPassword by remember { mutableStateOf(false) }
     var passwordVisible by remember { mutableStateOf(false) }
 

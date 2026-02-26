@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -27,13 +26,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorState
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpDialog
@@ -41,7 +43,9 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordD
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderBottomBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SearchOverlay
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SettingsPanel
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.TableOfContentsSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -58,6 +62,9 @@ fun ReaderScreen(
     val state by viewModel.state.collectAsState()
 
     val activity = context as? Activity
+
+    // Background color for PdfViewer
+    val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
 
     // Handle full screen mode
     DisposableEffect(state.isFullScreen) {
@@ -147,7 +154,7 @@ fun ReaderScreen(
         }
     }
 
-    // Password dialog
+    // Password dialog - show when library requests it
     if (state.isPasswordRequired) {
         PasswordDialog(
             isError = state.isPasswordError,
@@ -158,30 +165,18 @@ fun ReaderScreen(
                 navController.popBackStack()
             }
         )
-        return
-    }
-
-    // Loading state
-    if (state.isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-        return
     }
 
     // Error state
     state.error?.let { error ->
-        ErrorState(
-            message = error,
-            onRetry = { },
-            onBack = { navController.popBackStack() }
-        )
-        return
+        if (!state.isLoading) {
+            ErrorState(
+                message = error,
+                onRetry = { },
+                onBack = { navController.popBackStack() }
+            )
+            return
+        }
     }
 
     Scaffold(
@@ -221,16 +216,87 @@ fun ReaderScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.colorScheme.background)
         ) {
-            // TODO: Integrate PdfViewer library here
-            Text(
-                text = "PDF Viewer will be integrated here",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            // PDF Viewer using AndroidView
+            AndroidView(
+                factory = { ctx ->
+                    PdfViewer(ctx).apply {
+                        // Set up the viewer
+                        setBackgroundColor(backgroundColor)
+
+                        // Configure UI settings
+                        onReady {
+                            ui.toolbarEnabled = false
+                            ui.isSideBarOpen = false
+
+                            // Load the PDF file
+                            loadFromFile(viewModel.pdfPath)
+                        }
+
+                        // Register with ViewModel
+                        viewModel.setPdfViewer(this)
+                    }
+                },
+                modifier = Modifier.fillMaxSize(),
+                update = { pdfViewer ->
+                    // Update scroll mode when it changes
+                    val targetScrollMode = when (state.scrollDirection) {
+                        ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                        ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                    }
+                    if (pdfViewer.isInitialized && pdfViewer.pageScrollMode != targetScrollMode) {
+                        pdfViewer.pageScrollMode = targetScrollMode
+                    }
+                }
             )
+
+            // Loading overlay
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            // Search overlay
+            AnimatedVisibility(
+                visible = state.isSearchActive,
+                enter = slideInVertically { -it } + fadeIn(),
+                exit = slideOutVertically { -it } + fadeOut()
+            ) {
+                SearchOverlay(
+                    query = state.searchQuery,
+                    isSearching = state.isSearching,
+                    resultCount = state.searchResultCount,
+                    currentIndex = state.currentSearchIndex,
+                    onQueryChange = { viewModel.onAction(ReaderAction.Search(it)) },
+                    onPreviousResult = { viewModel.onAction(ReaderAction.PreviousSearchResult) },
+                    onNextResult = { viewModel.onAction(ReaderAction.NextSearchResult) },
+                    onClose = {
+                        viewModel.onAction(ReaderAction.ClearSearch)
+                        viewModel.onAction(ReaderAction.ToggleSearch)
+                    }
+                )
+            }
         }
+    }
+
+    // Table of Contents sheet
+    if (state.isTableOfContentsVisible) {
+        TableOfContentsSheet(
+            items = state.outline,
+            currentPage = state.currentPage,
+            onItemClick = { item ->
+                viewModel.onAction(ReaderAction.GoToPage(item.page))
+                viewModel.onAction(ReaderAction.HideTableOfContents)
+            },
+            onDismiss = { viewModel.onAction(ReaderAction.HideTableOfContents) }
+        )
     }
 
     // Page jump dialog
