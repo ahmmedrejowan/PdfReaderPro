@@ -1,0 +1,75 @@
+#viewerContainer {
+    --visible-toolbar-height: 0px;
+}
+
+.vertical-snap {
+    scroll-snap-type: y mandatory;
+}
+
+.horizontal-snap {
+    scroll-snap-type: x mandatory;
+}
+
+.vertical-snap .full-size-container,
+.vertical-snap .page,
+.horizontal-snap .full-size-container,
+.horizontal-snap .page {
+    scroll-snap-align: start;
+}
+
+.vertical-center {
+    display: flex;
+    align-items: center;
+}
+
+.horizontal-center {
+    display: flex;
+    justify-content: center;
+}
+
+.single-page-arrangement-vertical-center .full-size-container {
+    align-items: center;
+}
+
+.single-page-arrangement-horizontal-center .full-size-container {
+    justify-content: center;
+}
+
+.full-size-container {
+    display: inline-flex;
+    min-width: 100vw;
+    min-height: calc(100vh - var(--visible-toolbar-height) - 1px);
+    overflow: hidden;
+}
+
+.full-size-container .page {
+    margin: 0;
+}
+
+.toolbar {
+    display: none;
+}
+
+#editorUndoBar {
+    z-index: -10;
+    opacity: 0;
+}
+
+.add-stamp-plus-icon::before {
+    -webkit-mask-image: var(--editorParams-stampAddImage-icon);
+    mask-image: var(--editorParams-stampAddImage-icon);
+}
+
+#viewer ::selection {
+    background: var(--selection-color, rgba(0 0 255 / 0.25));
+}
+
+#viewer ::-moz-selection {
+    background: var(--selection-color, rgba(0 0 255 / 0.25));
+}
+
+#editorStampParamsToolbar {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}

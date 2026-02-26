@@ -105,6 +105,10 @@ dependencies {
     // Splash Screen
     implementation(libs.splashscreen)
 
+    // webkit for PDF rendering
+    implementation(libs.androidx.webkit)
+
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
