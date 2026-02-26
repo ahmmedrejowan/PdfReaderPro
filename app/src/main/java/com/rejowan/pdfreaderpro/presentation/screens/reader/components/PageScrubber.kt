@@ -148,7 +148,7 @@ fun PageScrubber(
                 )
 
                 // Droplet thumb
-                val thumbHeight = 32.dp
+                val thumbHeight = 36.dp
                 val thumbHeightPx = with(density) { thumbHeight.toPx() }
 
                 Box(
@@ -234,19 +234,19 @@ private fun DropletThumb(
 
     Surface(
         modifier = modifier
-            .width(48.dp)
-            .height(32.dp),
+            .width(56.dp)
+            .height(36.dp),
         shape = DropletShape,
         color = bgColor,
         shadowElevation = if (isDragging) 8.dp else 4.dp
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.padding(end = 6.dp) // Offset text toward the bulb
+            modifier = Modifier.padding(end = 8.dp, start = 2.dp)
         ) {
             Text(
                 text = "$pageNumber",
-                fontSize = 12.sp,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 textAlign = TextAlign.Center,
