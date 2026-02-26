@@ -83,6 +83,28 @@ fun ReaderScreen(
     // Track if user is bookmarked (placeholder - can be connected to actual bookmark logic)
     var isBookmarked by remember { mutableStateOf(false) }
 
+    // Track scrolling activity for showing page scrubber in immersive mode
+    var isScrolling by remember { mutableStateOf(false) }
+    var lastScrollTime by remember { mutableStateOf(0L) }
+
+    // Show scrubber temporarily when page changes in immersive mode
+    LaunchedEffect(state.currentPage) {
+        if (!state.isToolbarVisible || state.isFullScreen) {
+            isScrolling = true
+            lastScrollTime = System.currentTimeMillis()
+        }
+    }
+
+    // Auto-hide scrubber after 2 seconds of no scrolling
+    LaunchedEffect(lastScrollTime) {
+        if (isScrolling && lastScrollTime > 0) {
+            kotlinx.coroutines.delay(2000)
+            if (System.currentTimeMillis() - lastScrollTime >= 2000) {
+                isScrolling = false
+            }
+        }
+    }
+
     // Calculate content padding for PDF viewer (in pixels)
     val density = LocalDensity.current
     val statusBarHeightPx = WindowInsets.statusBars.getTop(density)
@@ -308,11 +330,12 @@ fun ReaderScreen(
                     )
                 }
 
-                // Page scrubber on right edge (auto-hides with toolbar)
+                // Page scrubber on right edge (shows with toolbar OR when scrolling in immersive mode)
+                val showScrubber = (state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen) || isScrolling
                 PageScrubber(
                     currentPage = state.currentPage,
                     totalPages = state.totalPages,
-                    isVisible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
+                    isVisible = showScrubber,
                     onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
                     isDarkMode = isDarkMode,
                     modifier = Modifier.align(Alignment.TopEnd)
