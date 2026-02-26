@@ -111,17 +111,24 @@ fun PageScrubber(
                         detectDragGestures(
                             onDragStart = { offset ->
                                 isDragging = true
-                                dragProgress = (offset.y / trackHeightPx).coerceIn(0f, 1f)
+                                val newProgress = (offset.y / trackHeightPx).coerceIn(0f, 1f)
+                                dragProgress = newProgress
+                                val newPage = (newProgress * (totalPages - 1)).roundToInt()
+                                onPageChange(newPage)
                             },
                             onDragEnd = {
-                                val newPage = (dragProgress * (totalPages - 1)).roundToInt()
-                                onPageChange(newPage)
                                 isDragging = false
                             },
                             onDragCancel = { isDragging = false },
                             onDrag = { change, _ ->
                                 change.consume()
-                                dragProgress = (change.position.y / trackHeightPx).coerceIn(0f, 1f)
+                                val newProgress = (change.position.y / trackHeightPx).coerceIn(0f, 1f)
+                                val oldPage = (dragProgress * (totalPages - 1)).roundToInt()
+                                val newPage = (newProgress * (totalPages - 1)).roundToInt()
+                                dragProgress = newProgress
+                                if (newPage != oldPage) {
+                                    onPageChange(newPage)
+                                }
                             }
                         )
                     },
