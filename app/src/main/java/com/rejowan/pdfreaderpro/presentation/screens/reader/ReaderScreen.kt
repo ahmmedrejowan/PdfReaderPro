@@ -51,6 +51,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorStat
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingControlBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingSearchBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpDialog
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageScrubber
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderSidebar
@@ -295,6 +296,16 @@ fun ReaderScreen(
                         isDarkMode = isDarkMode
                     )
                 }
+
+                // Page scrubber on right side (auto-hides with toolbar)
+                PageScrubber(
+                    currentPage = state.currentPage,
+                    totalPages = state.totalPages,
+                    isVisible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
+                    onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
+                    isDarkMode = isDarkMode,
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                )
 
                 // Floating control bar at bottom
                 AnimatedVisibility(
