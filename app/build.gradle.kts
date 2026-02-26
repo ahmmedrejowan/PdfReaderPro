@@ -18,11 +18,11 @@ android {
         versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
-        // Room schema export
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
+    // Room schema export
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 
     buildTypes {
