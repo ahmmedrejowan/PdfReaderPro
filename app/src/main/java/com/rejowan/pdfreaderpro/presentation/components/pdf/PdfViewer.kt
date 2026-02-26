@@ -1565,6 +1565,30 @@ class PdfViewer @JvmOverloads constructor(
         webView with Body set "style.backgroundColor"(color.toJsRgba().toJsString())
     }
 
+    /**
+     * Sets the content padding for the PDF viewer container.
+     * This adds padding inside the scrollable area so that PDF pages
+     * have space at the top and bottom, allowing content to scroll
+     * without being cut off by overlaying UI elements.
+     *
+     * @param top Top padding in pixels
+     * @param bottom Bottom padding in pixels
+     */
+    fun setContentPadding(top: Int, bottom: Int) {
+        if (!isInitialized) return
+
+        val js = """
+            (function() {
+                var container = document.getElementById('viewerContainer');
+                if (container) {
+                    container.style.paddingTop = '${top}px';
+                    container.style.paddingBottom = '${bottom}px';
+                }
+            })();
+        """.trimIndent()
+        webView.evaluateJavascript(js, null)
+    }
+
     fun saveState(outState: Bundle) {
         webView.saveState(outState)
     }
