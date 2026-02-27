@@ -159,14 +159,32 @@ fun ReaderScreen(
     DisposableEffect(state.screenOrientation) {
         activity?.let {
             it.requestedOrientation = when (state.screenOrientation) {
-                ScreenOrientation.AUTO -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                ScreenOrientation.AUTO -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
                 ScreenOrientation.PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
                 ScreenOrientation.LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             }
         }
 
         onDispose {
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        }
+    }
+
+    // Handle brightness
+    DisposableEffect(state.brightness) {
+        activity?.let {
+            val layoutParams = it.window.attributes
+            layoutParams.screenBrightness = state.brightness
+            it.window.attributes = layoutParams
+        }
+
+        onDispose {
+            // Reset to system brightness (-1)
+            activity?.let {
+                val layoutParams = it.window.attributes
+                layoutParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+                it.window.attributes = layoutParams
+            }
         }
     }
 

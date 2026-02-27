@@ -246,6 +246,57 @@ function selectSpreadEven() {
     spreadEven.click();
 }
 
+// Reading theme functions
+function setReadingTheme(theme) {
+    const viewer = document.getElementById('viewer');
+    const viewerContainer = document.getElementById('viewerContainer');
+
+    // Remove existing theme classes
+    viewer.classList.remove('theme-light', 'theme-dark', 'theme-sepia');
+    viewerContainer.classList.remove('theme-light', 'theme-dark', 'theme-sepia');
+
+    // Apply theme styles
+    let filter = 'none';
+    let bgColor = '#f5f5f5';
+
+    switch(theme) {
+        case 'light':
+            filter = 'none';
+            bgColor = '#f5f5f5';
+            break;
+        case 'dark':
+            filter = 'invert(0.85) hue-rotate(180deg)';
+            bgColor = '#1a1a1a';
+            break;
+        case 'sepia':
+            filter = 'sepia(0.3) brightness(0.95)';
+            bgColor = '#f5e6d3';
+            break;
+    }
+
+    // Apply to viewer container background
+    viewerContainer.style.backgroundColor = bgColor;
+    document.body.style.backgroundColor = bgColor;
+
+    // Apply filter to all page canvases
+    const pages = viewer.querySelectorAll('.page');
+    pages.forEach(page => {
+        page.style.filter = filter;
+    });
+
+    // Also apply to future pages via CSS
+    let styleEl = document.getElementById('reading-theme-style');
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'reading-theme-style';
+        document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = `
+        .page { filter: ${filter} !important; }
+        #viewerContainer { background-color: ${bgColor} !important; }
+    `;
+}
+
 function showDocumentProperties() {
     documentProperties.click();
 }

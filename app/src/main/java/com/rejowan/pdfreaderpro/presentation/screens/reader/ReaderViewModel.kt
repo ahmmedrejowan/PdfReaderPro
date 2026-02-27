@@ -286,7 +286,15 @@ class ReaderViewModel(
             }
             is ReaderAction.SetKeepScreenOn -> _state.update { it.copy(keepScreenOn = action.enabled) }
             is ReaderAction.SetScreenOrientation -> _state.update { it.copy(screenOrientation = action.orientation) }
-            is ReaderAction.SetReadingTheme -> _state.update { it.copy(readingTheme = action.theme) }
+            is ReaderAction.SetReadingTheme -> {
+                _state.update { it.copy(readingTheme = action.theme) }
+                val themeName = when (action.theme) {
+                    ReadingTheme.LIGHT -> "light"
+                    ReadingTheme.DARK -> "dark"
+                    ReadingTheme.SEPIA -> "sepia"
+                }
+                pdfViewer?.ui?.setReadingTheme(themeName)
+            }
 
             is ReaderAction.Search -> {
                 _state.update { it.copy(searchQuery = action.query, isSearching = true) }
