@@ -115,6 +115,53 @@ class UiSettings internal constructor(private val webView: WebView) {
     }
 
     /**
+     * Auto-scroll controls for hands-free reading.
+     */
+    val autoScroll = AutoScroll()
+
+    /**
+     * Auto-scroll functionality for hands-free reading.
+     */
+    inner class AutoScroll internal constructor() {
+        /**
+         * Starts auto-scrolling at the specified speed.
+         * @param pixelsPerSecond The scroll speed in pixels per second.
+         */
+        fun start(pixelsPerSecond: Float) {
+            webView callDirectly "startAutoScroll"(pixelsPerSecond)
+        }
+
+        /**
+         * Stops auto-scrolling completely.
+         */
+        fun stop() {
+            webView callDirectly "stopAutoScroll"()
+        }
+
+        /**
+         * Pauses auto-scrolling (can be resumed).
+         */
+        fun pause() {
+            webView callDirectly "pauseAutoScroll"()
+        }
+
+        /**
+         * Resumes auto-scrolling after pause.
+         */
+        fun resume() {
+            webView callDirectly "resumeAutoScroll"()
+        }
+
+        /**
+         * Changes the auto-scroll speed while scrolling.
+         * @param pixelsPerSecond The new scroll speed in pixels per second.
+         */
+        fun setSpeed(pixelsPerSecond: Float) {
+            webView callDirectly "setAutoScrollSpeed"(pixelsPerSecond)
+        }
+    }
+
+    /**
      * Settings for the editor mode UI.
      */
     @PdfEditorModeApi

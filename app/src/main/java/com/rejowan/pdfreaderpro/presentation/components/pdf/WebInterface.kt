@@ -196,6 +196,11 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
+    fun onAutoScrollEnd() = post {
+        pdfViewer.listeners.forEach { it.onAutoScrollEnd() }
+    }
+
+    @JavascriptInterface
     fun onAttachmentsLoaded(attachmentJson: String) = post {
         val attachments: List<SideBarTreeItem> = Json.decodeFromString(attachmentJson)
         pdfViewer.attachments = attachments

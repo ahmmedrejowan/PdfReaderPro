@@ -65,6 +65,8 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomPrese
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DisplaySheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.BookmarksSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.MoreOptionsSheet
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrollSheet
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrollOverlay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -538,7 +540,9 @@ fun ReaderScreen(
             onBookmarksClick = {
                 viewModel.onAction(ReaderAction.ShowBookmarksSheet)
             },
-            onAutoScrollClick = { /* TODO: Implement auto-scroll */ },
+            onAutoScrollClick = {
+                viewModel.onAction(ReaderAction.ShowAutoScrollSheet)
+            },
             onGoToPageClick = {
                 viewModel.onAction(ReaderAction.ShowPageJumpDialog)
             },
@@ -553,6 +557,33 @@ fun ReaderScreen(
                 viewModel.onAction(ReaderAction.ShowInfoDialog)
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideMoreOptionsSheet) }
+        )
+    }
+
+    // Auto-Scroll Sheet
+    if (state.isAutoScrollSheetVisible) {
+        AutoScrollSheet(
+            currentSpeed = state.autoScrollSpeed,
+            onStartAutoScroll = { speed ->
+                viewModel.onAction(ReaderAction.StartAutoScroll(speed))
+            },
+            onDismiss = { viewModel.onAction(ReaderAction.HideAutoScrollSheet) }
+        )
+    }
+
+    // Auto-Scroll Overlay (shown when auto-scrolling)
+    Box(modifier = Modifier.fillMaxSize()) {
+        AutoScrollOverlay(
+            isVisible = state.isAutoScrollActive,
+            isPaused = state.isAutoScrollPaused,
+            currentSpeed = state.autoScrollSpeed,
+            onTogglePause = { viewModel.onAction(ReaderAction.ToggleAutoScrollPause) },
+            onStop = { viewModel.onAction(ReaderAction.StopAutoScroll) },
+            onSpeedChange = { speed -> viewModel.onAction(ReaderAction.SetAutoScrollSpeed(speed)) },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .windowInsetsPadding(WindowInsets.navigationBars)
+                .padding(bottom = 16.dp)
         )
     }
 }

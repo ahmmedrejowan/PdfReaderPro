@@ -349,4 +349,9 @@ interface PdfListener {
      */
     fun onLoadAttachments(attachments: List<SideBarTreeItem>) {}
 
+    /**
+     * Called when auto-scroll reaches the end of the document.
+     */
+    fun onAutoScrollEnd() {}
+
 }

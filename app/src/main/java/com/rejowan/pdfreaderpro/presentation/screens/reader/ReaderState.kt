@@ -90,7 +90,13 @@ data class ReaderState(
     val isCurrentPageBookmarked: Boolean = false,
 
     // Bookmarks for current PDF
-    val bookmarks: List<BookmarkEntity> = emptyList()
+    val bookmarks: List<BookmarkEntity> = emptyList(),
+
+    // Auto-scroll
+    val isAutoScrollActive: Boolean = false,
+    val isAutoScrollPaused: Boolean = false,
+    val autoScrollSpeed: Float = 50f, // pixels per second
+    val isAutoScrollSheetVisible: Boolean = false
 ) {
     val pageLabel: String
         get() = "${currentPage + 1} / $totalPages"
@@ -231,4 +237,12 @@ sealed class ReaderAction {
     data object TogglePageBookmark : ReaderAction()
     data class DeleteBookmark(val bookmark: BookmarkEntity) : ReaderAction()
     data class GoToBookmark(val bookmark: BookmarkEntity) : ReaderAction()
+
+    // Auto-scroll
+    data object ShowAutoScrollSheet : ReaderAction()
+    data object HideAutoScrollSheet : ReaderAction()
+    data class StartAutoScroll(val speed: Float) : ReaderAction()
+    data object StopAutoScroll : ReaderAction()
+    data object ToggleAutoScrollPause : ReaderAction()
+    data class SetAutoScrollSpeed(val speed: Float) : ReaderAction()
 }

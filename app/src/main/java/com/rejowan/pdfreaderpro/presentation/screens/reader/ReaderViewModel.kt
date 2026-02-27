@@ -176,6 +176,17 @@ class ReaderViewModel(
                     else -> ScrollDirection.VERTICAL
                 }
                 _state.update { it.copy(scrollDirection = direction) }
+            },
+            onAutoScrollEnd = {
+                _state.update {
+                    it.copy(
+                        isAutoScrollActive = false,
+                        isAutoScrollPaused = false
+                    )
+                }
+                viewModelScope.launch {
+                    _events.send(ReaderEvent.ShowMessage("Reached end of document"))
+                }
             }
         )
     }
@@ -258,12 +269,19 @@ class ReaderViewModel(
                 pdfViewer?.zoomTo(PdfViewer.Zoom.ACTUAL_SIZE)
             }
 
-            is ReaderAction.ToggleToolbar -> _state.update {
-                // If in full screen, exit full screen mode and show toolbar
-                if (it.isFullScreen) {
-                    it.copy(isFullScreen = false, isToolbarVisible = true)
+            is ReaderAction.ToggleToolbar -> {
+                // If auto-scroll is active, toggle pause instead of toolbar
+                if (_state.value.isAutoScrollActive) {
+                    onAction(ReaderAction.ToggleAutoScrollPause)
                 } else {
-                    it.copy(isToolbarVisible = !it.isToolbarVisible)
+                    _state.update {
+                        // If in full screen, exit full screen mode and show toolbar
+                        if (it.isFullScreen) {
+                            it.copy(isFullScreen = false, isToolbarVisible = true)
+                        } else {
+                            it.copy(isToolbarVisible = !it.isToolbarVisible)
+                        }
+                    }
                 }
             }
             is ReaderAction.ToggleControlBarExpanded -> _state.update { it.copy(isControlBarExpanded = !it.isControlBarExpanded) }
@@ -408,6 +426,48 @@ class ReaderViewModel(
                     )
                 }
                 pdfViewer?.goToPage(page + 1)
+            }
+
+            // Auto-scroll actions
+            is ReaderAction.ShowAutoScrollSheet -> _state.update { it.copy(isAutoScrollSheetVisible = true) }
+            is ReaderAction.HideAutoScrollSheet -> _state.update { it.copy(isAutoScrollSheetVisible = false) }
+
+            is ReaderAction.StartAutoScroll -> {
+                _state.update {
+                    it.copy(
+                        isAutoScrollActive = true,
+                        isAutoScrollPaused = false,
+                        autoScrollSpeed = action.speed,
+                        isAutoScrollSheetVisible = false,
+                        isToolbarVisible = false
+                    )
+                }
+                pdfViewer?.ui?.autoScroll?.start(action.speed)
+            }
+
+            is ReaderAction.StopAutoScroll -> {
+                _state.update {
+                    it.copy(
+                        isAutoScrollActive = false,
+                        isAutoScrollPaused = false
+                    )
+                }
+                pdfViewer?.ui?.autoScroll?.stop()
+            }
+
+            is ReaderAction.ToggleAutoScrollPause -> {
+                val isPaused = _state.value.isAutoScrollPaused
+                _state.update { it.copy(isAutoScrollPaused = !isPaused) }
+                if (isPaused) {
+                    pdfViewer?.ui?.autoScroll?.resume()
+                } else {
+                    pdfViewer?.ui?.autoScroll?.pause()
+                }
+            }
+
+            is ReaderAction.SetAutoScrollSpeed -> {
+                _state.update { it.copy(autoScrollSpeed = action.speed) }
+                pdfViewer?.ui?.autoScroll?.setSpeed(action.speed)
             }
         }
     }

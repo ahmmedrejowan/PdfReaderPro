@@ -45,6 +45,95 @@ function extractPrintImages() {
 }
 // #endregion
 
+// #region auto-scroll functionality
+let autoScrollState = {
+    isActive: false,
+    isPaused: false,
+    speed: 50, // pixels per second
+    animationFrameId: null,
+    lastTimestamp: null
+};
+
+function startAutoScroll(pixelsPerSecond) {
+    autoScrollState.speed = pixelsPerSecond;
+    autoScrollState.isActive = true;
+    autoScrollState.isPaused = false;
+    autoScrollState.lastTimestamp = null;
+
+    function autoScrollStep(timestamp) {
+        if (!autoScrollState.isActive) return;
+        if (autoScrollState.isPaused) {
+            autoScrollState.lastTimestamp = null;
+            autoScrollState.animationFrameId = requestAnimationFrame(autoScrollStep);
+            return;
+        }
+
+        if (autoScrollState.lastTimestamp === null) {
+            autoScrollState.lastTimestamp = timestamp;
+        }
+
+        const elapsed = timestamp - autoScrollState.lastTimestamp;
+        const scrollAmount = (autoScrollState.speed * elapsed) / 1000;
+
+        const isHorizontal = PDFViewerApplication.pdfViewer.scrollMode === ScrollMode.HORIZONTAL;
+
+        if (isHorizontal) {
+            viewerContainer.scrollLeft += scrollAmount;
+            // Check if reached end
+            const maxScroll = viewerContainer.scrollWidth - viewerContainer.clientWidth;
+            if (viewerContainer.scrollLeft >= maxScroll) {
+                stopAutoScroll();
+                JWI.onAutoScrollEnd();
+                return;
+            }
+        } else {
+            viewerContainer.scrollTop += scrollAmount;
+            // Check if reached end
+            const maxScroll = viewerContainer.scrollHeight - viewerContainer.clientHeight;
+            if (viewerContainer.scrollTop >= maxScroll) {
+                stopAutoScroll();
+                JWI.onAutoScrollEnd();
+                return;
+            }
+        }
+
+        autoScrollState.lastTimestamp = timestamp;
+        autoScrollState.animationFrameId = requestAnimationFrame(autoScrollStep);
+    }
+
+    autoScrollState.animationFrameId = requestAnimationFrame(autoScrollStep);
+}
+
+function stopAutoScroll() {
+    autoScrollState.isActive = false;
+    autoScrollState.isPaused = false;
+    if (autoScrollState.animationFrameId) {
+        cancelAnimationFrame(autoScrollState.animationFrameId);
+        autoScrollState.animationFrameId = null;
+    }
+}
+
+function pauseAutoScroll() {
+    autoScrollState.isPaused = true;
+}
+
+function resumeAutoScroll() {
+    autoScrollState.isPaused = false;
+}
+
+function setAutoScrollSpeed(pixelsPerSecond) {
+    autoScrollState.speed = pixelsPerSecond;
+}
+
+function isAutoScrollActive() {
+    return autoScrollState.isActive;
+}
+
+function isAutoScrollPaused() {
+    return autoScrollState.isPaused;
+}
+// #endregion
+
 // #region pdf.js ui elements show/hide
 function setEditorModeButtonsEnabled(enabled) {
     editorModeButtons.style.display = enabled ? "inline flex" : "none";

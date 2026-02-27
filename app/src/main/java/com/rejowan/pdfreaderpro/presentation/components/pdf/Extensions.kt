@@ -143,6 +143,7 @@ fun PdfViewer.addListener(
     onShowFileChooser: ((filePathCallback: ValueCallback<Array<out Uri?>?>?, fileChooserParams: FileChooserParams?) -> Boolean)? = null,
     onLoadOutline: ((outline: List<SideBarTreeItem>) -> Unit)? = null,
     onLoadAttachments: ((attachments: List<SideBarTreeItem>) -> Unit)? = null,
+    onAutoScrollEnd: (() -> Unit)? = null,
 ) {
     addListener(object : PdfListener {
         override fun onPageLoadStart() {
@@ -364,6 +365,10 @@ fun PdfViewer.addListener(
 
         override fun onLoadAttachments(attachments: List<SideBarTreeItem>) {
             onLoadAttachments?.invoke(attachments)
+        }
+
+        override fun onAutoScrollEnd() {
+            onAutoScrollEnd?.invoke()
         }
     })
 }
