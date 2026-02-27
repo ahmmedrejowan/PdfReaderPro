@@ -4,6 +4,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,12 +21,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.AspectRatio
 import androidx.compose.material.icons.rounded.FitScreen
 import androidx.compose.material.icons.rounded.Fullscreen
-import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.Remove
-import androidx.compose.material.icons.rounded.ScreenLockRotation
 import androidx.compose.material.icons.rounded.ScreenRotation
 import androidx.compose.material.icons.rounded.StayCurrentLandscape
 import androidx.compose.material.icons.rounded.StayCurrentPortrait
@@ -60,6 +62,7 @@ import kotlinx.coroutines.delay
 // Design colors
 private val AccentTeal = Color(0xFF4DB6AC)
 private val AccentAmber = Color(0xFFFFB74D)
+private val AccentBlue = Color(0xFF64B5F6)
 
 // Zoom presets
 enum class ZoomPreset {
@@ -110,7 +113,7 @@ fun ZoomSheet(
             Spacer(modifier = Modifier.height(20.dp))
 
             // Zoom Presets
-            SectionLabel(text = "Presets", delay = 100)
+            SectionLabel(text = "Quick Zoom", delay = 100)
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -137,7 +140,7 @@ fun ZoomSheet(
                     animationDelay = 200
                 )
                 ZoomPresetChip(
-                    icon = Icons.Rounded.ZoomOutMap,
+                    icon = Icons.Rounded.AspectRatio,
                     label = "100%",
                     isSelected = false,
                     accentColor = AccentTeal,
@@ -156,11 +159,38 @@ fun ZoomSheet(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OrientationControlsRow(
-                currentOrientation = currentOrientation,
-                onOrientationChange = onOrientationChange,
-                animationDelay = 350
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                OrientationChip(
+                    icon = Icons.Rounded.ScreenRotation,
+                    label = "Auto",
+                    isSelected = currentOrientation == ScreenOrientation.AUTO,
+                    accentColor = AccentAmber,
+                    onClick = { onOrientationChange(ScreenOrientation.AUTO) },
+                    modifier = Modifier.weight(1f),
+                    animationDelay = 350
+                )
+                OrientationChip(
+                    icon = Icons.Rounded.StayCurrentPortrait,
+                    label = "Portrait",
+                    isSelected = currentOrientation == ScreenOrientation.PORTRAIT,
+                    accentColor = AccentAmber,
+                    onClick = { onOrientationChange(ScreenOrientation.PORTRAIT) },
+                    modifier = Modifier.weight(1f),
+                    animationDelay = 400
+                )
+                OrientationChip(
+                    icon = Icons.Rounded.StayCurrentLandscape,
+                    label = "Landscape",
+                    isSelected = currentOrientation == ScreenOrientation.LANDSCAPE,
+                    accentColor = AccentAmber,
+                    onClick = { onOrientationChange(ScreenOrientation.LANDSCAPE) },
+                    modifier = Modifier.weight(1f),
+                    animationDelay = 450
+                )
+            }
         }
     }
 }
@@ -266,9 +296,9 @@ private fun ZoomControlsRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Zoom Out Button
             ZoomButton(
@@ -278,19 +308,20 @@ private fun ZoomControlsRow(
             )
 
             // Zoom Percentage Display
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = AccentTeal.copy(alpha = 0.12f),
-                modifier = Modifier.padding(horizontal = 16.dp)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "${(currentZoom * 100).toInt()}%",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold
                     ),
-                    color = AccentTeal,
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+                    color = AccentTeal
+                )
+                Text(
+                    text = "Current Zoom",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
             }
 
@@ -313,7 +344,7 @@ private fun ZoomButton(
 ) {
     Surface(
         modifier = modifier
-            .size(48.dp)
+            .size(52.dp)
             .clip(CircleShape)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -325,13 +356,13 @@ private fun ZoomButton(
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(52.dp)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = accentColor,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(26.dp)
             )
         }
     }
@@ -361,10 +392,17 @@ private fun ZoomPresetChip(
     )
 
     val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor.copy(alpha = 0.15f)
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.12f)
         else MaterialTheme.colorScheme.surfaceContainerHigh,
         animationSpec = tween(200),
         label = "preset bg"
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.5f)
+        else Color.Transparent,
+        animationSpec = tween(200),
+        label = "preset border"
     )
 
     val contentColor by animateColorAsState(
@@ -377,13 +415,20 @@ private fun ZoomPresetChip(
     Surface(
         modifier = modifier
             .scale(scale)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(14.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
                 onClick = onClick
+            )
+            .then(
+                if (isSelected) Modifier.border(
+                    width = 1.5.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(14.dp)
+                ) else Modifier
             ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
         color = backgroundColor
     ) {
         Column(
@@ -392,14 +437,22 @@ private fun ZoomPresetChip(
                 .padding(horizontal = 12.dp, vertical = 14.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(22.dp),
-                tint = contentColor
-            )
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(accentColor.copy(alpha = 0.1f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(22.dp),
+                    tint = contentColor
+                )
+            }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = label,
@@ -413,11 +466,14 @@ private fun ZoomPresetChip(
 }
 
 @Composable
-private fun OrientationControlsRow(
-    currentOrientation: ScreenOrientation,
-    onOrientationChange: (ScreenOrientation) -> Unit,
-    animationDelay: Int,
-    modifier: Modifier = Modifier
+private fun OrientationChip(
+    icon: ImageVector,
+    label: String,
+    isSelected: Boolean,
+    accentColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    animationDelay: Int = 0
 ) {
     var isVisible by remember { mutableStateOf(false) }
 
@@ -429,108 +485,100 @@ private fun OrientationControlsRow(
     val scale by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0.95f,
         animationSpec = tween(250, easing = FastOutSlowInEasing),
-        label = "orientation controls scale"
+        label = "orientation scale"
     )
 
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .scale(scale),
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            OrientationButton(
-                icon = Icons.Rounded.ScreenRotation,
-                label = "Auto",
-                isSelected = currentOrientation == ScreenOrientation.AUTO,
-                onClick = { onOrientationChange(ScreenOrientation.AUTO) },
-                accentColor = AccentAmber
-            )
-
-            OrientationButton(
-                icon = Icons.Rounded.StayCurrentPortrait,
-                label = "Portrait",
-                isSelected = currentOrientation == ScreenOrientation.PORTRAIT,
-                onClick = { onOrientationChange(ScreenOrientation.PORTRAIT) },
-                accentColor = AccentAmber
-            )
-
-            OrientationButton(
-                icon = Icons.Rounded.StayCurrentLandscape,
-                label = "Landscape",
-                isSelected = currentOrientation == ScreenOrientation.LANDSCAPE,
-                onClick = { onOrientationChange(ScreenOrientation.LANDSCAPE) },
-                accentColor = AccentAmber
-            )
-        }
-    }
-}
-
-@Composable
-private fun OrientationButton(
-    icon: ImageVector,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    accentColor: Color,
-    modifier: Modifier = Modifier
-) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor.copy(alpha = 0.15f) else Color.Transparent,
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.12f)
+        else MaterialTheme.colorScheme.surfaceContainerHigh,
         animationSpec = tween(200),
         label = "orientation bg"
     )
 
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.5f)
+        else Color.Transparent,
+        animationSpec = tween(200),
+        label = "orientation border"
+    )
+
     val contentColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurfaceVariant,
+        targetValue = if (isSelected) accentColor
+        else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(200),
         label = "orientation content"
     )
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Surface(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
+            .scale(scale)
+            .clip(RoundedCornerShape(14.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
                 onClick = onClick
             )
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Surface(
-            shape = CircleShape,
-            color = backgroundColor,
-            modifier = Modifier.size(44.dp)
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(44.dp)
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = label,
-                    tint = contentColor,
-                    modifier = Modifier.size(22.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+            .then(
+                if (isSelected) Modifier.border(
+                    width = 1.5.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(14.dp)
+                ) else Modifier
             ),
-            color = contentColor
-        )
+        shape = RoundedCornerShape(14.dp),
+        color = backgroundColor
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(accentColor.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(22.dp),
+                        tint = contentColor
+                    )
+                }
+
+                // Checkmark badge for selected state
+                if (isSelected) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .size(16.dp)
+                            .clip(CircleShape)
+                            .background(accentColor),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = "Selected",
+                            modifier = Modifier.size(10.dp),
+                            tint = Color.White
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
+                ),
+                color = contentColor
+            )
+        }
     }
 }
