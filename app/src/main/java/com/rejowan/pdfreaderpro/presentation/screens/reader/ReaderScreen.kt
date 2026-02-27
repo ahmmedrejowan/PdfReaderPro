@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
@@ -188,6 +189,18 @@ fun ReaderScreen(
                 layoutParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
                 it.window.attributes = layoutParams
             }
+        }
+    }
+
+    // Handle orientation changes - auto fit width when orientation changes
+    val configuration = LocalConfiguration.current
+    var lastOrientation by remember { mutableStateOf(configuration.orientation) }
+
+    LaunchedEffect(configuration.orientation) {
+        if (lastOrientation != configuration.orientation) {
+            lastOrientation = configuration.orientation
+            // Auto fit width when orientation changes
+            viewModel.onAction(ReaderAction.ZoomFitWidth)
         }
     }
 
