@@ -38,12 +38,9 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -174,10 +171,10 @@ private fun TopBarMenuContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 6.dp)
     ) {
         // Header
-        MenuHeader(onDismiss = onDismiss)
+        MenuHeader()
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -244,8 +241,8 @@ private fun TopBarMenuContent(
 
         MenuOptionItem(
             icon = Icons.Outlined.Save,
-            title = "Save to Downloads",
-            subtitle = "Save a copy to Downloads folder",
+            title = "Save As",
+            subtitle = "Save a copy to your chosen location",
             accentColor = AccentPurple,
             onClick = {
                 onDismiss()
@@ -298,52 +295,21 @@ private fun TopBarMenuContent(
 
 @Composable
 private fun MenuHeader(
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Surface(
-            shape = RoundedCornerShape(10.dp),
-            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.MoreVert,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(18.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-
-        Spacer(modifier = Modifier.width(10.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "Document Options",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = "Share, print, and manage",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-            )
-        }
-
-        IconButton(onClick = onDismiss, modifier = Modifier.size(36.dp)) {
-            Icon(
-                imageVector = Icons.Rounded.Close,
-                contentDescription = "Close",
-                modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = "Document Options",
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = "Share, print, and manage",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        )
     }
 }
 

@@ -397,10 +397,15 @@ class ReaderViewModel(
             is ReaderAction.SubmitPassword -> submitPassword(action.password, action.remember)
 
             is ReaderAction.ToggleFavorite -> toggleFavorite()
+            is ReaderAction.AddToFavorite -> addToFavorite()
+            is ReaderAction.ShowRemoveFavoriteDialog -> _state.update { it.copy(isRemoveFavoriteDialogVisible = true) }
+            is ReaderAction.HideRemoveFavoriteDialog -> _state.update { it.copy(isRemoveFavoriteDialogVisible = false) }
+            is ReaderAction.ConfirmRemoveFavorite -> confirmRemoveFavorite()
             is ReaderAction.ShareDocument -> viewModelScope.launch { _events.send(ReaderEvent.ShareDocument) }
             is ReaderAction.PrintDocument -> printDocument()
             is ReaderAction.OpenWithExternal -> openWithExternal()
             is ReaderAction.SaveDocument -> saveDocument()
+            is ReaderAction.SaveDocumentWithPicker -> viewModelScope.launch { _events.send(ReaderEvent.SaveDocumentPicker) }
             is ReaderAction.CloseDocument -> viewModelScope.launch { _events.send(ReaderEvent.DocumentClosed) }
 
             // Top bar menu
@@ -552,6 +557,35 @@ class ReaderViewModel(
             // Update state
             val isFav = favoriteRepository.isFavorite(pdfPath)
             _state.update { it.copy(isFavorite = isFav) }
+        }
+    }
+
+    private fun addToFavorite() {
+        viewModelScope.launch {
+            val file = File(pdfPath)
+            val pdfFile = com.rejowan.pdfreaderpro.domain.model.PdfFile(
+                id = pdfPath.hashCode().toLong(),
+                name = _state.value.documentTitle ?: file.name,
+                path = pdfPath,
+                uri = android.net.Uri.fromFile(file),
+                size = file.length(),
+                dateModified = file.lastModified(),
+                dateAdded = file.lastModified(),
+                pageCount = _state.value.totalPages,
+                parentFolder = file.parent ?: ""
+            )
+            favoriteRepository.addFavorite(pdfFile)
+            _state.update { it.copy(isFavorite = true) }
+            _events.send(ReaderEvent.FavoriteAdded)
+        }
+    }
+
+    private fun confirmRemoveFavorite() {
+        viewModelScope.launch {
+            _state.update { it.copy(isRemoveFavoriteDialogVisible = false) }
+            favoriteRepository.removeFavorite(pdfPath)
+            _state.update { it.copy(isFavorite = false) }
+            _events.send(ReaderEvent.ShowMessage("Removed from favourites"))
         }
     }
 
@@ -717,4 +751,24 @@ class ReaderViewModel(
     }
 
     suspend fun isFavorite(): Boolean = favoriteRepository.isFavorite(pdfPath)
+
+    fun saveToUri(uri: android.net.Uri) {
+        viewModelScope.launch {
+            try {
+                val sourceFile = File(pdfPath)
+                applicationContext.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    sourceFile.inputStream().use { inputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+                _events.send(ReaderEvent.ShowMessage("Document saved successfully"))
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to save: ${e.message}"))
+            }
+        }
+    }
+
+    fun getDocumentFileName(): String {
+        return File(pdfPath).name
+    }
 }

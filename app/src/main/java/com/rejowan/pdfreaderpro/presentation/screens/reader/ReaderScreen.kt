@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.view.WindowManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -71,6 +73,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.MoreOptio
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrollSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrollOverlay
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.TopBarMenuPanel
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.RemoveFavoriteSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -84,6 +87,13 @@ fun ReaderScreen(
     val view = LocalView.current
     val snackbarHostState = remember { SnackbarHostState() }
     val isDarkMode = isSystemInDarkTheme()
+
+    // SAF launcher for saving document
+    val saveDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri ->
+        uri?.let { viewModel.saveToUri(it) }
+    }
 
     val state by viewModel.state.collectAsState()
 
@@ -239,6 +249,12 @@ fun ReaderScreen(
                     } catch (e: Exception) {
                         snackbarHostState.showSnackbar("Failed to share: ${e.message}")
                     }
+                }
+                is ReaderEvent.SaveDocumentPicker -> {
+                    saveDocumentLauncher.launch(viewModel.getDocumentFileName())
+                }
+                is ReaderEvent.FavoriteAdded -> {
+                    snackbarHostState.showSnackbar("Added to favourites")
                 }
                 is ReaderEvent.Error -> {
                     snackbarHostState.showSnackbar(event.message)
@@ -626,9 +642,23 @@ fun ReaderScreen(
         onShareClick = { viewModel.onAction(ReaderAction.ShareDocument) },
         onPrintClick = { viewModel.onAction(ReaderAction.PrintDocument) },
         onOpenWithClick = { viewModel.onAction(ReaderAction.OpenWithExternal) },
-        onSaveClick = { viewModel.onAction(ReaderAction.SaveDocument) },
-        onFavoriteClick = { viewModel.onAction(ReaderAction.ToggleFavorite) },
+        onSaveClick = { viewModel.onAction(ReaderAction.SaveDocumentWithPicker) },
+        onFavoriteClick = {
+            if (state.isFavorite) {
+                viewModel.onAction(ReaderAction.ShowRemoveFavoriteDialog)
+            } else {
+                viewModel.onAction(ReaderAction.AddToFavorite)
+            }
+        },
         onDeleteClick = { viewModel.onAction(ReaderAction.ShowDeleteDialog) },
         onDismiss = { viewModel.onAction(ReaderAction.HideTopBarMenu) }
     )
+
+    // Remove favourite confirmation sheet
+    if (state.isRemoveFavoriteDialogVisible) {
+        RemoveFavoriteSheet(
+            onConfirm = { viewModel.onAction(ReaderAction.ConfirmRemoveFavorite) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideRemoveFavoriteDialog) }
+        )
+    }
 }

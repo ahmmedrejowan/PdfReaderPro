@@ -104,7 +104,10 @@ data class ReaderState(
     val isFavorite: Boolean = false,
 
     // Top bar menu
-    val isTopBarMenuVisible: Boolean = false
+    val isTopBarMenuVisible: Boolean = false,
+
+    // Remove favourite confirmation
+    val isRemoveFavoriteDialogVisible: Boolean = false
 ) {
     val pageLabel: String
         get() = "${currentPage + 1} / $totalPages"
@@ -154,6 +157,8 @@ sealed class ReaderEvent {
     data object DocumentClosed : ReaderEvent()
     data object DocumentDeleted : ReaderEvent()
     data object ShareDocument : ReaderEvent()
+    data object SaveDocumentPicker : ReaderEvent()
+    data object FavoriteAdded : ReaderEvent()
     data class Error(val message: String) : ReaderEvent()
 }
 
@@ -264,4 +269,13 @@ sealed class ReaderAction {
     // Attachments
     data class OpenAttachment(val attachment: AttachmentItem) : ReaderAction()
     data class DownloadAttachment(val attachment: AttachmentItem) : ReaderAction()
+
+    // Favourite actions
+    data object ShowRemoveFavoriteDialog : ReaderAction()
+    data object HideRemoveFavoriteDialog : ReaderAction()
+    data object ConfirmRemoveFavorite : ReaderAction()
+    data object AddToFavorite : ReaderAction()
+
+    // Save with picker
+    data object SaveDocumentWithPicker : ReaderAction()
 }
