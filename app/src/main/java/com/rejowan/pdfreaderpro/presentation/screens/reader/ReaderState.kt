@@ -249,5 +249,6 @@ sealed class ReaderAction {
     data class SetAutoScrollSpeed(val speed: Float) : ReaderAction()
 
     // Attachments
+    data class OpenAttachment(val attachment: AttachmentItem) : ReaderAction()
     data class DownloadAttachment(val attachment: AttachmentItem) : ReaderAction()
 }

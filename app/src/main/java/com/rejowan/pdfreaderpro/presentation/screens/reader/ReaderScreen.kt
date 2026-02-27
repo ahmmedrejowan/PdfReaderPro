@@ -427,9 +427,12 @@ fun ReaderScreen(
                 viewModel.navigateToOutlineItem(item)
                 viewModel.onAction(ReaderAction.HideTableOfContents)
             },
-            onAttachmentClick = { attachment ->
-                viewModel.onAction(ReaderAction.DownloadAttachment(attachment))
+            onAttachmentOpen = { attachment ->
+                viewModel.onAction(ReaderAction.OpenAttachment(attachment))
                 viewModel.onAction(ReaderAction.HideTableOfContents)
+            },
+            onAttachmentDownload = { attachment ->
+                viewModel.onAction(ReaderAction.DownloadAttachment(attachment))
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideTableOfContents) }
         )

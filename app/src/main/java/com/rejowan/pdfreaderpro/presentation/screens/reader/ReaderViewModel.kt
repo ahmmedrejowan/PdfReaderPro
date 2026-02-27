@@ -47,6 +47,9 @@ class ReaderViewModel(
     private var pdfViewer: PdfViewer? = null
     private var storedLastPage: Int? = null
     private var isFirstOpen: Boolean = true
+    private var pendingAttachmentAction: AttachmentAction? = null
+
+    private enum class AttachmentAction { OPEN, DOWNLOAD }
 
     init {
         // Set document title from file name
@@ -200,9 +203,14 @@ class ReaderViewModel(
                 }
                 _state.update { it.copy(attachments = attachmentItems) }
             },
-            onDownload = { fileBytes, fileName, _ ->
+            onDownload = { fileBytes, fileName, mimeType ->
                 viewModelScope.launch {
-                    saveAttachmentFile(fileBytes, fileName)
+                    when (pendingAttachmentAction) {
+                        AttachmentAction.OPEN -> openAttachmentFile(fileBytes, fileName, mimeType)
+                        AttachmentAction.DOWNLOAD -> saveAttachmentFile(fileBytes, fileName)
+                        null -> saveAttachmentFile(fileBytes, fileName) // Default to save
+                    }
+                    pendingAttachmentAction = null
                 }
             }
         )
@@ -487,7 +495,15 @@ class ReaderViewModel(
                 pdfViewer?.ui?.autoScroll?.setSpeed(action.speed)
             }
 
+            is ReaderAction.OpenAttachment -> {
+                pendingAttachmentAction = AttachmentAction.OPEN
+                viewModelScope.launch {
+                    pdfViewer?.ui?.performSidebarTreeItemClick(action.attachment.id)
+                }
+            }
+
             is ReaderAction.DownloadAttachment -> {
+                pendingAttachmentAction = AttachmentAction.DOWNLOAD
                 viewModelScope.launch {
                     pdfViewer?.ui?.performSidebarTreeItemClick(action.attachment.id)
                 }
@@ -552,6 +568,49 @@ class ReaderViewModel(
             _events.send(ReaderEvent.ShowMessage("Saved to Downloads: $finalFileName"))
         } catch (e: Exception) {
             _events.send(ReaderEvent.Error("Failed to save attachment: ${e.message}"))
+        }
+    }
+
+    private suspend fun openAttachmentFile(fileBytes: ByteArray, fileName: String?, mimeType: String?) {
+        try {
+            // Save to cache directory
+            val cacheDir = File(applicationContext.cacheDir, "attachments")
+            if (!cacheDir.exists()) cacheDir.mkdirs()
+
+            val finalFileName = fileName ?: "attachment_${System.currentTimeMillis()}"
+            val file = File(cacheDir, finalFileName)
+            file.writeBytes(fileBytes)
+
+            // Get content URI using FileProvider
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                applicationContext,
+                "${applicationContext.packageName}.provider",
+                file
+            )
+
+            // Determine MIME type
+            val resolvedMimeType = mimeType
+                ?: android.webkit.MimeTypeMap.getSingleton()
+                    .getMimeTypeFromExtension(file.extension.lowercase())
+                ?: "*/*"
+
+            // Create open intent
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, resolvedMimeType)
+                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+
+            // Check if there's an app that can handle this
+            if (intent.resolveActivity(applicationContext.packageManager) != null) {
+                applicationContext.startActivity(intent)
+            } else {
+                // No app found, offer to save instead
+                _events.send(ReaderEvent.ShowMessage("No app found to open this file. Saving to Downloads..."))
+                saveAttachmentFile(fileBytes, fileName)
+            }
+        } catch (e: Exception) {
+            _events.send(ReaderEvent.Error("Failed to open attachment: ${e.message}"))
         }
     }
 

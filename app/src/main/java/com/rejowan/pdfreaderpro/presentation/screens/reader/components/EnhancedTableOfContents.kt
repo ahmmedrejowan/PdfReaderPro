@@ -70,7 +70,8 @@ fun EnhancedTableOfContents(
     attachments: List<AttachmentItem> = emptyList(),
     currentPage: Int,
     onItemClick: (OutlineItem) -> Unit,
-    onAttachmentClick: (AttachmentItem) -> Unit = {},
+    onAttachmentOpen: (AttachmentItem) -> Unit = {},
+    onAttachmentDownload: (AttachmentItem) -> Unit = {},
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -233,7 +234,8 @@ fun EnhancedTableOfContents(
                             itemsIndexed(attachments) { index, attachment ->
                                 AttachmentListItem(
                                     attachment = attachment,
-                                    onClick = { onAttachmentClick(attachment) },
+                                    onOpen = { onAttachmentOpen(attachment) },
+                                    onDownload = { onAttachmentDownload(attachment) },
                                     animationDelay = (index * 20).coerceAtMost(200)
                                 )
                             }
@@ -420,7 +422,8 @@ private fun EmptyTocState(
 @Composable
 private fun AttachmentListItem(
     attachment: AttachmentItem,
-    onClick: () -> Unit,
+    onOpen: () -> Unit,
+    onDownload: () -> Unit,
     animationDelay: Int,
     modifier: Modifier = Modifier
 ) {
@@ -446,7 +449,7 @@ private fun AttachmentListItem(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = AccentTeal),
-                onClick = onClick
+                onClick = onOpen
             ),
         shape = RoundedCornerShape(12.dp),
         color = Color.Transparent
@@ -485,23 +488,28 @@ private fun AttachmentListItem(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                // Show file extension as subtitle
+                // Show file extension as subtitle with tap hint
                 val extension = attachment.title.substringAfterLast('.', "").uppercase()
-                if (extension.isNotEmpty() && extension.length <= 4) {
-                    Text(
-                        text = "$extension file",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                    )
-                }
+                Text(
+                    text = if (extension.isNotEmpty() && extension.length <= 4) "$extension file · Tap to open" else "Tap to open",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             // Download button
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = AccentTeal.copy(alpha = 0.12f)
+                color = AccentTeal.copy(alpha = 0.12f),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(color = AccentTeal, bounded = true),
+                        onClick = onDownload
+                    )
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Download,
