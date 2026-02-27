@@ -52,7 +52,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.EnhancedT
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorState
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingControlBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingSearchBar
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpDialog
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageScrubber
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
@@ -425,9 +425,9 @@ fun ReaderScreen(
         )
     }
 
-    // Page jump dialog
+    // Page jump sheet
     if (state.isPageJumpDialogVisible) {
-        PageJumpDialog(
+        PageJumpSheet(
             currentPage = state.currentPage + 1,
             totalPages = state.totalPages,
             onPageSelected = {
