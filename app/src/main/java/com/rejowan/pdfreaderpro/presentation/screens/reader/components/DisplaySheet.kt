@@ -1,36 +1,50 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.BrightnessMedium
-import androidx.compose.material.icons.rounded.DarkMode
-import androidx.compose.material.icons.rounded.LightMode
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Slider
@@ -52,6 +66,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReadingTheme
@@ -72,6 +88,45 @@ fun DisplaySheet(
     onThemeChange: (ReadingTheme) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        // Side sheet for landscape mode
+        DisplaySideSheet(
+            brightness = brightness,
+            keepScreenOn = keepScreenOn,
+            currentTheme = currentTheme,
+            onBrightnessChange = onBrightnessChange,
+            onKeepScreenOnChange = onKeepScreenOnChange,
+            onThemeChange = onThemeChange,
+            onDismiss = onDismiss
+        )
+    } else {
+        // Bottom sheet for portrait mode
+        DisplayBottomSheet(
+            brightness = brightness,
+            keepScreenOn = keepScreenOn,
+            currentTheme = currentTheme,
+            onBrightnessChange = onBrightnessChange,
+            onKeepScreenOnChange = onKeepScreenOnChange,
+            onThemeChange = onThemeChange,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DisplayBottomSheet(
+    brightness: Float,
+    keepScreenOn: Boolean,
+    currentTheme: ReadingTheme,
+    onBrightnessChange: (Float) -> Unit,
+    onKeepScreenOnChange: (Boolean) -> Unit,
+    onThemeChange: (ReadingTheme) -> Unit,
+    onDismiss: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
@@ -81,59 +136,169 @@ fun DisplaySheet(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+        DisplaySheetContent(
+            brightness = brightness,
+            keepScreenOn = keepScreenOn,
+            currentTheme = currentTheme,
+            onBrightnessChange = onBrightnessChange,
+            onKeepScreenOnChange = onKeepScreenOnChange,
+            onThemeChange = onThemeChange,
+            showCloseButton = false,
+            onDismiss = onDismiss,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+    }
+}
+
+@Composable
+private fun DisplaySideSheet(
+    brightness: Float,
+    keepScreenOn: Boolean,
+    currentTheme: ReadingTheme,
+    onBrightnessChange: (Float) -> Unit,
+    onKeepScreenOnChange: (Boolean) -> Unit,
+    onThemeChange: (ReadingTheme) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Scrim (semi-transparent background)
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
         ) {
-            // Header
-            DisplaySheetHeader()
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Reading Theme Section
-            SectionLabel(text = "Reading Theme", delay = 0)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            ThemeSelector(
-                currentTheme = currentTheme,
-                onThemeChange = onThemeChange,
-                animationDelay = 50
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
             )
+        }
 
-            Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-            Spacer(modifier = Modifier.height(20.dp))
+        // Side sheet sliding from right
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
 
-            // Brightness Section
-            SectionLabel(text = "Brightness", delay = 150)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            BrightnessSlider(
-                brightness = brightness,
-                onBrightnessChange = onBrightnessChange,
-                animationDelay = 200
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Keep Screen On Toggle
-            KeepScreenOnRow(
-                keepScreenOn = keepScreenOn,
-                onKeepScreenOnChange = onKeepScreenOnChange,
-                animationDelay = 300
-            )
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                DisplaySheetContent(
+                    brightness = brightness,
+                    keepScreenOn = keepScreenOn,
+                    currentTheme = currentTheme,
+                    onBrightnessChange = onBrightnessChange,
+                    onKeepScreenOnChange = onKeepScreenOnChange,
+                    onThemeChange = onThemeChange,
+                    showCloseButton = true,
+                    onDismiss = onDismiss,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                        .verticalScroll(rememberScrollState())
+                )
+            }
         }
     }
 }
 
 @Composable
+private fun DisplaySheetContent(
+    brightness: Float,
+    keepScreenOn: Boolean,
+    currentTheme: ReadingTheme,
+    onBrightnessChange: (Float) -> Unit,
+    onKeepScreenOnChange: (Boolean) -> Unit,
+    onThemeChange: (ReadingTheme) -> Unit,
+    showCloseButton: Boolean,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp)
+    ) {
+        // Header with optional close button for side sheet
+        DisplaySheetHeader(
+            showCloseButton = showCloseButton,
+            onDismiss = onDismiss
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Reading Theme Section
+        SectionLabel(text = "Reading Theme", delay = 0)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        ThemeSelector(
+            currentTheme = currentTheme,
+            onThemeChange = onThemeChange,
+            animationDelay = 50
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Brightness Section
+        SectionLabel(text = "Brightness", delay = 150)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        BrightnessSlider(
+            brightness = brightness,
+            onBrightnessChange = onBrightnessChange,
+            animationDelay = 200
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Keep Screen On Toggle
+        KeepScreenOnRow(
+            keepScreenOn = keepScreenOn,
+            onKeepScreenOnChange = onKeepScreenOnChange,
+            animationDelay = 300
+        )
+    }
+}
+
+@Composable
 private fun DisplaySheetHeader(
+    showCloseButton: Boolean = false,
+    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -156,7 +321,7 @@ private fun DisplaySheetHeader(
 
         Spacer(modifier = Modifier.width(14.dp))
 
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = "Display Settings",
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -169,6 +334,16 @@ private fun DisplaySheetHeader(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
+        }
+
+        if (showCloseButton) {
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
