@@ -1,22 +1,39 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Numbers
@@ -26,6 +43,7 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -44,6 +62,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -66,6 +86,43 @@ fun MoreOptionsSheet(
     onDocumentInfoClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        MoreOptionsSideSheet(
+            onBookmarksClick = onBookmarksClick,
+            onAutoScrollClick = onAutoScrollClick,
+            onGoToPageClick = onGoToPageClick,
+            onPrintClick = onPrintClick,
+            onShareClick = onShareClick,
+            onDocumentInfoClick = onDocumentInfoClick,
+            onDismiss = onDismiss
+        )
+    } else {
+        MoreOptionsBottomSheet(
+            onBookmarksClick = onBookmarksClick,
+            onAutoScrollClick = onAutoScrollClick,
+            onGoToPageClick = onGoToPageClick,
+            onPrintClick = onPrintClick,
+            onShareClick = onShareClick,
+            onDocumentInfoClick = onDocumentInfoClick,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MoreOptionsBottomSheet(
+    onBookmarksClick: () -> Unit,
+    onAutoScrollClick: () -> Unit,
+    onGoToPageClick: () -> Unit,
+    onPrintClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onDocumentInfoClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
@@ -75,118 +132,224 @@ fun MoreOptionsSheet(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+        MoreOptionsSheetContent(
+            onBookmarksClick = onBookmarksClick,
+            onAutoScrollClick = onAutoScrollClick,
+            onGoToPageClick = onGoToPageClick,
+            onPrintClick = onPrintClick,
+            onShareClick = onShareClick,
+            onDocumentInfoClick = onDocumentInfoClick,
+            showCloseButton = false,
+            onDismiss = onDismiss,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+    }
+}
+
+@Composable
+private fun MoreOptionsSideSheet(
+    onBookmarksClick: () -> Unit,
+    onAutoScrollClick: () -> Unit,
+    onGoToPageClick: () -> Unit,
+    onPrintClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onDocumentInfoClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
         ) {
-            // Header
-            MoreOptionsHeader()
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Reading Tools Section
-            SectionLabel(text = "Reading Tools")
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            OptionItem(
-                icon = Icons.Rounded.Bookmark,
-                title = "Bookmarks",
-                subtitle = "View and manage saved pages",
-                accentColor = AccentPurple,
-                onClick = {
-                    onDismiss()
-                    onBookmarksClick()
-                },
-                animationDelay = 0
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
             )
+        }
 
-            Spacer(modifier = Modifier.height(8.dp))
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
 
-            OptionItem(
-                icon = Icons.Rounded.PlayArrow,
-                title = "Auto-Scroll",
-                subtitle = "Hands-free reading mode",
-                accentColor = AccentBlue,
-                onClick = {
-                    onDismiss()
-                    onAutoScrollClick()
-                },
-                animationDelay = 50
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OptionItem(
-                icon = Icons.Rounded.Numbers,
-                title = "Go to Page",
-                subtitle = "Jump to a specific page",
-                accentColor = AccentTeal,
-                onClick = {
-                    onDismiss()
-                    onGoToPageClick()
-                },
-                animationDelay = 100
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Document Actions Section
-            SectionLabel(text = "Document")
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            OptionItem(
-                icon = Icons.Rounded.Share,
-                title = "Share",
-                subtitle = "Share this document",
-                accentColor = AccentPink,
-                onClick = {
-                    onDismiss()
-                    onShareClick()
-                },
-                animationDelay = 150
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OptionItem(
-                icon = Icons.Rounded.Print,
-                title = "Print",
-                subtitle = "Print this document",
-                accentColor = AccentAmber,
-                onClick = {
-                    onDismiss()
-                    onPrintClick()
-                },
-                animationDelay = 200
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OptionItem(
-                icon = Icons.Rounded.Info,
-                title = "Document Info",
-                subtitle = "View file details and metadata",
-                accentColor = MaterialTheme.colorScheme.primary,
-                onClick = {
-                    onDismiss()
-                    onDocumentInfoClick()
-                },
-                animationDelay = 250
-            )
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                MoreOptionsSheetContent(
+                    onBookmarksClick = onBookmarksClick,
+                    onAutoScrollClick = onAutoScrollClick,
+                    onGoToPageClick = onGoToPageClick,
+                    onPrintClick = onPrintClick,
+                    onShareClick = onShareClick,
+                    onDocumentInfoClick = onDocumentInfoClick,
+                    showCloseButton = true,
+                    onDismiss = onDismiss,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                        .verticalScroll(rememberScrollState())
+                )
+            }
         }
     }
 }
 
 @Composable
+private fun MoreOptionsSheetContent(
+    onBookmarksClick: () -> Unit,
+    onAutoScrollClick: () -> Unit,
+    onGoToPageClick: () -> Unit,
+    onPrintClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onDocumentInfoClick: () -> Unit,
+    showCloseButton: Boolean,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp)
+    ) {
+        // Header
+        MoreOptionsHeader(
+            showCloseButton = showCloseButton,
+            onDismiss = onDismiss
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Reading Tools Section
+        SectionLabel(text = "Reading Tools")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        OptionItem(
+            icon = Icons.Rounded.Bookmark,
+            title = "Bookmarks",
+            subtitle = "View and manage saved pages",
+            accentColor = AccentPurple,
+            onClick = {
+                onDismiss()
+                onBookmarksClick()
+            },
+            animationDelay = 0
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OptionItem(
+            icon = Icons.Rounded.PlayArrow,
+            title = "Auto-Scroll",
+            subtitle = "Hands-free reading mode",
+            accentColor = AccentBlue,
+            onClick = {
+                onDismiss()
+                onAutoScrollClick()
+            },
+            animationDelay = 50
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OptionItem(
+            icon = Icons.Rounded.Numbers,
+            title = "Go to Page",
+            subtitle = "Jump to a specific page",
+            accentColor = AccentTeal,
+            onClick = {
+                onDismiss()
+                onGoToPageClick()
+            },
+            animationDelay = 100
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Document Actions Section
+        SectionLabel(text = "Document")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        OptionItem(
+            icon = Icons.Rounded.Share,
+            title = "Share",
+            subtitle = "Share this document",
+            accentColor = AccentPink,
+            onClick = {
+                onDismiss()
+                onShareClick()
+            },
+            animationDelay = 150
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OptionItem(
+            icon = Icons.Rounded.Print,
+            title = "Print",
+            subtitle = "Print this document",
+            accentColor = AccentAmber,
+            onClick = {
+                onDismiss()
+                onPrintClick()
+            },
+            animationDelay = 200
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OptionItem(
+            icon = Icons.Rounded.Info,
+            title = "Document Info",
+            subtitle = "View file details and metadata",
+            accentColor = MaterialTheme.colorScheme.primary,
+            onClick = {
+                onDismiss()
+                onDocumentInfoClick()
+            },
+            animationDelay = 250
+        )
+    }
+}
+
+@Composable
 private fun MoreOptionsHeader(
+    showCloseButton: Boolean = false,
+    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -209,7 +372,7 @@ private fun MoreOptionsHeader(
 
         Spacer(modifier = Modifier.width(14.dp))
 
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = "More Options",
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -222,6 +385,16 @@ private fun MoreOptionsHeader(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
+        }
+
+        if (showCloseButton) {
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

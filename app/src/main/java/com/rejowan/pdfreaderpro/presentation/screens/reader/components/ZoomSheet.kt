@@ -1,29 +1,44 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.AspectRatio
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.FitScreen
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Remove
@@ -31,10 +46,10 @@ import androidx.compose.material.icons.rounded.ScreenRotation
 import androidx.compose.material.icons.rounded.StayCurrentLandscape
 import androidx.compose.material.icons.rounded.StayCurrentPortrait
 import androidx.compose.material.icons.rounded.ZoomIn
-import androidx.compose.material.icons.rounded.ZoomOutMap
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -53,6 +68,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,6 +99,43 @@ fun ZoomSheet(
     onOrientationChange: (ScreenOrientation) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        ZoomSideSheet(
+            currentZoom = currentZoom,
+            currentOrientation = currentOrientation,
+            onZoomIn = onZoomIn,
+            onZoomOut = onZoomOut,
+            onZoomPreset = onZoomPreset,
+            onOrientationChange = onOrientationChange,
+            onDismiss = onDismiss
+        )
+    } else {
+        ZoomBottomSheet(
+            currentZoom = currentZoom,
+            currentOrientation = currentOrientation,
+            onZoomIn = onZoomIn,
+            onZoomOut = onZoomOut,
+            onZoomPreset = onZoomPreset,
+            onOrientationChange = onOrientationChange,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ZoomBottomSheet(
+    currentZoom: Float,
+    currentOrientation: ScreenOrientation,
+    onZoomIn: () -> Unit,
+    onZoomOut: () -> Unit,
+    onZoomPreset: (ZoomPreset) -> Unit,
+    onOrientationChange: (ScreenOrientation) -> Unit,
+    onDismiss: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
@@ -91,104 +145,91 @@ fun ZoomSheet(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+        ZoomSheetContent(
+            currentZoom = currentZoom,
+            currentOrientation = currentOrientation,
+            onZoomIn = onZoomIn,
+            onZoomOut = onZoomOut,
+            onZoomPreset = onZoomPreset,
+            onOrientationChange = onOrientationChange,
+            showCloseButton = false,
+            onDismiss = onDismiss,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+    }
+}
+
+@Composable
+private fun ZoomSideSheet(
+    currentZoom: Float,
+    currentOrientation: ScreenOrientation,
+    onZoomIn: () -> Unit,
+    onZoomOut: () -> Unit,
+    onZoomPreset: (ZoomPreset) -> Unit,
+    onOrientationChange: (ScreenOrientation) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
         ) {
-            // Header
-            ZoomSheetHeader()
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Zoom Controls
-            ZoomControlsRow(
-                currentZoom = currentZoom,
-                onZoomIn = onZoomIn,
-                onZoomOut = onZoomOut,
-                animationDelay = 0
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
             )
+        }
 
-            Spacer(modifier = Modifier.height(20.dp))
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
 
-            // Zoom Presets
-            SectionLabel(text = "Quick Zoom", delay = 100)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
             ) {
-                ZoomPresetChip(
-                    icon = Icons.Rounded.FitScreen,
-                    label = "Fit Page",
-                    isSelected = false,
-                    accentColor = AccentTeal,
-                    onClick = { onZoomPreset(ZoomPreset.FIT_PAGE) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 150
-                )
-                ZoomPresetChip(
-                    icon = Icons.Rounded.Fullscreen,
-                    label = "Fit Width",
-                    isSelected = false,
-                    accentColor = AccentTeal,
-                    onClick = { onZoomPreset(ZoomPreset.FIT_WIDTH) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 200
-                )
-                ZoomPresetChip(
-                    icon = Icons.Rounded.AspectRatio,
-                    label = "100%",
-                    isSelected = false,
-                    accentColor = AccentTeal,
-                    onClick = { onZoomPreset(ZoomPreset.ACTUAL_SIZE) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 250
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Screen Orientation Section
-            SectionLabel(text = "Screen Orientation", delay = 300)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                OrientationChip(
-                    icon = Icons.Rounded.ScreenRotation,
-                    label = "Auto",
-                    isSelected = currentOrientation == ScreenOrientation.AUTO,
-                    accentColor = AccentAmber,
-                    onClick = { onOrientationChange(ScreenOrientation.AUTO) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 350
-                )
-                OrientationChip(
-                    icon = Icons.Rounded.StayCurrentPortrait,
-                    label = "Portrait",
-                    isSelected = currentOrientation == ScreenOrientation.PORTRAIT,
-                    accentColor = AccentAmber,
-                    onClick = { onOrientationChange(ScreenOrientation.PORTRAIT) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 400
-                )
-                OrientationChip(
-                    icon = Icons.Rounded.StayCurrentLandscape,
-                    label = "Landscape",
-                    isSelected = currentOrientation == ScreenOrientation.LANDSCAPE,
-                    accentColor = AccentAmber,
-                    onClick = { onOrientationChange(ScreenOrientation.LANDSCAPE) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 450
+                ZoomSheetContent(
+                    currentZoom = currentZoom,
+                    currentOrientation = currentOrientation,
+                    onZoomIn = onZoomIn,
+                    onZoomOut = onZoomOut,
+                    onZoomPreset = onZoomPreset,
+                    onOrientationChange = onOrientationChange,
+                    showCloseButton = true,
+                    onDismiss = onDismiss,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                        .verticalScroll(rememberScrollState())
                 )
             }
         }
@@ -196,7 +237,126 @@ fun ZoomSheet(
 }
 
 @Composable
+private fun ZoomSheetContent(
+    currentZoom: Float,
+    currentOrientation: ScreenOrientation,
+    onZoomIn: () -> Unit,
+    onZoomOut: () -> Unit,
+    onZoomPreset: (ZoomPreset) -> Unit,
+    onOrientationChange: (ScreenOrientation) -> Unit,
+    showCloseButton: Boolean,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp)
+    ) {
+        // Header
+        ZoomSheetHeader(
+            showCloseButton = showCloseButton,
+            onDismiss = onDismiss
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Zoom Controls
+        ZoomControlsRow(
+            currentZoom = currentZoom,
+            onZoomIn = onZoomIn,
+            onZoomOut = onZoomOut,
+            animationDelay = 0
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Zoom Presets
+        SectionLabel(text = "Quick Zoom", delay = 100)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            ZoomPresetChip(
+                icon = Icons.Rounded.FitScreen,
+                label = "Fit Page",
+                isSelected = false,
+                accentColor = AccentTeal,
+                onClick = { onZoomPreset(ZoomPreset.FIT_PAGE) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 150
+            )
+            ZoomPresetChip(
+                icon = Icons.Rounded.Fullscreen,
+                label = "Fit Width",
+                isSelected = false,
+                accentColor = AccentTeal,
+                onClick = { onZoomPreset(ZoomPreset.FIT_WIDTH) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 200
+            )
+            ZoomPresetChip(
+                icon = Icons.Rounded.AspectRatio,
+                label = "100%",
+                isSelected = false,
+                accentColor = AccentTeal,
+                onClick = { onZoomPreset(ZoomPreset.ACTUAL_SIZE) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 250
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Screen Orientation Section
+        SectionLabel(text = "Screen Orientation", delay = 300)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            OrientationChip(
+                icon = Icons.Rounded.ScreenRotation,
+                label = "Auto",
+                isSelected = currentOrientation == ScreenOrientation.AUTO,
+                accentColor = AccentAmber,
+                onClick = { onOrientationChange(ScreenOrientation.AUTO) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 350
+            )
+            OrientationChip(
+                icon = Icons.Rounded.StayCurrentPortrait,
+                label = "Portrait",
+                isSelected = currentOrientation == ScreenOrientation.PORTRAIT,
+                accentColor = AccentAmber,
+                onClick = { onOrientationChange(ScreenOrientation.PORTRAIT) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 400
+            )
+            OrientationChip(
+                icon = Icons.Rounded.StayCurrentLandscape,
+                label = "Landscape",
+                isSelected = currentOrientation == ScreenOrientation.LANDSCAPE,
+                accentColor = AccentAmber,
+                onClick = { onOrientationChange(ScreenOrientation.LANDSCAPE) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 450
+            )
+        }
+    }
+}
+
+@Composable
 private fun ZoomSheetHeader(
+    showCloseButton: Boolean = false,
+    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -219,7 +379,7 @@ private fun ZoomSheetHeader(
 
         Spacer(modifier = Modifier.width(14.dp))
 
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = "Zoom & Display",
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -232,6 +392,16 @@ private fun ZoomSheetHeader(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
+        }
+
+        if (showCloseButton) {
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

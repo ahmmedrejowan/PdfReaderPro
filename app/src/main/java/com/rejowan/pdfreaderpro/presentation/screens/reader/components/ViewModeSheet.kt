@@ -1,28 +1,42 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
@@ -32,6 +46,7 @@ import androidx.compose.material.icons.rounded.ViewStream
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -52,6 +67,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
@@ -88,6 +105,43 @@ fun ViewModeSheet(
     onSnapToggle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        ViewModeSideSheet(
+            currentScrollDirection = currentScrollDirection,
+            currentSpreadMode = currentSpreadMode,
+            isSnapEnabled = isSnapEnabled,
+            onScrollDirectionChange = onScrollDirectionChange,
+            onSpreadModeChange = onSpreadModeChange,
+            onSnapToggle = onSnapToggle,
+            onDismiss = onDismiss
+        )
+    } else {
+        ViewModeBottomSheet(
+            currentScrollDirection = currentScrollDirection,
+            currentSpreadMode = currentSpreadMode,
+            isSnapEnabled = isSnapEnabled,
+            onScrollDirectionChange = onScrollDirectionChange,
+            onSpreadModeChange = onSpreadModeChange,
+            onSnapToggle = onSnapToggle,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ViewModeBottomSheet(
+    currentScrollDirection: ScrollDirection,
+    currentSpreadMode: PageSpreadMode,
+    isSnapEnabled: Boolean,
+    onScrollDirectionChange: (ScrollDirection) -> Unit,
+    onSpreadModeChange: (PageSpreadMode) -> Unit,
+    onSnapToggle: (Boolean) -> Unit,
+    onDismiss: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
@@ -97,96 +151,199 @@ fun ViewModeSheet(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+        ViewModeSheetContent(
+            currentScrollDirection = currentScrollDirection,
+            currentSpreadMode = currentSpreadMode,
+            isSnapEnabled = isSnapEnabled,
+            onScrollDirectionChange = onScrollDirectionChange,
+            onSpreadModeChange = onSpreadModeChange,
+            onSnapToggle = onSnapToggle,
+            showCloseButton = false,
+            onDismiss = onDismiss,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+    }
+}
+
+@Composable
+private fun ViewModeSideSheet(
+    currentScrollDirection: ScrollDirection,
+    currentSpreadMode: PageSpreadMode,
+    isSnapEnabled: Boolean,
+    onScrollDirectionChange: (ScrollDirection) -> Unit,
+    onSpreadModeChange: (PageSpreadMode) -> Unit,
+    onSnapToggle: (Boolean) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
         ) {
-            // Header
-            SheetHeader(
-                icon = Icons.Rounded.ViewDay,
-                title = "View Options",
-                subtitle = "Customize your reading layout",
-                accentColor = AccentPurple
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Scroll Direction Section
-            SectionLabel(text = "Scroll Direction", delay = 0)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ScrollModeChip(
-                    icon = Icons.Rounded.SwapVert,
-                    label = "Vertical",
-                    isSelected = currentScrollDirection == ScrollDirection.VERTICAL,
-                    accentColor = AccentPurple,
-                    onClick = { onScrollDirectionChange(ScrollDirection.VERTICAL) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 50
-                )
-                ScrollModeChip(
-                    icon = Icons.Rounded.SwapHoriz,
-                    label = "Horizontal",
-                    isSelected = currentScrollDirection == ScrollDirection.HORIZONTAL,
-                    accentColor = AccentPurple,
-                    onClick = { onScrollDirectionChange(ScrollDirection.HORIZONTAL) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 100
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Page Layout Section
-            SectionLabel(text = "Page Layout", delay = 150)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                SpreadModeChip(
-                    icon = Icons.Rounded.ViewStream,
-                    label = "Single",
-                    isSelected = currentSpreadMode == PageSpreadMode.NONE,
-                    accentColor = AccentBlue,
-                    onClick = { onSpreadModeChange(PageSpreadMode.NONE) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 200
-                )
-                SpreadModeChip(
-                    icon = Icons.Rounded.ViewModule,
-                    label = "Two-Page",
-                    isSelected = currentSpreadMode == PageSpreadMode.ODD || currentSpreadMode == PageSpreadMode.EVEN,
-                    accentColor = AccentBlue,
-                    onClick = { onSpreadModeChange(PageSpreadMode.ODD) },
-                    modifier = Modifier.weight(1f),
-                    animationDelay = 250
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Snap Toggle
-            SnapToggleRow(
-                isEnabled = isSnapEnabled,
-                onToggle = onSnapToggle,
-                accentColor = AccentTeal,
-                animationDelay = 300
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
             )
         }
+
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                ViewModeSheetContent(
+                    currentScrollDirection = currentScrollDirection,
+                    currentSpreadMode = currentSpreadMode,
+                    isSnapEnabled = isSnapEnabled,
+                    onScrollDirectionChange = onScrollDirectionChange,
+                    onSpreadModeChange = onSpreadModeChange,
+                    onSnapToggle = onSnapToggle,
+                    showCloseButton = true,
+                    onDismiss = onDismiss,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                        .verticalScroll(rememberScrollState())
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ViewModeSheetContent(
+    currentScrollDirection: ScrollDirection,
+    currentSpreadMode: PageSpreadMode,
+    isSnapEnabled: Boolean,
+    onScrollDirectionChange: (ScrollDirection) -> Unit,
+    onSpreadModeChange: (PageSpreadMode) -> Unit,
+    onSnapToggle: (Boolean) -> Unit,
+    showCloseButton: Boolean,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp)
+    ) {
+        // Header
+        SheetHeader(
+            icon = Icons.Rounded.ViewDay,
+            title = "View Options",
+            subtitle = "Customize your reading layout",
+            accentColor = AccentPurple,
+            showCloseButton = showCloseButton,
+            onDismiss = onDismiss
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Scroll Direction Section
+        SectionLabel(text = "Scroll Direction", delay = 0)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ScrollModeChip(
+                icon = Icons.Rounded.SwapVert,
+                label = "Vertical",
+                isSelected = currentScrollDirection == ScrollDirection.VERTICAL,
+                accentColor = AccentPurple,
+                onClick = { onScrollDirectionChange(ScrollDirection.VERTICAL) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 50
+            )
+            ScrollModeChip(
+                icon = Icons.Rounded.SwapHoriz,
+                label = "Horizontal",
+                isSelected = currentScrollDirection == ScrollDirection.HORIZONTAL,
+                accentColor = AccentPurple,
+                onClick = { onScrollDirectionChange(ScrollDirection.HORIZONTAL) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 100
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Page Layout Section
+        SectionLabel(text = "Page Layout", delay = 150)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            SpreadModeChip(
+                icon = Icons.Rounded.ViewStream,
+                label = "Single",
+                isSelected = currentSpreadMode == PageSpreadMode.NONE,
+                accentColor = AccentBlue,
+                onClick = { onSpreadModeChange(PageSpreadMode.NONE) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 200
+            )
+            SpreadModeChip(
+                icon = Icons.Rounded.ViewModule,
+                label = "Two-Page",
+                isSelected = currentSpreadMode == PageSpreadMode.ODD || currentSpreadMode == PageSpreadMode.EVEN,
+                accentColor = AccentBlue,
+                onClick = { onSpreadModeChange(PageSpreadMode.ODD) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 250
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Snap Toggle
+        SnapToggleRow(
+            isEnabled = isSnapEnabled,
+            onToggle = onSnapToggle,
+            accentColor = AccentTeal,
+            animationDelay = 300
+        )
     }
 }
 
@@ -196,6 +353,8 @@ private fun SheetHeader(
     title: String,
     subtitle: String,
     accentColor: Color,
+    showCloseButton: Boolean = false,
+    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -218,7 +377,7 @@ private fun SheetHeader(
 
         Spacer(modifier = Modifier.width(14.dp))
 
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -231,6 +390,16 @@ private fun SheetHeader(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
+        }
+
+        if (showCloseButton) {
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

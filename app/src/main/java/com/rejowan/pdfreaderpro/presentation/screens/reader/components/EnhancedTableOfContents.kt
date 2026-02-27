@@ -1,37 +1,51 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.rounded.AttachFile
 import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Download
-import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SegmentedButton
@@ -53,6 +67,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -74,7 +90,153 @@ fun EnhancedTableOfContents(
     onAttachmentDownload: (AttachmentItem) -> Unit = {},
     onDismiss: () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        TocSideSheet(
+            items = items,
+            attachments = attachments,
+            currentPage = currentPage,
+            onItemClick = onItemClick,
+            onAttachmentOpen = onAttachmentOpen,
+            onAttachmentDownload = onAttachmentDownload,
+            onDismiss = onDismiss
+        )
+    } else {
+        TocBottomSheet(
+            items = items,
+            attachments = attachments,
+            currentPage = currentPage,
+            onItemClick = onItemClick,
+            onAttachmentOpen = onAttachmentOpen,
+            onAttachmentDownload = onAttachmentDownload,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TocBottomSheet(
+    items: List<OutlineItem>,
+    attachments: List<AttachmentItem>,
+    currentPage: Int,
+    onItemClick: (OutlineItem) -> Unit,
+    onAttachmentOpen: (AttachmentItem) -> Unit,
+    onAttachmentDownload: (AttachmentItem) -> Unit,
+    onDismiss: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 2.dp
+    ) {
+        TocSheetContent(
+            items = items,
+            attachments = attachments,
+            currentPage = currentPage,
+            onItemClick = onItemClick,
+            onAttachmentOpen = onAttachmentOpen,
+            onAttachmentDownload = onAttachmentDownload,
+            showCloseButton = false,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@Composable
+private fun TocSideSheet(
+    items: List<OutlineItem>,
+    attachments: List<AttachmentItem>,
+    currentPage: Int,
+    onItemClick: (OutlineItem) -> Unit,
+    onAttachmentOpen: (AttachmentItem) -> Unit,
+    onAttachmentDownload: (AttachmentItem) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
+            )
+        }
+
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                TocSheetContent(
+                    items = items,
+                    attachments = attachments,
+                    currentPage = currentPage,
+                    onItemClick = onItemClick,
+                    onAttachmentOpen = onAttachmentOpen,
+                    onAttachmentDownload = onAttachmentDownload,
+                    showCloseButton = true,
+                    onDismiss = onDismiss,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TocSheetContent(
+    items: List<OutlineItem>,
+    attachments: List<AttachmentItem>,
+    currentPage: Int,
+    onItemClick: (OutlineItem) -> Unit,
+    onAttachmentOpen: (AttachmentItem) -> Unit,
+    onAttachmentDownload: (AttachmentItem) -> Unit,
+    showCloseButton: Boolean,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val listState = rememberLazyListState()
     val attachmentListState = rememberLazyListState()
 
@@ -92,157 +254,157 @@ fun EnhancedTableOfContents(
         }
     }
 
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        containerColor = MaterialTheme.colorScheme.surface,
-        tonalElevation = 2.dp
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
+    Column(modifier = modifier.fillMaxWidth()) {
+        // Header
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Header
-            Row(
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = AccentPurple.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.MenuBook,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .size(22.dp),
+                    tint = AccentPurple
+                )
+            }
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Document Navigation",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                val subtitle = when {
+                    selectedTab == 0 && items.isNotEmpty() -> "${items.size} ${if (items.size == 1) "section" else "sections"}"
+                    selectedTab == 1 && attachments.isNotEmpty() -> "${attachments.size} ${if (attachments.size == 1) "file" else "files"}"
+                    else -> "Browse document structure"
+                }
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            }
+
+            if (showCloseButton) {
+                IconButton(onClick = onDismiss) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = "Close",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+
+        // Segmented tabs (only show if there are attachments)
+        if (hasAttachments) {
+            Spacer(modifier = Modifier.height(12.dp))
+            SingleChoiceSegmentedButtonRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(horizontal = 24.dp)
             ) {
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = AccentPurple.copy(alpha = 0.12f)
+                SegmentedButton(
+                    selected = selectedTab == 0,
+                    onClick = { selectedTab = 0 },
+                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = AccentPurple.copy(alpha = 0.15f),
+                        activeContentColor = AccentPurple
+                    )
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.MenuBook,
-                        contentDescription = null,
+                    Text("Contents")
+                }
+                SegmentedButton(
+                    selected = selectedTab == 1,
+                    onClick = { selectedTab = 1 },
+                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = AccentTeal.copy(alpha = 0.15f),
+                        activeContentColor = AccentTeal
+                    )
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Rounded.AttachFile,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Attachments")
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Content based on selected tab
+        when (selectedTab) {
+            0 -> {
+                if (items.isEmpty()) {
+                    EmptyTocState()
+                } else {
+                    LazyColumn(
+                        state = listState,
                         modifier = Modifier
-                            .padding(10.dp)
-                            .size(22.dp),
-                        tint = AccentPurple
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(14.dp))
-
-                Column {
-                    Text(
-                        text = "Document Navigation",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    val subtitle = when {
-                        selectedTab == 0 && items.isNotEmpty() -> "${items.size} ${if (items.size == 1) "section" else "sections"}"
-                        selectedTab == 1 && attachments.isNotEmpty() -> "${attachments.size} ${if (attachments.size == 1) "file" else "files"}"
-                        else -> "Browse document structure"
-                    }
-                    Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                    )
-                }
-            }
-
-            // Segmented tabs (only show if there are attachments)
-            if (hasAttachments) {
-                Spacer(modifier = Modifier.height(12.dp))
-                SingleChoiceSegmentedButtonRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                ) {
-                    SegmentedButton(
-                        selected = selectedTab == 0,
-                        onClick = { selectedTab = 0 },
-                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-                        colors = SegmentedButtonDefaults.colors(
-                            activeContainerColor = AccentPurple.copy(alpha = 0.15f),
-                            activeContentColor = AccentPurple
-                        )
+                            .fillMaxWidth()
+                            .weight(1f, fill = false)
                     ) {
-                        Text("Contents")
-                    }
-                    SegmentedButton(
-                        selected = selectedTab == 1,
-                        onClick = { selectedTab = 1 },
-                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-                        colors = SegmentedButtonDefaults.colors(
-                            activeContainerColor = AccentTeal.copy(alpha = 0.15f),
-                            activeContentColor = AccentTeal
-                        )
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Rounded.AttachFile,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
+                        itemsIndexed(items) { index, item ->
+                            TocItem(
+                                item = item,
+                                isCurrentSection = item.page == currentPage,
+                                onClick = { onItemClick(item) },
+                                animationDelay = (index * 20).coerceAtMost(200)
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text("Attachments")
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(32.dp))
                         }
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = 24.dp),
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Content based on selected tab
-            when (selectedTab) {
-                0 -> {
-                    if (items.isEmpty()) {
-                        EmptyTocState()
-                    } else {
-                        LazyColumn(
-                            state = listState,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f, fill = false)
-                        ) {
-                            itemsIndexed(items) { index, item ->
-                                TocItem(
-                                    item = item,
-                                    isCurrentSection = item.page == currentPage,
-                                    onClick = { onItemClick(item) },
-                                    animationDelay = (index * 20).coerceAtMost(200)
-                                )
-                            }
-
-                            item {
-                                Spacer(modifier = Modifier.height(32.dp))
-                            }
+            1 -> {
+                if (attachments.isEmpty()) {
+                    EmptyAttachmentsState()
+                } else {
+                    LazyColumn(
+                        state = attachmentListState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f, fill = false)
+                    ) {
+                        itemsIndexed(attachments) { index, attachment ->
+                            AttachmentListItem(
+                                attachment = attachment,
+                                onOpen = { onAttachmentOpen(attachment) },
+                                onDownload = { onAttachmentDownload(attachment) },
+                                animationDelay = (index * 20).coerceAtMost(200)
+                            )
                         }
-                    }
-                }
-                1 -> {
-                    if (attachments.isEmpty()) {
-                        EmptyAttachmentsState()
-                    } else {
-                        LazyColumn(
-                            state = attachmentListState,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f, fill = false)
-                        ) {
-                            itemsIndexed(attachments) { index, attachment ->
-                                AttachmentListItem(
-                                    attachment = attachment,
-                                    onOpen = { onAttachmentOpen(attachment) },
-                                    onDownload = { onAttachmentDownload(attachment) },
-                                    animationDelay = (index * 20).coerceAtMost(200)
-                                )
-                            }
 
-                            item {
-                                Spacer(modifier = Modifier.height(32.dp))
-                            }
+                        item {
+                            Spacer(modifier = Modifier.height(32.dp))
                         }
                     }
                 }

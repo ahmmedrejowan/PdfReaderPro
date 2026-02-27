@@ -1,21 +1,33 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,6 +37,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -47,6 +60,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -68,6 +83,37 @@ fun BookmarksSheet(
     onDeleteBookmark: (BookmarkEntity) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        BookmarksSideSheet(
+            bookmarks = bookmarks,
+            currentPage = currentPage,
+            onBookmarkClick = onBookmarkClick,
+            onDeleteBookmark = onDeleteBookmark,
+            onDismiss = onDismiss
+        )
+    } else {
+        BookmarksBottomSheet(
+            bookmarks = bookmarks,
+            currentPage = currentPage,
+            onBookmarkClick = onBookmarkClick,
+            onDeleteBookmark = onDeleteBookmark,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BookmarksBottomSheet(
+    bookmarks: List<BookmarkEntity>,
+    currentPage: Int,
+    onBookmarkClick: (BookmarkEntity) -> Unit,
+    onDeleteBookmark: (BookmarkEntity) -> Unit,
+    onDismiss: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
@@ -77,78 +123,178 @@ fun BookmarksSheet(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
+        BookmarksSheetContent(
+            bookmarks = bookmarks,
+            currentPage = currentPage,
+            onBookmarkClick = onBookmarkClick,
+            onDeleteBookmark = onDeleteBookmark,
+            showCloseButton = false,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@Composable
+private fun BookmarksSideSheet(
+    bookmarks: List<BookmarkEntity>,
+    currentPage: Int,
+    onBookmarkClick: (BookmarkEntity) -> Unit,
+    onDeleteBookmark: (BookmarkEntity) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
         ) {
-            // Header
-            Row(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = AccentRed.copy(alpha = 0.12f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Bookmark,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .size(22.dp),
-                        tint = AccentRed
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(14.dp))
-
-                Column {
-                    Text(
-                        text = "Bookmarks",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    if (bookmarks.isNotEmpty()) {
-                        Text(
-                            text = "${bookmarks.size} ${if (bookmarks.size == 1) "bookmark" else "bookmarks"}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                        )
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
                     }
+            )
+        }
+
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                BookmarksSheetContent(
+                    bookmarks = bookmarks,
+                    currentPage = currentPage,
+                    onBookmarkClick = onBookmarkClick,
+                    onDeleteBookmark = onDeleteBookmark,
+                    showCloseButton = true,
+                    onDismiss = onDismiss,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BookmarksSheetContent(
+    bookmarks: List<BookmarkEntity>,
+    currentPage: Int,
+    onBookmarkClick: (BookmarkEntity) -> Unit,
+    onDeleteBookmark: (BookmarkEntity) -> Unit,
+    showCloseButton: Boolean,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        // Header
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = AccentRed.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Bookmark,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .size(22.dp),
+                    tint = AccentRed
+                )
+            }
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Bookmarks",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                if (bookmarks.isNotEmpty()) {
+                    Text(
+                        text = "${bookmarks.size} ${if (bookmarks.size == 1) "bookmark" else "bookmarks"}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = 24.dp),
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+            if (showCloseButton) {
+                IconButton(onClick = onDismiss) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = "Close",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
 
-            if (bookmarks.isEmpty()) {
-                EmptyBookmarksState()
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f, fill = false)
-                ) {
-                    itemsIndexed(bookmarks) { index, bookmark ->
-                        BookmarkItem(
-                            bookmark = bookmark,
-                            isCurrentPage = bookmark.pageNumber == currentPage,
-                            onClick = { onBookmarkClick(bookmark) },
-                            onDelete = { onDeleteBookmark(bookmark) },
-                            animationDelay = (index * 30).coerceAtMost(200)
-                        )
-                    }
+        Spacer(modifier = Modifier.height(12.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
 
-                    item {
-                        Spacer(modifier = Modifier.height(32.dp))
-                    }
+        if (bookmarks.isEmpty()) {
+            EmptyBookmarksState()
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f, fill = false)
+            ) {
+                itemsIndexed(bookmarks) { index, bookmark ->
+                    BookmarkItem(
+                        bookmark = bookmark,
+                        isCurrentPage = bookmark.pageNumber == currentPage,
+                        onClick = { onBookmarkClick(bookmark) },
+                        onDelete = { onDeleteBookmark(bookmark) },
+                        animationDelay = (index * 30).coerceAtMost(200)
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }
