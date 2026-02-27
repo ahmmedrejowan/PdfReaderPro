@@ -255,6 +255,8 @@ class ReaderViewModel(
             is ReaderAction.HideViewModeSheet -> _state.update { it.copy(isViewModeSheetVisible = false) }
             is ReaderAction.ShowZoomSheet -> _state.update { it.copy(isZoomSheetVisible = true) }
             is ReaderAction.HideZoomSheet -> _state.update { it.copy(isZoomSheetVisible = false) }
+            is ReaderAction.ShowDisplaySheet -> _state.update { it.copy(isDisplaySheetVisible = true) }
+            is ReaderAction.HideDisplaySheet -> _state.update { it.copy(isDisplaySheetVisible = false) }
             is ReaderAction.ShowBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = true) }
             is ReaderAction.HideBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = false) }
             is ReaderAction.ShowMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = true) }
@@ -283,6 +285,8 @@ class ReaderViewModel(
                 pdfViewer?.snapPage = action.enabled
             }
             is ReaderAction.SetKeepScreenOn -> _state.update { it.copy(keepScreenOn = action.enabled) }
+            is ReaderAction.SetScreenOrientation -> _state.update { it.copy(screenOrientation = action.orientation) }
+            is ReaderAction.SetReadingTheme -> _state.update { it.copy(readingTheme = action.theme) }
 
             is ReaderAction.Search -> {
                 _state.update { it.copy(searchQuery = action.query, isSearching = true) }

@@ -19,7 +19,7 @@ import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.material.icons.automirrored.rounded.RotateRight
+import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.ViewDay
 import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material3.Icon
@@ -51,7 +51,7 @@ fun FloatingControlBar(
     onTocClick: () -> Unit,
     onViewClick: () -> Unit,
     onZoomClick: () -> Unit,
-    onRotateClick: () -> Unit,
+    onDisplayClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -104,11 +104,11 @@ fun FloatingControlBar(
                 isDarkMode = isDarkMode
             )
 
-            // Rotate
+            // Display Settings (Theme, Brightness)
             ControlBarButton(
-                icon = Icons.AutoMirrored.Rounded.RotateRight,
-                contentDescription = "Rotate",
-                onClick = onRotateClick,
+                icon = Icons.Rounded.Palette,
+                contentDescription = "Display Settings",
+                onClick = onDisplayClick,
                 tint = AccentAmber,
                 isDarkMode = isDarkMode
             )

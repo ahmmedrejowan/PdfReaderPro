@@ -63,8 +63,15 @@ data class ReaderState(
     // Bottom bar sheets
     val isViewModeSheetVisible: Boolean = false,
     val isZoomSheetVisible: Boolean = false,
+    val isDisplaySheetVisible: Boolean = false,
     val isBookmarksSheetVisible: Boolean = false,
     val isMoreOptionsSheetVisible: Boolean = false,
+
+    // Screen orientation
+    val screenOrientation: ScreenOrientation = ScreenOrientation.AUTO,
+
+    // Reading theme
+    val readingTheme: ReadingTheme = ReadingTheme.LIGHT,
 
     // PDF info dialog
     val isInfoDialogVisible: Boolean = false,
@@ -100,6 +107,24 @@ enum class SpreadMode {
     NONE,
     ODD,
     EVEN
+}
+
+/**
+ * Screen orientation options.
+ */
+enum class ScreenOrientation {
+    AUTO,
+    PORTRAIT,
+    LANDSCAPE
+}
+
+/**
+ * Reading theme options.
+ */
+enum class ReadingTheme {
+    LIGHT,
+    DARK,
+    SEPIA
 }
 
 /**
@@ -151,6 +176,8 @@ sealed class ReaderAction {
     data object HideViewModeSheet : ReaderAction()
     data object ShowZoomSheet : ReaderAction()
     data object HideZoomSheet : ReaderAction()
+    data object ShowDisplaySheet : ReaderAction()
+    data object HideDisplaySheet : ReaderAction()
     data object ShowBookmarksSheet : ReaderAction()
     data object HideBookmarksSheet : ReaderAction()
     data object ShowMoreOptionsSheet : ReaderAction()
@@ -162,6 +189,8 @@ sealed class ReaderAction {
     data class SetSpreadMode(val mode: SpreadMode) : ReaderAction()
     data class SetSnapEnabled(val enabled: Boolean) : ReaderAction()
     data class SetKeepScreenOn(val enabled: Boolean) : ReaderAction()
+    data class SetScreenOrientation(val orientation: ScreenOrientation) : ReaderAction()
+    data class SetReadingTheme(val theme: ReadingTheme) : ReaderAction()
 
     // Search
     data class Search(val query: String) : ReaderAction()

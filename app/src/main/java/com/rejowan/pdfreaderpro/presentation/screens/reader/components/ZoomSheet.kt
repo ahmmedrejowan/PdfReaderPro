@@ -4,8 +4,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -21,13 +19,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.RotateLeft
-import androidx.compose.material.icons.automirrored.rounded.RotateRight
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.FitScreen
-import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.Fullscreen
+import androidx.compose.material.icons.rounded.PhoneAndroid
+import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.ScreenLockRotation
+import androidx.compose.material.icons.rounded.ScreenRotation
+import androidx.compose.material.icons.rounded.StayCurrentLandscape
+import androidx.compose.material.icons.rounded.StayCurrentPortrait
 import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material.icons.rounded.ZoomOutMap
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,6 +54,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ScreenOrientation
 import kotlinx.coroutines.delay
 
 // Design colors
@@ -71,12 +72,11 @@ enum class ZoomPreset {
 @Composable
 fun ZoomSheet(
     currentZoom: Float,
-    currentRotation: Int,
+    currentOrientation: ScreenOrientation,
     onZoomIn: () -> Unit,
     onZoomOut: () -> Unit,
     onZoomPreset: (ZoomPreset) -> Unit,
-    onRotateClockwise: () -> Unit,
-    onRotateCounterClockwise: () -> Unit,
+    onOrientationChange: (ScreenOrientation) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -121,7 +121,7 @@ fun ZoomSheet(
                 ZoomPresetChip(
                     icon = Icons.Rounded.FitScreen,
                     label = "Fit Page",
-                    isSelected = false, // Could track active preset if needed
+                    isSelected = false,
                     accentColor = AccentTeal,
                     onClick = { onZoomPreset(ZoomPreset.FIT_PAGE) },
                     modifier = Modifier.weight(1f),
@@ -151,15 +151,14 @@ fun ZoomSheet(
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Rotation Section
-            SectionLabel(text = "Rotation", delay = 300)
+            // Screen Orientation Section
+            SectionLabel(text = "Screen Orientation", delay = 300)
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            RotationControlsRow(
-                currentRotation = currentRotation,
-                onRotateClockwise = onRotateClockwise,
-                onRotateCounterClockwise = onRotateCounterClockwise,
+            OrientationControlsRow(
+                currentOrientation = currentOrientation,
+                onOrientationChange = onOrientationChange,
                 animationDelay = 350
             )
         }
@@ -192,7 +191,7 @@ private fun ZoomSheetHeader(
 
         Column {
             Text(
-                text = "Zoom & Rotation",
+                text = "Zoom & Display",
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -414,10 +413,9 @@ private fun ZoomPresetChip(
 }
 
 @Composable
-private fun RotationControlsRow(
-    currentRotation: Int,
-    onRotateClockwise: () -> Unit,
-    onRotateCounterClockwise: () -> Unit,
+private fun OrientationControlsRow(
+    currentOrientation: ScreenOrientation,
+    onOrientationChange: (ScreenOrientation) -> Unit,
     animationDelay: Int,
     modifier: Modifier = Modifier
 ) {
@@ -431,7 +429,7 @@ private fun RotationControlsRow(
     val scale by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0.95f,
         animationSpec = tween(250, easing = FastOutSlowInEasing),
-        label = "rotation controls scale"
+        label = "orientation controls scale"
     )
 
     Surface(
@@ -444,38 +442,31 @@ private fun RotationControlsRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 12.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            // Counter-clockwise button
-            RotationButton(
-                icon = Icons.AutoMirrored.Rounded.RotateLeft,
-                label = "CCW",
-                onClick = onRotateCounterClockwise,
+            OrientationButton(
+                icon = Icons.Rounded.ScreenRotation,
+                label = "Auto",
+                isSelected = currentOrientation == ScreenOrientation.AUTO,
+                onClick = { onOrientationChange(ScreenOrientation.AUTO) },
                 accentColor = AccentAmber
             )
 
-            // Current rotation display
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = AccentAmber.copy(alpha = 0.12f)
-            ) {
-                Text(
-                    text = "${currentRotation}°",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = AccentAmber,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
-                )
-            }
+            OrientationButton(
+                icon = Icons.Rounded.StayCurrentPortrait,
+                label = "Portrait",
+                isSelected = currentOrientation == ScreenOrientation.PORTRAIT,
+                onClick = { onOrientationChange(ScreenOrientation.PORTRAIT) },
+                accentColor = AccentAmber
+            )
 
-            // Clockwise button
-            RotationButton(
-                icon = Icons.AutoMirrored.Rounded.RotateRight,
-                label = "CW",
-                onClick = onRotateClockwise,
+            OrientationButton(
+                icon = Icons.Rounded.StayCurrentLandscape,
+                label = "Landscape",
+                isSelected = currentOrientation == ScreenOrientation.LANDSCAPE,
+                onClick = { onOrientationChange(ScreenOrientation.LANDSCAPE) },
                 accentColor = AccentAmber
             )
         }
@@ -483,13 +474,26 @@ private fun RotationControlsRow(
 }
 
 @Composable
-private fun RotationButton(
+private fun OrientationButton(
     icon: ImageVector,
     label: String,
+    isSelected: Boolean,
     onClick: () -> Unit,
     accentColor: Color,
     modifier: Modifier = Modifier
 ) {
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.15f) else Color.Transparent,
+        animationSpec = tween(200),
+        label = "orientation bg"
+    )
+
+    val contentColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = tween(200),
+        label = "orientation content"
+    )
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -503,7 +507,7 @@ private fun RotationButton(
     ) {
         Surface(
             shape = CircleShape,
-            color = accentColor.copy(alpha = 0.12f),
+            color = backgroundColor,
             modifier = Modifier.size(44.dp)
         ) {
             Box(
@@ -513,7 +517,7 @@ private fun RotationButton(
                 Icon(
                     imageVector = icon,
                     contentDescription = label,
-                    tint = accentColor,
+                    tint = contentColor,
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -523,8 +527,10 @@ private fun RotationButton(
 
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+            ),
+            color = contentColor
         )
     }
 }

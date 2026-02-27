@@ -62,6 +62,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ViewModeS
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageSpreadMode
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomPreset
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DisplaySheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.MoreOptionsSheet
 import org.koin.androidx.compose.koinViewModel
 
@@ -154,18 +155,13 @@ fun ReaderScreen(
         }
     }
 
-    // Handle rotation lock
-    DisposableEffect(state.isRotationLocked) {
+    // Handle screen orientation
+    DisposableEffect(state.screenOrientation) {
         activity?.let {
-            it.requestedOrientation = if (state.isRotationLocked) {
-                when (it.resources.configuration.orientation) {
-                    android.content.res.Configuration.ORIENTATION_LANDSCAPE ->
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                    else ->
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-                }
-            } else {
-                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            it.requestedOrientation = when (state.screenOrientation) {
+                ScreenOrientation.AUTO -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                ScreenOrientation.PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                ScreenOrientation.LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             }
         }
 
@@ -364,7 +360,7 @@ fun ReaderScreen(
                         onTocClick = { viewModel.onAction(ReaderAction.ShowTableOfContents) },
                         onViewClick = { viewModel.onAction(ReaderAction.ShowViewModeSheet) },
                         onZoomClick = { viewModel.onAction(ReaderAction.ShowZoomSheet) },
-                        onRotateClick = { viewModel.onAction(ReaderAction.RotateClockwise) },
+                        onDisplayClick = { viewModel.onAction(ReaderAction.ShowDisplaySheet) },
                         onBookmarkClick = { viewModel.onAction(ReaderAction.TogglePageBookmark) },
                         onMoreClick = { viewModel.onAction(ReaderAction.ShowMoreOptionsSheet) },
                         isDarkMode = isDarkMode
@@ -472,7 +468,7 @@ fun ReaderScreen(
     if (state.isZoomSheetVisible) {
         ZoomSheet(
             currentZoom = state.zoom,
-            currentRotation = state.pageRotation,
+            currentOrientation = state.screenOrientation,
             onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
             onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
             onZoomPreset = { preset ->
@@ -482,9 +478,23 @@ fun ReaderScreen(
                     ZoomPreset.ACTUAL_SIZE -> viewModel.onAction(ReaderAction.ZoomActualSize)
                 }
             },
-            onRotateClockwise = { viewModel.onAction(ReaderAction.RotateClockwise) },
-            onRotateCounterClockwise = { viewModel.onAction(ReaderAction.RotateCounterClockwise) },
+            onOrientationChange = { orientation ->
+                viewModel.onAction(ReaderAction.SetScreenOrientation(orientation))
+            },
             onDismiss = { viewModel.onAction(ReaderAction.HideZoomSheet) }
+        )
+    }
+
+    // Display Sheet
+    if (state.isDisplaySheetVisible) {
+        DisplaySheet(
+            brightness = state.brightness,
+            keepScreenOn = state.keepScreenOn,
+            currentTheme = state.readingTheme,
+            onBrightnessChange = { viewModel.onAction(ReaderAction.SetBrightness(it)) },
+            onKeepScreenOnChange = { viewModel.onAction(ReaderAction.SetKeepScreenOn(it)) },
+            onThemeChange = { viewModel.onAction(ReaderAction.SetReadingTheme(it)) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideDisplaySheet) }
         )
     }
 
@@ -493,7 +503,10 @@ fun ReaderScreen(
         MoreOptionsSheet(
             onBookmarksClick = { viewModel.onAction(ReaderAction.ShowBookmarksSheet) },
             onAutoScrollClick = { /* TODO: Implement auto-scroll */ },
-            onReadingThemeClick = { /* TODO: Implement reading theme */ },
+            onReadingThemeClick = {
+                viewModel.onAction(ReaderAction.HideMoreOptionsSheet)
+                viewModel.onAction(ReaderAction.ShowDisplaySheet)
+            },
             onDisplaySettingsClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) },
             onDismiss = { viewModel.onAction(ReaderAction.HideMoreOptionsSheet) }
         )
