@@ -91,8 +91,8 @@ fun PdfInfoDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+                .padding(horizontal = 20.dp, vertical = 4.dp)
+                .padding(bottom = 24.dp)
         ) {
             // Header
             Row(
@@ -100,20 +100,20 @@ fun PdfInfoDialog(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(10.dp),
                     color = AccentPurple.copy(alpha = 0.12f)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Description,
                         contentDescription = null,
                         modifier = Modifier
-                            .padding(10.dp)
-                            .size(22.dp),
+                            .padding(8.dp)
+                            .size(20.dp),
                         tint = AccentPurple
                     )
                 }
 
-                Spacer(modifier = Modifier.width(14.dp))
+                Spacer(modifier = Modifier.width(12.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -133,12 +133,12 @@ fun PdfInfoDialog(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             // Quick Stats Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 StatChip(
                     label = "${info.pageCount} pages",
@@ -161,7 +161,7 @@ fun PdfInfoDialog(
 
             // Document Section
             if (!info.subject.isNullOrBlank() || !info.keywords.isNullOrBlank() || !info.language.isNullOrBlank()) {
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(14.dp))
                 InfoSection(
                     title = "Document",
                     icon = Icons.Rounded.Info,
@@ -181,7 +181,7 @@ fun PdfInfoDialog(
 
             // Author Section
             if (!info.author.isNullOrBlank() || !info.creator.isNullOrBlank() || !info.producer.isNullOrBlank()) {
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(14.dp))
                 InfoSection(
                     title = "Author & Creator",
                     icon = Icons.Rounded.Person,
@@ -214,7 +214,7 @@ fun PdfInfoDialog(
 
             // Security & Features Section
             if (info.isEncrypted || info.hasForms || info.hasSignatures || info.hasXfa || info.isLinearized) {
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(14.dp))
                 InfoSection(
                     title = "Security & Features",
                     icon = Icons.Rounded.Lock,
@@ -222,8 +222,8 @@ fun PdfInfoDialog(
                 ) {
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         if (info.isEncrypted) {
                             FeatureTag(
@@ -275,9 +275,9 @@ private fun StatChip(
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(8.dp))
             .background(color.copy(alpha = 0.12f))
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+            .padding(horizontal = 10.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -300,15 +300,15 @@ private fun InfoSection(
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = 6.dp)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = accentColor,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(16.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium.copy(
@@ -318,13 +318,13 @@ private fun InfoSection(
             )
         }
         Surface(
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(10.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(14.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 content()
             }
@@ -346,7 +346,7 @@ private fun InfoItem(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = value,
             style = MaterialTheme.typography.bodySmall.copy(
