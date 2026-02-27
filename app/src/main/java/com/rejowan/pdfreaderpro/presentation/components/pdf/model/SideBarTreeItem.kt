@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
  *
  * @property title The title of the item.
  * @property dest The destination of the item. The link of outline item or attachment.
+ * @property page The page number (0-based index) for outline items.
  * @property children A list of sub-items, for building a tree structure.
  * @property id A unique identifier for the item.
  */
@@ -14,6 +15,7 @@ import kotlinx.serialization.Serializable
 data class SideBarTreeItem(
     val title: String?,
     val dest: String?,
+    val page: Int = 0,
     val children: List<SideBarTreeItem>,
     val id: String,
 )

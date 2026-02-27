@@ -932,14 +932,69 @@ function getInnerTextOfPage(pageNumber) {
 // #endregion
 
 // #region sidebar functions
-function loadOutline() {
-    const outlineDiv = $("#outlineView");
-    const outline = [];
+async function loadOutline() {
+    const pdfDocument = PDFViewerApplication.pdfDocument;
+    if (!pdfDocument) {
+        JWI.onOutlineLoaded(JSON.stringify([]));
+        return;
+    }
 
-    iterateTreeElements(outline, outlineDiv.children, 'outlineItem');
+    try {
+        const rawOutline = await pdfDocument.getOutline();
+        if (!rawOutline || rawOutline.length === 0) {
+            JWI.onOutlineLoaded(JSON.stringify([]));
+            return;
+        }
 
-    console.log(outline)
-    JWI.onOutlineLoaded(JSON.stringify(outline));
+        const outline = await processOutlineItems(rawOutline, pdfDocument, 'outlineItem');
+        console.log(outline);
+        JWI.onOutlineLoaded(JSON.stringify(outline));
+    } catch (e) {
+        console.error('Error loading outline:', e);
+        JWI.onOutlineLoaded(JSON.stringify([]));
+    }
+}
+
+async function processOutlineItems(items, pdfDocument, idPrefix) {
+    const result = [];
+    for (const item of items) {
+        let pageNumber = 0;
+
+        // Resolve destination to page number
+        if (item.dest) {
+            try {
+                let dest = item.dest;
+                // If dest is a string (named destination), resolve it
+                if (typeof dest === 'string') {
+                    dest = await pdfDocument.getDestination(dest);
+                }
+                // dest is now an array, first element is the page reference
+                if (dest && dest[0]) {
+                    const pageIndex = await pdfDocument.getPageIndex(dest[0]);
+                    pageNumber = pageIndex; // 0-based index
+                }
+            } catch (e) {
+                console.warn('Could not resolve destination for:', item.title, e);
+            }
+        }
+
+        const id = `${idPrefix}-${Math.random().toString(36).substring(2, 9)}`;
+        const outlineItem = {
+            title: item.title || '',
+            dest: typeof item.dest === 'string' ? item.dest : JSON.stringify(item.dest),
+            page: pageNumber,
+            children: [],
+            id: id,
+        };
+
+        // Process children recursively
+        if (item.items && item.items.length > 0) {
+            outlineItem.children = await processOutlineItems(item.items, pdfDocument, idPrefix);
+        }
+
+        result.push(outlineItem);
+    }
+    return result;
 }
 
 function loadAttachments() {
@@ -964,6 +1019,7 @@ function iterateTreeElements(outlineArray, elements, idPrefix) {
             const outlineItem = {
                 title: title,
                 dest: dest,
+                page: 0,
                 children: [],
                 id: linkElement.id,
             };
