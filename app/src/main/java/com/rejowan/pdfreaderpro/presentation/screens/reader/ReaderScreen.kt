@@ -42,7 +42,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.net.toUri
+import androidx.core.content.FileProvider
+import java.io.File
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -69,6 +70,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.Bookmarks
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.MoreOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrollSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrollOverlay
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.TopBarMenuPanel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -221,12 +223,22 @@ fun ReaderScreen(
                     navController.popBackStack()
                 }
                 is ReaderEvent.ShareDocument -> {
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                        type = "application/pdf"
-                        putExtra(Intent.EXTRA_STREAM, path.toUri())
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    try {
+                        val file = File(path)
+                        val uri = FileProvider.getUriForFile(
+                            context,
+                            "${context.packageName}.provider",
+                            file
+                        )
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "application/pdf"
+                            putExtra(Intent.EXTRA_STREAM, uri)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+                    } catch (e: Exception) {
+                        snackbarHostState.showSnackbar("Failed to share: ${e.message}")
                     }
-                    context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
                 }
                 is ReaderEvent.Error -> {
                     snackbarHostState.showSnackbar(event.message)
@@ -325,13 +337,7 @@ fun ReaderScreen(
                     isVisible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
                     onBackClick = { navController.popBackStack() },
                     onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
-                    onShareClick = { viewModel.onAction(ReaderAction.ShareDocument) },
-                    onPrintClick = {
-                        viewModel.printDocument()
-                    },
-                    onInfoClick = { viewModel.onAction(ReaderAction.ShowInfoDialog) },
-                    onFullScreenClick = { viewModel.onAction(ReaderAction.ToggleFullScreen) },
-                    onDeleteClick = { viewModel.onAction(ReaderAction.ShowDeleteDialog) },
+                    onMenuClick = { viewModel.onAction(ReaderAction.ShowTopBarMenu) },
                     isDarkMode = isDarkMode,
                     modifier = Modifier.align(Alignment.TopCenter)
                 )
@@ -611,4 +617,18 @@ fun ReaderScreen(
                 .padding(bottom = 16.dp)
         )
     }
+
+    // Top bar menu panel (slide from right)
+    TopBarMenuPanel(
+        isVisible = state.isTopBarMenuVisible,
+        isFavorite = state.isFavorite,
+        onInfoClick = { viewModel.onAction(ReaderAction.ShowInfoDialog) },
+        onShareClick = { viewModel.onAction(ReaderAction.ShareDocument) },
+        onPrintClick = { viewModel.onAction(ReaderAction.PrintDocument) },
+        onOpenWithClick = { viewModel.onAction(ReaderAction.OpenWithExternal) },
+        onSaveClick = { viewModel.onAction(ReaderAction.SaveDocument) },
+        onFavoriteClick = { viewModel.onAction(ReaderAction.ToggleFavorite) },
+        onDeleteClick = { viewModel.onAction(ReaderAction.ShowDeleteDialog) },
+        onDismiss = { viewModel.onAction(ReaderAction.HideTopBarMenu) }
+    )
 }

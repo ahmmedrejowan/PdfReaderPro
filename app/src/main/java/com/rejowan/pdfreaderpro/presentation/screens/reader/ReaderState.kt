@@ -98,7 +98,13 @@ data class ReaderState(
     val isAutoScrollActive: Boolean = false,
     val isAutoScrollPaused: Boolean = false,
     val autoScrollSpeed: Float = 50f, // pixels per second
-    val isAutoScrollSheetVisible: Boolean = false
+    val isAutoScrollSheetVisible: Boolean = false,
+
+    // Favorite status
+    val isFavorite: Boolean = false,
+
+    // Top bar menu
+    val isTopBarMenuVisible: Boolean = false
 ) {
     val pageLabel: String
         get() = "${currentPage + 1} / $totalPages"
@@ -217,7 +223,14 @@ sealed class ReaderAction {
     // Document actions
     data object ToggleFavorite : ReaderAction()
     data object ShareDocument : ReaderAction()
+    data object PrintDocument : ReaderAction()
+    data object OpenWithExternal : ReaderAction()
+    data object SaveDocument : ReaderAction()
     data object CloseDocument : ReaderAction()
+
+    // Top bar menu
+    data object ShowTopBarMenu : ReaderAction()
+    data object HideTopBarMenu : ReaderAction()
 
     // PDF info dialog
     data object ShowInfoDialog : ReaderAction()

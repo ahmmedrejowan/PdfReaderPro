@@ -19,24 +19,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Fullscreen
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Print
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,11 +47,7 @@ fun ReaderTopBar(
     isVisible: Boolean,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onShareClick: () -> Unit,
-    onPrintClick: () -> Unit,
-    onInfoClick: () -> Unit,
-    onFullScreenClick: () -> Unit,
-    onDeleteClick: () -> Unit,
+    onMenuClick: () -> Unit,
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
 ) {
@@ -105,11 +90,7 @@ fun ReaderTopBar(
                 title = title,
                 onBackClick = onBackClick,
                 onSearchClick = onSearchClick,
-                onShareClick = onShareClick,
-                onPrintClick = onPrintClick,
-                onInfoClick = onInfoClick,
-                onFullScreenClick = onFullScreenClick,
-                onDeleteClick = onDeleteClick,
+                onMenuClick = onMenuClick,
                 isDarkMode = isDarkMode
             )
         }
@@ -121,17 +102,11 @@ private fun TopBarContent(
     title: String,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onShareClick: () -> Unit,
-    onPrintClick: () -> Unit,
-    onInfoClick: () -> Unit,
-    onFullScreenClick: () -> Unit,
-    onDeleteClick: () -> Unit,
+    onMenuClick: () -> Unit,
     isDarkMode: Boolean
 ) {
     val surfaceColor = if (isDarkMode) SurfaceDark.copy(alpha = 0.95f) else SurfaceLight.copy(alpha = 0.95f)
     val contentColor = if (isDarkMode) Color.White else Color.Black
-
-    var showMenu by remember { mutableStateOf(false) }
 
     Surface(
         modifier = Modifier
@@ -182,97 +157,13 @@ private fun TopBarContent(
                 contentColor = contentColor
             )
 
-            // More button with dropdown
-            Box {
-                TopBarIconButton(
-                    icon = Icons.Rounded.MoreVert,
-                    contentDescription = "More options",
-                    onClick = { showMenu = true },
-                    contentColor = contentColor
-                )
-
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false }
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("Share") },
-                        onClick = {
-                            showMenu = false
-                            onShareClick()
-                        },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Outlined.Share,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Print") },
-                        onClick = {
-                            showMenu = false
-                            onPrintClick()
-                        },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Outlined.Print,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Full Screen") },
-                        onClick = {
-                            showMenu = false
-                            onFullScreenClick()
-                        },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Outlined.Fullscreen,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("PDF Info") },
-                        onClick = {
-                            showMenu = false
-                            onInfoClick()
-                        },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Outlined.Info,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                "Delete",
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        },
-                        onClick = {
-                            showMenu = false
-                            onDeleteClick()
-                        },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Outlined.Delete,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp),
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    )
-                }
-            }
+            // More button - opens slide panel
+            TopBarIconButton(
+                icon = Icons.Rounded.MoreVert,
+                contentDescription = "More options",
+                onClick = onMenuClick,
+                contentColor = contentColor
+            )
         }
     }
 }

@@ -74,6 +74,12 @@ class ReaderViewModel(
                 }
             }
             .launchIn(viewModelScope)
+
+        // Load favorite state
+        viewModelScope.launch {
+            val isFav = favoriteRepository.isFavorite(pdfPath)
+            _state.update { it.copy(isFavorite = isFav) }
+        }
     }
 
     fun setPdfViewer(viewer: PdfViewer) {
@@ -392,7 +398,14 @@ class ReaderViewModel(
 
             is ReaderAction.ToggleFavorite -> toggleFavorite()
             is ReaderAction.ShareDocument -> viewModelScope.launch { _events.send(ReaderEvent.ShareDocument) }
+            is ReaderAction.PrintDocument -> printDocument()
+            is ReaderAction.OpenWithExternal -> openWithExternal()
+            is ReaderAction.SaveDocument -> saveDocument()
             is ReaderAction.CloseDocument -> viewModelScope.launch { _events.send(ReaderEvent.DocumentClosed) }
+
+            // Top bar menu
+            is ReaderAction.ShowTopBarMenu -> _state.update { it.copy(isTopBarMenuVisible = true) }
+            is ReaderAction.HideTopBarMenu -> _state.update { it.copy(isTopBarMenuVisible = false) }
 
             is ReaderAction.ShowInfoDialog -> _state.update { it.copy(isInfoDialogVisible = true) }
             is ReaderAction.HideInfoDialog -> _state.update { it.copy(isInfoDialogVisible = false) }
@@ -536,6 +549,58 @@ class ReaderViewModel(
                 parentFolder = file.parent ?: ""
             )
             favoriteRepository.toggleFavorite(pdfFile)
+            // Update state
+            val isFav = favoriteRepository.isFavorite(pdfPath)
+            _state.update { it.copy(isFavorite = isFav) }
+        }
+    }
+
+    private fun openWithExternal() {
+        viewModelScope.launch {
+            try {
+                val file = File(pdfPath)
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    applicationContext,
+                    "${applicationContext.packageName}.provider",
+                    file
+                )
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "application/pdf")
+                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                // Create chooser to let user pick the app
+                val chooser = android.content.Intent.createChooser(intent, "Open with")
+                chooser.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                applicationContext.startActivity(chooser)
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to open with external app: ${e.message}"))
+            }
+        }
+    }
+
+    private fun saveDocument() {
+        viewModelScope.launch {
+            try {
+                val sourceFile = File(pdfPath)
+                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val destFile = File(downloadsDir, sourceFile.name)
+
+                // If file already exists, add number suffix
+                var finalFile = destFile
+                var counter = 1
+                while (finalFile.exists()) {
+                    val nameWithoutExt = sourceFile.nameWithoutExtension
+                    val ext = sourceFile.extension
+                    finalFile = File(downloadsDir, "${nameWithoutExt}_$counter.$ext")
+                    counter++
+                }
+
+                sourceFile.copyTo(finalFile)
+                _events.send(ReaderEvent.ShowMessage("Saved to Downloads: ${finalFile.name}"))
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to save document: ${e.message}"))
+            }
         }
     }
 
