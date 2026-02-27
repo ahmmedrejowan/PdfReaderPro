@@ -244,6 +244,16 @@ class ReaderViewModel(
             is ReaderAction.ShowSettingsPanel -> _state.update { it.copy(isSettingsPanelVisible = true) }
             is ReaderAction.HideSettingsPanel -> _state.update { it.copy(isSettingsPanelVisible = false) }
 
+            // Bottom bar sheets
+            is ReaderAction.ShowViewModeSheet -> _state.update { it.copy(isViewModeSheetVisible = true) }
+            is ReaderAction.HideViewModeSheet -> _state.update { it.copy(isViewModeSheetVisible = false) }
+            is ReaderAction.ShowZoomSheet -> _state.update { it.copy(isZoomSheetVisible = true) }
+            is ReaderAction.HideZoomSheet -> _state.update { it.copy(isZoomSheetVisible = false) }
+            is ReaderAction.ShowBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = true) }
+            is ReaderAction.HideBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = false) }
+            is ReaderAction.ShowMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = true) }
+            is ReaderAction.HideMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = false) }
+
             is ReaderAction.SetBrightness -> _state.update { it.copy(brightness = action.brightness) }
             is ReaderAction.SetScrollDirection -> {
                 _state.update { it.copy(scrollDirection = action.direction) }
@@ -289,6 +299,22 @@ class ReaderViewModel(
             is ReaderAction.ConfirmDelete -> deleteDocument()
 
             is ReaderAction.ToggleRotationLock -> _state.update { it.copy(isRotationLocked = !it.isRotationLocked) }
+
+            // Page rotation
+            is ReaderAction.RotateClockwise -> {
+                pdfViewer?.rotateClockWise()
+                _state.update { it.copy(pageRotation = (it.pageRotation + 90) % 360) }
+            }
+            is ReaderAction.RotateCounterClockwise -> {
+                pdfViewer?.rotateCounterClockWise()
+                _state.update { it.copy(pageRotation = (it.pageRotation - 90 + 360) % 360) }
+            }
+
+            // Bookmark current page
+            is ReaderAction.TogglePageBookmark -> {
+                _state.update { it.copy(isCurrentPageBookmarked = !it.isCurrentPageBookmarked) }
+                // TODO: Implement actual bookmark persistence
+            }
         }
     }
 

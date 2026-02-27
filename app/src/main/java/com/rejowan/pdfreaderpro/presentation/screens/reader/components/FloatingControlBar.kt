@@ -1,6 +1,12 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,202 +15,201 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.Toc
-import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
-import androidx.compose.material.icons.rounded.Remove
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.SwapHoriz
-import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.MoreHoriz
+import androidx.compose.material.icons.automirrored.rounded.RotateRight
+import androidx.compose.material.icons.rounded.ViewDay
+import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
 
+// Design system colors
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
+private val AccentTeal = Color(0xFF4DB6AC)
+private val AccentAmber = Color(0xFFFFB74D)
 private val SurfaceDark = Color(0xFF1C1C1E)
 private val SurfaceLight = Color(0xFFF5F5F7)
 
 @Composable
 fun FloatingControlBar(
-    currentZoom: Float,
-    scrollDirection: ScrollDirection,
     isBookmarked: Boolean,
-    onZoomIn: () -> Unit,
-    onZoomOut: () -> Unit,
-    onResetZoom: () -> Unit,
-    onScrollDirectionToggle: () -> Unit,
     onTocClick: () -> Unit,
+    onViewClick: () -> Unit,
+    onZoomClick: () -> Unit,
+    onRotateClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onSettingsClick: () -> Unit,
+    onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
 ) {
     val surfaceColor = if (isDarkMode) SurfaceDark.copy(alpha = 0.95f) else SurfaceLight.copy(alpha = 0.95f)
     val contentColor = if (isDarkMode) Color.White else Color.Black
-    val dividerColor = if (isDarkMode) Color.White.copy(alpha = 0.1f) else Color.Black.copy(alpha = 0.1f)
 
     Surface(
         modifier = modifier
             .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(28.dp),
-                ambientColor = AccentPurple.copy(alpha = 0.1f),
-                spotColor = AccentPurple.copy(alpha = 0.2f)
+                elevation = 20.dp,
+                shape = RoundedCornerShape(32.dp),
+                ambientColor = AccentPurple.copy(alpha = 0.15f),
+                spotColor = AccentPurple.copy(alpha = 0.25f)
             ),
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(32.dp),
         color = surfaceColor,
         tonalElevation = 8.dp
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            // Zoom controls
-            ZoomControls(
-                currentZoom = currentZoom,
-                onZoomIn = onZoomIn,
-                onZoomOut = onZoomOut,
-                onResetZoom = onResetZoom,
-                contentColor = contentColor
-            )
-
-            // Divider
-            VerticalDivider(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .size(width = 1.dp, height = 24.dp),
-                color = dividerColor
-            )
-
-            // Scroll direction toggle
-            ControlButton(
-                icon = if (scrollDirection == ScrollDirection.VERTICAL)
-                    Icons.Rounded.SwapVert else Icons.Rounded.SwapHoriz,
-                onClick = onScrollDirectionToggle,
-                contentColor = AccentBlue,
-                contentDescription = "Toggle scroll direction"
-            )
-
-            // Divider
-            VerticalDivider(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .size(width = 1.dp, height = 24.dp),
-                color = dividerColor
-            )
-
-            // Action buttons
-            ControlButton(
-                icon = Icons.AutoMirrored.Rounded.Toc,
+            // Table of Contents
+            ControlBarButton(
+                icon = Icons.AutoMirrored.Rounded.MenuBook,
+                contentDescription = "Table of Contents",
                 onClick = onTocClick,
-                contentColor = contentColor,
-                contentDescription = "Table of Contents"
+                tint = AccentPurple,
+                isDarkMode = isDarkMode
             )
-            ControlButton(
-                icon = if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
+
+            // View Mode
+            ControlBarButton(
+                icon = Icons.Rounded.ViewDay,
+                contentDescription = "View Options",
+                onClick = onViewClick,
+                tint = AccentBlue,
+                isDarkMode = isDarkMode
+            )
+
+            // Zoom
+            ControlBarButton(
+                icon = Icons.Rounded.ZoomIn,
+                contentDescription = "Zoom",
+                onClick = onZoomClick,
+                tint = AccentTeal,
+                isDarkMode = isDarkMode
+            )
+
+            // Rotate
+            ControlBarButton(
+                icon = Icons.AutoMirrored.Rounded.RotateRight,
+                contentDescription = "Rotate",
+                onClick = onRotateClick,
+                tint = AccentAmber,
+                isDarkMode = isDarkMode
+            )
+
+            // Bookmark
+            BookmarkButton(
+                isBookmarked = isBookmarked,
                 onClick = onBookmarkClick,
-                contentColor = if (isBookmarked) AccentPurple else contentColor,
-                contentDescription = "Bookmark"
+                isDarkMode = isDarkMode
             )
-            ControlButton(
-                icon = Icons.Rounded.Settings,
-                onClick = onSettingsClick,
-                contentColor = contentColor,
-                contentDescription = "Settings"
+
+            // More Options
+            ControlBarButton(
+                icon = Icons.Rounded.MoreHoriz,
+                contentDescription = "More Options",
+                onClick = onMoreClick,
+                tint = contentColor.copy(alpha = 0.7f),
+                isDarkMode = isDarkMode
             )
         }
     }
 }
 
 @Composable
-private fun ZoomControls(
-    currentZoom: Float,
-    onZoomIn: () -> Unit,
-    onZoomOut: () -> Unit,
-    onResetZoom: () -> Unit,
-    contentColor: Color,
+private fun ControlBarButton(
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit,
+    tint: Color,
+    isDarkMode: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(0.dp)
-    ) {
-        // Zoom out
-        ControlButton(
-            icon = Icons.Rounded.Remove,
-            onClick = onZoomOut,
-            contentColor = contentColor,
-            contentDescription = "Zoom out",
-            size = 38
-        )
+    val backgroundColor = tint.copy(alpha = 0.12f)
 
-        // Zoom percentage (clickable to reset)
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .clickable(onClick = onResetZoom)
-                .padding(horizontal = 8.dp, vertical = 6.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "${(currentZoom * 100).toInt()}%",
-                style = MaterialTheme.typography.labelMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 12.sp
-                ),
-                color = contentColor
-            )
-        }
-
-        // Zoom in
-        ControlButton(
-            icon = Icons.Rounded.Add,
-            onClick = onZoomIn,
-            contentColor = contentColor,
-            contentDescription = "Zoom in",
-            size = 38
-        )
-    }
-}
-
-@Composable
-private fun ControlButton(
-    icon: ImageVector,
-    onClick: () -> Unit,
-    contentColor: Color,
-    contentDescription: String,
-    modifier: Modifier = Modifier,
-    size: Int = 42
-) {
     Box(
         modifier = modifier
-            .size(size.dp)
+            .size(46.dp)
             .clip(CircleShape)
-            .clickable(onClick = onClick),
+            .background(backgroundColor)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = tint, bounded = true),
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = contentColor,
-            modifier = Modifier.size((size * 0.52).dp)
+            tint = tint,
+            modifier = Modifier.size(22.dp)
+        )
+    }
+}
+
+@Composable
+private fun BookmarkButton(
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    isDarkMode: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val tint by animateColorAsState(
+        targetValue = if (isBookmarked) AccentPurple else if (isDarkMode) Color.White.copy(alpha = 0.6f) else Color.Black.copy(alpha = 0.5f),
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "bookmark tint"
+    )
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isBookmarked) AccentPurple.copy(alpha = 0.15f) else Color.Transparent,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "bookmark bg"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (isBookmarked) 1.1f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "bookmark scale"
+    )
+
+    Box(
+        modifier = modifier
+            .size(46.dp)
+            .scale(scale)
+            .clip(CircleShape)
+            .background(backgroundColor)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = AccentPurple, bounded = true),
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
+            contentDescription = if (isBookmarked) "Remove Bookmark" else "Add Bookmark",
+            tint = tint,
+            modifier = Modifier.size(22.dp)
         )
     }
 }

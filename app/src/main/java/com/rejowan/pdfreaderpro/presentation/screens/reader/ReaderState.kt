@@ -58,6 +58,12 @@ data class ReaderState(
     // Settings panel
     val isSettingsPanelVisible: Boolean = false,
 
+    // Bottom bar sheets
+    val isViewModeSheetVisible: Boolean = false,
+    val isZoomSheetVisible: Boolean = false,
+    val isBookmarksSheetVisible: Boolean = false,
+    val isMoreOptionsSheetVisible: Boolean = false,
+
     // PDF info dialog
     val isInfoDialogVisible: Boolean = false,
 
@@ -65,7 +71,13 @@ data class ReaderState(
     val isDeleteDialogVisible: Boolean = false,
 
     // Rotation lock
-    val isRotationLocked: Boolean = false
+    val isRotationLocked: Boolean = false,
+
+    // Page rotation (0, 90, 180, 270)
+    val pageRotation: Int = 0,
+
+    // Current page bookmark status
+    val isCurrentPageBookmarked: Boolean = false
 ) {
     val pageLabel: String
         get() = "${currentPage + 1} / $totalPages"
@@ -120,6 +132,16 @@ sealed class ReaderAction {
     data object ShowSettingsPanel : ReaderAction()
     data object HideSettingsPanel : ReaderAction()
 
+    // Bottom bar sheets
+    data object ShowViewModeSheet : ReaderAction()
+    data object HideViewModeSheet : ReaderAction()
+    data object ShowZoomSheet : ReaderAction()
+    data object HideZoomSheet : ReaderAction()
+    data object ShowBookmarksSheet : ReaderAction()
+    data object HideBookmarksSheet : ReaderAction()
+    data object ShowMoreOptionsSheet : ReaderAction()
+    data object HideMoreOptionsSheet : ReaderAction()
+
     // Reading settings
     data class SetBrightness(val brightness: Float) : ReaderAction()
     data class SetScrollDirection(val direction: ScrollDirection) : ReaderAction()
@@ -151,4 +173,11 @@ sealed class ReaderAction {
 
     // Rotation lock
     data object ToggleRotationLock : ReaderAction()
+
+    // Page rotation
+    data object RotateClockwise : ReaderAction()
+    data object RotateCounterClockwise : ReaderAction()
+
+    // Bookmark current page
+    data object TogglePageBookmark : ReaderAction()
 }

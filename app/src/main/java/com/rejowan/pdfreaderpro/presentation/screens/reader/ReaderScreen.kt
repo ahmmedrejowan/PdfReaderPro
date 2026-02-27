@@ -80,9 +80,6 @@ fun ReaderScreen(
     val backgroundColor = if (isDarkMode) Color(0xFF121212) else Color(0xFFF5F5F5)
     val backgroundColorArgb = backgroundColor.toArgb()
 
-    // Track if user is bookmarked (placeholder - can be connected to actual bookmark logic)
-    var isBookmarked by remember { mutableStateOf(false) }
-
     // Track scrolling activity for showing page scrubber in immersive mode
     var isScrolling by remember { mutableStateOf(false) }
     var lastScrollTime by remember { mutableStateOf(0L) }
@@ -358,25 +355,13 @@ fun ReaderScreen(
                     ) + fadeOut()
                 ) {
                     FloatingControlBar(
-                        currentZoom = state.zoom,
-                        scrollDirection = state.scrollDirection,
-                        isBookmarked = isBookmarked,
-                        onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
-                        onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
-                        onResetZoom = { viewModel.onAction(ReaderAction.ResetZoom) },
-                        onScrollDirectionToggle = {
-                            viewModel.onAction(
-                                ReaderAction.SetScrollDirection(
-                                    if (state.scrollDirection == ScrollDirection.VERTICAL)
-                                        ScrollDirection.HORIZONTAL
-                                    else
-                                        ScrollDirection.VERTICAL
-                                )
-                            )
-                        },
+                        isBookmarked = state.isCurrentPageBookmarked,
                         onTocClick = { viewModel.onAction(ReaderAction.ShowTableOfContents) },
-                        onBookmarkClick = { isBookmarked = !isBookmarked },
-                        onSettingsClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) },
+                        onViewClick = { viewModel.onAction(ReaderAction.ShowViewModeSheet) },
+                        onZoomClick = { viewModel.onAction(ReaderAction.ShowZoomSheet) },
+                        onRotateClick = { viewModel.onAction(ReaderAction.RotateClockwise) },
+                        onBookmarkClick = { viewModel.onAction(ReaderAction.TogglePageBookmark) },
+                        onMoreClick = { viewModel.onAction(ReaderAction.ShowMoreOptionsSheet) },
                         isDarkMode = isDarkMode
                     )
                 }
