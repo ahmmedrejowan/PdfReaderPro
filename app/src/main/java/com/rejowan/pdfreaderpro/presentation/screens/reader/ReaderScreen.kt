@@ -417,13 +417,18 @@ fun ReaderScreen(
         )
     }
 
-    // Table of Contents sheet - using enhanced version
+    // Table of Contents & Attachments sheet - using enhanced version
     if (state.isTableOfContentsVisible) {
         EnhancedTableOfContents(
             items = state.outline,
+            attachments = state.attachments,
             currentPage = state.currentPage,
             onItemClick = { item ->
                 viewModel.navigateToOutlineItem(item)
+                viewModel.onAction(ReaderAction.HideTableOfContents)
+            },
+            onAttachmentClick = { attachment ->
+                viewModel.onAction(ReaderAction.DownloadAttachment(attachment))
                 viewModel.onAction(ReaderAction.HideTableOfContents)
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideTableOfContents) }

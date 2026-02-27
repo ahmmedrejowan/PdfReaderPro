@@ -1,6 +1,7 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader
 
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AttachmentItem
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.OutlineItem
 
 /**
@@ -44,9 +45,10 @@ data class ReaderState(
     val searchResultCount: Int = 0,
     val currentSearchIndex: Int = 0,
 
-    // Table of Contents
+    // Table of Contents & Attachments
     val isTableOfContentsVisible: Boolean = false,
     val outline: List<OutlineItem> = emptyList(),
+    val attachments: List<AttachmentItem> = emptyList(),
 
     // Page thumbnails
     val isPageThumbnailsVisible: Boolean = false,
@@ -245,4 +247,7 @@ sealed class ReaderAction {
     data object StopAutoScroll : ReaderAction()
     data object ToggleAutoScrollPause : ReaderAction()
     data class SetAutoScrollSpeed(val speed: Float) : ReaderAction()
+
+    // Attachments
+    data class DownloadAttachment(val attachment: AttachmentItem) : ReaderAction()
 }

@@ -22,16 +22,21 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
+import androidx.compose.material.icons.rounded.AttachFile
 import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -39,6 +44,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,23 +61,33 @@ import kotlinx.coroutines.delay
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
+private val AccentTeal = Color(0xFF4DB6AC)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnhancedTableOfContents(
     items: List<OutlineItem>,
+    attachments: List<AttachmentItem> = emptyList(),
     currentPage: Int,
     onItemClick: (OutlineItem) -> Unit,
+    onAttachmentClick: (AttachmentItem) -> Unit = {},
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val listState = rememberLazyListState()
+    val attachmentListState = rememberLazyListState()
+
+    // 0 = Contents, 1 = Attachments
+    var selectedTab by remember { mutableIntStateOf(0) }
+    val hasAttachments = attachments.isNotEmpty()
 
     // Auto-scroll to current page section
     LaunchedEffect(items, currentPage) {
-        val currentIndex = items.indexOfFirst { it.page == currentPage }
-        if (currentIndex >= 0) {
-            listState.animateScrollToItem(currentIndex)
+        if (selectedTab == 0) {
+            val currentIndex = items.indexOfFirst { it.page == currentPage }
+            if (currentIndex >= 0) {
+                listState.animateScrollToItem(currentIndex)
+            }
         }
     }
 
@@ -110,18 +126,62 @@ fun EnhancedTableOfContents(
 
                 Column {
                     Text(
-                        text = "Table of Contents",
+                        text = "Document Navigation",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    if (items.isNotEmpty()) {
-                        Text(
-                            text = "${items.size} ${if (items.size == 1) "section" else "sections"}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    val subtitle = when {
+                        selectedTab == 0 && items.isNotEmpty() -> "${items.size} ${if (items.size == 1) "section" else "sections"}"
+                        selectedTab == 1 && attachments.isNotEmpty() -> "${attachments.size} ${if (attachments.size == 1) "file" else "files"}"
+                        else -> "Browse document structure"
+                    }
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
+            }
+
+            // Segmented tabs (only show if there are attachments)
+            if (hasAttachments) {
+                Spacer(modifier = Modifier.height(12.dp))
+                SingleChoiceSegmentedButtonRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                ) {
+                    SegmentedButton(
+                        selected = selectedTab == 0,
+                        onClick = { selectedTab = 0 },
+                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = AccentPurple.copy(alpha = 0.15f),
+                            activeContentColor = AccentPurple
                         )
+                    ) {
+                        Text("Contents")
+                    }
+                    SegmentedButton(
+                        selected = selectedTab == 1,
+                        onClick = { selectedTab = 1 },
+                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = AccentTeal.copy(alpha = 0.15f),
+                            activeContentColor = AccentTeal
+                        )
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Rounded.AttachFile,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Attachments")
+                        }
                     }
                 }
             }
@@ -133,26 +193,55 @@ fun EnhancedTableOfContents(
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (items.isEmpty()) {
-                EmptyTocState()
-            } else {
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f, fill = false)
-                ) {
-                    itemsIndexed(items) { index, item ->
-                        TocItem(
-                            item = item,
-                            isCurrentSection = item.page == currentPage,
-                            onClick = { onItemClick(item) },
-                            animationDelay = (index * 20).coerceAtMost(200)
-                        )
-                    }
+            // Content based on selected tab
+            when (selectedTab) {
+                0 -> {
+                    if (items.isEmpty()) {
+                        EmptyTocState()
+                    } else {
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = false)
+                        ) {
+                            itemsIndexed(items) { index, item ->
+                                TocItem(
+                                    item = item,
+                                    isCurrentSection = item.page == currentPage,
+                                    onClick = { onItemClick(item) },
+                                    animationDelay = (index * 20).coerceAtMost(200)
+                                )
+                            }
 
-                    item {
-                        Spacer(modifier = Modifier.height(32.dp))
+                            item {
+                                Spacer(modifier = Modifier.height(32.dp))
+                            }
+                        }
+                    }
+                }
+                1 -> {
+                    if (attachments.isEmpty()) {
+                        EmptyAttachmentsState()
+                    } else {
+                        LazyColumn(
+                            state = attachmentListState,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = false)
+                        ) {
+                            itemsIndexed(attachments) { index, attachment ->
+                                AttachmentListItem(
+                                    attachment = attachment,
+                                    onClick = { onAttachmentClick(attachment) },
+                                    animationDelay = (index * 20).coerceAtMost(200)
+                                )
+                            }
+
+                            item {
+                                Spacer(modifier = Modifier.height(32.dp))
+                            }
+                        }
                     }
                 }
             }
@@ -320,6 +409,156 @@ private fun EmptyTocState(
 
         Text(
             text = "This PDF doesn't have a table of contents",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun AttachmentListItem(
+    attachment: AttachmentItem,
+    onClick: () -> Unit,
+    animationDelay: Int,
+    modifier: Modifier = Modifier
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(animationDelay.toLong())
+        isVisible = true
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(200, easing = FastOutSlowInEasing),
+        label = "attachment item scale"
+    )
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .padding(horizontal = 12.dp, vertical = 2.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = AccentTeal),
+                onClick = onClick
+            ),
+        shape = RoundedCornerShape(12.dp),
+        color = Color.Transparent
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // File icon
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = AccentTeal.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.InsertDriveFile,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .size(20.dp),
+                    tint = AccentTeal
+                )
+            }
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            // File name
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = attachment.title,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                // Show file extension as subtitle
+                val extension = attachment.title.substringAfterLast('.', "").uppercase()
+                if (extension.isNotEmpty() && extension.length <= 4) {
+                    Text(
+                        text = "$extension file",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // Download button
+            Surface(
+                shape = RoundedCornerShape(8.dp),
+                color = AccentTeal.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Download,
+                    contentDescription = "Download",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(18.dp),
+                    tint = AccentTeal
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyAttachmentsState(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Surface(
+            shape = RoundedCornerShape(20.dp),
+            color = AccentTeal.copy(alpha = 0.1f),
+            modifier = Modifier.size(80.dp)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.size(80.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.AttachFile,
+                    contentDescription = null,
+                    tint = AccentTeal,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "No Attachments",
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "This PDF doesn't have any embedded files",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )

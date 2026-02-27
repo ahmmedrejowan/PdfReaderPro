@@ -11,8 +11,10 @@ import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
 import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
 import com.rejowan.pdfreaderpro.presentation.components.pdf.addListener
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AttachmentItem
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.OutlineItem
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfo
+import android.os.Environment
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -186,6 +188,21 @@ class ReaderViewModel(
                 }
                 viewModelScope.launch {
                     _events.send(ReaderEvent.ShowMessage("Reached end of document"))
+                }
+            },
+            onLoadAttachments = { sidebarItems ->
+                val attachmentItems = sidebarItems.map { item ->
+                    AttachmentItem(
+                        title = item.title ?: "Unknown",
+                        id = item.id,
+                        dest = item.dest
+                    )
+                }
+                _state.update { it.copy(attachments = attachmentItems) }
+            },
+            onDownload = { fileBytes, fileName, _ ->
+                viewModelScope.launch {
+                    saveAttachmentFile(fileBytes, fileName)
                 }
             }
         )
@@ -469,6 +486,12 @@ class ReaderViewModel(
                 _state.update { it.copy(autoScrollSpeed = action.speed) }
                 pdfViewer?.ui?.autoScroll?.setSpeed(action.speed)
             }
+
+            is ReaderAction.DownloadAttachment -> {
+                viewModelScope.launch {
+                    pdfViewer?.ui?.performSidebarTreeItemClick(action.attachment.id)
+                }
+            }
         }
     }
 
@@ -516,6 +539,19 @@ class ReaderViewModel(
             } catch (e: Exception) {
                 _events.send(ReaderEvent.Error("Error: ${e.message}"))
             }
+        }
+    }
+
+    private suspend fun saveAttachmentFile(fileBytes: ByteArray, fileName: String?) {
+        try {
+            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val finalFileName = fileName ?: "attachment_${System.currentTimeMillis()}"
+            val file = File(downloadsDir, finalFileName)
+
+            file.writeBytes(fileBytes)
+            _events.send(ReaderEvent.ShowMessage("Saved to Downloads: $finalFileName"))
+        } catch (e: Exception) {
+            _events.send(ReaderEvent.Error("Failed to save attachment: ${e.message}"))
         }
     }
 
