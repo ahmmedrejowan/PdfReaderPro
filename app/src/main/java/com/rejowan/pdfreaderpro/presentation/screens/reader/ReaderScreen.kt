@@ -29,6 +29,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -170,7 +171,8 @@ fun ReaderScreen(
         }
 
         onDispose {
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+            // Reset to unspecified to respect device orientation settings
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 
@@ -194,7 +196,7 @@ fun ReaderScreen(
 
     // Handle orientation changes - auto fit width when orientation changes
     val configuration = LocalConfiguration.current
-    var lastOrientation by remember { mutableStateOf(configuration.orientation) }
+    var lastOrientation by remember { mutableIntStateOf(configuration.orientation) }
 
     LaunchedEffect(configuration.orientation) {
         if (lastOrientation != configuration.orientation) {
