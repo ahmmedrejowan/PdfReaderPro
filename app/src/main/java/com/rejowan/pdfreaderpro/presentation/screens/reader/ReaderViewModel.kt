@@ -166,13 +166,14 @@ class ReaderViewModel(
         val result = mutableListOf<OutlineItem>()
         for (item in items) {
             // Extract page number from dest if possible
-            // The dest is typically a named destination or page reference
             val pageNum = extractPageFromDest(item.dest)
             result.add(
                 OutlineItem(
                     title = item.title ?: "",
                     page = pageNum,
-                    level = level
+                    level = level,
+                    id = item.id,
+                    dest = item.dest
                 )
             )
             // Recursively add children
@@ -183,12 +184,27 @@ class ReaderViewModel(
 
     private fun extractPageFromDest(dest: String?): Int {
         if (dest == null) return 0
-        // Try to parse page number from destination
-        // The dest might be in format like "page=5" or just a number
+        // The dest is a URL like "file:///...#page=5" or contains nameddest
+        // Try to extract page number from various formats
         return try {
-            dest.toIntOrNull() ?: 0
+            // Check for #page= format
+            val pageMatch = Regex("#page=(\\d+)").find(dest)
+            if (pageMatch != null) {
+                return pageMatch.groupValues[1].toIntOrNull()?.minus(1) ?: 0
+            }
+            // Check for nameddest format (can't extract page, will use click navigation)
+            0
         } catch (e: Exception) {
             0
+        }
+    }
+
+    /**
+     * Navigate to an outline item using its ID.
+     */
+    fun navigateToOutlineItem(item: OutlineItem) {
+        viewModelScope.launch {
+            pdfViewer?.ui?.performSidebarTreeItemClick(item.id)
         }
     }
 

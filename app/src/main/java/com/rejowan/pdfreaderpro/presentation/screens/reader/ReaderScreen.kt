@@ -403,7 +403,7 @@ fun ReaderScreen(
             items = state.outline,
             currentPage = state.currentPage,
             onItemClick = { item ->
-                viewModel.onAction(ReaderAction.GoToPage(item.page))
+                viewModel.navigateToOutlineItem(item)
                 viewModel.onAction(ReaderAction.HideTableOfContents)
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideTableOfContents) }
