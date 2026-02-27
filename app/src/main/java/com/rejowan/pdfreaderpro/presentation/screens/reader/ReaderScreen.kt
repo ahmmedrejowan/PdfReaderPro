@@ -542,9 +542,6 @@ fun ReaderScreen(
             onGoToPageClick = {
                 viewModel.onAction(ReaderAction.ShowPageJumpDialog)
             },
-            onFullScreenClick = {
-                viewModel.onAction(ReaderAction.ToggleFullScreen)
-            },
             onShareClick = {
                 viewModel.onAction(ReaderAction.ShareDocument)
             },

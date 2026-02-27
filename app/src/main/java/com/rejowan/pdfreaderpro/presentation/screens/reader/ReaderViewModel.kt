@@ -258,7 +258,14 @@ class ReaderViewModel(
                 pdfViewer?.zoomTo(PdfViewer.Zoom.ACTUAL_SIZE)
             }
 
-            is ReaderAction.ToggleToolbar -> _state.update { it.copy(isToolbarVisible = !it.isToolbarVisible) }
+            is ReaderAction.ToggleToolbar -> _state.update {
+                // If in full screen, exit full screen mode and show toolbar
+                if (it.isFullScreen) {
+                    it.copy(isFullScreen = false, isToolbarVisible = true)
+                } else {
+                    it.copy(isToolbarVisible = !it.isToolbarVisible)
+                }
+            }
             is ReaderAction.ToggleControlBarExpanded -> _state.update { it.copy(isControlBarExpanded = !it.isControlBarExpanded) }
             is ReaderAction.ToggleFullScreen -> _state.update { it.copy(isFullScreen = !it.isFullScreen, isToolbarVisible = it.isFullScreen) }
             is ReaderAction.ToggleQuickActions -> _state.update { it.copy(showQuickActions = !it.showQuickActions) }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Bookmark
-import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Numbers
@@ -54,7 +53,6 @@ private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
 private val AccentTeal = Color(0xFF4DB6AC)
 private val AccentAmber = Color(0xFFFFB74D)
-private val AccentGreen = Color(0xFF81C784)
 private val AccentPink = Color(0xFFF48FB1)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +61,6 @@ fun MoreOptionsSheet(
     onBookmarksClick: () -> Unit,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
-    onFullScreenClick: () -> Unit,
     onPrintClick: () -> Unit,
     onShareClick: () -> Unit,
     onDocumentInfoClick: () -> Unit,
@@ -134,20 +131,6 @@ fun MoreOptionsSheet(
                 animationDelay = 100
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OptionItem(
-                icon = Icons.Rounded.Fullscreen,
-                title = "Full Screen",
-                subtitle = "Distraction-free reading",
-                accentColor = AccentGreen,
-                onClick = {
-                    onDismiss()
-                    onFullScreenClick()
-                },
-                animationDelay = 150
-            )
-
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
@@ -168,7 +151,7 @@ fun MoreOptionsSheet(
                     onDismiss()
                     onShareClick()
                 },
-                animationDelay = 200
+                animationDelay = 150
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -182,7 +165,7 @@ fun MoreOptionsSheet(
                     onDismiss()
                     onPrintClick()
                 },
-                animationDelay = 250
+                animationDelay = 200
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -196,7 +179,7 @@ fun MoreOptionsSheet(
                     onDismiss()
                     onDocumentInfoClick()
                 },
-                animationDelay = 300
+                animationDelay = 250
             )
         }
     }
