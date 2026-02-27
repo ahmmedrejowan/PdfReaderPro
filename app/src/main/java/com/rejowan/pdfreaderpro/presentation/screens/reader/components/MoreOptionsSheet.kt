@@ -17,11 +17,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Bookmark
-import androidx.compose.material.icons.rounded.DarkMode
+import androidx.compose.material.icons.rounded.Fullscreen
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.MoreHoriz
+import androidx.compose.material.icons.rounded.Numbers
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Print
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -50,14 +54,19 @@ private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
 private val AccentTeal = Color(0xFF4DB6AC)
 private val AccentAmber = Color(0xFFFFB74D)
+private val AccentGreen = Color(0xFF81C784)
+private val AccentPink = Color(0xFFF48FB1)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreOptionsSheet(
     onBookmarksClick: () -> Unit,
     onAutoScrollClick: () -> Unit,
-    onReadingThemeClick: () -> Unit,
-    onDisplaySettingsClick: () -> Unit,
+    onGoToPageClick: () -> Unit,
+    onFullScreenClick: () -> Unit,
+    onPrintClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onDocumentInfoClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -80,7 +89,11 @@ fun MoreOptionsSheet(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Options
+            // Reading Tools Section
+            SectionLabel(text = "Reading Tools")
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             OptionItem(
                 icon = Icons.Rounded.Bookmark,
                 title = "Bookmarks",
@@ -98,7 +111,7 @@ fun MoreOptionsSheet(
             OptionItem(
                 icon = Icons.Rounded.PlayArrow,
                 title = "Auto-Scroll",
-                subtitle = "Automatic page scrolling",
+                subtitle = "Hands-free reading mode",
                 accentColor = AccentBlue,
                 onClick = {
                     onDismiss()
@@ -110,13 +123,13 @@ fun MoreOptionsSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             OptionItem(
-                icon = Icons.Rounded.DarkMode,
-                title = "Reading Theme",
-                subtitle = "Light, Dark, or Sepia mode",
-                accentColor = AccentAmber,
+                icon = Icons.Rounded.Numbers,
+                title = "Go to Page",
+                subtitle = "Jump to a specific page",
+                accentColor = AccentTeal,
                 onClick = {
                     onDismiss()
-                    onReadingThemeClick()
+                    onGoToPageClick()
                 },
                 animationDelay = 100
             )
@@ -124,15 +137,66 @@ fun MoreOptionsSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             OptionItem(
-                icon = Icons.Rounded.Settings,
-                title = "Display Settings",
-                subtitle = "Brightness, screen timeout, rotation",
-                accentColor = AccentTeal,
+                icon = Icons.Rounded.Fullscreen,
+                title = "Full Screen",
+                subtitle = "Distraction-free reading",
+                accentColor = AccentGreen,
                 onClick = {
                     onDismiss()
-                    onDisplaySettingsClick()
+                    onFullScreenClick()
                 },
                 animationDelay = 150
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Document Actions Section
+            SectionLabel(text = "Document")
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            OptionItem(
+                icon = Icons.Rounded.Share,
+                title = "Share",
+                subtitle = "Share this document",
+                accentColor = AccentPink,
+                onClick = {
+                    onDismiss()
+                    onShareClick()
+                },
+                animationDelay = 200
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OptionItem(
+                icon = Icons.Rounded.Print,
+                title = "Print",
+                subtitle = "Print this document",
+                accentColor = AccentAmber,
+                onClick = {
+                    onDismiss()
+                    onPrintClick()
+                },
+                animationDelay = 250
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OptionItem(
+                icon = Icons.Rounded.Info,
+                title = "Document Info",
+                subtitle = "View file details and metadata",
+                accentColor = MaterialTheme.colorScheme.primary,
+                onClick = {
+                    onDismiss()
+                    onDocumentInfoClick()
+                },
+                animationDelay = 300
             )
         }
     }
@@ -171,12 +235,27 @@ private fun MoreOptionsHeader(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Additional reader settings",
+                text = "Additional tools and actions",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
         }
     }
+}
+
+@Composable
+private fun SectionLabel(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelMedium.copy(
+            fontWeight = FontWeight.SemiBold
+        ),
+        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+        modifier = modifier.padding(start = 4.dp)
+    )
 }
 
 @Composable

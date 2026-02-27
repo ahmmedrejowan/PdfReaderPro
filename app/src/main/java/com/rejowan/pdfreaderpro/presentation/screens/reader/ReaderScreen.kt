@@ -536,15 +536,25 @@ fun ReaderScreen(
     if (state.isMoreOptionsSheetVisible) {
         MoreOptionsSheet(
             onBookmarksClick = {
-                viewModel.onAction(ReaderAction.HideMoreOptionsSheet)
                 viewModel.onAction(ReaderAction.ShowBookmarksSheet)
             },
             onAutoScrollClick = { /* TODO: Implement auto-scroll */ },
-            onReadingThemeClick = {
-                viewModel.onAction(ReaderAction.HideMoreOptionsSheet)
-                viewModel.onAction(ReaderAction.ShowDisplaySheet)
+            onGoToPageClick = {
+                viewModel.onAction(ReaderAction.ShowPageJumpDialog)
             },
-            onDisplaySettingsClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) },
+            onFullScreenClick = {
+                viewModel.onAction(ReaderAction.ToggleFullScreen)
+            },
+            onShareClick = {
+                viewModel.onAction(ReaderAction.ShareDocument)
+            },
+            onPrintClick = {
+                val printManager = context.getSystemService(PrintManager::class.java)
+                // TODO: Implement print with PdfPrintAdapter
+            },
+            onDocumentInfoClick = {
+                viewModel.onAction(ReaderAction.ShowInfoDialog)
+            },
             onDismiss = { viewModel.onAction(ReaderAction.HideMoreOptionsSheet) }
         )
     }
