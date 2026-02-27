@@ -137,8 +137,7 @@ fun AutoScrollSheet(
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = AccentBlue,
                             selectedLabelColor = Color.White
-                        ),
-                        modifier = Modifier.weight(1f)
+                        )
                     )
                 }
             }

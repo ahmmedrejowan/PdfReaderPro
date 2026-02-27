@@ -8,36 +8,30 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Remove
-import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-
-private val AccentBlue = Color(0xFF64B5F6)
-private val AccentRed = Color(0xFFEF5350)
 
 @Composable
 fun AutoScrollOverlay(
@@ -49,6 +43,9 @@ fun AutoScrollOverlay(
     onSpeedChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val surfaceColor = MaterialTheme.colorScheme.surfaceContainerHigh
+    val iconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(
@@ -61,136 +58,81 @@ fun AutoScrollOverlay(
         ) + fadeOut(),
         modifier = modifier
     ) {
-        Surface(
-            shape = RoundedCornerShape(20.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.95f),
-            shadowElevation = 8.dp,
-            tonalElevation = 4.dp
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(14.dp))
+                .background(surfaceColor)
         ) {
-            Column(
-                modifier = Modifier.padding(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier.padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Status indicator
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(4.dp),
-                        color = if (isPaused) AccentRed.copy(alpha = 0.2f) else AccentBlue.copy(alpha = 0.2f)
-                    ) {
-                        Text(
-                            text = if (isPaused) "PAUSED" else "SCROLLING",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = if (isPaused) AccentRed else AccentBlue,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
+                // Decrease speed
+                OverlayIconButton(
+                    icon = Icons.Rounded.Remove,
+                    contentDescription = "Slower",
+                    iconColor = iconColor,
+                    onClick = {
+                        val newSpeed = (currentSpeed - 10f).coerceAtLeast(10f)
+                        onSpeedChange(newSpeed)
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "${currentSpeed.toInt()} px/s",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                )
 
-                Spacer(modifier = Modifier.size(8.dp))
+                // Play/Pause button
+                OverlayIconButton(
+                    icon = if (isPaused) Icons.Rounded.PlayArrow else Icons.Rounded.Pause,
+                    contentDescription = if (isPaused) "Resume" else "Pause",
+                    iconColor = iconColor,
+                    onClick = onTogglePause
+                )
 
-                // Controls row
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Decrease speed
-                    IconButton(
-                        onClick = {
-                            val newSpeed = (currentSpeed - 10f).coerceAtLeast(10f)
-                            onSpeedChange(newSpeed)
-                        },
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colorScheme.surfaceContainerHighest),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Remove,
-                            contentDescription = "Decrease speed",
-                            modifier = Modifier.size(20.dp)
-                        )
+                // Increase speed
+                OverlayIconButton(
+                    icon = Icons.Rounded.Add,
+                    contentDescription = "Faster",
+                    iconColor = iconColor,
+                    onClick = {
+                        val newSpeed = (currentSpeed + 10f).coerceAtMost(200f)
+                        onSpeedChange(newSpeed)
                     }
+                )
 
-                    // Play/Pause button
-                    IconButton(
-                        onClick = onTogglePause,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(AccentBlue),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Icon(
-                            imageVector = if (isPaused) Icons.Rounded.PlayArrow else Icons.Rounded.Pause,
-                            contentDescription = if (isPaused) "Resume" else "Pause",
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
-                    // Stop button
-                    IconButton(
-                        onClick = onStop,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(AccentRed.copy(alpha = 0.15f)),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = AccentRed
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Stop,
-                            contentDescription = "Stop",
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
-                    // Increase speed
-                    IconButton(
-                        onClick = {
-                            val newSpeed = (currentSpeed + 10f).coerceAtMost(200f)
-                            onSpeedChange(newSpeed)
-                        },
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colorScheme.surfaceContainerHighest),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = "Increase speed",
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.size(4.dp))
-
-                // Hint
-                Text(
-                    text = "Tap screen to pause/resume",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                // Stop button
+                OverlayIconButton(
+                    icon = Icons.Rounded.Close,
+                    contentDescription = "Stop",
+                    iconColor = iconColor,
+                    onClick = onStop
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun OverlayIconButton(
+    icon: ImageVector,
+    contentDescription: String,
+    iconColor: androidx.compose.ui.graphics.Color,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(36.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(bounded = true),
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            modifier = Modifier.size(18.dp),
+            tint = iconColor
+        )
     }
 }

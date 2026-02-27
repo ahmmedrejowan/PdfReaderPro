@@ -51,7 +51,8 @@ let autoScrollState = {
     isPaused: false,
     speed: 50, // pixels per second
     animationFrameId: null,
-    lastTimestamp: null
+    lastTimestamp: null,
+    accumulatedScroll: 0 // Track fractional scroll amounts
 };
 
 function startAutoScroll(pixelsPerSecond) {
@@ -59,6 +60,7 @@ function startAutoScroll(pixelsPerSecond) {
     autoScrollState.isActive = true;
     autoScrollState.isPaused = false;
     autoScrollState.lastTimestamp = null;
+    autoScrollState.accumulatedScroll = 0;
 
     function autoScrollStep(timestamp) {
         if (!autoScrollState.isActive) return;
@@ -73,27 +75,34 @@ function startAutoScroll(pixelsPerSecond) {
         }
 
         const elapsed = timestamp - autoScrollState.lastTimestamp;
-        const scrollAmount = (autoScrollState.speed * elapsed) / 1000;
+        // Accumulate fractional scroll amounts for low speeds
+        autoScrollState.accumulatedScroll += (autoScrollState.speed * elapsed) / 1000;
 
-        const isHorizontal = PDFViewerApplication.pdfViewer.scrollMode === ScrollMode.HORIZONTAL;
+        // Only scroll when we have at least 0.5 pixel accumulated
+        if (autoScrollState.accumulatedScroll >= 0.5) {
+            const scrollAmount = autoScrollState.accumulatedScroll;
+            autoScrollState.accumulatedScroll = 0;
 
-        if (isHorizontal) {
-            viewerContainer.scrollLeft += scrollAmount;
-            // Check if reached end
-            const maxScroll = viewerContainer.scrollWidth - viewerContainer.clientWidth;
-            if (viewerContainer.scrollLeft >= maxScroll) {
-                stopAutoScroll();
-                JWI.onAutoScrollEnd();
-                return;
-            }
-        } else {
-            viewerContainer.scrollTop += scrollAmount;
-            // Check if reached end
-            const maxScroll = viewerContainer.scrollHeight - viewerContainer.clientHeight;
-            if (viewerContainer.scrollTop >= maxScroll) {
-                stopAutoScroll();
-                JWI.onAutoScrollEnd();
-                return;
+            const isHorizontal = PDFViewerApplication.pdfViewer.scrollMode === ScrollMode.HORIZONTAL;
+
+            if (isHorizontal) {
+                viewerContainer.scrollLeft += scrollAmount;
+                // Check if reached end
+                const maxScroll = viewerContainer.scrollWidth - viewerContainer.clientWidth;
+                if (viewerContainer.scrollLeft >= maxScroll) {
+                    stopAutoScroll();
+                    JWI.onAutoScrollEnd();
+                    return;
+                }
+            } else {
+                viewerContainer.scrollTop += scrollAmount;
+                // Check if reached end
+                const maxScroll = viewerContainer.scrollHeight - viewerContainer.clientHeight;
+                if (viewerContainer.scrollTop >= maxScroll) {
+                    stopAutoScroll();
+                    JWI.onAutoScrollEnd();
+                    return;
+                }
             }
         }
 
