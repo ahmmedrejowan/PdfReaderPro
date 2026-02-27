@@ -1,9 +1,5 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -171,36 +166,18 @@ private fun BookmarkButton(
     isDarkMode: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val tint by animateColorAsState(
-        targetValue = if (isBookmarked) AccentPurple else if (isDarkMode) Color.White.copy(alpha = 0.6f) else Color.Black.copy(alpha = 0.5f),
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-        label = "bookmark tint"
-    )
-
-    val backgroundColor by animateColorAsState(
-        targetValue = if (isBookmarked) AccentPurple.copy(alpha = 0.15f) else Color.Transparent,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-        label = "bookmark bg"
-    )
-
-    val scale by animateFloatAsState(
-        targetValue = if (isBookmarked) 1.1f else 1f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = "bookmark scale"
-    )
+    val accentRed = Color(0xFFEF5350)
+    val tint = if (isBookmarked) accentRed else if (isDarkMode) Color.White.copy(alpha = 0.6f) else Color.Black.copy(alpha = 0.5f)
+    val backgroundColor = if (isBookmarked) accentRed.copy(alpha = 0.12f) else Color.Transparent
 
     Box(
         modifier = modifier
             .size(46.dp)
-            .scale(scale)
             .clip(CircleShape)
             .background(backgroundColor)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = AccentPurple, bounded = true),
+                indication = ripple(color = accentRed, bounded = true),
                 onClick = onClick
             ),
         contentAlignment = Alignment.Center
