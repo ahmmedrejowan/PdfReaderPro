@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rejowan.pdfreaderpro.data.local.PasswordStorage
+import com.rejowan.pdfreaderpro.data.local.database.dao.BookmarkDao
+import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
 import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
@@ -15,6 +17,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,6 +27,7 @@ import java.io.File
 class ReaderViewModel(
     private val recentRepository: RecentRepository,
     private val favoriteRepository: FavoriteRepository,
+    private val bookmarkDao: BookmarkDao,
     private val applicationContext: Context,
     savedStateHandle: SavedStateHandle,
     private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
@@ -51,6 +56,19 @@ class ReaderViewModel(
             storedLastPage = recentRepository.getLastPage(pdfPath)
             isFirstOpen = storedLastPage == null
         }
+
+        // Observe bookmarks for this PDF
+        bookmarkDao.getBookmarksForPdf(pdfPath)
+            .onEach { bookmarks ->
+                _state.update { state ->
+                    val isCurrentBookmarked = bookmarks.any { it.pageNumber == state.currentPage }
+                    state.copy(
+                        bookmarks = bookmarks,
+                        isCurrentPageBookmarked = isCurrentBookmarked
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun setPdfViewer(viewer: PdfViewer) {
@@ -105,7 +123,10 @@ class ReaderViewModel(
             onPageChange = { pageNumber ->
                 // Library uses 1-based indexing, our state uses 0-based
                 val page = pageNumber - 1
-                _state.update { it.copy(currentPage = page) }
+                _state.update { state ->
+                    val isBookmarked = state.bookmarks.any { it.pageNumber == page }
+                    state.copy(currentPage = page, isCurrentPageBookmarked = isBookmarked)
+                }
                 // Save last read page to database
                 viewModelScope.launch {
                     recentRepository.updateLastPage(pdfPath, page)
@@ -343,8 +364,43 @@ class ReaderViewModel(
 
             // Bookmark current page
             is ReaderAction.TogglePageBookmark -> {
-                _state.update { it.copy(isCurrentPageBookmarked = !it.isCurrentPageBookmarked) }
-                // TODO: Implement actual bookmark persistence
+                viewModelScope.launch {
+                    val currentPage = _state.value.currentPage
+                    val isCurrentlyBookmarked = _state.value.isCurrentPageBookmarked
+
+                    if (isCurrentlyBookmarked) {
+                        // Remove bookmark
+                        bookmarkDao.deleteByPage(pdfPath, currentPage)
+                    } else {
+                        // Add bookmark
+                        val bookmark = BookmarkEntity(
+                            pdfPath = pdfPath,
+                            pageNumber = currentPage,
+                            title = "Page ${currentPage + 1}"
+                        )
+                        bookmarkDao.insert(bookmark)
+                    }
+                    // State will be updated automatically by the Flow observer
+                }
+            }
+
+            is ReaderAction.DeleteBookmark -> {
+                viewModelScope.launch {
+                    bookmarkDao.delete(action.bookmark)
+                }
+            }
+
+            is ReaderAction.GoToBookmark -> {
+                val page = action.bookmark.pageNumber
+                _state.update { state ->
+                    val isBookmarked = state.bookmarks.any { it.pageNumber == page }
+                    state.copy(
+                        currentPage = page,
+                        isCurrentPageBookmarked = isBookmarked,
+                        isBookmarksSheetVisible = false
+                    )
+                }
+                pdfViewer?.goToPage(page + 1)
             }
         }
     }

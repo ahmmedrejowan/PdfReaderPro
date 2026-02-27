@@ -1,5 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader
 
+import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.OutlineItem
 
 /**
@@ -86,7 +87,10 @@ data class ReaderState(
     val pageRotation: Int = 0,
 
     // Current page bookmark status
-    val isCurrentPageBookmarked: Boolean = false
+    val isCurrentPageBookmarked: Boolean = false,
+
+    // Bookmarks for current PDF
+    val bookmarks: List<BookmarkEntity> = emptyList()
 ) {
     val pageLabel: String
         get() = "${currentPage + 1} / $totalPages"
@@ -225,4 +229,6 @@ sealed class ReaderAction {
 
     // Bookmark current page
     data object TogglePageBookmark : ReaderAction()
+    data class DeleteBookmark(val bookmark: BookmarkEntity) : ReaderAction()
+    data class GoToBookmark(val bookmark: BookmarkEntity) : ReaderAction()
 }

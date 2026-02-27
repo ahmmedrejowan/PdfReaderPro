@@ -63,6 +63,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageSprea
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomPreset
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DisplaySheet
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.BookmarksSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.MoreOptionsSheet
 import org.koin.androidx.compose.koinViewModel
 
@@ -516,10 +517,28 @@ fun ReaderScreen(
         )
     }
 
+    // Bookmarks Sheet
+    if (state.isBookmarksSheetVisible) {
+        BookmarksSheet(
+            bookmarks = state.bookmarks,
+            currentPage = state.currentPage,
+            onBookmarkClick = { bookmark ->
+                viewModel.onAction(ReaderAction.GoToBookmark(bookmark))
+            },
+            onDeleteBookmark = { bookmark ->
+                viewModel.onAction(ReaderAction.DeleteBookmark(bookmark))
+            },
+            onDismiss = { viewModel.onAction(ReaderAction.HideBookmarksSheet) }
+        )
+    }
+
     // More Options Sheet
     if (state.isMoreOptionsSheetVisible) {
         MoreOptionsSheet(
-            onBookmarksClick = { viewModel.onAction(ReaderAction.ShowBookmarksSheet) },
+            onBookmarksClick = {
+                viewModel.onAction(ReaderAction.HideMoreOptionsSheet)
+                viewModel.onAction(ReaderAction.ShowBookmarksSheet)
+            },
             onAutoScrollClick = { /* TODO: Implement auto-scroll */ },
             onReadingThemeClick = {
                 viewModel.onAction(ReaderAction.HideMoreOptionsSheet)
