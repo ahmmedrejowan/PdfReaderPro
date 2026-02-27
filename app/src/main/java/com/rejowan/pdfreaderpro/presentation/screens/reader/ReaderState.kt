@@ -23,6 +23,8 @@ data class ReaderState(
     val minZoom: Float = 0.5f,
     val maxZoom: Float = 5f,
     val scrollDirection: ScrollDirection = ScrollDirection.VERTICAL,
+    val spreadMode: SpreadMode = SpreadMode.NONE,
+    val isSnapEnabled: Boolean = false,
 
     // UI visibility
     val isToolbarVisible: Boolean = true,
@@ -92,6 +94,15 @@ enum class ScrollDirection {
 }
 
 /**
+ * Page spread mode for PDF viewer.
+ */
+enum class SpreadMode {
+    NONE,
+    ODD,
+    EVEN
+}
+
+/**
  * Reader events for one-time actions.
  */
 sealed class ReaderEvent {
@@ -117,6 +128,9 @@ sealed class ReaderAction {
     data object ZoomIn : ReaderAction()
     data object ZoomOut : ReaderAction()
     data object ResetZoom : ReaderAction()
+    data object ZoomFitPage : ReaderAction()
+    data object ZoomFitWidth : ReaderAction()
+    data object ZoomActualSize : ReaderAction()
 
     // UI
     data object ToggleToolbar : ReaderAction()
@@ -145,6 +159,8 @@ sealed class ReaderAction {
     // Reading settings
     data class SetBrightness(val brightness: Float) : ReaderAction()
     data class SetScrollDirection(val direction: ScrollDirection) : ReaderAction()
+    data class SetSpreadMode(val mode: SpreadMode) : ReaderAction()
+    data class SetSnapEnabled(val enabled: Boolean) : ReaderAction()
     data class SetKeepScreenOn(val enabled: Boolean) : ReaderAction()
 
     // Search

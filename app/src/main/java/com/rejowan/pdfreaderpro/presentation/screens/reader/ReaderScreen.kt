@@ -58,6 +58,11 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordD
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderSidebar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ViewModeSheet
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageSpreadMode
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomSheet
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomPreset
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.MoreOptionsSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -432,6 +437,65 @@ fun ReaderScreen(
             fileName = state.documentTitle ?: "this PDF",
             onConfirm = { viewModel.onAction(ReaderAction.ConfirmDelete) },
             onDismiss = { viewModel.onAction(ReaderAction.HideDeleteDialog) }
+        )
+    }
+
+    // View Mode Sheet
+    if (state.isViewModeSheetVisible) {
+        ViewModeSheet(
+            currentScrollDirection = state.scrollDirection,
+            currentSpreadMode = when (state.spreadMode) {
+                SpreadMode.NONE -> PageSpreadMode.NONE
+                SpreadMode.ODD -> PageSpreadMode.ODD
+                SpreadMode.EVEN -> PageSpreadMode.EVEN
+            },
+            isSnapEnabled = state.isSnapEnabled,
+            onScrollDirectionChange = { direction ->
+                viewModel.onAction(ReaderAction.SetScrollDirection(direction))
+            },
+            onSpreadModeChange = { mode ->
+                val spreadMode = when (mode) {
+                    PageSpreadMode.NONE -> SpreadMode.NONE
+                    PageSpreadMode.ODD -> SpreadMode.ODD
+                    PageSpreadMode.EVEN -> SpreadMode.EVEN
+                }
+                viewModel.onAction(ReaderAction.SetSpreadMode(spreadMode))
+            },
+            onSnapToggle = { enabled ->
+                viewModel.onAction(ReaderAction.SetSnapEnabled(enabled))
+            },
+            onDismiss = { viewModel.onAction(ReaderAction.HideViewModeSheet) }
+        )
+    }
+
+    // Zoom Sheet
+    if (state.isZoomSheetVisible) {
+        ZoomSheet(
+            currentZoom = state.zoom,
+            currentRotation = state.pageRotation,
+            onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
+            onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
+            onZoomPreset = { preset ->
+                when (preset) {
+                    ZoomPreset.FIT_PAGE -> viewModel.onAction(ReaderAction.ZoomFitPage)
+                    ZoomPreset.FIT_WIDTH -> viewModel.onAction(ReaderAction.ZoomFitWidth)
+                    ZoomPreset.ACTUAL_SIZE -> viewModel.onAction(ReaderAction.ZoomActualSize)
+                }
+            },
+            onRotateClockwise = { viewModel.onAction(ReaderAction.RotateClockwise) },
+            onRotateCounterClockwise = { viewModel.onAction(ReaderAction.RotateCounterClockwise) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideZoomSheet) }
+        )
+    }
+
+    // More Options Sheet
+    if (state.isMoreOptionsSheetVisible) {
+        MoreOptionsSheet(
+            onBookmarksClick = { viewModel.onAction(ReaderAction.ShowBookmarksSheet) },
+            onAutoScrollClick = { /* TODO: Implement auto-scroll */ },
+            onReadingThemeClick = { /* TODO: Implement reading theme */ },
+            onDisplaySettingsClick = { viewModel.onAction(ReaderAction.ShowSettingsPanel) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideMoreOptionsSheet) }
         )
     }
 }

@@ -230,6 +230,15 @@ class ReaderViewModel(
             is ReaderAction.ResetZoom -> {
                 pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_FIT)
             }
+            is ReaderAction.ZoomFitPage -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+            }
+            is ReaderAction.ZoomFitWidth -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_WIDTH)
+            }
+            is ReaderAction.ZoomActualSize -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.ACTUAL_SIZE)
+            }
 
             is ReaderAction.ToggleToolbar -> _state.update { it.copy(isToolbarVisible = !it.isToolbarVisible) }
             is ReaderAction.ToggleControlBarExpanded -> _state.update { it.copy(isControlBarExpanded = !it.isControlBarExpanded) }
@@ -262,6 +271,19 @@ class ReaderViewModel(
                     ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
                 }
                 pdfViewer?.pageScrollMode = scrollMode
+            }
+            is ReaderAction.SetSpreadMode -> {
+                _state.update { it.copy(spreadMode = action.mode) }
+                val spreadMode = when (action.mode) {
+                    SpreadMode.NONE -> PdfViewer.PageSpreadMode.NONE
+                    SpreadMode.ODD -> PdfViewer.PageSpreadMode.ODD
+                    SpreadMode.EVEN -> PdfViewer.PageSpreadMode.EVEN
+                }
+                pdfViewer?.pageSpreadMode = spreadMode
+            }
+            is ReaderAction.SetSnapEnabled -> {
+                _state.update { it.copy(isSnapEnabled = action.enabled) }
+                pdfViewer?.snapPage = action.enabled
             }
             is ReaderAction.SetKeepScreenOn -> _state.update { it.copy(keepScreenOn = action.enabled) }
 
