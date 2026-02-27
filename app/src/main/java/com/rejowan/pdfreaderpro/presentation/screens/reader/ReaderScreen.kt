@@ -3,7 +3,6 @@ package com.rejowan.pdfreaderpro.presentation.screens.reader
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.print.PrintManager
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -47,6 +46,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
+import com.rejowan.pdfreaderpro.presentation.components.pdf.print.DefaultPdfPrintAdapter
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.EnhancedTableOfContents
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorState
@@ -256,6 +256,11 @@ fun ReaderScreen(
                 PdfViewer(ctx).apply {
                     setBackgroundColor(backgroundColorArgb)
 
+                    // Set up print adapter
+                    pdfPrintAdapter = DefaultPdfPrintAdapter(ctx).also {
+                        it.defaultFileName = viewModel.pdfPath.substringAfterLast("/")
+                    }
+
                     onReady {
                         ui.toolbarEnabled = false
                         ui.isSideBarOpen = false
@@ -307,9 +312,7 @@ fun ReaderScreen(
                     onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
                     onShareClick = { viewModel.onAction(ReaderAction.ShareDocument) },
                     onPrintClick = {
-                        // Print functionality
-                        val printManager = context.getSystemService(PrintManager::class.java)
-                        // You can implement print adapter here
+                        viewModel.printDocument()
                     },
                     onInfoClick = { viewModel.onAction(ReaderAction.ShowInfoDialog) },
                     onFullScreenClick = { viewModel.onAction(ReaderAction.ToggleFullScreen) },
@@ -550,8 +553,7 @@ fun ReaderScreen(
                 viewModel.onAction(ReaderAction.ShareDocument)
             },
             onPrintClick = {
-                val printManager = context.getSystemService(PrintManager::class.java)
-                // TODO: Implement print with PdfPrintAdapter
+                viewModel.printDocument()
             },
             onDocumentInfoClick = {
                 viewModel.onAction(ReaderAction.ShowInfoDialog)

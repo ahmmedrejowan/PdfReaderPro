@@ -519,16 +519,40 @@ class ReaderViewModel(
         }
     }
 
+    fun printDocument() {
+        try {
+            val fileName = _state.value.documentTitle ?: File(pdfPath).nameWithoutExtension
+            pdfViewer?.printFile(fileName)
+        } catch (e: Exception) {
+            viewModelScope.launch {
+                _events.send(ReaderEvent.Error("Print error: ${e.message}"))
+            }
+        }
+    }
+
     fun getPdfInfo(): PdfInfo {
         val file = File(pdfPath)
         val properties = pdfViewer?.properties
         return PdfInfo(
             title = properties?.title?.takeIf { it.isNotBlank() } ?: _state.value.documentTitle,
             author = properties?.author?.takeIf { it.isNotBlank() },
+            subject = properties?.subject?.takeIf { it.isNotBlank() },
+            creator = properties?.creator?.takeIf { it.isNotBlank() },
+            producer = properties?.producer?.takeIf { it.isNotBlank() },
+            creationDate = properties?.creationDate?.takeIf { it.isNotBlank() && it != "null" },
+            keywords = properties?.keywords?.takeIf { it.isNotBlank() },
+            language = properties?.language?.takeIf { it.isNotBlank() },
+            pdfVersion = properties?.pdfFormatVersion?.takeIf { it.isNotBlank() },
             path = pdfPath,
             pageCount = _state.value.totalPages,
-            fileSize = file.length(),
-            lastModified = file.lastModified()
+            fileSize = properties?.fileSize ?: file.length(),
+            lastModified = file.lastModified(),
+            isLinearized = properties?.isLinearized ?: false,
+            isEncrypted = !properties?.encryptFilterName.isNullOrBlank(),
+            encryptionType = properties?.encryptFilterName?.takeIf { it.isNotBlank() },
+            hasForms = properties?.isAcroFormPresent ?: false,
+            hasSignatures = properties?.isSignaturesPresent ?: false,
+            hasXfa = properties?.isXFAPresent ?: false
         )
     }
 
