@@ -1,7 +1,10 @@
 package com.rejowan.pdfreaderpro.presentation
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,9 +28,13 @@ import com.rejowan.pdfreaderpro.presentation.components.PermissionBottomSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.Home
 import com.rejowan.pdfreaderpro.presentation.navigation.Onboarding
 import com.rejowan.pdfreaderpro.presentation.navigation.PdfReaderNavGraph
+import com.rejowan.pdfreaderpro.presentation.navigation.Reader
 import com.rejowan.pdfreaderpro.presentation.theme.PdfReaderProTheme
+import com.rejowan.pdfreaderpro.util.FileOperations
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -48,20 +55,30 @@ class MainActivity : ComponentActivity() {
         // Keep splash visible while loading preferences
         splashScreen.setKeepOnScreenCondition { !isReady }
 
-        // Determine start destination
+        // Clean up old cached PDFs in background
+        lifecycleScope.launch(Dispatchers.IO) {
+            FileOperations.cleanupOldCachedPdfs(this@MainActivity)
+        }
+
+        // Determine start destination (check for incoming intent first)
         lifecycleScope.launch {
             val prefs = preferencesRepository.preferences.first()
             hasCompletedOnboarding = prefs.hasCompletedOnboarding
             val hasPermission = Environment.isExternalStorageManager()
 
-            startDestination = if (hasCompletedOnboarding && hasPermission) {
-                Home
-            } else if (hasCompletedOnboarding && !hasPermission) {
-                // Onboarding done but permission revoked - go to Home but show sheet
-                showPermissionSheet = true
-                Home
-            } else {
-                Onboarding
+            // Check if opened via intent with PDF
+            val intentPdfPath = handleIncomingIntent(intent)
+
+            startDestination = when {
+                // If we have an intent with PDF, go directly to reader
+                intentPdfPath != null -> Reader(path = intentPdfPath, fromIntent = true)
+                // Normal app launch flow
+                hasCompletedOnboarding && hasPermission -> Home
+                hasCompletedOnboarding && !hasPermission -> {
+                    showPermissionSheet = true
+                    Home
+                }
+                else -> Onboarding
             }
             isReady = true
         }
@@ -104,6 +121,39 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Handles incoming intents (ACTION_VIEW, ACTION_SEND) with PDF files.
+     * Returns the local file path if successful, null otherwise.
+     */
+    private suspend fun handleIncomingIntent(intent: Intent?): String? {
+        if (intent == null) return null
+
+        val uri: Uri? = when (intent.action) {
+            Intent.ACTION_VIEW -> intent.data
+            Intent.ACTION_SEND -> intent.getParcelableExtra(Intent.EXTRA_STREAM)
+            else -> null
+        }
+
+        if (uri == null) return null
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val path = FileOperations.resolveUriToPath(this@MainActivity, uri)
+                if (path == null) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity, "Failed to open PDF", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                path
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+                null
             }
         }
     }
