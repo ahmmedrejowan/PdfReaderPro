@@ -108,7 +108,7 @@ class UiSettings internal constructor(private val webView: WebView) {
 
     /**
      * Sets the reading theme for the PDF viewer.
-     * @param theme The theme to apply: "light", "dark", or "sepia"
+     * @param theme The theme to apply: "light", "dark", "sepia", or "black"
      */
     fun setReadingTheme(theme: String) {
         webView callDirectly "setReadingTheme"(theme.toJsString())

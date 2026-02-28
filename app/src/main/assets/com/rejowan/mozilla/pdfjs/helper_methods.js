@@ -350,8 +350,8 @@ function setReadingTheme(theme) {
     const viewerContainer = document.getElementById('viewerContainer');
 
     // Remove existing theme classes
-    viewer.classList.remove('theme-light', 'theme-dark', 'theme-sepia');
-    viewerContainer.classList.remove('theme-light', 'theme-dark', 'theme-sepia');
+    viewer.classList.remove('theme-light', 'theme-dark', 'theme-sepia', 'theme-black');
+    viewerContainer.classList.remove('theme-light', 'theme-dark', 'theme-sepia', 'theme-black');
 
     // Apply theme styles
     let filter = 'none';
@@ -369,6 +369,10 @@ function setReadingTheme(theme) {
         case 'sepia':
             filter = 'sepia(0.3) brightness(0.95)';
             bgColor = '#f5e6d3';
+            break;
+        case 'black':
+            filter = 'invert(1) hue-rotate(180deg)';
+            bgColor = '#000000';
             break;
     }
 
