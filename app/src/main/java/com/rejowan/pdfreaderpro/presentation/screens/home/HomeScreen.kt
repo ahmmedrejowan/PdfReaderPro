@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -50,6 +51,7 @@ import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.StatsSheet
 import com.rejowan.pdfreaderpro.presentation.components.WelcomeHeader
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.ExitConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToFolderDetail
@@ -62,6 +64,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.home.tabs.RecentTab
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreenContent
 import com.rejowan.pdfreaderpro.presentation.screens.tools.ToolsScreen
 import com.rejowan.pdfreaderpro.util.FileOperations
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -161,8 +164,14 @@ fun HomeScreen(
     var showRenameDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showInfoDialog by remember { mutableStateOf(false) }
+    var showExitConfirmSheet by remember { mutableStateOf(false) }
     var fileForDialog by remember { mutableStateOf<PdfFile?>(null) }
     var selectedFileFromRecent by remember { mutableStateOf(false) }
+
+    // Handle back press to show exit confirmation
+    BackHandler(enabled = selectedNavItem == 0) {
+        showExitConfirmSheet = true
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -432,5 +441,17 @@ fun HomeScreen(
                 }
             )
         }
+    }
+
+    // Exit Confirmation Sheet
+    if (showExitConfirmSheet) {
+        val activity = context as? Activity
+        ExitConfirmSheet(
+            onDismiss = { showExitConfirmSheet = false },
+            onConfirmExit = {
+                showExitConfirmSheet = false
+                activity?.finishAffinity()
+            }
+        )
     }
 }
