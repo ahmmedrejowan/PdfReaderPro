@@ -437,7 +437,7 @@ private fun ThemeOption(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = AccentAmber),
@@ -448,12 +448,12 @@ private fun ThemeOption(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .height(52.dp)
+                .clip(RoundedCornerShape(8.dp))
                 .border(
                     width = borderWidth.dp,
                     color = borderColor,
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(8.dp)
                 )
                 .background(backgroundColor),
             contentAlignment = Alignment.Center
@@ -465,25 +465,25 @@ private fun ThemeOption(
                 // Sample text lines to preview theme
                 Box(
                     modifier = Modifier
-                        .width(40.dp)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(2.dp))
+                        .width(32.dp)
+                        .height(3.dp)
+                        .clip(RoundedCornerShape(1.5.dp))
                         .background(textColor.copy(alpha = 0.8f))
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(3.dp))
                 Box(
                     modifier = Modifier
-                        .width(32.dp)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(2.dp))
+                        .width(24.dp)
+                        .height(3.dp)
+                        .clip(RoundedCornerShape(1.5.dp))
                         .background(textColor.copy(alpha = 0.5f))
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(3.dp))
                 Box(
                     modifier = Modifier
-                        .width(36.dp)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(2.dp))
+                        .width(28.dp)
+                        .height(3.dp)
+                        .clip(RoundedCornerShape(1.5.dp))
                         .background(textColor.copy(alpha = 0.6f))
                 )
             }
@@ -493,8 +493,8 @@ private fun ThemeOption(
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(6.dp)
-                        .size(20.dp)
+                        .padding(4.dp)
+                        .size(16.dp)
                         .clip(CircleShape)
                         .background(AccentAmber),
                     contentAlignment = Alignment.Center
@@ -503,17 +503,17 @@ private fun ThemeOption(
                         imageVector = Icons.Outlined.Check,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(14.dp)
+                        modifier = Modifier.size(10.dp)
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Text(
             text = label,
-            style = MaterialTheme.typography.labelMedium.copy(
+            style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
             ),
             color = if (isSelected) AccentAmber else MaterialTheme.colorScheme.onSurfaceVariant
@@ -545,20 +545,20 @@ private fun BrightnessSlider(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 10.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Rounded.BrightnessLow,
                 contentDescription = "Low brightness",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(22.dp)
+                modifier = Modifier.size(18.dp)
             )
 
             Slider(
@@ -567,7 +567,7 @@ private fun BrightnessSlider(
                 valueRange = 0f..1f,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 12.dp),
+                    .padding(horizontal = 8.dp),
                 colors = SliderDefaults.colors(
                     thumbColor = AccentAmber,
                     activeTrackColor = AccentAmber,
@@ -579,7 +579,7 @@ private fun BrightnessSlider(
                 imageVector = Icons.Rounded.BrightnessHigh,
                 contentDescription = "High brightness",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(22.dp)
+                modifier = Modifier.size(18.dp)
             )
         }
     }
@@ -609,46 +609,46 @@ private fun KeepScreenOnRow(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(horizontal = 10.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
                 shape = CircleShape,
                 color = AccentPurple.copy(alpha = 0.12f),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(32.dp)
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.BrightnessMedium,
                         contentDescription = null,
                         tint = AccentPurple,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(16.dp)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "Keep Screen On",
-                    style = MaterialTheme.typography.bodyLarge.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Prevent screen from turning off while reading",
-                    style = MaterialTheme.typography.bodySmall,
+                    text = "Prevent screen from turning off",
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }

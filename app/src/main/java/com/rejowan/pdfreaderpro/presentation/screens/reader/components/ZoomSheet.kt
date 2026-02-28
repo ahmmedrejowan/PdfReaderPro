@@ -70,7 +70,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScreenOrientation
 import kotlinx.coroutines.delay
 
@@ -258,7 +257,7 @@ private fun ZoomSheetContent(
             animationDelay = 0
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Zoom Presets
         SectionLabel(text = "Quick Zoom", delay = 100)
@@ -437,13 +436,13 @@ private fun ZoomControlsRow(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -460,7 +459,7 @@ private fun ZoomControlsRow(
             ) {
                 Text(
                     text = "${(currentZoom * 100).toInt()}%",
-                    style = MaterialTheme.typography.headlineMedium.copy(
+                    style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
                     ),
                     color = AccentTeal
@@ -491,7 +490,7 @@ private fun ZoomButton(
 ) {
     Surface(
         modifier = modifier
-            .size(52.dp)
+            .size(40.dp)
             .clip(CircleShape)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -503,13 +502,13 @@ private fun ZoomButton(
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.size(52.dp)
+            modifier = Modifier.size(40.dp)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = accentColor,
-                modifier = Modifier.size(26.dp)
+                modifier = Modifier.size(20.dp)
             )
         }
     }
@@ -562,7 +561,7 @@ private fun ZoomPresetChip(
     Surface(
         modifier = modifier
             .scale(scale)
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -570,23 +569,23 @@ private fun ZoomPresetChip(
             )
             .then(
                 if (isSelected) Modifier.border(
-                    width = 1.5.dp,
+                    width = 1.dp,
                     color = borderColor,
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(8.dp)
                 ) else Modifier
             ),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(8.dp),
         color = backgroundColor
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 14.dp),
+                .padding(horizontal = 8.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(32.dp)
                     .clip(CircleShape)
                     .background(accentColor.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
@@ -594,16 +593,16 @@ private fun ZoomPresetChip(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp),
+                    modifier = Modifier.size(18.dp),
                     tint = contentColor
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelMedium.copy(
+                style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Medium
                 ),
                 color = contentColor
@@ -659,7 +658,7 @@ private fun OrientationChip(
     Surface(
         modifier = modifier
             .scale(scale)
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -667,24 +666,24 @@ private fun OrientationChip(
             )
             .then(
                 if (isSelected) Modifier.border(
-                    width = 1.5.dp,
+                    width = 1.dp,
                     color = borderColor,
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(8.dp)
                 ) else Modifier
             ),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(8.dp),
         color = backgroundColor
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 14.dp),
+                .padding(horizontal = 6.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(32.dp)
                         .clip(CircleShape)
                         .background(accentColor.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
@@ -692,7 +691,7 @@ private fun OrientationChip(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        modifier = Modifier.size(22.dp),
+                        modifier = Modifier.size(18.dp),
                         tint = contentColor
                     )
                 }
@@ -702,7 +701,7 @@ private fun OrientationChip(
                     Box(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .size(16.dp)
+                            .size(14.dp)
                             .clip(CircleShape)
                             .background(accentColor),
                         contentAlignment = Alignment.Center
@@ -710,18 +709,18 @@ private fun OrientationChip(
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = "Selected",
-                            modifier = Modifier.size(10.dp),
+                            modifier = Modifier.size(8.dp),
                             tint = Color.White
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelMedium.copy(
+                style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
                 ),
                 color = contentColor
