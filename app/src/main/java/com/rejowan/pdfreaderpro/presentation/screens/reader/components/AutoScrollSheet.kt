@@ -242,17 +242,18 @@ private fun AutoScrollSheetContent(
         // Speed presets
         Text(
             text = "Speed Presets",
-            style = MaterialTheme.typography.labelMedium.copy(
-                fontWeight = FontWeight.SemiBold
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Medium
             ),
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            modifier = Modifier.padding(start = 4.dp)
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             SpeedPreset.entries.forEach { preset ->
                 val isSelected = selectedSpeed == preset.speed
@@ -262,7 +263,7 @@ private fun AutoScrollSheetContent(
                     label = {
                         Text(
                             text = preset.label,
-                            style = MaterialTheme.typography.labelMedium
+                            style = MaterialTheme.typography.labelSmall
                         )
                     },
                     colors = FilterChipDefaults.filterChipColors(
@@ -273,7 +274,7 @@ private fun AutoScrollSheetContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Custom speed slider
         Row(
@@ -284,27 +285,27 @@ private fun AutoScrollSheetContent(
                 imageVector = Icons.Rounded.Speed,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(16.dp)
             )
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "Custom Speed",
-                style = MaterialTheme.typography.labelMedium.copy(
-                    fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Medium
                 ),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "${selectedSpeed.toInt()} px/s",
-                style = MaterialTheme.typography.labelMedium.copy(
+                style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Medium
                 ),
                 color = AccentBlue
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Slider(
             value = selectedSpeed,
@@ -335,7 +336,7 @@ private fun AutoScrollSheetContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Start button
         Button(
@@ -345,30 +346,30 @@ private fun AutoScrollSheetContent(
                 containerColor = AccentBlue,
                 contentColor = Color.White
             ),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(8.dp)
         ) {
             Icon(
                 imageVector = Icons.Rounded.PlayArrow,
                 contentDescription = null,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(16.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "Start Auto-Scroll",
-                style = MaterialTheme.typography.titleSmall.copy(
+                style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 )
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         // Hint text
         Text(
-            text = "Tap anywhere on the screen to pause/resume. Use the overlay controls to stop or adjust speed.",
-            style = MaterialTheme.typography.bodySmall,
+            text = "Tap screen to pause/resume. Use overlay to stop.",
+            style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier.padding(horizontal = 4.dp)
         )
     }
 }

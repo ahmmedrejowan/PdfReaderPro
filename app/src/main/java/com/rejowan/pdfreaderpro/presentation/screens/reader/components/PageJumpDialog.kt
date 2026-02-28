@@ -321,7 +321,7 @@ private fun PageJumpContent(
                 ),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Cancel")
+                Text("Cancel", style = MaterialTheme.typography.labelMedium)
             }
 
             Button(
@@ -336,7 +336,7 @@ private fun PageJumpContent(
                 ),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Go")
+                Text("Go", style = MaterialTheme.typography.labelMedium)
             }
         }
     }

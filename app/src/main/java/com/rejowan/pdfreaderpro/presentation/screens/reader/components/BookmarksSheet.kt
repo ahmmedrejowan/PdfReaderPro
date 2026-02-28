@@ -277,7 +277,7 @@ private fun BookmarksSheetContent(
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -321,20 +321,20 @@ private fun BookmarkItem(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
-            .padding(horizontal = 12.dp, vertical = 2.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .padding(horizontal = 8.dp, vertical = 1.dp)
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = AccentRed),
                 onClick = onClick
             ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         color = backgroundColor
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
+                .padding(start = 10.dp, end = 4.dp, top = 8.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Bookmark icon
@@ -347,20 +347,20 @@ private fun BookmarkItem(
                     imageVector = Icons.Rounded.Bookmark,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(8.dp)
-                        .size(18.dp),
+                        .padding(6.dp)
+                        .size(14.dp),
                     tint = if (isCurrentPage) AccentRed
                           else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             // Title and date
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = bookmark.title ?: "Page ${bookmark.pageNumber + 1}",
-                    style = MaterialTheme.typography.bodyLarge.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = if (isCurrentPage) FontWeight.SemiBold else FontWeight.Normal
                     ),
                     color = textColor,
@@ -369,35 +369,35 @@ private fun BookmarkItem(
                 )
                 Text(
                     text = formatDate(bookmark.createdAt),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
             }
 
             // Page number chip
             Surface(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(6.dp),
                 color = if (isCurrentPage) AccentRed
                        else MaterialTheme.colorScheme.surfaceContainerHigh
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "${bookmark.pageNumber + 1}",
-                        style = MaterialTheme.typography.labelMedium.copy(
+                        style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Medium
                         ),
                         color = if (isCurrentPage) Color.White
                                else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     if (isCurrentPage) {
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(2.dp))
                         Icon(
                             imageVector = Icons.Rounded.ChevronRight,
                             contentDescription = null,
-                            modifier = Modifier.size(14.dp),
+                            modifier = Modifier.size(12.dp),
                             tint = Color.White
                         )
                     }
@@ -407,13 +407,13 @@ private fun BookmarkItem(
             // Delete button
             IconButton(
                 onClick = onDelete,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(32.dp)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Delete,
                     contentDescription = "Delete bookmark",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
@@ -427,47 +427,47 @@ private fun EmptyBookmarksState(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(48.dp),
+            .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Surface(
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(12.dp),
             color = AccentPurple.copy(alpha = 0.1f),
-            modifier = Modifier.size(80.dp)
+            modifier = Modifier.size(56.dp)
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(56.dp)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.BookmarkBorder,
                     contentDescription = null,
                     tint = AccentPurple,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "No Bookmarks Yet",
-            style = MaterialTheme.typography.titleMedium.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = "Tap the bookmark icon to save pages",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
