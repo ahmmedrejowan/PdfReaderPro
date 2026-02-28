@@ -125,6 +125,14 @@ fun ReaderScreen(
         }
     }
 
+    // Auto-hide toolbar after 5 seconds when enabled
+    LaunchedEffect(state.isToolbarVisible, state.autoHideToolbar) {
+        if (state.isToolbarVisible && state.autoHideToolbar && !state.isSearchActive) {
+            kotlinx.coroutines.delay(5000)
+            viewModel.onAction(ReaderAction.ToggleToolbar)
+        }
+    }
+
     // Calculate content padding for PDF viewer (in pixels)
     val density = LocalDensity.current
     val statusBarHeightPx = WindowInsets.statusBars.getTop(density)
@@ -515,6 +523,8 @@ fun ReaderScreen(
                 SpreadMode.EVEN -> PageSpreadMode.EVEN
             },
             isSnapEnabled = state.isSnapEnabled,
+            currentPageAlignment = state.pageAlignment,
+            isAutoHideToolbar = state.autoHideToolbar,
             onScrollDirectionChange = { direction ->
                 viewModel.onAction(ReaderAction.SetScrollDirection(direction))
             },
@@ -528,6 +538,12 @@ fun ReaderScreen(
             },
             onSnapToggle = { enabled ->
                 viewModel.onAction(ReaderAction.SetSnapEnabled(enabled))
+            },
+            onPageAlignmentChange = { alignment ->
+                viewModel.onAction(ReaderAction.SetPageAlignment(alignment))
+            },
+            onAutoHideToolbarToggle = { enabled ->
+                viewModel.onAction(ReaderAction.SetAutoHideToolbar(enabled))
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideViewModeSheet) }
         )

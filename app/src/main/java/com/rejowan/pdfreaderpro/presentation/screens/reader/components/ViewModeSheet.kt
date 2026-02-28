@@ -36,9 +36,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.automirrored.rounded.FormatAlignLeft
+import androidx.compose.material.icons.automirrored.rounded.FormatAlignRight
+import androidx.compose.material.icons.rounded.FormatAlignCenter
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.ViewDay
 import androidx.compose.material.icons.rounded.ViewModule
 import androidx.compose.material.icons.rounded.ViewStream
@@ -69,6 +73,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.presentation.screens.reader.PageAlignment
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
 import kotlinx.coroutines.delay
 
@@ -98,9 +103,13 @@ fun ViewModeSheet(
     currentScrollDirection: ScrollDirection,
     currentSpreadMode: PageSpreadMode,
     isSnapEnabled: Boolean,
+    currentPageAlignment: PageAlignment,
+    isAutoHideToolbar: Boolean,
     onScrollDirectionChange: (ScrollDirection) -> Unit,
     onSpreadModeChange: (PageSpreadMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
+    onPageAlignmentChange: (PageAlignment) -> Unit,
+    onAutoHideToolbarToggle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -111,9 +120,13 @@ fun ViewModeSheet(
             currentScrollDirection = currentScrollDirection,
             currentSpreadMode = currentSpreadMode,
             isSnapEnabled = isSnapEnabled,
+            currentPageAlignment = currentPageAlignment,
+            isAutoHideToolbar = isAutoHideToolbar,
             onScrollDirectionChange = onScrollDirectionChange,
             onSpreadModeChange = onSpreadModeChange,
             onSnapToggle = onSnapToggle,
+            onPageAlignmentChange = onPageAlignmentChange,
+            onAutoHideToolbarToggle = onAutoHideToolbarToggle,
             onDismiss = onDismiss
         )
     } else {
@@ -121,9 +134,13 @@ fun ViewModeSheet(
             currentScrollDirection = currentScrollDirection,
             currentSpreadMode = currentSpreadMode,
             isSnapEnabled = isSnapEnabled,
+            currentPageAlignment = currentPageAlignment,
+            isAutoHideToolbar = isAutoHideToolbar,
             onScrollDirectionChange = onScrollDirectionChange,
             onSpreadModeChange = onSpreadModeChange,
             onSnapToggle = onSnapToggle,
+            onPageAlignmentChange = onPageAlignmentChange,
+            onAutoHideToolbarToggle = onAutoHideToolbarToggle,
             onDismiss = onDismiss
         )
     }
@@ -135,9 +152,13 @@ private fun ViewModeBottomSheet(
     currentScrollDirection: ScrollDirection,
     currentSpreadMode: PageSpreadMode,
     isSnapEnabled: Boolean,
+    currentPageAlignment: PageAlignment,
+    isAutoHideToolbar: Boolean,
     onScrollDirectionChange: (ScrollDirection) -> Unit,
     onSpreadModeChange: (PageSpreadMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
+    onPageAlignmentChange: (PageAlignment) -> Unit,
+    onAutoHideToolbarToggle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -153,9 +174,13 @@ private fun ViewModeBottomSheet(
             currentScrollDirection = currentScrollDirection,
             currentSpreadMode = currentSpreadMode,
             isSnapEnabled = isSnapEnabled,
+            currentPageAlignment = currentPageAlignment,
+            isAutoHideToolbar = isAutoHideToolbar,
             onScrollDirectionChange = onScrollDirectionChange,
             onSpreadModeChange = onSpreadModeChange,
             onSnapToggle = onSnapToggle,
+            onPageAlignmentChange = onPageAlignmentChange,
+            onAutoHideToolbarToggle = onAutoHideToolbarToggle,
             modifier = Modifier.padding(bottom = 24.dp)
         )
     }
@@ -166,9 +191,13 @@ private fun ViewModeSideSheet(
     currentScrollDirection: ScrollDirection,
     currentSpreadMode: PageSpreadMode,
     isSnapEnabled: Boolean,
+    currentPageAlignment: PageAlignment,
+    isAutoHideToolbar: Boolean,
     onScrollDirectionChange: (ScrollDirection) -> Unit,
     onSpreadModeChange: (PageSpreadMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
+    onPageAlignmentChange: (PageAlignment) -> Unit,
+    onAutoHideToolbarToggle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
@@ -220,9 +249,13 @@ private fun ViewModeSideSheet(
                     currentScrollDirection = currentScrollDirection,
                     currentSpreadMode = currentSpreadMode,
                     isSnapEnabled = isSnapEnabled,
+                    currentPageAlignment = currentPageAlignment,
+                    isAutoHideToolbar = isAutoHideToolbar,
                     onScrollDirectionChange = onScrollDirectionChange,
                     onSpreadModeChange = onSpreadModeChange,
                     onSnapToggle = onSnapToggle,
+                    onPageAlignmentChange = onPageAlignmentChange,
+                    onAutoHideToolbarToggle = onAutoHideToolbarToggle,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -241,9 +274,13 @@ private fun ViewModeSheetContent(
     currentScrollDirection: ScrollDirection,
     currentSpreadMode: PageSpreadMode,
     isSnapEnabled: Boolean,
+    currentPageAlignment: PageAlignment,
+    isAutoHideToolbar: Boolean,
     onScrollDirectionChange: (ScrollDirection) -> Unit,
     onSpreadModeChange: (PageSpreadMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
+    onPageAlignmentChange: (PageAlignment) -> Unit,
+    onAutoHideToolbarToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -327,12 +364,64 @@ private fun ViewModeSheetContent(
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         Spacer(modifier = Modifier.height(12.dp))
 
+        // Page Alignment Section
+        SectionLabel(text = "Page Alignment", delay = 300)
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            AlignmentChip(
+                icon = Icons.AutoMirrored.Rounded.FormatAlignLeft,
+                label = "Left",
+                isSelected = currentPageAlignment == PageAlignment.LEFT,
+                accentColor = AccentTeal,
+                onClick = { onPageAlignmentChange(PageAlignment.LEFT) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 350
+            )
+            AlignmentChip(
+                icon = Icons.Rounded.FormatAlignCenter,
+                label = "Center",
+                isSelected = currentPageAlignment == PageAlignment.CENTER,
+                accentColor = AccentTeal,
+                onClick = { onPageAlignmentChange(PageAlignment.CENTER) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 400
+            )
+            AlignmentChip(
+                icon = Icons.AutoMirrored.Rounded.FormatAlignRight,
+                label = "Right",
+                isSelected = currentPageAlignment == PageAlignment.RIGHT,
+                accentColor = AccentTeal,
+                onClick = { onPageAlignmentChange(PageAlignment.RIGHT) },
+                modifier = Modifier.weight(1f),
+                animationDelay = 450
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        Spacer(modifier = Modifier.height(12.dp))
+
         // Snap Toggle
         SnapToggleRow(
             isEnabled = isSnapEnabled,
             onToggle = onSnapToggle,
             accentColor = AccentTeal,
-            animationDelay = 300
+            animationDelay = 500
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Auto-Hide Toolbar Toggle
+        AutoHideToggleRow(
+            isEnabled = isAutoHideToolbar,
+            onToggle = onAutoHideToolbarToggle,
+            accentColor = AccentPurple,
+            animationDelay = 550
         )
     }
 }
@@ -601,6 +690,174 @@ private fun SnapToggleRow(
                 )
                 Text(
                     text = "Automatically align to page boundaries",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                )
+            }
+
+            Switch(
+                checked = isEnabled,
+                onCheckedChange = onToggle,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = accentColor,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                )
+            )
+        }
+    }
+}
+
+@Composable
+private fun AlignmentChip(
+    icon: ImageVector,
+    label: String,
+    isSelected: Boolean,
+    accentColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    animationDelay: Int = 0
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(animationDelay.toLong())
+        isVisible = true
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
+        label = "alignment chip scale"
+    )
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.12f)
+        else MaterialTheme.colorScheme.surfaceContainerHigh,
+        animationSpec = tween(200),
+        label = "alignment chip bg"
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.5f)
+        else Color.Transparent,
+        animationSpec = tween(200),
+        label = "alignment chip border"
+    )
+
+    val contentColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor
+        else MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = tween(200),
+        label = "alignment chip content"
+    )
+
+    Surface(
+        modifier = modifier
+            .scale(scale)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = accentColor),
+                onClick = onClick
+            )
+            .then(
+                if (isSelected) Modifier.border(
+                    width = 1.5.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(12.dp)
+                ) else Modifier
+            ),
+        shape = RoundedCornerShape(12.dp),
+        color = backgroundColor
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = contentColor
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
+                ),
+                color = contentColor
+            )
+        }
+    }
+}
+
+@Composable
+private fun AutoHideToggleRow(
+    isEnabled: Boolean,
+    onToggle: (Boolean) -> Unit,
+    accentColor: Color,
+    animationDelay: Int,
+    modifier: Modifier = Modifier
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(animationDelay.toLong())
+        isVisible = true
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
+        label = "auto hide toggle scale"
+    )
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .scale(scale),
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = accentColor.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Timer,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(18.dp),
+                    tint = accentColor
+                )
+            }
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Auto-Hide Toolbar",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Hide toolbar after 5 seconds",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )

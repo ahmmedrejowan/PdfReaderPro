@@ -374,41 +374,63 @@ private fun ThemeSelector(
         label = "theme selector scale"
     )
 
-    Row(
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        ThemeOption(
-            theme = ReadingTheme.LIGHT,
-            label = "Light",
-            backgroundColor = Color(0xFFFAFAFA),
-            textColor = Color(0xFF212121),
-            isSelected = currentTheme == ReadingTheme.LIGHT,
-            onClick = { onThemeChange(ReadingTheme.LIGHT) },
-            modifier = Modifier.weight(1f)
-        )
+        // First row: Light and Dark
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ThemeOption(
+                theme = ReadingTheme.LIGHT,
+                label = "Light",
+                backgroundColor = Color(0xFFFAFAFA),
+                textColor = Color(0xFF212121),
+                isSelected = currentTheme == ReadingTheme.LIGHT,
+                onClick = { onThemeChange(ReadingTheme.LIGHT) },
+                modifier = Modifier.weight(1f)
+            )
 
-        ThemeOption(
-            theme = ReadingTheme.DARK,
-            label = "Dark",
-            backgroundColor = Color(0xFF1E1E1E),
-            textColor = Color(0xFFE0E0E0),
-            isSelected = currentTheme == ReadingTheme.DARK,
-            onClick = { onThemeChange(ReadingTheme.DARK) },
-            modifier = Modifier.weight(1f)
-        )
+            ThemeOption(
+                theme = ReadingTheme.DARK,
+                label = "Dark",
+                backgroundColor = Color(0xFF1E1E1E),
+                textColor = Color(0xFFE0E0E0),
+                isSelected = currentTheme == ReadingTheme.DARK,
+                onClick = { onThemeChange(ReadingTheme.DARK) },
+                modifier = Modifier.weight(1f)
+            )
+        }
 
-        ThemeOption(
-            theme = ReadingTheme.SEPIA,
-            label = "Sepia",
-            backgroundColor = Color(0xFFF5E6D3),
-            textColor = Color(0xFF5D4037),
-            isSelected = currentTheme == ReadingTheme.SEPIA,
-            onClick = { onThemeChange(ReadingTheme.SEPIA) },
-            modifier = Modifier.weight(1f)
-        )
+        // Second row: Sepia and Black (AMOLED)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ThemeOption(
+                theme = ReadingTheme.SEPIA,
+                label = "Sepia",
+                backgroundColor = Color(0xFFF5E6D3),
+                textColor = Color(0xFF5D4037),
+                isSelected = currentTheme == ReadingTheme.SEPIA,
+                onClick = { onThemeChange(ReadingTheme.SEPIA) },
+                modifier = Modifier.weight(1f)
+            )
+
+            ThemeOption(
+                theme = ReadingTheme.BLACK,
+                label = "Black",
+                backgroundColor = Color(0xFF000000),
+                textColor = Color(0xFFB0B0B0),
+                isSelected = currentTheme == ReadingTheme.BLACK,
+                onClick = { onThemeChange(ReadingTheme.BLACK) },
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
 }
 

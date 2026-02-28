@@ -369,8 +369,17 @@ class ReaderViewModel(
                     ReadingTheme.LIGHT -> "light"
                     ReadingTheme.DARK -> "dark"
                     ReadingTheme.SEPIA -> "sepia"
+                    ReadingTheme.BLACK -> "black"
                 }
                 pdfViewer?.ui?.setReadingTheme(themeName)
+            }
+
+            is ReaderAction.SetPageAlignment -> {
+                _state.update { it.copy(pageAlignment = action.alignment) }
+            }
+
+            is ReaderAction.SetAutoHideToolbar -> {
+                _state.update { it.copy(autoHideToolbar = action.enabled) }
             }
 
             is ReaderAction.Search -> {
@@ -407,6 +416,7 @@ class ReaderViewModel(
             is ReaderAction.SaveDocument -> saveDocument()
             is ReaderAction.SaveDocumentWithPicker -> viewModelScope.launch { _events.send(ReaderEvent.SaveDocumentPicker) }
             is ReaderAction.CloseDocument -> viewModelScope.launch { _events.send(ReaderEvent.DocumentClosed) }
+            is ReaderAction.OpenLink -> openLink(action.url)
 
             // Top bar menu
             is ReaderAction.ShowTopBarMenu -> _state.update { it.copy(isTopBarMenuVisible = true) }
@@ -609,6 +619,20 @@ class ReaderViewModel(
                 applicationContext.startActivity(chooser)
             } catch (e: Exception) {
                 _events.send(ReaderEvent.Error("Failed to open with external app: ${e.message}"))
+            }
+        }
+    }
+
+    private fun openLink(url: String) {
+        viewModelScope.launch {
+            try {
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                    data = android.net.Uri.parse(url)
+                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                applicationContext.startActivity(intent)
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to open link: ${e.message}"))
             }
         }
     }

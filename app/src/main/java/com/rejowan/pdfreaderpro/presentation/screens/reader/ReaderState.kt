@@ -76,6 +76,12 @@ data class ReaderState(
     // Reading theme
     val readingTheme: ReadingTheme = ReadingTheme.LIGHT,
 
+    // Page alignment
+    val pageAlignment: PageAlignment = PageAlignment.CENTER,
+
+    // Auto-hide toolbar
+    val autoHideToolbar: Boolean = false,
+
     // PDF info dialog
     val isInfoDialogVisible: Boolean = false,
 
@@ -145,7 +151,17 @@ enum class ScreenOrientation {
 enum class ReadingTheme {
     LIGHT,
     DARK,
-    SEPIA
+    SEPIA,
+    BLACK  // AMOLED black
+}
+
+/**
+ * Page alignment options.
+ */
+enum class PageAlignment {
+    LEFT,
+    CENTER,
+    RIGHT
 }
 
 /**
@@ -214,6 +230,9 @@ sealed class ReaderAction {
     data class SetKeepScreenOn(val enabled: Boolean) : ReaderAction()
     data class SetScreenOrientation(val orientation: ScreenOrientation) : ReaderAction()
     data class SetReadingTheme(val theme: ReadingTheme) : ReaderAction()
+    data class SetPageAlignment(val alignment: PageAlignment) : ReaderAction()
+    data class SetAutoHideToolbar(val enabled: Boolean) : ReaderAction()
+    data class OpenLink(val url: String) : ReaderAction()
 
     // Search
     data class Search(val query: String) : ReaderAction()
