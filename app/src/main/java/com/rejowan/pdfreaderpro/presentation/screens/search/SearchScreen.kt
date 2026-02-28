@@ -87,7 +87,7 @@ import com.rejowan.pdfreaderpro.presentation.components.LoadingState
 import com.rejowan.pdfreaderpro.presentation.components.PdfListItem
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
-import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import com.rejowan.pdfreaderpro.util.FileOperations
 import kotlinx.coroutines.launch
@@ -246,10 +246,10 @@ fun SearchScreen(
         )
     }
 
-    // Rename Dialog
+    // Rename Sheet
     if (showRenameDialog) {
         fileForDialog?.let { file ->
-            RenameDialog(
+            RenameSheet(
                 pdfFile = file,
                 onDismiss = {
                     showRenameDialog = false

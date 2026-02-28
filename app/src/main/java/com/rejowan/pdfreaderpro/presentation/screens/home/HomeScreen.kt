@@ -51,7 +51,7 @@ import com.rejowan.pdfreaderpro.presentation.components.StatsSheet
 import com.rejowan.pdfreaderpro.presentation.components.WelcomeHeader
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
-import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToFolderDetail
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSearch
@@ -387,10 +387,10 @@ fun HomeScreen(
         )
     }
 
-    // Rename Dialog
+    // Rename Sheet
     if (showRenameDialog) {
         fileForDialog?.let { file ->
-            RenameDialog(
+            RenameSheet(
                 pdfFile = file,
                 onDismiss = {
                     showRenameDialog = false
