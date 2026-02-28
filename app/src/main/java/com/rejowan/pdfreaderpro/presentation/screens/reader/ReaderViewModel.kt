@@ -218,6 +218,9 @@ class ReaderViewModel(
                     }
                     pendingAttachmentAction = null
                 }
+            },
+            onLinkClick = { link ->
+                onAction(ReaderAction.OpenLink(link))
             }
         )
     }
