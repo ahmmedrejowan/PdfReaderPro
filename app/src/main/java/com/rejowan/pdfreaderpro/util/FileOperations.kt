@@ -7,7 +7,9 @@ import android.provider.OpenableColumns
 import androidx.core.content.FileProvider
 import timber.log.Timber
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.security.MessageDigest
 
 object FileOperations {
 
@@ -16,6 +18,7 @@ object FileOperations {
 
     /**
      * Copies a content URI to the app's cache directory.
+     * Uses MD5 verification to avoid duplicating identical files.
      * Returns the local file path, or null if copy failed.
      */
     fun copyContentUriToCache(context: Context, uri: Uri): String? {
@@ -23,28 +26,51 @@ object FileOperations {
             val fileName = getFileNameFromUri(context, uri) ?: "shared_${System.currentTimeMillis()}.pdf"
             val cacheDir = File(context.cacheDir, SHARED_PDF_CACHE_DIR).apply { mkdirs() }
             val destFile = File(cacheDir, fileName)
+            val tempFile = File(cacheDir, "temp_${System.currentTimeMillis()}.pdf")
 
-            // If file already exists with same name, add timestamp
-            val finalFile = if (destFile.exists()) {
-                val nameWithoutExt = fileName.substringBeforeLast(".")
-                val ext = fileName.substringAfterLast(".", "pdf")
-                File(cacheDir, "${nameWithoutExt}_${System.currentTimeMillis()}.$ext")
-            } else {
-                destFile
-            }
-
+            // Copy to temp file first
             context.contentResolver.openInputStream(uri)?.use { input ->
-                FileOutputStream(finalFile).use { output ->
+                FileOutputStream(tempFile).use { output ->
                     input.copyTo(output)
+                }
+            } ?: return null
+
+            val newFileMd5 = calculateMd5(tempFile)
+
+            // Check if existing file with same name has same MD5
+            if (destFile.exists()) {
+                val existingMd5 = calculateMd5(destFile)
+                if (existingMd5 == newFileMd5) {
+                    // Same file, reuse existing
+                    tempFile.delete()
+                    Timber.d("Reusing existing cached file (MD5 match): ${destFile.absolutePath}")
+                    return destFile.absolutePath
                 }
             }
 
-            Timber.d("Copied content URI to: ${finalFile.absolutePath}")
-            finalFile.absolutePath
+            // Different file or doesn't exist - overwrite
+            tempFile.renameTo(destFile)
+            Timber.d("Cached new file: ${destFile.absolutePath}")
+            destFile.absolutePath
         } catch (e: Exception) {
             Timber.e(e, "Error copying content URI to cache")
             null
         }
+    }
+
+    /**
+     * Calculates MD5 hash of a file.
+     */
+    private fun calculateMd5(file: File): String {
+        val md = MessageDigest.getInstance("MD5")
+        FileInputStream(file).use { fis ->
+            val buffer = ByteArray(8192)
+            var bytesRead: Int
+            while (fis.read(buffer).also { bytesRead = it } != -1) {
+                md.update(buffer, 0, bytesRead)
+            }
+        }
+        return md.digest().joinToString("") { "%02x".format(it) }
     }
 
     /**
