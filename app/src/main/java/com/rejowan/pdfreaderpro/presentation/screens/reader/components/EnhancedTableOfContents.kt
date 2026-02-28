@@ -70,7 +70,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
 private val AccentPurple = Color(0xFF9575CD)
@@ -293,10 +292,11 @@ private fun TocSheetContent(
 
         // Segmented tabs (only show if there are attachments)
         if (hasAttachments) {
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             SingleChoiceSegmentedButtonRow(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(36.dp)
                     .padding(horizontal = 16.dp)
             ) {
                 SegmentedButton(
@@ -308,7 +308,7 @@ private fun TocSheetContent(
                         activeContentColor = AccentPurple
                     )
                 ) {
-                    Text("Contents")
+                    Text("Contents", style = MaterialTheme.typography.labelSmall)
                 }
                 SegmentedButton(
                     selected = selectedTab == 1,
@@ -323,10 +323,10 @@ private fun TocSheetContent(
                         Icon(
                             imageVector = Icons.Rounded.AttachFile,
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Attachments")
+                        Text("Attachments", style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }
@@ -361,7 +361,7 @@ private fun TocSheetContent(
                         }
 
                         item {
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
@@ -386,7 +386,7 @@ private fun TocSheetContent(
                         }
 
                         item {
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
@@ -432,77 +432,75 @@ private fun TocItem(
         label = "toc text color"
     )
 
-    val startPadding = 24.dp + (item.level * 20).dp
+    val startPadding = 16.dp + (item.level * 12).dp
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
-            .padding(horizontal = 12.dp, vertical = 2.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .padding(horizontal = 8.dp, vertical = 1.dp)
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = AccentPurple),
                 onClick = onClick
             ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         color = backgroundColor
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = startPadding, end = 16.dp, top = 14.dp, bottom = 14.dp),
+                .padding(start = startPadding, end = 10.dp, top = 10.dp, bottom = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Level indicator line
             Box(
                 modifier = Modifier
-                    .width(3.dp)
-                    .height(if (item.level == 0) 28.dp else 20.dp)
-                    .clip(RoundedCornerShape(1.5.dp))
+                    .width(2.dp)
+                    .height(if (item.level == 0) 20.dp else 16.dp)
+                    .clip(RoundedCornerShape(1.dp))
                     .background(indicatorColor)
             )
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-            // Title and chevron
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = item.title,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = if (isCurrentSection || item.level == 0) FontWeight.SemiBold else FontWeight.Normal,
-                        fontSize = if (item.level == 0) 16.sp else 15.sp
-                    ),
-                    color = textColor,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+            // Title
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = if (isCurrentSection || item.level == 0) FontWeight.SemiBold else FontWeight.Normal
+                ),
+                color = textColor,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             // Page number chip
             Surface(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(6.dp),
                 color = if (isCurrentSection) AccentPurple else MaterialTheme.colorScheme.surfaceContainerHigh
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "${item.page + 1}",
-                        style = MaterialTheme.typography.labelMedium.copy(
+                        style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Medium
                         ),
                         color = if (isCurrentSection) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     if (isCurrentSection) {
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(2.dp))
                         Icon(
                             imageVector = Icons.Rounded.ChevronRight,
                             contentDescription = null,
-                            modifier = Modifier.size(14.dp),
+                            modifier = Modifier.size(12.dp),
                             tint = Color.White
                         )
                     }
@@ -519,47 +517,47 @@ private fun EmptyTocState(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(48.dp),
+            .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Surface(
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(12.dp),
             color = AccentBlue.copy(alpha = 0.1f),
-            modifier = Modifier.size(80.dp)
+            modifier = Modifier.size(56.dp)
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(56.dp)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.MenuBook,
                     contentDescription = null,
                     tint = AccentBlue,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "No Contents Available",
-            style = MaterialTheme.typography.titleMedium.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = "This PDF doesn't have a table of contents",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -588,44 +586,44 @@ private fun AttachmentListItem(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
-            .padding(horizontal = 12.dp, vertical = 2.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .padding(horizontal = 8.dp, vertical = 1.dp)
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = AccentTeal),
                 onClick = onOpen
             ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         color = Color.Transparent
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(horizontal = 10.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // File icon
             Surface(
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = AccentTeal.copy(alpha = 0.12f)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.InsertDriveFile,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(20.dp),
+                        .padding(6.dp)
+                        .size(16.dp),
                     tint = AccentTeal
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             // File name
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = attachment.title,
-                    style = MaterialTheme.typography.bodyLarge.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface,
@@ -636,7 +634,7 @@ private fun AttachmentListItem(
                 val extension = attachment.title.substringAfterLast('.', "").uppercase()
                 Text(
                     text = if (extension.isNotEmpty() && extension.length <= 4) "$extension file · Tap to open" else "Tap to open",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
@@ -645,10 +643,10 @@ private fun AttachmentListItem(
 
             // Download button
             Surface(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(6.dp),
                 color = AccentTeal.copy(alpha = 0.12f),
                 modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(6.dp))
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(color = AccentTeal, bounded = true),
@@ -659,8 +657,8 @@ private fun AttachmentListItem(
                     imageVector = Icons.Rounded.Download,
                     contentDescription = "Download",
                     modifier = Modifier
-                        .padding(8.dp)
-                        .size(18.dp),
+                        .padding(6.dp)
+                        .size(16.dp),
                     tint = AccentTeal
                 )
             }
@@ -675,46 +673,46 @@ private fun EmptyAttachmentsState(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(48.dp),
+            .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Surface(
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(12.dp),
             color = AccentTeal.copy(alpha = 0.1f),
-            modifier = Modifier.size(80.dp)
+            modifier = Modifier.size(56.dp)
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(56.dp)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.AttachFile,
                     contentDescription = null,
                     tint = AccentTeal,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "No Attachments",
-            style = MaterialTheme.typography.titleMedium.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = "This PDF doesn't have any embedded files",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
