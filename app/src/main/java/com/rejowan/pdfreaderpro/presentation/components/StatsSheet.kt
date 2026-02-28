@@ -1,17 +1,36 @@
 package com.rejowan.pdfreaderpro.presentation.components
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Storage
@@ -27,17 +46,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import java.util.Locale
+
+// Accent colors matching UI guide
+private val AccentPurple = Color(0xFF9575CD)
+private val AccentBlue = Color(0xFF64B5F6)
+private val AccentPink = Color(0xFFF48FB1)
 
 private fun formatFileSize(bytes: Long): String {
     if (bytes <= 0) return "0 B"
@@ -55,77 +83,213 @@ fun StatsSheet(
     favoritesCount: Int,
     onDismiss: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val softPurple = Color(0xFF9575CD)
-    val softBlue = Color(0xFF64B5F6)
-    val softPink = Color(0xFFF06292)
+    if (isLandscape) {
+        StatsSideSheet(
+            totalPdfs = totalPdfs,
+            totalSize = totalSize,
+            favoritesCount = favoritesCount,
+            onDismiss = onDismiss
+        )
+    } else {
+        StatsBottomSheet(
+            totalPdfs = totalPdfs,
+            totalSize = totalSize,
+            favoritesCount = favoritesCount,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun StatsBottomSheet(
+    totalPdfs: Int,
+    totalSize: Long,
+    favoritesCount: Int,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+        StatsSheetContent(
+            totalPdfs = totalPdfs,
+            totalSize = totalSize,
+            favoritesCount = favoritesCount,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+    }
+}
+
+@Composable
+private fun StatsSideSheet(
+    totalPdfs: Int,
+    totalSize: Long,
+    favoritesCount: Int,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Scrim
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
         ) {
-            // Title
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
+            )
+        }
+
+        // Side panel
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                StatsSheetContent(
+                    totalPdfs = totalPdfs,
+                    totalSize = totalSize,
+                    favoritesCount = favoritesCount,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                        .verticalScroll(rememberScrollState())
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun StatsSheetContent(
+    totalPdfs: Int,
+    totalSize: Long,
+    favoritesCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        // Header
+        StatsSheetHeader()
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Stats Cards
+        AnimatedStatCard(
+            icon = Icons.Outlined.Description,
+            label = "Total PDFs",
+            value = totalPdfs.toString(),
+            subtitle = "files in your library",
+            accentColor = AccentPurple,
+            progress = 1f,
+            animationDelay = 0
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        AnimatedStatCard(
+            icon = Icons.Outlined.Storage,
+            label = "Storage Used",
+            value = formatFileSize(totalSize),
+            subtitle = "total file size",
+            accentColor = AccentBlue,
+            progress = 0.7f,
+            animationDelay = 50
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        AnimatedStatCard(
+            icon = Icons.Outlined.FavoriteBorder,
+            label = "Favorites",
+            value = favoritesCount.toString(),
+            subtitle = if (totalPdfs > 0) "${(favoritesCount * 100 / totalPdfs)}% of your library" else "no files yet",
+            accentColor = AccentPink,
+            progress = if (totalPdfs > 0) favoritesCount.toFloat() / totalPdfs else 0f,
+            animationDelay = 100
+        )
+    }
+}
+
+@Composable
+private fun StatsSheetHeader(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Analytics,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(6.dp)
+                    .size(16.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        Column {
             Text(
                 text = "Library Stats",
-                style = MaterialTheme.typography.titleLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = "Your PDF collection at a glance",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Stats Cards
-            AnimatedStatCard(
-                icon = Icons.Outlined.Description,
-                label = "Total PDFs",
-                value = totalPdfs.toString(),
-                subtitle = "files in your library",
-                accentColor = softPurple,
-                progress = 1f,
-                animationDelay = 0
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            AnimatedStatCard(
-                icon = Icons.Outlined.Storage,
-                label = "Storage Used",
-                value = formatFileSize(totalSize),
-                subtitle = "total file size",
-                accentColor = softBlue,
-                progress = 0.7f,
-                animationDelay = 100
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            AnimatedStatCard(
-                icon = Icons.Outlined.FavoriteBorder,
-                label = "Favorites",
-                value = favoritesCount.toString(),
-                subtitle = if (totalPdfs > 0) "${(favoritesCount * 100 / totalPdfs)}% of your library" else "no files yet",
-                accentColor = softPink,
-                progress = if (totalPdfs > 0) favoritesCount.toFloat() / totalPdfs else 0f,
-                animationDelay = 200
             )
         }
     }
@@ -142,20 +306,32 @@ private fun AnimatedStatCard(
     animationDelay: Int,
     modifier: Modifier = Modifier
 ) {
+    var isVisible by remember { mutableStateOf(false) }
     var targetProgress by remember { mutableFloatStateOf(0f) }
+
     val animatedProgress by animateFloatAsState(
         targetValue = targetProgress,
         animationSpec = tween(durationMillis = 800, delayMillis = animationDelay),
         label = "progress"
     )
 
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
+        label = "card scale"
+    )
+
     LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(animationDelay.toLong())
+        isVisible = true
         targetProgress = progress.coerceIn(0f, 1f)
     }
 
     Surface(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .scale(scale),
+        shape = RoundedCornerShape(12.dp),
         color = accentColor.copy(alpha = 0.08f)
     ) {
         Column(
@@ -171,27 +347,27 @@ private fun AnimatedStatCard(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
-                        color = accentColor.copy(alpha = 0.15f)
+                        shape = RoundedCornerShape(8.dp),
+                        color = accentColor.copy(alpha = 0.12f)
                     ) {
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
                             tint = accentColor,
                             modifier = Modifier
-                                .padding(8.dp)
-                                .size(20.dp)
+                                .padding(6.dp)
+                                .size(16.dp)
                         )
                     }
                     Column {
                         Text(
                             text = label,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = value,
-                            style = MaterialTheme.typography.titleLarge.copy(
+                            style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold
                             ),
                             color = MaterialTheme.colorScheme.onSurface
@@ -207,8 +383,8 @@ private fun AnimatedStatCard(
                 progress = { animatedProgress },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(5.dp)
-                    .clip(RoundedCornerShape(2.5.dp)),
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp)),
                 color = accentColor,
                 trackColor = accentColor.copy(alpha = 0.2f),
                 strokeCap = StrokeCap.Round

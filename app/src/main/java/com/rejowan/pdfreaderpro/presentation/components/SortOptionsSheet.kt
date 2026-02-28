@@ -1,5 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.components
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -9,22 +10,32 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.AccessTime
@@ -53,19 +64,46 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import kotlinx.coroutines.delay
 
-// Soft accent colors matching StatsSheet
-private val SoftPurple = Color(0xFF9575CD)
-private val SoftBlue = Color(0xFF64B5F6)
-private val SoftTeal = Color(0xFF4DB6AC)
+// Accent colors matching UI guide
+private val AccentPurple = Color(0xFF9575CD)
+private val AccentBlue = Color(0xFF64B5F6)
+private val AccentTeal = Color(0xFF4DB6AC)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SortOptionsSheet(
+    currentSort: SortOption,
+    onSortSelected: (SortOption) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        SortOptionsSideSheet(
+            currentSort = currentSort,
+            onSortSelected = onSortSelected,
+            onDismiss = onDismiss
+        )
+    } else {
+        SortOptionsBottomSheet(
+            currentSort = currentSort,
+            onSortSelected = onSortSelected,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SortOptionsBottomSheet(
     currentSort: SortOption,
     onSortSelected: (SortOption) -> Unit,
     onDismiss: () -> Unit
@@ -75,68 +113,152 @@ fun SortOptionsSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+        SortOptionsContent(
+            currentSort = currentSort,
+            onSortSelected = onSortSelected,
+            onDismiss = onDismiss,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+    }
+}
+
+@Composable
+private fun SortOptionsSideSheet(
+    currentSort: SortOption,
+    onSortSelected: (SortOption) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Scrim
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
         ) {
-            // Header
-            SortSheetHeader()
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Sort Categories
-            SortCategoryCard(
-                title = "Alphabetical",
-                description = "Sort by file name",
-                icon = Icons.Outlined.SortByAlpha,
-                accentColor = SoftPurple,
-                options = listOf(SortOption.NAME_ASC, SortOption.NAME_DESC),
-                currentSort = currentSort,
-                onSortSelected = {
-                    onSortSelected(it)
-                    onDismiss()
-                },
-                animationDelay = 0
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            SortCategoryCard(
-                title = "Date Modified",
-                description = "Sort by last modified time",
-                icon = Icons.Outlined.AccessTime,
-                accentColor = SoftBlue,
-                options = listOf(SortOption.DATE_DESC, SortOption.DATE_ASC),
-                currentSort = currentSort,
-                onSortSelected = {
-                    onSortSelected(it)
-                    onDismiss()
-                },
-                animationDelay = 50
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            SortCategoryCard(
-                title = "File Size",
-                description = "Sort by storage size",
-                icon = Icons.Outlined.DataUsage,
-                accentColor = SoftTeal,
-                options = listOf(SortOption.SIZE_DESC, SortOption.SIZE_ASC),
-                currentSort = currentSort,
-                onSortSelected = {
-                    onSortSelected(it)
-                    onDismiss()
-                },
-                animationDelay = 100
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
             )
         }
+
+        // Side panel
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                SortOptionsContent(
+                    currentSort = currentSort,
+                    onSortSelected = onSortSelected,
+                    onDismiss = onDismiss,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                        .verticalScroll(rememberScrollState())
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SortOptionsContent(
+    currentSort: SortOption,
+    onSortSelected: (SortOption) -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        // Header
+        SortSheetHeader()
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Sort Categories
+        SortCategoryCard(
+            title = "Alphabetical",
+            description = "Sort by file name",
+            icon = Icons.Outlined.SortByAlpha,
+            accentColor = AccentPurple,
+            options = listOf(SortOption.NAME_ASC, SortOption.NAME_DESC),
+            currentSort = currentSort,
+            onSortSelected = {
+                onSortSelected(it)
+                onDismiss()
+            },
+            animationDelay = 0
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SortCategoryCard(
+            title = "Date Modified",
+            description = "Sort by last modified time",
+            icon = Icons.Outlined.AccessTime,
+            accentColor = AccentBlue,
+            options = listOf(SortOption.DATE_DESC, SortOption.DATE_ASC),
+            currentSort = currentSort,
+            onSortSelected = {
+                onSortSelected(it)
+                onDismiss()
+            },
+            animationDelay = 50
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SortCategoryCard(
+            title = "File Size",
+            description = "Sort by storage size",
+            icon = Icons.Outlined.DataUsage,
+            accentColor = AccentTeal,
+            options = listOf(SortOption.SIZE_DESC, SortOption.SIZE_ASC),
+            currentSort = currentSort,
+            onSortSelected = {
+                onSortSelected(it)
+                onDismiss()
+            },
+            animationDelay = 100
+        )
     }
 }
 
@@ -149,32 +271,32 @@ private fun SortSheetHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Sort,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .size(22.dp),
+                    .padding(6.dp)
+                    .size(16.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
         }
 
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(modifier = Modifier.width(10.dp))
 
         Column {
             Text(
                 text = "Sort Files",
-                style = MaterialTheme.typography.titleLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = "Choose how to organize your PDFs",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
         }
@@ -203,21 +325,15 @@ private fun SortCategoryCard(
 
     val scale by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0.95f,
-        animationSpec = tween(300, easing = FastOutSlowInEasing),
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
         label = "card scale"
-    )
-
-    val alpha by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0f,
-        animationSpec = tween(300),
-        label = "card alpha"
     )
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         color = if (hasSelection) {
             accentColor.copy(alpha = 0.06f)
         } else {
@@ -227,7 +343,7 @@ private fun SortCategoryCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp)
+                .padding(12.dp)
         ) {
             // Category header
             Row(
@@ -235,26 +351,26 @@ private fun SortCategoryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(8.dp),
                     color = accentColor.copy(alpha = 0.12f)
                 ) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
                         modifier = Modifier
-                            .padding(8.dp)
-                            .size(18.dp),
+                            .padding(6.dp)
+                            .size(16.dp),
                         tint = accentColor
                     )
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleSmall.copy(
-                            fontWeight = FontWeight.SemiBold
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Medium
                         ),
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -283,12 +399,12 @@ private fun SortCategoryCard(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             // Sort options row
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 options.forEach { option ->
                     SortOptionChip(
@@ -313,14 +429,14 @@ private fun SortOptionChip(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor.copy(alpha = 0.15f)
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.12f)
         else MaterialTheme.colorScheme.surfaceContainerHigh,
         animationSpec = tween(200),
         label = "chip bg"
     )
 
     val borderColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor.copy(alpha = 0.4f)
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.5f)
         else Color.Transparent,
         animationSpec = tween(200),
         label = "chip border"
@@ -344,7 +460,7 @@ private fun SortOptionChip(
     Surface(
         modifier = modifier
             .scale(scale)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(10.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -354,16 +470,16 @@ private fun SortOptionChip(
                 if (isSelected) Modifier.border(
                     width = 1.5.dp,
                     color = borderColor,
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(10.dp)
                 ) else Modifier
             ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(10.dp),
         color = backgroundColor
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 12.dp),
+                .padding(horizontal = 10.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -371,7 +487,7 @@ private fun SortOptionChip(
             Icon(
                 imageVector = chipIcon,
                 contentDescription = null,
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(14.dp),
                 tint = contentColor
             )
 
@@ -380,7 +496,7 @@ private fun SortOptionChip(
             // Label
             Text(
                 text = chipLabel,
-                style = MaterialTheme.typography.labelLarge.copy(
+                style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
                 ),
                 color = contentColor
@@ -396,7 +512,7 @@ private fun SortOptionChip(
                     Spacer(modifier = Modifier.width(6.dp))
                     Box(
                         modifier = Modifier
-                            .size(16.dp)
+                            .size(14.dp)
                             .clip(CircleShape)
                             .background(accentColor),
                         contentAlignment = Alignment.Center
@@ -404,7 +520,7 @@ private fun SortOptionChip(
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = "Selected",
-                            modifier = Modifier.size(10.dp),
+                            modifier = Modifier.size(9.dp),
                             tint = Color.White
                         )
                     }
