@@ -165,7 +165,7 @@ private fun PageJumpSideSheet(
             Surface(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(300.dp),
+                    .width(320.dp),
                 shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
@@ -218,7 +218,7 @@ private fun PageJumpContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Header
         Row(
@@ -226,15 +226,15 @@ private fun PageJumpContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Numbers,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(8.dp)
-                        .size(18.dp),
+                        .padding(6.dp)
+                        .size(16.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
@@ -257,7 +257,7 @@ private fun PageJumpContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Input field
         OutlinedTextField(
@@ -293,7 +293,7 @@ private fun PageJumpContent(
                 errorBorderColor = MaterialTheme.colorScheme.error
             ),
             isError = pageInput.text.isNotEmpty() && !isValidPage,
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(8.dp)
         )
 
         // Error text
@@ -319,7 +319,7 @@ private fun PageJumpContent(
                     containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                     contentColor = MaterialTheme.colorScheme.onSurface
                 ),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Cancel")
             }
@@ -334,7 +334,7 @@ private fun PageJumpContent(
                     disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                     disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
                 ),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Go")
             }

@@ -33,7 +33,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Bookmark
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Numbers
@@ -43,7 +42,6 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -128,7 +126,7 @@ private fun MoreOptionsBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
@@ -139,9 +137,8 @@ private fun MoreOptionsBottomSheet(
             onPrintClick = onPrintClick,
             onShareClick = onShareClick,
             onDocumentInfoClick = onDocumentInfoClick,
-            showCloseButton = false,
             onDismiss = onDismiss,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
     }
 }
@@ -196,7 +193,7 @@ private fun MoreOptionsSideSheet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(320.dp),
-                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
                 shadowElevation = 8.dp
@@ -208,7 +205,6 @@ private fun MoreOptionsSideSheet(
                     onPrintClick = onPrintClick,
                     onShareClick = onShareClick,
                     onDocumentInfoClick = onDocumentInfoClick,
-                    showCloseButton = true,
                     onDismiss = onDismiss,
                     modifier = Modifier
                         .fillMaxSize()
@@ -231,27 +227,23 @@ private fun MoreOptionsSheetContent(
     onPrintClick: () -> Unit,
     onShareClick: () -> Unit,
     onDocumentInfoClick: () -> Unit,
-    showCloseButton: Boolean,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Header
-        MoreOptionsHeader(
-            showCloseButton = showCloseButton,
-            onDismiss = onDismiss
-        )
+        MoreOptionsHeader()
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Reading Tools Section
         SectionLabel(text = "Reading Tools")
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.Bookmark,
@@ -265,7 +257,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 0
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         OptionItem(
             icon = Icons.Rounded.PlayArrow,
@@ -279,7 +271,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 50
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         OptionItem(
             icon = Icons.Rounded.Numbers,
@@ -293,16 +285,16 @@ private fun MoreOptionsSheetContent(
             animationDelay = 100
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         HorizontalDivider(
             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         // Document Actions Section
         SectionLabel(text = "Document")
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.Share,
@@ -316,7 +308,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 150
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         OptionItem(
             icon = Icons.Rounded.Print,
@@ -330,7 +322,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 200
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         OptionItem(
             icon = Icons.Rounded.Info,
@@ -348,8 +340,6 @@ private fun MoreOptionsSheetContent(
 
 @Composable
 private fun MoreOptionsHeader(
-    showCloseButton: Boolean = false,
-    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -357,44 +347,34 @@ private fun MoreOptionsHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
         ) {
             Icon(
                 imageVector = Icons.Rounded.MoreHoriz,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .size(22.dp),
+                    .padding(6.dp)
+                    .size(16.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
         }
 
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(modifier = Modifier.width(10.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column {
             Text(
                 text = "More Options",
-                style = MaterialTheme.typography.titleLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = "Additional tools and actions",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
-        }
-
-        if (showCloseButton) {
-            IconButton(onClick = onDismiss) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
@@ -406,10 +386,10 @@ private fun SectionLabel(
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium.copy(
-            fontWeight = FontWeight.SemiBold
+        style = MaterialTheme.typography.labelSmall.copy(
+            fontWeight = FontWeight.Medium
         ),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
         modifier = modifier.padding(start = 4.dp)
     )
 }
@@ -441,43 +421,44 @@ private fun OptionItem(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
                 onClick = onClick
             ),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp),
+                .height(44.dp)
+                .padding(horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Icon
             Surface(
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = accentColor.copy(alpha = 0.12f)
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(20.dp),
+                        .padding(6.dp)
+                        .size(16.dp),
                     tint = accentColor
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             // Text
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleSmall.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
@@ -493,7 +474,7 @@ private fun OptionItem(
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
                 contentDescription = null,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
             )
         }

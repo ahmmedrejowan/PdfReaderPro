@@ -29,7 +29,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material3.Button
@@ -38,7 +37,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Slider
@@ -108,7 +106,7 @@ private fun AutoScrollBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
@@ -116,9 +114,7 @@ private fun AutoScrollBottomSheet(
             selectedSpeed = selectedSpeed,
             onSpeedChange = { selectedSpeed = it },
             onStartAutoScroll = onStartAutoScroll,
-            showCloseButton = false,
-            onDismiss = onDismiss,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
     }
 }
@@ -170,7 +166,7 @@ private fun AutoScrollSideSheet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(320.dp),
-                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
                 shadowElevation = 8.dp
@@ -179,8 +175,6 @@ private fun AutoScrollSideSheet(
                     selectedSpeed = selectedSpeed,
                     onSpeedChange = { selectedSpeed = it },
                     onStartAutoScroll = onStartAutoScroll,
-                    showCloseButton = true,
-                    onDismiss = onDismiss,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -199,14 +193,12 @@ private fun AutoScrollSheetContent(
     selectedSpeed: Float,
     onSpeedChange: (Float) -> Unit,
     onStartAutoScroll: (Float) -> Unit,
-    showCloseButton: Boolean,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Header
         Row(
@@ -214,48 +206,38 @@ private fun AutoScrollSheetContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = AccentBlue.copy(alpha = 0.12f)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.PlayArrow,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(22.dp),
+                        .padding(6.dp)
+                        .size(16.dp),
                     tint = AccentBlue
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column {
                 Text(
                     text = "Auto-Scroll",
-                    style = MaterialTheme.typography.titleLarge.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = "Hands-free reading mode",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
-
-            if (showCloseButton) {
-                IconButton(onClick = onDismiss) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Speed presets
         Text(
@@ -291,7 +273,7 @@ private fun AutoScrollSheetContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Custom speed slider
         Row(
@@ -353,7 +335,7 @@ private fun AutoScrollSheetContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Start button
         Button(

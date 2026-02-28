@@ -38,7 +38,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.AspectRatio
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.FitScreen
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Remove
@@ -49,7 +48,6 @@ import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -141,7 +139,7 @@ private fun ZoomBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
@@ -152,9 +150,7 @@ private fun ZoomBottomSheet(
             onZoomOut = onZoomOut,
             onZoomPreset = onZoomPreset,
             onOrientationChange = onOrientationChange,
-            showCloseButton = false,
-            onDismiss = onDismiss,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
     }
 }
@@ -209,7 +205,7 @@ private fun ZoomSideSheet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(320.dp),
-                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
                 shadowElevation = 8.dp
@@ -221,8 +217,6 @@ private fun ZoomSideSheet(
                     onZoomOut = onZoomOut,
                     onZoomPreset = onZoomPreset,
                     onOrientationChange = onOrientationChange,
-                    showCloseButton = true,
-                    onDismiss = onDismiss,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -244,22 +238,17 @@ private fun ZoomSheetContent(
     onZoomOut: () -> Unit,
     onZoomPreset: (ZoomPreset) -> Unit,
     onOrientationChange: (ScreenOrientation) -> Unit,
-    showCloseButton: Boolean,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Header
-        ZoomSheetHeader(
-            showCloseButton = showCloseButton,
-            onDismiss = onDismiss
-        )
+        ZoomSheetHeader()
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Zoom Controls
         ZoomControlsRow(
@@ -274,7 +263,7 @@ private fun ZoomSheetContent(
         // Zoom Presets
         SectionLabel(text = "Quick Zoom", delay = 100)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -309,14 +298,14 @@ private fun ZoomSheetContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Screen Orientation Section
         SectionLabel(text = "Screen Orientation", delay = 300)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -355,8 +344,6 @@ private fun ZoomSheetContent(
 
 @Composable
 private fun ZoomSheetHeader(
-    showCloseButton: Boolean = false,
-    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -364,44 +351,34 @@ private fun ZoomSheetHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             color = AccentTeal.copy(alpha = 0.12f)
         ) {
             Icon(
                 imageVector = Icons.Rounded.ZoomIn,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .size(22.dp),
+                    .padding(6.dp)
+                    .size(16.dp),
                 tint = AccentTeal
             )
         }
 
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(modifier = Modifier.width(10.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column {
             Text(
                 text = "Zoom & Display",
-                style = MaterialTheme.typography.titleLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = "Adjust view size and orientation",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
-        }
-
-        if (showCloseButton) {
-            IconButton(onClick = onDismiss) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
@@ -427,10 +404,10 @@ private fun SectionLabel(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium.copy(
-            fontWeight = FontWeight.SemiBold
+        style = MaterialTheme.typography.labelSmall.copy(
+            fontWeight = FontWeight.Medium
         ),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f * alpha),
+        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
         modifier = modifier.padding(start = 4.dp)
     )
 }

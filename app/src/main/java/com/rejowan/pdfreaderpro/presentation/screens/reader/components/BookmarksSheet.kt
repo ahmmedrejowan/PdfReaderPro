@@ -37,12 +37,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -119,7 +118,7 @@ private fun BookmarksBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
@@ -127,9 +126,7 @@ private fun BookmarksBottomSheet(
             bookmarks = bookmarks,
             currentPage = currentPage,
             onBookmarkClick = onBookmarkClick,
-            onDeleteBookmark = onDeleteBookmark,
-            showCloseButton = false,
-            onDismiss = onDismiss
+            onDeleteBookmark = onDeleteBookmark
         )
     }
 }
@@ -182,7 +179,7 @@ private fun BookmarksSideSheet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(320.dp),
-                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
                 shadowElevation = 8.dp
@@ -192,8 +189,6 @@ private fun BookmarksSideSheet(
                     currentPage = currentPage,
                     onBookmarkClick = onBookmarkClick,
                     onDeleteBookmark = onDeleteBookmark,
-                    showCloseButton = true,
-                    onDismiss = onDismiss,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -212,8 +207,6 @@ private fun BookmarksSheetContent(
     currentPage: Int,
     onBookmarkClick: (BookmarkEntity) -> Unit,
     onDeleteBookmark: (BookmarkEntity) -> Unit,
-    showCloseButton: Boolean,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -221,29 +214,29 @@ private fun BookmarksSheetContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = AccentRed.copy(alpha = 0.12f)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Bookmark,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(22.dp),
+                        .padding(6.dp)
+                        .size(16.dp),
                     tint = AccentRed
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column {
                 Text(
                     text = "Bookmarks",
-                    style = MaterialTheme.typography.titleLarge.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
@@ -251,26 +244,16 @@ private fun BookmarksSheetContent(
                 if (bookmarks.isNotEmpty()) {
                     Text(
                         text = "${bookmarks.size} ${if (bookmarks.size == 1) "bookmark" else "bookmarks"}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                    )
-                }
-            }
-
-            if (showCloseButton) {
-                IconButton(onClick = onDismiss) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
         )
         Spacer(modifier = Modifier.height(8.dp))

@@ -138,7 +138,7 @@ private fun RemoveFavoriteSideSheet(
             Surface(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(280.dp),
+                    .width(320.dp),
                 shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
@@ -192,7 +192,7 @@ private fun RemoveFavoriteContent(
             Column {
                 Text(
                     text = "Remove from Favourites?",
-                    style = MaterialTheme.typography.titleSmall.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface

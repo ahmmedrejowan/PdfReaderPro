@@ -232,7 +232,7 @@ private fun PdfInfoContent(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = info.title ?: File(info.path).nameWithoutExtension,
-                    style = MaterialTheme.typography.titleSmall.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface,

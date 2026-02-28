@@ -36,7 +36,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
@@ -46,7 +45,6 @@ import androidx.compose.material.icons.rounded.ViewStream
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -147,7 +145,7 @@ private fun ViewModeBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
@@ -158,9 +156,7 @@ private fun ViewModeBottomSheet(
             onScrollDirectionChange = onScrollDirectionChange,
             onSpreadModeChange = onSpreadModeChange,
             onSnapToggle = onSnapToggle,
-            showCloseButton = false,
-            onDismiss = onDismiss,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
     }
 }
@@ -215,7 +211,7 @@ private fun ViewModeSideSheet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(320.dp),
-                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
                 shadowElevation = 8.dp
@@ -227,8 +223,6 @@ private fun ViewModeSideSheet(
                     onScrollDirectionChange = onScrollDirectionChange,
                     onSpreadModeChange = onSpreadModeChange,
                     onSnapToggle = onSnapToggle,
-                    showCloseButton = true,
-                    onDismiss = onDismiss,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -250,31 +244,27 @@ private fun ViewModeSheetContent(
     onScrollDirectionChange: (ScrollDirection) -> Unit,
     onSpreadModeChange: (PageSpreadMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
-    showCloseButton: Boolean,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Header
         SheetHeader(
             icon = Icons.Rounded.ViewDay,
             title = "View Options",
             subtitle = "Customize your reading layout",
-            accentColor = AccentPurple,
-            showCloseButton = showCloseButton,
-            onDismiss = onDismiss
+            accentColor = AccentPurple
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Scroll Direction Section
         SectionLabel(text = "Scroll Direction", delay = 0)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -300,14 +290,14 @@ private fun ViewModeSheetContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Page Layout Section
         SectionLabel(text = "Page Layout", delay = 150)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -333,9 +323,9 @@ private fun ViewModeSheetContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Snap Toggle
         SnapToggleRow(
@@ -353,8 +343,6 @@ private fun SheetHeader(
     title: String,
     subtitle: String,
     accentColor: Color,
-    showCloseButton: Boolean = false,
-    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -362,44 +350,34 @@ private fun SheetHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             color = accentColor.copy(alpha = 0.12f)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .size(22.dp),
+                    .padding(6.dp)
+                    .size(16.dp),
                 tint = accentColor
             )
         }
 
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(modifier = Modifier.width(10.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
-        }
-
-        if (showCloseButton) {
-            IconButton(onClick = onDismiss) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
@@ -425,10 +403,10 @@ private fun SectionLabel(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium.copy(
-            fontWeight = FontWeight.SemiBold
+        style = MaterialTheme.typography.labelSmall.copy(
+            fontWeight = FontWeight.Medium
         ),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f * alpha),
+        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
         modifier = modifier.padding(start = 4.dp)
     )
 }

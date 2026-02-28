@@ -39,12 +39,10 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.BrightnessMedium
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Slider
@@ -132,7 +130,7 @@ private fun DisplayBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
@@ -143,9 +141,7 @@ private fun DisplayBottomSheet(
             onBrightnessChange = onBrightnessChange,
             onKeepScreenOnChange = onKeepScreenOnChange,
             onThemeChange = onThemeChange,
-            showCloseButton = false,
-            onDismiss = onDismiss,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
     }
 }
@@ -204,7 +200,7 @@ private fun DisplaySideSheet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(320.dp),
-                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
                 shadowElevation = 8.dp
@@ -216,8 +212,6 @@ private fun DisplaySideSheet(
                     onBrightnessChange = onBrightnessChange,
                     onKeepScreenOnChange = onKeepScreenOnChange,
                     onThemeChange = onThemeChange,
-                    showCloseButton = true,
-                    onDismiss = onDismiss,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -239,27 +233,22 @@ private fun DisplaySheetContent(
     onBrightnessChange: (Float) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
     onThemeChange: (ReadingTheme) -> Unit,
-    showCloseButton: Boolean,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        // Header with optional close button for side sheet
-        DisplaySheetHeader(
-            showCloseButton = showCloseButton,
-            onDismiss = onDismiss
-        )
+        // Header
+        DisplaySheetHeader()
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Reading Theme Section
         SectionLabel(text = "Reading Theme", delay = 0)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         ThemeSelector(
             currentTheme = currentTheme,
@@ -267,9 +256,9 @@ private fun DisplaySheetContent(
             animationDelay = 50
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Brightness Section
         SectionLabel(text = "Brightness", delay = 150)
@@ -282,9 +271,9 @@ private fun DisplaySheetContent(
             animationDelay = 200
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Keep Screen On Toggle
         KeepScreenOnRow(
@@ -297,8 +286,6 @@ private fun DisplaySheetContent(
 
 @Composable
 private fun DisplaySheetHeader(
-    showCloseButton: Boolean = false,
-    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -306,44 +293,34 @@ private fun DisplaySheetHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             color = AccentAmber.copy(alpha = 0.12f)
         ) {
             Icon(
                 imageVector = Icons.Rounded.Palette,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .size(22.dp),
+                    .padding(6.dp)
+                    .size(16.dp),
                 tint = AccentAmber
             )
         }
 
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(modifier = Modifier.width(10.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column {
             Text(
                 text = "Display Settings",
-                style = MaterialTheme.typography.titleLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = "Theme, brightness & screen options",
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
-        }
-
-        if (showCloseButton) {
-            IconButton(onClick = onDismiss) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
@@ -369,10 +346,10 @@ private fun SectionLabel(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium.copy(
-            fontWeight = FontWeight.SemiBold
+        style = MaterialTheme.typography.labelSmall.copy(
+            fontWeight = FontWeight.Medium
         ),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f * alpha),
+        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
         modifier = modifier.padding(start = 4.dp)
     )
 }

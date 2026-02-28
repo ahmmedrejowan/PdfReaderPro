@@ -126,7 +126,7 @@ fun TopBarMenuPanel(
             Surface(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(260.dp),
+                    .width(320.dp),
                 shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,

@@ -151,7 +151,7 @@ private fun DeleteConfirmSideSheet(
             Surface(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(280.dp),
+                    .width(320.dp),
                 shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
@@ -207,7 +207,7 @@ private fun DeleteConfirmContent(
             Column {
                 Text(
                     text = "Delete PDF?",
-                    style = MaterialTheme.typography.titleSmall.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
