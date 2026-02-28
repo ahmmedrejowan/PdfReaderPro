@@ -40,12 +40,10 @@ import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.rounded.AttachFile
 import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SegmentedButton
@@ -132,7 +130,7 @@ private fun TocBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
@@ -142,9 +140,7 @@ private fun TocBottomSheet(
             currentPage = currentPage,
             onItemClick = onItemClick,
             onAttachmentOpen = onAttachmentOpen,
-            onAttachmentDownload = onAttachmentDownload,
-            showCloseButton = false,
-            onDismiss = onDismiss
+            onAttachmentDownload = onAttachmentDownload
         )
     }
 }
@@ -199,7 +195,7 @@ private fun TocSideSheet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(320.dp),
-                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
                 shadowElevation = 8.dp
@@ -211,8 +207,6 @@ private fun TocSideSheet(
                     onItemClick = onItemClick,
                     onAttachmentOpen = onAttachmentOpen,
                     onAttachmentDownload = onAttachmentDownload,
-                    showCloseButton = true,
-                    onDismiss = onDismiss,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -233,8 +227,6 @@ private fun TocSheetContent(
     onItemClick: (OutlineItem) -> Unit,
     onAttachmentOpen: (AttachmentItem) -> Unit,
     onAttachmentDownload: (AttachmentItem) -> Unit,
-    showCloseButton: Boolean,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -259,29 +251,29 @@ private fun TocSheetContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = AccentPurple.copy(alpha = 0.12f)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.MenuBook,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(22.dp),
+                        .padding(6.dp)
+                        .size(16.dp),
                     tint = AccentPurple
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column {
                 Text(
                     text = "Document Navigation",
-                    style = MaterialTheme.typography.titleLarge.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
@@ -293,19 +285,9 @@ private fun TocSheetContent(
                 }
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
-            }
-
-            if (showCloseButton) {
-                IconButton(onClick = onDismiss) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
             }
         }
 
@@ -315,7 +297,7 @@ private fun TocSheetContent(
             SingleChoiceSegmentedButtonRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 SegmentedButton(
                     selected = selectedTab == 0,
@@ -352,7 +334,7 @@ private fun TocSheetContent(
 
         Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
         )
         Spacer(modifier = Modifier.height(8.dp))
