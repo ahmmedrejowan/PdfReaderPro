@@ -139,7 +139,10 @@ private fun TocBottomSheet(
             currentPage = currentPage,
             onItemClick = onItemClick,
             onAttachmentOpen = onAttachmentOpen,
-            onAttachmentDownload = onAttachmentDownload
+            onAttachmentDownload = onAttachmentDownload,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.6f)
         )
     }
 }
@@ -349,7 +352,7 @@ private fun TocSheetContent(
                         state = listState,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f, fill = false)
+                            .weight(1f)
                     ) {
                         itemsIndexed(items) { index, item ->
                             TocItem(
@@ -374,7 +377,7 @@ private fun TocSheetContent(
                         state = attachmentListState,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f, fill = false)
+                            .weight(1f)
                     ) {
                         itemsIndexed(attachments) { index, attachment ->
                             AttachmentListItem(
