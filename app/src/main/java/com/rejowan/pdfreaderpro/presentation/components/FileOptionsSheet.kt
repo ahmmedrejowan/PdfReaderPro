@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.HistoryToggleOff
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Star
@@ -56,6 +57,7 @@ private val SoftAmber = Color(0xFFFFB74D)
 private val SoftBlue = Color(0xFF64B5F6)
 private val SoftPurple = Color(0xFF9575CD)
 private val SoftTeal = Color(0xFF4DB6AC)
+private val SoftOrange = Color(0xFFFF8A65)
 private val SoftRed = Color(0xFFEF5350)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,7 +70,8 @@ fun FileOptionsSheet(
     onShareClick: () -> Unit,
     onRenameClick: () -> Unit,
     onInfoClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onRemoveFromRecentsClick: (() -> Unit)? = null
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -112,6 +115,23 @@ fun FileOptionsSheet(
                     onDismiss()
                 }
             )
+
+            // Remove from Recents option (only shown when callback is provided)
+            if (onRemoveFromRecentsClick != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FileActionCard(
+                    icon = Icons.Outlined.HistoryToggleOff,
+                    label = "Remove from Recents",
+                    description = "Clear from recent history",
+                    accentColor = SoftOrange,
+                    animationDelay = 15,
+                    onClick = {
+                        onRemoveFromRecentsClick()
+                        onDismiss()
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 

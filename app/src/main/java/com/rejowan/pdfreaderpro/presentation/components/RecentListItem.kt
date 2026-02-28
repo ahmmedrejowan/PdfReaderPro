@@ -36,7 +36,11 @@ fun RecentListItem(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PdfThumbnail(size = 56.dp)
+        PdfThumbnail(
+            size = 56.dp,
+            pdfPath = recentFile.path,
+            pageCount = recentFile.totalPages.takeIf { it > 0 }
+        )
 
         Spacer(modifier = Modifier.width(16.dp))
 

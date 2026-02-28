@@ -162,6 +162,7 @@ fun HomeScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showInfoDialog by remember { mutableStateOf(false) }
     var fileForDialog by remember { mutableStateOf<PdfFile?>(null) }
+    var selectedFileFromRecent by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -246,6 +247,7 @@ fun HomeScreen(
                                         onFileOptionsClick = { recent ->
                                             allFiles.find { it.path == recent.path }?.let { pdf ->
                                                 selectedFile = pdf
+                                                selectedFileFromRecent = true
                                                 scope.launch {
                                                     selectedFileFavorite = viewModel.isFavorite(pdf.path)
                                                 }
@@ -270,6 +272,7 @@ fun HomeScreen(
                                         onFileOptionsClick = { pdf ->
                                             selectedFile = pdf
                                             selectedFileFavorite = true
+                                            selectedFileFromRecent = false
                                         },
                                         onBrowseClick = {
                                             scope.launch {
@@ -289,6 +292,7 @@ fun HomeScreen(
                                         },
                                         onFileOptionsClick = { pdf ->
                                             selectedFile = pdf
+                                            selectedFileFromRecent = false
                                             scope.launch {
                                                 selectedFileFavorite = viewModel.isFavorite(pdf.path)
                                             }
@@ -375,7 +379,10 @@ fun HomeScreen(
             onDeleteClick = {
                 fileForDialog = file
                 showDeleteDialog = true
-            }
+            },
+            onRemoveFromRecentsClick = if (selectedFileFromRecent) {
+                { viewModel.removeFromRecent(file.path) }
+            } else null
         )
     }
 
