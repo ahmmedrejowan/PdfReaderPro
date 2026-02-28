@@ -239,6 +239,7 @@ fun HomeScreen(
                                 when (HomeSubTab.entries[page]) {
                                     HomeSubTab.RECENT -> RecentTab(
                                         recentFiles = recentFiles,
+                                        viewMode = viewMode,
                                         isLoading = isLoading,
                                         hasPermission = hasPermission,
                                         onFileClick = { recent ->
