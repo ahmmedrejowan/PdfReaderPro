@@ -1,5 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader.components
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -58,6 +59,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -122,11 +124,14 @@ fun TopBarMenuPanel(
             modifier = Modifier.align(Alignment.CenterEnd)
         ) {
             val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+            val configuration = LocalConfiguration.current
+            val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            val panelWidth = if (isLandscape) 320.dp else 280.dp
 
             Surface(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(320.dp),
+                    .width(panelWidth),
                 shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 2.dp,
