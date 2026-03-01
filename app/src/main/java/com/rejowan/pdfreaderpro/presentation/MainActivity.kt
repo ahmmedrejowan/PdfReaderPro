@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.presentation
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
@@ -43,6 +44,19 @@ class MainActivity : ComponentActivity() {
 
     private val preferencesRepository: PreferencesRepository by inject()
 
+    /**
+     * Checks if the app has storage permission.
+     * On API 30+, checks MANAGE_EXTERNAL_STORAGE.
+     * On API 29 and below, returns true (old permission model handled by system).
+     */
+    private fun hasStoragePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            hasStoragePermission()
+        } else {
+            true // On older APIs, scoped storage doesn't apply
+        }
+    }
+
     private var isReady by mutableStateOf(false)
     private var startDestination: Any by mutableStateOf(Home)
     private var showPermissionSheet by mutableStateOf(false)
@@ -66,7 +80,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             val prefs = preferencesRepository.preferences.first()
             hasCompletedOnboarding = prefs.hasCompletedOnboarding
-            val hasPermission = Environment.isExternalStorageManager()
+            val hasPermission = hasStoragePermission()
 
             // Check if opened via intent with PDF
             val intentPdfPath = handleIncomingIntent(intent)
@@ -89,7 +103,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 if (isReady && hasCompletedOnboarding) {
-                    val hasPermission = Environment.isExternalStorageManager()
+                    val hasPermission = hasStoragePermission()
                     if (hasPermission) {
                         showPermissionSheet = false
                     }
@@ -146,7 +160,12 @@ class MainActivity : ComponentActivity() {
 
         val uri: Uri? = when (intent.action) {
             Intent.ACTION_VIEW -> intent.data
-            Intent.ACTION_SEND -> intent.getParcelableExtra(Intent.EXTRA_STREAM)
+            Intent.ACTION_SEND -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra(Intent.EXTRA_STREAM)
+            }
             else -> null
         }
 

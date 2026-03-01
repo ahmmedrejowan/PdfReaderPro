@@ -14,7 +14,7 @@ val databaseModule = module {
             PdfDatabase.DATABASE_NAME
         )
             .addMigrations(*PdfDatabase.migrations)
-            .fallbackToDestructiveMigrationOnDowngrade()
+            .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
             .build()
     }
 

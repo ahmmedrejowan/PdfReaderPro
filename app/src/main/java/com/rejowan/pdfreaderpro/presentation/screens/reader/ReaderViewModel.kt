@@ -154,7 +154,7 @@ class ReaderViewModel(
                     DomainReadingTheme.DARK -> "dark"
                     DomainReadingTheme.BLACK -> "black"
                 }
-                viewer.ui?.setReadingTheme(themeName)
+                viewer.ui.setReadingTheme(themeName)
             } catch (e: Exception) {
                 // Viewer not yet initialized, settings will be applied when ready
             }

@@ -47,9 +47,9 @@ abstract class PdfDatabase : RoomDatabase() {
          * First removes duplicate entries keeping the most recently opened one.
          */
         val MIGRATION_5_6 = object : Migration(5, 6) {
-            override fun migrate(database: SupportSQLiteDatabase) {
+            override fun migrate(db: SupportSQLiteDatabase) {
                 // Remove duplicates, keeping the entry with the highest lastOpened for each path
-                database.execSQL("""
+                db.execSQL("""
                     DELETE FROM recent
                     WHERE id NOT IN (
                         SELECT MAX(id)
@@ -59,14 +59,14 @@ abstract class PdfDatabase : RoomDatabase() {
                 """)
 
                 // Create unique index on path
-                database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_recent_path ON recent (path)")
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_recent_path ON recent (path)")
             }
         }
 
         val MIGRATION_4_5 = object : Migration(4, 5) {
-            override fun migrate(database: SupportSQLiteDatabase) {
+            override fun migrate(db: SupportSQLiteDatabase) {
                 // Create new recent table
-                database.execSQL("""
+                db.execSQL("""
                     CREATE TABLE IF NOT EXISTS recent_new (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         name TEXT NOT NULL,
@@ -79,7 +79,7 @@ abstract class PdfDatabase : RoomDatabase() {
                 """)
 
                 // Copy data from old recent_table to new recent
-                database.execSQL("""
+                db.execSQL("""
                     INSERT INTO recent_new (id, name, path, size, lastOpened, totalPages, lastPage)
                     SELECT
                         id_recent,
@@ -93,11 +93,11 @@ abstract class PdfDatabase : RoomDatabase() {
                 """)
 
                 // Drop old table and rename new
-                database.execSQL("DROP TABLE IF EXISTS recent_table")
-                database.execSQL("ALTER TABLE recent_new RENAME TO recent")
+                db.execSQL("DROP TABLE IF EXISTS recent_table")
+                db.execSQL("ALTER TABLE recent_new RENAME TO recent")
 
                 // Create new favorites table
-                database.execSQL("""
+                db.execSQL("""
                     CREATE TABLE IF NOT EXISTS favorites_new (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         name TEXT NOT NULL,
@@ -109,7 +109,7 @@ abstract class PdfDatabase : RoomDatabase() {
                 """)
 
                 // Copy data from old favorite table to new favorites
-                database.execSQL("""
+                db.execSQL("""
                     INSERT INTO favorites_new (id, name, path, size, dateModified, parentFolder)
                     SELECT
                         id_favorite,
@@ -122,11 +122,11 @@ abstract class PdfDatabase : RoomDatabase() {
                 """)
 
                 // Drop old table and rename new
-                database.execSQL("DROP TABLE IF EXISTS favorite")
-                database.execSQL("ALTER TABLE favorites_new RENAME TO favorites")
+                db.execSQL("DROP TABLE IF EXISTS favorite")
+                db.execSQL("ALTER TABLE favorites_new RENAME TO favorites")
 
                 // Create new bookmarks table
-                database.execSQL("""
+                db.execSQL("""
                     CREATE TABLE IF NOT EXISTS bookmarks (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         pdfPath TEXT NOT NULL,
@@ -137,7 +137,7 @@ abstract class PdfDatabase : RoomDatabase() {
                 """)
 
                 // Create new annotations table
-                database.execSQL("""
+                db.execSQL("""
                     CREATE TABLE IF NOT EXISTS annotations (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         pdfPath TEXT NOT NULL,
