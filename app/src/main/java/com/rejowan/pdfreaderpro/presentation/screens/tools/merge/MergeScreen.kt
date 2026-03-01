@@ -232,7 +232,7 @@ fun MergeScreen(
                         state = lazyListState,
                         modifier = Modifier.weight(1f),
                         contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(
                             count = state.selectedFiles.size,
@@ -244,7 +244,8 @@ fun MergeScreen(
                                     file = file,
                                     index = index + 1,
                                     isDragging = isDragging,
-                                    dragModifier = Modifier.draggableHandle(),
+                                    dragHandleModifier = Modifier.draggableHandle(),
+                                    longPressDragModifier = Modifier.longPressDraggableHandle(),
                                     onPreview = { navController.navigateToReader(file.path) },
                                     onSelectPages = { selectedFileForPageSelection = file },
                                     onRemove = { viewModel.removeFile(file) }
@@ -347,7 +348,8 @@ private fun MergeFileItem(
     file: MergeFile,
     index: Int,
     isDragging: Boolean = false,
-    dragModifier: Modifier = Modifier,
+    dragHandleModifier: Modifier = Modifier,
+    longPressDragModifier: Modifier = Modifier,
     onPreview: () -> Unit,
     onSelectPages: () -> Unit,
     onRemove: () -> Unit
@@ -356,7 +358,9 @@ private fun MergeFileItem(
     val isPartialSelection = file.pageSelection !is PageSelection.All
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(longPressDragModifier),
         colors = CardDefaults.cardColors(
             containerColor = if (isDragging) {
                 MaterialTheme.colorScheme.surfaceContainerHighest
@@ -381,7 +385,7 @@ private fun MergeFileItem(
             ) {
                 // Drag handle - directly draggable
                 Box(
-                    modifier = dragModifier
+                    modifier = dragHandleModifier
                         .size(32.dp)
                         .clip(RoundedCornerShape(6.dp))
                         .background(
@@ -561,13 +565,17 @@ private fun ActionChip(
 private fun AddMoreFilesCard(
     onAddFiles: () -> Unit
 ) {
-    Card(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = 1.5.dp,
+                color = AccentTeal.copy(alpha = 0.5f),
+                shape = RoundedCornerShape(12.dp)
+            )
             .clickable(onClick = onAddFiles),
-        colors = CardDefaults.cardColors(
-            containerColor = AccentBlue.copy(alpha = 0.08f)
-        ),
+        color = AccentTeal.copy(alpha = 0.08f),
         shape = RoundedCornerShape(12.dp)
     ) {
         Row(
@@ -577,18 +585,25 @@ private fun AddMoreFilesCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Icon(
-                Icons.Default.Add,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = AccentBlue
-            )
-            Spacer(modifier = Modifier.width(8.dp))
+            Surface(
+                shape = RoundedCornerShape(8.dp),
+                color = AccentTeal.copy(alpha = 0.15f)
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(18.dp),
+                    tint = AccentTeal
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
             Text(
                 "Add more files",
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium,
-                color = AccentBlue
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
