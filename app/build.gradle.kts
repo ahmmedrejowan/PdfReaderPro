@@ -101,6 +101,9 @@ dependencies {
     // Animation
     implementation(libs.lottie.compose)
 
+    // Reorderable List (drag-to-reorder)
+    implementation(libs.reorderable)
+
     // Splash Screen
     implementation(libs.splashscreen)
 

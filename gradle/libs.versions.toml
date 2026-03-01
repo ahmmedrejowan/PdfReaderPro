@@ -38,6 +38,9 @@ timber = "5.0.1"
 # Animation
 lottieCompose = "6.7.1"
 
+# Reorderable List
+reorderable = "2.4.3"
+
 # Splash Screen
 splashscreen = "1.2.0"
 
@@ -95,6 +98,9 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # Animation
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+
+# Reorderable List
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 
 # Splash Screen
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }

@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,11 +34,14 @@ import androidx.compose.material.icons.automirrored.filled.CallMerge
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Pages
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.outlined.Visibility
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -82,10 +84,13 @@ import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
-// Accent colors
-private val AccentBlue = Color(0xFF64B5F6)
-private val AccentGreen = Color(0xFF81C784)
-private val AccentRed = Color(0xFFEF5350)
+// Accent colors - consistent with app design system
+private val AccentPurple = Color(0xFF9575CD)    // Primary actions (merge)
+private val AccentBlue = Color(0xFF64B5F6)      // General/Info actions
+private val AccentTeal = Color(0xFF4DB6AC)      // Preview/View
+private val AccentAmber = Color(0xFFFFB74D)     // Range/Pages selection
+private val AccentGreen = Color(0xFF81C784)     // Success
+private val AccentRed = Color(0xFFEF5350)       // PDF icon, Remove
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -202,30 +207,34 @@ fun MergeScreen(
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // File list
+                    // File list with drag-to-reorder
+                    val lazyListState = rememberLazyListState()
+                    val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
+                        viewModel.moveFile(from.index, to.index)
+                    }
+
                     LazyColumn(
+                        state = lazyListState,
                         modifier = Modifier.weight(1f),
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        itemsIndexed(
-                            items = state.selectedFiles,
-                            key = { _, file -> file.path }
-                        ) { index, file ->
-                            MergeFileItem(
-                                modifier = Modifier.animateItem(),
-                                file = file,
-                                index = index + 1,
-                                totalFiles = state.selectedFiles.size,
-                                onTap = { selectedFileForPageSelection = file },
-                                onRemove = { viewModel.removeFile(file) },
-                                onMoveUp = if (index > 0) {
-                                    { viewModel.moveFile(index, index - 1) }
-                                } else null,
-                                onMoveDown = if (index < state.selectedFiles.size - 1) {
-                                    { viewModel.moveFile(index, index + 1) }
-                                } else null
-                            )
+                        items(
+                            count = state.selectedFiles.size,
+                            key = { index -> state.selectedFiles[index].path }
+                        ) { index ->
+                            val file = state.selectedFiles[index]
+                            ReorderableItem(reorderableLazyListState, key = file.path) { isDragging ->
+                                MergeFileItem(
+                                    file = file,
+                                    index = index + 1,
+                                    isDragging = isDragging,
+                                    dragModifier = Modifier.draggableHandle(),
+                                    onPreview = { navController.navigateToReader(file.path) },
+                                    onSelectPages = { selectedFileForPageSelection = file },
+                                    onRemove = { viewModel.removeFile(file) }
+                                )
+                            }
                         }
 
                         // Add more files card at the end of the list
@@ -320,183 +329,216 @@ private fun EmptyState(
 
 @Composable
 private fun MergeFileItem(
-    modifier: Modifier = Modifier,
     file: MergeFile,
     index: Int,
-    totalFiles: Int,
-    onTap: () -> Unit,
-    onRemove: () -> Unit,
-    onMoveUp: (() -> Unit)?,
-    onMoveDown: (() -> Unit)?
+    isDragging: Boolean = false,
+    dragModifier: Modifier = Modifier,
+    onPreview: () -> Unit,
+    onSelectPages: () -> Unit,
+    onRemove: () -> Unit
 ) {
     val selectedPageCount = file.pageSelection.getSelectedCount(file.pageCount)
     val isPartialSelection = file.pageSelection !is PageSelection.All
 
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onTap),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            containerColor = if (isDragging) {
+                MaterialTheme.colorScheme.surfaceContainerHighest
+            } else {
+                MaterialTheme.colorScheme.surfaceContainerLow
+            }
         ),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (isDragging) 8.dp else 0.dp
+        )
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(12.dp)
         ) {
-            // Index number
-            Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(AccentBlue.copy(alpha = 0.1f)),
-                contentAlignment = Alignment.Center
+            // Top row: Drag handle, thumbnail, file info, remove button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    "$index",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = AccentBlue
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            // PDF Thumbnail or fallback icon
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = RoundedCornerShape(6.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                if (file.thumbnail != null) {
-                    Image(
-                        bitmap = file.thumbnail.asImageBitmap(),
-                        contentDescription = "PDF preview",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
+                // Drag handle - directly draggable
+                Box(
+                    modifier = dragModifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(
+                            if (isDragging) AccentPurple.copy(alpha = 0.15f)
+                            else MaterialTheme.colorScheme.surfaceContainerHigh
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(
-                        Icons.Default.PictureAsPdf,
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
+                        Icons.Default.DragHandle,
+                        contentDescription = "Drag to reorder",
+                        modifier = Modifier.size(20.dp),
+                        tint = if (isDragging) {
+                            AccentPurple
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                // Index badge
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(AccentPurple.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "$index",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = AccentPurple
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                // PDF Thumbnail
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            shape = RoundedCornerShape(6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (file.thumbnail != null) {
+                        Image(
+                            bitmap = file.thumbnail.asImageBitmap(),
+                            contentDescription = "PDF preview",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Icon(
+                            Icons.Default.PictureAsPdf,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp),
+                            tint = AccentRed
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                // File info
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        file.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        "${formatFileSize(file.size)} • ${file.pageCount} pages",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                // Remove button
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(AccentRed.copy(alpha = 0.08f))
+                        .clickable { onRemove() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "Remove",
+                        modifier = Modifier.size(16.dp),
                         tint = AccentRed
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            // File info
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    file.name,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+            // Bottom row: Action chips
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Preview chip
+                ActionChip(
+                    icon = Icons.Outlined.Visibility,
+                    label = "Preview",
+                    color = AccentTeal,
+                    onClick = onPreview,
+                    modifier = Modifier.weight(1f)
                 )
-                Text(
-                    "${formatFileSize(file.size)} • ${file.pageCount} total pages",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                // Page selection info
-                Text(
-                    if (isPartialSelection) {
-                        "$selectedPageCount of ${file.pageCount} pages selected"
+
+                // Pages chip
+                ActionChip(
+                    icon = Icons.Default.Pages,
+                    label = if (isPartialSelection) {
+                        "$selectedPageCount/${file.pageCount} pages"
                     } else {
                         "All ${file.pageCount} pages"
                     },
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = if (isPartialSelection) FontWeight.Medium else FontWeight.Normal,
-                    color = if (isPartialSelection) AccentBlue else MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // Reorder buttons (only show if more than 1 file)
-            if (totalFiles > 1) {
-                Spacer(modifier = Modifier.width(8.dp))
-                Column(
-                    modifier = Modifier.padding(horizontal = 4.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Move up button
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(
-                                if (onMoveUp != null) AccentBlue.copy(alpha = 0.1f)
-                                else Color.Transparent
-                            )
-                            .clickable(enabled = onMoveUp != null) { onMoveUp?.invoke() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            Icons.Default.KeyboardArrowUp,
-                            contentDescription = "Move up",
-                            modifier = Modifier.size(24.dp),
-                            tint = if (onMoveUp != null) {
-                                AccentBlue
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                            }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    // Move down button
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(
-                                if (onMoveDown != null) AccentBlue.copy(alpha = 0.1f)
-                                else Color.Transparent
-                            )
-                            .clickable(enabled = onMoveDown != null) { onMoveDown?.invoke() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Move down",
-                            modifier = Modifier.size(24.dp),
-                            tint = if (onMoveDown != null) {
-                                AccentBlue
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                            }
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-
-            // Remove button
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .clickable { onRemove() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    Icons.Default.Close,
-                    contentDescription = "Remove",
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = AccentAmber,
+                    isHighlighted = isPartialSelection,
+                    onClick = onSelectPages,
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ActionChip(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    color: Color,
+    modifier: Modifier = Modifier,
+    isHighlighted: Boolean = false,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(color.copy(alpha = if (isHighlighted) 0.15f else 0.08f))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = color
+        )
+        Spacer(modifier = Modifier.width(6.dp))
+        Text(
+            label,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = if (isHighlighted) FontWeight.Medium else FontWeight.Normal,
+            color = color,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
