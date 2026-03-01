@@ -49,7 +49,6 @@ import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material.icons.rounded.ZoomIn
@@ -121,17 +120,12 @@ fun SettingsScreenContent(
             .fillMaxSize()
             .padding(paddingValues)
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .padding(bottom = 80.dp)
+            .padding(horizontal = 16.dp)
+            .padding(top = 8.dp, bottom = 80.dp)
     ) {
-        // Header
-        SettingsHeader()
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         // Appearance Section
         SectionLabel(text = "Appearance", delay = 0)
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.Palette,
@@ -146,11 +140,11 @@ fun SettingsScreenContent(
             animationDelay = 50
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Reader Section
         SectionLabel(text = "Reader", delay = 100)
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.Brightness6,
@@ -161,7 +155,7 @@ fun SettingsScreenContent(
             animationDelay = 150
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.SwapVert,
@@ -172,7 +166,7 @@ fun SettingsScreenContent(
             animationDelay = 200
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.FormatAlignCenter,
@@ -183,7 +177,7 @@ fun SettingsScreenContent(
             animationDelay = 250
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.ZoomIn,
@@ -198,7 +192,7 @@ fun SettingsScreenContent(
             animationDelay = 300
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.ColorLens,
@@ -209,7 +203,7 @@ fun SettingsScreenContent(
             animationDelay = 350
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         SettingsToggleItem(
             icon = Icons.Rounded.VisibilityOff,
@@ -221,7 +215,7 @@ fun SettingsScreenContent(
             animationDelay = 400
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsToggleItem(
             icon = Icons.Rounded.ScreenLockPortrait,
@@ -233,11 +227,11 @@ fun SettingsScreenContent(
             animationDelay = 450
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         // About Section
         SectionLabel(text = "About", delay = 500)
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsInfoItem(
             icon = Icons.Rounded.Info,
@@ -366,45 +360,6 @@ fun SettingsScreenContent(
 }
 
 @Composable
-private fun SettingsHeader(modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Surface(
-            shape = RoundedCornerShape(8.dp),
-            color = AccentPurple.copy(alpha = 0.12f)
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Settings,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(6.dp)
-                    .size(16.dp),
-                tint = AccentPurple
-            )
-        }
-
-        Spacer(modifier = Modifier.width(10.dp))
-
-        Column {
-            Text(
-                text = "Settings",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = "Customize your experience",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-            )
-        }
-    }
-}
-
-@Composable
 private fun SectionLabel(
     text: String,
     delay: Int,
@@ -424,12 +379,13 @@ private fun SectionLabel(
     )
 
     Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall.copy(
-            fontWeight = FontWeight.Medium
+        text = text.uppercase(),
+        style = MaterialTheme.typography.labelMedium.copy(
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
         ),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
-        modifier = modifier.padding(start = 4.dp)
+        color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
+        modifier = modifier.padding(start = 4.dp, bottom = 4.dp)
     )
 }
 
@@ -460,58 +416,59 @@ private fun SettingsOptionItem(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
                 onClick = onClick
             ),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(44.dp)
-                .padding(horizontal = 10.dp),
+                .height(64.dp)
+                .padding(horizontal = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(10.dp),
                 color = accentColor.copy(alpha = 0.12f)
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(6.dp)
-                        .size(16.dp),
+                        .padding(8.dp)
+                        .size(20.dp),
                     tint = accentColor
                 )
             }
 
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(14.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodySmall.copy(
+                    style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
 
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
                 contentDescription = null,
-                modifier = Modifier.size(16.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                modifier = Modifier.size(20.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
         }
     }
@@ -544,15 +501,16 @@ private fun SettingsToggleItem(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .scale(scale),
-        shape = RoundedCornerShape(14.dp),
+            .scale(scale)
+            .clip(RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onCheckedChange(!checked) }
-                .padding(horizontal = 10.dp, vertical = 10.dp),
+                .padding(horizontal = 14.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
@@ -564,7 +522,7 @@ private fun SettingsToggleItem(
                     contentDescription = null,
                     modifier = Modifier
                         .padding(8.dp)
-                        .size(18.dp),
+                        .size(20.dp),
                     tint = accentColor
                 )
             }
@@ -574,15 +532,16 @@ private fun SettingsToggleItem(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
 
@@ -626,34 +585,35 @@ private fun SettingsInfoItem(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .height(64.dp)
+                .padding(horizontal = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(10.dp),
                 color = accentColor.copy(alpha = 0.12f)
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(6.dp)
-                        .size(16.dp),
+                        .padding(8.dp)
+                        .size(20.dp),
                     tint = accentColor
                 )
             }
 
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(14.dp))
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodySmall.copy(
+                style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Medium
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
@@ -662,7 +622,7 @@ private fun SettingsInfoItem(
 
             Text(
                 text = value,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
         }
@@ -897,7 +857,7 @@ private fun PickerContent(
                 animationDelay = 50 * (index + 1)
             )
             if (index < options.lastIndex) {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
@@ -1203,7 +1163,7 @@ private fun BrightnessContent(
             animationDelay = 50
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         BrightnessOptionItem(
             icon = Icons.Rounded.Brightness6,
