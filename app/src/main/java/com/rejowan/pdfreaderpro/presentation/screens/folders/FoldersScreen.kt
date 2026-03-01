@@ -216,7 +216,9 @@ private fun FoldersHeader(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Search bar or controls row
+        // Search bar or controls row - fixed height to prevent layout shift
+        val headerRowHeight = 44.dp
+
         if (isSearchExpanded) {
             SearchBar(
                 query = searchQuery,
@@ -225,12 +227,15 @@ private fun FoldersHeader(
                 onClose = {
                     onSearchQueryChange("")
                     onSearchToggle()
-                }
+                },
+                modifier = Modifier.height(headerRowHeight)
             )
         } else {
             // Section label with controls
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(headerRowHeight),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -292,8 +297,8 @@ private fun SearchBar(
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 10.dp),
+                .fillMaxSize()
+                .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
