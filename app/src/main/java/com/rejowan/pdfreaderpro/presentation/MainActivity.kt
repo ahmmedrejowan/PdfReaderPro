@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,6 +31,7 @@ import com.rejowan.pdfreaderpro.presentation.navigation.Onboarding
 import com.rejowan.pdfreaderpro.presentation.navigation.PdfReaderNavGraph
 import com.rejowan.pdfreaderpro.presentation.navigation.Reader
 import com.rejowan.pdfreaderpro.presentation.theme.PdfReaderProTheme
+import com.rejowan.pdfreaderpro.presentation.theme.ThemeMode
 import com.rejowan.pdfreaderpro.util.FileOperations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -96,7 +98,17 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            PdfReaderProTheme {
+            // Observe theme preference
+            val preferences by preferencesRepository.preferences.collectAsState(
+                initial = com.rejowan.pdfreaderpro.domain.model.AppPreferences()
+            )
+            val themeMode = when (preferences.themeMode) {
+                com.rejowan.pdfreaderpro.domain.model.ThemeMode.LIGHT -> ThemeMode.LIGHT
+                com.rejowan.pdfreaderpro.domain.model.ThemeMode.DARK -> ThemeMode.DARK
+                com.rejowan.pdfreaderpro.domain.model.ThemeMode.SYSTEM -> ThemeMode.SYSTEM
+            }
+
+            PdfReaderProTheme(themeMode = themeMode) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

@@ -7,8 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.rejowan.pdfreaderpro.data.local.PasswordStorage
 import com.rejowan.pdfreaderpro.data.local.database.dao.BookmarkDao
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
+import com.rejowan.pdfreaderpro.domain.model.PageAlignment as DomainPageAlignment
+import com.rejowan.pdfreaderpro.domain.model.PageLayout
+import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
+import com.rejowan.pdfreaderpro.domain.model.ReadingTheme as DomainReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScrollDirection as DomainScrollDirection
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
+import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
+import kotlinx.coroutines.flow.first
 import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
 import com.rejowan.pdfreaderpro.presentation.components.pdf.addListener
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AttachmentItem
@@ -29,6 +36,7 @@ import java.io.File
 class ReaderViewModel(
     private val recentRepository: RecentRepository,
     private val favoriteRepository: FavoriteRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val bookmarkDao: BookmarkDao,
     private val applicationContext: Context,
     savedStateHandle: SavedStateHandle,
@@ -62,6 +70,21 @@ class ReaderViewModel(
             isFirstOpen = storedLastPage == null
         }
 
+        // Load global reader settings from preferences
+        viewModelScope.launch {
+            val prefs = preferencesRepository.preferences.first()
+            _state.update { state ->
+                state.copy(
+                    brightness = prefs.readerBrightness,
+                    scrollDirection = mapDomainScrollDirection(prefs.readerScrollDirection),
+                    readingTheme = mapDomainReadingTheme(prefs.readerTheme),
+                    pageAlignment = mapDomainPageAlignment(prefs.readerPageAlignment),
+                    autoHideToolbar = prefs.readerAutoHideToolbar,
+                    keepScreenOn = prefs.readerKeepScreenOn
+                )
+            }
+        }
+
         // Observe bookmarks for this PDF
         bookmarkDao.getBookmarksForPdf(pdfPath)
             .onEach { bookmarks ->
@@ -82,9 +105,57 @@ class ReaderViewModel(
         }
     }
 
+    // Mapping functions from domain models to reader state models
+    private fun mapDomainScrollDirection(direction: DomainScrollDirection): ScrollDirection {
+        return when (direction) {
+            DomainScrollDirection.VERTICAL -> ScrollDirection.VERTICAL
+            DomainScrollDirection.HORIZONTAL -> ScrollDirection.HORIZONTAL
+        }
+    }
+
+    private fun mapDomainReadingTheme(theme: DomainReadingTheme): ReadingTheme {
+        return when (theme) {
+            DomainReadingTheme.LIGHT -> ReadingTheme.LIGHT
+            DomainReadingTheme.SEPIA -> ReadingTheme.SEPIA
+            DomainReadingTheme.DARK -> ReadingTheme.DARK
+            DomainReadingTheme.BLACK -> ReadingTheme.BLACK
+        }
+    }
+
+    private fun mapDomainPageAlignment(alignment: DomainPageAlignment): PageAlignment {
+        return when (alignment) {
+            DomainPageAlignment.LEFT -> PageAlignment.LEFT
+            DomainPageAlignment.CENTER -> PageAlignment.CENTER
+            DomainPageAlignment.RIGHT -> PageAlignment.RIGHT
+        }
+    }
+
     fun setPdfViewer(viewer: PdfViewer) {
         pdfViewer = viewer
         setupPdfViewerListeners(viewer)
+        applyInitialSettings(viewer)
+    }
+
+    private fun applyInitialSettings(viewer: PdfViewer) {
+        viewModelScope.launch {
+            val prefs = preferencesRepository.preferences.first()
+
+            // Apply scroll direction
+            val scrollMode = when (prefs.readerScrollDirection) {
+                DomainScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                DomainScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+            }
+            viewer.pageScrollMode = scrollMode
+
+            // Apply reading theme
+            val themeName = when (prefs.readerTheme) {
+                DomainReadingTheme.LIGHT -> "light"
+                DomainReadingTheme.SEPIA -> "sepia"
+                DomainReadingTheme.DARK -> "dark"
+                DomainReadingTheme.BLACK -> "black"
+            }
+            viewer.ui?.setReadingTheme(themeName)
+        }
     }
 
     private fun setupPdfViewerListeners(viewer: PdfViewer) {
@@ -118,9 +189,17 @@ class ReaderViewModel(
                     viewer.scrollTo(0)
                 }
 
-                // Add to recent files
+                // Add to recent files and apply quick zoom preset
                 viewModelScope.launch {
                     addToRecent()
+
+                    // Apply quick zoom preset from settings
+                    val prefs = preferencesRepository.preferences.first()
+                    when (prefs.readerQuickZoomPreset) {
+                        QuickZoomPreset.FIT_PAGE -> viewer.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                        QuickZoomPreset.FIT_WIDTH -> viewer.zoomTo(PdfViewer.Zoom.PAGE_WIDTH)
+                        QuickZoomPreset.ACTUAL_SIZE -> viewer.zoomTo(PdfViewer.Zoom.ACTUAL_SIZE)
+                    }
                 }
             },
             onPageLoadFailed = { exception ->
@@ -295,12 +374,21 @@ class ReaderViewModel(
             }
             is ReaderAction.ZoomFitPage -> {
                 pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderQuickZoomPreset(QuickZoomPreset.FIT_PAGE)
+                }
             }
             is ReaderAction.ZoomFitWidth -> {
                 pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_WIDTH)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderQuickZoomPreset(QuickZoomPreset.FIT_WIDTH)
+                }
             }
             is ReaderAction.ZoomActualSize -> {
                 pdfViewer?.zoomTo(PdfViewer.Zoom.ACTUAL_SIZE)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderQuickZoomPreset(QuickZoomPreset.ACTUAL_SIZE)
+                }
             }
 
             is ReaderAction.ToggleToolbar -> {
@@ -342,7 +430,12 @@ class ReaderViewModel(
             is ReaderAction.ShowMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = true) }
             is ReaderAction.HideMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = false) }
 
-            is ReaderAction.SetBrightness -> _state.update { it.copy(brightness = action.brightness) }
+            is ReaderAction.SetBrightness -> {
+                _state.update { it.copy(brightness = action.brightness) }
+                viewModelScope.launch {
+                    preferencesRepository.setReaderBrightness(action.brightness)
+                }
+            }
             is ReaderAction.SetScrollDirection -> {
                 _state.update { it.copy(scrollDirection = action.direction) }
                 val scrollMode = when (action.direction) {
@@ -350,6 +443,14 @@ class ReaderViewModel(
                     ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
                 }
                 pdfViewer?.pageScrollMode = scrollMode
+                // Persist to global settings
+                viewModelScope.launch {
+                    val domainDirection = when (action.direction) {
+                        ScrollDirection.VERTICAL -> DomainScrollDirection.VERTICAL
+                        ScrollDirection.HORIZONTAL -> DomainScrollDirection.HORIZONTAL
+                    }
+                    preferencesRepository.setReaderScrollDirection(domainDirection)
+                }
             }
             is ReaderAction.SetSpreadMode -> {
                 _state.update { it.copy(spreadMode = action.mode) }
@@ -364,7 +465,12 @@ class ReaderViewModel(
                 _state.update { it.copy(isSnapEnabled = action.enabled) }
                 pdfViewer?.snapPage = action.enabled
             }
-            is ReaderAction.SetKeepScreenOn -> _state.update { it.copy(keepScreenOn = action.enabled) }
+            is ReaderAction.SetKeepScreenOn -> {
+                _state.update { it.copy(keepScreenOn = action.enabled) }
+                viewModelScope.launch {
+                    preferencesRepository.setReaderKeepScreenOn(action.enabled)
+                }
+            }
             is ReaderAction.SetScreenOrientation -> _state.update { it.copy(screenOrientation = action.orientation) }
             is ReaderAction.SetReadingTheme -> {
                 _state.update { it.copy(readingTheme = action.theme) }
@@ -375,14 +481,36 @@ class ReaderViewModel(
                     ReadingTheme.BLACK -> "black"
                 }
                 pdfViewer?.ui?.setReadingTheme(themeName)
+                // Persist to global settings
+                viewModelScope.launch {
+                    val domainTheme = when (action.theme) {
+                        ReadingTheme.LIGHT -> DomainReadingTheme.LIGHT
+                        ReadingTheme.SEPIA -> DomainReadingTheme.SEPIA
+                        ReadingTheme.DARK -> DomainReadingTheme.DARK
+                        ReadingTheme.BLACK -> DomainReadingTheme.BLACK
+                    }
+                    preferencesRepository.setReaderTheme(domainTheme)
+                }
             }
 
             is ReaderAction.SetPageAlignment -> {
                 _state.update { it.copy(pageAlignment = action.alignment) }
+                // Persist to global settings
+                viewModelScope.launch {
+                    val domainAlignment = when (action.alignment) {
+                        PageAlignment.LEFT -> DomainPageAlignment.LEFT
+                        PageAlignment.CENTER -> DomainPageAlignment.CENTER
+                        PageAlignment.RIGHT -> DomainPageAlignment.RIGHT
+                    }
+                    preferencesRepository.setReaderPageAlignment(domainAlignment)
+                }
             }
 
             is ReaderAction.SetAutoHideToolbar -> {
                 _state.update { it.copy(autoHideToolbar = action.enabled) }
+                viewModelScope.launch {
+                    preferencesRepository.setReaderAutoHideToolbar(action.enabled)
+                }
             }
 
             is ReaderAction.Search -> {

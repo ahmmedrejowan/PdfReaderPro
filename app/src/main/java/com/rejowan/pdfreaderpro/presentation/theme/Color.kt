@@ -3,7 +3,7 @@ package com.rejowan.pdfreaderpro.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 // ============================================================================
-// DARK THEME - DEFAULT (Purple/Violet) - Optimized for AMOLED
+// DARK THEME - Purple/Violet - Optimized for AMOLED
 // ============================================================================
 
 val primaryDark = Color(0xFF9181F4)
@@ -22,70 +22,6 @@ val tertiaryContainerDark = Color(0xFF00897B)
 val onTertiaryContainerDark = Color(0xFFFFFFFF)
 
 val inversePrimaryDark = Color(0xFF9181F4)
-
-// ============================================================================
-// ACCENT THEMES
-// ============================================================================
-
-object OceanColors {
-    val primary = Color(0xFF1976D2)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFF42A5F5)
-    val onPrimaryContainer = Color(0xFFFFFFFF)
-    val secondary = Color(0xFF64B5F6)
-    val onSecondary = Color(0xFF0D3B66)
-    val secondaryContainer = Color(0xFF4FC3F7)
-    val onSecondaryContainer = Color(0xFFFFFFFF)
-    val tertiary = Color(0xFF4DD0E1)
-    val onTertiary = Color(0xFF003D42)
-    val tertiaryContainer = Color(0xFF00838F)
-    val onTertiaryContainer = Color(0xFFFFFFFF)
-}
-
-object SunsetColors {
-    val primary = Color(0xFFE65100)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFFFF8A65)
-    val onPrimaryContainer = Color(0xFFFFFFFF)
-    val secondary = Color(0xFFFFAB91)
-    val onSecondary = Color(0xFF4E1500)
-    val secondaryContainer = Color(0xFFFF8A50)
-    val onSecondaryContainer = Color(0xFFFFFFFF)
-    val tertiary = Color(0xFFFFAB40)
-    val onTertiary = Color(0xFF3E2723)
-    val tertiaryContainer = Color(0xFFBF360C)
-    val onTertiaryContainer = Color(0xFFFFFFFF)
-}
-
-object ForestColors {
-    val primary = Color(0xFF2E7D32)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFF66BB6A)
-    val onPrimaryContainer = Color(0xFFFFFFFF)
-    val secondary = Color(0xFFA5D6A7)
-    val onSecondary = Color(0xFF1B3E1F)
-    val secondaryContainer = Color(0xFF81C784)
-    val onSecondaryContainer = Color(0xFFFFFFFF)
-    val tertiary = Color(0xFF4DB6AC)
-    val onTertiary = Color(0xFF003731)
-    val tertiaryContainer = Color(0xFF00695C)
-    val onTertiaryContainer = Color(0xFFFFFFFF)
-}
-
-object RoseColors {
-    val primary = Color(0xFFD81B60)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFFEC407A)
-    val onPrimaryContainer = Color(0xFFFFFFFF)
-    val secondary = Color(0xFFF48FB1)
-    val onSecondary = Color(0xFF4A0E26)
-    val secondaryContainer = Color(0xFFF06292)
-    val onSecondaryContainer = Color(0xFFFFFFFF)
-    val tertiary = Color(0xFFBA68C8)
-    val onTertiary = Color(0xFF2E003E)
-    val tertiaryContainer = Color(0xFF7B1FA2)
-    val onTertiaryContainer = Color(0xFFFFFFFF)
-}
 
 // ============================================================================
 // SHARED DARK SURFACE COLORS
@@ -146,7 +82,7 @@ object LightSurfaces {
 }
 
 // ============================================================================
-// LIGHT THEME - DEFAULT
+// LIGHT THEME - Purple/Violet
 // ============================================================================
 
 val primaryLight = Color(0xFF7B68EE)
@@ -165,70 +101,6 @@ val tertiaryContainerLight = Color(0xFFFFD8E4)
 val onTertiaryContainerLight = Color(0xFF31111D)
 
 val inversePrimaryLight = Color(0xFFD0BCFF)
-
-// ============================================================================
-// LIGHT ACCENT THEMES
-// ============================================================================
-
-object OceanColorsLight {
-    val primary = Color(0xFF005CB2)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFFD5E3FF)
-    val onPrimaryContainer = Color(0xFF001C3A)
-    val secondary = Color(0xFF545F71)
-    val onSecondary = Color(0xFFFFFFFF)
-    val secondaryContainer = Color(0xFFD8E3F7)
-    val onSecondaryContainer = Color(0xFF111C2B)
-    val tertiary = Color(0xFF6C5677)
-    val onTertiary = Color(0xFFFFFFFF)
-    val tertiaryContainer = Color(0xFFF4D9FF)
-    val onTertiaryContainer = Color(0xFF261431)
-}
-
-object SunsetColorsLight {
-    val primary = Color(0xFFC44E00)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFFFFDCC7)
-    val onPrimaryContainer = Color(0xFF2F1600)
-    val secondary = Color(0xFF735B48)
-    val onSecondary = Color(0xFFFFFFFF)
-    val secondaryContainer = Color(0xFFFFDCC7)
-    val onSecondaryContainer = Color(0xFF2A1A0A)
-    val tertiary = Color(0xFF5F6135)
-    val onTertiary = Color(0xFFFFFFFF)
-    val tertiaryContainer = Color(0xFFE5E6AE)
-    val onTertiaryContainer = Color(0xFF1C1D00)
-}
-
-object ForestColorsLight {
-    val primary = Color(0xFF006E1C)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFF95F990)
-    val onPrimaryContainer = Color(0xFF002204)
-    val secondary = Color(0xFF526350)
-    val onSecondary = Color(0xFFFFFFFF)
-    val secondaryContainer = Color(0xFFD4E8D0)
-    val onSecondaryContainer = Color(0xFF101F10)
-    val tertiary = Color(0xFF39656D)
-    val onTertiary = Color(0xFFFFFFFF)
-    val tertiaryContainer = Color(0xFFBCEBF4)
-    val onTertiaryContainer = Color(0xFF001F25)
-}
-
-object RoseColorsLight {
-    val primary = Color(0xFFB5004B)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFFFFD9E2)
-    val onPrimaryContainer = Color(0xFF3F0016)
-    val secondary = Color(0xFF74565F)
-    val onSecondary = Color(0xFFFFFFFF)
-    val secondaryContainer = Color(0xFFFFD9E2)
-    val onSecondaryContainer = Color(0xFF2B151C)
-    val tertiary = Color(0xFF7C5635)
-    val onTertiary = Color(0xFFFFFFFF)
-    val tertiaryContainer = Color(0xFFFFDCC7)
-    val onTertiaryContainer = Color(0xFF2F1600)
-}
 
 // ============================================================================
 // PDF READER THEMES

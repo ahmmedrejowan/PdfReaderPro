@@ -1,15 +1,23 @@
 package com.rejowan.pdfreaderpro.domain.model
 
 data class AppPreferences(
+    // App settings
     val isFirstLaunch: Boolean = true,
     val hasCompletedOnboarding: Boolean = false,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
-    val accentColor: AccentColor = AccentColor.DEFAULT,
     val defaultViewMode: ViewMode = ViewMode.LIST,
     val defaultSortOption: SortOption = SortOption.NAME_ASC,
-    val keepScreenOn: Boolean = false,
     val rememberPasswords: Boolean = true,
-    val defaultScrollDirection: ScrollDirection = ScrollDirection.VERTICAL
+
+    // Reader settings (global)
+    val readerBrightness: Float = -1f, // -1 = system default, 0-1 = custom
+    val readerScrollDirection: ScrollDirection = ScrollDirection.VERTICAL,
+    val readerPageLayout: PageLayout = PageLayout.CONTINUOUS,
+    val readerPageAlignment: PageAlignment = PageAlignment.CENTER,
+    val readerAutoHideToolbar: Boolean = false,
+    val readerQuickZoomPreset: QuickZoomPreset = QuickZoomPreset.FIT_WIDTH,
+    val readerKeepScreenOn: Boolean = false,
+    val readerTheme: ReadingTheme = ReadingTheme.LIGHT
 )
 
 enum class ThemeMode {
@@ -18,15 +26,31 @@ enum class ThemeMode {
     SYSTEM
 }
 
-enum class AccentColor(val colorName: String) {
-    DEFAULT("Purple"),
-    OCEAN("Ocean"),
-    SUNSET("Sunset"),
-    FOREST("Forest"),
-    ROSE("Rose")
-}
-
 enum class ScrollDirection {
     VERTICAL,
     HORIZONTAL
+}
+
+enum class PageLayout {
+    SINGLE_PAGE,
+    CONTINUOUS
+}
+
+enum class PageAlignment {
+    LEFT,
+    CENTER,
+    RIGHT
+}
+
+enum class QuickZoomPreset {
+    FIT_PAGE,
+    FIT_WIDTH,
+    ACTUAL_SIZE // 100%
+}
+
+enum class ReadingTheme {
+    LIGHT,
+    SEPIA,
+    DARK,
+    BLACK // AMOLED
 }
