@@ -85,7 +85,7 @@ import com.rejowan.pdfreaderpro.presentation.components.EmptySearchState
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.LoadingState
 import com.rejowan.pdfreaderpro.presentation.components.PdfListItem
-import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
@@ -263,10 +263,10 @@ fun SearchScreen(
         }
     }
 
-    // Delete Confirmation Dialog
+    // Delete Confirmation Sheet
     if (showDeleteDialog) {
         fileForDialog?.let { file ->
-            DeleteConfirmDialog(
+            DeleteConfirmSheet(
                 pdfFile = file,
                 onDismiss = {
                     showDeleteDialog = false

@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rejowan.pdfreaderpro.domain.model.FolderSortOption
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import com.rejowan.pdfreaderpro.domain.model.RecentFile
@@ -40,6 +41,12 @@ class HomeViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
+    private val _folderSortOption = MutableStateFlow(FolderSortOption.NAME_ASC)
+    val folderSortOption: StateFlow<FolderSortOption> = _folderSortOption.asStateFlow()
+
+    private val _folderSearchQuery = MutableStateFlow("")
+    val folderSearchQuery: StateFlow<String> = _folderSearchQuery.asStateFlow()
+
     val allFiles: StateFlow<List<PdfFile>> = combine(
         pdfFileRepository.getAllPdfFiles(),
         _sortOption
@@ -53,8 +60,16 @@ class HomeViewModel(
     val favoriteFiles: StateFlow<List<PdfFile>> = favoriteRepository.getFavorites()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    val folders: StateFlow<List<PdfFolder>> = pdfFileRepository.getPdfFolders()
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val folders: StateFlow<List<PdfFolder>> = combine(
+        pdfFileRepository.getPdfFolders(),
+        _folderSortOption,
+        _folderSearchQuery
+    ) { folders, sort, query ->
+        val filtered = if (query.isBlank()) folders else folders.filter {
+            it.name.contains(query, ignoreCase = true)
+        }
+        sortFolders(filtered, sort)
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     val searchResults: StateFlow<List<PdfFile>> = combine(
         pdfFileRepository.searchPdfs(_searchQuery.value),
@@ -114,6 +129,14 @@ class HomeViewModel(
         _searchQuery.value = query
     }
 
+    fun setFolderSortOption(option: FolderSortOption) {
+        _folderSortOption.value = option
+    }
+
+    fun setFolderSearchQuery(query: String) {
+        _folderSearchQuery.value = query
+    }
+
     fun toggleFavorite(pdfFile: PdfFile) {
         viewModelScope.launch {
             favoriteRepository.toggleFavorite(pdfFile)
@@ -150,6 +173,15 @@ class HomeViewModel(
             SortOption.DATE_ASC -> files.sortedBy { it.dateModified }
             SortOption.SIZE_DESC -> files.sortedByDescending { it.size }
             SortOption.SIZE_ASC -> files.sortedBy { it.size }
+        }
+    }
+
+    private fun sortFolders(folders: List<PdfFolder>, sortOption: FolderSortOption): List<PdfFolder> {
+        return when (sortOption) {
+            FolderSortOption.NAME_ASC -> folders.sortedBy { it.name.lowercase() }
+            FolderSortOption.NAME_DESC -> folders.sortedByDescending { it.name.lowercase() }
+            FolderSortOption.COUNT_DESC -> folders.sortedByDescending { it.pdfCount }
+            FolderSortOption.COUNT_ASC -> folders.sortedBy { it.pdfCount }
         }
     }
 }

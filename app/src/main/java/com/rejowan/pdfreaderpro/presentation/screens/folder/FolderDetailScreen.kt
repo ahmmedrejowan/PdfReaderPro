@@ -71,7 +71,7 @@ import com.rejowan.pdfreaderpro.presentation.components.PdfGridItem
 import com.rejowan.pdfreaderpro.presentation.components.PdfListItem
 import com.rejowan.pdfreaderpro.presentation.components.PermissionRequiredState
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
-import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
@@ -308,10 +308,10 @@ fun FolderDetailScreen(
         }
     }
 
-    // Delete Confirmation Dialog
+    // Delete Confirmation Sheet
     if (showDeleteDialog) {
         fileForDialog?.let { file ->
-            DeleteConfirmDialog(
+            DeleteConfirmSheet(
                 pdfFile = file,
                 onDismiss = {
                     showDeleteDialog = false

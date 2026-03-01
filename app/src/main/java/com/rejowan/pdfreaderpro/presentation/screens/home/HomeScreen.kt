@@ -43,14 +43,16 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
+import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import com.rejowan.pdfreaderpro.presentation.components.AnimatedBottomNav
 import com.rejowan.pdfreaderpro.presentation.components.ClickableSearchBar
 import com.rejowan.pdfreaderpro.presentation.components.CompactTabRow
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
+import com.rejowan.pdfreaderpro.presentation.components.FolderOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.StatsSheet
 import com.rejowan.pdfreaderpro.presentation.components.WelcomeHeader
-import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmDialog
+import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.ExitConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
@@ -150,6 +152,8 @@ fun HomeScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val viewMode by viewModel.viewMode.collectAsState()
     val sortOption by viewModel.sortOption.collectAsState()
+    val folderSortOption by viewModel.folderSortOption.collectAsState()
+    val folderSearchQuery by viewModel.folderSearchQuery.collectAsState()
 
     val allFiles by viewModel.allFiles.collectAsState()
     val recentFiles by viewModel.recentFiles.collectAsState()
@@ -167,6 +171,7 @@ fun HomeScreen(
     var showExitConfirmSheet by remember { mutableStateOf(false) }
     var fileForDialog by remember { mutableStateOf<PdfFile?>(null) }
     var selectedFileFromRecent by remember { mutableStateOf(false) }
+    var selectedFolder by remember { mutableStateOf<PdfFolder?>(null) }
 
     // Handle back press to show exit confirmation
     BackHandler(enabled = selectedNavItem == 0) {
@@ -320,11 +325,18 @@ fun HomeScreen(
                             folders = folders,
                             isLoading = isLoading,
                             hasPermission = hasPermission,
+                            currentSort = folderSortOption,
+                            searchQuery = folderSearchQuery,
                             onFolderClick = { folder ->
                                 navController.navigateToFolderDetail(folder.path, folder.name)
                             },
+                            onFolderLongClick = { folder ->
+                                selectedFolder = folder
+                            },
                             onRefresh = { viewModel.refresh() },
-                            onGrantPermissionClick = openPermissionSettings
+                            onGrantPermissionClick = openPermissionSettings,
+                            onSortSelected = { viewModel.setFolderSortOption(it) },
+                            onSearchQueryChange = { viewModel.setFolderSearchQuery(it) }
                         )
                     }
 
@@ -396,6 +408,17 @@ fun HomeScreen(
         )
     }
 
+    // Folder Options Sheet
+    selectedFolder?.let { folder ->
+        FolderOptionsSheet(
+            folder = folder,
+            onDismiss = { selectedFolder = null },
+            onOpenClick = {
+                navController.navigateToFolderDetail(folder.path, folder.name)
+            }
+        )
+    }
+
     // Rename Sheet
     if (showRenameDialog) {
         fileForDialog?.let { file ->
@@ -413,10 +436,10 @@ fun HomeScreen(
         }
     }
 
-    // Delete Confirmation Dialog
+    // Delete Confirmation Sheet
     if (showDeleteDialog) {
         fileForDialog?.let { file ->
-            DeleteConfirmDialog(
+            DeleteConfirmSheet(
                 pdfFile = file,
                 onDismiss = {
                     showDeleteDialog = false
