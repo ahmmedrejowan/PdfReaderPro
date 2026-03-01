@@ -133,28 +133,31 @@ class ReaderViewModel(
     fun setPdfViewer(viewer: PdfViewer) {
         pdfViewer = viewer
         setupPdfViewerListeners(viewer)
-        applyInitialSettings(viewer)
     }
 
     private fun applyInitialSettings(viewer: PdfViewer) {
         viewModelScope.launch {
-            val prefs = preferencesRepository.preferences.first()
+            try {
+                val prefs = preferencesRepository.preferences.first()
 
-            // Apply scroll direction
-            val scrollMode = when (prefs.readerScrollDirection) {
-                DomainScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
-                DomainScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
-            }
-            viewer.pageScrollMode = scrollMode
+                // Apply scroll direction
+                val scrollMode = when (prefs.readerScrollDirection) {
+                    DomainScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    DomainScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                }
+                viewer.pageScrollMode = scrollMode
 
-            // Apply reading theme
-            val themeName = when (prefs.readerTheme) {
-                DomainReadingTheme.LIGHT -> "light"
-                DomainReadingTheme.SEPIA -> "sepia"
-                DomainReadingTheme.DARK -> "dark"
-                DomainReadingTheme.BLACK -> "black"
+                // Apply reading theme
+                val themeName = when (prefs.readerTheme) {
+                    DomainReadingTheme.LIGHT -> "light"
+                    DomainReadingTheme.SEPIA -> "sepia"
+                    DomainReadingTheme.DARK -> "dark"
+                    DomainReadingTheme.BLACK -> "black"
+                }
+                viewer.ui?.setReadingTheme(themeName)
+            } catch (e: Exception) {
+                // Viewer not yet initialized, settings will be applied when ready
             }
-            viewer.ui?.setReadingTheme(themeName)
         }
     }
 
@@ -189,9 +192,12 @@ class ReaderViewModel(
                     viewer.scrollTo(0)
                 }
 
-                // Add to recent files and apply quick zoom preset
+                // Add to recent files and apply settings
                 viewModelScope.launch {
                     addToRecent()
+
+                    // Apply initial settings (scroll direction, reading theme)
+                    applyInitialSettings(viewer)
 
                     // Apply quick zoom preset from settings
                     val prefs = preferencesRepository.preferences.first()
