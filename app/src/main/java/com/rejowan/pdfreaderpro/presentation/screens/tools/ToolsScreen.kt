@@ -36,6 +36,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
 
 enum class ToolCategory(val title: String) {
     ORGANIZE("Organize"),
@@ -53,8 +55,8 @@ data class PdfTool(
 )
 
 private val pdfTools = listOf(
-    PdfTool("merge", "Merge PDFs", "Combine multiple PDFs", Icons.AutoMirrored.Filled.CallMerge, ToolCategory.ORGANIZE),
-    PdfTool("split", "Split PDF", "Split into multiple files", Icons.AutoMirrored.Filled.CallSplit, ToolCategory.ORGANIZE),
+    PdfTool("merge", "Merge PDFs", "Combine multiple PDFs", Icons.AutoMirrored.Filled.CallMerge, ToolCategory.ORGANIZE, isEnabled = true),
+    PdfTool("split", "Split PDF", "Split into multiple files", Icons.AutoMirrored.Filled.CallSplit, ToolCategory.ORGANIZE, isEnabled = true),
     PdfTool("compress", "Compress", "Reduce file size", Icons.Default.Compress, ToolCategory.ORGANIZE),
     PdfTool("rotate", "Rotate Pages", "Rotate pages", Icons.AutoMirrored.Filled.RotateRight, ToolCategory.ORGANIZE),
     PdfTool("img_to_pdf", "Image to PDF", "Convert images", Icons.Default.Image, ToolCategory.CONVERT),
@@ -91,7 +93,11 @@ fun ToolsScreen(
                 ToolCard(
                     tool = tool,
                     onClick = {
-                        // TODO: Navigate to tool screen when implemented
+                        when (tool.id) {
+                            "merge" -> navController.navigateToMergeTool()
+                            "split" -> navController.navigateToSplitTool("")
+                            // Other tools will be added as they are implemented
+                        }
                     }
                 )
             }

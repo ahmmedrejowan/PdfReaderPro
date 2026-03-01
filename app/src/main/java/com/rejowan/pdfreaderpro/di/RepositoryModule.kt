@@ -2,10 +2,12 @@ package com.rejowan.pdfreaderpro.di
 
 import com.rejowan.pdfreaderpro.data.repository.FavoriteRepositoryImpl
 import com.rejowan.pdfreaderpro.data.repository.PdfFileRepositoryImpl
+import com.rejowan.pdfreaderpro.data.repository.PdfToolsRepositoryImpl
 import com.rejowan.pdfreaderpro.data.repository.PreferencesRepositoryImpl
 import com.rejowan.pdfreaderpro.data.repository.RecentRepositoryImpl
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.PdfFileRepository
+import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
 import org.koin.android.ext.koin.androidContext
@@ -16,4 +18,5 @@ val repositoryModule = module {
     single<RecentRepository> { RecentRepositoryImpl(get()) }
     single<FavoriteRepository> { FavoriteRepositoryImpl(get()) }
     single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
+    single<PdfToolsRepository> { PdfToolsRepositoryImpl(androidContext()) }
 }

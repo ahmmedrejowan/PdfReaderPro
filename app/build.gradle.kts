@@ -52,6 +52,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            excludes += "/META-INF/DEPENDENCIES"
         }
     }
 }
@@ -104,6 +106,13 @@ dependencies {
 
     // webkit for PDF rendering
     implementation(libs.androidx.webkit)
+
+    // iText PDF processing
+    implementation(libs.itext.core) {
+        exclude(group = "org.bouncycastle")
+    }
+    implementation(libs.bouncycastle.provider)
+    implementation(libs.bouncycastle.pkix)
 
 
     // Testing

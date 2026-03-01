@@ -1,0 +1,139 @@
+package com.rejowan.pdfreaderpro.domain.repository
+
+import kotlinx.coroutines.flow.Flow
+
+/**
+ * Repository interface for PDF manipulation tools.
+ * All operations return Result to handle success/failure gracefully.
+ */
+interface PdfToolsRepository {
+
+    /**
+     * Merge multiple PDF files into a single PDF.
+     * @param inputPaths List of paths to source PDFs (in order)
+     * @param outputPath Path for the merged output PDF
+     * @return Result with Unit on success, or exception on failure
+     */
+    suspend fun mergePdfs(
+        inputPaths: List<String>,
+        outputPath: String,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Split a PDF by page ranges.
+     * @param inputPath Path to source PDF
+     * @param outputDir Directory for output files
+     * @param ranges List of page ranges (e.g., "1-5", "6-10")
+     * @return Result with list of created file paths
+     */
+    suspend fun splitPdf(
+        inputPath: String,
+        outputDir: String,
+        ranges: List<String>,
+        onProgress: (Float) -> Unit = {}
+    ): Result<List<String>>
+
+    /**
+     * Split PDF into individual pages.
+     * @param inputPath Path to source PDF
+     * @param outputDir Directory for output files
+     * @return Result with list of created file paths
+     */
+    suspend fun splitIntoPages(
+        inputPath: String,
+        outputDir: String,
+        onProgress: (Float) -> Unit = {}
+    ): Result<List<String>>
+
+    /**
+     * Extract specific pages from a PDF.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param pages List of page numbers to extract (1-indexed)
+     * @return Result with Unit on success
+     */
+    suspend fun extractPages(
+        inputPath: String,
+        outputPath: String,
+        pages: List<Int>,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Rotate pages in a PDF.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param rotation Rotation angle (90, 180, 270)
+     * @param pages Pages to rotate (null = all pages)
+     * @return Result with Unit on success
+     */
+    suspend fun rotatePages(
+        inputPath: String,
+        outputPath: String,
+        rotation: Int,
+        pages: List<Int>? = null,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Reorder pages in a PDF.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param newOrder New page order (1-indexed page numbers)
+     * @return Result with Unit on success
+     */
+    suspend fun reorderPages(
+        inputPath: String,
+        outputPath: String,
+        newOrder: List<Int>,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Compress a PDF to reduce file size.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param quality Compression quality (0.0 = max compression, 1.0 = min compression)
+     * @return Result with the new file size in bytes
+     */
+    suspend fun compressPdf(
+        inputPath: String,
+        outputPath: String,
+        quality: Float = 0.5f,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Long>
+
+    /**
+     * Convert images to PDF.
+     * @param imagePaths List of image file paths
+     * @param outputPath Path for output PDF
+     * @return Result with Unit on success
+     */
+    suspend fun imagesToPdf(
+        imagePaths: List<String>,
+        outputPath: String,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Export PDF pages as images.
+     * @param inputPath Path to source PDF
+     * @param outputDir Directory for output images
+     * @param format Image format ("png" or "jpg")
+     * @param pages Pages to export (null = all pages)
+     * @return Result with list of created image paths
+     */
+    suspend fun pdfToImages(
+        inputPath: String,
+        outputDir: String,
+        format: String = "png",
+        pages: List<Int>? = null,
+        onProgress: (Float) -> Unit = {}
+    ): Result<List<String>>
+
+    /**
+     * Get the number of pages in a PDF.
+     */
+    suspend fun getPageCount(inputPath: String): Result<Int>
+}

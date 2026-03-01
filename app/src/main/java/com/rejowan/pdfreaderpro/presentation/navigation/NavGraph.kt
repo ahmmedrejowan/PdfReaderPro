@@ -14,6 +14,8 @@ import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingViewMo
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderScreen
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -96,13 +98,19 @@ fun PdfReaderNavHost(
         // Tool: Merge PDFs
         composable<ToolMerge> { backStackEntry ->
             val toolMerge: ToolMerge = backStackEntry.toRoute()
-            // TODO: MergePdfsScreen(navController, toolMerge.selectedFiles)
+            MergeScreen(
+                navController = navController,
+                initialFiles = toolMerge.selectedFiles
+            )
         }
 
         // Tool: Split PDF
         composable<ToolSplit> { backStackEntry ->
             val toolSplit: ToolSplit = backStackEntry.toRoute()
-            // TODO: SplitPdfScreen(navController, toolSplit.filePath)
+            SplitScreen(
+                navController = navController,
+                initialFilePath = toolSplit.filePath
+            )
         }
 
         // Tool: Compress PDF

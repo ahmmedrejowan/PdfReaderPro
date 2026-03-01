@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
      */
     private fun hasStoragePermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            hasStoragePermission()
+            Environment.isExternalStorageManager()
         } else {
             true // On older APIs, scoped storage doesn't apply
         }
