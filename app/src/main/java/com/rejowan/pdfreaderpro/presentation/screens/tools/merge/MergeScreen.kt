@@ -1,15 +1,21 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.merge
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +23,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,7 +35,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.CallMerge
@@ -36,6 +46,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Pages
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Visibility
@@ -59,11 +70,13 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -74,6 +87,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -104,7 +119,6 @@ fun MergeScreen(
 
     // Page selection sheet state
     var selectedFileForPageSelection by remember { mutableStateOf<MergeFile?>(null) }
-    val pageSelectionSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val pdfPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -112,18 +126,14 @@ fun MergeScreen(
         viewModel.addFiles(uris)
     }
 
-    // Page Selection Bottom Sheet
+    // Page Selection Sheet (hybrid: bottom sheet in portrait, side panel in landscape)
     if (selectedFileForPageSelection != null) {
         PageSelectionSheet(
             file = selectedFileForPageSelection!!,
-            sheetState = pageSelectionSheetState,
             onDismiss = { selectedFileForPageSelection = null },
             onSelectionChanged = { selection ->
                 viewModel.updatePageSelection(selectedFileForPageSelection!!, selection)
                 selectedFileForPageSelection = null
-            },
-            onPreview = {
-                navController.navigateToReader(selectedFileForPageSelection!!.path)
             }
         )
     }
@@ -182,7 +192,12 @@ fun MergeScreen(
                 // Success state
                 SuccessState(
                     result = state.result!!,
-                    onOpenFile = {
+                    onOpenInApp = {
+                        // Open in app's reader screen
+                        navController.navigateToReader(state.result!!.outputPath)
+                    },
+                    onOpenWith = {
+                        // Open with external app via ACTION_VIEW
                         val file = File(state.result!!.outputPath)
                         val uri = FileProvider.getUriForFile(
                             context,
@@ -193,7 +208,7 @@ fun MergeScreen(
                             setDataAndType(uri, "application/pdf")
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
-                        context.startActivity(intent)
+                        context.startActivity(Intent.createChooser(intent, "Open with"))
                     },
                     onMergeMore = {
                         viewModel.reset()
@@ -534,8 +549,8 @@ private fun ActionChip(
         Text(
             label,
             style = MaterialTheme.typography.labelMedium,
-            fontWeight = if (isHighlighted) FontWeight.Medium else FontWeight.Normal,
-            color = color,
+            fontWeight = if (isHighlighted) FontWeight.SemiBold else FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -746,7 +761,8 @@ private fun ProcessingOverlay(progress: Float) {
 @Composable
 private fun SuccessState(
     result: MergeResult,
-    onOpenFile: () -> Unit,
+    onOpenInApp: () -> Unit,
+    onOpenWith: () -> Unit,
     onMergeMore: () -> Unit,
     onDone: () -> Unit
 ) {
@@ -840,32 +856,58 @@ private fun SuccessState(
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // Open in App button (primary)
         Button(
-            onClick = onOpenFile,
+            onClick = onOpenInApp,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Open Merged PDF")
+            Icon(
+                Icons.Default.Visibility,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Open in App", style = MaterialTheme.typography.labelMedium)
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
+        // Open With button (secondary)
+        OutlinedButton(
+            onClick = onOpenWith,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Icon(
+                Icons.AutoMirrored.Filled.OpenInNew,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Open With...", style = MaterialTheme.typography.labelMedium)
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Merge More button
         OutlinedButton(
             onClick = onMergeMore,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Merge More Files")
+            Text("Merge More Files", style = MaterialTheme.typography.labelMedium)
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
+        // Done button
         OutlinedButton(
             onClick = onDone,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Done")
+            Text("Done", style = MaterialTheme.typography.labelMedium)
         }
     }
 }
@@ -879,21 +921,138 @@ private fun formatFileSize(bytes: Long): String {
 }
 
 // ============================================================================
-// Page Selection Sheet
+// Page Selection Sheet - Hybrid Pattern
 // ============================================================================
 
 private enum class SelectionMode {
     ALL, RANGE, CUSTOM
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PageSelectionSheet(
     file: MergeFile,
-    sheetState: androidx.compose.material3.SheetState,
+    onDismiss: () -> Unit,
+    onSelectionChanged: (PageSelection) -> Unit
+) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        PageSelectionSidePanel(
+            file = file,
+            onDismiss = onDismiss,
+            onSelectionChanged = onSelectionChanged
+        )
+    } else {
+        PageSelectionBottomSheet(
+            file = file,
+            onDismiss = onDismiss,
+            onSelectionChanged = onSelectionChanged
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PageSelectionBottomSheet(
+    file: MergeFile,
+    onDismiss: () -> Unit,
+    onSelectionChanged: (PageSelection) -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 2.dp
+    ) {
+        PageSelectionContent(
+            file = file,
+            onDismiss = onDismiss,
+            onSelectionChanged = onSelectionChanged,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+    }
+}
+
+@Composable
+private fun PageSelectionSidePanel(
+    file: MergeFile,
+    onDismiss: () -> Unit,
+    onSelectionChanged: (PageSelection) -> Unit
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Scrim
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .pointerInput(Unit) {
+                        detectTapGestures { onDismiss() }
+                    }
+            )
+        }
+
+        // Side panel
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(250, easing = FastOutSlowInEasing)
+            ),
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(320.dp),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp
+            ) {
+                PageSelectionContent(
+                    file = file,
+                    onDismiss = onDismiss,
+                    onSelectionChanged = onSelectionChanged,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = systemBarsPadding.calculateTopPadding(),
+                            bottom = systemBarsPadding.calculateBottomPadding()
+                        )
+                        .verticalScroll(rememberScrollState())
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PageSelectionContent(
+    file: MergeFile,
     onDismiss: () -> Unit,
     onSelectionChanged: (PageSelection) -> Unit,
-    onPreview: () -> Unit
+    modifier: Modifier = Modifier
 ) {
     // Determine initial mode from current selection
     val initialMode = when (file.pageSelection) {
@@ -932,194 +1091,225 @@ private fun PageSelectionSheet(
         )
     }
 
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 32.dp)
+        // Header
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Header
+            Surface(
+                shape = RoundedCornerShape(8.dp),
+                color = AccentAmber.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    Icons.Default.Pages,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(16.dp),
+                    tint = AccentAmber
+                )
+            }
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    "Select Pages",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    file.name,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Total pages info
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerLow
+        ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(AccentBlue.copy(alpha = 0.1f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        Icons.Default.PictureAsPdf,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = AccentBlue
-                    )
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        "Select Pages",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        file.name,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                // Preview button
-                OutlinedButton(
-                    onClick = onPreview,
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Icon(
-                        Icons.Default.Visibility,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Preview")
-                }
+                Icon(
+                    Icons.Default.PictureAsPdf,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = AccentRed
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    "Total: ${file.pageCount} pages",
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
+        }
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                "Total pages: ${file.pageCount}",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+        // Selection mode chips
+        Text(
+            "Selection Mode",
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            modifier = Modifier.padding(start = 4.dp)
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            FilterChip(
+                selected = selectionMode == SelectionMode.ALL,
+                onClick = { selectionMode = SelectionMode.ALL },
+                label = { Text("All") },
+                modifier = Modifier.weight(1f),
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = AccentAmber.copy(alpha = 0.15f),
+                    selectedLabelColor = MaterialTheme.colorScheme.onSurface
+                )
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Selection mode chips
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                FilterChip(
-                    selected = selectionMode == SelectionMode.ALL,
-                    onClick = { selectionMode = SelectionMode.ALL },
-                    label = { Text("All") },
-                    modifier = Modifier.weight(1f),
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = AccentBlue.copy(alpha = 0.15f),
-                        selectedLabelColor = AccentBlue
-                    )
+            FilterChip(
+                selected = selectionMode == SelectionMode.RANGE,
+                onClick = { selectionMode = SelectionMode.RANGE },
+                label = { Text("Range") },
+                modifier = Modifier.weight(1f),
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = AccentAmber.copy(alpha = 0.15f),
+                    selectedLabelColor = MaterialTheme.colorScheme.onSurface
                 )
-                FilterChip(
-                    selected = selectionMode == SelectionMode.RANGE,
-                    onClick = { selectionMode = SelectionMode.RANGE },
-                    label = { Text("Range") },
-                    modifier = Modifier.weight(1f),
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = AccentBlue.copy(alpha = 0.15f),
-                        selectedLabelColor = AccentBlue
-                    )
+            )
+            FilterChip(
+                selected = selectionMode == SelectionMode.CUSTOM,
+                onClick = { selectionMode = SelectionMode.CUSTOM },
+                label = { Text("Custom") },
+                modifier = Modifier.weight(1f),
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = AccentAmber.copy(alpha = 0.15f),
+                    selectedLabelColor = MaterialTheme.colorScheme.onSurface
                 )
-                FilterChip(
-                    selected = selectionMode == SelectionMode.CUSTOM,
-                    onClick = { selectionMode = SelectionMode.CUSTOM },
-                    label = { Text("Custom") },
-                    modifier = Modifier.weight(1f),
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = AccentBlue.copy(alpha = 0.15f),
-                        selectedLabelColor = AccentBlue
-                    )
-                )
-            }
+            )
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            // Mode-specific options
-            when (selectionMode) {
-                SelectionMode.ALL -> {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = AccentGreen.copy(alpha = 0.1f)
-                        ),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                Icons.Default.CheckCircle,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp),
-                                tint = AccentGreen
-                            )
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(
-                                "All ${file.pageCount} pages will be included",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    }
-                }
-
-                SelectionMode.RANGE -> {
+        // Mode-specific options
+        when (selectionMode) {
+            SelectionMode.ALL -> {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    color = AccentGreen.copy(alpha = 0.1f)
+                ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        OutlinedTextField(
-                            value = rangeStart,
-                            onValueChange = { rangeStart = it.filter { c -> c.isDigit() } },
-                            label = { Text("From") },
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp),
-                            singleLine = true
+                        Icon(
+                            Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                            tint = AccentGreen
                         )
-                        OutlinedTextField(
-                            value = rangeEnd,
-                            onValueChange = { rangeEnd = it.filter { c -> c.isDigit() } },
-                            label = { Text("To") },
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp),
-                            singleLine = true
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            "All ${file.pageCount} pages will be included",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        "Pages $rangeStart to $rangeEnd will be included",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                SelectionMode.CUSTOM -> {
-                    OutlinedTextField(
-                        value = customPages,
-                        onValueChange = { customPages = it },
-                        label = { Text("Page numbers") },
-                        placeholder = { Text("e.g., 1, 3, 5-8, 12") },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        supportingText = {
-                            Text("Enter page numbers or ranges separated by commas")
-                        }
-                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            SelectionMode.RANGE -> {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    OutlinedTextField(
+                        value = rangeStart,
+                        onValueChange = { rangeStart = it.filter { c -> c.isDigit() } },
+                        label = { Text("From") },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(8.dp),
+                        singleLine = true
+                    )
+                    OutlinedTextField(
+                        value = rangeEnd,
+                        onValueChange = { rangeEnd = it.filter { c -> c.isDigit() } },
+                        label = { Text("To") },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(8.dp),
+                        singleLine = true
+                    )
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    "Pages $rangeStart to $rangeEnd will be included",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
 
-            // Apply button
+            SelectionMode.CUSTOM -> {
+                OutlinedTextField(
+                    value = customPages,
+                    onValueChange = { customPages = it },
+                    label = { Text("Page numbers") },
+                    placeholder = { Text("e.g., 1, 3, 5-8, 12") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    supportingText = {
+                        Text("Enter page numbers or ranges separated by commas")
+                    }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Buttons
+        Row(modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(
+                onClick = onDismiss,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Cancel", style = MaterialTheme.typography.labelMedium)
+            }
+
+            Spacer(modifier = Modifier.width(10.dp))
+
             Button(
                 onClick = {
                     val selection = when (selectionMode) {
@@ -1136,10 +1326,10 @@ private fun PageSelectionSheet(
                     }
                     onSelectionChanged(selection)
                 },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Apply Selection")
+                Text("Apply", style = MaterialTheme.typography.labelMedium)
             }
         }
     }
