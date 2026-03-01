@@ -1,5 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.settings
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -44,8 +45,14 @@ import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.ColorLens
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.FormatAlignCenter
+import androidx.compose.material.icons.rounded.Code
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Gavel
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LightMode
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
@@ -80,8 +87,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import com.rejowan.pdfreaderpro.BuildConfig
 import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
@@ -107,6 +118,8 @@ fun SettingsScreenContent(
 ) {
     val preferences by viewModel.preferences.collectAsState()
 
+    val context = LocalContext.current
+
     // Sheet visibility states
     var showThemeModeSheet by remember { mutableStateOf(false) }
     var showScrollDirectionSheet by remember { mutableStateOf(false) }
@@ -114,6 +127,13 @@ fun SettingsScreenContent(
     var showQuickZoomSheet by remember { mutableStateOf(false) }
     var showReadingThemeSheet by remember { mutableStateOf(false) }
     var showBrightnessSheet by remember { mutableStateOf(false) }
+
+    // About section sheets
+    var showChangelogSheet by remember { mutableStateOf(false) }
+    var showPrivacyPolicySheet by remember { mutableStateOf(false) }
+    var showLicensesSheet by remember { mutableStateOf(false) }
+    var showCreatorSheet by remember { mutableStateOf(false) }
+    var showAppLicenseSheet by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -233,12 +253,91 @@ fun SettingsScreenContent(
         SectionLabel(text = "About", delay = 500)
         Spacer(modifier = Modifier.height(8.dp))
 
-        SettingsInfoItem(
+        SettingsOptionItem(
             icon = Icons.Rounded.Info,
-            title = "App Version",
-            value = "2.0.0",
+            title = "Version ${BuildConfig.VERSION_NAME}",
+            subtitle = "View changelog",
             accentColor = AccentBlue,
+            onClick = { showChangelogSheet = true },
             animationDelay = 550
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Policy,
+            title = "Privacy Policy",
+            subtitle = "View our privacy policy",
+            accentColor = AccentTeal,
+            onClick = { showPrivacyPolicySheet = true },
+            animationDelay = 600
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Code,
+            title = "Open Source Licenses",
+            subtitle = "View third-party libraries",
+            accentColor = AccentPurple,
+            onClick = { showLicensesSheet = true },
+            animationDelay = 650
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Person,
+            title = "Creator",
+            subtitle = "About the developer",
+            accentColor = AccentAmber,
+            onClick = { showCreatorSheet = true },
+            animationDelay = 700
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Gavel,
+            title = "App License",
+            subtitle = "GNU Affero General Public License v3.0",
+            accentColor = AccentBlue,
+            onClick = { showAppLicenseSheet = true },
+            animationDelay = 750
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Email,
+            title = "Contact",
+            subtitle = "Get in touch with the developer",
+            accentColor = AccentTeal,
+            onClick = {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = "mailto:kmrejowan@gmail.com".toUri()
+                    putExtra(Intent.EXTRA_SUBJECT, "PDF Reader Pro Feedback")
+                }
+                context.startActivity(intent)
+            },
+            animationDelay = 800
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.History,
+            title = "GitHub Repository",
+            subtitle = "View source code",
+            accentColor = AccentPurple,
+            onClick = {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    "https://github.com/ahmmedrejowan/PdfReaderPro".toUri()
+                )
+                context.startActivity(intent)
+            },
+            animationDelay = 850
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -356,6 +455,37 @@ fun SettingsScreenContent(
             onBrightnessChange = { viewModel.setReaderBrightness(it) },
             onDismiss = { showBrightnessSheet = false }
         )
+    }
+
+    // About section sheets
+    if (showChangelogSheet) {
+        AboutSheet(onDismiss = { showChangelogSheet = false }) {
+            ChangelogContent()
+        }
+    }
+
+    if (showPrivacyPolicySheet) {
+        AboutSheet(onDismiss = { showPrivacyPolicySheet = false }) {
+            PrivacyPolicyContent()
+        }
+    }
+
+    if (showLicensesSheet) {
+        AboutSheet(onDismiss = { showLicensesSheet = false }) {
+            LicensesContent()
+        }
+    }
+
+    if (showCreatorSheet) {
+        AboutSheet(onDismiss = { showCreatorSheet = false }) {
+            CreatorContent()
+        }
+    }
+
+    if (showAppLicenseSheet) {
+        AboutSheet(onDismiss = { showAppLicenseSheet = false }) {
+            AppLicenseContent()
+        }
     }
 }
 
@@ -1349,4 +1479,660 @@ private fun BrightnessOptionItem(
             }
         }
     }
+}
+
+// ============================================================================
+// ABOUT SECTION SHEETS
+// ============================================================================
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AboutSheet(
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isLandscape) {
+        // Side panel for landscape
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .pointerInput(Unit) { detectTapGestures { onDismiss() } }
+        ) {
+            AnimatedVisibility(
+                visible = true,
+                enter = slideInHorizontally(
+                    initialOffsetX = { it },
+                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(200)),
+                exit = slideOutHorizontally(
+                    targetOffsetX = { it },
+                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(200)),
+                modifier = Modifier.align(Alignment.CenterEnd)
+            ) {
+                Surface(
+                    modifier = Modifier
+                        .width(400.dp)
+                        .fillMaxHeight()
+                        .pointerInput(Unit) { detectTapGestures { /* consume */ } },
+                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 2.dp
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding(),
+                                bottom = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
+                            )
+                    ) {
+                        content()
+                    }
+                }
+            }
+        }
+    } else {
+        // Bottom sheet for portrait
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            content()
+        }
+    }
+}
+
+@Composable
+private fun ChangelogContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 32.dp)
+    ) {
+        Text(
+            text = "Changelog",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+
+        ChangelogVersionItem(
+            version = BuildConfig.VERSION_NAME,
+            date = "2026-03-01",
+            changes = listOf(
+                "Complete UI redesign with Material 3",
+                "New PDF viewer with PDF.js engine",
+                "Bookmarks and favorites support",
+                "Reading themes (Light, Sepia, Dark, Black)",
+                "Auto-scroll functionality",
+                "Page jump and search",
+                "Table of contents with attachments",
+                "Customizable reader settings",
+                "Dark mode and system theme support"
+            )
+        )
+    }
+}
+
+@Composable
+private fun ChangelogVersionItem(
+    version: String,
+    date: String,
+    changes: List<String>
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Version $version",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = date,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            changes.forEach { change ->
+                Row(modifier = Modifier.padding(vertical = 4.dp)) {
+                    Text(
+                        text = "•",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Text(
+                        text = change,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PrivacyPolicyContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 32.dp)
+    ) {
+        Text(
+            text = "Privacy Policy",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+
+        // Privacy Highlights Card
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Your Privacy is Protected",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                PrivacyHighlightItem("No internet connection required")
+                PrivacyHighlightItem("No data collection or sharing")
+                PrivacyHighlightItem("No analytics or tracking")
+                PrivacyHighlightItem("100% offline operation")
+            }
+        }
+
+        PrivacySection(
+            title = "No Data Collection",
+            content = "PDF Reader Pro does not collect, store, transmit, or share any personal data. The app operates completely offline and does not require an internet connection. There are no analytics, tracking, or telemetry of any kind."
+        )
+
+        PrivacySection(
+            title = "Local Data Storage",
+            content = "All bookmarks, favorites, and app preferences are stored exclusively on your device. This data never leaves your device and is not accessible to anyone except you. You have complete control and can delete this data at any time."
+        )
+
+        PrivacySection(
+            title = "File Access",
+            content = "PDF Reader Pro requires storage permission to read PDF files from your device. This access is used solely to display your documents and is never used to collect or transmit any information."
+        )
+
+        PrivacySection(
+            title = "Password Storage",
+            content = "If you choose to save passwords for protected PDFs, they are stored locally using encrypted storage. Passwords never leave your device."
+        )
+
+        Text(
+            text = "Last updated: March 1, 2026",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+    }
+}
+
+@Composable
+private fun PrivacyHighlightItem(text: String) {
+    Row(
+        modifier = Modifier.padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "✓",
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.padding(end = 10.dp)
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+@Composable
+private fun PrivacySection(title: String, content: String) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+            Text(
+                text = content,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun LicensesContent() {
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 32.dp)
+    ) {
+        Text(
+            text = "Open Source Licenses",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+
+        LicenseItem(
+            name = "Jetpack Compose",
+            author = "Google",
+            license = "Apache License 2.0",
+            url = "https://developer.android.com/jetpack/compose",
+            context = context
+        )
+
+        LicenseItem(
+            name = "Koin",
+            author = "Kotzilla",
+            license = "Apache License 2.0",
+            url = "https://insert-koin.io/",
+            context = context
+        )
+
+        LicenseItem(
+            name = "Room Database",
+            author = "Google",
+            license = "Apache License 2.0",
+            url = "https://developer.android.com/training/data-storage/room",
+            context = context
+        )
+
+        LicenseItem(
+            name = "PDF.js",
+            author = "Mozilla",
+            license = "Apache License 2.0",
+            url = "https://mozilla.github.io/pdf.js/",
+            context = context
+        )
+
+        LicenseItem(
+            name = "Material Components",
+            author = "Google",
+            license = "Apache License 2.0",
+            url = "https://github.com/material-components/material-components-android",
+            context = context
+        )
+
+        LicenseItem(
+            name = "Kotlin Coroutines",
+            author = "JetBrains",
+            license = "Apache License 2.0",
+            url = "https://github.com/Kotlin/kotlinx.coroutines",
+            context = context
+        )
+
+        LicenseItem(
+            name = "AndroidX Libraries",
+            author = "Google",
+            license = "Apache License 2.0",
+            url = "https://developer.android.com/jetpack/androidx",
+            context = context
+        )
+
+        LicenseItem(
+            name = "DataStore",
+            author = "Google",
+            license = "Apache License 2.0",
+            url = "https://developer.android.com/topic/libraries/architecture/datastore",
+            context = context
+        )
+    }
+}
+
+@Composable
+private fun LicenseItem(
+    name: String,
+    author: String,
+    license: String,
+    url: String,
+    context: android.content.Context
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 10.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable {
+                val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+                context.startActivity(intent)
+            },
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = name,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = author,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 2.dp)
+            )
+            Text(
+                text = license,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun CreatorContent() {
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "About the Creator",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        Text(
+            text = "K M Rejowan Ahmmed",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Text(
+            text = "Senior Android Developer",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 4.dp, bottom = 20.dp)
+        )
+
+        Text(
+            text = "PDF Reader Pro was created to provide a free, open-source, and privacy-focused PDF reading experience. With features like bookmarks, favorites, reading themes, and customizable settings, it aims to be a complete PDF solution for Android users.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerLow
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                CreatorLinkItem(
+                    icon = "🌐",
+                    label = "Website",
+                    value = "rejowan.com",
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://rejowan.com".toUri())
+                        context.startActivity(intent)
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                CreatorLinkItem(
+                    icon = "📧",
+                    label = "Email",
+                    value = "kmrejowan@gmail.com",
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:kmrejowan@gmail.com".toUri()
+                        }
+                        context.startActivity(intent)
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                CreatorLinkItem(
+                    icon = "💼",
+                    label = "GitHub",
+                    value = "github.com/ahmmedrejowan",
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/ahmmedrejowan".toUri())
+                        context.startActivity(intent)
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                CreatorLinkItem(
+                    icon = "🔗",
+                    label = "LinkedIn",
+                    value = "linkedin.com/in/ahmmedrejowan",
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://linkedin.com/in/ahmmedrejowan".toUri())
+                        context.startActivity(intent)
+                    }
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier.padding(top = 24.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Made with ❤️ by ",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = "K M Rejowan Ahmmed",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
+@Composable
+private fun CreatorLinkItem(
+    icon: String,
+    label: String,
+    value: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = icon,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(end = 16.dp)
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+        Icon(
+            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+        )
+    }
+}
+
+@Composable
+private fun AppLicenseContent() {
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 32.dp)
+    ) {
+        Text(
+            text = "GNU Affero General Public License v3.0",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerLow
+        ) {
+            Text(
+                text = """
+PDF Reader Pro - Open Source PDF Viewer
+Copyright (C) 2026 K M Rejowan Ahmmed
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+                """.trimIndent(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Key Terms",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                LicenseTermItem("✓ Freedom to use the software for any purpose")
+                LicenseTermItem("✓ Freedom to study and modify the source code")
+                LicenseTermItem("✓ Freedom to distribute copies")
+                LicenseTermItem("✓ Freedom to distribute modified versions")
+                LicenseTermItem("✓ Network use counts as distribution (AGPL clause)")
+                LicenseTermItem("✓ Derivative works must be open source under AGPL v3.0")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .clickable {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        "https://www.gnu.org/licenses/agpl-3.0.en.html".toUri()
+                    )
+                    context.startActivity(intent)
+                },
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.primary
+        ) {
+            Text(
+                text = "View Full AGPL v3.0 License",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onPrimary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun LicenseTermItem(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
+        modifier = Modifier.padding(vertical = 4.dp)
+    )
 }
