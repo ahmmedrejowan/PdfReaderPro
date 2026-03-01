@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +51,10 @@ class ErrorActivity : ComponentActivity() {
                     ErrorScreen(
                         errorMessage = errorMessage,
                         errorDetails = errorDetails,
+                        onGoBackClick = {
+                            // Try to go back to previous screen
+                            finish()
+                        },
                         onRestartClick = {
                             // Restart the app
                             val intent = packageManager.getLaunchIntentForPackage(packageName)
@@ -74,7 +79,7 @@ class ErrorActivity : ComponentActivity() {
             return Intent(context, ErrorActivity::class.java).apply {
                 putExtra(EXTRA_ERROR_MESSAGE, errorMessage)
                 putExtra(EXTRA_ERROR_DETAILS, errorDetails)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }
     }
@@ -84,6 +89,7 @@ class ErrorActivity : ComponentActivity() {
 private fun ErrorScreen(
     errorMessage: String,
     errorDetails: String?,
+    onGoBackClick: () -> Unit,
     onRestartClick: () -> Unit,
     onCloseClick: () -> Unit
 ) {
@@ -147,7 +153,20 @@ private fun ErrorScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // Go Back button - primary action
         Button(
+            onClick = onGoBackClick,
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text(
+                text = "Go Back",
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        OutlinedButton(
             onClick = onRestartClick,
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -157,9 +176,9 @@ private fun ErrorScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        OutlinedButton(
+        TextButton(
             onClick = onCloseClick,
             shape = RoundedCornerShape(12.dp)
         ) {

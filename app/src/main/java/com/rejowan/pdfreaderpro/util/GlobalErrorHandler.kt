@@ -54,8 +54,7 @@ object GlobalErrorHandler {
         val intent = ErrorActivity.createIntent(context, errorMessage, errorDetails)
         context.startActivity(intent)
 
-        // Kill the current process to prevent further issues
-        android.os.Process.killProcess(android.os.Process.myPid())
+        // Don't kill process - let user navigate back to previous screen
     }
 
     private fun logCrashDetails(throwable: Throwable) {
