@@ -8,7 +8,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +27,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -35,15 +35,17 @@ import androidx.compose.material.icons.automirrored.filled.CallMerge
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -60,13 +62,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -111,24 +115,24 @@ fun MergeScreen(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
+                actions = {
+                    // Show add button in top bar when files are selected
+                    if (state.selectedFiles.isNotEmpty() && !state.isProcessing && state.result == null) {
+                        IconButton(
+                            onClick = { pdfPickerLauncher.launch(arrayOf("application/pdf")) }
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "Add more PDFs",
+                                tint = AccentBlue
+                            )
+                        }
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
             )
-        },
-        floatingActionButton = {
-            if (!state.isProcessing && state.result == null) {
-                FloatingActionButton(
-                    onClick = { pdfPickerLauncher.launch(arrayOf("application/pdf")) },
-                    containerColor = AccentBlue
-                ) {
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = "Add PDFs",
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
         }
     ) { paddingValues ->
         Box(
@@ -181,8 +185,11 @@ fun MergeScreen(
                             key = { _, file -> file.path }
                         ) { index, file ->
                             MergeFileItem(
+                                modifier = Modifier.animateItem(),
                                 file = file,
                                 index = index + 1,
+                                totalFiles = state.selectedFiles.size,
+                                onView = { navController.navigateToReader(file.path) },
                                 onRemove = { viewModel.removeFile(file) },
                                 onMoveUp = if (index > 0) {
                                     { viewModel.moveFile(index, index - 1) }
@@ -190,6 +197,13 @@ fun MergeScreen(
                                 onMoveDown = if (index < state.selectedFiles.size - 1) {
                                     { viewModel.moveFile(index, index + 1) }
                                 } else null
+                            )
+                        }
+
+                        // Add more files card at the end of the list
+                        item {
+                            AddMoreFilesCard(
+                                onAddFiles = { pdfPickerLauncher.launch(arrayOf("application/pdf")) }
                             )
                         }
                     }
@@ -278,14 +292,19 @@ private fun EmptyState(
 
 @Composable
 private fun MergeFileItem(
+    modifier: Modifier = Modifier,
     file: MergeFile,
     index: Int,
+    totalFiles: Int,
+    onView: () -> Unit,
     onRemove: () -> Unit,
     onMoveUp: (() -> Unit)?,
     onMoveDown: (() -> Unit)?
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onView),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -315,13 +334,34 @@ private fun MergeFileItem(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // File icon
-            Icon(
-                Icons.Default.PictureAsPdf,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = AccentRed
-            )
+            // PDF Thumbnail or fallback icon
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        shape = RoundedCornerShape(6.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                if (file.thumbnail != null) {
+                    Image(
+                        bitmap = file.thumbnail.asImageBitmap(),
+                        contentDescription = "PDF preview",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Icon(
+                        Icons.Default.PictureAsPdf,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = AccentRed
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -341,28 +381,116 @@ private fun MergeFileItem(
                 )
             }
 
-            // Drag handle (visual only for now)
-            Icon(
-                Icons.Default.DragHandle,
-                contentDescription = "Reorder",
-                modifier = Modifier
-                    .size(24.dp)
-                    .padding(4.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-            )
+            // Reorder buttons (only show if more than 1 file)
+            if (totalFiles > 1) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Column(
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Move up button
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(
+                                if (onMoveUp != null) AccentBlue.copy(alpha = 0.1f)
+                                else Color.Transparent
+                            )
+                            .clickable(enabled = onMoveUp != null) { onMoveUp?.invoke() },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.KeyboardArrowUp,
+                            contentDescription = "Move up",
+                            modifier = Modifier.size(24.dp),
+                            tint = if (onMoveUp != null) {
+                                AccentBlue
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    // Move down button
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(
+                                if (onMoveDown != null) AccentBlue.copy(alpha = 0.1f)
+                                else Color.Transparent
+                            )
+                            .clickable(enabled = onMoveDown != null) { onMoveDown?.invoke() },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.KeyboardArrowDown,
+                            contentDescription = "Move down",
+                            modifier = Modifier.size(24.dp),
+                            tint = if (onMoveDown != null) {
+                                AccentBlue
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                            }
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+            }
 
             // Remove button
-            IconButton(
-                onClick = onRemove,
-                modifier = Modifier.size(32.dp)
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { onRemove() },
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     Icons.Default.Close,
                     contentDescription = "Remove",
-                    modifier = Modifier.size(18.dp),
+                    modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun AddMoreFilesCard(
+    onAddFiles: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onAddFiles),
+        colors = CardDefaults.cardColors(
+            containerColor = AccentBlue.copy(alpha = 0.08f)
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                Icons.Default.Add,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = AccentBlue
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                "Add more files",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+                color = AccentBlue
+            )
         }
     }
 }

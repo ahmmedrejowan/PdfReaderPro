@@ -1,16 +1,21 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.merge
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
@@ -22,7 +27,8 @@ data class MergeFile(
     val path: String,
     val name: String,
     val size: Long,
-    val pageCount: Int = 0
+    val pageCount: Int = 0,
+    val thumbnail: Bitmap? = null
 )
 
 data class MergeState(
@@ -66,12 +72,14 @@ class MergeViewModel(
                     if (path != null && File(path).exists()) {
                         val file = File(path)
                         val pageCount = pdfToolsRepository.getPageCount(path).getOrDefault(0)
+                        val thumbnail = generateThumbnail(path)
                         MergeFile(
                             uri = uri,
                             path = path,
                             name = file.name,
                             size = file.length(),
-                            pageCount = pageCount
+                            pageCount = pageCount,
+                            thumbnail = thumbnail
                         )
                     } else {
                         // Try to copy from content URI
@@ -79,12 +87,14 @@ class MergeViewModel(
                         if (tempPath != null) {
                             val file = File(tempPath)
                             val pageCount = pdfToolsRepository.getPageCount(tempPath).getOrDefault(0)
+                            val thumbnail = generateThumbnail(tempPath)
                             MergeFile(
                                 uri = uri,
                                 path = tempPath,
                                 name = getFileNameFromUri(uri) ?: file.name,
                                 size = file.length(),
-                                pageCount = pageCount
+                                pageCount = pageCount,
+                                thumbnail = thumbnail
                             )
                         } else null
                     }
@@ -102,6 +112,45 @@ class MergeViewModel(
                     error = null
                 )
             }
+        }
+    }
+
+    private suspend fun generateThumbnail(pdfPath: String): Bitmap? = withContext(Dispatchers.IO) {
+        try {
+            val file = File(pdfPath)
+            val fd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            val renderer = PdfRenderer(fd)
+
+            if (renderer.pageCount > 0) {
+                val page = renderer.openPage(0)
+
+                // Create a compact thumbnail (48dp equivalent at ~2x density = 96px)
+                val thumbnailSize = 96
+                val aspectRatio = page.width.toFloat() / page.height.toFloat()
+                val width: Int
+                val height: Int
+                if (aspectRatio > 1) {
+                    width = thumbnailSize
+                    height = (thumbnailSize / aspectRatio).toInt()
+                } else {
+                    height = thumbnailSize
+                    width = (thumbnailSize * aspectRatio).toInt()
+                }
+
+                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                page.close()
+                renderer.close()
+                fd.close()
+                bitmap
+            } else {
+                renderer.close()
+                fd.close()
+                null
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to generate thumbnail for: $pdfPath")
+            null
         }
     }
 
