@@ -173,9 +173,15 @@ fun HomeScreen(
     var selectedFileFromRecent by remember { mutableStateOf(false) }
     var selectedFolder by remember { mutableStateOf<PdfFolder?>(null) }
 
-    // Handle back press to show exit confirmation
-    BackHandler(enabled = selectedNavItem == 0) {
-        showExitConfirmSheet = true
+    // Handle back press: navigate to Home first, then show exit confirmation
+    BackHandler(enabled = true) {
+        if (selectedNavItem != 0) {
+            // If not on Home tab, navigate to Home first
+            selectedNavItem = 0
+        } else {
+            // If already on Home, show exit confirmation
+            showExitConfirmSheet = true
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
