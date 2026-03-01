@@ -60,6 +60,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".presentation.ErrorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PDFReaderPro"
+            android:configChanges="orientation|screenSize" />
+
     </application>
 
 </manifest>
