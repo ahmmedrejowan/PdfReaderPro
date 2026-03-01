@@ -5,12 +5,12 @@ targetSdk = "36"
 minSdk = "24"
 
 # Core Android
-agp = "8.13.2"
+agp = "9.0.1"
 kotlin = "2.3.10"
 coreKtx = "1.17.0"
 
 # Compose
-composeBom = "2026.02.00"
+composeBom = "2026.02.01"
 activityCompose = "1.12.4"
 lifecycleRuntimeCompose = "2.10.0"
 navigationCompose = "2.9.7"
@@ -28,8 +28,6 @@ koinCompose = "4.1.1"
 # Kotlin Serialization
 kotlinxSerialization = "1.10.0"
 
-# PDF Libraries
-# TODO: Add PdfViewer library
 
 # Image Loading
 coil = "2.7.0"
@@ -44,7 +42,7 @@ lottieCompose = "6.7.1"
 splashscreen = "1.2.0"
 
 # webkit
-webkit = "1.14.0"
+webkit = "1.15.0"
 
 
 # Testing
@@ -84,9 +82,6 @@ koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navig
 
 # Kotlin Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-
-# PDF Libraries
-# TODO: Add PdfViewer library
 
 # Image Loading
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }

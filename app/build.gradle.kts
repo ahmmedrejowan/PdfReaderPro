@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
@@ -14,7 +13,7 @@ android {
         applicationId = "com.rejowan.pdfreaderpro"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
+        versionCode = 2
         versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -90,8 +89,6 @@ dependencies {
     // Kotlin Serialization (for type-safe navigation)
     implementation(libs.kotlinx.serialization.json)
 
-    // PDF Libraries
-    // TODO: Add PdfViewer library
 
     // Image Loading
     implementation(libs.coil.compose)
