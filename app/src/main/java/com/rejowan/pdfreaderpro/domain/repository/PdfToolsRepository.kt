@@ -1,12 +1,20 @@
 package com.rejowan.pdfreaderpro.domain.repository
 
-import kotlinx.coroutines.flow.Flow
-
 /**
  * Repository interface for PDF manipulation tools.
  * All operations return Result to handle success/failure gracefully.
  */
 interface PdfToolsRepository {
+
+    /**
+     * Represents page selection for a PDF file.
+     * @param path Path to the PDF file
+     * @param pages List of pages to include (1-indexed), null means all pages
+     */
+    data class PdfPageSelection(
+        val path: String,
+        val pages: List<Int>? = null // null = all pages
+    )
 
     /**
      * Merge multiple PDF files into a single PDF.
@@ -16,6 +24,18 @@ interface PdfToolsRepository {
      */
     suspend fun mergePdfs(
         inputPaths: List<String>,
+        outputPath: String,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Merge multiple PDF files with page selections into a single PDF.
+     * @param selections List of PdfPageSelection (path + selected pages)
+     * @param outputPath Path for the merged output PDF
+     * @return Result with Unit on success, or exception on failure
+     */
+    suspend fun mergePdfsWithSelection(
+        selections: List<PdfPageSelection>,
         outputPath: String,
         onProgress: (Float) -> Unit = {}
     ): Result<Unit>

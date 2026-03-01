@@ -51,6 +51,48 @@ class PdfToolsRepositoryImpl(
         }
     }
 
+    override suspend fun mergePdfsWithSelection(
+        selections: List<PdfToolsRepository.PdfPageSelection>,
+        outputPath: String,
+        onProgress: (Float) -> Unit
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            require(selections.isNotEmpty()) { "At least 1 PDF required for merging" }
+
+            val pdfDoc = PdfDocument(PdfWriter(outputPath))
+            val merger = PdfMerger(pdfDoc)
+            val totalSelections = selections.size
+
+            selections.forEachIndexed { index, selection ->
+                val sourceDoc = PdfDocument(PdfReader(selection.path))
+                val totalPages = sourceDoc.numberOfPages
+
+                if (selection.pages == null) {
+                    // All pages
+                    merger.merge(sourceDoc, 1, totalPages)
+                } else {
+                    // Selected pages only
+                    val validPages = selection.pages.filter { it in 1..totalPages }
+                    if (validPages.isNotEmpty()) {
+                        // PdfMerger.merge() requires a contiguous range, so we need to copy pages individually
+                        validPages.forEach { pageNum ->
+                            sourceDoc.copyPagesTo(pageNum, pageNum, pdfDoc)
+                        }
+                    }
+                }
+
+                sourceDoc.close()
+                onProgress((index + 1).toFloat() / totalSelections)
+            }
+
+            pdfDoc.close()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to merge PDFs with selection")
+            Result.failure(e)
+        }
+    }
+
     override suspend fun splitPdf(
         inputPath: String,
         outputDir: String,

@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -51,14 +52,21 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -89,10 +97,30 @@ fun MergeScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
+    // Page selection sheet state
+    var selectedFileForPageSelection by remember { mutableStateOf<MergeFile?>(null) }
+    val pageSelectionSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     val pdfPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->
         viewModel.addFiles(uris)
+    }
+
+    // Page Selection Bottom Sheet
+    if (selectedFileForPageSelection != null) {
+        PageSelectionSheet(
+            file = selectedFileForPageSelection!!,
+            sheetState = pageSelectionSheetState,
+            onDismiss = { selectedFileForPageSelection = null },
+            onSelectionChanged = { selection ->
+                viewModel.updatePageSelection(selectedFileForPageSelection!!, selection)
+                selectedFileForPageSelection = null
+            },
+            onPreview = {
+                navController.navigateToReader(selectedFileForPageSelection!!.path)
+            }
+        )
     }
 
     Scaffold(
@@ -189,7 +217,7 @@ fun MergeScreen(
                                 file = file,
                                 index = index + 1,
                                 totalFiles = state.selectedFiles.size,
-                                onView = { navController.navigateToReader(file.path) },
+                                onTap = { selectedFileForPageSelection = file },
                                 onRemove = { viewModel.removeFile(file) },
                                 onMoveUp = if (index > 0) {
                                     { viewModel.moveFile(index, index - 1) }
@@ -296,15 +324,18 @@ private fun MergeFileItem(
     file: MergeFile,
     index: Int,
     totalFiles: Int,
-    onView: () -> Unit,
+    onTap: () -> Unit,
     onRemove: () -> Unit,
     onMoveUp: (() -> Unit)?,
     onMoveDown: (() -> Unit)?
 ) {
+    val selectedPageCount = file.pageSelection.getSelectedCount(file.pageCount)
+    val isPartialSelection = file.pageSelection !is PageSelection.All
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onView),
+            .clickable(onClick = onTap),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -375,9 +406,20 @@ private fun MergeFileItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    "${file.pageCount} pages • ${formatFileSize(file.size)}",
+                    "${formatFileSize(file.size)} • ${file.pageCount} total pages",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                // Page selection info
+                Text(
+                    if (isPartialSelection) {
+                        "$selectedPageCount of ${file.pageCount} pages selected"
+                    } else {
+                        "All ${file.pageCount} pages"
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = if (isPartialSelection) FontWeight.Medium else FontWeight.Normal,
+                    color = if (isPartialSelection) AccentBlue else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -792,4 +834,299 @@ private fun formatFileSize(bytes: Long): String {
         bytes < 1024 * 1024 -> "%.1f KB".format(bytes / 1024.0)
         else -> "%.1f MB".format(bytes / (1024.0 * 1024.0))
     }
+}
+
+// ============================================================================
+// Page Selection Sheet
+// ============================================================================
+
+private enum class SelectionMode {
+    ALL, RANGE, CUSTOM
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PageSelectionSheet(
+    file: MergeFile,
+    sheetState: androidx.compose.material3.SheetState,
+    onDismiss: () -> Unit,
+    onSelectionChanged: (PageSelection) -> Unit,
+    onPreview: () -> Unit
+) {
+    // Determine initial mode from current selection
+    val initialMode = when (file.pageSelection) {
+        is PageSelection.All -> SelectionMode.ALL
+        is PageSelection.Range -> SelectionMode.RANGE
+        is PageSelection.Custom -> SelectionMode.CUSTOM
+    }
+
+    var selectionMode by remember { mutableStateOf(initialMode) }
+
+    // Range inputs
+    var rangeStart by remember {
+        mutableStateOf(
+            when (val sel = file.pageSelection) {
+                is PageSelection.Range -> sel.start.toString()
+                else -> "1"
+            }
+        )
+    }
+    var rangeEnd by remember {
+        mutableStateOf(
+            when (val sel = file.pageSelection) {
+                is PageSelection.Range -> sel.end.toString()
+                else -> file.pageCount.toString()
+            }
+        )
+    }
+
+    // Custom pages input
+    var customPages by remember {
+        mutableStateOf(
+            when (val sel = file.pageSelection) {
+                is PageSelection.Custom -> sel.pages.joinToString(", ")
+                else -> ""
+            }
+        )
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 32.dp)
+        ) {
+            // Header
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(AccentBlue.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.PictureAsPdf,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = AccentBlue
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        "Select Pages",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        file.name,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                // Preview button
+                OutlinedButton(
+                    onClick = onPreview,
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Visibility,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Preview")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                "Total pages: ${file.pageCount}",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Selection mode chips
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FilterChip(
+                    selected = selectionMode == SelectionMode.ALL,
+                    onClick = { selectionMode = SelectionMode.ALL },
+                    label = { Text("All") },
+                    modifier = Modifier.weight(1f),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = AccentBlue.copy(alpha = 0.15f),
+                        selectedLabelColor = AccentBlue
+                    )
+                )
+                FilterChip(
+                    selected = selectionMode == SelectionMode.RANGE,
+                    onClick = { selectionMode = SelectionMode.RANGE },
+                    label = { Text("Range") },
+                    modifier = Modifier.weight(1f),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = AccentBlue.copy(alpha = 0.15f),
+                        selectedLabelColor = AccentBlue
+                    )
+                )
+                FilterChip(
+                    selected = selectionMode == SelectionMode.CUSTOM,
+                    onClick = { selectionMode = SelectionMode.CUSTOM },
+                    label = { Text("Custom") },
+                    modifier = Modifier.weight(1f),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = AccentBlue.copy(alpha = 0.15f),
+                        selectedLabelColor = AccentBlue
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Mode-specific options
+            when (selectionMode) {
+                SelectionMode.ALL -> {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = AccentGreen.copy(alpha = 0.1f)
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                                tint = AccentGreen
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                "All ${file.pageCount} pages will be included",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+
+                SelectionMode.RANGE -> {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = rangeStart,
+                            onValueChange = { rangeStart = it.filter { c -> c.isDigit() } },
+                            label = { Text("From") },
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(12.dp),
+                            singleLine = true
+                        )
+                        OutlinedTextField(
+                            value = rangeEnd,
+                            onValueChange = { rangeEnd = it.filter { c -> c.isDigit() } },
+                            label = { Text("To") },
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(12.dp),
+                            singleLine = true
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        "Pages $rangeStart to $rangeEnd will be included",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                SelectionMode.CUSTOM -> {
+                    OutlinedTextField(
+                        value = customPages,
+                        onValueChange = { customPages = it },
+                        label = { Text("Page numbers") },
+                        placeholder = { Text("e.g., 1, 3, 5-8, 12") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        supportingText = {
+                            Text("Enter page numbers or ranges separated by commas")
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Apply button
+            Button(
+                onClick = {
+                    val selection = when (selectionMode) {
+                        SelectionMode.ALL -> PageSelection.All
+                        SelectionMode.RANGE -> {
+                            val start = rangeStart.toIntOrNull()?.coerceIn(1, file.pageCount) ?: 1
+                            val end = rangeEnd.toIntOrNull()?.coerceIn(start, file.pageCount) ?: file.pageCount
+                            PageSelection.Range(start, end)
+                        }
+                        SelectionMode.CUSTOM -> {
+                            val pages = parseCustomPages(customPages, file.pageCount)
+                            if (pages.isEmpty()) PageSelection.All else PageSelection.Custom(pages)
+                        }
+                    }
+                    onSelectionChanged(selection)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Apply Selection")
+            }
+        }
+    }
+}
+
+private fun parseCustomPages(input: String, maxPages: Int): List<Int> {
+    val pages = mutableSetOf<Int>()
+
+    input.split(",").forEach { part ->
+        val trimmed = part.trim()
+        if (trimmed.contains("-")) {
+            // Range: "5-8"
+            val rangeParts = trimmed.split("-")
+            if (rangeParts.size == 2) {
+                val start = rangeParts[0].trim().toIntOrNull()
+                val end = rangeParts[1].trim().toIntOrNull()
+                if (start != null && end != null) {
+                    for (i in start..end) {
+                        if (i in 1..maxPages) pages.add(i)
+                    }
+                }
+            }
+        } else {
+            // Single page: "3"
+            trimmed.toIntOrNull()?.let { page ->
+                if (page in 1..maxPages) pages.add(page)
+            }
+        }
+    }
+
+    return pages.sorted()
 }

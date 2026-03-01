@@ -22,13 +22,45 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Represents page selection mode for a PDF file.
+ */
+sealed class PageSelection {
+    data object All : PageSelection()
+    data class Range(val start: Int, val end: Int) : PageSelection()
+    data class Custom(val pages: List<Int>) : PageSelection()
+
+    fun toDisplayString(totalPages: Int): String = when (this) {
+        is All -> "All pages (1-$totalPages)"
+        is Range -> "Pages $start-$end"
+        is Custom -> if (pages.size <= 5) {
+            "Pages ${pages.joinToString(", ")}"
+        } else {
+            "Pages ${pages.take(4).joinToString(", ")}... (${pages.size} pages)"
+        }
+    }
+
+    fun toPageList(totalPages: Int): List<Int>? = when (this) {
+        is All -> null // null means all pages
+        is Range -> (start..end.coerceAtMost(totalPages)).toList()
+        is Custom -> pages.filter { it in 1..totalPages }
+    }
+
+    fun getSelectedCount(totalPages: Int): Int = when (this) {
+        is All -> totalPages
+        is Range -> (end.coerceAtMost(totalPages) - start + 1).coerceAtLeast(0)
+        is Custom -> pages.count { it in 1..totalPages }
+    }
+}
+
 data class MergeFile(
     val uri: Uri,
     val path: String,
     val name: String,
     val size: Long,
     val pageCount: Int = 0,
-    val thumbnail: Bitmap? = null
+    val thumbnail: Bitmap? = null,
+    val pageSelection: PageSelection = PageSelection.All
 )
 
 data class MergeState(
@@ -171,6 +203,16 @@ class MergeViewModel(
         }
     }
 
+    fun updatePageSelection(file: MergeFile, selection: PageSelection) {
+        _state.update { current ->
+            current.copy(
+                selectedFiles = current.selectedFiles.map {
+                    if (it.path == file.path) it.copy(pageSelection = selection) else it
+                }
+            )
+        }
+    }
+
     fun setOutputFileName(name: String) {
         _state.update { it.copy(outputFileName = name) }
     }
@@ -193,8 +235,16 @@ class MergeViewModel(
             val outputDir = getOutputDirectory()
             val outputPath = "$outputDir/${currentState.outputFileName}.pdf"
 
-            val result = pdfToolsRepository.mergePdfs(
-                inputPaths = currentState.selectedFiles.map { it.path },
+            // Create page selections from merge files
+            val selections = currentState.selectedFiles.map { file ->
+                PdfToolsRepository.PdfPageSelection(
+                    path = file.path,
+                    pages = file.pageSelection.toPageList(file.pageCount)
+                )
+            }
+
+            val result = pdfToolsRepository.mergePdfsWithSelection(
+                selections = selections,
                 outputPath = outputPath,
                 onProgress = { progress ->
                     _state.update { it.copy(progress = progress) }
