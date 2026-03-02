@@ -16,6 +16,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.lock.LockScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.reorder.ReorderScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
@@ -143,6 +144,15 @@ fun PdfReaderNavHost(
             )
         }
 
+        // Tool: Lock PDF
+        composable<ToolLock> { backStackEntry ->
+            val toolLock: ToolLock = backStackEntry.toRoute()
+            LockScreen(
+                navController = navController,
+                initialFilePath = toolLock.filePath
+            )
+        }
+
         // Tool Result Screen
         composable<ToolResult> { backStackEntry ->
             val toolResult: ToolResult = backStackEntry.toRoute()
@@ -227,4 +237,11 @@ fun NavController.navigateToRotateTool(filePath: String) {
  */
 fun NavController.navigateToReorderTool(filePath: String) {
     navigate(ToolReorder(filePath = filePath))
+}
+
+/**
+ * Navigate to tool lock screen.
+ */
+fun NavController.navigateToLockTool(filePath: String) {
+    navigate(ToolLock(filePath = filePath))
 }

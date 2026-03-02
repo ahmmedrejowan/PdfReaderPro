@@ -10,6 +10,7 @@ import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.kernel.pdf.WriterProperties
+import com.itextpdf.kernel.pdf.EncryptionConstants
 import com.itextpdf.kernel.utils.PdfMerger
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Image
@@ -486,6 +487,71 @@ class PdfToolsRepositoryImpl(
             )
         } catch (e: Exception) {
             Timber.e(e, "Failed to analyze PDF")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun lockPdf(
+        inputPath: String,
+        outputPath: String,
+        userPassword: String,
+        ownerPassword: String,
+        permissions: PdfToolsRepository.PdfPermissions,
+        onProgress: (Float) -> Unit
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            require(ownerPassword.isNotEmpty()) { "Owner password is required" }
+
+            onProgress(0.1f)
+
+            // Calculate permissions bitmask
+            var permissionFlags = 0
+            if (permissions.allowPrinting) {
+                permissionFlags = permissionFlags or EncryptionConstants.ALLOW_PRINTING
+            }
+            if (permissions.allowCopying) {
+                permissionFlags = permissionFlags or EncryptionConstants.ALLOW_COPY
+            }
+            if (permissions.allowModifying) {
+                permissionFlags = permissionFlags or EncryptionConstants.ALLOW_MODIFY_CONTENTS
+            }
+            if (permissions.allowAnnotations) {
+                permissionFlags = permissionFlags or EncryptionConstants.ALLOW_MODIFY_ANNOTATIONS
+            }
+
+            onProgress(0.2f)
+
+            // Set up writer with encryption
+            val writerProperties = WriterProperties()
+                .setStandardEncryption(
+                    userPassword.toByteArray(),
+                    ownerPassword.toByteArray(),
+                    permissionFlags,
+                    EncryptionConstants.ENCRYPTION_AES_256
+                )
+
+            onProgress(0.3f)
+
+            // Read source and write encrypted PDF
+            val reader = PdfReader(inputPath)
+            val writer = PdfWriter(outputPath, writerProperties)
+            val pdfDoc = PdfDocument(reader, writer)
+
+            val totalPages = pdfDoc.numberOfPages
+            onProgress(0.5f)
+
+            // Copy all pages (encryption is applied automatically)
+            for (i in 1..totalPages) {
+                onProgress(0.5f + (0.4f * i / totalPages))
+            }
+
+            pdfDoc.close()
+            onProgress(1f)
+
+            Timber.d("PDF locked successfully: $outputPath")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to lock PDF")
             Result.failure(e)
         }
     }

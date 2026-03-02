@@ -174,4 +174,32 @@ interface PdfToolsRepository {
         val estimatedRatioMedium: Float, // Balanced estimate
         val estimatedRatioHigh: Float    // Aggressive estimate
     )
+
+    /**
+     * Lock/encrypt a PDF with password protection.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param userPassword Password required to open the PDF (can be empty for no open password)
+     * @param ownerPassword Password for full access/permissions (required)
+     * @param permissions Permissions to grant when opened with user password
+     * @return Result with Unit on success
+     */
+    suspend fun lockPdf(
+        inputPath: String,
+        outputPath: String,
+        userPassword: String,
+        ownerPassword: String,
+        permissions: PdfPermissions = PdfPermissions(),
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * PDF permissions when locked.
+     */
+    data class PdfPermissions(
+        val allowPrinting: Boolean = false,
+        val allowCopying: Boolean = false,
+        val allowModifying: Boolean = false,
+        val allowAnnotations: Boolean = false
+    )
 }

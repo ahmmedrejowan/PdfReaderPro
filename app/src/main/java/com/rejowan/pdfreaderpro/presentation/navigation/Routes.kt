@@ -61,6 +61,11 @@ data class ToolReorder(
 )
 
 @Serializable
+data class ToolLock(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,

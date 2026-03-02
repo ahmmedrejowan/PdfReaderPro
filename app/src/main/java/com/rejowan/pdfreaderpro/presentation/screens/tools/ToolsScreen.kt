@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
@@ -153,7 +154,8 @@ private val pdfTools = listOf(
         "Lock PDF",
         "Add password protection",
         Icons.Default.Lock,
-        ToolCategory.SECURITY
+        ToolCategory.SECURITY,
+        isEnabled = true
     ),
     PdfTool(
         "unlock_pdf",
@@ -225,6 +227,7 @@ fun ToolsScreen(
                                 "compress" -> navController.navigateToCompressTool("")
                                 "rotate" -> navController.navigateToRotateTool("")
                                 "reorder" -> navController.navigateToReorderTool("")
+                                "lock_pdf" -> navController.navigateToLockTool("")
                             }
                         }
                     )
