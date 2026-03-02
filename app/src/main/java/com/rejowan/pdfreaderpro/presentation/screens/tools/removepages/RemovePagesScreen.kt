@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Visibility
@@ -59,7 +60,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -203,19 +206,26 @@ fun RemovePagesScreen(
                     Column(modifier = Modifier.fillMaxSize()) {
                         // Scrollable content
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(3),
+                            columns = GridCells.Fixed(2),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             // Selection header
-                            item(span = { GridItemSpan(3) }) {
+                            item(span = { GridItemSpan(2) }) {
                                 SelectionHeader(
                                     selectedCount = state.sourceFile?.pages?.count { it.isSelected } ?: 0,
                                     totalCount = state.sourceFile?.pageCount ?: 0,
                                     onSelectAll = { viewModel.selectAllPages() },
-                                    onClear = { viewModel.deselectAllPages() }
+                                    onClear = { viewModel.deselectAllPages() },
+                                    onSelectOdd = { viewModel.selectOddPages() },
+                                    onSelectEven = { viewModel.selectEvenPages() },
+                                    onSelectRange = { start, end -> viewModel.selectRange(start, end) },
+                                    onSelectBefore = { page -> viewModel.selectBeforePage(page) },
+                                    onSelectAfter = { page -> viewModel.selectAfterPage(page) },
+                                    onSelectFirstN = { n -> viewModel.selectFirstN(n) },
+                                    onSelectLastN = { n -> viewModel.selectLastN(n) }
                                 )
                             }
 
@@ -320,8 +330,20 @@ private fun SelectionHeader(
     totalCount: Int,
     onSelectAll: () -> Unit,
     onClear: () -> Unit,
+    onSelectOdd: () -> Unit,
+    onSelectEven: () -> Unit,
+    onSelectRange: (Int, Int) -> Unit,
+    onSelectBefore: (Int) -> Unit,
+    onSelectAfter: (Int) -> Unit,
+    onSelectFirstN: (Int) -> Unit,
+    onSelectLastN: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showRangeDialog by remember { mutableStateOf(false) }
+    var showBeforeAfterDialog by remember { mutableStateOf(false) }
+    var showFirstLastDialog by remember { mutableStateOf(false) }
+    var dialogMode by remember { mutableStateOf("") }
+
     Column(modifier = modifier.padding(bottom = 8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -347,22 +369,20 @@ private fun SelectionHeader(
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (selectedCount > 0) {
-                    Surface(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(6.dp))
-                            .clickable(onClick = onClear),
-                        shape = RoundedCornerShape(6.dp),
-                        color = MaterialTheme.colorScheme.surfaceContainerLow
-                    ) {
-                        Text(
-                            "Clear",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
+            if (selectedCount > 0) {
+                Surface(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .clickable(onClick = onClear),
+                    shape = RoundedCornerShape(6.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow
+                ) {
+                    Text(
+                        "Clear",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    )
                 }
             }
         }
@@ -374,7 +394,269 @@ private fun SelectionHeader(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Quick selection chips - Row 1
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            QuickSelectChip(
+                label = "All",
+                onClick = onSelectAll,
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectChip(
+                label = "Odd",
+                onClick = onSelectOdd,
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectChip(
+                label = "Even",
+                onClick = onSelectEven,
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectChip(
+                label = "Range",
+                onClick = { showRangeDialog = true },
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Quick selection chips - Row 2
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            QuickSelectChip(
+                label = "First N",
+                onClick = {
+                    dialogMode = "first"
+                    showFirstLastDialog = true
+                },
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectChip(
+                label = "Last N",
+                onClick = {
+                    dialogMode = "last"
+                    showFirstLastDialog = true
+                },
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectChip(
+                label = "Before",
+                onClick = {
+                    dialogMode = "before"
+                    showBeforeAfterDialog = true
+                },
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectChip(
+                label = "After",
+                onClick = {
+                    dialogMode = "after"
+                    showBeforeAfterDialog = true
+                },
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
+
+    // Range Dialog
+    if (showRangeDialog) {
+        RangeInputDialog(
+            totalPages = totalCount,
+            onDismiss = { showRangeDialog = false },
+            onConfirm = { start, end ->
+                onSelectRange(start, end)
+                showRangeDialog = false
+            }
+        )
+    }
+
+    // Before/After Dialog
+    if (showBeforeAfterDialog) {
+        PageInputDialog(
+            title = if (dialogMode == "before") "Select Before Page" else "Select After Page",
+            hint = if (dialogMode == "before") "Pages before this will be selected" else "Pages after this will be selected",
+            totalPages = totalCount,
+            onDismiss = { showBeforeAfterDialog = false },
+            onConfirm = { page ->
+                if (dialogMode == "before") onSelectBefore(page) else onSelectAfter(page)
+                showBeforeAfterDialog = false
+            }
+        )
+    }
+
+    // First/Last N Dialog
+    if (showFirstLastDialog) {
+        PageInputDialog(
+            title = if (dialogMode == "first") "Select First N Pages" else "Select Last N Pages",
+            hint = if (dialogMode == "first") "First N pages will be selected" else "Last N pages will be selected",
+            totalPages = totalCount,
+            label = "Number of pages",
+            onDismiss = { showFirstLastDialog = false },
+            onConfirm = { n ->
+                if (dialogMode == "first") onSelectFirstN(n) else onSelectLastN(n)
+                showFirstLastDialog = false
+            }
+        )
+    }
+}
+
+@Composable
+private fun QuickSelectChip(
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(8.dp),
+        color = AccentRed.copy(alpha = 0.1f)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = AccentRed,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 8.dp)
+        )
+    }
+}
+
+@Composable
+private fun RangeInputDialog(
+    totalPages: Int,
+    onDismiss: () -> Unit,
+    onConfirm: (Int, Int) -> Unit
+) {
+    var startPage by remember { mutableStateOf("1") }
+    var endPage by remember { mutableStateOf(totalPages.toString()) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Select Page Range") },
+        text = {
+            Column {
+                Text(
+                    "Select pages from start to end (inclusive)",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = startPage,
+                        onValueChange = { startPage = it.filter { c -> c.isDigit() } },
+                        label = { Text("From") },
+                        singleLine = true,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text("to", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    OutlinedTextField(
+                        value = endPage,
+                        onValueChange = { endPage = it.filter { c -> c.isDigit() } },
+                        label = { Text("To") },
+                        singleLine = true,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                error?.let {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(it, color = AccentRed, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = {
+                val start = startPage.toIntOrNull() ?: 0
+                val end = endPage.toIntOrNull() ?: 0
+                when {
+                    start < 1 || start > totalPages -> error = "Start page must be 1-$totalPages"
+                    end < 1 || end > totalPages -> error = "End page must be 1-$totalPages"
+                    start > end -> error = "Start must be less than end"
+                    else -> onConfirm(start, end)
+                }
+            }) {
+                Text("Select")
+            }
+        },
+        dismissButton = {
+            OutlinedButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+private fun PageInputDialog(
+    title: String,
+    hint: String,
+    totalPages: Int,
+    label: String = "Page number",
+    onDismiss: () -> Unit,
+    onConfirm: (Int) -> Unit
+) {
+    var pageInput by remember { mutableStateOf("") }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column {
+                Text(
+                    hint,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = pageInput,
+                    onValueChange = { pageInput = it.filter { c -> c.isDigit() } },
+                    label = { Text(label) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                error?.let {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(it, color = AccentRed, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = {
+                val page = pageInput.toIntOrNull() ?: 0
+                when {
+                    page < 1 || page > totalPages -> error = "Value must be 1-$totalPages"
+                    else -> onConfirm(page)
+                }
+            }) {
+                Text("Select")
+            }
+        },
+        dismissButton = {
+            OutlinedButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 @Composable

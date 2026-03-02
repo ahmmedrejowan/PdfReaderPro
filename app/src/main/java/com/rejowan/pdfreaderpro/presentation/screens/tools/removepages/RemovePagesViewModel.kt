@@ -113,8 +113,8 @@ class RemovePagesViewModel(
             for (i in 0 until minOf(pageCount, 100)) { // Limit to 100 pages
                 val page = renderer.openPage(i)
 
-                // Create higher quality thumbnail
-                val thumbnailSize = 300
+                // Create higher quality thumbnail for readable content
+                val thumbnailSize = 500
                 val aspectRatio = page.width.toFloat() / page.height.toFloat()
                 val width: Int
                 val height: Int
@@ -177,6 +177,91 @@ class RemovePagesViewModel(
         _state.update { current ->
             val updatedPages = current.sourceFile?.pages?.map { page ->
                 page.copy(isSelected = false)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages)
+            )
+        }
+    }
+
+    fun selectOddPages() {
+        _state.update { current ->
+            val updatedPages = current.sourceFile?.pages?.map { page ->
+                page.copy(isSelected = page.pageNumber % 2 == 1)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages)
+            )
+        }
+    }
+
+    fun selectEvenPages() {
+        _state.update { current ->
+            val updatedPages = current.sourceFile?.pages?.map { page ->
+                page.copy(isSelected = page.pageNumber % 2 == 0)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages)
+            )
+        }
+    }
+
+    fun selectRange(start: Int, end: Int) {
+        _state.update { current ->
+            val updatedPages = current.sourceFile?.pages?.map { page ->
+                page.copy(isSelected = page.pageNumber in start..end)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages)
+            )
+        }
+    }
+
+    fun selectBeforePage(page: Int) {
+        _state.update { current ->
+            val updatedPages = current.sourceFile?.pages?.map { p ->
+                p.copy(isSelected = p.pageNumber < page)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages)
+            )
+        }
+    }
+
+    fun selectAfterPage(page: Int) {
+        _state.update { current ->
+            val updatedPages = current.sourceFile?.pages?.map { p ->
+                p.copy(isSelected = p.pageNumber > page)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages)
+            )
+        }
+    }
+
+    fun selectFirstN(n: Int) {
+        _state.update { current ->
+            val updatedPages = current.sourceFile?.pages?.map { page ->
+                page.copy(isSelected = page.pageNumber <= n)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages)
+            )
+        }
+    }
+
+    fun selectLastN(n: Int) {
+        _state.update { current ->
+            val totalPages = current.sourceFile?.pageCount ?: 0
+            val updatedPages = current.sourceFile?.pages?.map { page ->
+                page.copy(isSelected = page.pageNumber > (totalPages - n))
             } ?: emptyList()
 
             current.copy(
