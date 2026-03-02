@@ -204,33 +204,33 @@ fun RotateScreen(
                 }
                 else -> {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        // Rotation options
-                        RotationOptionsSection(
-                            selectedAngle = state.rotationAngle,
-                            onAngleSelected = { viewModel.setRotationAngle(it) },
-                            modifier = Modifier.padding(16.dp)
-                        )
-
-                        // Page selection header
-                        PageSelectionHeader(
-                            selectionMode = state.selectionMode,
-                            selectedCount = state.sourceFile?.pages?.count { it.isSelected } ?: 0,
-                            totalCount = state.sourceFile?.pageCount ?: 0,
-                            onSelectAll = { viewModel.selectAllPages() },
-                            onDeselectAll = { viewModel.deselectAllPages() },
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Page grid
+                        // Scrollable content
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(3),
+                            columns = GridCells.Fixed(2),
                             modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
+                            // Rotation options (spans 2 columns)
+                            item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(2) }) {
+                                RotationOptionsSection(
+                                    selectedAngle = state.rotationAngle,
+                                    onAngleSelected = { viewModel.setRotationAngle(it) }
+                                )
+                            }
+
+                            // Quick selection chips (spans 2 columns)
+                            item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(2) }) {
+                                QuickSelectionSection(
+                                    onQuickSelect = { viewModel.applyQuickSelection(it) },
+                                    selectedCount = state.sourceFile?.pages?.count { it.isSelected } ?: 0,
+                                    totalCount = state.sourceFile?.pageCount ?: 0,
+                                    onClear = { viewModel.deselectAllPages() }
+                                )
+                            }
+
+                            // Page thumbnails
                             items(state.sourceFile?.pages ?: emptyList()) { page ->
                                 PageThumbnailItem(
                                     page = page,
@@ -332,12 +332,12 @@ private fun RotationOptionsSection(
     Column(modifier = modifier) {
         Text(
             "ROTATION",
-            style = MaterialTheme.typography.labelMedium.copy(
+            style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.SemiBold,
-                letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
+                letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
             ),
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+            modifier = Modifier.padding(start = 4.dp, bottom = 6.dp)
         )
 
         Row(
@@ -365,35 +365,36 @@ private fun RotationChip(
 ) {
     Surface(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(10.dp))
             .then(
                 if (isSelected) {
-                    Modifier.border(1.5.dp, AccentOrange, RoundedCornerShape(12.dp))
+                    Modifier.border(1.5.dp, AccentOrange, RoundedCornerShape(10.dp))
                 } else Modifier
             )
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(10.dp),
         color = if (isSelected) {
             AccentOrange.copy(alpha = 0.1f)
         } else {
             MaterialTheme.colorScheme.surfaceContainerLow
         }
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = 8.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.RotateRight,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(18.dp)
                     .rotate(angle.degrees.toFloat() - 90f),
                 tint = if (isSelected) AccentOrange else MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 angle.label,
                 style = MaterialTheme.typography.labelMedium.copy(
@@ -406,46 +407,115 @@ private fun RotationChip(
 }
 
 @Composable
-private fun PageSelectionHeader(
-    selectionMode: PageSelectionMode,
+private fun QuickSelectionSection(
+    onQuickSelect: (QuickSelection) -> Unit,
     selectedCount: Int,
     totalCount: Int,
-    onSelectAll: () -> Unit,
-    onDeselectAll: () -> Unit,
+    onClear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            "SELECT PAGES",
-            style = MaterialTheme.typography.labelMedium.copy(
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
-            ),
-            color = MaterialTheme.colorScheme.primary
-        )
+    Column(modifier = modifier.padding(top = 8.dp)) {
+        // Header row with title, count, and clear button
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "SELECT PAGES",
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
+                    ),
+                    color = MaterialTheme.colorScheme.primary
+                )
+                if (selectedCount > 0) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        "($selectedCount/$totalCount)",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = AccentOrange
+                    )
+                }
+            }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilterChip(
-                selected = selectionMode == PageSelectionMode.ALL_PAGES,
-                onClick = onSelectAll,
-                label = { Text("All") },
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = AccentOrange.copy(alpha = 0.15f),
-                    selectedLabelColor = AccentOrange
-                )
-            )
-            if (selectedCount > 0 && selectionMode == PageSelectionMode.SELECTED_PAGES) {
-                FilterChip(
-                    selected = false,
-                    onClick = onDeselectAll,
-                    label = { Text("Clear") }
-                )
+            if (selectedCount > 0) {
+                Surface(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .clickable(onClick = onClear),
+                    shape = RoundedCornerShape(6.dp),
+                    color = AccentRed.copy(alpha = 0.1f)
+                ) {
+                    Text(
+                        "Clear",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = AccentRed,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    )
+                }
             }
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Quick selection chips - single row with wrap
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            QuickSelectionChip(
+                label = "All",
+                onClick = { onQuickSelect(QuickSelection.ALL) },
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectionChip(
+                label = "Odd",
+                onClick = { onQuickSelect(QuickSelection.ODD) },
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectionChip(
+                label = "Even",
+                onClick = { onQuickSelect(QuickSelection.EVEN) },
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectionChip(
+                label = "1st ½",
+                onClick = { onQuickSelect(QuickSelection.FIRST_HALF) },
+                modifier = Modifier.weight(1f)
+            )
+            QuickSelectionChip(
+                label = "2nd ½",
+                onClick = { onQuickSelect(QuickSelection.SECOND_HALF) },
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun QuickSelectionChip(
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .clip(RoundedCornerShape(6.dp))
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(6.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp),
+            textAlign = TextAlign.Center
+        )
     }
 }
 

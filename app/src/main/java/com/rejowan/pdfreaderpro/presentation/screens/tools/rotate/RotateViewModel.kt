@@ -40,6 +40,19 @@ enum class PageSelectionMode {
     SELECTED_PAGES
 }
 
+/**
+ * Quick selection options for pages.
+ */
+enum class QuickSelection(val label: String) {
+    ALL("All"),
+    ODD("Odd"),
+    EVEN("Even"),
+    FIRST_HALF("First Half"),
+    SECOND_HALF("Second Half"),
+    EVERY_2ND("Every 2nd"),
+    EVERY_3RD("Every 3rd")
+}
+
 data class PageInfo(
     val pageNumber: Int,
     val thumbnail: Bitmap?,
@@ -220,6 +233,46 @@ class RotateViewModel(
         _state.update { current ->
             val updatedPages = current.sourceFile?.pages?.map { page ->
                 page.copy(isSelected = false)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages),
+                selectionMode = PageSelectionMode.SELECTED_PAGES
+            )
+        }
+    }
+
+    fun applyQuickSelection(selection: QuickSelection) {
+        _state.update { current ->
+            val totalPages = current.sourceFile?.pageCount ?: 0
+            val updatedPages = current.sourceFile?.pages?.map { page ->
+                val isSelected = when (selection) {
+                    QuickSelection.ALL -> true
+                    QuickSelection.ODD -> page.pageNumber % 2 == 1
+                    QuickSelection.EVEN -> page.pageNumber % 2 == 0
+                    QuickSelection.FIRST_HALF -> page.pageNumber <= (totalPages + 1) / 2
+                    QuickSelection.SECOND_HALF -> page.pageNumber > totalPages / 2
+                    QuickSelection.EVERY_2ND -> page.pageNumber % 2 == 0
+                    QuickSelection.EVERY_3RD -> page.pageNumber % 3 == 0
+                }
+                page.copy(isSelected = isSelected)
+            } ?: emptyList()
+
+            current.copy(
+                sourceFile = current.sourceFile?.copy(pages = updatedPages),
+                selectionMode = if (selection == QuickSelection.ALL) {
+                    PageSelectionMode.ALL_PAGES
+                } else {
+                    PageSelectionMode.SELECTED_PAGES
+                }
+            )
+        }
+    }
+
+    fun selectPageRange(start: Int, end: Int) {
+        _state.update { current ->
+            val updatedPages = current.sourceFile?.pages?.map { page ->
+                page.copy(isSelected = page.pageNumber in start..end)
             } ?: emptyList()
 
             current.copy(
