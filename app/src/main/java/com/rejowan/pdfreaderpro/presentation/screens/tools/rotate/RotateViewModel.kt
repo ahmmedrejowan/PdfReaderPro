@@ -107,6 +107,9 @@ class RotateViewModel(
                     val pageCount = pdfToolsRepository.getPageCount(path).getOrDefault(0)
                     val pages = generatePageThumbnails(path, pageCount)
 
+                    // Select all pages by default
+                    val selectedPages = pages.map { it.copy(isSelected = true) }
+
                     _state.update {
                         it.copy(
                             sourceFile = SourceFile(
@@ -115,8 +118,9 @@ class RotateViewModel(
                                 name = getFileNameFromUri(uri) ?: file.name,
                                 size = file.length(),
                                 pageCount = pageCount,
-                                pages = pages
+                                pages = selectedPages
                             ),
+                            selectionMode = PageSelectionMode.ALL_PAGES,
                             isLoading = false,
                             error = null,
                             result = null
@@ -149,8 +153,8 @@ class RotateViewModel(
             for (i in 0 until minOf(pageCount, 50)) { // Limit to 50 pages for performance
                 val page = renderer.openPage(i)
 
-                // Create thumbnail
-                val thumbnailSize = 120
+                // Create higher quality thumbnail
+                val thumbnailSize = 300
                 val aspectRatio = page.width.toFloat() / page.height.toFloat()
                 val width: Int
                 val height: Int

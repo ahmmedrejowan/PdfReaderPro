@@ -216,17 +216,26 @@ fun RotateScreen(
                             item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(2) }) {
                                 RotationOptionsSection(
                                     selectedAngle = state.rotationAngle,
-                                    onAngleSelected = { viewModel.setRotationAngle(it) }
+                                    onAngleSelected = {
+                                        focusManager.clearFocus()
+                                        viewModel.setRotationAngle(it)
+                                    }
                                 )
                             }
 
                             // Quick selection chips (spans 2 columns)
                             item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(2) }) {
                                 QuickSelectionSection(
-                                    onQuickSelect = { viewModel.applyQuickSelection(it) },
+                                    onQuickSelect = {
+                                        focusManager.clearFocus()
+                                        viewModel.applyQuickSelection(it)
+                                    },
                                     selectedCount = state.sourceFile?.pages?.count { it.isSelected } ?: 0,
                                     totalCount = state.sourceFile?.pageCount ?: 0,
-                                    onClear = { viewModel.deselectAllPages() }
+                                    onClear = {
+                                        focusManager.clearFocus()
+                                        viewModel.deselectAllPages()
+                                    }
                                 )
                             }
 
@@ -236,7 +245,10 @@ fun RotateScreen(
                                     page = page,
                                     rotationAngle = state.rotationAngle,
                                     isAllSelected = state.selectionMode == PageSelectionMode.ALL_PAGES,
-                                    onClick = { viewModel.togglePageSelection(page.pageNumber) }
+                                    onClick = {
+                                        focusManager.clearFocus()
+                                        viewModel.togglePageSelection(page.pageNumber)
+                                    }
                                 )
                             }
                         }
