@@ -237,4 +237,72 @@ interface PdfToolsRepository {
         pagesToRemove: List<Int>,
         onProgress: (Float) -> Unit = {}
     ): Result<Unit>
+
+    /**
+     * Watermark configuration for text watermarks.
+     */
+    data class TextWatermarkConfig(
+        val text: String,
+        val fontSize: Float = 48f,
+        val color: Int = 0x80808080.toInt(), // Gray with alpha
+        val opacity: Float = 50f, // 1-100
+        val rotation: Float = -45f, // Degrees
+        val position: WatermarkPosition = WatermarkPosition.CENTER
+    )
+
+    /**
+     * Watermark configuration for image watermarks.
+     */
+    data class ImageWatermarkConfig(
+        val imagePath: String,
+        val scale: Float = 30f, // 1-100 (percentage of page size)
+        val opacity: Float = 50f, // 1-100
+        val position: WatermarkPosition = WatermarkPosition.CENTER
+    )
+
+    /**
+     * Watermark position options.
+     */
+    enum class WatermarkPosition {
+        CENTER,
+        TOP_LEFT,
+        TOP_CENTER,
+        TOP_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_CENTER,
+        BOTTOM_RIGHT,
+        TILED
+    }
+
+    /**
+     * Add a text watermark to PDF pages.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param config Text watermark configuration
+     * @param pages Pages to apply watermark (null = all pages)
+     * @return Result with Unit on success
+     */
+    suspend fun addTextWatermark(
+        inputPath: String,
+        outputPath: String,
+        config: TextWatermarkConfig,
+        pages: List<Int>? = null,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Add an image watermark to PDF pages.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param config Image watermark configuration
+     * @param pages Pages to apply watermark (null = all pages)
+     * @return Result with Unit on success
+     */
+    suspend fun addImageWatermark(
+        inputPath: String,
+        outputPath: String,
+        config: ImageWatermarkConfig,
+        pages: List<Int>? = null,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
 }

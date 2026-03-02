@@ -76,6 +76,11 @@ data class ToolRemovePages(
 )
 
 @Serializable
+data class ToolWatermark(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,

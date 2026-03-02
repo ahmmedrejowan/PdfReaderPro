@@ -59,6 +59,7 @@ import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToUnlockTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToWatermarkTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRemovePagesTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
@@ -141,7 +142,8 @@ private val pdfTools = listOf(
         "Add Watermark",
         "Add text or image watermark",
         Icons.Default.WaterDrop,
-        ToolCategory.EDIT
+        ToolCategory.EDIT,
+        isEnabled = true
     ),
     PdfTool(
         "page_numbers",
@@ -225,6 +227,7 @@ fun ToolsScreen(
                                 "lock_pdf" -> navController.navigateToLockTool("")
                                 "unlock_pdf" -> navController.navigateToUnlockTool("")
                                 "remove_pages" -> navController.navigateToRemovePagesTool("")
+                                "watermark" -> navController.navigateToWatermarkTool("")
                             }
                         }
                     )

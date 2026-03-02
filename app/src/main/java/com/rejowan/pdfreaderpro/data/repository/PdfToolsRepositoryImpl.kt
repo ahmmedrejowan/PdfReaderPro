@@ -12,9 +12,19 @@ import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.kernel.pdf.ReaderProperties
 import com.itextpdf.kernel.pdf.WriterProperties
 import com.itextpdf.kernel.pdf.EncryptionConstants
+import com.itextpdf.kernel.colors.ColorConstants
+import com.itextpdf.kernel.colors.DeviceRgb
+import com.itextpdf.kernel.font.PdfFontFactory
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas
+import com.itextpdf.kernel.pdf.extgstate.PdfExtGState
 import com.itextpdf.kernel.utils.PdfMerger
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Image
+import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.layout.properties.TextAlignment
+import com.itextpdf.layout.properties.VerticalAlignment
+import kotlin.math.cos
+import kotlin.math.sin
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -662,6 +672,295 @@ class PdfToolsRepositoryImpl(
         } catch (e: Exception) {
             Timber.e(e, "Failed to remove pages from PDF")
             Result.failure(e)
+        }
+    }
+
+    override suspend fun addTextWatermark(
+        inputPath: String,
+        outputPath: String,
+        config: PdfToolsRepository.TextWatermarkConfig,
+        pages: List<Int>?,
+        onProgress: (Float) -> Unit
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            onProgress(0.1f)
+
+            val sourceDoc = PdfDocument(PdfReader(inputPath))
+            val destDoc = PdfDocument(PdfWriter(outputPath))
+            val totalPages = sourceDoc.numberOfPages
+
+            // Copy all pages first
+            sourceDoc.copyPagesTo(1, totalPages, destDoc)
+            sourceDoc.close()
+
+            onProgress(0.3f)
+
+            // Determine which pages to watermark
+            val pagesToWatermark = pages?.filter { it in 1..totalPages } ?: (1..totalPages).toList()
+
+            // Extract color components from the Int color
+            val alpha = ((config.color shr 24) and 0xFF) / 255f
+            val red = ((config.color shr 16) and 0xFF) / 255f
+            val green = ((config.color shr 8) and 0xFF) / 255f
+            val blue = (config.color and 0xFF) / 255f
+
+            val color = DeviceRgb(red, green, blue)
+            val font = PdfFontFactory.createFont()
+
+            // Calculate effective opacity (config opacity * color alpha)
+            val effectiveOpacity = (config.opacity / 100f) * alpha
+
+            pagesToWatermark.forEachIndexed { index, pageNum ->
+                val page = destDoc.getPage(pageNum)
+                val pageSize = page.pageSize
+                val canvas = PdfCanvas(page)
+
+                // Set transparency
+                val gs = PdfExtGState()
+                gs.setFillOpacity(effectiveOpacity)
+                canvas.setExtGState(gs)
+
+                canvas.saveState()
+
+                when (config.position) {
+                    PdfToolsRepository.WatermarkPosition.TILED -> {
+                        // Draw tiled watermarks
+                        val textWidth = font.getWidth(config.text, config.fontSize)
+                        val textHeight = config.fontSize
+                        val spacingX = textWidth + 100
+                        val spacingY = textHeight + 100
+
+                        var y = 0f
+                        while (y < pageSize.height + spacingY) {
+                            var x = 0f
+                            while (x < pageSize.width + spacingX) {
+                                canvas.saveState()
+                                canvas.concatMatrix(
+                                    cos(Math.toRadians(config.rotation.toDouble())),
+                                    sin(Math.toRadians(config.rotation.toDouble())),
+                                    -sin(Math.toRadians(config.rotation.toDouble())),
+                                    cos(Math.toRadians(config.rotation.toDouble())),
+                                    x.toDouble(),
+                                    y.toDouble()
+                                )
+                                canvas.beginText()
+                                    .setFontAndSize(font, config.fontSize)
+                                    .setColor(color, true)
+                                    .moveText(0.0, 0.0)
+                                    .showText(config.text)
+                                    .endText()
+                                canvas.restoreState()
+                                x += spacingX
+                            }
+                            y += spacingY
+                        }
+                    }
+                    else -> {
+                        // Calculate position
+                        val (x, y) = calculateTextPosition(
+                            config.position,
+                            pageSize.width,
+                            pageSize.height,
+                            font.getWidth(config.text, config.fontSize),
+                            config.fontSize
+                        )
+
+                        // Apply rotation around the text center
+                        canvas.concatMatrix(
+                            cos(Math.toRadians(config.rotation.toDouble())),
+                            sin(Math.toRadians(config.rotation.toDouble())),
+                            -sin(Math.toRadians(config.rotation.toDouble())),
+                            cos(Math.toRadians(config.rotation.toDouble())),
+                            x.toDouble(),
+                            y.toDouble()
+                        )
+
+                        canvas.beginText()
+                            .setFontAndSize(font, config.fontSize)
+                            .setColor(color, true)
+                            .moveText(0.0, 0.0)
+                            .showText(config.text)
+                            .endText()
+                    }
+                }
+
+                canvas.restoreState()
+                onProgress(0.3f + (0.6f * (index + 1) / pagesToWatermark.size))
+            }
+
+            destDoc.close()
+            onProgress(1f)
+
+            Timber.d("Text watermark added successfully: $outputPath")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to add text watermark")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun addImageWatermark(
+        inputPath: String,
+        outputPath: String,
+        config: PdfToolsRepository.ImageWatermarkConfig,
+        pages: List<Int>?,
+        onProgress: (Float) -> Unit
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            onProgress(0.1f)
+
+            val sourceDoc = PdfDocument(PdfReader(inputPath))
+            val destDoc = PdfDocument(PdfWriter(outputPath))
+            val totalPages = sourceDoc.numberOfPages
+
+            // Copy all pages first
+            sourceDoc.copyPagesTo(1, totalPages, destDoc)
+            sourceDoc.close()
+
+            onProgress(0.3f)
+
+            // Load the watermark image
+            val imageData = ImageDataFactory.create(config.imagePath)
+
+            // Determine which pages to watermark
+            val pagesToWatermark = pages?.filter { it in 1..totalPages } ?: (1..totalPages).toList()
+
+            pagesToWatermark.forEachIndexed { index, pageNum ->
+                val page = destDoc.getPage(pageNum)
+                val pageSize = page.pageSize
+                val canvas = PdfCanvas(page)
+
+                // Set transparency
+                val gs = PdfExtGState()
+                gs.setFillOpacity(config.opacity / 100f)
+                canvas.setExtGState(gs)
+
+                // Calculate image size based on scale
+                val maxDimension = minOf(pageSize.width, pageSize.height) * (config.scale / 100f)
+                val aspectRatio = imageData.width / imageData.height
+                val imageWidth: Float
+                val imageHeight: Float
+                if (aspectRatio > 1) {
+                    imageWidth = maxDimension
+                    imageHeight = maxDimension / aspectRatio
+                } else {
+                    imageHeight = maxDimension
+                    imageWidth = maxDimension * aspectRatio
+                }
+
+                when (config.position) {
+                    PdfToolsRepository.WatermarkPosition.TILED -> {
+                        // Draw tiled watermarks
+                        val spacingX = imageWidth + 50
+                        val spacingY = imageHeight + 50
+
+                        var y = 0f
+                        while (y < pageSize.height) {
+                            var x = 0f
+                            while (x < pageSize.width) {
+                                canvas.addImageWithTransformationMatrix(
+                                    imageData,
+                                    imageWidth,
+                                    0f,
+                                    0f,
+                                    imageHeight,
+                                    x,
+                                    y
+                                )
+                                x += spacingX
+                            }
+                            y += spacingY
+                        }
+                    }
+                    else -> {
+                        // Calculate position
+                        val (x, y) = calculateImagePosition(
+                            config.position,
+                            pageSize.width,
+                            pageSize.height,
+                            imageWidth,
+                            imageHeight
+                        )
+
+                        canvas.addImageWithTransformationMatrix(
+                            imageData,
+                            imageWidth,
+                            0f,
+                            0f,
+                            imageHeight,
+                            x,
+                            y
+                        )
+                    }
+                }
+
+                onProgress(0.3f + (0.6f * (index + 1) / pagesToWatermark.size))
+            }
+
+            destDoc.close()
+            onProgress(1f)
+
+            Timber.d("Image watermark added successfully: $outputPath")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to add image watermark")
+            Result.failure(e)
+        }
+    }
+
+    private fun calculateTextPosition(
+        position: PdfToolsRepository.WatermarkPosition,
+        pageWidth: Float,
+        pageHeight: Float,
+        textWidth: Float,
+        textHeight: Float
+    ): Pair<Float, Float> {
+        val margin = 50f
+        return when (position) {
+            PdfToolsRepository.WatermarkPosition.CENTER ->
+                Pair(pageWidth / 2 - textWidth / 2, pageHeight / 2)
+            PdfToolsRepository.WatermarkPosition.TOP_LEFT ->
+                Pair(margin, pageHeight - margin - textHeight)
+            PdfToolsRepository.WatermarkPosition.TOP_CENTER ->
+                Pair(pageWidth / 2 - textWidth / 2, pageHeight - margin - textHeight)
+            PdfToolsRepository.WatermarkPosition.TOP_RIGHT ->
+                Pair(pageWidth - margin - textWidth, pageHeight - margin - textHeight)
+            PdfToolsRepository.WatermarkPosition.BOTTOM_LEFT ->
+                Pair(margin, margin)
+            PdfToolsRepository.WatermarkPosition.BOTTOM_CENTER ->
+                Pair(pageWidth / 2 - textWidth / 2, margin)
+            PdfToolsRepository.WatermarkPosition.BOTTOM_RIGHT ->
+                Pair(pageWidth - margin - textWidth, margin)
+            PdfToolsRepository.WatermarkPosition.TILED ->
+                Pair(0f, 0f) // Handled separately
+        }
+    }
+
+    private fun calculateImagePosition(
+        position: PdfToolsRepository.WatermarkPosition,
+        pageWidth: Float,
+        pageHeight: Float,
+        imageWidth: Float,
+        imageHeight: Float
+    ): Pair<Float, Float> {
+        val margin = 50f
+        return when (position) {
+            PdfToolsRepository.WatermarkPosition.CENTER ->
+                Pair(pageWidth / 2 - imageWidth / 2, pageHeight / 2 - imageHeight / 2)
+            PdfToolsRepository.WatermarkPosition.TOP_LEFT ->
+                Pair(margin, pageHeight - margin - imageHeight)
+            PdfToolsRepository.WatermarkPosition.TOP_CENTER ->
+                Pair(pageWidth / 2 - imageWidth / 2, pageHeight - margin - imageHeight)
+            PdfToolsRepository.WatermarkPosition.TOP_RIGHT ->
+                Pair(pageWidth - margin - imageWidth, pageHeight - margin - imageHeight)
+            PdfToolsRepository.WatermarkPosition.BOTTOM_LEFT ->
+                Pair(margin, margin)
+            PdfToolsRepository.WatermarkPosition.BOTTOM_CENTER ->
+                Pair(pageWidth / 2 - imageWidth / 2, margin)
+            PdfToolsRepository.WatermarkPosition.BOTTOM_RIGHT ->
+                Pair(pageWidth - margin - imageWidth, margin)
+            PdfToolsRepository.WatermarkPosition.TILED ->
+                Pair(0f, 0f) // Handled separately
         }
     }
 

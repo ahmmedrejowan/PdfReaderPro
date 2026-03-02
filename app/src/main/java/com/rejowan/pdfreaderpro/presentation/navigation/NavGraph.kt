@@ -21,6 +21,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.reorder.ReorderScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.unlock.UnlockScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.removepages.RemovePagesScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.WatermarkScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -173,6 +174,15 @@ fun PdfReaderNavHost(
             )
         }
 
+        // Tool: Watermark
+        composable<ToolWatermark> { backStackEntry ->
+            val toolWatermark: ToolWatermark = backStackEntry.toRoute()
+            WatermarkScreen(
+                navController = navController,
+                initialFilePath = toolWatermark.filePath
+            )
+        }
+
         // Tool Result Screen
         composable<ToolResult> { backStackEntry ->
             val toolResult: ToolResult = backStackEntry.toRoute()
@@ -278,4 +288,11 @@ fun NavController.navigateToUnlockTool(filePath: String) {
  */
 fun NavController.navigateToRemovePagesTool(filePath: String) {
     navigate(ToolRemovePages(filePath = filePath))
+}
+
+/**
+ * Navigate to tool watermark screen.
+ */
+fun NavController.navigateToWatermarkTool(filePath: String) {
+    navigate(ToolWatermark(filePath = filePath))
 }
