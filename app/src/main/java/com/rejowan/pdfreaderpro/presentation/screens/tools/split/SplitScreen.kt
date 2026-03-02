@@ -37,6 +37,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -59,24 +61,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.navigation.NavController
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
-// Accent colors
-private val AccentOrange = Color(0xFFFF9800)
-private val AccentGreen = Color(0xFF81C784)
-private val AccentRed = Color(0xFFEF5350)
+// Accent colors - consistent with app design system
+private val AccentAmber = Color(0xFFFFB74D)     // Split theme color
+private val AccentTeal = Color(0xFF4DB6AC)      // Preview
+private val AccentGreen = Color(0xFF81C784)     // Success
+private val AccentRed = Color(0xFFEF5350)       // PDF icon
+private val AccentBlue = Color(0xFF64B5F6)      // Info/General
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,6 +97,7 @@ fun SplitScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
 
     val pdfPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -102,7 +113,7 @@ fun SplitScreen(
                         Text("Split PDF")
                         state.sourceFile?.let { file ->
                             Text(
-                                "${file.pageCount} pages",
+                                "${file.pageCount} pages • ${state.splitMode.toDisplayName()}",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -124,6 +135,12 @@ fun SplitScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
+                    focusManager.clearFocus()
+                }
         ) {
             when {
                 state.sourceFile == null && state.result == null -> {
@@ -136,26 +153,22 @@ fun SplitScreen(
                     // Success state
                     SuccessState(
                         result = state.result!!,
-                        onOpenFolder = {
-                            val folder = File(state.result!!.outputDir)
+                        onViewFile = { filePath ->
+                            navController.navigateToReader(filePath)
+                        },
+                        onShareFile = { filePath ->
+                            val file = File(filePath)
                             val uri = FileProvider.getUriForFile(
                                 context,
                                 "${context.packageName}.provider",
-                                folder
+                                file
                             )
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                setDataAndType(uri, "resource/folder")
+                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "application/pdf"
+                                putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            try {
-                                context.startActivity(intent)
-                            } catch (e: Exception) {
-                                // Fallback: try to open with file manager
-                                val fallbackIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                                    type = "*/*"
-                                }
-                                context.startActivity(Intent.createChooser(fallbackIntent, "Open folder"))
-                            }
+                            context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
                         },
                         onSplitMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }
@@ -175,6 +188,11 @@ fun SplitScreen(
                             item {
                                 SourceFileCard(
                                     sourceFile = state.sourceFile!!,
+                                    onPreview = {
+                                        state.sourceFile?.path?.let { path ->
+                                            navController.navigateToReader(path)
+                                        }
+                                    },
                                     onChangeFile = { pdfPickerLauncher.launch(arrayOf("application/pdf")) }
                                 )
                             }
@@ -238,14 +256,14 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             modifier = Modifier
                 .size(80.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(AccentOrange.copy(alpha = 0.1f)),
+                .background(AccentAmber.copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.CallSplit,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
-                tint = AccentOrange
+                tint = AccentAmber
             )
         }
 
@@ -282,6 +300,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
 @Composable
 private fun SourceFileCard(
     sourceFile: SourceFile,
+    onPreview: () -> Unit,
     onChangeFile: () -> Unit
 ) {
     Card(
@@ -329,6 +348,29 @@ private fun SourceFileCard(
                 )
             }
 
+            // Preview button
+            IconButton(
+                onClick = onPreview,
+                modifier = Modifier.size(40.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(AccentTeal.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Outlined.Visibility,
+                        contentDescription = "Preview",
+                        modifier = Modifier.size(18.dp),
+                        tint = AccentTeal
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
             OutlinedButton(
                 onClick = onChangeFile,
                 shape = RoundedCornerShape(8.dp)
@@ -352,42 +394,52 @@ private fun SplitModeSection(
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
-        Row(
+        // Mode selection with descriptions
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            SplitModeChip(
-                label = "By Ranges",
-                selected = selectedMode == SplitMode.BY_RANGES,
-                onClick = { onModeSelected(SplitMode.BY_RANGES) },
-                modifier = Modifier.weight(1f)
-            )
-            SplitModeChip(
-                label = "Every N",
-                selected = selectedMode == SplitMode.EVERY_N_PAGES,
-                onClick = { onModeSelected(SplitMode.EVERY_N_PAGES) },
-                modifier = Modifier.weight(1f)
-            )
-        }
+            // First row: Multiple PDF outputs
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                SplitModeChip(
+                    label = "By Ranges",
+                    description = "Multiple PDFs",
+                    selected = selectedMode == SplitMode.BY_RANGES,
+                    onClick = { onModeSelected(SplitMode.BY_RANGES) },
+                    modifier = Modifier.weight(1f)
+                )
+                SplitModeChip(
+                    label = "Every N Pages",
+                    description = "Auto split",
+                    selected = selectedMode == SplitMode.EVERY_N_PAGES,
+                    onClick = { onModeSelected(SplitMode.EVERY_N_PAGES) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            SplitModeChip(
-                label = "Single Pages",
-                selected = selectedMode == SplitMode.INTO_PAGES,
-                onClick = { onModeSelected(SplitMode.INTO_PAGES) },
-                modifier = Modifier.weight(1f)
-            )
-            SplitModeChip(
-                label = "Extract",
-                selected = selectedMode == SplitMode.SPECIFIC_PAGES,
-                onClick = { onModeSelected(SplitMode.SPECIFIC_PAGES) },
-                modifier = Modifier.weight(1f)
-            )
+            // Second row: Single page / extraction modes
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                SplitModeChip(
+                    label = "Single Pages",
+                    description = "1 page = 1 PDF",
+                    selected = selectedMode == SplitMode.INTO_PAGES,
+                    onClick = { onModeSelected(SplitMode.INTO_PAGES) },
+                    modifier = Modifier.weight(1f)
+                )
+                SplitModeChip(
+                    label = "Extract Pages",
+                    description = "Single PDF",
+                    selected = selectedMode == SplitMode.SPECIFIC_PAGES,
+                    onClick = { onModeSelected(SplitMode.SPECIFIC_PAGES) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 }
@@ -395,6 +447,7 @@ private fun SplitModeSection(
 @Composable
 private fun SplitModeChip(
     label: String,
+    description: String,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -403,16 +456,30 @@ private fun SplitModeChip(
         selected = selected,
         onClick = onClick,
         label = {
-            Text(
-                label,
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.labelMedium
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    label,
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
+                    color = if (selected) AccentAmber else MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    description,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (selected) AccentAmber.copy(alpha = 0.8f)
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         },
-        modifier = modifier.height(40.dp),
+        modifier = modifier.height(56.dp),
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = AccentOrange.copy(alpha = 0.15f),
-            selectedLabelColor = AccentOrange
+            selectedContainerColor = AccentAmber.copy(alpha = 0.15f),
+            selectedLabelColor = AccentAmber,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         )
     )
 }
@@ -434,35 +501,76 @@ private fun SplitOptionsSection(
 
         when (state.splitMode) {
             SplitMode.BY_RANGES -> {
-                OutlinedTextField(
-                    value = state.rangesInput,
-                    onValueChange = onRangesChange,
-                    label = { Text("Page Ranges") },
-                    placeholder = { Text("e.g., 1-5, 6-10, 11-15") },
-                    supportingText = {
-                        Text("Separate ranges with commas. Max page: ${state.sourceFile?.pageCount ?: 0}")
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
-                )
+                val rangeCount = countRanges(state.rangesInput)
+                val hasError = state.rangesError != null
+                Column {
+                    OutlinedTextField(
+                        value = state.rangesInput,
+                        onValueChange = onRangesChange,
+                        label = { Text("Page Ranges") },
+                        placeholder = { Text("e.g., 1-5, 6-10, 11-15") },
+                        supportingText = {
+                            state.rangesError?.let { error ->
+                                Text(error, color = AccentRed)
+                            } ?: Text("Each range creates a separate PDF. Pages: 1-${state.sourceFile?.pageCount ?: 0}")
+                        },
+                        isError = hasError,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+
+                    if (rangeCount > 0 && !hasError) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = AccentAmber.copy(alpha = 0.1f)
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.CallSplit,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp),
+                                    tint = AccentAmber
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    "Will create $rangeCount PDF file${if (rangeCount > 1) "s" else ""}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
             }
 
             SplitMode.EVERY_N_PAGES -> {
+                val maxPages = state.sourceFile?.pageCount ?: 1
+                val sliderMax = maxPages.coerceAtLeast(1).toFloat()
                 Column {
                     Text(
-                        "Split every ${state.everyNPages} pages",
+                        "Split every ${state.everyNPages} page${if (state.everyNPages > 1) "s" else ""}",
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Slider(
-                        value = state.everyNPages.toFloat(),
+                        value = state.everyNPages.toFloat().coerceIn(1f, sliderMax),
                         onValueChange = { onEveryNChange(it.toInt()) },
-                        valueRange = 1f..20f,
-                        steps = 18,
+                        valueRange = 1f..sliderMax,
+                        steps = (sliderMax.toInt() - 2).coerceAtLeast(0),
                         modifier = Modifier.fillMaxWidth()
                     )
                     Text(
-                        "Will create ${calculateParts(state.sourceFile?.pageCount ?: 0, state.everyNPages)} file(s)",
+                        "Will create ${calculateParts(maxPages, state.everyNPages)} file${if (calculateParts(maxPages, state.everyNPages) > 1) "s" else ""} (max: $maxPages pages)",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -473,7 +581,7 @@ private fun SplitOptionsSection(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = AccentOrange.copy(alpha = 0.1f)
+                        containerColor = AccentAmber.copy(alpha = 0.1f)
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -487,7 +595,7 @@ private fun SplitOptionsSection(
                             Icons.Default.Description,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp),
-                            tint = AccentOrange
+                            tint = AccentAmber
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
@@ -507,18 +615,57 @@ private fun SplitOptionsSection(
             }
 
             SplitMode.SPECIFIC_PAGES -> {
-                OutlinedTextField(
-                    value = state.specificPagesInput,
-                    onValueChange = onSpecificPagesChange,
-                    label = { Text("Pages to Extract") },
-                    placeholder = { Text("e.g., 1, 3, 5-8, 12") },
-                    supportingText = {
-                        Text("Enter page numbers or ranges. Max page: ${state.sourceFile?.pageCount ?: 0}")
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-                )
+                val pageCount = countExtractedPages(state.specificPagesInput, state.sourceFile?.pageCount ?: 0)
+                val hasError = state.specificPagesError != null
+                Column {
+                    OutlinedTextField(
+                        value = state.specificPagesInput,
+                        onValueChange = onSpecificPagesChange,
+                        label = { Text("Pages to Extract") },
+                        placeholder = { Text("e.g., 1, 3, 5-8, 12") },
+                        supportingText = {
+                            state.specificPagesError?.let { error ->
+                                Text(error, color = AccentRed)
+                            } ?: Text("Creates a single PDF with selected pages. Pages: 1-${state.sourceFile?.pageCount ?: 0}")
+                        },
+                        isError = hasError,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                    )
+
+                    if (pageCount > 0 && !hasError) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = AccentBlue.copy(alpha = 0.1f)
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Default.Description,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp),
+                                    tint = AccentBlue
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    "Will create 1 PDF with $pageCount page${if (pageCount > 1) "s" else ""}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -658,7 +805,7 @@ private fun ProcessingOverlay(progress: Float) {
                 CircularProgressIndicator(
                     progress = { animatedProgress },
                     modifier = Modifier.size(48.dp),
-                    color = AccentOrange
+                    color = AccentAmber
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -674,7 +821,7 @@ private fun ProcessingOverlay(progress: Float) {
                 LinearProgressIndicator(
                     progress = { animatedProgress },
                     modifier = Modifier.fillMaxWidth(),
-                    color = AccentOrange
+                    color = AccentAmber
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -692,7 +839,8 @@ private fun ProcessingOverlay(progress: Float) {
 @Composable
 private fun SuccessState(
     result: SplitResult,
-    onOpenFolder: () -> Unit,
+    onViewFile: (String) -> Unit,
+    onShareFile: (String) -> Unit,
     onSplitMore: () -> Unit,
     onDone: () -> Unit
 ) {
@@ -700,128 +848,191 @@ private fun SuccessState(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.systemBars)
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
-        AnimatedVisibility(
-            visible = true,
-            enter = scaleIn() + fadeIn()
+        // Header section
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            AnimatedVisibility(
+                visible = true,
+                enter = scaleIn() + fadeIn()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(AccentGreen.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        modifier = Modifier.size(36.dp),
+                        tint = AccentGreen
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                "Split Complete!",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                "${result.createdFiles.size} files created",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        // Files list
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(result.createdFiles) { filePath ->
+                SplitResultFileItem(
+                    filePath = filePath,
+                    onView = { onViewFile(filePath) },
+                    onShare = { onShareFile(filePath) }
+                )
+            }
+        }
+
+        // Bottom buttons
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Button(
+                onClick = onSplitMore,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Split Another PDF")
+            }
+
+            OutlinedButton(
+                onClick = onDone,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Done")
+            }
+        }
+    }
+}
+
+@Composable
+private fun SplitResultFileItem(
+    filePath: String,
+    onView: () -> Unit,
+    onShare: () -> Unit
+) {
+    val file = File(filePath)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // PDF icon
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(AccentGreen.copy(alpha = 0.1f)),
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(AccentRed.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    Icons.Default.CheckCircle,
+                    Icons.Default.PictureAsPdf,
                     contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = AccentGreen
+                    modifier = Modifier.size(20.dp),
+                    tint = AccentRed
                 )
             }
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-        Text(
-            "Split Complete!",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Result info card
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-            ),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.FolderOpen,
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        tint = AccentOrange
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        "${result.createdFiles.size} files created",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
+            // File info
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    result.outputDir,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                    maxLines = 2,
+                    file.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Text(
+                    formatFileSize(file.length()),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // List created files
-                result.createdFiles.take(5).forEach { filePath ->
-                    Text(
-                        "• ${File(filePath).name}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                if (result.createdFiles.size > 5) {
-                    Text(
-                        "• ... and ${result.createdFiles.size - 5} more",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+            // View button
+            IconButton(
+                onClick = onView,
+                modifier = Modifier.size(36.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(AccentTeal.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Outlined.Visibility,
+                        contentDescription = "View",
+                        modifier = Modifier.size(16.dp),
+                        tint = AccentTeal
                     )
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.width(4.dp))
 
-        Button(
-            onClick = onOpenFolder,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text("Open Folder")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedButton(
-            onClick = onSplitMore,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text("Split Another PDF")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedButton(
-            onClick = onDone,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text("Done")
+            // Share button
+            IconButton(
+                onClick = onShare,
+                modifier = Modifier.size(36.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(AccentBlue.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Share,
+                        contentDescription = "Share",
+                        modifier = Modifier.size(16.dp),
+                        tint = AccentBlue
+                    )
+                }
+            }
         }
     }
 }
@@ -837,4 +1048,57 @@ private fun formatFileSize(bytes: Long): String {
 private fun calculateParts(totalPages: Int, everyN: Int): Int {
     if (totalPages == 0 || everyN == 0) return 0
     return (totalPages + everyN - 1) / everyN
+}
+
+private fun countRanges(rangesInput: String): Int {
+    if (rangesInput.isBlank()) return 0
+    return rangesInput
+        .split(",")
+        .map { it.trim() }
+        .filter { it.isNotBlank() }
+        .count { range ->
+            // Validate range format: "N" or "N-M"
+            val parts = range.split("-")
+            when (parts.size) {
+                1 -> parts[0].toIntOrNull() != null
+                2 -> parts[0].toIntOrNull() != null && parts[1].toIntOrNull() != null
+                else -> false
+            }
+        }
+}
+
+private fun SplitMode.toDisplayName(): String = when (this) {
+    SplitMode.BY_RANGES -> "By Ranges"
+    SplitMode.EVERY_N_PAGES -> "Every N Pages"
+    SplitMode.INTO_PAGES -> "Single Pages"
+    SplitMode.SPECIFIC_PAGES -> "Extract"
+}
+
+private fun countExtractedPages(input: String, maxPages: Int): Int {
+    if (input.isBlank() || maxPages == 0) return 0
+    val pages = mutableSetOf<Int>()
+
+    input.split(",").forEach { part ->
+        val trimmed = part.trim()
+        if (trimmed.contains("-")) {
+            // Range: "5-8"
+            val parts = trimmed.split("-").map { it.trim().toIntOrNull() }
+            if (parts.size == 2) {
+                val start = parts[0]
+                val end = parts[1]
+                if (start != null && end != null) {
+                    for (i in start..end) {
+                        if (i in 1..maxPages) pages.add(i)
+                    }
+                }
+            }
+        } else {
+            // Single page: "3"
+            trimmed.toIntOrNull()?.let { page ->
+                if (page in 1..maxPages) pages.add(page)
+            }
+        }
+    }
+
+    return pages.size
 }

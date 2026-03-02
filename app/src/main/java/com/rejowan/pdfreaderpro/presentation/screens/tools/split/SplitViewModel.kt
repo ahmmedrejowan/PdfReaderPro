@@ -28,8 +28,10 @@ data class SplitState(
     val sourceFile: SourceFile? = null,
     val splitMode: SplitMode = SplitMode.BY_RANGES,
     val rangesInput: String = "",           // For BY_RANGES: "1-5, 6-10, 11-15"
+    val rangesError: String? = null,        // Validation error for ranges
     val everyNPages: Int = 5,               // For EVERY_N_PAGES
     val specificPagesInput: String = "",    // For SPECIFIC_PAGES: "1, 3, 5-8, 12"
+    val specificPagesError: String? = null, // Validation error for specific pages
     val outputPrefix: String = "",
     val isProcessing: Boolean = false,
     val progress: Float = 0f,
@@ -59,6 +61,16 @@ class SplitViewModel(
     private val _state = MutableStateFlow(SplitState())
     val state: StateFlow<SplitState> = _state.asStateFlow()
 
+    init {
+        generateDefaultPrefix()
+    }
+
+    private fun generateDefaultPrefix() {
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+        val timestamp = dateFormat.format(Date())
+        _state.update { it.copy(outputPrefix = "split_$timestamp") }
+    }
+
     fun setSourceFile(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -76,7 +88,6 @@ class SplitViewModel(
                     _state.update {
                         it.copy(
                             sourceFile = sourceFile,
-                            outputPrefix = file.nameWithoutExtension,
                             error = null
                         )
                     }
@@ -110,15 +121,79 @@ class SplitViewModel(
     }
 
     fun setRangesInput(input: String) {
-        _state.update { it.copy(rangesInput = input, error = null) }
+        val maxPages = _state.value.sourceFile?.pageCount ?: 0
+        val error = validateRangesInput(input, maxPages)
+        _state.update { it.copy(rangesInput = input, rangesError = error, error = null) }
     }
 
     fun setEveryNPages(n: Int) {
-        _state.update { it.copy(everyNPages = n.coerceIn(1, 100), error = null) }
+        val maxPages = _state.value.sourceFile?.pageCount ?: 100
+        _state.update { it.copy(everyNPages = n.coerceIn(1, maxPages), error = null) }
     }
 
     fun setSpecificPagesInput(input: String) {
-        _state.update { it.copy(specificPagesInput = input, error = null) }
+        val maxPages = _state.value.sourceFile?.pageCount ?: 0
+        val error = validateSpecificPagesInput(input, maxPages)
+        _state.update { it.copy(specificPagesInput = input, specificPagesError = error, error = null) }
+    }
+
+    private fun validateRangesInput(input: String, maxPages: Int): String? {
+        if (input.isBlank()) return null
+        if (maxPages == 0) return null
+
+        val parts = input.split(",").map { it.trim() }.filter { it.isNotBlank() }
+
+        for (part in parts) {
+            val rangeParts = part.split("-").map { it.trim() }
+            when (rangeParts.size) {
+                1 -> {
+                    val page = rangeParts[0].toIntOrNull()
+                    if (page == null) return "Invalid format: $part"
+                    if (page < 1) return "Page must be at least 1"
+                    if (page > maxPages) return "Page $page exceeds max ($maxPages)"
+                }
+                2 -> {
+                    val start = rangeParts[0].toIntOrNull()
+                    val end = rangeParts[1].toIntOrNull()
+                    if (start == null || end == null) return "Invalid range: $part"
+                    if (start < 1) return "Start page must be at least 1"
+                    if (end < 1) return "End page must be at least 1"
+                    if (start > maxPages) return "Start page $start exceeds max ($maxPages)"
+                    if (end > maxPages) return "End page $end exceeds max ($maxPages)"
+                    if (start > end) return "Invalid range: start > end in $part"
+                }
+                else -> return "Invalid format: $part"
+            }
+        }
+        return null
+    }
+
+    private fun validateSpecificPagesInput(input: String, maxPages: Int): String? {
+        if (input.isBlank()) return null
+        if (maxPages == 0) return null
+
+        val parts = input.split(",").map { it.trim() }.filter { it.isNotBlank() }
+
+        for (part in parts) {
+            if (part.contains("-")) {
+                val rangeParts = part.split("-").map { it.trim() }
+                if (rangeParts.size != 2) return "Invalid range: $part"
+                val start = rangeParts[0].toIntOrNull()
+                val end = rangeParts[1].toIntOrNull()
+                if (start == null || end == null) return "Invalid range: $part"
+                if (start < 1) return "Start page must be at least 1"
+                if (end < 1) return "End page must be at least 1"
+                if (start > maxPages) return "Page $start exceeds max ($maxPages)"
+                if (end > maxPages) return "Page $end exceeds max ($maxPages)"
+                if (start > end) return "Invalid range: start > end in $part"
+            } else {
+                val page = part.toIntOrNull()
+                if (page == null) return "Invalid page: $part"
+                if (page < 1) return "Page must be at least 1"
+                if (page > maxPages) return "Page $page exceeds max ($maxPages)"
+            }
+        }
+        return null
     }
 
     fun setOutputPrefix(prefix: String) {
@@ -137,6 +212,31 @@ class SplitViewModel(
         if (currentState.outputPrefix.isBlank()) {
             _state.update { it.copy(error = "Enter an output prefix") }
             return
+        }
+
+        // Check for validation errors based on mode
+        when (currentState.splitMode) {
+            SplitMode.BY_RANGES -> {
+                if (currentState.rangesInput.isBlank()) {
+                    _state.update { it.copy(error = "Enter page ranges") }
+                    return
+                }
+                if (currentState.rangesError != null) {
+                    _state.update { it.copy(error = currentState.rangesError) }
+                    return
+                }
+            }
+            SplitMode.SPECIFIC_PAGES -> {
+                if (currentState.specificPagesInput.isBlank()) {
+                    _state.update { it.copy(error = "Enter pages to extract") }
+                    return
+                }
+                if (currentState.specificPagesError != null) {
+                    _state.update { it.copy(error = currentState.specificPagesError) }
+                    return
+                }
+            }
+            else -> { /* No additional validation needed */ }
         }
 
         viewModelScope.launch {
@@ -303,6 +403,7 @@ class SplitViewModel(
 
     fun reset() {
         _state.update { SplitState() }
+        generateDefaultPrefix()
     }
 
     private fun getOutputDirectory(prefix: String): String {
