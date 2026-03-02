@@ -229,11 +229,28 @@ class MergeViewModel(
             return
         }
 
+        // Check for empty page selections
+        val emptySelectionFiles = currentState.selectedFiles.filter { file ->
+            file.pageSelection.getSelectedCount(file.pageCount) == 0
+        }
+        if (emptySelectionFiles.isNotEmpty()) {
+            val fileNames = emptySelectionFiles.joinToString(", ") { it.name }
+            _state.update { it.copy(error = "No pages selected for: $fileNames") }
+            return
+        }
+
         viewModelScope.launch {
             _state.update { it.copy(isProcessing = true, progress = 0f, error = null) }
 
             val outputDir = getOutputDirectory()
-            val outputPath = "$outputDir/${currentState.outputFileName}.pdf"
+            var outputPath = "$outputDir/${currentState.outputFileName}.pdf"
+
+            // Check if file exists and generate unique name
+            var counter = 1
+            while (File(outputPath).exists()) {
+                outputPath = "$outputDir/${currentState.outputFileName}_$counter.pdf"
+                counter++
+            }
 
             // Create page selections from merge files
             val selections = currentState.selectedFiles.map { file ->

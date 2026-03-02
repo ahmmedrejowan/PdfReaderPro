@@ -49,6 +49,7 @@ import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Pages
 import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.Visibility
 import sh.calvin.reorderable.ReorderableItem
@@ -209,6 +210,21 @@ fun MergeScreen(
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         context.startActivity(Intent.createChooser(intent, "Open with"))
+                    },
+                    onShare = {
+                        // Share the merged PDF
+                        val file = File(state.result!!.outputPath)
+                        val uri = FileProvider.getUriForFile(
+                            context,
+                            "${context.packageName}.provider",
+                            file
+                        )
+                        val intent = Intent(Intent.ACTION_SEND).apply {
+                            type = "application/pdf"
+                            putExtra(Intent.EXTRA_STREAM, uri)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                        context.startActivity(Intent.createChooser(intent, "Share PDF"))
                     },
                     onMergeMore = {
                         viewModel.reset()
@@ -778,6 +794,7 @@ private fun SuccessState(
     result: MergeResult,
     onOpenInApp: () -> Unit,
     onOpenWith: () -> Unit,
+    onShare: () -> Unit,
     onMergeMore: () -> Unit,
     onDone: () -> Unit
 ) {
@@ -888,19 +905,38 @@ private fun SuccessState(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Open With button (secondary)
-        OutlinedButton(
-            onClick = onOpenWith,
+        // Open With and Share buttons in a row
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Icon(
-                Icons.AutoMirrored.Filled.OpenInNew,
-                contentDescription = null,
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Open With...", style = MaterialTheme.typography.labelMedium)
+            OutlinedButton(
+                onClick = onOpenWith,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.OpenInNew,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Open With", style = MaterialTheme.typography.labelMedium)
+            }
+
+            OutlinedButton(
+                onClick = onShare,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(
+                    Icons.Default.Share,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Share", style = MaterialTheme.typography.labelMedium)
+            }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
