@@ -1,48 +1,70 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CallMerge
 import androidx.compose.material.icons.automirrored.filled.CallSplit
 import androidx.compose.material.icons.automirrored.filled.RotateRight
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.Reorder
 import androidx.compose.material.icons.filled.SelectAll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
+import kotlinx.coroutines.delay
 
-enum class ToolCategory(val title: String) {
-    ORGANIZE("Organize"),
-    CONVERT("Convert"),
-    EXTRACT("Extract")
+// Accent colors (consistent with app design system)
+private val AccentPurple = Color(0xFF9575CD)
+private val AccentBlue = Color(0xFF64B5F6)
+private val AccentTeal = Color(0xFF4DB6AC)
+private val AccentAmber = Color(0xFFFFB74D)
+private val AccentGreen = Color(0xFF81C784)
+
+enum class ToolCategory(val title: String, val accentColor: Color) {
+    ORGANIZE("Organize", AccentPurple),
+    CONVERT("Convert", AccentTeal),
+    EXTRACT("Extract", AccentBlue)
 }
 
 data class PdfTool(
@@ -51,18 +73,68 @@ data class PdfTool(
     val description: String,
     val icon: ImageVector,
     val category: ToolCategory,
-    val isEnabled: Boolean = false // Coming soon by default
+    val isEnabled: Boolean = false
 )
 
 private val pdfTools = listOf(
-    PdfTool("merge", "Merge PDFs", "Combine multiple PDFs", Icons.AutoMirrored.Filled.CallMerge, ToolCategory.ORGANIZE, isEnabled = true),
-    PdfTool("split", "Split PDF", "Split into multiple files", Icons.AutoMirrored.Filled.CallSplit, ToolCategory.ORGANIZE, isEnabled = true),
-    PdfTool("compress", "Compress", "Reduce file size", Icons.Default.Compress, ToolCategory.ORGANIZE),
-    PdfTool("rotate", "Rotate Pages", "Rotate pages", Icons.AutoMirrored.Filled.RotateRight, ToolCategory.ORGANIZE),
-    PdfTool("img_to_pdf", "Image to PDF", "Convert images", Icons.Default.Image, ToolCategory.CONVERT),
-    PdfTool("pdf_to_img", "PDF to Images", "Export as images", Icons.Default.Photo, ToolCategory.CONVERT),
-    PdfTool("extract", "Extract Pages", "Extract specific pages", Icons.Default.SelectAll, ToolCategory.EXTRACT),
-    PdfTool("reorder", "Reorder Pages", "Rearrange pages", Icons.Default.Reorder, ToolCategory.EXTRACT),
+    PdfTool(
+        "merge",
+        "Merge PDFs",
+        "Combine multiple PDF files into one",
+        Icons.AutoMirrored.Filled.CallMerge,
+        ToolCategory.ORGANIZE,
+        isEnabled = true
+    ),
+    PdfTool(
+        "split",
+        "Split PDF",
+        "Split a PDF into multiple files",
+        Icons.AutoMirrored.Filled.CallSplit,
+        ToolCategory.ORGANIZE,
+        isEnabled = true
+    ),
+    PdfTool(
+        "compress",
+        "Compress PDF",
+        "Reduce file size while maintaining quality",
+        Icons.Default.Compress,
+        ToolCategory.ORGANIZE
+    ),
+    PdfTool(
+        "rotate",
+        "Rotate Pages",
+        "Rotate individual or all pages",
+        Icons.AutoMirrored.Filled.RotateRight,
+        ToolCategory.ORGANIZE
+    ),
+    PdfTool(
+        "img_to_pdf",
+        "Image to PDF",
+        "Convert images to PDF document",
+        Icons.Default.Image,
+        ToolCategory.CONVERT
+    ),
+    PdfTool(
+        "pdf_to_img",
+        "PDF to Images",
+        "Export PDF pages as image files",
+        Icons.Default.Photo,
+        ToolCategory.CONVERT
+    ),
+    PdfTool(
+        "extract",
+        "Extract Pages",
+        "Extract specific pages to new PDF",
+        Icons.Default.SelectAll,
+        ToolCategory.EXTRACT
+    ),
+    PdfTool(
+        "reorder",
+        "Reorder Pages",
+        "Rearrange page order in PDF",
+        Icons.Default.Reorder,
+        ToolCategory.EXTRACT
+    ),
 )
 
 @Composable
@@ -70,35 +142,192 @@ fun ToolsScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp)
+            .padding(top = 8.dp, bottom = 80.dp)
     ) {
+        var animationIndex = 0
+
         ToolCategory.entries.forEach { category ->
             val toolsInCategory = pdfTools.filter { it.category == category }
 
-            item(span = { GridItemSpan(2) }) {
-                Text(
+            if (toolsInCategory.isNotEmpty()) {
+                // Section label
+                SectionLabel(
                     text = category.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    delay = animationIndex * 50
+                )
+                animationIndex++
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Tool items
+                toolsInCategory.forEach { tool ->
+                    ToolItem(
+                        tool = tool,
+                        accentColor = category.accentColor,
+                        animationDelay = animationIndex * 50,
+                        onClick = {
+                            when (tool.id) {
+                                "merge" -> navController.navigateToMergeTool()
+                                "split" -> navController.navigateToSplitTool("")
+                            }
+                        }
+                    )
+                    animationIndex++
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun SectionLabel(
+    text: String,
+    delay: Int,
+    modifier: Modifier = Modifier
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(delay.toLong())
+        isVisible = true
+    }
+
+    val alpha by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0f,
+        animationSpec = tween(200),
+        label = "section alpha"
+    )
+
+    Text(
+        text = text.uppercase(),
+        style = MaterialTheme.typography.labelMedium.copy(
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
+        ),
+        color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
+        modifier = modifier.padding(start = 4.dp, bottom = 4.dp)
+    )
+}
+
+@Composable
+private fun ToolItem(
+    tool: PdfTool,
+    accentColor: Color,
+    animationDelay: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(animationDelay.toLong())
+        isVisible = true
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
+        label = "tool scale"
+    )
+
+    val effectiveAccentColor = if (tool.isEnabled) accentColor else accentColor.copy(alpha = 0.4f)
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .clip(RoundedCornerShape(12.dp))
+            .then(
+                if (tool.isEnabled) {
+                    Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(color = accentColor),
+                        onClick = onClick
+                    )
+                } else {
+                    Modifier
+                }
+            ),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(72.dp)
+                .padding(horizontal = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Icon container
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = effectiveAccentColor.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    imageVector = tool.icon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .size(24.dp),
+                    tint = effectiveAccentColor
                 )
             }
 
-            items(toolsInCategory) { tool ->
-                ToolCard(
-                    tool = tool,
-                    onClick = {
-                        when (tool.id) {
-                            "merge" -> navController.navigateToMergeTool()
-                            "split" -> navController.navigateToSplitTool("")
-                            // Other tools will be added as they are implemented
+            Spacer(modifier = Modifier.width(14.dp))
+
+            // Text content
+            Column(modifier = Modifier.weight(1f)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = tool.name,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = if (tool.isEnabled) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         }
+                    )
+
+                    // Coming Soon badge
+                    if (!tool.isEnabled) {
+                        ComingSoonBadge()
                     }
+                }
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Text(
+                    text = tool.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (tool.isEnabled) {
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                    }
+                )
+            }
+
+            // Arrow for enabled tools
+            if (tool.isEnabled) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             }
         }
@@ -106,63 +335,21 @@ fun ToolsScreen(
 }
 
 @Composable
-private fun ToolCard(
-    tool: PdfTool,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .clickable(enabled = tool.isEnabled, onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = if (tool.isEnabled) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            }
-        )
+private fun ComingSoonBadge() {
+    Box(
+        modifier = Modifier
+            .background(
+                color = AccentAmber.copy(alpha = 0.15f),
+                shape = RoundedCornerShape(4.dp)
+            )
+            .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = tool.icon,
-                contentDescription = null,
-                modifier = Modifier.size(40.dp),
-                tint = if (tool.isEnabled) {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = tool.name,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                color = if (tool.isEnabled) {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                }
-            )
-
-            if (!tool.isEnabled) {
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Coming Soon",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                )
-            }
-        }
+        Text(
+            text = "Soon",
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = AccentAmber
+        )
     }
 }
