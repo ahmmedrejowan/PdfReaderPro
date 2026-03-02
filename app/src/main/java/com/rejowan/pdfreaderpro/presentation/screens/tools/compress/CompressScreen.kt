@@ -210,7 +210,7 @@ fun CompressScreen(
                                 CompressionLevelSection(
                                     selectedLevel = state.compressionLevel,
                                     onLevelSelected = { viewModel.setCompressionLevel(it) },
-                                    originalSize = state.sourceFile!!.size
+                                    sourceFile = state.sourceFile!!
                                 )
                             }
                         }
@@ -411,7 +411,7 @@ private fun SourceFileCard(
 private fun CompressionLevelSection(
     selectedLevel: CompressionLevel,
     onLevelSelected: (CompressionLevel) -> Unit,
-    originalSize: Long
+    sourceFile: SourceFile
 ) {
     Column {
         Text(
@@ -437,7 +437,7 @@ private fun CompressionLevelSection(
         // Size estimate pill
         Spacer(modifier = Modifier.height(20.dp))
         SizeEstimatePill(
-            originalSize = originalSize,
+            sourceFile = sourceFile,
             compressionLevel = selectedLevel
         )
     }
@@ -524,62 +524,89 @@ private fun CompressionLevelItem(
 
 @Composable
 private fun SizeEstimatePill(
-    originalSize: Long,
+    sourceFile: SourceFile,
     compressionLevel: CompressionLevel
 ) {
-    // Estimated compression ratio based on level
-    val estimatedRatio = when (compressionLevel) {
-        CompressionLevel.LOW -> 0.85f
-        CompressionLevel.MEDIUM -> 0.60f
-        CompressionLevel.HIGH -> 0.40f
+    val estimate = sourceFile.compressionEstimate
+    val originalSize = sourceFile.size
+
+    // Get estimated size based on compression level
+    val estimatedSize = when {
+        estimate != null -> when (compressionLevel) {
+            CompressionLevel.LOW -> estimate.estimatedSizeLow
+            CompressionLevel.MEDIUM -> estimate.estimatedSizeMedium
+            CompressionLevel.HIGH -> estimate.estimatedSizeHigh
+        }
+        // Fallback if no analysis available
+        else -> when (compressionLevel) {
+            CompressionLevel.LOW -> (originalSize * 0.90f).toLong()
+            CompressionLevel.MEDIUM -> (originalSize * 0.70f).toLong()
+            CompressionLevel.HIGH -> (originalSize * 0.50f).toLong()
+        }
     }
-    val estimatedSize = (originalSize * estimatedRatio).toLong()
+
     val savedSize = originalSize - estimatedSize
-    val reductionPercent = ((1 - estimatedRatio) * 100).toInt()
+    val reductionPercent = if (originalSize > 0) {
+        ((savedSize.toFloat() / originalSize) * 100).toInt()
+    } else 0
+
+    // Determine color based on potential
+    val (pillColor, contentInfo) = when {
+        estimate?.isAlreadyOptimized == true -> AccentAmber to "Already optimized"
+        reductionPercent >= 30 -> AccentGreen to null
+        reductionPercent >= 15 -> AccentBlue to null
+        else -> AccentAmber to "Limited potential"
+    }
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        color = AccentGreen.copy(alpha = 0.1f)
+        color = pillColor.copy(alpha = 0.1f)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 14.dp),
+                .padding(vertical = 14.dp, horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Main estimate row
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
                     Icons.Default.Compress,
                     contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                    tint = AccentGreen
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    "Estimated Size",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                )
-            }
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Text(
-                    formatFileSize(estimatedSize),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = AccentGreen
+                    modifier = Modifier.size(20.dp),
+                    tint = pillColor
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    "Save ~${formatFileSize(savedSize)} ($reductionPercent%)",
+                    "~${formatFileSize(estimatedSize)}",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = pillColor
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    "(save ${formatFileSize(savedSize)} • $reductionPercent%)",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+
+            // Content info if applicable
+            if (contentInfo != null || estimate != null) {
+                Spacer(modifier = Modifier.height(6.dp))
+                val infoText = contentInfo ?: when {
+                    estimate?.hasImages == true -> "Contains images • Good compression potential"
+                    else -> "Mostly text content"
+                }
+                Text(
+                    infoText,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
             }
         }
@@ -915,13 +942,13 @@ private fun SuccessState(
                 onClick = onCompressMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Compress Another")
+                Text("New File", maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done")
+                Text("Done", maxLines = 1)
             }
         }
     }

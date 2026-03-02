@@ -35,13 +35,23 @@ enum class CompressionLevel(
     HIGH("High", "Maximum compression, smaller file", 0.2f)
 }
 
+data class CompressionEstimate(
+    val bytesPerPage: Long,
+    val hasImages: Boolean,
+    val isAlreadyOptimized: Boolean,
+    val estimatedSizeLow: Long,
+    val estimatedSizeMedium: Long,
+    val estimatedSizeHigh: Long
+)
+
 data class SourceFile(
     val uri: Uri,
     val path: String,
     val name: String,
     val size: Long,
     val pageCount: Int = 0,
-    val thumbnail: Bitmap? = null
+    val thumbnail: Bitmap? = null,
+    val compressionEstimate: CompressionEstimate? = null
 )
 
 data class CompressState(
@@ -89,8 +99,22 @@ class CompressViewModel(
                 val path = copyUriToCache(uri)
                 if (path != null) {
                     val file = File(path)
+                    val fileSize = file.length()
                     val pageCount = pdfToolsRepository.getPageCount(path).getOrDefault(0)
                     val thumbnail = generateThumbnail(path)
+
+                    // Analyze compression potential
+                    val analysis = pdfToolsRepository.analyzeCompressionPotential(path).getOrNull()
+                    val compressionEstimate = analysis?.let {
+                        CompressionEstimate(
+                            bytesPerPage = it.bytesPerPage,
+                            hasImages = it.hasImages,
+                            isAlreadyOptimized = it.isAlreadyOptimized,
+                            estimatedSizeLow = (fileSize * it.estimatedRatioLow).toLong(),
+                            estimatedSizeMedium = (fileSize * it.estimatedRatioMedium).toLong(),
+                            estimatedSizeHigh = (fileSize * it.estimatedRatioHigh).toLong()
+                        )
+                    }
 
                     _state.update {
                         it.copy(
@@ -98,9 +122,10 @@ class CompressViewModel(
                                 uri = uri,
                                 path = path,
                                 name = getFileNameFromUri(uri) ?: file.name,
-                                size = file.length(),
+                                size = fileSize,
                                 pageCount = pageCount,
-                                thumbnail = thumbnail
+                                thumbnail = thumbnail,
+                                compressionEstimate = compressionEstimate
                             ),
                             error = null,
                             result = null

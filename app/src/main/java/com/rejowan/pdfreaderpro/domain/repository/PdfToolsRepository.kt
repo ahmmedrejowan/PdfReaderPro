@@ -156,4 +156,22 @@ interface PdfToolsRepository {
      * Get the number of pages in a PDF.
      */
     suspend fun getPageCount(inputPath: String): Result<Int>
+
+    /**
+     * Analyze PDF to estimate compression potential.
+     * Returns estimated compression ratio (0.0 to 1.0, where 0.3 means 30% of original size).
+     */
+    suspend fun analyzeCompressionPotential(inputPath: String): Result<CompressionAnalysis>
+
+    /**
+     * Analysis result for compression estimation.
+     */
+    data class CompressionAnalysis(
+        val bytesPerPage: Long,
+        val hasImages: Boolean,
+        val isAlreadyOptimized: Boolean,
+        val estimatedRatioLow: Float,    // Conservative estimate (low compression)
+        val estimatedRatioMedium: Float, // Balanced estimate
+        val estimatedRatioHigh: Float    // Aggressive estimate
+    )
 }

@@ -390,6 +390,106 @@ class PdfToolsRepositoryImpl(
         }
     }
 
+    override suspend fun analyzeCompressionPotential(
+        inputPath: String
+    ): Result<PdfToolsRepository.CompressionAnalysis> = withContext(Dispatchers.IO) {
+        try {
+            val file = File(inputPath)
+            val fileSize = file.length()
+
+            val pdfDoc = PdfDocument(PdfReader(inputPath))
+            val pageCount = pdfDoc.numberOfPages
+
+            // Calculate bytes per page
+            val bytesPerPage = if (pageCount > 0) fileSize / pageCount else fileSize
+
+            // Check for images by scanning PDF objects
+            var hasImages = false
+            var imageCount = 0
+            var totalImageBytes = 0L
+
+            for (i in 1..pdfDoc.numberOfPages) {
+                val page = pdfDoc.getPage(i)
+                val resources = page.resources
+
+                // Check for XObject (images are stored as XObjects)
+                val xObjects = resources?.getResource(com.itextpdf.kernel.pdf.PdfName.XObject) as? com.itextpdf.kernel.pdf.PdfDictionary
+                if (xObjects != null) {
+                    for (key in xObjects.keySet()) {
+                        val xObject = xObjects.getAsStream(key)
+                        if (xObject != null) {
+                            val subtype = xObject.getAsName(com.itextpdf.kernel.pdf.PdfName.Subtype)
+                            if (subtype == com.itextpdf.kernel.pdf.PdfName.Image) {
+                                hasImages = true
+                                imageCount++
+                                // Estimate image size from stream length
+                                xObject.getAsNumber(com.itextpdf.kernel.pdf.PdfName.Length)?.let {
+                                    totalImageBytes += it.longValue()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            pdfDoc.close()
+
+            // Determine if already optimized based on bytes per page
+            // Well-optimized PDFs typically have lower bytes per page
+            val isAlreadyOptimized = bytesPerPage < 30_000 && !hasImages
+
+            // Calculate estimated compression ratios based on content analysis
+            val (ratioLow, ratioMedium, ratioHigh) = when {
+                // Scanned/image-heavy PDFs (>500KB per page)
+                bytesPerPage > 500_000 -> Triple(0.70f, 0.50f, 0.35f)
+
+                // Image-heavy PDFs (200-500KB per page)
+                bytesPerPage > 200_000 -> Triple(0.80f, 0.60f, 0.45f)
+
+                // Mixed content (100-200KB per page)
+                bytesPerPage > 100_000 -> Triple(0.85f, 0.70f, 0.55f)
+
+                // Light images or formatted text (50-100KB per page)
+                bytesPerPage > 50_000 -> Triple(0.90f, 0.80f, 0.70f)
+
+                // Mostly text (30-50KB per page)
+                bytesPerPage > 30_000 -> Triple(0.95f, 0.88f, 0.80f)
+
+                // Already compact/optimized (<30KB per page)
+                else -> Triple(0.98f, 0.95f, 0.90f)
+            }
+
+            // Adjust if has images (more potential for compression)
+            val adjustedRatios = if (hasImages && imageCount > pageCount / 2) {
+                // Many images - more compression potential
+                Triple(
+                    (ratioLow - 0.05f).coerceAtLeast(0.5f),
+                    (ratioMedium - 0.10f).coerceAtLeast(0.4f),
+                    (ratioHigh - 0.15f).coerceAtLeast(0.3f)
+                )
+            } else {
+                Triple(ratioLow, ratioMedium, ratioHigh)
+            }
+
+            Timber.d("PDF Analysis: ${file.name} - ${bytesPerPage / 1024}KB/page, images=$hasImages ($imageCount), optimized=$isAlreadyOptimized")
+            Timber.d("Estimated ratios: low=${adjustedRatios.first}, medium=${adjustedRatios.second}, high=${adjustedRatios.third}")
+
+            Result.success(
+                PdfToolsRepository.CompressionAnalysis(
+                    bytesPerPage = bytesPerPage,
+                    hasImages = hasImages,
+                    isAlreadyOptimized = isAlreadyOptimized,
+                    estimatedRatioLow = adjustedRatios.first,
+                    estimatedRatioMedium = adjustedRatios.second,
+                    estimatedRatioHigh = adjustedRatios.third
+                )
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to analyze PDF")
+            Result.failure(e)
+        }
+    }
+
     private fun parseRange(range: String, maxPages: Int): Pair<Int, Int> {
         val parts = range.trim().split("-")
         return when (parts.size) {
