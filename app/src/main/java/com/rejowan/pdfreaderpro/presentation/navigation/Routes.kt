@@ -71,6 +71,11 @@ data class ToolUnlock(
 )
 
 @Serializable
+data class ToolRemovePages(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,

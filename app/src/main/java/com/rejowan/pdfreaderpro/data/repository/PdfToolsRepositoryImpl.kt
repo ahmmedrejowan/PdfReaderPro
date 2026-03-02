@@ -619,6 +619,52 @@ class PdfToolsRepositoryImpl(
         }
     }
 
+    override suspend fun removePages(
+        inputPath: String,
+        outputPath: String,
+        pagesToRemove: List<Int>,
+        onProgress: (Float) -> Unit
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            require(pagesToRemove.isNotEmpty()) { "At least one page must be selected for removal" }
+
+            onProgress(0.1f)
+
+            val sourceDoc = PdfDocument(PdfReader(inputPath))
+            val totalPages = sourceDoc.numberOfPages
+
+            // Validate pages to remove
+            val validPagesToRemove = pagesToRemove.filter { it in 1..totalPages }.toSet()
+            require(validPagesToRemove.size < totalPages) { "Cannot remove all pages from PDF" }
+
+            onProgress(0.2f)
+
+            // Calculate pages to keep
+            val pagesToKeep = (1..totalPages).filter { it !in validPagesToRemove }
+
+            onProgress(0.3f)
+
+            // Create new PDF with only the pages to keep
+            val destDoc = PdfDocument(PdfWriter(outputPath))
+
+            pagesToKeep.forEachIndexed { index, pageNum ->
+                sourceDoc.copyPagesTo(pageNum, pageNum, destDoc)
+                onProgress(0.3f + (0.6f * (index + 1) / pagesToKeep.size))
+            }
+
+            sourceDoc.close()
+            destDoc.close()
+
+            onProgress(1f)
+
+            Timber.d("Removed ${validPagesToRemove.size} pages from PDF: $outputPath")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to remove pages from PDF")
+            Result.failure(e)
+        }
+    }
+
     private fun parseRange(range: String, maxPages: Int): Pair<Int, Int> {
         val parts = range.trim().split("-")
         return when (parts.size) {

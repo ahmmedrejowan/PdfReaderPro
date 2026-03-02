@@ -223,4 +223,18 @@ interface PdfToolsRepository {
      * @return Result with true if password protected, false otherwise
      */
     suspend fun isPasswordProtected(inputPath: String): Result<Boolean>
+
+    /**
+     * Remove specific pages from a PDF.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param pagesToRemove List of page numbers to remove (1-indexed)
+     * @return Result with Unit on success
+     */
+    suspend fun removePages(
+        inputPath: String,
+        outputPath: String,
+        pagesToRemove: List<Int>,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
 }

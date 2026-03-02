@@ -19,6 +19,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.lock.LockScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.reorder.ReorderScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.unlock.UnlockScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.removepages.RemovePagesScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
@@ -163,6 +164,15 @@ fun PdfReaderNavHost(
             )
         }
 
+        // Tool: Remove Pages
+        composable<ToolRemovePages> { backStackEntry ->
+            val toolRemovePages: ToolRemovePages = backStackEntry.toRoute()
+            RemovePagesScreen(
+                navController = navController,
+                initialFilePath = toolRemovePages.filePath
+            )
+        }
+
         // Tool Result Screen
         composable<ToolResult> { backStackEntry ->
             val toolResult: ToolResult = backStackEntry.toRoute()
@@ -261,4 +271,11 @@ fun NavController.navigateToLockTool(filePath: String) {
  */
 fun NavController.navigateToUnlockTool(filePath: String) {
     navigate(ToolUnlock(filePath = filePath))
+}
+
+/**
+ * Navigate to tool remove pages screen.
+ */
+fun NavController.navigateToRemovePagesTool(filePath: String) {
+    navigate(ToolRemovePages(filePath = filePath))
 }

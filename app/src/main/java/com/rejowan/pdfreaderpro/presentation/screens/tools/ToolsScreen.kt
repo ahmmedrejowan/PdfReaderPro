@@ -59,6 +59,7 @@ import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToUnlockTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRemovePagesTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
 import kotlinx.coroutines.delay
@@ -132,7 +133,8 @@ private val pdfTools = listOf(
         "Remove Pages",
         "Delete specific pages from PDF",
         Icons.Default.DeleteSweep,
-        ToolCategory.EDIT
+        ToolCategory.EDIT,
+        isEnabled = true
     ),
     PdfTool(
         "watermark",
@@ -222,6 +224,7 @@ fun ToolsScreen(
                                 "reorder" -> navController.navigateToReorderTool("")
                                 "lock_pdf" -> navController.navigateToLockTool("")
                                 "unlock_pdf" -> navController.navigateToUnlockTool("")
+                                "remove_pages" -> navController.navigateToRemovePagesTool("")
                             }
                         }
                     )

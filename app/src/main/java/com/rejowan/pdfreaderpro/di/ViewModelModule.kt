@@ -11,6 +11,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.lock.LockViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.reorder.ReorderViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.unlock.UnlockViewModel
+import com.rejowan.pdfreaderpro.presentation.screens.tools.removepages.RemovePagesViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitViewModel
 import org.koin.android.ext.koin.androidContext
@@ -32,4 +33,5 @@ val viewModelModule = module {
     viewModel { ReorderViewModel(get(), androidContext()) }
     viewModel { LockViewModel(get(), androidContext()) }
     viewModel { UnlockViewModel(get(), androidContext()) }
+    viewModel { RemovePagesViewModel(get(), androidContext()) }
 }
