@@ -59,6 +59,7 @@ import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToUnlockTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
 import kotlinx.coroutines.delay
@@ -162,7 +163,8 @@ private val pdfTools = listOf(
         "Unlock PDF",
         "Remove password from PDF",
         Icons.Default.LockOpen,
-        ToolCategory.SECURITY
+        ToolCategory.SECURITY,
+        isEnabled = true
     ),
     PdfTool(
         "img_to_pdf",
@@ -228,6 +230,7 @@ fun ToolsScreen(
                                 "rotate" -> navController.navigateToRotateTool("")
                                 "reorder" -> navController.navigateToReorderTool("")
                                 "lock_pdf" -> navController.navigateToLockTool("")
+                                "unlock_pdf" -> navController.navigateToUnlockTool("")
                             }
                         }
                     )

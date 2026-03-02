@@ -9,6 +9,7 @@ import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
 import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.kernel.pdf.ReaderProperties
 import com.itextpdf.kernel.pdf.WriterProperties
 import com.itextpdf.kernel.pdf.EncryptionConstants
 import com.itextpdf.kernel.utils.PdfMerger
@@ -552,6 +553,68 @@ class PdfToolsRepositoryImpl(
             Result.success(Unit)
         } catch (e: Exception) {
             Timber.e(e, "Failed to lock PDF")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun unlockPdf(
+        inputPath: String,
+        outputPath: String,
+        password: String,
+        onProgress: (Float) -> Unit
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            onProgress(0.1f)
+
+            // Set up reader with password
+            val readerProperties = ReaderProperties()
+                .setPassword(password.toByteArray())
+
+            onProgress(0.2f)
+
+            // Open encrypted PDF with password
+            val reader = PdfReader(inputPath, readerProperties)
+            reader.setUnethicalReading(true) // Allow reading even with restrictions
+
+            onProgress(0.3f)
+
+            // Create new PDF without encryption
+            val writer = PdfWriter(outputPath)
+            val pdfDoc = PdfDocument(reader, writer)
+
+            val totalPages = pdfDoc.numberOfPages
+            onProgress(0.5f)
+
+            // Pages are automatically copied
+            for (i in 1..totalPages) {
+                onProgress(0.5f + (0.4f * i / totalPages))
+            }
+
+            pdfDoc.close()
+            onProgress(1f)
+
+            Timber.d("PDF unlocked successfully: $outputPath")
+            Result.success(Unit)
+        } catch (e: com.itextpdf.kernel.exceptions.BadPasswordException) {
+            Timber.e(e, "Wrong password for PDF")
+            Result.failure(Exception("Incorrect password"))
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to unlock PDF")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun isPasswordProtected(inputPath: String): Result<Boolean> = withContext(Dispatchers.IO) {
+        try {
+            val reader = PdfReader(inputPath)
+            val isEncrypted = reader.isEncrypted
+            reader.close()
+            Result.success(isEncrypted)
+        } catch (e: com.itextpdf.kernel.exceptions.BadPasswordException) {
+            // If we get a BadPasswordException, the PDF is password protected
+            Result.success(true)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to check PDF encryption")
             Result.failure(e)
         }
     }

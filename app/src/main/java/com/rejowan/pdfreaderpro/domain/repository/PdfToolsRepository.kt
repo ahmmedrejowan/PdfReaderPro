@@ -202,4 +202,25 @@ interface PdfToolsRepository {
         val allowModifying: Boolean = false,
         val allowAnnotations: Boolean = false
     )
+
+    /**
+     * Unlock/decrypt a password-protected PDF.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param password Password to unlock the PDF (user or owner password)
+     * @return Result with Unit on success
+     */
+    suspend fun unlockPdf(
+        inputPath: String,
+        outputPath: String,
+        password: String,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
+
+    /**
+     * Check if a PDF is password protected.
+     * @param inputPath Path to PDF file
+     * @return Result with true if password protected, false otherwise
+     */
+    suspend fun isPasswordProtected(inputPath: String): Result<Boolean>
 }

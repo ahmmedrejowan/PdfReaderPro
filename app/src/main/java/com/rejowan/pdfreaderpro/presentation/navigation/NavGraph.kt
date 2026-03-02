@@ -18,6 +18,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressScre
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.lock.LockScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.reorder.ReorderScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.unlock.UnlockScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
@@ -153,6 +154,15 @@ fun PdfReaderNavHost(
             )
         }
 
+        // Tool: Unlock PDF
+        composable<ToolUnlock> { backStackEntry ->
+            val toolUnlock: ToolUnlock = backStackEntry.toRoute()
+            UnlockScreen(
+                navController = navController,
+                initialFilePath = toolUnlock.filePath
+            )
+        }
+
         // Tool Result Screen
         composable<ToolResult> { backStackEntry ->
             val toolResult: ToolResult = backStackEntry.toRoute()
@@ -244,4 +254,11 @@ fun NavController.navigateToReorderTool(filePath: String) {
  */
 fun NavController.navigateToLockTool(filePath: String) {
     navigate(ToolLock(filePath = filePath))
+}
+
+/**
+ * Navigate to tool unlock screen.
+ */
+fun NavController.navigateToUnlockTool(filePath: String) {
+    navigate(ToolUnlock(filePath = filePath))
 }

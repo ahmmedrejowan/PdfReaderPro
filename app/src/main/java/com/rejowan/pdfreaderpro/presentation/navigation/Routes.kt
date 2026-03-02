@@ -66,6 +66,11 @@ data class ToolLock(
 )
 
 @Serializable
+data class ToolUnlock(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,
