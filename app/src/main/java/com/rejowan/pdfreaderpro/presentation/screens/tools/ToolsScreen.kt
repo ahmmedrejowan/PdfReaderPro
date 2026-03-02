@@ -28,7 +28,13 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material.icons.automirrored.filled.CompareArrows
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.FormatListNumbered
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Reorder
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -51,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
 import kotlinx.coroutines.delay
@@ -64,7 +71,10 @@ private val AccentGreen = Color(0xFF81C784)
 
 enum class ToolCategory(val title: String, val accentColor: Color) {
     ORGANIZE("Organize", AccentPurple),
-    CONVERT("Convert", AccentTeal)
+    EDIT("Edit", AccentBlue),
+    SECURITY("Security", AccentAmber),
+    CONVERT("Convert", AccentTeal),
+    UTILITIES("Utilities", AccentGreen)
 }
 
 data class PdfTool(
@@ -114,7 +124,43 @@ private val pdfTools = listOf(
         "Reorder Pages",
         "Rearrange page order in PDF",
         Icons.Default.Reorder,
-        ToolCategory.ORGANIZE
+        ToolCategory.ORGANIZE,
+        isEnabled = true
+    ),
+    PdfTool(
+        "remove_pages",
+        "Remove Pages",
+        "Delete specific pages from PDF",
+        Icons.Default.DeleteSweep,
+        ToolCategory.EDIT
+    ),
+    PdfTool(
+        "watermark",
+        "Add Watermark",
+        "Add text or image watermark",
+        Icons.Default.WaterDrop,
+        ToolCategory.EDIT
+    ),
+    PdfTool(
+        "page_numbers",
+        "Add Page Numbers",
+        "Insert page numbers to PDF",
+        Icons.Default.FormatListNumbered,
+        ToolCategory.EDIT
+    ),
+    PdfTool(
+        "lock_pdf",
+        "Lock PDF",
+        "Add password protection",
+        Icons.Default.Lock,
+        ToolCategory.SECURITY
+    ),
+    PdfTool(
+        "unlock_pdf",
+        "Unlock PDF",
+        "Remove password from PDF",
+        Icons.Default.LockOpen,
+        ToolCategory.SECURITY
     ),
     PdfTool(
         "img_to_pdf",
@@ -129,6 +175,13 @@ private val pdfTools = listOf(
         "Export PDF pages as image files",
         Icons.Default.Photo,
         ToolCategory.CONVERT
+    ),
+    PdfTool(
+        "compare_pdf",
+        "Compare PDF",
+        "Compare two PDF documents",
+        Icons.AutoMirrored.Filled.CompareArrows,
+        ToolCategory.UTILITIES
     ),
 )
 
@@ -171,6 +224,7 @@ fun ToolsScreen(
                                 "split" -> navController.navigateToSplitTool("")
                                 "compress" -> navController.navigateToCompressTool("")
                                 "rotate" -> navController.navigateToRotateTool("")
+                                "reorder" -> navController.navigateToReorderTool("")
                             }
                         }
                     )

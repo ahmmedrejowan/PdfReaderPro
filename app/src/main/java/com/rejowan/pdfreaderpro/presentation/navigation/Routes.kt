@@ -56,6 +56,11 @@ data class ToolRotate(
 )
 
 @Serializable
+data class ToolReorder(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,
