@@ -16,6 +16,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -123,6 +124,15 @@ fun PdfReaderNavHost(
             )
         }
 
+        // Tool: Rotate Pages
+        composable<ToolRotate> { backStackEntry ->
+            val toolRotate: ToolRotate = backStackEntry.toRoute()
+            RotateScreen(
+                navController = navController,
+                initialFilePath = toolRotate.filePath
+            )
+        }
+
         // Tool Result Screen
         composable<ToolResult> { backStackEntry ->
             val toolResult: ToolResult = backStackEntry.toRoute()
@@ -193,4 +203,11 @@ fun NavController.navigateToSplitTool(filePath: String) {
  */
 fun NavController.navigateToCompressTool(filePath: String) {
     navigate(ToolCompress(filePath = filePath))
+}
+
+/**
+ * Navigate to tool rotate screen.
+ */
+fun NavController.navigateToRotateTool(filePath: String) {
+    navigate(ToolRotate(filePath = filePath))
 }

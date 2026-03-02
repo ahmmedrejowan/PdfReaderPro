@@ -51,6 +51,11 @@ data class ToolCompress(
 )
 
 @Serializable
+data class ToolRotate(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,

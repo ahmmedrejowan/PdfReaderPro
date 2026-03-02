@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
 import kotlinx.coroutines.delay
 
@@ -107,7 +108,8 @@ private val pdfTools = listOf(
         "Rotate Pages",
         "Rotate individual or all pages",
         Icons.AutoMirrored.Filled.RotateRight,
-        ToolCategory.ORGANIZE
+        ToolCategory.ORGANIZE,
+        isEnabled = true
     ),
     PdfTool(
         "img_to_pdf",
@@ -177,6 +179,7 @@ fun ToolsScreen(
                                 "merge" -> navController.navigateToMergeTool()
                                 "split" -> navController.navigateToSplitTool("")
                                 "compress" -> navController.navigateToCompressTool("")
+                                "rotate" -> navController.navigateToRotateTool("")
                             }
                         }
                     )
