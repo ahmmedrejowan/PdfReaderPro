@@ -14,6 +14,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.unlock.UnlockViewMode
 import com.rejowan.pdfreaderpro.presentation.screens.tools.removepages.RemovePagesViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.WatermarkViewModel
+import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageNumbersViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
@@ -36,4 +37,5 @@ val viewModelModule = module {
     viewModel { UnlockViewModel(get(), androidContext()) }
     viewModel { RemovePagesViewModel(get(), androidContext()) }
     viewModel { WatermarkViewModel(get(), androidContext()) }
+    viewModel { PageNumbersViewModel(get(), androidContext()) }
 }

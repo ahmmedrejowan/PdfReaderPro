@@ -81,6 +81,11 @@ data class ToolWatermark(
 )
 
 @Serializable
+data class ToolPageNumbers(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,

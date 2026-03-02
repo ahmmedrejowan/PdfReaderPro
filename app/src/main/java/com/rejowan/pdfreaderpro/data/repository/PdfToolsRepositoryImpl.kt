@@ -936,6 +936,128 @@ class PdfToolsRepositoryImpl(
         }
     }
 
+    override suspend fun addPageNumbers(
+        inputPath: String,
+        outputPath: String,
+        config: PdfToolsRepository.PageNumberConfig,
+        pages: List<Int>?,
+        onProgress: (Float) -> Unit
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            onProgress(0.1f)
+
+            val sourceDoc = PdfDocument(PdfReader(inputPath))
+            val destDoc = PdfDocument(PdfWriter(outputPath))
+            val totalPages = sourceDoc.numberOfPages
+
+            // Copy all pages first
+            sourceDoc.copyPagesTo(1, totalPages, destDoc)
+            sourceDoc.close()
+
+            onProgress(0.3f)
+
+            // Determine which pages to number
+            val pagesToNumber = pages?.filter { it in 1..totalPages } ?: (1..totalPages).toList()
+
+            // Extract color components
+            val red = ((config.color shr 16) and 0xFF) / 255f
+            val green = ((config.color shr 8) and 0xFF) / 255f
+            val blue = (config.color and 0xFF) / 255f
+
+            val color = DeviceRgb(red, green, blue)
+            val font = PdfFontFactory.createFont()
+
+            pagesToNumber.forEachIndexed { index, pageNum ->
+                val page = destDoc.getPage(pageNum)
+                val pageSize = page.pageSize
+                val canvas = PdfCanvas(page)
+
+                // Calculate the display number (respecting startNumber)
+                val displayNumber = config.startNumber + (pageNum - 1)
+
+                // Format the page number text
+                val numberText = formatPageNumber(
+                    format = config.format,
+                    currentPage = displayNumber,
+                    totalPages = totalPages + config.startNumber - 1,
+                    prefix = config.prefix,
+                    suffix = config.suffix
+                )
+
+                // Calculate text width for centering
+                val textWidth = font.getWidth(numberText, config.fontSize)
+
+                // Calculate position
+                val (x, y) = calculatePageNumberPosition(
+                    position = config.position,
+                    pageWidth = pageSize.width,
+                    pageHeight = pageSize.height,
+                    textWidth = textWidth,
+                    marginX = config.marginX,
+                    marginY = config.marginY
+                )
+
+                canvas.beginText()
+                    .setFontAndSize(font, config.fontSize)
+                    .setColor(color, true)
+                    .moveText(x.toDouble(), y.toDouble())
+                    .showText(numberText)
+                    .endText()
+
+                onProgress(0.3f + (0.6f * (index + 1) / pagesToNumber.size))
+            }
+
+            destDoc.close()
+            onProgress(1f)
+
+            Timber.d("Page numbers added successfully: $outputPath")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to add page numbers")
+            Result.failure(e)
+        }
+    }
+
+    private fun formatPageNumber(
+        format: PdfToolsRepository.PageNumberFormat,
+        currentPage: Int,
+        totalPages: Int,
+        prefix: String,
+        suffix: String
+    ): String {
+        return when (format) {
+            PdfToolsRepository.PageNumberFormat.NUMBER_ONLY -> "$currentPage"
+            PdfToolsRepository.PageNumberFormat.PAGE_X -> "Page $currentPage"
+            PdfToolsRepository.PageNumberFormat.X_OF_Y -> "$currentPage of $totalPages"
+            PdfToolsRepository.PageNumberFormat.DASH_X_DASH -> "- $currentPage -"
+            PdfToolsRepository.PageNumberFormat.CUSTOM -> "$prefix$currentPage$suffix"
+        }
+    }
+
+    private fun calculatePageNumberPosition(
+        position: PdfToolsRepository.PageNumberPosition,
+        pageWidth: Float,
+        pageHeight: Float,
+        textWidth: Float,
+        marginX: Float,
+        marginY: Float
+    ): Pair<Float, Float> {
+        return when (position) {
+            PdfToolsRepository.PageNumberPosition.TOP_LEFT ->
+                Pair(marginX, pageHeight - marginY)
+            PdfToolsRepository.PageNumberPosition.TOP_CENTER ->
+                Pair(pageWidth / 2 - textWidth / 2, pageHeight - marginY)
+            PdfToolsRepository.PageNumberPosition.TOP_RIGHT ->
+                Pair(pageWidth - marginX - textWidth, pageHeight - marginY)
+            PdfToolsRepository.PageNumberPosition.BOTTOM_LEFT ->
+                Pair(marginX, marginY)
+            PdfToolsRepository.PageNumberPosition.BOTTOM_CENTER ->
+                Pair(pageWidth / 2 - textWidth / 2, marginY)
+            PdfToolsRepository.PageNumberPosition.BOTTOM_RIGHT ->
+                Pair(pageWidth - marginX - textWidth, marginY)
+        }
+    }
+
     private fun calculateImagePosition(
         position: PdfToolsRepository.WatermarkPosition,
         pageWidth: Float,

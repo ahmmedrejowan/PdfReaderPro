@@ -22,6 +22,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.unlock.UnlockScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.removepages.RemovePagesScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.WatermarkScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageNumbersScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -183,6 +184,15 @@ fun PdfReaderNavHost(
             )
         }
 
+        // Tool: Page Numbers
+        composable<ToolPageNumbers> { backStackEntry ->
+            val toolPageNumbers: ToolPageNumbers = backStackEntry.toRoute()
+            PageNumbersScreen(
+                navController = navController,
+                initialFilePath = toolPageNumbers.filePath
+            )
+        }
+
         // Tool Result Screen
         composable<ToolResult> { backStackEntry ->
             val toolResult: ToolResult = backStackEntry.toRoute()
@@ -295,4 +305,11 @@ fun NavController.navigateToRemovePagesTool(filePath: String) {
  */
 fun NavController.navigateToWatermarkTool(filePath: String) {
     navigate(ToolWatermark(filePath = filePath))
+}
+
+/**
+ * Navigate to tool page numbers screen.
+ */
+fun NavController.navigateToPageNumbersTool(filePath: String) {
+    navigate(ToolPageNumbers(filePath = filePath))
 }

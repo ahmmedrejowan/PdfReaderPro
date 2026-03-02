@@ -305,4 +305,58 @@ interface PdfToolsRepository {
         pages: List<Int>? = null,
         onProgress: (Float) -> Unit = {}
     ): Result<Unit>
+
+    /**
+     * Page number position options.
+     */
+    enum class PageNumberPosition {
+        TOP_LEFT,
+        TOP_CENTER,
+        TOP_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_CENTER,
+        BOTTOM_RIGHT
+    }
+
+    /**
+     * Page number format options.
+     */
+    enum class PageNumberFormat {
+        NUMBER_ONLY,           // 1, 2, 3...
+        PAGE_X,                // Page 1, Page 2...
+        X_OF_Y,                // 1 of 10, 2 of 10...
+        DASH_X_DASH,           // - 1 -, - 2 -...
+        CUSTOM                 // Custom prefix/suffix
+    }
+
+    /**
+     * Page number configuration.
+     */
+    data class PageNumberConfig(
+        val position: PageNumberPosition = PageNumberPosition.BOTTOM_CENTER,
+        val format: PageNumberFormat = PageNumberFormat.NUMBER_ONLY,
+        val fontSize: Float = 12f,
+        val color: Int = 0xFF000000.toInt(),
+        val startNumber: Int = 1,
+        val prefix: String = "",
+        val suffix: String = "",
+        val marginX: Float = 36f,
+        val marginY: Float = 30f
+    )
+
+    /**
+     * Add page numbers to PDF pages.
+     * @param inputPath Path to source PDF
+     * @param outputPath Path for output PDF
+     * @param config Page number configuration
+     * @param pages Pages to add numbers to (null = all pages)
+     * @return Result with Unit on success
+     */
+    suspend fun addPageNumbers(
+        inputPath: String,
+        outputPath: String,
+        config: PageNumberConfig,
+        pages: List<Int>? = null,
+        onProgress: (Float) -> Unit = {}
+    ): Result<Unit>
 }

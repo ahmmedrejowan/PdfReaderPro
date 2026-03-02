@@ -60,6 +60,7 @@ import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToUnlockTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToWatermarkTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPageNumbersTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRemovePagesTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
@@ -150,7 +151,8 @@ private val pdfTools = listOf(
         "Add Page Numbers",
         "Insert page numbers to PDF",
         Icons.Default.FormatListNumbered,
-        ToolCategory.EDIT
+        ToolCategory.EDIT,
+        isEnabled = true
     ),
     PdfTool(
         "lock_pdf",
@@ -228,6 +230,7 @@ fun ToolsScreen(
                                 "unlock_pdf" -> navController.navigateToUnlockTool("")
                                 "remove_pages" -> navController.navigateToRemovePagesTool("")
                                 "watermark" -> navController.navigateToWatermarkTool("")
+                                "page_numbers" -> navController.navigateToPageNumbersTool("")
                             }
                         }
                     )
