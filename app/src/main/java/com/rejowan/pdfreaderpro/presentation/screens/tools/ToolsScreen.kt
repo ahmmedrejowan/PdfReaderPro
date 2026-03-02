@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.Reorder
-import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -65,8 +64,7 @@ private val AccentGreen = Color(0xFF81C784)
 
 enum class ToolCategory(val title: String, val accentColor: Color) {
     ORGANIZE("Organize", AccentPurple),
-    CONVERT("Convert", AccentTeal),
-    EXTRACT("Extract", AccentBlue)
+    CONVERT("Convert", AccentTeal)
 }
 
 data class PdfTool(
@@ -112,6 +110,13 @@ private val pdfTools = listOf(
         isEnabled = true
     ),
     PdfTool(
+        "reorder",
+        "Reorder Pages",
+        "Rearrange page order in PDF",
+        Icons.Default.Reorder,
+        ToolCategory.ORGANIZE
+    ),
+    PdfTool(
         "img_to_pdf",
         "Image to PDF",
         "Convert images to PDF document",
@@ -124,20 +129,6 @@ private val pdfTools = listOf(
         "Export PDF pages as image files",
         Icons.Default.Photo,
         ToolCategory.CONVERT
-    ),
-    PdfTool(
-        "extract",
-        "Extract Pages",
-        "Extract specific pages to new PDF",
-        Icons.Default.SelectAll,
-        ToolCategory.EXTRACT
-    ),
-    PdfTool(
-        "reorder",
-        "Reorder Pages",
-        "Rearrange page order in PDF",
-        Icons.Default.Reorder,
-        ToolCategory.EXTRACT
     ),
 )
 
