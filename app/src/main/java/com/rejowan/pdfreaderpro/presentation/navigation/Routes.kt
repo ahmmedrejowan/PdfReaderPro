@@ -86,6 +86,14 @@ data class ToolPageNumbers(
 )
 
 @Serializable
+object ToolImageToPdf
+
+@Serializable
+data class ToolPdfToImage(
+    val filePath: String
+)
+
+@Serializable
 data class ToolResult(
     val toolType: String,
     val outputPath: String? = null,

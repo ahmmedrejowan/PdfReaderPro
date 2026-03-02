@@ -23,6 +23,8 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.removepages.RemovePag
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.WatermarkScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageNumbersScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.imagetopdf.ImageToPdfScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage.PdfToImageScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -193,6 +195,20 @@ fun PdfReaderNavHost(
             )
         }
 
+        // Tool: Image to PDF
+        composable<ToolImageToPdf> {
+            ImageToPdfScreen(navController = navController)
+        }
+
+        // Tool: PDF to Image
+        composable<ToolPdfToImage> { backStackEntry ->
+            val toolPdfToImage: ToolPdfToImage = backStackEntry.toRoute()
+            PdfToImageScreen(
+                navController = navController,
+                initialFilePath = toolPdfToImage.filePath
+            )
+        }
+
         // Tool Result Screen
         composable<ToolResult> { backStackEntry ->
             val toolResult: ToolResult = backStackEntry.toRoute()
@@ -312,4 +328,18 @@ fun NavController.navigateToWatermarkTool(filePath: String) {
  */
 fun NavController.navigateToPageNumbersTool(filePath: String) {
     navigate(ToolPageNumbers(filePath = filePath))
+}
+
+/**
+ * Navigate to tool image to PDF screen.
+ */
+fun NavController.navigateToImageToPdfTool() {
+    navigate(ToolImageToPdf)
+}
+
+/**
+ * Navigate to tool PDF to image screen.
+ */
+fun NavController.navigateToPdfToImageTool(filePath: String) {
+    navigate(ToolPdfToImage(filePath = filePath))
 }

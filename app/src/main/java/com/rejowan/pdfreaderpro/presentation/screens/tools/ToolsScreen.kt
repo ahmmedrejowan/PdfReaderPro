@@ -64,6 +64,8 @@ import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPageNumbersToo
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRemovePagesTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToImageToPdfTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPdfToImageTool
 import kotlinx.coroutines.delay
 
 // Accent colors (consistent with app design system)
@@ -175,14 +177,16 @@ private val pdfTools = listOf(
         "Image to PDF",
         "Convert images to PDF document",
         Icons.Default.Image,
-        ToolCategory.CONVERT
+        ToolCategory.CONVERT,
+        isEnabled = true
     ),
     PdfTool(
         "pdf_to_img",
         "PDF to Images",
         "Export PDF pages as image files",
         Icons.Default.Photo,
-        ToolCategory.CONVERT
+        ToolCategory.CONVERT,
+        isEnabled = true
     ),
 )
 
@@ -231,6 +235,8 @@ fun ToolsScreen(
                                 "remove_pages" -> navController.navigateToRemovePagesTool("")
                                 "watermark" -> navController.navigateToWatermarkTool("")
                                 "page_numbers" -> navController.navigateToPageNumbersTool("")
+                                "img_to_pdf" -> navController.navigateToImageToPdfTool()
+                                "pdf_to_img" -> navController.navigateToPdfToImageTool("")
                             }
                         }
                     )
