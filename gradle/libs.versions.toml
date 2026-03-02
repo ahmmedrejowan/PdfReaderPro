@@ -39,7 +39,7 @@ timber = "5.0.1"
 lottieCompose = "6.7.1"
 
 # Reorderable List
-reorderable = "2.4.3"
+reorderable = "3.0.0"
 
 # Splash Screen
 splashscreen = "1.2.0"
@@ -48,8 +48,8 @@ splashscreen = "1.2.0"
 webkit = "1.15.0"
 
 # iText PDF
-itext = "9.1.0"
-bouncycastle = "1.80"
+itext = "9.5.0"
+bouncycastle = "1.83"
 
 
 # Testing
