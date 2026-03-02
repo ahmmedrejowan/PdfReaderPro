@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
 import kotlinx.coroutines.delay
@@ -98,7 +99,8 @@ private val pdfTools = listOf(
         "Compress PDF",
         "Reduce file size while maintaining quality",
         Icons.Default.Compress,
-        ToolCategory.ORGANIZE
+        ToolCategory.ORGANIZE,
+        isEnabled = true
     ),
     PdfTool(
         "rotate",
@@ -174,6 +176,7 @@ fun ToolsScreen(
                             when (tool.id) {
                                 "merge" -> navController.navigateToMergeTool()
                                 "split" -> navController.navigateToSplitTool("")
+                                "compress" -> navController.navigateToCompressTool("")
                             }
                         }
                     )

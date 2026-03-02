@@ -14,6 +14,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.onboarding.OnboardingViewMo
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderScreen
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchScreen
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsScreen
+import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeScreen
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitScreen
 import org.koin.androidx.compose.koinViewModel
@@ -116,7 +117,10 @@ fun PdfReaderNavHost(
         // Tool: Compress PDF
         composable<ToolCompress> { backStackEntry ->
             val toolCompress: ToolCompress = backStackEntry.toRoute()
-            // TODO: CompressPdfScreen(navController, toolCompress.filePath)
+            CompressScreen(
+                navController = navController,
+                initialFilePath = toolCompress.filePath
+            )
         }
 
         // Tool Result Screen
