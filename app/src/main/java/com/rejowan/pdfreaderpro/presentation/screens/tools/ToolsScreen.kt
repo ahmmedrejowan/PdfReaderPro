@@ -28,7 +28,6 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.Lock
@@ -75,8 +74,7 @@ enum class ToolCategory(val title: String, val accentColor: Color) {
     ORGANIZE("Organize", AccentPurple),
     EDIT("Edit", AccentBlue),
     SECURITY("Security", AccentAmber),
-    CONVERT("Convert", AccentTeal),
-    UTILITIES("Utilities", AccentGreen)
+    CONVERT("Convert", AccentTeal)
 }
 
 data class PdfTool(
@@ -179,13 +177,6 @@ private val pdfTools = listOf(
         "Export PDF pages as image files",
         Icons.Default.Photo,
         ToolCategory.CONVERT
-    ),
-    PdfTool(
-        "compare_pdf",
-        "Compare PDF",
-        "Compare two PDF documents",
-        Icons.AutoMirrored.Filled.CompareArrows,
-        ToolCategory.UTILITIES
     ),
 )
 
