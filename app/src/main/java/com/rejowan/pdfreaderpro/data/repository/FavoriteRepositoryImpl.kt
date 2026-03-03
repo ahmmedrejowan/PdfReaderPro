@@ -7,6 +7,7 @@ import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.File
 
 class FavoriteRepositoryImpl(
     private val favoriteDao: FavoriteDao
@@ -55,6 +56,19 @@ class FavoriteRepositoryImpl(
 
     override suspend fun getFavoriteCount(): Int {
         return favoriteDao.getCount()
+    }
+
+    override suspend fun updatePath(oldPath: String, newPath: String, newName: String) {
+        favoriteDao.updatePath(oldPath, newPath, newName)
+    }
+
+    override suspend fun cleanupMissingFiles() {
+        val favorites = favoriteDao.getAllFavoritesSync()
+        favorites.forEach { entity ->
+            if (!File(entity.path).exists()) {
+                favoriteDao.deleteByPath(entity.path)
+            }
+        }
     }
 
     private fun FavoriteEntity.toDomain(): PdfFile {

@@ -163,12 +163,15 @@ object FileOperations {
         }
     }
 
-    fun renameFile(filePath: String, newName: String): Boolean {
+    /**
+     * Renames a file and returns the new file path, or null if rename failed.
+     */
+    fun renameFile(filePath: String, newName: String): String? {
         return try {
             val file = File(filePath)
             if (!file.exists()) {
                 Timber.e("File not found: $filePath")
-                return false
+                return null
             }
 
             val newFileName = if (newName.endsWith(".pdf", ignoreCase = true)) {
@@ -181,13 +184,17 @@ object FileOperations {
 
             if (newFile.exists()) {
                 Timber.e("File with name $newFileName already exists")
-                return false
+                return null
             }
 
-            file.renameTo(newFile)
+            if (file.renameTo(newFile)) {
+                newFile.absolutePath
+            } else {
+                null
+            }
         } catch (e: Exception) {
             Timber.e(e, "Error renaming file")
-            false
+            null
         }
     }
 

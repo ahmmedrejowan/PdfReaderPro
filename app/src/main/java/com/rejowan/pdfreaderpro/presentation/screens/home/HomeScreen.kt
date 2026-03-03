@@ -435,8 +435,7 @@ fun HomeScreen(
                     fileForDialog = null
                 },
                 onRename = { newName ->
-                    FileOperations.renameFile(file.path, newName)
-                    viewModel.refresh()
+                    viewModel.renameFile(file.path, newName) { /* success handled internally */ }
                 }
             )
         }

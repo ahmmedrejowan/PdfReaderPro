@@ -11,4 +11,6 @@ interface RecentRepository {
     suspend fun removeRecent(path: String)
     suspend fun clearAllRecent()
     suspend fun getRecentCount(): Int
+    suspend fun updatePath(oldPath: String, newPath: String, newName: String)
+    suspend fun cleanupMissingFiles()
 }

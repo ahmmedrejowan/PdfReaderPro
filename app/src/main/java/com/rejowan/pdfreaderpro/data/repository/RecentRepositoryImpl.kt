@@ -6,6 +6,7 @@ import com.rejowan.pdfreaderpro.domain.model.RecentFile
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.File
 
 class RecentRepositoryImpl(
     private val recentDao: RecentDao
@@ -53,6 +54,19 @@ class RecentRepositoryImpl(
 
     override suspend fun getRecentCount(): Int {
         return recentDao.getCount()
+    }
+
+    override suspend fun updatePath(oldPath: String, newPath: String, newName: String) {
+        recentDao.updatePath(oldPath, newPath, newName)
+    }
+
+    override suspend fun cleanupMissingFiles() {
+        val recentFiles = recentDao.getAllRecentSync()
+        recentFiles.forEach { entity ->
+            if (!File(entity.path).exists()) {
+                recentDao.deleteByPath(entity.path)
+            }
+        }
     }
 
     private fun RecentEntity.toDomain(): RecentFile {

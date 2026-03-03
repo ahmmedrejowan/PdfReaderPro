@@ -34,4 +34,10 @@ interface RecentDao {
 
     @Query("SELECT COUNT(*) FROM recent")
     suspend fun getCount(): Int
+
+    @Query("UPDATE recent SET path = :newPath, name = :newName WHERE path = :oldPath")
+    suspend fun updatePath(oldPath: String, newPath: String, newName: String)
+
+    @Query("SELECT * FROM recent")
+    suspend fun getAllRecentSync(): List<RecentEntity>
 }

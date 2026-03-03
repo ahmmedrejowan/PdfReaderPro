@@ -12,6 +12,8 @@ import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.PdfFileRepository
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
+import com.rejowan.pdfreaderpro.util.FileOperations
+import java.io.File
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -102,6 +104,10 @@ class HomeViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                // Clean up missing files from favorites and recent
+                favoriteRepository.cleanupMissingFiles()
+                recentRepository.cleanupMissingFiles()
+                // Refresh PDF list
                 pdfFileRepository.refreshPdfs()
             } catch (e: Exception) {
                 Timber.e(e, "Error refreshing PDFs")
@@ -163,6 +169,38 @@ class HomeViewModel(
 
     suspend fun isFavorite(path: String): Boolean {
         return favoriteRepository.isFavorite(path)
+    }
+
+    /**
+     * Renames a file and updates the path in favorites and recent databases.
+     * Returns true if successful, false otherwise.
+     */
+    fun renameFile(oldPath: String, newName: String, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val newPath = FileOperations.renameFile(oldPath, newName)
+            if (newPath != null) {
+                val newFileName = File(newPath).name
+                // Update path in favorites if present
+                favoriteRepository.updatePath(oldPath, newPath, newFileName)
+                // Update path in recent if present
+                recentRepository.updatePath(oldPath, newPath, newFileName)
+                // Refresh the file list
+                pdfFileRepository.refreshPdfs()
+                onComplete(true)
+            } else {
+                onComplete(false)
+            }
+        }
+    }
+
+    /**
+     * Cleans up entries in favorites and recent that point to missing files.
+     */
+    fun cleanupMissingFiles() {
+        viewModelScope.launch {
+            favoriteRepository.cleanupMissingFiles()
+            recentRepository.cleanupMissingFiles()
+        }
     }
 
     private fun sortFiles(files: List<PdfFile>, sortOption: SortOption): List<PdfFile> {

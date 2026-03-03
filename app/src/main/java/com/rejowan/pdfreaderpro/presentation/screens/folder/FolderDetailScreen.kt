@@ -303,8 +303,7 @@ fun FolderDetailScreen(
                     fileForDialog = null
                 },
                 onRename = { newName ->
-                    FileOperations.renameFile(file.path, newName)
-                    viewModel.loadFilesForFolder(folderPath)
+                    viewModel.renameFile(file.path, newName) { /* success handled internally */ }
                 }
             )
         }

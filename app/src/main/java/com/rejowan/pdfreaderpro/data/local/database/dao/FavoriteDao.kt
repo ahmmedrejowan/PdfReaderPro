@@ -37,4 +37,10 @@ interface FavoriteDao {
 
     @Query("SELECT COUNT(*) FROM favorites")
     suspend fun getCount(): Int
+
+    @Query("UPDATE favorites SET path = :newPath, name = :newName WHERE path = :oldPath")
+    suspend fun updatePath(oldPath: String, newPath: String, newName: String)
+
+    @Query("SELECT * FROM favorites")
+    suspend fun getAllFavoritesSync(): List<FavoriteEntity>
 }

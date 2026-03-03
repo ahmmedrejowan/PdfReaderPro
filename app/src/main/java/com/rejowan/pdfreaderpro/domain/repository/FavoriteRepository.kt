@@ -12,4 +12,6 @@ interface FavoriteRepository {
     suspend fun toggleFavorite(pdfFile: PdfFile)
     suspend fun clearAllFavorites()
     suspend fun getFavoriteCount(): Int
+    suspend fun updatePath(oldPath: String, newPath: String, newName: String)
+    suspend fun cleanupMissingFiles()
 }

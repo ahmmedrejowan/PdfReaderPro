@@ -8,6 +8,9 @@ import com.rejowan.pdfreaderpro.domain.model.ViewMode
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.PdfFileRepository
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
+import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
+import com.rejowan.pdfreaderpro.util.FileOperations
+import java.io.File
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +20,8 @@ import kotlinx.coroutines.launch
 class FolderDetailViewModel(
     private val pdfFileRepository: PdfFileRepository,
     private val favoriteRepository: FavoriteRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val recentRepository: RecentRepository
 ) : ViewModel() {
 
     private val _files = MutableStateFlow<List<PdfFile>>(emptyList())
@@ -78,6 +82,27 @@ class FolderDetailViewModel(
 
     suspend fun isFavorite(path: String): Boolean {
         return favoriteRepository.isFavorite(path)
+    }
+
+    /**
+     * Renames a file and updates the path in favorites and recent databases.
+     */
+    fun renameFile(oldPath: String, newName: String, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val newPath = FileOperations.renameFile(oldPath, newName)
+            if (newPath != null) {
+                val newFileName = File(newPath).name
+                // Update path in favorites if present
+                favoriteRepository.updatePath(oldPath, newPath, newFileName)
+                // Update path in recent if present
+                recentRepository.updatePath(oldPath, newPath, newFileName)
+                // Reload folder contents
+                loadFilesForFolder(currentFolderPath)
+                onComplete(true)
+            } else {
+                onComplete(false)
+            }
+        }
     }
 
     private fun sortFiles(files: List<PdfFile>, sortOption: SortOption): List<PdfFile> {

@@ -256,8 +256,7 @@ fun SearchScreen(
                     fileForDialog = null
                 },
                 onRename = { newName ->
-                    FileOperations.renameFile(file.path, newName)
-                    viewModel.setSearchQuery(searchQuery) // Refresh results
+                    viewModel.renameFile(file.path, newName) { /* success handled internally */ }
                 }
             )
         }
