@@ -10,6 +10,10 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import java.io.File
 import java.io.FileOutputStream
 
@@ -915,6 +919,234 @@ class PdfToolsRepositoryIntegrationTest {
         assertTrue("Export should succeed", result.isSuccess)
         val images = result.getOrNull()
         assertEquals("Should create correct number of images", pagesToExport.size, images!!.size)
+    }
+    // endregion
+
+    // region Image to PDF Operations
+    private fun createTestImage(name: String, width: Int = 200, height: Int = 300, color: Int = Color.BLUE): File {
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(color)
+
+        // Draw some text to make each image unique
+        val paint = Paint().apply {
+            this.color = Color.WHITE
+            textSize = 40f
+            textAlign = Paint.Align.CENTER
+        }
+        canvas.drawText(name, width / 2f, height / 2f, paint)
+
+        val file = File(testDir, name)
+        FileOutputStream(file).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+        }
+        bitmap.recycle()
+        return file
+    }
+
+    @Test
+    fun imagesToPdf_singleImage_createsValidPdf() = runBlocking {
+        val image = createTestImage("test_image_1.png")
+        val outputPath = File(outputDir, "image_to_pdf_single.pdf").absolutePath
+
+        val result = repository.imagesToPdf(
+            imagePaths = listOf(image.absolutePath),
+            outputPath = outputPath
+        )
+
+        assertTrue("Image to PDF should succeed", result.isSuccess)
+        assertTrue("Output file should exist", File(outputPath).exists())
+
+        val pageCount = repository.getPageCount(outputPath).getOrElse { 0 }
+        assertEquals("PDF should have 1 page", 1, pageCount)
+    }
+
+    @Test
+    fun imagesToPdf_multipleImages_createsValidPdf() = runBlocking {
+        val image1 = createTestImage("test_image_1.png", color = Color.RED)
+        val image2 = createTestImage("test_image_2.png", color = Color.GREEN)
+        val image3 = createTestImage("test_image_3.png", color = Color.BLUE)
+        val outputPath = File(outputDir, "image_to_pdf_multi.pdf").absolutePath
+
+        val result = repository.imagesToPdf(
+            imagePaths = listOf(image1.absolutePath, image2.absolutePath, image3.absolutePath),
+            outputPath = outputPath
+        )
+
+        assertTrue("Image to PDF should succeed", result.isSuccess)
+        assertTrue("Output file should exist", File(outputPath).exists())
+
+        val pageCount = repository.getPageCount(outputPath).getOrElse { 0 }
+        assertEquals("PDF should have 3 pages", 3, pageCount)
+    }
+
+    @Test
+    fun imagesToPdf_jpegImage_createsValidPdf() = runBlocking {
+        // Create JPEG image
+        val bitmap = Bitmap.createBitmap(200, 300, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.YELLOW)
+        val jpegFile = File(testDir, "test_image.jpg")
+        FileOutputStream(jpegFile).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+        }
+        bitmap.recycle()
+
+        val outputPath = File(outputDir, "image_to_pdf_jpeg.pdf").absolutePath
+
+        val result = repository.imagesToPdf(
+            imagePaths = listOf(jpegFile.absolutePath),
+            outputPath = outputPath
+        )
+
+        assertTrue("JPEG to PDF should succeed", result.isSuccess)
+        assertTrue("Output file should exist", File(outputPath).exists())
+    }
+
+    @Test
+    fun imagesToPdf_emptyList_returnsFailure() = runBlocking {
+        val outputPath = File(outputDir, "image_to_pdf_empty.pdf").absolutePath
+
+        val result = repository.imagesToPdf(
+            imagePaths = emptyList(),
+            outputPath = outputPath
+        )
+
+        assertTrue("Empty list should fail", result.isFailure)
+    }
+
+    @Test
+    fun imagesToPdf_nonExistentImage_returnsFailure() = runBlocking {
+        val outputPath = File(outputDir, "image_to_pdf_invalid.pdf").absolutePath
+
+        val result = repository.imagesToPdf(
+            imagePaths = listOf("/nonexistent/image.png"),
+            outputPath = outputPath
+        )
+
+        assertTrue("Non-existent image should fail", result.isFailure)
+    }
+    // endregion
+
+    // region Image Watermark Operations
+    @Test
+    fun addImageWatermarkCenter_createsValidOutput() = runBlocking {
+        val watermarkImage = createTestImage("watermark.png", 100, 100, Color.RED)
+        val outputPath = File(outputDir, "watermark_image_center.pdf").absolutePath
+
+        val config = PdfToolsRepository.ImageWatermarkConfig(
+            imagePath = watermarkImage.absolutePath,
+            scale = 30f,
+            opacity = 50f,
+            position = PdfToolsRepository.WatermarkPosition.CENTER
+        )
+
+        val result = repository.addImageWatermark(
+            inputPath = multipagePdf.absolutePath,
+            outputPath = outputPath,
+            config = config
+        )
+
+        assertTrue("Image watermark should succeed", result.isSuccess)
+        assertTrue("Output file should exist", File(outputPath).exists())
+        assertTrue("Output should have content", File(outputPath).length() > 0)
+    }
+
+    @Test
+    fun addImageWatermarkAllPositions_succeed() = runBlocking {
+        val watermarkImage = createTestImage("watermark_pos.png", 50, 50, Color.MAGENTA)
+        val positions = listOf(
+            PdfToolsRepository.WatermarkPosition.TOP_LEFT,
+            PdfToolsRepository.WatermarkPosition.TOP_CENTER,
+            PdfToolsRepository.WatermarkPosition.TOP_RIGHT,
+            PdfToolsRepository.WatermarkPosition.BOTTOM_LEFT,
+            PdfToolsRepository.WatermarkPosition.BOTTOM_CENTER,
+            PdfToolsRepository.WatermarkPosition.BOTTOM_RIGHT
+        )
+
+        positions.forEachIndexed { index, position ->
+            val outputPath = File(outputDir, "watermark_image_pos_$index.pdf").absolutePath
+
+            val config = PdfToolsRepository.ImageWatermarkConfig(
+                imagePath = watermarkImage.absolutePath,
+                scale = 20f,
+                opacity = 40f,
+                position = position
+            )
+
+            val result = repository.addImageWatermark(
+                inputPath = smallPdf.absolutePath,
+                outputPath = outputPath,
+                config = config
+            )
+
+            assertTrue("Image watermark at $position should succeed", result.isSuccess)
+        }
+    }
+
+    @Test
+    fun addImageWatermarkTiled_createsValidOutput() = runBlocking {
+        val watermarkImage = createTestImage("watermark_tiled.png", 80, 80, Color.CYAN)
+        val outputPath = File(outputDir, "watermark_image_tiled.pdf").absolutePath
+
+        val config = PdfToolsRepository.ImageWatermarkConfig(
+            imagePath = watermarkImage.absolutePath,
+            scale = 15f,
+            opacity = 25f,
+            position = PdfToolsRepository.WatermarkPosition.TILED
+        )
+
+        val result = repository.addImageWatermark(
+            inputPath = multipagePdf.absolutePath,
+            outputPath = outputPath,
+            config = config
+        )
+
+        assertTrue("Tiled image watermark should succeed", result.isSuccess)
+        assertTrue("Output file should exist", File(outputPath).exists())
+    }
+
+    @Test
+    fun addImageWatermarkSpecificPages_createsValidOutput() = runBlocking {
+        val watermarkImage = createTestImage("watermark_specific.png", 60, 60, Color.DKGRAY)
+        val outputPath = File(outputDir, "watermark_image_specific.pdf").absolutePath
+        val pageCount = repository.getPageCount(mediumPdf.absolutePath).getOrElse { 1 }
+
+        val config = PdfToolsRepository.ImageWatermarkConfig(
+            imagePath = watermarkImage.absolutePath,
+            scale = 25f,
+            opacity = 60f,
+            position = PdfToolsRepository.WatermarkPosition.BOTTOM_RIGHT
+        )
+
+        val result = repository.addImageWatermark(
+            inputPath = mediumPdf.absolutePath,
+            outputPath = outputPath,
+            config = config,
+            pages = listOf(1) // Only first page
+        )
+
+        assertTrue("Image watermark on specific pages should succeed", result.isSuccess)
+
+        val outputPages = repository.getPageCount(outputPath).getOrElse { 0 }
+        assertEquals("Page count should be preserved", pageCount, outputPages)
+    }
+
+    @Test
+    fun addImageWatermarkNonExistentImage_returnsFailure() = runBlocking {
+        val outputPath = File(outputDir, "watermark_image_invalid.pdf").absolutePath
+
+        val config = PdfToolsRepository.ImageWatermarkConfig(
+            imagePath = "/nonexistent/image.png"
+        )
+
+        val result = repository.addImageWatermark(
+            inputPath = multipagePdf.absolutePath,
+            outputPath = outputPath,
+            config = config
+        )
+
+        assertTrue("Non-existent watermark image should fail", result.isFailure)
     }
     // endregion
 
