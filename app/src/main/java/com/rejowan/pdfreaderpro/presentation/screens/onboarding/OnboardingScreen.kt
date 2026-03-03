@@ -41,7 +41,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.PictureAsPdf
 import androidx.compose.material.icons.rounded.Security
-import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -60,6 +60,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -82,37 +83,119 @@ data class OnboardingPage(
     val title: String,
     val description: String,
     val accentColor: Color,
-    val shapeCornerPercent: Int // For morphing effect
+    // Shape morphing parameters
+    val topStartCorner: Int,
+    val topEndCorner: Int,
+    val bottomStartCorner: Int,
+    val bottomEndCorner: Int,
+    // Icon container size and position
+    val iconContainerScale: Float = 1f,
+    val iconOffsetX: Float = 0f,
+    val iconOffsetY: Float = 0f,
+    // Background shape positions (for slide effects)
+    val bgShape1OffsetX: Float = 200f,
+    val bgShape1OffsetY: Float = 60f,
+    val bgShape2OffsetX: Float = -50f,
+    val bgShape2OffsetY: Float = 480f,
+    val bgShape3OffsetX: Float = -20f,
+    val bgShape3OffsetY: Float = 250f,
+    // Background shape sizes
+    val bgShape1Size: Float = 200f,
+    val bgShape2Size: Float = 160f,
+    val bgShape3Size: Float = 120f
 )
 
 private val onboardingPages = listOf(
     OnboardingPage(
         icon = Icons.Rounded.PictureAsPdf,
         title = "Welcome to\nPDF Reader Pro",
-        description = "The fastest and most powerful PDF reader for Android. Read, organize, and manage all your PDF files.",
+        description = "A clean, lightweight PDF reader built for simplicity. Open source, ad-free, and respects your privacy.",
         accentColor = Color(0xFF6366F1), // Indigo
-        shapeCornerPercent = 50 // Circle
+        // Circle shape
+        topStartCorner = 50,
+        topEndCorner = 50,
+        bottomStartCorner = 50,
+        bottomEndCorner = 50,
+        iconContainerScale = 1f,
+        // Background shapes - spread out
+        bgShape1OffsetX = 220f,
+        bgShape1OffsetY = 80f,
+        bgShape2OffsetX = -60f,
+        bgShape2OffsetY = 520f,
+        bgShape3OffsetX = 280f,
+        bgShape3OffsetY = 380f,
+        bgShape1Size = 180f,
+        bgShape2Size = 140f,
+        bgShape3Size = 100f
     ),
     OnboardingPage(
         icon = Icons.Rounded.Folder,
         title = "All Your PDFs\nin One Place",
-        description = "Automatically scan and organize PDF files from your device. Browse by folders or view everything at once.",
+        description = "Automatically discovers PDFs across your device. Browse by folders, sort by name, date, or size, and find any document instantly with search.",
         accentColor = Color(0xFF8B5CF6), // Purple
-        shapeCornerPercent = 35 // Rounded square
+        // Rounded rectangle - slightly asymmetric
+        topStartCorner = 40,
+        topEndCorner = 20,
+        bottomStartCorner = 20,
+        bottomEndCorner = 40,
+        iconContainerScale = 1.05f,
+        iconOffsetY = -5f,
+        // Background shapes - slide to different positions
+        bgShape1OffsetX = 180f,
+        bgShape1OffsetY = 120f,
+        bgShape2OffsetX = -80f,
+        bgShape2OffsetY = 420f,
+        bgShape3OffsetX = -40f,
+        bgShape3OffsetY = 200f,
+        bgShape1Size = 220f,
+        bgShape2Size = 180f,
+        bgShape3Size = 90f
     ),
     OnboardingPage(
-        icon = Icons.Rounded.Star,
-        title = "Quick Access\nto Favorites",
-        description = "Mark important documents as favorites for instant access. Track your reading progress seamlessly.",
+        icon = Icons.Rounded.Tune,
+        title = "Powerful Reader\n& PDF Tools",
+        description = "Search text, customize themes, and adjust display settings. Plus built-in tools to merge, split, compress, and organize your PDFs.",
         accentColor = Color(0xFFEC4899), // Pink
-        shapeCornerPercent = 25 // More square
+        // Diamond-like shape - opposing corners
+        topStartCorner = 15,
+        topEndCorner = 45,
+        bottomStartCorner = 45,
+        bottomEndCorner = 15,
+        iconContainerScale = 0.95f,
+        iconOffsetX = 3f,
+        // Background shapes - more dramatic slide
+        bgShape1OffsetX = 250f,
+        bgShape1OffsetY = 40f,
+        bgShape2OffsetX = -100f,
+        bgShape2OffsetY = 350f,
+        bgShape3OffsetX = 300f,
+        bgShape3OffsetY = 280f,
+        bgShape1Size = 160f,
+        bgShape2Size = 200f,
+        bgShape3Size = 130f
     ),
     OnboardingPage(
         icon = Icons.Rounded.Security,
         title = "Storage Access\nRequired",
         description = "Grant access to scan and display your PDF files. Your documents stay private and are never uploaded.",
         accentColor = Color(0xFF10B981), // Emerald
-        shapeCornerPercent = 20 // Nearly square
+        // Squircle-like - medium uniform corners
+        topStartCorner = 30,
+        topEndCorner = 30,
+        bottomStartCorner = 30,
+        bottomEndCorner = 30,
+        iconContainerScale = 1.02f,
+        iconOffsetY = 2f,
+        // Background shapes - settle into final positions
+        bgShape1OffsetX = 200f,
+        bgShape1OffsetY = 100f,
+        bgShape2OffsetX = -70f,
+        bgShape2OffsetY = 480f,
+        bgShape3OffsetX = -30f,
+        bgShape3OffsetY = 320f,
+        bgShape1Size = 190f,
+        bgShape2Size = 150f,
+        bgShape3Size = 110f
     )
 )
 
@@ -212,15 +295,49 @@ fun OnboardingScreen(
         label = "outerPulseAlpha"
     )
 
+    // Background shape movement animations
+    val bgRotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(20000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "bgRotation"
+    )
+
+    val bgFloat by infiniteTransition.animateFloat(
+        initialValue = -10f,
+        targetValue = 10f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bgFloat"
+    )
+
+    val bgScale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(4000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bgScale"
+    )
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Background morphing shapes (subtle)
+            // Background morphing shapes (subtle) with movement
             BackgroundMorphingShapes(
                 cornerPercent = currentCornerPercent,
-                accentColor = currentAccentColor
+                accentColor = currentAccentColor,
+                rotation = bgRotation,
+                floatOffset = bgFloat,
+                scale = bgScale
             )
 
             Column(
@@ -358,24 +475,42 @@ fun OnboardingScreen(
 @Composable
 private fun BackgroundMorphingShapes(
     cornerPercent: Float,
-    accentColor: Color
+    accentColor: Color,
+    rotation: Float,
+    floatOffset: Float,
+    scale: Float
 ) {
-    // Top-right shape
+    // Top-right shape - rotates slowly and floats
     Box(
         modifier = Modifier
-            .size(180.dp)
-            .offset(x = 220.dp, y = 80.dp)
+            .size(200.dp)
+            .offset(x = 200.dp, y = (60 + floatOffset).dp)
+            .scale(scale)
+            .rotate(rotation * 0.5f)
             .clip(RoundedCornerShape(cornerPercent.toInt()))
+            .background(accentColor.copy(alpha = 0.1f))
+    )
+
+    // Bottom-left shape - rotates opposite direction and floats inverse
+    Box(
+        modifier = Modifier
+            .size(160.dp)
+            .offset(x = (-50).dp, y = (480 - floatOffset).dp)
+            .scale(1.1f - (scale - 1f))
+            .rotate(-rotation * 0.3f)
+            .clip(RoundedCornerShape((60 - cornerPercent / 2).toInt().coerceIn(10, 50)))
             .background(accentColor.copy(alpha = 0.08f))
     )
 
-    // Bottom-left shape
+    // Third shape - center-left, more subtle
     Box(
         modifier = Modifier
-            .size(140.dp)
-            .offset(x = (-40).dp, y = 500.dp)
-            .clip(RoundedCornerShape((60 - cornerPercent / 2).toInt().coerceIn(10, 50)))
-            .background(accentColor.copy(alpha = 0.06f))
+            .size(120.dp)
+            .offset(x = (-20).dp, y = (250 + floatOffset * 0.5f).dp)
+            .scale(scale * 0.95f)
+            .rotate(rotation * 0.2f)
+            .clip(RoundedCornerShape((cornerPercent * 0.8f).toInt()))
+            .background(accentColor.copy(alpha = 0.05f))
     )
 }
 
@@ -414,49 +549,49 @@ private fun OnboardingPageContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Pulsing morphing icon container
+        // Pulsing morphing icon container - BIGGER circles
         Box(
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier.size(260.dp),
             contentAlignment = Alignment.Center
         ) {
-            // Outer pulse ring (morphing)
+            // Outer pulse ring (morphing) - bigger
             Box(
                 modifier = Modifier
-                    .size(160.dp)
+                    .size(220.dp)
                     .scale(outerPulseScale)
                     .clip(RoundedCornerShape(cornerPercent.toInt()))
                     .background(accentColor.copy(alpha = outerPulseAlpha))
             )
 
-            // Middle pulse ring (morphing)
+            // Middle pulse ring (morphing) - bigger
             Box(
                 modifier = Modifier
-                    .size(130.dp)
+                    .size(170.dp)
                     .scale(pulseScale)
                     .clip(RoundedCornerShape(cornerPercent.toInt()))
                     .background(accentColor.copy(alpha = pulseAlpha))
             )
 
-            // Inner container with icon (morphing shape)
+            // Inner container with icon (morphing shape) - bigger and more visible
             Box(
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(120.dp)
                     .clip(RoundedCornerShape(cornerPercent.toInt()))
-                    .background(accentColor.copy(alpha = 0.15f)),
+                    .background(accentColor.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = page.icon,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(48.dp)
-                        .scale(1f + (pulseScale - 1f) * 0.2f), // Subtle icon pulse
+                        .size(56.dp)
+                        .scale(1f + (pulseScale - 1f) * 0.25f), // More noticeable icon pulse
                     tint = accentColor
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         // Title
         Text(
