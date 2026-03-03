@@ -41,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -161,7 +162,9 @@ fun FolderDetailScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        PullToRefreshBox(
+            isRefreshing = isLoading,
+            onRefresh = { viewModel.loadFilesForFolder(folderPath) },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -179,7 +182,7 @@ fun FolderDetailScreen(
                         }
                     )
                 }
-                isLoading -> {
+                isLoading && files.isEmpty() -> {
                     LoadingState()
                 }
                 files.isEmpty() -> {
@@ -191,6 +194,7 @@ fun FolderDetailScreen(
                     )
                 }
                 else -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
                     // Folder header with info and controls
                     FolderDetailHeader(
                         fileCount = files.size,
@@ -253,6 +257,7 @@ fun FolderDetailScreen(
                                 )
                             }
                         }
+                    }
                     }
                 }
             }

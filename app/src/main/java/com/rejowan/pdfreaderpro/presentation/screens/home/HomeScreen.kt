@@ -113,7 +113,10 @@ fun HomeScreen(
         )
     }
 
-    // Re-check permission when returning from settings
+    // Track if this is the first resume (initial launch)
+    var isFirstResume by remember { mutableStateOf(true) }
+
+    // Re-check permission and do silent refresh on resume
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
@@ -124,8 +127,12 @@ fun HomeScreen(
                 if (newPermissionState && !hasPermission) {
                     // Permission was just granted, refresh data
                     viewModel.refresh()
+                } else if (newPermissionState && !isFirstResume) {
+                    // App resumed from background with permission, do silent refresh
+                    viewModel.silentRefresh()
                 }
                 hasPermission = newPermissionState
+                isFirstResume = false
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -279,6 +286,7 @@ fun HomeScreen(
                                                 homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
                                             }
                                         },
+                                        onRefresh = { viewModel.refresh() },
                                         onGrantPermissionClick = openPermissionSettings
                                     )
 
@@ -300,6 +308,7 @@ fun HomeScreen(
                                                 homeSubTabPagerState.animateScrollToPage(HomeSubTab.ALL.ordinal)
                                             }
                                         },
+                                        onRefresh = { viewModel.refresh() },
                                         onGrantPermissionClick = openPermissionSettings
                                     )
 

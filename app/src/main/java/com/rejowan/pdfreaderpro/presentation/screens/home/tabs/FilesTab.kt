@@ -62,7 +62,8 @@ fun FilesTab(
                             pdfFile = file,
                             onClick = { onFileClick(file) },
                             onOptionsClick = { onFileOptionsClick(file) },
-                            animationDelay = index * 30
+                            animationDelay = index * 30,
+                            modifier = Modifier.animateItem()
                         )
                     }
                 }
@@ -81,7 +82,8 @@ fun FilesTab(
                             pdfFile = file,
                             onClick = { onFileClick(file) },
                             onOptionsClick = { onFileOptionsClick(file) },
-                            animationDelay = index * 30
+                            animationDelay = index * 30,
+                            modifier = Modifier.animateItem()
                         )
                     }
                 }

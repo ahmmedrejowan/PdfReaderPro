@@ -1,6 +1,5 @@
 package com.rejowan.pdfreaderpro.presentation.screens.home.tabs
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +7,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import com.rejowan.pdfreaderpro.presentation.components.PdfGridItem
 import com.rejowan.pdfreaderpro.presentation.components.PdfListItem
 import com.rejowan.pdfreaderpro.presentation.components.PermissionRequiredState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesTab(
     favorites: List<PdfFile>,
@@ -28,10 +30,15 @@ fun FavoritesTab(
     onFileClick: (PdfFile) -> Unit,
     onFileOptionsClick: (PdfFile) -> Unit,
     onBrowseClick: () -> Unit,
+    onRefresh: () -> Unit,
     onGrantPermissionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    PullToRefreshBox(
+        isRefreshing = isLoading,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
+    ) {
         when {
             !hasPermission -> {
                 PermissionRequiredState(onGrantClick = onGrantPermissionClick)
@@ -55,7 +62,8 @@ fun FavoritesTab(
                             pdfFile = file,
                             onClick = { onFileClick(file) },
                             onOptionsClick = { onFileOptionsClick(file) },
-                            animationDelay = index * 30
+                            animationDelay = index * 30,
+                            modifier = Modifier.animateItem()
                         )
                     }
                 }
@@ -74,7 +82,8 @@ fun FavoritesTab(
                             pdfFile = file,
                             onClick = { onFileClick(file) },
                             onOptionsClick = { onFileOptionsClick(file) },
-                            animationDelay = index * 30
+                            animationDelay = index * 30,
+                            modifier = Modifier.animateItem()
                         )
                     }
                 }

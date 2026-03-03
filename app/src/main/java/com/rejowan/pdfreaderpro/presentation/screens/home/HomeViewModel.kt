@@ -121,6 +121,24 @@ class HomeViewModel(
         }
     }
 
+    /**
+     * Silent refresh - updates data without showing loading indicator.
+     * Used when app resumes from background.
+     */
+    fun silentRefresh() {
+        viewModelScope.launch {
+            try {
+                // Clean up missing files from favorites and recent
+                favoriteRepository.cleanupMissingFiles()
+                recentRepository.cleanupMissingFiles()
+                // Refresh PDF list silently
+                pdfFileRepository.refreshPdfs()
+            } catch (e: Exception) {
+                Timber.e(e, "Error during silent refresh")
+            }
+        }
+    }
+
     fun setViewMode(mode: ViewMode) {
         _viewMode.value = mode
         viewModelScope.launch {
