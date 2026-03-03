@@ -91,6 +91,10 @@ class HomeViewModel(
                 _viewMode.value = prefs.defaultViewMode
                 _sortOption.value = prefs.defaultSortOption
 
+                // Clean up missing files from favorites and recent on app start
+                favoriteRepository.cleanupMissingFiles()
+                recentRepository.cleanupMissingFiles()
+
                 pdfFileRepository.refreshPdfs()
             } catch (e: Exception) {
                 Timber.e(e, "Error loading initial data")

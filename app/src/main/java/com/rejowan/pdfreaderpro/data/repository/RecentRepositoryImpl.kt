@@ -6,6 +6,7 @@ import com.rejowan.pdfreaderpro.domain.model.RecentFile
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import java.io.File
 
 class RecentRepositoryImpl(
@@ -62,8 +63,11 @@ class RecentRepositoryImpl(
 
     override suspend fun cleanupMissingFiles() {
         val recentFiles = recentDao.getAllRecentSync()
+        Timber.d("Checking ${recentFiles.size} recent files for missing files")
         recentFiles.forEach { entity ->
-            if (!File(entity.path).exists()) {
+            val file = File(entity.path)
+            if (!file.exists()) {
+                Timber.d("Removing missing recent: ${entity.path}")
                 recentDao.deleteByPath(entity.path)
             }
         }

@@ -7,6 +7,7 @@ import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import java.io.File
 
 class FavoriteRepositoryImpl(
@@ -64,8 +65,11 @@ class FavoriteRepositoryImpl(
 
     override suspend fun cleanupMissingFiles() {
         val favorites = favoriteDao.getAllFavoritesSync()
+        Timber.d("Checking ${favorites.size} favorites for missing files")
         favorites.forEach { entity ->
-            if (!File(entity.path).exists()) {
+            val file = File(entity.path)
+            if (!file.exists()) {
+                Timber.d("Removing missing favorite: ${entity.path}")
                 favoriteDao.deleteByPath(entity.path)
             }
         }
