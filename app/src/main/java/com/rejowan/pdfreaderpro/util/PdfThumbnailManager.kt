@@ -142,6 +142,25 @@ object PdfThumbnailManager {
     }
 
     /**
+     * Get page count for a PDF file.
+     */
+    fun getPageCount(pdfPath: String): Int {
+        return try {
+            val file = File(pdfPath)
+            if (!file.exists()) return 0
+
+            val fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            val pdfRenderer = PdfRenderer(fileDescriptor)
+            val pageCount = pdfRenderer.pageCount
+            pdfRenderer.close()
+            fileDescriptor.close()
+            pageCount
+        } catch (e: Exception) {
+            0
+        }
+    }
+
+    /**
      * Clear all cached thumbnails.
      */
     fun clearCache(context: Context) {

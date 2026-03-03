@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import com.rejowan.pdfreaderpro.domain.repository.PdfFileRepository
+import com.rejowan.pdfreaderpro.util.PdfThumbnailManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -166,6 +167,7 @@ class PdfFileRepositoryImpl(
 
                     val uri = ContentUris.withAppendedId(collection, id)
                     val parentFolder = File(path).parent ?: ""
+                    val pageCount = PdfThumbnailManager.getPageCount(path)
 
                     pdfList.add(
                         PdfFile(
@@ -176,7 +178,8 @@ class PdfFileRepositoryImpl(
                             size = size,
                             dateModified = dateModified,
                             dateAdded = dateAdded,
-                            parentFolder = parentFolder
+                            parentFolder = parentFolder,
+                            pageCount = pageCount
                         )
                     )
                 }
