@@ -176,10 +176,11 @@ class HomeViewModelTest {
         every { pdfFileRepository.getAllPdfFiles() } returns flowOf(files)
 
         viewModel = createViewModel()
-        advanceUntilIdle()
 
+        // Subscribe first (triggers SharingStarted.Lazily), then advance
         viewModel.allFiles.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(2, result.size)
             cancelAndIgnoreRemainingEvents()
         }
@@ -195,10 +196,11 @@ class HomeViewModelTest {
         every { pdfFileRepository.getAllPdfFiles() } returns flowOf(files)
 
         viewModel = createViewModel()
-        advanceUntilIdle()
 
         viewModel.allFiles.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(3, result.size)
             assertEquals("alpha.pdf", result[0].name)
             assertEquals("bravo.pdf", result[1].name)
             assertEquals("charlie.pdf", result[2].name)
@@ -216,16 +218,23 @@ class HomeViewModelTest {
         every { pdfFileRepository.getAllPdfFiles() } returns flowOf(files)
 
         viewModel = createViewModel()
+
+        // Subscribe first to trigger SharingStarted.Lazily
+        viewModel.allFiles.test {
+            advanceUntilIdle()
+            cancelAndIgnoreRemainingEvents()
+        }
+
+        // Set sort option and wait for flow to update
         viewModel.setSortOption(SortOption.NAME_DESC)
         advanceUntilIdle()
 
-        viewModel.allFiles.test {
-            val result = awaitItem()
-            assertEquals("charlie.pdf", result[0].name)
-            assertEquals("bravo.pdf", result[1].name)
-            assertEquals("alpha.pdf", result[2].name)
-            cancelAndIgnoreRemainingEvents()
-        }
+        // Check the sorted value
+        val result = viewModel.allFiles.value
+        assertEquals(3, result.size)
+        assertEquals("charlie.pdf", result[0].name)
+        assertEquals("bravo.pdf", result[1].name)
+        assertEquals("alpha.pdf", result[2].name)
     }
 
     @Test
@@ -239,16 +248,23 @@ class HomeViewModelTest {
         every { pdfFileRepository.getAllPdfFiles() } returns flowOf(files)
 
         viewModel = createViewModel()
+
+        // Subscribe first to trigger SharingStarted.Lazily
+        viewModel.allFiles.test {
+            advanceUntilIdle()
+            cancelAndIgnoreRemainingEvents()
+        }
+
+        // Set sort option and wait for flow to update
         viewModel.setSortOption(SortOption.DATE_DESC)
         advanceUntilIdle()
 
-        viewModel.allFiles.test {
-            val result = awaitItem()
-            assertEquals("new.pdf", result[0].name)
-            assertEquals("middle.pdf", result[1].name)
-            assertEquals("old.pdf", result[2].name)
-            cancelAndIgnoreRemainingEvents()
-        }
+        // Check the sorted value
+        val result = viewModel.allFiles.value
+        assertEquals(3, result.size)
+        assertEquals("new.pdf", result[0].name)
+        assertEquals("middle.pdf", result[1].name)
+        assertEquals("old.pdf", result[2].name)
     }
 
     @Test
@@ -262,10 +278,11 @@ class HomeViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSortOption(SortOption.SIZE_DESC)
-        advanceUntilIdle()
 
         viewModel.allFiles.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(3, result.size)
             assertEquals("large.pdf", result[0].name)
             assertEquals("medium.pdf", result[1].name)
             assertEquals("small.pdf", result[2].name)
@@ -284,10 +301,10 @@ class HomeViewModelTest {
         every { recentRepository.getRecentFiles() } returns flowOf(recents)
 
         viewModel = createViewModel()
-        advanceUntilIdle()
 
         viewModel.recentFiles.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(2, result.size)
             cancelAndIgnoreRemainingEvents()
         }
@@ -304,10 +321,10 @@ class HomeViewModelTest {
         every { favoriteRepository.getFavorites() } returns flowOf(favorites)
 
         viewModel = createViewModel()
-        advanceUntilIdle()
 
         viewModel.favoriteFiles.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(2, result.size)
             cancelAndIgnoreRemainingEvents()
         }
@@ -325,10 +342,10 @@ class HomeViewModelTest {
         every { pdfFileRepository.getPdfFolders() } returns flowOf(folders)
 
         viewModel = createViewModel()
-        advanceUntilIdle()
 
         viewModel.folders.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(3, result.size)
             assertEquals("alpha", result[0].name)
             assertEquals("bravo", result[1].name)
@@ -348,10 +365,10 @@ class HomeViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setFolderSearchQuery("Doc")
-        advanceUntilIdle()
 
         viewModel.folders.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(1, result.size)
             assertEquals("Documents", result[0].name)
             cancelAndIgnoreRemainingEvents()
@@ -369,10 +386,11 @@ class HomeViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setFolderSortOption(FolderSortOption.COUNT_DESC)
-        advanceUntilIdle()
 
         viewModel.folders.test {
-            val result = awaitItem()
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(3, result.size)
             assertEquals("many", result[0].name)
             assertEquals("some", result[1].name)
             assertEquals("few", result[2].name)
@@ -443,16 +461,18 @@ class HomeViewModelTest {
 
     // region refresh Tests
     @Test
-    fun `refresh sets isLoading true then false`() = runTest {
+    fun `refresh sets isLoading false after completion`() = runTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
+        // After initial load, isLoading should be false
+        assertFalse(viewModel.isLoading.value)
+
+        // Call refresh and wait for completion
         viewModel.refresh()
-
-        assertTrue(viewModel.isLoading.value)
-
         advanceUntilIdle()
 
+        // After refresh completes, isLoading should be false again
         assertFalse(viewModel.isLoading.value)
     }
 

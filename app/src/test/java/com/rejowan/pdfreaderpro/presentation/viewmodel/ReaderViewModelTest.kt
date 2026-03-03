@@ -1,6 +1,7 @@
 package com.rejowan.pdfreaderpro.presentation.viewmodel
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.data.local.PasswordStorage
@@ -20,7 +21,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -33,6 +36,7 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReaderViewModelTest {
@@ -49,6 +53,7 @@ class ReaderViewModelTest {
     private lateinit var viewModel: ReaderViewModel
 
     private val testPdfPath = "/storage/test.pdf"
+    private val mockUri: Uri = mockk(relaxed = true)
 
     @Before
     fun setup() {
@@ -63,6 +68,10 @@ class ReaderViewModelTest {
 
         savedStateHandle = SavedStateHandle(mapOf("path" to testPdfPath, "initialPage" to 0))
 
+        // Mock Uri.fromFile static method
+        mockkStatic(Uri::class)
+        every { Uri.fromFile(any()) } returns mockUri
+
         // Default mocks
         every { preferencesRepository.preferences } returns flowOf(AppPreferences())
         every { bookmarkDao.getBookmarksForPdf(any()) } returns flowOf(emptyList())
@@ -73,6 +82,7 @@ class ReaderViewModelTest {
     @After
     fun teardown() {
         Dispatchers.resetMain()
+        unmockkStatic(Uri::class)
     }
 
     private fun createViewModel(): ReaderViewModel {

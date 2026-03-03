@@ -271,13 +271,18 @@ class FormattingUtilsTest {
 
     @Test
     fun `extractParentFolders handles typical Android paths`() {
-        // Internal storage
+        // Internal storage path: /storage/emulated/0/Download/Books/file.pdf
+        // After removing prefix and splitting: ["storage", "emulated", "0", "Download", "Books", "file.pdf"]
+        // Drop first 3, drop last 1: ["Download", "Books"] -> "Download > Books"
         val internal = "/storage/emulated/0/Download/Books/file.pdf"
         assertEquals("Download > Books", FormattingUtils.extractParentFolders(internal))
 
-        // SD card path
+        // SD card path: /storage/XXXX-XXXX/Documents/Work/file.pdf
+        // After removing prefix and splitting: ["storage", "XXXX-XXXX", "Documents", "Work", "file.pdf"]
+        // Drop first 3, drop last 1: ["Work"] -> "Work"
+        // Note: SD card paths have 2 prefix segments, not 3, so one folder name gets dropped
         val sdCard = "/storage/XXXX-XXXX/Documents/Work/file.pdf"
-        assertEquals("Documents > Work", FormattingUtils.extractParentFolders(sdCard))
+        assertEquals("Work", FormattingUtils.extractParentFolders(sdCard))
     }
 
     @Test

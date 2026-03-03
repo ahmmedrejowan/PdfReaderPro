@@ -2,11 +2,16 @@ package com.rejowan.pdfreaderpro.data.repository
 
 import android.content.ContentResolver
 import android.content.Context
+import android.database.Cursor
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -18,6 +23,8 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PdfFileRepositoryTest {
@@ -29,6 +36,7 @@ class PdfFileRepositoryTest {
     private lateinit var repository: PdfFileRepositoryImpl
 
     private val mockUri: Uri = mockk(relaxed = true)
+    private val mockCollectionUri: Uri = mockk(relaxed = true)
 
     @Before
     fun setup() {
@@ -38,11 +46,21 @@ class PdfFileRepositoryTest {
         contentResolver = mockk(relaxed = true)
 
         every { context.contentResolver } returns contentResolver
+
+        // Mock MediaStore static methods
+        mockkStatic(MediaStore.Files::class)
+        every { MediaStore.Files.getContentUri(any<String>()) } returns mockCollectionUri
+
+        // Mock Uri static methods
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) } returns mockUri
     }
 
     @After
     fun teardown() {
         Dispatchers.resetMain()
+        unmockkStatic(MediaStore.Files::class)
+        unmockkStatic(Uri::class)
     }
 
     private fun createRepository(): PdfFileRepositoryImpl {
@@ -52,8 +70,10 @@ class PdfFileRepositoryTest {
     // region getAllPdfFiles Tests
     @Test
     fun `getAllPdfFiles returns empty list initially`() = runTest {
+        // Mock contentResolver.query to return null (no PDFs found)
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         repository.getAllPdfFiles().test {
             val files = awaitItem()
@@ -64,8 +84,9 @@ class PdfFileRepositoryTest {
 
     @Test
     fun `getAllPdfFiles returns flow`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         assertNotNull(repository.getAllPdfFiles())
     }
@@ -74,8 +95,9 @@ class PdfFileRepositoryTest {
     // region getPdfsByFolder Tests
     @Test
     fun `getPdfsByFolder returns empty list for non-existent folder`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         repository.getPdfsByFolder("/nonexistent/folder").test {
             val files = awaitItem()
@@ -86,8 +108,9 @@ class PdfFileRepositoryTest {
 
     @Test
     fun `getPdfsByFolder returns flow`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         assertNotNull(repository.getPdfsByFolder("/some/folder"))
     }
@@ -96,8 +119,9 @@ class PdfFileRepositoryTest {
     // region searchPdfs Tests
     @Test
     fun `searchPdfs returns empty list for blank query`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         repository.searchPdfs("").test {
             val files = awaitItem()
@@ -108,8 +132,9 @@ class PdfFileRepositoryTest {
 
     @Test
     fun `searchPdfs returns empty list for whitespace query`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         repository.searchPdfs("   ").test {
             val files = awaitItem()
@@ -120,8 +145,9 @@ class PdfFileRepositoryTest {
 
     @Test
     fun `searchPdfs returns flow`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         assertNotNull(repository.searchPdfs("test"))
     }
@@ -130,8 +156,9 @@ class PdfFileRepositoryTest {
     // region getPdfFolders Tests
     @Test
     fun `getPdfFolders returns empty list initially`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         repository.getPdfFolders().test {
             val folders = awaitItem()
@@ -142,8 +169,9 @@ class PdfFileRepositoryTest {
 
     @Test
     fun `getPdfFolders returns flow`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
-        advanceUntilIdle()
 
         assertNotNull(repository.getPdfFolders())
     }
@@ -152,6 +180,8 @@ class PdfFileRepositoryTest {
     // region getPdfFile Tests
     @Test
     fun `getPdfFile returns null for non-existent path`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
         advanceUntilIdle()
 
@@ -161,6 +191,8 @@ class PdfFileRepositoryTest {
 
     @Test
     fun `getPdfFile returns null when no files loaded`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
         advanceUntilIdle()
 
@@ -172,6 +204,8 @@ class PdfFileRepositoryTest {
     // region renamePdf Tests
     @Test
     fun `renamePdf with invalid path returns failure`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         repository = createRepository()
         advanceUntilIdle()
 
@@ -187,6 +221,7 @@ class PdfFileRepositoryTest {
         )
 
         val result = repository.renamePdf(pdfFile, "newname")
+        advanceUntilIdle()
         assertTrue(result.isFailure)
     }
     // endregion
@@ -194,6 +229,7 @@ class PdfFileRepositoryTest {
     // region deletePdf Tests
     @Test
     fun `deletePdf calls contentResolver delete`() = runTest {
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
         every { contentResolver.delete(any(), any(), any()) } returns 0
 
         repository = createRepository()
@@ -211,6 +247,7 @@ class PdfFileRepositoryTest {
         )
 
         val result = repository.deletePdf(pdfFile)
+        advanceUntilIdle()
         // Should fail because file doesn't exist
         assertTrue(result.isFailure)
     }
@@ -230,6 +267,23 @@ class PdfFileRepositoryTest {
         advanceUntilIdle()
 
         // Files should still be empty
+        repository.getAllPdfFiles().test {
+            val files = awaitItem()
+            assertTrue(files.isEmpty())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `refreshPdfs handles empty cursor`() = runTest {
+        val cursor = mockk<Cursor>(relaxed = true)
+        every { cursor.moveToNext() } returns false
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returns cursor
+
+        repository = createRepository()
+        repository.refreshPdfs()
+        advanceUntilIdle()
+
         repository.getAllPdfFiles().test {
             val files = awaitItem()
             assertTrue(files.isEmpty())

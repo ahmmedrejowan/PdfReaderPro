@@ -91,10 +91,11 @@ class SearchViewModelTest {
     @Test
     fun `initial searchResults is empty`() = runTest {
         viewModel = createViewModel()
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            assertEquals(emptyList<PdfFile>(), awaitItem())
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(emptyList<PdfFile>(), result)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -113,13 +114,12 @@ class SearchViewModelTest {
     @Test
     fun `setSearchQuery with blank query does not search`() = runTest {
         viewModel = createViewModel()
-        advanceUntilIdle()
-
         viewModel.setSearchQuery("")
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            assertEquals(emptyList<PdfFile>(), awaitItem())
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(emptyList<PdfFile>(), result)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -127,13 +127,12 @@ class SearchViewModelTest {
     @Test
     fun `setSearchQuery with whitespace only does not search`() = runTest {
         viewModel = createViewModel()
-        advanceUntilIdle()
-
         viewModel.setSearchQuery("   ")
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            assertEquals(emptyList<PdfFile>(), awaitItem())
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(emptyList<PdfFile>(), result)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -168,11 +167,11 @@ class SearchViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSearchQuery("report")
-        advanceTimeBy(350) // Wait for debounce
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            val result = awaitItem()
+            advanceTimeBy(350) // Wait for debounce
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(1, result.size)
             assertEquals("report.pdf", result[0].name)
             cancelAndIgnoreRemainingEvents()
@@ -185,11 +184,12 @@ class SearchViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSearchQuery("xyz")
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            assertEquals(emptyList<PdfFile>(), awaitItem())
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(emptyList<PdfFile>(), result)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -205,22 +205,24 @@ class SearchViewModelTest {
 
         // First search
         viewModel.setSearchQuery("alpha")
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            val result1 = awaitItem()
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result1 = expectMostRecentItem()
+            assertTrue(result1.isNotEmpty())
             assertEquals("alpha.pdf", result1[0].name)
             cancelAndIgnoreRemainingEvents()
         }
 
         // Second search
         viewModel.setSearchQuery("beta")
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            val result2 = awaitItem()
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result2 = expectMostRecentItem()
+            assertTrue(result2.isNotEmpty())
             assertEquals("beta.pdf", result2[0].name)
             cancelAndIgnoreRemainingEvents()
         }
@@ -246,15 +248,17 @@ class SearchViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSearchQuery("test")
-        advanceTimeBy(350)
-        advanceUntilIdle()
-
-        viewModel.clearSearch()
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            assertEquals(emptyList<PdfFile>(), awaitItem())
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            expectMostRecentItem() // consume first result
+
+            viewModel.clearSearch()
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
+            assertEquals(emptyList<PdfFile>(), result)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -323,11 +327,11 @@ class SearchViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSearchQuery("report")
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            val result = awaitItem()
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(1, result.size)
             cancelAndIgnoreRemainingEvents()
         }
@@ -342,11 +346,11 @@ class SearchViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSearchQuery("(1)")
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            val result = awaitItem()
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(1, result.size)
             cancelAndIgnoreRemainingEvents()
         }
@@ -359,11 +363,11 @@ class SearchViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSearchQuery("文档")
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            val result = awaitItem()
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(1, result.size)
             cancelAndIgnoreRemainingEvents()
         }
@@ -381,11 +385,11 @@ class SearchViewModelTest {
 
         viewModel = createViewModel()
         viewModel.setSearchQuery("a")
-        advanceTimeBy(350)
-        advanceUntilIdle()
 
         viewModel.searchResults.test {
-            val result = awaitItem()
+            advanceTimeBy(350)
+            advanceUntilIdle()
+            val result = expectMostRecentItem()
             assertEquals(1, result.size)
             cancelAndIgnoreRemainingEvents()
         }
