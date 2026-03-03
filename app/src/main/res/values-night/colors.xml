@@ -3,4 +3,6 @@
     <!-- Primary brand color for splash screen (night) -->
     <color name="colorPrimary">#7372C3</color>
     <color name="colorAccent">#7372C3</color>
+    <color name="bgColor">#121212</color>
+
 </resources>

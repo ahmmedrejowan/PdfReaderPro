@@ -3,4 +3,5 @@
     <!-- Primary brand color for splash screen -->
     <color name="colorPrimary">#7A59DA</color>
     <color name="colorAccent">#7A59DA</color>
+    <color name="bgColor">#FFFFFF</color>
 </resources>
