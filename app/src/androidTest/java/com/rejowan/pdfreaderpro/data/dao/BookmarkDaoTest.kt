@@ -37,11 +37,13 @@ class BookmarkDaoTest {
 
     // region Test Data
     private fun createBookmark(
+        id: Long = 0,
         pdfPath: String = "/storage/test.pdf",
         pageNumber: Int = 0,
         title: String? = "Page 1",
         createdAt: Long = System.currentTimeMillis()
     ) = BookmarkEntity(
+        id = id,
         pdfPath = pdfPath,
         pageNumber = pageNumber,
         title = title,
