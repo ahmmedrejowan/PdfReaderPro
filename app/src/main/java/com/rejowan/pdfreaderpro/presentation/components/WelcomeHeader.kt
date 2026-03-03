@@ -14,10 +14,15 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.Analytics
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +49,7 @@ private fun getGreetingEmoji(): String {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeHeader(
     onSortClick: () -> Unit,
@@ -82,19 +88,39 @@ fun WelcomeHeader(
             }
 
             Row {
-                IconButton(onClick = onSortClick) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Outlined.Sort,
-                        contentDescription = "Sort",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip {
+                            Text("Sort files")
+                        }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = onSortClick) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.Sort,
+                            contentDescription = "Sort files",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
-                IconButton(onClick = onStatsClick) {
-                    Icon(
-                        imageVector = Icons.Outlined.Analytics,
-                        contentDescription = "Stats",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip {
+                            Text("Library statistics")
+                        }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = onStatsClick) {
+                        Icon(
+                            imageVector = Icons.Outlined.Analytics,
+                            contentDescription = "Library statistics",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
