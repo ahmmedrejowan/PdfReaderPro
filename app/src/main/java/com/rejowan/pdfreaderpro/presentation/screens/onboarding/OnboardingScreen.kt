@@ -78,12 +78,26 @@ import com.rejowan.pdfreaderpro.presentation.navigation.Home
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
+// Individual shape configuration for varied morphing
+data class ShapeConfig(
+    val offsetX: Float,
+    val offsetY: Float,
+    val size: Float,
+    val rotation: Float = 0f,
+    val alpha: Float = 0.1f,
+    // Asymmetric corners for varied shapes (0-50 range, percentage-like)
+    val topStartCorner: Int = 50,
+    val topEndCorner: Int = 50,
+    val bottomStartCorner: Int = 50,
+    val bottomEndCorner: Int = 50
+)
+
 data class OnboardingPage(
     val icon: ImageVector,
     val title: String,
     val description: String,
     val accentColor: Color,
-    // Shape morphing parameters
+    // Icon container shape morphing parameters
     val topStartCorner: Int,
     val topEndCorner: Int,
     val bottomStartCorner: Int,
@@ -92,17 +106,11 @@ data class OnboardingPage(
     val iconContainerScale: Float = 1f,
     val iconOffsetX: Float = 0f,
     val iconOffsetY: Float = 0f,
-    // Background shape positions (for slide effects)
-    val bgShape1OffsetX: Float = 200f,
-    val bgShape1OffsetY: Float = 60f,
-    val bgShape2OffsetX: Float = -50f,
-    val bgShape2OffsetY: Float = 480f,
-    val bgShape3OffsetX: Float = -20f,
-    val bgShape3OffsetY: Float = 250f,
-    // Background shape sizes
-    val bgShape1Size: Float = 200f,
-    val bgShape2Size: Float = 160f,
-    val bgShape3Size: Float = 120f
+    // Background shapes with individual configurations
+    val bgShape1: ShapeConfig,
+    val bgShape2: ShapeConfig,
+    val bgShape3: ShapeConfig,
+    val bgShape4: ShapeConfig? = null // Optional 4th shape for some pages
 )
 
 private val onboardingPages = listOf(
@@ -111,91 +119,151 @@ private val onboardingPages = listOf(
         title = "Welcome to\nPDF Reader Pro",
         description = "A clean, lightweight PDF reader built for simplicity. Open source, ad-free, and respects your privacy.",
         accentColor = Color(0xFF6366F1), // Indigo
-        // Circle shape
+        // Circle shape for icon
         topStartCorner = 50,
         topEndCorner = 50,
         bottomStartCorner = 50,
         bottomEndCorner = 50,
         iconContainerScale = 1f,
-        // Background shapes - spread out
-        bgShape1OffsetX = 220f,
-        bgShape1OffsetY = 80f,
-        bgShape2OffsetX = -60f,
-        bgShape2OffsetY = 520f,
-        bgShape3OffsetX = 280f,
-        bgShape3OffsetY = 380f,
-        bgShape1Size = 180f,
-        bgShape2Size = 140f,
-        bgShape3Size = 100f
+        // Background shapes - varied shapes, spread out (subtle)
+        bgShape1 = ShapeConfig(
+            offsetX = 260f, offsetY = 40f, size = 140f,
+            rotation = 0f, alpha = 0.06f,
+            topStartCorner = 50, topEndCorner = 50, // Circle
+            bottomStartCorner = 50, bottomEndCorner = 50
+        ),
+        bgShape2 = ShapeConfig(
+            offsetX = -80f, offsetY = 480f, size = 180f,
+            rotation = 15f, alpha = 0.04f,
+            topStartCorner = 30, topEndCorner = 50, // Teardrop-ish
+            bottomStartCorner = 50, bottomEndCorner = 30
+        ),
+        bgShape3 = ShapeConfig(
+            offsetX = 300f, offsetY = 350f, size = 100f,
+            rotation = -10f, alpha = 0.03f,
+            topStartCorner = 20, topEndCorner = 40, // Blob-like
+            bottomStartCorner = 35, bottomEndCorner = 25
+        ),
+        bgShape4 = ShapeConfig(
+            offsetX = -40f, offsetY = 180f, size = 80f,
+            rotation = 25f, alpha = 0.025f,
+            topStartCorner = 45, topEndCorner = 15, // Leaf-like
+            bottomStartCorner = 15, bottomEndCorner = 45
+        )
     ),
     OnboardingPage(
         icon = Icons.Rounded.Folder,
         title = "All Your PDFs\nin One Place",
         description = "Automatically discovers PDFs across your device. Browse by folders, sort by name, date, or size, and find any document instantly with search.",
         accentColor = Color(0xFF8B5CF6), // Purple
-        // Rounded rectangle - slightly asymmetric
+        // Asymmetric rounded for icon
         topStartCorner = 40,
         topEndCorner = 20,
         bottomStartCorner = 20,
         bottomEndCorner = 40,
         iconContainerScale = 1.05f,
         iconOffsetY = -5f,
-        // Background shapes - slide to different positions
-        bgShape1OffsetX = 180f,
-        bgShape1OffsetY = 120f,
-        bgShape2OffsetX = -80f,
-        bgShape2OffsetY = 420f,
-        bgShape3OffsetX = -40f,
-        bgShape3OffsetY = 200f,
-        bgShape1Size = 220f,
-        bgShape2Size = 180f,
-        bgShape3Size = 90f
+        // Shapes slide to new positions with different morphs (subtle)
+        bgShape1 = ShapeConfig(
+            offsetX = 180f, offsetY = 100f, size = 200f,
+            rotation = 45f, alpha = 0.05f,
+            topStartCorner = 25, topEndCorner = 45, // Diamond-ish
+            bottomStartCorner = 45, bottomEndCorner = 25
+        ),
+        bgShape2 = ShapeConfig(
+            offsetX = -100f, offsetY = 380f, size = 160f,
+            rotation = -20f, alpha = 0.045f,
+            topStartCorner = 50, topEndCorner = 20, // Egg shape
+            bottomStartCorner = 35, bottomEndCorner = 50
+        ),
+        bgShape3 = ShapeConfig(
+            offsetX = 280f, offsetY = 500f, size = 120f,
+            rotation = 30f, alpha = 0.035f,
+            topStartCorner = 15, topEndCorner = 15, // Squarish with round bottom
+            bottomStartCorner = 40, bottomEndCorner = 40
+        ),
+        bgShape4 = ShapeConfig(
+            offsetX = -60f, offsetY = 120f, size = 90f,
+            rotation = -45f, alpha = 0.03f,
+            topStartCorner = 40, topEndCorner = 40, // Rounded top, pointed bottom
+            bottomStartCorner = 10, bottomEndCorner = 10
+        )
     ),
     OnboardingPage(
         icon = Icons.Rounded.Tune,
         title = "Powerful Reader\n& PDF Tools",
         description = "Search text, customize themes, and adjust display settings. Plus built-in tools to merge, split, compress, and organize your PDFs.",
         accentColor = Color(0xFFEC4899), // Pink
-        // Diamond-like shape - opposing corners
+        // Diamond-like shape for icon
         topStartCorner = 15,
         topEndCorner = 45,
         bottomStartCorner = 45,
         bottomEndCorner = 15,
         iconContainerScale = 0.95f,
         iconOffsetX = 3f,
-        // Background shapes - more dramatic slide
-        bgShape1OffsetX = 250f,
-        bgShape1OffsetY = 40f,
-        bgShape2OffsetX = -100f,
-        bgShape2OffsetY = 350f,
-        bgShape3OffsetX = 300f,
-        bgShape3OffsetY = 280f,
-        bgShape1Size = 160f,
-        bgShape2Size = 200f,
-        bgShape3Size = 130f
+        // More dramatic positions and shapes (subtle)
+        bgShape1 = ShapeConfig(
+            offsetX = 320f, offsetY = 60f, size = 170f,
+            rotation = -30f, alpha = 0.055f,
+            topStartCorner = 10, topEndCorner = 50, // Comma shape
+            bottomStartCorner = 50, bottomEndCorner = 10
+        ),
+        bgShape2 = ShapeConfig(
+            offsetX = -120f, offsetY = 320f, size = 220f,
+            rotation = 60f, alpha = 0.04f,
+            topStartCorner = 35, topEndCorner = 20, // Organic blob
+            bottomStartCorner = 45, bottomEndCorner = 30
+        ),
+        bgShape3 = ShapeConfig(
+            offsetX = 200f, offsetY = 450f, size = 90f,
+            rotation = -60f, alpha = 0.03f,
+            topStartCorner = 50, topEndCorner = 50, // Small circle
+            bottomStartCorner = 50, bottomEndCorner = 50
+        ),
+        bgShape4 = ShapeConfig(
+            offsetX = 350f, offsetY = 280f, size = 70f,
+            rotation = 90f, alpha = 0.025f,
+            topStartCorner = 30, topEndCorner = 30, // Squircle
+            bottomStartCorner = 30, bottomEndCorner = 30
+        )
     ),
     OnboardingPage(
         icon = Icons.Rounded.Security,
         title = "Storage Access\nRequired",
         description = "Grant access to scan and display your PDF files. Your documents stay private and are never uploaded.",
         accentColor = Color(0xFF10B981), // Emerald
-        // Squircle-like - medium uniform corners
+        // Squircle for icon
         topStartCorner = 30,
         topEndCorner = 30,
         bottomStartCorner = 30,
         bottomEndCorner = 30,
         iconContainerScale = 1.02f,
         iconOffsetY = 2f,
-        // Background shapes - settle into final positions
-        bgShape1OffsetX = 200f,
-        bgShape1OffsetY = 100f,
-        bgShape2OffsetX = -70f,
-        bgShape2OffsetY = 480f,
-        bgShape3OffsetX = -30f,
-        bgShape3OffsetY = 320f,
-        bgShape1Size = 190f,
-        bgShape2Size = 150f,
-        bgShape3Size = 110f
+        // Final settled positions (subtle)
+        bgShape1 = ShapeConfig(
+            offsetX = 240f, offsetY = 80f, size = 160f,
+            rotation = 15f, alpha = 0.05f,
+            topStartCorner = 35, topEndCorner = 35, // Soft squircle
+            bottomStartCorner = 35, bottomEndCorner = 35
+        ),
+        bgShape2 = ShapeConfig(
+            offsetX = -90f, offsetY = 450f, size = 180f,
+            rotation = -15f, alpha = 0.04f,
+            topStartCorner = 40, topEndCorner = 25, // Slightly organic
+            bottomStartCorner = 30, bottomEndCorner = 45
+        ),
+        bgShape3 = ShapeConfig(
+            offsetX = 280f, offsetY = 380f, size = 110f,
+            rotation = 0f, alpha = 0.03f,
+            topStartCorner = 50, topEndCorner = 30, // Pebble shape
+            bottomStartCorner = 40, bottomEndCorner = 50
+        ),
+        bgShape4 = ShapeConfig(
+            offsetX = -20f, offsetY = 220f, size = 85f,
+            rotation = 30f, alpha = 0.025f,
+            topStartCorner = 25, topEndCorner = 50, // Asymmetric blob
+            bottomStartCorner = 50, bottomEndCorner = 20
+        )
     )
 )
 
@@ -246,10 +314,196 @@ fun OnboardingScreen(
         label = "accent"
     )
 
-    val currentCornerPercent by animateFloatAsState(
-        targetValue = onboardingPages[currentPage].shapeCornerPercent.toFloat(),
+    // Animated corner values for asymmetric shapes
+    val topStartCorner by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].topStartCorner.toFloat(),
+        animationSpec = tween(600),
+        label = "topStart"
+    )
+    val topEndCorner by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].topEndCorner.toFloat(),
+        animationSpec = tween(600),
+        label = "topEnd"
+    )
+    val bottomStartCorner by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bottomStartCorner.toFloat(),
+        animationSpec = tween(600),
+        label = "bottomStart"
+    )
+    val bottomEndCorner by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bottomEndCorner.toFloat(),
+        animationSpec = tween(600),
+        label = "bottomEnd"
+    )
+
+    // Animated icon container properties
+    val iconContainerScale by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].iconContainerScale,
         animationSpec = tween(500),
-        label = "corner"
+        label = "iconScale"
+    )
+    val iconOffsetX by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].iconOffsetX,
+        animationSpec = tween(500),
+        label = "iconOffsetX"
+    )
+    val iconOffsetY by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].iconOffsetY,
+        animationSpec = tween(500),
+        label = "iconOffsetY"
+    )
+
+    // Shape 1 animations
+    val bg1X by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.offsetX,
+        animationSpec = tween(700), label = "bg1X"
+    )
+    val bg1Y by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.offsetY,
+        animationSpec = tween(750), label = "bg1Y"
+    )
+    val bg1Size by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.size,
+        animationSpec = tween(600), label = "bg1Size"
+    )
+    val bg1Rotation by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.rotation,
+        animationSpec = tween(800), label = "bg1Rot"
+    )
+    val bg1Alpha by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.alpha,
+        animationSpec = tween(500), label = "bg1Alpha"
+    )
+    val bg1TS by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.topStartCorner.toFloat(),
+        animationSpec = tween(650), label = "bg1TS"
+    )
+    val bg1TE by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.topEndCorner.toFloat(),
+        animationSpec = tween(650), label = "bg1TE"
+    )
+    val bg1BS by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.bottomStartCorner.toFloat(),
+        animationSpec = tween(650), label = "bg1BS"
+    )
+    val bg1BE by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape1.bottomEndCorner.toFloat(),
+        animationSpec = tween(650), label = "bg1BE"
+    )
+
+    // Shape 2 animations
+    val bg2X by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.offsetX,
+        animationSpec = tween(800), label = "bg2X"
+    )
+    val bg2Y by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.offsetY,
+        animationSpec = tween(850), label = "bg2Y"
+    )
+    val bg2Size by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.size,
+        animationSpec = tween(700), label = "bg2Size"
+    )
+    val bg2Rotation by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.rotation,
+        animationSpec = tween(900), label = "bg2Rot"
+    )
+    val bg2Alpha by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.alpha,
+        animationSpec = tween(550), label = "bg2Alpha"
+    )
+    val bg2TS by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.topStartCorner.toFloat(),
+        animationSpec = tween(700), label = "bg2TS"
+    )
+    val bg2TE by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.topEndCorner.toFloat(),
+        animationSpec = tween(700), label = "bg2TE"
+    )
+    val bg2BS by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.bottomStartCorner.toFloat(),
+        animationSpec = tween(700), label = "bg2BS"
+    )
+    val bg2BE by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape2.bottomEndCorner.toFloat(),
+        animationSpec = tween(700), label = "bg2BE"
+    )
+
+    // Shape 3 animations
+    val bg3X by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.offsetX,
+        animationSpec = tween(650), label = "bg3X"
+    )
+    val bg3Y by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.offsetY,
+        animationSpec = tween(700), label = "bg3Y"
+    )
+    val bg3Size by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.size,
+        animationSpec = tween(550), label = "bg3Size"
+    )
+    val bg3Rotation by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.rotation,
+        animationSpec = tween(750), label = "bg3Rot"
+    )
+    val bg3Alpha by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.alpha,
+        animationSpec = tween(450), label = "bg3Alpha"
+    )
+    val bg3TS by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.topStartCorner.toFloat(),
+        animationSpec = tween(600), label = "bg3TS"
+    )
+    val bg3TE by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.topEndCorner.toFloat(),
+        animationSpec = tween(600), label = "bg3TE"
+    )
+    val bg3BS by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.bottomStartCorner.toFloat(),
+        animationSpec = tween(600), label = "bg3BS"
+    )
+    val bg3BE by animateFloatAsState(
+        targetValue = onboardingPages[currentPage].bgShape3.bottomEndCorner.toFloat(),
+        animationSpec = tween(600), label = "bg3BE"
+    )
+
+    // Shape 4 animations (optional shape)
+    val bg4Config = onboardingPages[currentPage].bgShape4
+    val bg4X by animateFloatAsState(
+        targetValue = bg4Config?.offsetX ?: -200f,
+        animationSpec = tween(720), label = "bg4X"
+    )
+    val bg4Y by animateFloatAsState(
+        targetValue = bg4Config?.offsetY ?: 300f,
+        animationSpec = tween(780), label = "bg4Y"
+    )
+    val bg4Size by animateFloatAsState(
+        targetValue = bg4Config?.size ?: 0f,
+        animationSpec = tween(620), label = "bg4Size"
+    )
+    val bg4Rotation by animateFloatAsState(
+        targetValue = bg4Config?.rotation ?: 0f,
+        animationSpec = tween(850), label = "bg4Rot"
+    )
+    val bg4Alpha by animateFloatAsState(
+        targetValue = bg4Config?.alpha ?: 0f,
+        animationSpec = tween(500), label = "bg4Alpha"
+    )
+    val bg4TS by animateFloatAsState(
+        targetValue = (bg4Config?.topStartCorner ?: 50).toFloat(),
+        animationSpec = tween(680), label = "bg4TS"
+    )
+    val bg4TE by animateFloatAsState(
+        targetValue = (bg4Config?.topEndCorner ?: 50).toFloat(),
+        animationSpec = tween(680), label = "bg4TE"
+    )
+    val bg4BS by animateFloatAsState(
+        targetValue = (bg4Config?.bottomStartCorner ?: 50).toFloat(),
+        animationSpec = tween(680), label = "bg4BS"
+    )
+    val bg4BE by animateFloatAsState(
+        targetValue = (bg4Config?.bottomEndCorner ?: 50).toFloat(),
+        animationSpec = tween(680), label = "bg4BE"
     )
 
     // Infinite pulsing animation
@@ -331,13 +585,28 @@ fun OnboardingScreen(
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Background morphing shapes (subtle) with movement
+            // Background morphing shapes with varied animations
             BackgroundMorphingShapes(
-                cornerPercent = currentCornerPercent,
                 accentColor = currentAccentColor,
-                rotation = bgRotation,
+                continuousRotation = bgRotation,
                 floatOffset = bgFloat,
-                scale = bgScale
+                breatheScale = bgScale,
+                // Shape 1
+                shape1X = bg1X, shape1Y = bg1Y, shape1Size = bg1Size,
+                shape1Rotation = bg1Rotation, shape1Alpha = bg1Alpha,
+                shape1TS = bg1TS, shape1TE = bg1TE, shape1BS = bg1BS, shape1BE = bg1BE,
+                // Shape 2
+                shape2X = bg2X, shape2Y = bg2Y, shape2Size = bg2Size,
+                shape2Rotation = bg2Rotation, shape2Alpha = bg2Alpha,
+                shape2TS = bg2TS, shape2TE = bg2TE, shape2BS = bg2BS, shape2BE = bg2BE,
+                // Shape 3
+                shape3X = bg3X, shape3Y = bg3Y, shape3Size = bg3Size,
+                shape3Rotation = bg3Rotation, shape3Alpha = bg3Alpha,
+                shape3TS = bg3TS, shape3TE = bg3TE, shape3BS = bg3BS, shape3BE = bg3BE,
+                // Shape 4
+                shape4X = bg4X, shape4Y = bg4Y, shape4Size = bg4Size,
+                shape4Rotation = bg4Rotation, shape4Alpha = bg4Alpha,
+                shape4TS = bg4TS, shape4TE = bg4TE, shape4BS = bg4BS, shape4BE = bg4BE
             )
 
             Column(
@@ -382,7 +651,13 @@ fun OnboardingScreen(
                     OnboardingPageContent(
                         page = onboardingPages[page],
                         pageOffset = pageOffset,
-                        cornerPercent = currentCornerPercent,
+                        topStartCorner = topStartCorner,
+                        topEndCorner = topEndCorner,
+                        bottomStartCorner = bottomStartCorner,
+                        bottomEndCorner = bottomEndCorner,
+                        iconContainerScale = iconContainerScale,
+                        iconOffsetX = iconOffsetX,
+                        iconOffsetY = iconOffsetY,
                         pulseScale = pulseScale,
                         pulseAlpha = pulseAlpha,
                         outerPulseScale = outerPulseScale,
@@ -447,7 +722,12 @@ fun OnboardingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
-                        shape = RoundedCornerShape(currentCornerPercent.toInt().coerceIn(16, 28)),
+                        shape = RoundedCornerShape(
+                            topStart = topStartCorner.toInt().coerceIn(14, 28).dp,
+                            topEnd = topEndCorner.toInt().coerceIn(14, 28).dp,
+                            bottomStart = bottomStartCorner.toInt().coerceIn(14, 28).dp,
+                            bottomEnd = bottomEndCorner.toInt().coerceIn(14, 28).dp
+                        ),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = currentAccentColor
                         )
@@ -474,51 +754,116 @@ fun OnboardingScreen(
 
 @Composable
 private fun BackgroundMorphingShapes(
-    cornerPercent: Float,
     accentColor: Color,
-    rotation: Float,
+    continuousRotation: Float,
     floatOffset: Float,
-    scale: Float
+    breatheScale: Float,
+    // Shape 1
+    shape1X: Float, shape1Y: Float, shape1Size: Float,
+    shape1Rotation: Float, shape1Alpha: Float,
+    shape1TS: Float, shape1TE: Float, shape1BS: Float, shape1BE: Float,
+    // Shape 2
+    shape2X: Float, shape2Y: Float, shape2Size: Float,
+    shape2Rotation: Float, shape2Alpha: Float,
+    shape2TS: Float, shape2TE: Float, shape2BS: Float, shape2BE: Float,
+    // Shape 3
+    shape3X: Float, shape3Y: Float, shape3Size: Float,
+    shape3Rotation: Float, shape3Alpha: Float,
+    shape3TS: Float, shape3TE: Float, shape3BS: Float, shape3BE: Float,
+    // Shape 4
+    shape4X: Float, shape4Y: Float, shape4Size: Float,
+    shape4Rotation: Float, shape4Alpha: Float,
+    shape4TS: Float, shape4TE: Float, shape4BS: Float, shape4BE: Float
 ) {
-    // Top-right shape - rotates slowly and floats
+    // Shape 1 - morphing with gentle breathing and subtle rotation
     Box(
         modifier = Modifier
-            .size(200.dp)
-            .offset(x = 200.dp, y = (60 + floatOffset).dp)
-            .scale(scale)
-            .rotate(rotation * 0.5f)
-            .clip(RoundedCornerShape(cornerPercent.toInt()))
-            .background(accentColor.copy(alpha = 0.1f))
+            .size(shape1Size.dp)
+            .offset(x = shape1X.dp, y = (shape1Y + floatOffset * 0.8f).dp)
+            .scale(breatheScale * 0.98f)
+            .rotate(shape1Rotation + continuousRotation * 0.02f)
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = shape1TS.toInt(),
+                    topEndPercent = shape1TE.toInt(),
+                    bottomStartPercent = shape1BS.toInt(),
+                    bottomEndPercent = shape1BE.toInt()
+                )
+            )
+            .background(accentColor.copy(alpha = shape1Alpha))
     )
 
-    // Bottom-left shape - rotates opposite direction and floats inverse
+    // Shape 2 - larger, slower, drifts opposite direction
     Box(
         modifier = Modifier
-            .size(160.dp)
-            .offset(x = (-50).dp, y = (480 - floatOffset).dp)
-            .scale(1.1f - (scale - 1f))
-            .rotate(-rotation * 0.3f)
-            .clip(RoundedCornerShape((60 - cornerPercent / 2).toInt().coerceIn(10, 50)))
-            .background(accentColor.copy(alpha = 0.08f))
+            .size(shape2Size.dp)
+            .offset(x = shape2X.dp, y = (shape2Y - floatOffset * 0.6f).dp)
+            .scale(1.05f - (breatheScale - 1f) * 0.5f)
+            .rotate(shape2Rotation - continuousRotation * 0.015f)
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = shape2TS.toInt(),
+                    topEndPercent = shape2TE.toInt(),
+                    bottomStartPercent = shape2BS.toInt(),
+                    bottomEndPercent = shape2BE.toInt()
+                )
+            )
+            .background(accentColor.copy(alpha = shape2Alpha))
     )
 
-    // Third shape - center-left, more subtle
+    // Shape 3 - smaller, more playful movement
     Box(
         modifier = Modifier
-            .size(120.dp)
-            .offset(x = (-20).dp, y = (250 + floatOffset * 0.5f).dp)
-            .scale(scale * 0.95f)
-            .rotate(rotation * 0.2f)
-            .clip(RoundedCornerShape((cornerPercent * 0.8f).toInt()))
-            .background(accentColor.copy(alpha = 0.05f))
+            .size(shape3Size.dp)
+            .offset(x = (shape3X + floatOffset * 0.3f).dp, y = shape3Y.dp)
+            .scale(breatheScale * 0.95f)
+            .rotate(shape3Rotation + continuousRotation * 0.025f)
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = shape3TS.toInt(),
+                    topEndPercent = shape3TE.toInt(),
+                    bottomStartPercent = shape3BS.toInt(),
+                    bottomEndPercent = shape3BE.toInt()
+                )
+            )
+            .background(accentColor.copy(alpha = shape3Alpha))
     )
+
+    // Shape 4 - optional accent shape, subtle diagonal drift
+    if (shape4Alpha > 0.01f) {
+        Box(
+            modifier = Modifier
+                .size(shape4Size.dp)
+                .offset(
+                    x = (shape4X + floatOffset * 0.4f).dp,
+                    y = (shape4Y + floatOffset * 0.5f).dp
+                )
+                .scale(breatheScale)
+                .rotate(shape4Rotation - continuousRotation * 0.03f)
+                .clip(
+                    RoundedCornerShape(
+                        topStartPercent = shape4TS.toInt(),
+                        topEndPercent = shape4TE.toInt(),
+                        bottomStartPercent = shape4BS.toInt(),
+                        bottomEndPercent = shape4BE.toInt()
+                    )
+                )
+                .background(accentColor.copy(alpha = shape4Alpha))
+        )
+    }
 }
 
 @Composable
 private fun OnboardingPageContent(
     page: OnboardingPage,
     pageOffset: Float,
-    cornerPercent: Float,
+    topStartCorner: Float,
+    topEndCorner: Float,
+    bottomStartCorner: Float,
+    bottomEndCorner: Float,
+    iconContainerScale: Float,
+    iconOffsetX: Float,
+    iconOffsetY: Float,
     pulseScale: Float,
     pulseAlpha: Float,
     outerPulseScale: Float,
@@ -537,6 +882,14 @@ private fun OnboardingPageContent(
         label = "scale"
     )
 
+    // Create asymmetric shape for icon container
+    val iconShape = RoundedCornerShape(
+        topStartPercent = topStartCorner.toInt(),
+        topEndPercent = topEndCorner.toInt(),
+        bottomStartPercent = bottomStartCorner.toInt(),
+        bottomEndPercent = bottomEndCorner.toInt()
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -549,34 +902,37 @@ private fun OnboardingPageContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Pulsing morphing icon container - BIGGER circles
+        // Pulsing morphing icon container with asymmetric shapes
         Box(
-            modifier = Modifier.size(260.dp),
+            modifier = Modifier
+                .size(260.dp)
+                .offset(x = iconOffsetX.dp, y = iconOffsetY.dp)
+                .scale(iconContainerScale),
             contentAlignment = Alignment.Center
         ) {
-            // Outer pulse ring (morphing) - bigger
+            // Outer pulse ring (asymmetric morphing)
             Box(
                 modifier = Modifier
                     .size(220.dp)
                     .scale(outerPulseScale)
-                    .clip(RoundedCornerShape(cornerPercent.toInt()))
+                    .clip(iconShape)
                     .background(accentColor.copy(alpha = outerPulseAlpha))
             )
 
-            // Middle pulse ring (morphing) - bigger
+            // Middle pulse ring (asymmetric morphing)
             Box(
                 modifier = Modifier
                     .size(170.dp)
                     .scale(pulseScale)
-                    .clip(RoundedCornerShape(cornerPercent.toInt()))
+                    .clip(iconShape)
                     .background(accentColor.copy(alpha = pulseAlpha))
             )
 
-            // Inner container with icon (morphing shape) - bigger and more visible
+            // Inner container with icon (asymmetric morphing shape)
             Box(
                 modifier = Modifier
                     .size(120.dp)
-                    .clip(RoundedCornerShape(cornerPercent.toInt()))
+                    .clip(iconShape)
                     .background(accentColor.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -585,7 +941,7 @@ private fun OnboardingPageContent(
                     contentDescription = null,
                     modifier = Modifier
                         .size(56.dp)
-                        .scale(1f + (pulseScale - 1f) * 0.25f), // More noticeable icon pulse
+                        .scale(1f + (pulseScale - 1f) * 0.25f),
                     tint = accentColor
                 )
             }

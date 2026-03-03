@@ -11,7 +11,7 @@
     <!-- Splash screen theme for Android 12+ Splash Screen API (night) -->
     <style name="Theme.PDFReaderPro.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/bgColor</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/img_splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.PDFReaderPro</item>
     </style>
 
