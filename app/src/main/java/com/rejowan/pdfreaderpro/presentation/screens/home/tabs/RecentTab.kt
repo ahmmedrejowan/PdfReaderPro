@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -47,14 +47,15 @@ fun RecentTab(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(top = 8.dp, bottom = 80.dp)
                 ) {
-                    items(
+                    itemsIndexed(
                         items = recentFiles,
-                        key = { it.id }
-                    ) { file ->
+                        key = { _, file -> file.id }
+                    ) { index, file ->
                         RecentListItem(
                             recentFile = file,
                             onClick = { onFileClick(file) },
-                            onOptionsClick = { onFileOptionsClick(file) }
+                            onOptionsClick = { onFileOptionsClick(file) },
+                            animationDelay = index * 30
                         )
                     }
                 }
@@ -65,14 +66,15 @@ fun RecentTab(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp)
                 ) {
-                    items(
+                    itemsIndexed(
                         items = recentFiles,
-                        key = { it.id }
-                    ) { file ->
+                        key = { _, file -> file.id }
+                    ) { index, file ->
                         RecentGridItem(
                             recentFile = file,
                             onClick = { onFileClick(file) },
-                            onOptionsClick = { onFileOptionsClick(file) }
+                            onOptionsClick = { onFileOptionsClick(file) },
+                            animationDelay = index * 30
                         )
                     }
                 }

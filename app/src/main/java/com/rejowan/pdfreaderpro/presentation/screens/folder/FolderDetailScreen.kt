@@ -23,8 +23,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -209,10 +209,10 @@ fun FolderDetailScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(bottom = 16.dp)
                         ) {
-                            items(
+                            itemsIndexed(
                                 items = files,
-                                key = { it.id }
-                            ) { file ->
+                                key = { _, file -> file.id }
+                            ) { index, file ->
                                 PdfListItem(
                                     pdfFile = file,
                                     onClick = {
@@ -223,7 +223,8 @@ fun FolderDetailScreen(
                                         scope.launch {
                                             selectedFileFavorite = viewModel.isFavorite(file.path)
                                         }
-                                    }
+                                    },
+                                    animationDelay = index * 30
                                 )
                             }
                         }
@@ -233,10 +234,10 @@ fun FolderDetailScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 16.dp)
                         ) {
-                            items(
+                            itemsIndexed(
                                 items = files,
-                                key = { it.id }
-                            ) { file ->
+                                key = { _, file -> file.id }
+                            ) { index, file ->
                                 PdfGridItem(
                                     pdfFile = file,
                                     onClick = {
@@ -247,7 +248,8 @@ fun FolderDetailScreen(
                                         scope.launch {
                                             selectedFileFavorite = viewModel.isFavorite(file.path)
                                         }
-                                    }
+                                    },
+                                    animationDelay = index * 30
                                 )
                             }
                         }

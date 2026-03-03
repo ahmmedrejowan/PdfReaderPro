@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -54,14 +54,15 @@ fun FilesTab(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(top = 8.dp, bottom = 80.dp)
                 ) {
-                    items(
+                    itemsIndexed(
                         items = files,
-                        key = { it.id }
-                    ) { file ->
+                        key = { _, file -> file.id }
+                    ) { index, file ->
                         PdfListItem(
                             pdfFile = file,
                             onClick = { onFileClick(file) },
-                            onOptionsClick = { onFileOptionsClick(file) }
+                            onOptionsClick = { onFileOptionsClick(file) },
+                            animationDelay = index * 30
                         )
                     }
                 }
@@ -72,14 +73,15 @@ fun FilesTab(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp)
                 ) {
-                    items(
+                    itemsIndexed(
                         items = files,
-                        key = { it.id }
-                    ) { file ->
+                        key = { _, file -> file.id }
+                    ) { index, file ->
                         PdfGridItem(
                             pdfFile = file,
                             onClick = { onFileClick(file) },
-                            onOptionsClick = { onFileOptionsClick(file) }
+                            onOptionsClick = { onFileOptionsClick(file) },
+                            animationDelay = index * 30
                         )
                     }
                 }
