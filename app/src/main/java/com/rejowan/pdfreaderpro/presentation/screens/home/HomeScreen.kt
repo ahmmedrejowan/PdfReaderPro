@@ -396,6 +396,7 @@ fun HomeScreen(
             totalPdfs = allFiles.size,
             totalSize = allFiles.sumOf { it.size },
             favoritesCount = favoriteFiles.size,
+            recentCount = recentFiles.size,
             onDismiss = { showStatsSheet = false }
         )
     }

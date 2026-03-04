@@ -1,5 +1,10 @@
 package com.rejowan.pdfreaderpro.presentation.components
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +13,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,6 +56,18 @@ fun EmptyState(
     onAction: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    // Subtle floating animation for the icon
+    val infiniteTransition = rememberInfiniteTransition(label = "empty state float")
+    val floatOffset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 6f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "float offset"
+    )
+
     // Use top bias to account for header above - content appears in upper-center
     Column(
         modifier = modifier
@@ -57,10 +76,11 @@ fun EmptyState(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Soft icon container
+        // Soft icon container with floating animation
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
+                .offset(y = (-floatOffset).dp)
                 .size(100.dp)
                 .background(
                     color = accentColor.copy(alpha = 0.12f),
@@ -198,6 +218,18 @@ fun PermissionRequiredState(
     onGrantClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Subtle floating animation for the icon
+    val infiniteTransition = rememberInfiniteTransition(label = "permission state float")
+    val floatOffset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 6f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "float offset"
+    )
+
     // Use top bias to account for header above - content appears in upper-center
     Column(
         modifier = modifier
@@ -206,10 +238,11 @@ fun PermissionRequiredState(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Soft icon container
+        // Soft icon container with floating animation
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
+                .offset(y = (-floatOffset).dp)
                 .size(100.dp)
                 .background(
                     color = SoftPurple.copy(alpha = 0.12f),

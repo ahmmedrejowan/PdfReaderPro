@@ -33,6 +33,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -66,6 +67,7 @@ import java.util.Locale
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
 private val AccentPink = Color(0xFFF48FB1)
+private val AccentTeal = Color(0xFF4DB6AC)
 
 private fun formatFileSize(bytes: Long): String {
     if (bytes <= 0) return "0 B"
@@ -81,6 +83,7 @@ fun StatsSheet(
     totalPdfs: Int,
     totalSize: Long,
     favoritesCount: Int,
+    recentCount: Int,
     onDismiss: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -91,6 +94,7 @@ fun StatsSheet(
             totalPdfs = totalPdfs,
             totalSize = totalSize,
             favoritesCount = favoritesCount,
+            recentCount = recentCount,
             onDismiss = onDismiss
         )
     } else {
@@ -98,6 +102,7 @@ fun StatsSheet(
             totalPdfs = totalPdfs,
             totalSize = totalSize,
             favoritesCount = favoritesCount,
+            recentCount = recentCount,
             onDismiss = onDismiss
         )
     }
@@ -109,6 +114,7 @@ private fun StatsBottomSheet(
     totalPdfs: Int,
     totalSize: Long,
     favoritesCount: Int,
+    recentCount: Int,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -124,6 +130,7 @@ private fun StatsBottomSheet(
             totalPdfs = totalPdfs,
             totalSize = totalSize,
             favoritesCount = favoritesCount,
+            recentCount = recentCount,
             modifier = Modifier.padding(bottom = 24.dp)
         )
     }
@@ -134,6 +141,7 @@ private fun StatsSideSheet(
     totalPdfs: Int,
     totalSize: Long,
     favoritesCount: Int,
+    recentCount: Int,
     onDismiss: () -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
@@ -187,6 +195,7 @@ private fun StatsSideSheet(
                     totalPdfs = totalPdfs,
                     totalSize = totalSize,
                     favoritesCount = favoritesCount,
+                    recentCount = recentCount,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -205,6 +214,7 @@ private fun StatsSheetContent(
     totalPdfs: Int,
     totalSize: Long,
     favoritesCount: Int,
+    recentCount: Int,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -250,6 +260,18 @@ private fun StatsSheetContent(
             accentColor = AccentPink,
             progress = if (totalPdfs > 0) favoritesCount.toFloat() / totalPdfs else 0f,
             animationDelay = 100
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        AnimatedStatCard(
+            icon = Icons.Outlined.History,
+            label = "Recent Files",
+            value = recentCount.toString(),
+            subtitle = "recently opened",
+            accentColor = AccentTeal,
+            progress = if (totalPdfs > 0) recentCount.toFloat() / totalPdfs else 0f,
+            animationDelay = 150
         )
     }
 }
