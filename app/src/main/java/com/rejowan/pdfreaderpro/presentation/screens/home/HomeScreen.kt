@@ -157,6 +157,7 @@ fun HomeScreen(
     )
 
     val isLoading by viewModel.isLoading.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
     val viewMode by viewModel.viewMode.collectAsState()
     val sortOption by viewModel.sortOption.collectAsState()
     val folderSortOption by viewModel.folderSortOption.collectAsState()
@@ -268,6 +269,7 @@ fun HomeScreen(
                                         recentFiles = recentFiles,
                                         viewMode = viewMode,
                                         isLoading = isLoading,
+                                        isRefreshing = isRefreshing,
                                         hasPermission = hasPermission,
                                         onFileClick = { recent ->
                                             navController.navigateToReader(recent.path, recent.lastPage)
@@ -294,6 +296,7 @@ fun HomeScreen(
                                         favorites = favoriteFiles,
                                         viewMode = viewMode,
                                         isLoading = isLoading,
+                                        isRefreshing = isRefreshing,
                                         hasPermission = hasPermission,
                                         onFileClick = { pdf ->
                                             navController.navigateToReader(pdf.path)
@@ -316,6 +319,7 @@ fun HomeScreen(
                                         files = allFiles,
                                         viewMode = viewMode,
                                         isLoading = isLoading,
+                                        isRefreshing = isRefreshing,
                                         hasPermission = hasPermission,
                                         onFileClick = { pdf ->
                                             navController.navigateToReader(pdf.path)
@@ -339,6 +343,7 @@ fun HomeScreen(
                         FoldersScreen(
                             folders = folders,
                             isLoading = isLoading,
+                            isRefreshing = isRefreshing,
                             hasPermission = hasPermission,
                             currentSort = folderSortOption,
                             searchQuery = folderSearchQuery,

@@ -26,6 +26,7 @@ fun FavoritesTab(
     favorites: List<PdfFile>,
     viewMode: ViewMode,
     isLoading: Boolean,
+    isRefreshing: Boolean,
     hasPermission: Boolean,
     onFileClick: (PdfFile) -> Unit,
     onFileOptionsClick: (PdfFile) -> Unit,
@@ -35,7 +36,7 @@ fun FavoritesTab(
     modifier: Modifier = Modifier
 ) {
     PullToRefreshBox(
-        isRefreshing = isLoading,
+        isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize()
     ) {

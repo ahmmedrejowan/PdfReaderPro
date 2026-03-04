@@ -125,6 +125,7 @@ fun FolderDetailScreen(
 
     val files by viewModel.files.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
     val viewMode by viewModel.viewMode.collectAsState()
     val sortOption by viewModel.sortOption.collectAsState()
 
@@ -163,8 +164,8 @@ fun FolderDetailScreen(
         }
     ) { paddingValues ->
         PullToRefreshBox(
-            isRefreshing = isLoading,
-            onRefresh = { viewModel.loadFilesForFolder(folderPath) },
+            isRefreshing = isRefreshing,
+            onRefresh = { viewModel.refreshFolder() },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)

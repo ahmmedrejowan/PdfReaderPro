@@ -30,6 +30,9 @@ class FolderDetailViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     private val _viewMode = MutableStateFlow(ViewMode.LIST)
     val viewMode: StateFlow<ViewMode> = _viewMode.asStateFlow()
 
@@ -61,6 +64,20 @@ class FolderDetailViewModel(
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    fun refreshFolder() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            try {
+                pdfFileRepository.getPdfsByFolder(currentFolderPath).collect { files ->
+                    _files.value = sortFiles(files, _sortOption.value)
+                    _isRefreshing.value = false
+                }
+            } catch (e: Exception) {
+                _isRefreshing.value = false
             }
         }
     }

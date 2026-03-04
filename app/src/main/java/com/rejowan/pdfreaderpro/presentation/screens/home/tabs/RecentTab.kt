@@ -26,6 +26,7 @@ fun RecentTab(
     recentFiles: List<RecentFile>,
     viewMode: ViewMode,
     isLoading: Boolean,
+    isRefreshing: Boolean,
     hasPermission: Boolean,
     onFileClick: (RecentFile) -> Unit,
     onFileOptionsClick: (RecentFile) -> Unit,
@@ -35,7 +36,7 @@ fun RecentTab(
     modifier: Modifier = Modifier
 ) {
     PullToRefreshBox(
-        isRefreshing = isLoading,
+        isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize()
     ) {

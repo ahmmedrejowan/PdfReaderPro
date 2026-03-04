@@ -34,6 +34,9 @@ class HomeViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     private val _viewMode = MutableStateFlow(ViewMode.LIST)
     val viewMode: StateFlow<ViewMode> = _viewMode.asStateFlow()
 
@@ -106,7 +109,7 @@ class HomeViewModel(
 
     fun refresh() {
         viewModelScope.launch {
-            _isLoading.value = true
+            _isRefreshing.value = true
             try {
                 // Clean up missing files from favorites and recent
                 favoriteRepository.cleanupMissingFiles()
@@ -116,7 +119,7 @@ class HomeViewModel(
             } catch (e: Exception) {
                 Timber.e(e, "Error refreshing PDFs")
             } finally {
-                _isLoading.value = false
+                _isRefreshing.value = false
             }
         }
     }

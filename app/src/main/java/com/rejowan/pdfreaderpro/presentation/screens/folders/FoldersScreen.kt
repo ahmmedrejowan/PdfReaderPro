@@ -64,6 +64,7 @@ private val SoftBlue = Color(0xFF64B5F6)
 fun FoldersScreen(
     folders: List<PdfFolder>,
     isLoading: Boolean,
+    isRefreshing: Boolean,
     hasPermission: Boolean,
     currentSort: FolderSortOption,
     searchQuery: String,
@@ -82,7 +83,7 @@ fun FoldersScreen(
     val searchFocusRequester = remember { FocusRequester() }
 
     PullToRefreshBox(
-        isRefreshing = isLoading,
+        isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize()
     ) {
