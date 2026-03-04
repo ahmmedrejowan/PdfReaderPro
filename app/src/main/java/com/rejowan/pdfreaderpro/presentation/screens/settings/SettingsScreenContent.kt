@@ -1664,13 +1664,9 @@ private fun AboutSheet(
             }
         }
     } else {
-        // Bottom sheet for portrait - non-draggable (only close button dismisses)
         ModalBottomSheet(
             onDismissRequest = onDismiss,
-            sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true,
-                confirmValueChange = { it != SheetValue.Hidden }
-            ),
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
             containerColor = MaterialTheme.colorScheme.surface,
         ) {
