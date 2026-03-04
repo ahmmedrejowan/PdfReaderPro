@@ -1,12 +1,20 @@
 package com.rejowan.pdfreaderpro.presentation.screens.home
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Folder
@@ -181,6 +189,28 @@ fun HomeScreen(
     var selectedFileFromRecent by remember { mutableStateOf(false) }
     var selectedFolder by remember { mutableStateOf<PdfFolder?>(null) }
 
+    // Bottom bar hide on scroll
+    var isBottomBarVisible by remember { mutableStateOf(true) }
+    val bottomBarHeight = 120.dp
+    val bottomBarOffset by animateDpAsState(
+        targetValue = if (isBottomBarVisible) 0.dp else bottomBarHeight,
+        animationSpec = tween(durationMillis = 300),
+        label = "bottomBarOffset"
+    )
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (available.y > 10) {
+                    isBottomBarVisible = true
+                } else if (available.y < -10) {
+                    isBottomBarVisible = false
+                }
+                return Offset.Zero
+            }
+        }
+    }
+
     // Handle back press: navigate to Home first, then show exit confirmation
     BackHandler(enabled = true) {
         if (selectedNavItem != 0) {
@@ -192,7 +222,7 @@ fun HomeScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
         Scaffold(
             topBar = {
                 when (BottomNavItem.entries[selectedNavItem]) {
@@ -376,8 +406,13 @@ fun HomeScreen(
         // Bottom navigation bar - outside Scaffold, floating on top
         AnimatedBottomNav(
             selectedIndex = selectedNavItem,
-            onItemClick = { index -> selectedNavItem = index },
-            modifier = Modifier.align(Alignment.BottomCenter)
+            onItemClick = { index ->
+                selectedNavItem = index
+                isBottomBarVisible = true  // Show bottom bar when switching tabs
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .offset(y = bottomBarOffset)
         )
     }
 
