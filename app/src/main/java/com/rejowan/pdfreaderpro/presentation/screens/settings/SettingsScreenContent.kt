@@ -106,6 +106,9 @@ import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
+import com.rejowan.licensy.LicenseContent
+import com.rejowan.licensy.Licenses
+import com.rejowan.licensy.compose.LicensyList
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -1933,12 +1936,116 @@ private fun PrivacySection(title: String, content: String) {
 
 @Composable
 private fun LicensesContent() {
-    val context = LocalContext.current
+    val licenses = remember {
+        listOf(
+            LicenseContent(
+                title = "Jetpack Compose",
+                author = "Google",
+                license = Licenses.APACHE_2_0,
+                url = "https://developer.android.com/jetpack/compose"
+            ),
+            LicenseContent(
+                title = "Koin",
+                author = "Kotzilla",
+                license = Licenses.APACHE_2_0,
+                url = "https://insert-koin.io/"
+            ),
+            LicenseContent(
+                title = "Room Database",
+                author = "Google",
+                license = Licenses.APACHE_2_0,
+                url = "https://developer.android.com/training/data-storage/room"
+            ),
+            LicenseContent(
+                title = "PDF.js",
+                author = "Mozilla",
+                license = Licenses.APACHE_2_0,
+                url = "https://mozilla.github.io/pdf.js/"
+            ),
+            LicenseContent(
+                title = "Material Components",
+                author = "Google",
+                license = Licenses.APACHE_2_0,
+                url = "https://github.com/material-components/material-components-android"
+            ),
+            LicenseContent(
+                title = "Kotlin Coroutines",
+                author = "JetBrains",
+                license = Licenses.APACHE_2_0,
+                url = "https://github.com/Kotlin/kotlinx.coroutines"
+            ),
+            LicenseContent(
+                title = "AndroidX Libraries",
+                author = "Google",
+                license = Licenses.APACHE_2_0,
+                url = "https://developer.android.com/jetpack/androidx"
+            ),
+            LicenseContent(
+                title = "DataStore",
+                author = "Google",
+                license = Licenses.APACHE_2_0,
+                url = "https://developer.android.com/topic/libraries/architecture/datastore"
+            ),
+            LicenseContent(
+                title = "Coil",
+                author = "Coil Contributors",
+                license = Licenses.APACHE_2_0,
+                url = "https://coil-kt.github.io/coil/"
+            ),
+            LicenseContent(
+                title = "Timber",
+                author = "Jake Wharton",
+                license = Licenses.APACHE_2_0,
+                url = "https://github.com/JakeWharton/timber"
+            ),
+            LicenseContent(
+                title = "Lottie",
+                author = "Airbnb",
+                license = Licenses.APACHE_2_0,
+                url = "https://airbnb.io/lottie/"
+            ),
+            LicenseContent(
+                title = "Reorderable",
+                author = "Calvin Liang",
+                license = Licenses.APACHE_2_0,
+                url = "https://github.com/Calvin-LL/Reorderable"
+            ),
+            LicenseContent(
+                title = "Kotlinx Serialization",
+                author = "JetBrains",
+                license = Licenses.APACHE_2_0,
+                url = "https://github.com/Kotlin/kotlinx.serialization"
+            ),
+            LicenseContent(
+                title = "iText",
+                author = "iText Software",
+                license = Licenses.AGPL_3_0,
+                url = "https://itextpdf.com/"
+            ),
+            LicenseContent(
+                title = "Bouncy Castle",
+                author = "Legion of the Bouncy Castle",
+                license = Licenses.MIT,
+                url = "https://www.bouncycastle.org/"
+            ),
+            LicenseContent(
+                title = "Navigation Compose",
+                author = "Google",
+                license = Licenses.APACHE_2_0,
+                url = "https://developer.android.com/jetpack/compose/navigation"
+            ),
+            LicenseContent(
+                title = "Licensy",
+                author = "K M Rejowan Ahmmed",
+                license = Licenses.APACHE_2_0,
+                url = "https://github.com/ahmmedrejowan/Licensy"
+            )
+        )
+    }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp)
             .padding(bottom = 32.dp)
     ) {
@@ -1949,112 +2056,7 @@ private fun LicensesContent() {
             modifier = Modifier.padding(bottom = 20.dp)
         )
 
-        LicenseItem(
-            name = "Jetpack Compose",
-            author = "Google",
-            license = "Apache License 2.0",
-            url = "https://developer.android.com/jetpack/compose",
-            context = context
-        )
-
-        LicenseItem(
-            name = "Koin",
-            author = "Kotzilla",
-            license = "Apache License 2.0",
-            url = "https://insert-koin.io/",
-            context = context
-        )
-
-        LicenseItem(
-            name = "Room Database",
-            author = "Google",
-            license = "Apache License 2.0",
-            url = "https://developer.android.com/training/data-storage/room",
-            context = context
-        )
-
-        LicenseItem(
-            name = "PDF.js",
-            author = "Mozilla",
-            license = "Apache License 2.0",
-            url = "https://mozilla.github.io/pdf.js/",
-            context = context
-        )
-
-        LicenseItem(
-            name = "Material Components",
-            author = "Google",
-            license = "Apache License 2.0",
-            url = "https://github.com/material-components/material-components-android",
-            context = context
-        )
-
-        LicenseItem(
-            name = "Kotlin Coroutines",
-            author = "JetBrains",
-            license = "Apache License 2.0",
-            url = "https://github.com/Kotlin/kotlinx.coroutines",
-            context = context
-        )
-
-        LicenseItem(
-            name = "AndroidX Libraries",
-            author = "Google",
-            license = "Apache License 2.0",
-            url = "https://developer.android.com/jetpack/androidx",
-            context = context
-        )
-
-        LicenseItem(
-            name = "DataStore",
-            author = "Google",
-            license = "Apache License 2.0",
-            url = "https://developer.android.com/topic/libraries/architecture/datastore",
-            context = context
-        )
-    }
-}
-
-@Composable
-private fun LicenseItem(
-    name: String,
-    author: String,
-    license: String,
-    url: String,
-    context: android.content.Context
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .clickable {
-                val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-                context.startActivity(intent)
-            },
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = author,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 2.dp)
-            )
-            Text(
-                text = license,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
+        LicensyList(licenses = licenses)
     }
 }
 

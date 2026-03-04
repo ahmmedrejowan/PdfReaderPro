@@ -41,6 +41,9 @@ lottieCompose = "6.7.1"
 # Reorderable List
 reorderable = "3.0.0"
 
+# Licensy
+licensy = "1.1.0"
+
 # Splash Screen
 splashscreen = "1.2.0"
 
@@ -105,6 +108,9 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 
 # Reorderable List
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
+
+# Licensy
+licensy-compose = { module = "com.rejowan:licensy-compose", version.ref = "licensy" }
 
 # Splash Screen
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }

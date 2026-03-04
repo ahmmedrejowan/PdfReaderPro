@@ -105,6 +105,9 @@ dependencies {
     // Reorderable List (drag-to-reorder)
     implementation(libs.reorderable)
 
+    // Licensy (open source licenses display)
+    implementation(libs.licensy.compose)
+
     // Splash Screen
     implementation(libs.splashscreen)
 
