@@ -17,6 +17,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -37,23 +40,20 @@ class SearchViewModel(
         .debounce(300)
         .flatMapLatest { query ->
             if (query.isBlank()) {
+                _isSearching.value = false
                 flowOf(emptyList())
             } else {
-                _isSearching.value = true
                 pdfFileRepository.searchPdfs(query)
+                    .onEach { _isSearching.value = false }
             }
         }
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    init {
-        viewModelScope.launch {
-            searchResults.collect {
-                _isSearching.value = false
-            }
-        }
-    }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     fun setSearchQuery(query: String) {
+        // Show loading immediately when user types (before debounce)
+        if (query.isNotBlank() && _searchQuery.value != query) {
+            _isSearching.value = true
+        }
         _searchQuery.value = query
     }
 
