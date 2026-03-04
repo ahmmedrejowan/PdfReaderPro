@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -45,12 +46,15 @@ import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.ColorLens
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.FormatAlignCenter
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Gavel
-import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.LightMode
+import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Palette
@@ -58,8 +62,10 @@ import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.material.icons.rounded.Work
 import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -92,7 +98,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.compose.ui.res.painterResource
 import com.rejowan.pdfreaderpro.BuildConfig
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
@@ -143,6 +151,11 @@ fun SettingsScreenContent(
             .padding(horizontal = 16.dp)
             .padding(top = 8.dp, bottom = 80.dp)
     ) {
+        // App Header Card
+        SettingsHeaderCard()
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         // Appearance Section
         SectionLabel(text = "Appearance", delay = 0)
         Spacer(modifier = Modifier.height(8.dp))
@@ -326,7 +339,7 @@ fun SettingsScreenContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
-            icon = Icons.Rounded.History,
+            icon = Icons.Rounded.Code,
             title = "GitHub Repository",
             subtitle = "View source code",
             accentColor = AccentPurple,
@@ -502,6 +515,12 @@ private fun SectionLabel(
         isVisible = true
     }
 
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.9f,
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
+        label = "section scale"
+    )
+
     val alpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
         animationSpec = tween(200),
@@ -515,8 +534,78 @@ private fun SectionLabel(
             letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
         ),
         color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
-        modifier = modifier.padding(start = 4.dp, bottom = 4.dp)
+        modifier = modifier
+            .scale(scale)
+            .padding(start = 4.dp, bottom = 4.dp)
     )
+}
+
+@Composable
+private fun SettingsHeaderCard() {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(300, easing = FastOutSlowInEasing),
+        label = "header scale"
+    )
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .scale(scale),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // App logo
+            Image(
+                painter = painterResource(id = R.drawable.img_splash_logo),
+                contentDescription = "App Logo",
+                modifier = Modifier.size(52.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "PDF Reader Pro",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "Version ${BuildConfig.VERSION_NAME}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            // License badge
+            Surface(
+                shape = RoundedCornerShape(6.dp),
+                color = AccentTeal.copy(alpha = 0.15f)
+            ) {
+                Text(
+                    text = "GPL 3.0",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Medium,
+                    color = AccentTeal,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -1496,24 +1585,42 @@ private fun AboutSheet(
 
     if (isLandscape) {
         // Side panel for landscape
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-                .pointerInput(Unit) { detectTapGestures { onDismiss() } }
-        ) {
+        var isVisible by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            isVisible = true
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Scrim
             AnimatedVisibility(
-                visible = true,
+                visible = isVisible,
+                enter = fadeIn(tween(300)),
+                exit = fadeOut(tween(300))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.5f))
+                        .pointerInput(Unit) { detectTapGestures { onDismiss() } }
+                )
+            }
+
+            // Side panel
+            AnimatedVisibility(
+                visible = isVisible,
                 enter = slideInHorizontally(
                     initialOffsetX = { it },
                     animationSpec = tween(300, easing = FastOutSlowInEasing)
-                ) + fadeIn(animationSpec = tween(200)),
+                ),
                 exit = slideOutHorizontally(
                     targetOffsetX = { it },
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
-                ) + fadeOut(animationSpec = tween(200)),
+                    animationSpec = tween(250, easing = FastOutSlowInEasing)
+                ),
                 modifier = Modifier.align(Alignment.CenterEnd)
             ) {
+                val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
                 Surface(
                     modifier = Modifier
                         .width(400.dp)
@@ -1521,30 +1628,83 @@ private fun AboutSheet(
                         .pointerInput(Unit) { detectTapGestures { /* consume */ } },
                     shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                     color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 2.dp
+                    tonalElevation = 2.dp,
+                    shadowElevation = 8.dp
                 ) {
-                    Column(
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(
-                                top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding(),
-                                bottom = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
+                                top = systemBarsPadding.calculateTopPadding(),
+                                bottom = systemBarsPadding.calculateBottomPadding()
                             )
                     ) {
                         content()
+
+                        // Close button
+                        Surface(
+                            onClick = onDismiss,
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(12.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Close,
+                                contentDescription = "Close",
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(20.dp),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 }
             }
         }
     } else {
-        // Bottom sheet for portrait
+        // Bottom sheet for portrait - non-draggable (only close button dismisses)
         ModalBottomSheet(
             onDismissRequest = onDismiss,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            sheetState = rememberModalBottomSheetState(
+                skipPartiallyExpanded = true,
+                confirmValueChange = { it != SheetValue.Hidden }
+            ),
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
+            dragHandle = {
+                // Custom drag handle with close button
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp, end = 12.dp),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Surface(
+                        onClick = onDismiss,
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = "Close",
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
         ) {
-            content()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.75f)
+            ) {
+                content()
+            }
         }
     }
 }
@@ -1554,10 +1714,9 @@ private fun ChangelogContent() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp)
-            .padding(bottom = 32.dp)
     ) {
+        // Fixed title
         Text(
             text = "Changelog",
             style = MaterialTheme.typography.headlineSmall,
@@ -1565,21 +1724,49 @@ private fun ChangelogContent() {
             modifier = Modifier.padding(bottom = 20.dp)
         )
 
-        ChangelogVersionItem(
-            version = BuildConfig.VERSION_NAME,
-            date = "2026-03-01",
-            changes = listOf(
-                "Complete UI redesign with Material 3",
-                "New PDF viewer with PDF.js engine",
-                "Bookmarks and favorites support",
-                "Reading themes (Light, Sepia, Dark, Black)",
-                "Auto-scroll functionality",
-                "Page jump and search",
-                "Table of contents with attachments",
-                "Customizable reader settings",
-                "Dark mode and system theme support"
+        // Scrollable version list
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            ChangelogVersionItem(
+                version = "2.0.0",
+                date = "March 2026",
+                isLatest = true,
+                changes = listOf(
+                    "Complete UI redesign with Material 3",
+                    "New PDF viewer with PDF.js engine",
+                    "Bookmarks and favorites support",
+                    "Reading themes (Light, Sepia, Dark, Black)",
+                    "Auto-scroll functionality",
+                    "Page jump and search in documents",
+                    "Table of contents with attachments",
+                    "PDF tools (merge, split, compress, rotate, and more)",
+                    "Customizable reader settings",
+                    "Dark mode and system theme support",
+                    "Folder browser with sorting options",
+                    "Recent files tracking",
+                    "Search across all PDFs"
+                )
             )
-        )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
+                version = "1.0.0",
+                date = "May 2024",
+                isLatest = false,
+                changes = listOf(
+                    "Initial release",
+                    "Basic PDF viewing functionality",
+                    "Light and dark theme support",
+                    "File browser integration"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+        }
     }
 }
 
@@ -1587,12 +1774,14 @@ private fun ChangelogContent() {
 private fun ChangelogVersionItem(
     version: String,
     date: String,
+    isLatest: Boolean,
     changes: List<String>
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow
+        color = if (isLatest) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+        else MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -1600,12 +1789,31 @@ private fun ChangelogVersionItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Version $version",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Version $version",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    if (isLatest) {
+                        Surface(
+                            shape = RoundedCornerShape(4.dp),
+                            color = MaterialTheme.colorScheme.primary
+                        ) {
+                            Text(
+                                text = "LATEST",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+                }
                 Text(
                     text = date,
                     style = MaterialTheme.typography.bodySmall,
@@ -1708,13 +1916,15 @@ private fun PrivacyHighlightItem(text: String) {
         modifier = Modifier.padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "✓",
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.padding(end = 10.dp)
+        Icon(
+            imageVector = Icons.Rounded.CheckCircle,
+            contentDescription = null,
+            modifier = Modifier
+                .size(18.dp)
+                .padding(end = 0.dp),
+            tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
+        Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
@@ -1924,21 +2134,23 @@ private fun CreatorContent() {
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 CreatorLinkItem(
-                    icon = "🌐",
+                    icon = Icons.Rounded.Language,
                     label = "Website",
                     value = "rejowan.com",
+                    accentColor = AccentBlue,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://rejowan.com".toUri())
                         context.startActivity(intent)
                     }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 CreatorLinkItem(
-                    icon = "📧",
+                    icon = Icons.Rounded.Email,
                     label = "Email",
                     value = "kmrejowan@gmail.com",
+                    accentColor = AccentAmber,
                     onClick = {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                             data = "mailto:kmrejowan@gmail.com".toUri()
@@ -1947,24 +2159,26 @@ private fun CreatorContent() {
                     }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 CreatorLinkItem(
-                    icon = "💼",
+                    icon = Icons.Rounded.Code,
                     label = "GitHub",
                     value = "github.com/ahmmedrejowan",
+                    accentColor = AccentPurple,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://github.com/ahmmedrejowan".toUri())
                         context.startActivity(intent)
                     }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 CreatorLinkItem(
-                    icon = "🔗",
+                    icon = Icons.Rounded.Work,
                     label = "LinkedIn",
                     value = "linkedin.com/in/ahmmedrejowan",
+                    accentColor = AccentTeal,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://linkedin.com/in/ahmmedrejowan".toUri())
                         context.startActivity(intent)
@@ -1995,9 +2209,10 @@ private fun CreatorContent() {
 
 @Composable
 private fun CreatorLinkItem(
-    icon: String,
+    icon: ImageVector,
     label: String,
     value: String,
+    accentColor: Color,
     onClick: () -> Unit
 ) {
     Row(
@@ -2005,14 +2220,25 @@ private fun CreatorLinkItem(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
-            .padding(vertical = 4.dp),
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = icon,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(end = 16.dp)
-        )
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            color = accentColor.copy(alpha = 0.12f)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(18.dp),
+                tint = accentColor
+            )
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = label,
@@ -2088,11 +2314,11 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-                LicenseTermItem("✓ Freedom to use the software for any purpose")
-                LicenseTermItem("✓ Freedom to study and modify the source code")
-                LicenseTermItem("✓ Freedom to distribute copies")
-                LicenseTermItem("✓ Freedom to distribute modified versions")
-                LicenseTermItem("✓ Derivative works must be open source under GPL v3.0")
+                LicenseTermItem("Freedom to use the software for any purpose")
+                LicenseTermItem("Freedom to study and modify the source code")
+                LicenseTermItem("Freedom to distribute copies")
+                LicenseTermItem("Freedom to distribute modified versions")
+                LicenseTermItem("Derivative works must be open source under GPL v3.0")
             }
         }
 
@@ -2128,10 +2354,21 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 @Composable
 private fun LicenseTermItem(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onPrimaryContainer,
-        modifier = Modifier.padding(vertical = 4.dp)
-    )
+    Row(
+        modifier = Modifier.padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.CheckCircle,
+            contentDescription = null,
+            modifier = Modifier.size(18.dp),
+            tint = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
 }
