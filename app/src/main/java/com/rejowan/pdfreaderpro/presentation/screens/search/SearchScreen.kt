@@ -272,8 +272,7 @@ fun SearchScreen(
                     fileForDialog = null
                 },
                 onConfirm = {
-                    FileOperations.deleteFile(file.path)
-                    viewModel.setSearchQuery(searchQuery) // Refresh results
+                    viewModel.deleteFile(file.path) { /* success handled internally */ }
                 }
             )
         }

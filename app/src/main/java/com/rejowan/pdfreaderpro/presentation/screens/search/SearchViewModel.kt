@@ -93,4 +93,26 @@ class SearchViewModel(
             }
         }
     }
+
+    /**
+     * Deletes a file and removes it from favorites and recent databases.
+     */
+    fun deleteFile(path: String, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val success = FileOperations.deleteFile(path)
+            if (success) {
+                // Remove from favorites if present
+                favoriteRepository.removeFavorite(path)
+                // Remove from recent if present
+                recentRepository.removeRecent(path)
+                // Re-trigger search to refresh results
+                val currentQuery = _searchQuery.value
+                _searchQuery.value = ""
+                _searchQuery.value = currentQuery
+                onComplete(true)
+            } else {
+                onComplete(false)
+            }
+        }
+    }
 }

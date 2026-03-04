@@ -122,6 +122,26 @@ class FolderDetailViewModel(
         }
     }
 
+    /**
+     * Deletes a file and removes it from favorites and recent databases.
+     */
+    fun deleteFile(path: String, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val success = FileOperations.deleteFile(path)
+            if (success) {
+                // Remove from favorites if present
+                favoriteRepository.removeFavorite(path)
+                // Remove from recent if present
+                recentRepository.removeRecent(path)
+                // Reload folder contents
+                loadFilesForFolder(currentFolderPath)
+                onComplete(true)
+            } else {
+                onComplete(false)
+            }
+        }
+    }
+
     private fun sortFiles(files: List<PdfFile>, sortOption: SortOption): List<PdfFile> {
         return when (sortOption) {
             SortOption.NAME_ASC -> files.sortedBy { it.name.lowercase() }

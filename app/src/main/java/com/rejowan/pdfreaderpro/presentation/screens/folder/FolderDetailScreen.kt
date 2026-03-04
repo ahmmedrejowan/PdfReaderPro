@@ -325,8 +325,7 @@ fun FolderDetailScreen(
                     fileForDialog = null
                 },
                 onConfirm = {
-                    FileOperations.deleteFile(file.path)
-                    viewModel.loadFilesForFolder(folderPath)
+                    viewModel.deleteFile(file.path) { /* success handled internally */ }
                 }
             )
         }

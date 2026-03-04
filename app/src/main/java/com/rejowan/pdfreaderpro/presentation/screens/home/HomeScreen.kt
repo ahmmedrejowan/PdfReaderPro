@@ -465,8 +465,7 @@ fun HomeScreen(
                     fileForDialog = null
                 },
                 onConfirm = {
-                    FileOperations.deleteFile(file.path)
-                    viewModel.refresh()
+                    viewModel.deleteFile(file.path) { /* success handled internally */ }
                 }
             )
         }
