@@ -37,11 +37,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -199,6 +203,7 @@ fun FolderDetailScreen(
                     // Folder header with info and controls
                     FolderDetailHeader(
                         fileCount = files.size,
+                        totalSize = files.sumOf { it.size },
                         isGridView = viewMode == ViewMode.GRID,
                         onViewModeToggle = {
                             viewModel.setViewMode(
@@ -229,7 +234,8 @@ fun FolderDetailScreen(
                                             selectedFileFavorite = viewModel.isFavorite(file.path)
                                         }
                                     },
-                                    animationDelay = index * 30
+                                    animationDelay = index * 30,
+                                    modifier = Modifier.animateItem()
                                 )
                             }
                         }
@@ -254,7 +260,8 @@ fun FolderDetailScreen(
                                             selectedFileFavorite = viewModel.isFavorite(file.path)
                                         }
                                     },
-                                    animationDelay = index * 30
+                                    animationDelay = index * 30,
+                                    modifier = Modifier.animateItem()
                                 )
                             }
                         }
@@ -345,9 +352,20 @@ fun FolderDetailScreen(
     }
 }
 
+private fun formatSize(bytes: Long): String {
+    return when {
+        bytes >= 1_073_741_824 -> String.format("%.1f GB", bytes / 1_073_741_824.0)
+        bytes >= 1_048_576 -> String.format("%.1f MB", bytes / 1_048_576.0)
+        bytes >= 1024 -> String.format("%.1f KB", bytes / 1024.0)
+        else -> "$bytes B"
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FolderDetailHeader(
     fileCount: Int,
+    totalSize: Long,
     isGridView: Boolean,
     onViewModeToggle: () -> Unit,
     onSortClick: () -> Unit,
@@ -360,69 +378,119 @@ private fun FolderDetailHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // File count chip
-        Surface(
-            shape = RoundedCornerShape(10.dp),
-            color = SoftBlue.copy(alpha = 0.12f)
+        // File count and size chips
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            // File count chip
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = SoftBlue.copy(alpha = 0.12f)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Description,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                    tint = SoftBlue
-                )
-                Text(
-                    text = "$fileCount PDF${if (fileCount != 1) "s" else ""}",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.Medium
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Row(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Description,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = SoftBlue
+                    )
+                    Text(
+                        text = "$fileCount PDF${if (fileCount != 1) "s" else ""}",
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+
+            // Total size chip
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = FolderAmber.copy(alpha = 0.12f)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Folder,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = FolderAmber
+                    )
+                    Text(
+                        text = formatSize(totalSize),
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
 
-        // View mode and sort controls
+        // View mode and sort controls with tooltips
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // List view
-            ViewModeButton(
-                isSelected = !isGridView,
-                onClick = { if (isGridView) onViewModeToggle() }
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = { PlainTooltip { Text("List view") } },
+                state = rememberTooltipState()
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ViewList,
-                    contentDescription = "List view",
-                    modifier = Modifier.size(18.dp)
-                )
+                ViewModeButton(
+                    isSelected = !isGridView,
+                    onClick = { if (isGridView) onViewModeToggle() }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ViewList,
+                        contentDescription = "List view",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
             // Grid view
-            ViewModeButton(
-                isSelected = isGridView,
-                onClick = { if (!isGridView) onViewModeToggle() }
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = { PlainTooltip { Text("Grid view") } },
+                state = rememberTooltipState()
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.GridView,
-                    contentDescription = "Grid view",
-                    modifier = Modifier.size(18.dp)
-                )
+                ViewModeButton(
+                    isSelected = isGridView,
+                    onClick = { if (!isGridView) onViewModeToggle() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.GridView,
+                        contentDescription = "Grid view",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
             // Sort
-            ViewModeButton(
-                isSelected = false,
-                onClick = onSortClick
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = { PlainTooltip { Text("Sort files") } },
+                state = rememberTooltipState()
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.Sort,
-                    contentDescription = "Sort",
-                    modifier = Modifier.size(18.dp)
-                )
+                ViewModeButton(
+                    isSelected = false,
+                    onClick = onSortClick
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.Sort,
+                        contentDescription = "Sort",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
         }
     }
