@@ -300,7 +300,7 @@ fun SettingsScreenContent(
         SettingsOptionItem(
             icon = Icons.Rounded.Gavel,
             title = "App License",
-            subtitle = "GNU Affero General Public License v3.0",
+            subtitle = "GNU General Public License v3.0",
             accentColor = AccentBlue,
             onClick = { showAppLicenseSheet = true },
             animationDelay = 750
@@ -2047,7 +2047,7 @@ private fun AppLicenseContent() {
             .padding(bottom = 32.dp)
     ) {
         Text(
-            text = "GNU Affero General Public License v3.0",
+            text = "GNU General Public License v3.0",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 20.dp)
@@ -2065,9 +2065,9 @@ private fun AppLicenseContent() {
 PDF Reader Pro - Open Source PDF Viewer
 Copyright (C) 2026 K M Rejowan Ahmmed
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
                 """.trimIndent(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -2092,8 +2092,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
                 LicenseTermItem("✓ Freedom to study and modify the source code")
                 LicenseTermItem("✓ Freedom to distribute copies")
                 LicenseTermItem("✓ Freedom to distribute modified versions")
-                LicenseTermItem("✓ Network use counts as distribution (AGPL clause)")
-                LicenseTermItem("✓ Derivative works must be open source under AGPL v3.0")
+                LicenseTermItem("✓ Derivative works must be open source under GPL v3.0")
             }
         }
 
@@ -2106,7 +2105,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
                 .clickable {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
-                        "https://www.gnu.org/licenses/agpl-3.0.en.html".toUri()
+                        "https://www.gnu.org/licenses/gpl-3.0.en.html".toUri()
                     )
                     context.startActivity(intent)
                 },
@@ -2114,7 +2113,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
             color = MaterialTheme.colorScheme.primary
         ) {
             Text(
-                text = "View Full AGPL v3.0 License",
+                text = "View Full GPL v3.0 License",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onPrimary,
