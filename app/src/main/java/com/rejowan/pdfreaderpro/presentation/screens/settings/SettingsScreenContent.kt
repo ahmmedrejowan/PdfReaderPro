@@ -1673,30 +1673,6 @@ private fun AboutSheet(
             ),
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
             containerColor = MaterialTheme.colorScheme.surface,
-            dragHandle = {
-                // Custom drag handle with close button
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp, end = 12.dp),
-                    contentAlignment = Alignment.TopEnd
-                ) {
-                    Surface(
-                        onClick = onDismiss,
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.surfaceContainerHigh
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = "Close",
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .size(20.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
         ) {
             Box(
                 modifier = Modifier
