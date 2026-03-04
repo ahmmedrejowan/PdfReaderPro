@@ -400,6 +400,8 @@ private fun SearchHeader(
     }
 }
 
+private const val COLLAPSED_RECENT_COUNT = 3
+
 @Composable
 private fun SearchIdleContent(
     recentSearches: List<String>,
@@ -408,6 +410,10 @@ private fun SearchIdleContent(
     onClearAllRecent: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isRecentExpanded by remember { mutableStateOf(false) }
+    val displayedSearches = if (isRecentExpanded) recentSearches else recentSearches.take(COLLAPSED_RECENT_COUNT)
+    val hasMore = recentSearches.size > COLLAPSED_RECENT_COUNT
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 32.dp)
@@ -450,12 +456,35 @@ private fun SearchIdleContent(
                 }
             }
 
-            items(recentSearches) { query ->
+            items(displayedSearches) { query ->
                 RecentSearchItem(
                     query = query,
                     onClick = { onRecentClick(query) },
                     onRemove = { onClearRecent(query) }
                 )
+            }
+
+            // Show more/less button
+            if (hasMore) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable { isRecentExpanded = !isRecentExpanded }
+                            .padding(horizontal = 20.dp, vertical = 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (isRecentExpanded) "Show Less" else "Show All (${recentSearches.size})",
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = SoftPurple
+                        )
+                    }
+                }
             }
 
             item { Spacer(modifier = Modifier.height(24.dp)) }
