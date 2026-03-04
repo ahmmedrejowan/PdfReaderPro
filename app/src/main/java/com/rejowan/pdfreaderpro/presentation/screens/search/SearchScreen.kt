@@ -9,8 +9,10 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +32,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,6 +51,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.TipsAndUpdates
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -75,9 +79,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
@@ -456,11 +463,12 @@ private fun SearchIdleContent(
                 }
             }
 
-            items(displayedSearches) { query ->
+            itemsIndexed(displayedSearches) { index, query ->
                 RecentSearchItem(
                     query = query,
                     onClick = { onRecentClick(query) },
-                    onRemove = { onClearRecent(query) }
+                    onRemove = { onClearRecent(query) },
+                    animationDelay = index * 30
                 )
             }
 
@@ -502,11 +510,28 @@ private fun RecentSearchItem(
     query: String,
     onClick: () -> Unit,
     onRemove: () -> Unit,
+    animationDelay: Int = 0,
     modifier: Modifier = Modifier
 ) {
+    var isVisible by remember { mutableStateOf(animationDelay == 0) }
+
+    LaunchedEffect(Unit) {
+        if (animationDelay > 0) {
+            kotlinx.coroutines.delay(animationDelay.toLong())
+            isVisible = true
+        }
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(200, easing = FastOutSlowInEasing),
+        label = "recent item scale"
+    )
+
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .scale(scale)
             .clickable(onClick = onClick)
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -683,8 +708,16 @@ private fun SearchResultsContent(
     onFileOptionsClick: (PdfFile) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
+
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(onPress = {
+                    focusManager.clearFocus()
+                })
+            },
         contentPadding = PaddingValues(bottom = 32.dp)
     ) {
         // Results header
@@ -695,15 +728,18 @@ private fun SearchResultsContent(
             )
         }
 
-        // Results list
-        items(
+        // Results list with staggered animation
+        itemsIndexed(
             items = results,
-            key = { it.id }
-        ) { file ->
-            PdfListItem(
+            key = { _, file -> file.id }
+        ) { index, file ->
+            SearchResultItem(
                 pdfFile = file,
+                query = query,
                 onClick = { onFileClick(file) },
-                onOptionsClick = { onFileOptionsClick(file) }
+                onOptionsClick = { onFileOptionsClick(file) },
+                animationDelay = index * 30,
+                modifier = Modifier.animateItem()
             )
         }
     }
@@ -754,5 +790,179 @@ private fun SearchResultsHeader(
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
             )
         }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun SearchResultItem(
+    pdfFile: PdfFile,
+    query: String,
+    onClick: () -> Unit,
+    onOptionsClick: () -> Unit,
+    animationDelay: Int = 0,
+    modifier: Modifier = Modifier
+) {
+    var isVisible by remember { mutableStateOf(animationDelay == 0) }
+
+    LaunchedEffect(Unit) {
+        if (animationDelay > 0) {
+            kotlinx.coroutines.delay(animationDelay.toLong())
+            isVisible = true
+        }
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
+        label = "item scale"
+    )
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onOptionsClick
+            ),
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // PDF Thumbnail
+            com.rejowan.pdfreaderpro.presentation.components.PdfThumbnail(
+                size = 52.dp,
+                pdfPath = pdfFile.path,
+                pageCount = pdfFile.pageCount.takeIf { it > 0 }
+            )
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            // File info with highlighted name
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                // Highlighted file name
+                Text(
+                    text = buildHighlightedText(pdfFile.displayName, query),
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                // Size and date row
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                    ) {
+                        Text(
+                            text = com.rejowan.pdfreaderpro.util.FormattingUtils.formattedFileSize(pdfFile.size),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
+                    }
+                    Text(
+                        text = "•",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF9E9E9E)
+                    )
+                    Text(
+                        text = com.rejowan.pdfreaderpro.util.FormattingUtils.formattedDate(pdfFile.dateModified),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
+
+                // Folder row
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Folder,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                        tint = Color(0xFF9E9E9E).copy(alpha = 0.7f)
+                    )
+                    Text(
+                        text = pdfFile.folderName,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+
+            // Options button
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    .clickable(onClick = onOptionsClick),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.MoreVert,
+                    contentDescription = "Options",
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun buildHighlightedText(text: String, query: String) = buildAnnotatedString {
+    val lowerText = text.lowercase()
+    val lowerQuery = query.lowercase()
+    var startIndex = 0
+
+    while (true) {
+        val matchIndex = lowerText.indexOf(lowerQuery, startIndex)
+        if (matchIndex == -1) {
+            // No more matches, append the rest
+            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                append(text.substring(startIndex))
+            }
+            break
+        }
+
+        // Append text before match
+        if (matchIndex > startIndex) {
+            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                append(text.substring(startIndex, matchIndex))
+            }
+        }
+
+        // Append highlighted match
+        withStyle(
+            SpanStyle(
+                color = SoftPurple,
+                fontWeight = FontWeight.Bold
+            )
+        ) {
+            append(text.substring(matchIndex, matchIndex + query.length))
+        }
+
+        startIndex = matchIndex + query.length
     }
 }
