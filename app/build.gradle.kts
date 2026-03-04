@@ -92,6 +92,11 @@ dependencies {
     // Kotlin Serialization (for type-safe navigation)
     implementation(libs.kotlinx.serialization.json)
 
+    // Ktor HTTP Client (for GitHub API)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.json)
+
 
     // Image Loading
     implementation(libs.coil.compose)

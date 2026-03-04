@@ -8,6 +8,7 @@ data class AppPreferences(
     val defaultViewMode: ViewMode = ViewMode.LIST,
     val defaultSortOption: SortOption = SortOption.NAME_ASC,
     val rememberPasswords: Boolean = true,
+    val updateCheckInterval: UpdateCheckInterval = UpdateCheckInterval.WEEKLY,
 
     // Reader settings (global)
     val readerBrightness: Float = -1f, // -1 = system default, 0-1 = custom
@@ -53,4 +54,13 @@ enum class ReadingTheme {
     SEPIA,
     DARK,
     BLACK // AMOLED
+}
+
+enum class UpdateCheckInterval(val days: Int, val displayName: String) {
+    NEVER(0, "Never"),
+    DAILY(1, "Daily"),
+    THREE_DAYS(3, "Every 3 days"),
+    WEEKLY(7, "Weekly"),
+    BIWEEKLY(14, "Every 2 weeks"),
+    MONTHLY(30, "Monthly")
 }

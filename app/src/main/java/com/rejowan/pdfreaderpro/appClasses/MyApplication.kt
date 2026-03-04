@@ -4,6 +4,7 @@ import android.app.Application
 import com.rejowan.pdfreaderpro.BuildConfig
 import com.rejowan.pdfreaderpro.di.dataStoreModule
 import com.rejowan.pdfreaderpro.di.databaseModule
+import com.rejowan.pdfreaderpro.di.networkModule
 import com.rejowan.pdfreaderpro.di.repositoryModule
 import com.rejowan.pdfreaderpro.di.viewModelModule
 import com.rejowan.pdfreaderpro.util.GlobalErrorHandler
@@ -43,6 +44,7 @@ class MyApplication : Application() {
             modules(
                 databaseModule,
                 dataStoreModule,
+                networkModule,
                 repositoryModule,
                 viewModelModule
             )

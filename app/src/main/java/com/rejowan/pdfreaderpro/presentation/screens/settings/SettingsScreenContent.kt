@@ -62,6 +62,8 @@ import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.SystemUpdate
 import androidx.compose.material.icons.rounded.Work
 import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -106,6 +108,9 @@ import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
+import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
+import com.rejowan.pdfreaderpro.domain.model.UpdateState
+import com.rejowan.pdfreaderpro.presentation.components.UpdateAvailableSheet
 import com.rejowan.licensy.LicenseContent
 import com.rejowan.licensy.Licenses
 import com.rejowan.licensy.compose.LicensyList
@@ -128,6 +133,7 @@ fun SettingsScreenContent(
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val preferences by viewModel.preferences.collectAsState()
+    val updateState by viewModel.updateState.collectAsState()
 
     val context = LocalContext.current
 
@@ -145,6 +151,7 @@ fun SettingsScreenContent(
     var showLicensesSheet by remember { mutableStateOf(false) }
     var showCreatorSheet by remember { mutableStateOf(false) }
     var showAppLicenseSheet by remember { mutableStateOf(false) }
+    var showUpdateIntervalSheet by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -265,8 +272,40 @@ fun SettingsScreenContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Updates Section
+        SectionLabel(text = "Updates", delay = 500)
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.SystemUpdate,
+            title = "Check for Updates",
+            subtitle = when (updateState) {
+                is UpdateState.Idle -> "Tap to check for updates"
+                is UpdateState.Checking -> "Checking..."
+                is UpdateState.Available -> "Update available: v${(updateState as UpdateState.Available).release.version}"
+                is UpdateState.UpToDate -> "You're up to date"
+                is UpdateState.Error -> "Error: ${(updateState as UpdateState.Error).message}"
+            },
+            accentColor = AccentAmber,
+            onClick = { viewModel.checkForUpdates() },
+            animationDelay = 550
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Schedule,
+            title = "Auto-check Interval",
+            subtitle = preferences.updateCheckInterval.displayName,
+            accentColor = AccentBlue,
+            onClick = { showUpdateIntervalSheet = true },
+            animationDelay = 600
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         // About Section
-        SectionLabel(text = "About", delay = 500)
+        SectionLabel(text = "About", delay = 650)
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
@@ -275,7 +314,7 @@ fun SettingsScreenContent(
             subtitle = "View changelog",
             accentColor = AccentBlue,
             onClick = { showChangelogSheet = true },
-            animationDelay = 550
+            animationDelay = 700
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -286,7 +325,7 @@ fun SettingsScreenContent(
             subtitle = "View our privacy policy",
             accentColor = AccentTeal,
             onClick = { showPrivacyPolicySheet = true },
-            animationDelay = 600
+            animationDelay = 750
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -297,7 +336,7 @@ fun SettingsScreenContent(
             subtitle = "View third-party libraries",
             accentColor = AccentPurple,
             onClick = { showLicensesSheet = true },
-            animationDelay = 650
+            animationDelay = 800
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -308,7 +347,7 @@ fun SettingsScreenContent(
             subtitle = "About the developer",
             accentColor = AccentAmber,
             onClick = { showCreatorSheet = true },
-            animationDelay = 700
+            animationDelay = 850
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -319,7 +358,7 @@ fun SettingsScreenContent(
             subtitle = "GNU General Public License v3.0",
             accentColor = AccentBlue,
             onClick = { showAppLicenseSheet = true },
-            animationDelay = 750
+            animationDelay = 900
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -336,7 +375,7 @@ fun SettingsScreenContent(
                 }
                 context.startActivity(intent)
             },
-            animationDelay = 800
+            animationDelay = 950
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -353,7 +392,7 @@ fun SettingsScreenContent(
                 )
                 context.startActivity(intent)
             },
-            animationDelay = 850
+            animationDelay = 1000
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -502,6 +541,42 @@ fun SettingsScreenContent(
         AboutSheet(onDismiss = { showAppLicenseSheet = false }) {
             AppLicenseContent()
         }
+    }
+
+    // Update check interval picker
+    if (showUpdateIntervalSheet) {
+        SettingsPickerSheet(
+            title = "Auto-check Interval",
+            subtitle = "How often to check for updates",
+            icon = Icons.Rounded.Schedule,
+            accentColor = AccentBlue,
+            options = listOf(
+                PickerOption(Icons.Rounded.Schedule, "Never", "Manual check only"),
+                PickerOption(Icons.Rounded.Schedule, "Daily", "Check every day"),
+                PickerOption(Icons.Rounded.Schedule, "Every 3 days", "Check every 3 days"),
+                PickerOption(Icons.Rounded.Schedule, "Weekly", "Check once a week"),
+                PickerOption(Icons.Rounded.Schedule, "Every 2 weeks", "Check every 2 weeks"),
+                PickerOption(Icons.Rounded.Schedule, "Monthly", "Check once a month")
+            ),
+            selectedIndex = UpdateCheckInterval.entries.indexOf(preferences.updateCheckInterval),
+            onSelect = { index ->
+                viewModel.setUpdateCheckInterval(UpdateCheckInterval.entries[index])
+                showUpdateIntervalSheet = false
+            },
+            onDismiss = { showUpdateIntervalSheet = false }
+        )
+    }
+
+    // Update available sheet
+    if (updateState is UpdateState.Available) {
+        val availableState = updateState as UpdateState.Available
+        UpdateAvailableSheet(
+            release = availableState.release,
+            currentVersion = availableState.currentVersion,
+            downloadUrl = viewModel.getApkDownloadUrl(availableState.release),
+            onDismiss = { viewModel.dismissUpdateDialog() },
+            onSkipVersion = { viewModel.skipVersion(availableState.release.version) }
+        )
     }
 }
 

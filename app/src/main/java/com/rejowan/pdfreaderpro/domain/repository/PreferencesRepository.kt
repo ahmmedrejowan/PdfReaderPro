@@ -8,6 +8,7 @@ import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
+import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
 import com.rejowan.pdfreaderpro.domain.model.ViewMode
 import kotlinx.coroutines.flow.Flow
 
@@ -21,6 +22,7 @@ interface PreferencesRepository {
     suspend fun setDefaultViewMode(mode: ViewMode)
     suspend fun setDefaultSortOption(option: SortOption)
     suspend fun setRememberPasswords(enabled: Boolean)
+    suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval)
 
     // Reader settings
     suspend fun setReaderBrightness(brightness: Float)
