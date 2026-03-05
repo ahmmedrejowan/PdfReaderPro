@@ -27,6 +27,7 @@ class ApkDownloadManager(private val context: Context) {
     companion object {
         private const val TAG = "ApkDownloader"
         private const val UPDATES_DIR = "updates"
+        private const val VERSION_FILE = "pending_version.txt"
         private const val PROGRESS_POLL_INTERVAL = 500L
     }
 
@@ -53,9 +54,12 @@ class ApkDownloadManager(private val context: Context) {
      *
      * @param url The download URL for the APK
      * @param fileName The name to save the file as
+     * @param version The version string to save for later reference
      * @return A Flow emitting DownloadState updates
      */
-    fun downloadApk(url: String, fileName: String): Flow<DownloadState> = callbackFlow {
+    fun downloadApk(url: String, fileName: String, version: String? = null): Flow<DownloadState> = callbackFlow {
+        // Save version for later reference
+        version?.let { savePendingVersion(it) }
         Timber.tag(TAG).d("=== DOWNLOAD START ===")
         Timber.tag(TAG).d("URL: $url")
         Timber.tag(TAG).d("File: $fileName")
@@ -286,7 +290,7 @@ class ApkDownloadManager(private val context: Context) {
     }
 
     /**
-     * Cleans up old downloaded APKs.
+     * Cleans up old downloaded APKs and version file.
      */
     fun cleanupOldDownloads() {
         val updatesDir = File(context.getExternalFilesDir(null), UPDATES_DIR)
@@ -298,6 +302,7 @@ class ApkDownloadManager(private val context: Context) {
                 }
             }
         }
+        clearPendingVersion()
     }
 
     /**
@@ -334,10 +339,42 @@ class ApkDownloadManager(private val context: Context) {
     }
 
     /**
-     * Gets version from pending APK filename.
+     * Gets version of the pending APK (from saved version file).
      */
     fun getPendingApkVersion(): String? {
-        return getPendingApk()?.name?.let { extractVersion(it) }
+        val updatesDir = File(context.getExternalFilesDir(null), UPDATES_DIR)
+        val versionFile = File(updatesDir, VERSION_FILE)
+        return if (versionFile.exists()) {
+            versionFile.readText().trim().also {
+                Timber.tag(TAG).d("Read pending version: $it")
+            }
+        } else {
+            // Fallback to extracting from filename
+            getPendingApk()?.name?.let { extractVersion(it) }
+        }
+    }
+
+    /**
+     * Saves the pending version to a file.
+     */
+    private fun savePendingVersion(version: String) {
+        val updatesDir = File(context.getExternalFilesDir(null), UPDATES_DIR)
+        if (!updatesDir.exists()) updatesDir.mkdirs()
+        val versionFile = File(updatesDir, VERSION_FILE)
+        versionFile.writeText(version)
+        Timber.tag(TAG).d("Saved pending version: $version")
+    }
+
+    /**
+     * Clears the saved pending version.
+     */
+    private fun clearPendingVersion() {
+        val updatesDir = File(context.getExternalFilesDir(null), UPDATES_DIR)
+        val versionFile = File(updatesDir, VERSION_FILE)
+        if (versionFile.exists()) {
+            versionFile.delete()
+            Timber.tag(TAG).d("Cleared pending version file")
+        }
     }
 
     /**

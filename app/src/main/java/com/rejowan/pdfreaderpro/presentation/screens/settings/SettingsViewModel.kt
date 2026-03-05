@@ -182,11 +182,11 @@ class SettingsViewModel(
             return
         }
 
-        Timber.tag(TAG).d("Starting download: ${apkAsset.name}")
+        Timber.tag(TAG).d("Starting download: ${apkAsset.name}, version: ${release.version}")
 
         downloadJob?.cancel()
         downloadJob = viewModelScope.launch {
-            apkDownloadManager.downloadApk(apkAsset.downloadUrl, apkAsset.name)
+            apkDownloadManager.downloadApk(apkAsset.downloadUrl, apkAsset.name, release.version)
                 .collect { state ->
                     _downloadState.value = state
                     Timber.tag(TAG).d("Download state: $state")

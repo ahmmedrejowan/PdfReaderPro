@@ -157,10 +157,6 @@ fun SettingsScreenContent(
             is ApkDownloadManager.DownloadState.Downloading -> {
                 showDownloadSheet = true
             }
-            is ApkDownloadManager.DownloadState.Completed -> {
-                // Refresh pending APK state when download completes
-                viewModel.refreshPendingApkState()
-            }
             else -> {}
         }
     }
