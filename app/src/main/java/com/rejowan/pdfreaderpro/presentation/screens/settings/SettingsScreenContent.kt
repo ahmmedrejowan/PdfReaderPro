@@ -44,8 +44,11 @@ import androidx.compose.material.icons.rounded.Brightness6
 import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.ColorLens
+import androidx.compose.material.icons.rounded.Brightness1
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.FormatAlignCenter
+import androidx.compose.material.icons.rounded.FormatAlignLeft
+import androidx.compose.material.icons.rounded.FormatAlignRight
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Code
@@ -61,11 +64,15 @@ import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
+import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SystemUpdate
 import androidx.compose.material.icons.rounded.Work
+import androidx.compose.material.icons.rounded.AspectRatio
+import androidx.compose.material.icons.rounded.FitScreen
+import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
@@ -487,7 +494,7 @@ fun SettingsScreenContent(
             accentColor = AccentPurple,
             options = listOf(
                 PickerOption(Icons.Rounded.SwapVert, "Vertical", "Scroll up and down"),
-                PickerOption(Icons.Rounded.SwapVert, "Horizontal", "Scroll left and right")
+                PickerOption(Icons.Rounded.SwapHoriz, "Horizontal", "Scroll left and right")
             ),
             selectedIndex = ScrollDirection.entries.indexOf(preferences.readerScrollDirection),
             onSelect = { index ->
@@ -506,9 +513,9 @@ fun SettingsScreenContent(
             icon = Icons.Rounded.FormatAlignCenter,
             accentColor = AccentTeal,
             options = listOf(
-                PickerOption(Icons.Rounded.FormatAlignCenter, "Left", "Align pages to left"),
+                PickerOption(Icons.Rounded.FormatAlignLeft, "Left", "Align pages to left"),
                 PickerOption(Icons.Rounded.FormatAlignCenter, "Center", "Center pages"),
-                PickerOption(Icons.Rounded.FormatAlignCenter, "Right", "Align pages to right")
+                PickerOption(Icons.Rounded.FormatAlignRight, "Right", "Align pages to right")
             ),
             selectedIndex = PageAlignment.entries.indexOf(preferences.readerPageAlignment),
             onSelect = { index ->
@@ -527,9 +534,9 @@ fun SettingsScreenContent(
             icon = Icons.Rounded.ZoomIn,
             accentColor = AccentBlue,
             options = listOf(
-                PickerOption(Icons.Rounded.ZoomIn, "Fit Page", "Show entire page"),
-                PickerOption(Icons.Rounded.ZoomIn, "Fit Width", "Match page width to screen"),
-                PickerOption(Icons.Rounded.ZoomIn, "100%", "Actual size")
+                PickerOption(Icons.Rounded.FitScreen, "Fit Page", "Show entire page"),
+                PickerOption(Icons.Rounded.Fullscreen, "Fit Width", "Match page width to screen"),
+                PickerOption(Icons.Rounded.AspectRatio, "100%", "Actual size")
             ),
             selectedIndex = QuickZoomPreset.entries.indexOf(preferences.readerQuickZoomPreset),
             onSelect = { index ->
@@ -551,7 +558,7 @@ fun SettingsScreenContent(
                 PickerOption(Icons.Rounded.LightMode, "Light", "White background"),
                 PickerOption(Icons.Rounded.ColorLens, "Sepia", "Warm paper tone"),
                 PickerOption(Icons.Rounded.DarkMode, "Dark", "Dark gray background"),
-                PickerOption(Icons.Rounded.DarkMode, "Black", "Pure black (AMOLED)")
+                PickerOption(Icons.Rounded.Brightness1, "Black", "Pure black (AMOLED)")
             ),
             selectedIndex = ReadingTheme.entries.indexOf(preferences.readerTheme),
             onSelect = { index ->
@@ -950,76 +957,6 @@ private fun SettingsToggleItem(
                     uncheckedThumbColor = Color.White,
                     uncheckedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
                 )
-            )
-        }
-    }
-}
-
-@Composable
-private fun SettingsInfoItem(
-    icon: ImageVector,
-    title: String,
-    value: String,
-    accentColor: Color,
-    animationDelay: Int,
-    modifier: Modifier = Modifier
-) {
-    var isVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        delay(animationDelay.toLong())
-        isVisible = true
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0.95f,
-        animationSpec = tween(250, easing = FastOutSlowInEasing),
-        label = "info scale"
-    )
-
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .scale(scale),
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-                .padding(horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Surface(
-                shape = RoundedCornerShape(10.dp),
-                color = accentColor.copy(alpha = 0.12f)
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(20.dp),
-                    tint = accentColor
-                )
-            }
-
-            Spacer(modifier = Modifier.width(14.dp))
-
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Medium
-                ),
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.weight(1f)
-            )
-
-            Text(
-                text = value,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
         }
     }
@@ -2072,9 +2009,7 @@ private fun PrivacyHighlightItem(text: String) {
         Icon(
             imageVector = Icons.Rounded.CheckCircle,
             contentDescription = null,
-            modifier = Modifier
-                .size(18.dp)
-                .padding(end = 0.dp),
+            modifier = Modifier.size(18.dp),
             tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.width(10.dp))
