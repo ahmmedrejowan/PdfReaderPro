@@ -616,9 +616,11 @@ class PdfToolsRepositoryImpl(
 
     override suspend fun isPasswordProtected(inputPath: String): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
+            // Need to create PdfDocument to actually read the PDF and check encryption
             val reader = PdfReader(inputPath)
+            val pdfDoc = PdfDocument(reader)
             val isEncrypted = reader.isEncrypted
-            reader.close()
+            pdfDoc.close()
             Result.success(isEncrypted)
         } catch (e: com.itextpdf.kernel.exceptions.BadPasswordException) {
             // If we get a BadPasswordException, the PDF is password protected
