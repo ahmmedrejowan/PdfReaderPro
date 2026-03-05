@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 
 class ReaderViewModel(
@@ -171,7 +172,8 @@ class ReaderViewModel(
                     it.copy(
                         isLoading = false,
                         totalPages = pagesCount,
-                        error = null
+                        error = null,
+                        passwordSubmitted = false
                     )
                 }
 
@@ -232,7 +234,17 @@ class ReaderViewModel(
                 _state.update { it.copy(zoom = scale) }
             },
             onPasswordDialogChange = { isOpen ->
-                _state.update { it.copy(isPasswordRequired = isOpen) }
+                _state.update { currentState ->
+                    if (isOpen && currentState.passwordSubmitted) {
+                        // Password dialog reopened after submission = wrong password
+                        currentState.copy(isPasswordRequired = true, isPasswordError = true)
+                    } else if (isOpen) {
+                        currentState.copy(isPasswordRequired = true)
+                    } else {
+                        // Dialog closed - keep passwordSubmitted flag (library may reopen if wrong)
+                        currentState.copy(isPasswordRequired = false, isPasswordError = false)
+                    }
+                }
             },
             onSingleClick = {
                 onAction(ReaderAction.ToggleToolbar)
@@ -681,7 +693,8 @@ class ReaderViewModel(
             if (remember) {
                 passwordStorage.savePassword(pdfPath, password)
             }
-            // Submit password to the library's password dialog
+            // Mark that we submitted a password (to detect wrong password if dialog reopens)
+            _state.update { it.copy(passwordSubmitted = true) }
             pdfViewer?.ui?.passwordDialog?.submitPassword(password)
         }
     }

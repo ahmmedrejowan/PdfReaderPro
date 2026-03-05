@@ -56,6 +56,7 @@ data class ReaderState(
     // Password
     val isPasswordRequired: Boolean = false,
     val isPasswordError: Boolean = false,
+    val passwordSubmitted: Boolean = false,
 
     // Page jump dialog
     val isPageJumpDialogVisible: Boolean = false,
