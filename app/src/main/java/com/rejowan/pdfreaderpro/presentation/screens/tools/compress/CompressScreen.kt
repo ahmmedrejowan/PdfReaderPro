@@ -5,8 +5,16 @@ import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,6 +29,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,7 +68,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -184,6 +196,37 @@ fun CompressScreen(
                 }
                 else -> {
                     // Compress options
+                    // Staggered entry animation states
+                    var item1Visible by remember { mutableStateOf(false) }
+                    var item2Visible by remember { mutableStateOf(false) }
+
+                    LaunchedEffect(Unit) {
+                        item1Visible = true
+                        delay(40)
+                        item2Visible = true
+                    }
+
+                    val item1Alpha by animateFloatAsState(
+                        targetValue = if (item1Visible) 1f else 0f,
+                        animationSpec = tween(durationMillis = 300),
+                        label = "item1 alpha"
+                    )
+                    val item1Scale by animateFloatAsState(
+                        targetValue = if (item1Visible) 1f else 0.95f,
+                        animationSpec = tween(durationMillis = 300),
+                        label = "item1 scale"
+                    )
+                    val item2Alpha by animateFloatAsState(
+                        targetValue = if (item2Visible) 1f else 0f,
+                        animationSpec = tween(durationMillis = 300),
+                        label = "item2 alpha"
+                    )
+                    val item2Scale by animateFloatAsState(
+                        targetValue = if (item2Visible) 1f else 0.95f,
+                        animationSpec = tween(durationMillis = 300),
+                        label = "item2 scale"
+                    )
+
                     Column(
                         modifier = Modifier.fillMaxSize()
                     ) {
@@ -194,24 +237,42 @@ fun CompressScreen(
                         ) {
                             // Source file card
                             item {
-                                SourceFileCard(
-                                    sourceFile = state.sourceFile!!,
-                                    onPreview = {
-                                        state.sourceFile?.path?.let { path ->
-                                            navController.navigateToReader(path)
+                                Box(
+                                    modifier = Modifier
+                                        .graphicsLayer {
+                                            alpha = item1Alpha
+                                            scaleX = item1Scale
+                                            scaleY = item1Scale
                                         }
-                                    },
-                                    onChangeFile = { pdfPickerLauncher.launch(arrayOf("application/pdf")) }
-                                )
+                                ) {
+                                    SourceFileCard(
+                                        sourceFile = state.sourceFile!!,
+                                        onPreview = {
+                                            state.sourceFile?.path?.let { path ->
+                                                navController.navigateToReader(path)
+                                            }
+                                        },
+                                        onChangeFile = { pdfPickerLauncher.launch(arrayOf("application/pdf")) }
+                                    )
+                                }
                             }
 
                             // Compression level selection with size estimate
                             item {
-                                CompressionLevelSection(
-                                    selectedLevel = state.compressionLevel,
-                                    onLevelSelected = { viewModel.setCompressionLevel(it) },
-                                    sourceFile = state.sourceFile!!
-                                )
+                                Box(
+                                    modifier = Modifier
+                                        .graphicsLayer {
+                                            alpha = item2Alpha
+                                            scaleX = item2Scale
+                                            scaleY = item2Scale
+                                        }
+                                ) {
+                                    CompressionLevelSection(
+                                        selectedLevel = state.compressionLevel,
+                                        onLevelSelected = { viewModel.setCompressionLevel(it) },
+                                        sourceFile = state.sourceFile!!
+                                    )
+                                }
                             }
                         }
 
@@ -244,6 +305,18 @@ fun CompressScreen(
 
 @Composable
 private fun EmptyState(onSelectFile: () -> Unit) {
+    // Floating animation for icon
+    val infiniteTransition = rememberInfiniteTransition(label = "empty state float")
+    val floatOffset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 6f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "float offset"
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -253,6 +326,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
     ) {
         Box(
             modifier = Modifier
+                .offset(y = (-floatOffset).dp)
                 .size(80.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(AccentPurple.copy(alpha = 0.1f)),
