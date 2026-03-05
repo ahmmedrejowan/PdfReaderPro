@@ -1,6 +1,7 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -48,8 +49,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -76,7 +80,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -103,7 +109,6 @@ private val PresetColors = listOf(
     Color(0xFF42A5F5), // Blue
     Color(0xFF66BB6A), // Green
     Color(0xFFAB47BC), // Purple
-    Color(0xFF26A69A), // Teal
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -330,15 +335,28 @@ private fun PageNumbersContent(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        // Position selector
+        // Preview card on top
+        PageNumberPreview(
+            format = state.format,
+            fontSize = state.fontSize,
+            textColor = state.textColor,
+            startNumber = state.startNumber,
+            customPrefix = state.customPrefix,
+            customSuffix = state.customSuffix,
+            position = state.position
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Position selector (compact)
         SectionLabel("POSITION")
         Spacer(modifier = Modifier.height(8.dp))
-        PositionSelector(
+        CompactPositionSelector(
             selectedPosition = state.position,
             onPositionChange = onPositionChange
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Format selector
         SectionLabel("FORMAT")
@@ -376,7 +394,7 @@ private fun PageNumbersContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Appearance settings
         SectionLabel("APPEARANCE")
@@ -394,6 +412,8 @@ private fun PageNumbersContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Color picker
+        var showColorPicker by remember { mutableStateOf(false) }
+
         Text(
             "Color",
             style = MaterialTheme.typography.labelMedium,
@@ -411,6 +431,41 @@ private fun PageNumbersContent(
                     onClick = { onColorChange(color) }
                 )
             }
+            // Custom color picker button
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(
+                        brush = androidx.compose.ui.graphics.Brush.sweepGradient(
+                            colors = listOf(
+                                Color.Red, Color.Yellow, Color.Green,
+                                Color.Cyan, Color.Blue, Color.Magenta, Color.Red
+                            )
+                        )
+                    )
+                    .clickable { showColorPicker = true },
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surface)
+                )
+            }
+        }
+
+        // Color picker sheet
+        if (showColorPicker) {
+            ColorPickerSheet(
+                currentColor = state.textColor,
+                onColorSelected = { color ->
+                    onColorChange(color)
+                    showColorPicker = false
+                },
+                onDismiss = { showColorPicker = false }
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -550,123 +605,37 @@ private fun SectionLabel(text: String) {
 }
 
 @Composable
-private fun PositionSelector(
+private fun CompactPositionSelector(
     selectedPosition: NumberPosition,
     onPositionChange: (NumberPosition) -> Unit
 ) {
-    // Visual position grid
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        ),
-        shape = RoundedCornerShape(12.dp)
+    Row(
+        modifier = Modifier.horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            // Top row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                PositionButton(
-                    label = "TL",
-                    isSelected = selectedPosition == NumberPosition.TOP_LEFT,
-                    onClick = { onPositionChange(NumberPosition.TOP_LEFT) }
-                )
-                PositionButton(
-                    label = "TC",
-                    isSelected = selectedPosition == NumberPosition.TOP_CENTER,
-                    onClick = { onPositionChange(NumberPosition.TOP_CENTER) }
-                )
-                PositionButton(
-                    label = "TR",
-                    isSelected = selectedPosition == NumberPosition.TOP_RIGHT,
-                    onClick = { onPositionChange(NumberPosition.TOP_RIGHT) }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Page representation
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surface,
-                        RoundedCornerShape(4.dp)
+        NumberPosition.entries.forEach { position ->
+            FilterChip(
+                selected = selectedPosition == position,
+                onClick = { onPositionChange(position) },
+                label = {
+                    Text(
+                        when (position) {
+                            NumberPosition.TOP_LEFT -> "Top Left"
+                            NumberPosition.TOP_CENTER -> "Top Center"
+                            NumberPosition.TOP_RIGHT -> "Top Right"
+                            NumberPosition.BOTTOM_LEFT -> "Bottom Left"
+                            NumberPosition.BOTTOM_CENTER -> "Bottom Center"
+                            NumberPosition.BOTTOM_RIGHT -> "Bottom Right"
+                        },
+                        style = MaterialTheme.typography.labelSmall
                     )
-                    .border(
-                        1.dp,
-                        MaterialTheme.colorScheme.outlineVariant,
-                        RoundedCornerShape(4.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "Page Content",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                },
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = AccentOrange.copy(alpha = 0.2f),
+                    selectedLabelColor = AccentOrange
                 )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Bottom row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                PositionButton(
-                    label = "BL",
-                    isSelected = selectedPosition == NumberPosition.BOTTOM_LEFT,
-                    onClick = { onPositionChange(NumberPosition.BOTTOM_LEFT) }
-                )
-                PositionButton(
-                    label = "BC",
-                    isSelected = selectedPosition == NumberPosition.BOTTOM_CENTER,
-                    onClick = { onPositionChange(NumberPosition.BOTTOM_CENTER) }
-                )
-                PositionButton(
-                    label = "BR",
-                    isSelected = selectedPosition == NumberPosition.BOTTOM_RIGHT,
-                    onClick = { onPositionChange(NumberPosition.BOTTOM_RIGHT) }
-                )
-            }
+            )
         }
-    }
-}
-
-@Composable
-private fun PositionButton(
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(
-                if (isSelected) AccentOrange.copy(alpha = 0.2f)
-                else Color.Transparent
-            )
-            .border(
-                width = if (isSelected) 2.dp else 1.dp,
-                color = if (isSelected) AccentOrange else MaterialTheme.colorScheme.outlineVariant,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            label,
-            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-            color = if (isSelected) AccentOrange else MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }
 
@@ -782,6 +751,399 @@ private fun ColorCircle(
                 tint = if (color == Color.Black || color == Color(0xFF424242)) Color.White else Color.Black
             )
         }
+    }
+}
+
+@Composable
+private fun PageNumberPreview(
+    format: NumberFormat,
+    fontSize: Float,
+    textColor: Color,
+    startNumber: Int,
+    customPrefix: String,
+    customSuffix: String,
+    position: NumberPosition
+) {
+    val previewText = when (format) {
+        NumberFormat.NUMBER_ONLY -> "$startNumber"
+        NumberFormat.PAGE_X -> "Page $startNumber"
+        NumberFormat.X_OF_Y -> "$startNumber of 10"
+        NumberFormat.DASH_X_DASH -> "- $startNumber -"
+        NumberFormat.CUSTOM -> "$customPrefix$startNumber$customSuffix"
+    }
+
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Preview box simulating page with number at position
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(Color.White, RoundedCornerShape(4.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(4.dp))
+                    .padding(8.dp)
+            ) {
+                // Mock content lines
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 20.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    repeat(4) { index ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(if (index == 3) 0.5f else 0.8f + (index % 2) * 0.1f)
+                                .height(3.dp)
+                                .background(Color.Gray.copy(alpha = 0.15f), RoundedCornerShape(1.dp))
+                        )
+                    }
+                }
+
+                // Page number at position
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = when (position) {
+                        NumberPosition.TOP_LEFT -> Alignment.TopStart
+                        NumberPosition.TOP_CENTER -> Alignment.TopCenter
+                        NumberPosition.TOP_RIGHT -> Alignment.TopEnd
+                        NumberPosition.BOTTOM_LEFT -> Alignment.BottomStart
+                        NumberPosition.BOTTOM_CENTER -> Alignment.BottomCenter
+                        NumberPosition.BOTTOM_RIGHT -> Alignment.BottomEnd
+                    }
+                ) {
+                    Text(
+                        text = previewText,
+                        fontSize = (fontSize * 0.35f).coerceIn(8f, 18f).sp,
+                        fontWeight = FontWeight.Medium,
+                        color = textColor
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                "${format.label} • ${fontSize.toInt()}pt • ${position.name.replace("_", " ")}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ColorPickerSheet(
+    currentColor: Color,
+    onColorSelected: (Color) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val focusManager = LocalFocusManager.current
+
+    var red by remember { mutableStateOf((currentColor.red * 255).toInt()) }
+    var green by remember { mutableStateOf((currentColor.green * 255).toInt()) }
+    var blue by remember { mutableStateOf((currentColor.blue * 255).toInt()) }
+    var hexInput by remember { mutableStateOf(String.format("%02X%02X%02X", red, green, blue)) }
+
+    var redText by remember { mutableStateOf(red.toString()) }
+    var greenText by remember { mutableStateOf(green.toString()) }
+    var blueText by remember { mutableStateOf(blue.toString()) }
+
+    val isHexValid = hexInput.length == 6 && hexInput.all { it in '0'..'9' || it in 'A'..'F' }
+    val isRedValid = redText.toIntOrNull()?.let { it in 0..255 } ?: false
+    val isGreenValid = greenText.toIntOrNull()?.let { it in 0..255 } ?: false
+    val isBlueValid = blueText.toIntOrNull()?.let { it in 0..255 } ?: false
+
+    val selectedColor = Color(red, green, blue)
+
+    fun updateHexFromRgb() {
+        hexInput = String.format("%02X%02X%02X", red, green, blue)
+    }
+
+    fun updateRgbFromHex(hex: String) {
+        if (hex.length == 6 && hex.all { it in '0'..'9' || it in 'A'..'F' }) {
+            try {
+                val colorInt = hex.toLong(16).toInt()
+                red = (colorInt shr 16) and 0xFF
+                green = (colorInt shr 8) and 0xFF
+                blue = colorInt and 0xFF
+                redText = red.toString()
+                greenText = green.toString()
+                blueText = blue.toString()
+            } catch (_: Exception) { }
+        }
+    }
+
+    @Composable
+    fun ColorPickerContent(modifier: Modifier = Modifier) {
+        Box(
+            modifier = modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { focusManager.clearFocus() }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Header
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(AccentOrange.copy(alpha = 0.1f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.FormatListNumbered,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp),
+                            tint = AccentOrange
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            "Pick Color",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            "Page number color",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Color preview with hex
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(selectedColor)
+                            .border(
+                                1.dp,
+                                MaterialTheme.colorScheme.outlineVariant,
+                                RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Column {
+                        Text(
+                            "#${String.format("%02X%02X%02X", red, green, blue)}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = AccentOrange
+                        )
+                        Text(
+                            "RGB($red, $green, $blue)",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Hex input
+                OutlinedTextField(
+                    value = hexInput,
+                    onValueChange = { input ->
+                        val filtered = input.filter { it in '0'..'9' || it.uppercaseChar() in 'A'..'F' }
+                            .take(6).uppercase()
+                        hexInput = filtered
+                        updateRgbFromHex(filtered)
+                    },
+                    label = { Text("Hex") },
+                    prefix = { Text("#") },
+                    singleLine = true,
+                    isError = hexInput.isNotEmpty() && !isHexValid,
+                    supportingText = if (hexInput.isNotEmpty() && !isHexValid) {
+                        { Text("Enter 6 hex characters (0-9, A-F)") }
+                    } else null,
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // RGB inputs
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedTextField(
+                        value = redText,
+                        onValueChange = { input ->
+                            val filtered = input.filter { it.isDigit() }.take(3)
+                            redText = filtered
+                            filtered.toIntOrNull()?.coerceIn(0, 255)?.let {
+                                red = it
+                                updateHexFromRgb()
+                            }
+                        },
+                        label = { Text("R") },
+                        singleLine = true,
+                        isError = redText.isNotEmpty() && !isRedValid,
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = greenText,
+                        onValueChange = { input ->
+                            val filtered = input.filter { it.isDigit() }.take(3)
+                            greenText = filtered
+                            filtered.toIntOrNull()?.coerceIn(0, 255)?.let {
+                                green = it
+                                updateHexFromRgb()
+                            }
+                        },
+                        label = { Text("G") },
+                        singleLine = true,
+                        isError = greenText.isNotEmpty() && !isGreenValid,
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = blueText,
+                        onValueChange = { input ->
+                            val filtered = input.filter { it.isDigit() }.take(3)
+                            blueText = filtered
+                            filtered.toIntOrNull()?.coerceIn(0, 255)?.let {
+                                blue = it
+                                updateHexFromRgb()
+                            }
+                        },
+                        label = { Text("B") },
+                        singleLine = true,
+                        isError = blueText.isNotEmpty() && !isBlueValid,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // RGB Sliders
+                ColorSlider(label = "R", value = red.toFloat(), color = Color.Red, onValueChange = {
+                    red = it.toInt(); redText = red.toString(); updateHexFromRgb()
+                })
+                Spacer(modifier = Modifier.height(4.dp))
+                ColorSlider(label = "G", value = green.toFloat(), color = Color.Green, onValueChange = {
+                    green = it.toInt(); greenText = green.toString(); updateHexFromRgb()
+                })
+                Spacer(modifier = Modifier.height(4.dp))
+                ColorSlider(label = "B", value = blue.toFloat(), color = Color.Blue, onValueChange = {
+                    blue = it.toInt(); blueText = blue.toString(); updateHexFromRgb()
+                })
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
+                        Text("Cancel")
+                    }
+                    Button(onClick = { onColorSelected(selectedColor) }, modifier = Modifier.weight(1f)) {
+                        Text("Select")
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+
+    if (isLandscape) {
+        androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onDismiss() }
+                )
+                Card(
+                    modifier = Modifier.width(320.dp).fillMaxHeight(),
+                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                ) {
+                    ColorPickerContent(modifier = Modifier.fillMaxSize())
+                }
+            }
+        }
+    } else {
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            ColorPickerContent()
+        }
+    }
+}
+
+@Composable
+private fun ColorSlider(
+    label: String,
+    value: Float,
+    color: Color,
+    onValueChange: (Float) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = color,
+            modifier = Modifier.width(24.dp)
+        )
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
+            valueRange = 0f..255f,
+            modifier = Modifier.weight(1f),
+            colors = SliderDefaults.colors(thumbColor = color, activeTrackColor = color)
+        )
+        Text(
+            value.toInt().toString(),
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.width(32.dp),
+            textAlign = TextAlign.End
+        )
     }
 }
 
