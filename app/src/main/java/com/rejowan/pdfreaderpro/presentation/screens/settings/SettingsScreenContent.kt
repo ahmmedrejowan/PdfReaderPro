@@ -390,7 +390,7 @@ fun SettingsScreenContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
-            icon = Icons.Rounded.Code,
+            icon = Icons.Rounded.Gavel,
             title = "Open Source Licenses",
             subtitle = "View third-party libraries",
             accentColor = AccentPurple,
@@ -2208,6 +2208,12 @@ private fun LicensesContent() {
                 url = "https://developer.android.com/jetpack/compose/navigation"
             ),
             LicenseContent(
+                title = "Ktor",
+                author = "JetBrains",
+                license = Licenses.APACHE_2_0,
+                url = "https://ktor.io/"
+            ),
+            LicenseContent(
                 title = "Licensy",
                 author = "K M Rejowan Ahmmed",
                 license = Licenses.APACHE_2_0,
@@ -2436,7 +2442,7 @@ private fun AppLicenseContent() {
             Text(
                 text = """
 PDF Reader Pro - Open Source PDF Viewer
-Copyright (C) 2026 K M Rejowan Ahmmed
+Copyright (C) ${java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)} K M Rejowan Ahmmed
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
