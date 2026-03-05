@@ -64,9 +64,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -85,9 +82,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -231,6 +231,7 @@ fun WatermarkScreen(
                         onCustomPagesChange = { viewModel.setCustomPages(it) },
                         onOutputFileNameChange = { viewModel.setOutputFileName(it) },
                         onApply = { viewModel.applyWatermark() },
+                        onReset = { viewModel.reset() },
                         onClearError = { viewModel.clearError() }
                     )
                 }
@@ -333,134 +334,178 @@ private fun WatermarkContent(
     onCustomPagesChange: (String) -> Unit,
     onOutputFileNameChange: (String) -> Unit,
     onApply: () -> Unit,
+    onReset: () -> Unit,
     onClearError: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        // Watermark Type Tabs
-        WatermarkTypeTabs(
-            selectedType = state.watermarkType,
-            onTypeChange = onWatermarkTypeChange
-        )
+        // Top section: Preview on left, buttons on right
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Compact preview
+            CompactWatermarkPreview(
+                watermarkType = state.watermarkType,
+                text = state.watermarkText,
+                fontSize = state.fontSize,
+                textColor = state.textColor,
+                textOpacity = state.textOpacity,
+                textRotation = state.textRotation,
+                imageUri = state.imageUri,
+                imageScale = state.imageScale,
+                imageOpacity = state.imageOpacity,
+                position = state.position,
+                modifier = Modifier.weight(2f)
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Type-specific settings
-        when (state.watermarkType) {
-            WatermarkType.TEXT -> {
-                TextWatermarkSettings(
-                    text = state.watermarkText,
-                    fontSize = state.fontSize,
-                    textColor = state.textColor,
-                    opacity = state.textOpacity,
-                    rotation = state.textRotation,
-                    onTextChange = onTextChange,
-                    onFontSizeChange = onFontSizeChange,
-                    onColorChange = onTextColorChange,
-                    onOpacityChange = onTextOpacityChange,
-                    onRotationChange = onTextRotationChange
-                )
-            }
-            WatermarkType.IMAGE -> {
-                ImageWatermarkSettings(
-                    imagePath = state.imagePath,
-                    imageUri = state.imageUri,
-                    scale = state.imageScale,
-                    opacity = state.imageOpacity,
-                    onSelectImage = onSelectImage,
-                    onScaleChange = onImageScaleChange,
-                    onOpacityChange = onImageOpacityChange
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Position selection
-        PositionSelector(
-            selectedPosition = state.position,
-            onPositionChange = onPositionChange
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Page selection
-        PageSelector(
-            selectedSelection = state.pageSelection,
-            customPages = state.customPages,
-            totalPages = state.sourceFile?.pageCount ?: 0,
-            onSelectionChange = onPageSelectionChange,
-            onCustomPagesChange = onCustomPagesChange
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Error message
-        AnimatedVisibility(visible = state.error != null) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFEF5350).copy(alpha = 0.1f)
-                ),
-                shape = RoundedCornerShape(8.dp)
+            // Action buttons
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                Button(
+                    onClick = onApply,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !state.isProcessing
                 ) {
-                    Text(
-                        state.error ?: "",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFFEF5350),
-                        modifier = Modifier.weight(1f)
+                    Icon(
+                        Icons.Default.WaterDrop,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
                     )
-                    IconButton(
-                        onClick = onClearError,
-                        modifier = Modifier.size(24.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Close,
-                            contentDescription = "Dismiss",
-                            modifier = Modifier.size(16.dp),
-                            tint = Color(0xFFEF5350)
-                        )
-                    }
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Apply")
+                }
+                OutlinedButton(
+                    onClick = onReset,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Reset")
                 }
             }
         }
 
-        // Output filename
-        OutlinedTextField(
-            value = state.outputFileName,
-            onValueChange = onOutputFileNameChange,
-            label = { Text("Output file name") },
-            suffix = { Text(".pdf") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Apply button
-        Button(
-            onClick = onApply,
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !state.isProcessing
+        // Scrollable customization section
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
         ) {
-            Icon(Icons.Default.WaterDrop, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Apply Watermark")
-        }
+            // Watermark Type Tabs
+            WatermarkTypeTabs(
+                selectedType = state.watermarkType,
+                onTypeChange = onWatermarkTypeChange
+            )
 
-        Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Type-specific settings
+            when (state.watermarkType) {
+                WatermarkType.TEXT -> {
+                    TextWatermarkSettings(
+                        text = state.watermarkText,
+                        fontSize = state.fontSize,
+                        textColor = state.textColor,
+                        opacity = state.textOpacity,
+                        rotation = state.textRotation,
+                        onTextChange = onTextChange,
+                        onFontSizeChange = onFontSizeChange,
+                        onColorChange = onTextColorChange,
+                        onOpacityChange = onTextOpacityChange,
+                        onRotationChange = onTextRotationChange
+                    )
+                }
+                WatermarkType.IMAGE -> {
+                    ImageWatermarkSettings(
+                        imagePath = state.imagePath,
+                        imageUri = state.imageUri,
+                        scale = state.imageScale,
+                        opacity = state.imageOpacity,
+                        onSelectImage = onSelectImage,
+                        onScaleChange = onImageScaleChange,
+                        onOpacityChange = onImageOpacityChange
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Position selection
+            PositionSelector(
+                selectedPosition = state.position,
+                onPositionChange = onPositionChange
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Page selection
+            PageSelector(
+                selectedSelection = state.pageSelection,
+                customPages = state.customPages,
+                totalPages = state.sourceFile?.pageCount ?: 0,
+                onSelectionChange = onPageSelectionChange,
+                onCustomPagesChange = onCustomPagesChange
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Error message
+            AnimatedVisibility(visible = state.error != null) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFEF5350).copy(alpha = 0.1f)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            state.error ?: "",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color(0xFFEF5350),
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(
+                            onClick = onClearError,
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.Close,
+                                contentDescription = "Dismiss",
+                                modifier = Modifier.size(16.dp),
+                                tint = Color(0xFFEF5350)
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Output filename
+            OutlinedTextField(
+                value = state.outputFileName,
+                onValueChange = onOutputFileNameChange,
+                label = { Text("Output file name") },
+                suffix = { Text(".pdf") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+        }
     }
 }
 
@@ -469,61 +514,76 @@ private fun WatermarkTypeTabs(
     selectedType: WatermarkType,
     onTypeChange: (WatermarkType) -> Unit
 ) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        ),
-        shape = RoundedCornerShape(12.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        TabRow(
-            selectedTabIndex = if (selectedType == WatermarkType.TEXT) 0 else 1,
-            containerColor = Color.Transparent,
-            contentColor = AccentCyan,
-            indicator = { tabPositions ->
-                Box(
-                    Modifier
-                        .tabIndicatorOffset(tabPositions[if (selectedType == WatermarkType.TEXT) 0 else 1])
-                        .fillMaxWidth()
-                        .height(3.dp)
-                        .padding(horizontal = 24.dp)
-                        .background(AccentCyan, RoundedCornerShape(topStart = 3.dp, topEnd = 3.dp))
+        // Text option
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(8.dp))
+                .background(
+                    if (selectedType == WatermarkType.TEXT)
+                        AccentCyan.copy(alpha = 0.15f)
+                    else Color.Transparent
+                )
+                .clickable { onTypeChange(WatermarkType.TEXT) }
+                .padding(vertical = 10.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.TextFields,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = if (selectedType == WatermarkType.TEXT)
+                        AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    "Text",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (selectedType == WatermarkType.TEXT)
+                        AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+        }
+
+        // Image option
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(8.dp))
+                .background(
+                    if (selectedType == WatermarkType.IMAGE)
+                        AccentCyan.copy(alpha = 0.15f)
+                    else Color.Transparent
+                )
+                .clickable { onTypeChange(WatermarkType.IMAGE) }
+                .padding(vertical = 10.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Tab(
-                selected = selectedType == WatermarkType.TEXT,
-                onClick = { onTypeChange(WatermarkType.TEXT) },
-                text = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Default.TextFields,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("Text")
-                    }
-                },
-                selectedContentColor = AccentCyan,
-                unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Tab(
-                selected = selectedType == WatermarkType.IMAGE,
-                onClick = { onTypeChange(WatermarkType.IMAGE) },
-                text = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Default.Image,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("Image")
-                    }
-                },
-                selectedContentColor = AccentCyan,
-                unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.Image,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = if (selectedType == WatermarkType.IMAGE)
+                        AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    "Image",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (selectedType == WatermarkType.IMAGE)
+                        AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
@@ -786,6 +846,171 @@ private fun PositionSelector(
                         selectedContainerColor = AccentCyan.copy(alpha = 0.2f),
                         selectedLabelColor = AccentCyan
                     )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompactWatermarkPreview(
+    watermarkType: WatermarkType,
+    text: String,
+    fontSize: Float,
+    textColor: Color,
+    textOpacity: Float,
+    textRotation: Float,
+    imageUri: android.net.Uri?,
+    imageScale: Float,
+    imageOpacity: Float,
+    position: WatermarkPosition,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        // Compact mock PDF page
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            shape = RoundedCornerShape(4.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(6.dp)
+            ) {
+                // Simplified mock content lines
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    repeat(8) { index ->
+                        val widthFraction = when (index) {
+                            0 -> 0.5f
+                            7 -> 0.3f
+                            else -> 0.7f + (index % 2) * 0.15f
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(widthFraction.coerceAtMost(1f))
+                                .height(3.dp)
+                                .background(
+                                    Color.Gray.copy(alpha = 0.12f),
+                                    RoundedCornerShape(1.dp)
+                                )
+                        )
+                    }
+                }
+
+                // Watermark overlay
+                if (position == WatermarkPosition.TILED) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        repeat(2) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                repeat(2) {
+                                    WatermarkElement(
+                                        watermarkType = watermarkType,
+                                        text = text,
+                                        fontSize = fontSize * 0.08f,
+                                        textColor = textColor,
+                                        textOpacity = textOpacity,
+                                        textRotation = textRotation,
+                                        imageUri = imageUri,
+                                        imageScale = imageScale * 0.2f,
+                                        imageOpacity = imageOpacity,
+                                        isTiled = true
+                                    )
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = when (position) {
+                            WatermarkPosition.CENTER -> Alignment.Center
+                            WatermarkPosition.TOP_LEFT -> Alignment.TopStart
+                            WatermarkPosition.TOP_CENTER -> Alignment.TopCenter
+                            WatermarkPosition.TOP_RIGHT -> Alignment.TopEnd
+                            WatermarkPosition.BOTTOM_LEFT -> Alignment.BottomStart
+                            WatermarkPosition.BOTTOM_CENTER -> Alignment.BottomCenter
+                            WatermarkPosition.BOTTOM_RIGHT -> Alignment.BottomEnd
+                            WatermarkPosition.TILED -> Alignment.Center
+                        }
+                    ) {
+                        WatermarkElement(
+                            watermarkType = watermarkType,
+                            text = text,
+                            fontSize = fontSize * 0.1f,
+                            textColor = textColor,
+                            textOpacity = textOpacity,
+                            textRotation = textRotation,
+                            imageUri = imageUri,
+                            imageScale = imageScale * 0.25f,
+                            imageOpacity = imageOpacity,
+                            isTiled = false
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WatermarkElement(
+    watermarkType: WatermarkType,
+    text: String,
+    fontSize: Float,
+    textColor: Color,
+    textOpacity: Float,
+    textRotation: Float,
+    imageUri: android.net.Uri?,
+    imageScale: Float,
+    imageOpacity: Float,
+    isTiled: Boolean
+) {
+    when (watermarkType) {
+        WatermarkType.TEXT -> {
+            val displayText = text.ifEmpty { "Sample" }
+            Text(
+                text = displayText,
+                fontSize = fontSize.coerceIn(5f, if (isTiled) 10f else 16f).sp,
+                color = textColor.copy(alpha = (textOpacity / 100f).coerceIn(0.1f, 1f)),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.rotate(textRotation),
+                maxLines = 1
+            )
+        }
+        WatermarkType.IMAGE -> {
+            if (imageUri != null) {
+                val size = (imageScale * 1f).coerceIn(12f, if (isTiled) 24f else 50f)
+                AsyncImage(
+                    model = imageUri,
+                    contentDescription = "Watermark preview",
+                    modifier = Modifier
+                        .size(size.dp)
+                        .graphicsLayer { alpha = (imageOpacity / 100f).coerceIn(0.1f, 1f) },
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Icon(
+                    Icons.Default.Image,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(if (isTiled) 16.dp else 28.dp)
+                        .graphicsLayer { alpha = 0.3f },
+                    tint = AccentCyan
                 )
             }
         }
