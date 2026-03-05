@@ -2345,23 +2345,6 @@ private fun CreatorContent() {
             }
         }
 
-        Row(
-            modifier = Modifier.padding(top = 24.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Made with ❤️ by ",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = "K M Rejowan Ahmmed",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
     }
 }
 
