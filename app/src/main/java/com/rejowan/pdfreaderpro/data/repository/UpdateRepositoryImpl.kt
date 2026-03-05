@@ -23,6 +23,10 @@ class UpdateRepositoryImpl(
     private val dataStore: DataStore<Preferences>
 ) : UpdateRepository {
 
+    companion object {
+        private const val TAG = "UpdateChecker"
+    }
+
     private object Keys {
         val LAST_CHECK_TIME = longPreferencesKey("update_last_check_time")
         val SKIPPED_VERSIONS = stringSetPreferencesKey("update_skipped_versions")
@@ -31,30 +35,40 @@ class UpdateRepositoryImpl(
     override suspend fun getLatestRelease(owner: String, repo: String): Result<GithubRelease?> {
         return try {
             val url = "https://api.github.com/repos/$owner/$repo/releases/latest"
-            Timber.d("Fetching latest release from: $url")
+            Timber.tag(TAG).d("=== API REQUEST ===")
+            Timber.tag(TAG).d("URL: $url")
 
             val response = httpClient.get(url) {
                 header("Accept", "application/vnd.github.v3+json")
                 header("User-Agent", "PdfReaderPro-Android")
             }
 
+            Timber.tag(TAG).d("=== API RESPONSE ===")
+            Timber.tag(TAG).d("Status: ${response.status}")
+
             when (response.status) {
                 HttpStatusCode.OK -> {
                     val release = response.body<GithubRelease>()
-                    Timber.d("Found release: ${release.tagName}")
+                    Timber.tag(TAG).d("Release tag: ${release.tagName}")
+                    Timber.tag(TAG).d("Release name: ${release.name}")
+                    Timber.tag(TAG).d("Published: ${release.publishedAt}")
+                    Timber.tag(TAG).d("Assets count: ${release.assets.size}")
+                    release.assets.forEach { asset ->
+                        Timber.tag(TAG).d("  - ${asset.name} (${asset.formattedSize}) isApk=${asset.isApk}")
+                    }
                     Result.success(release)
                 }
                 HttpStatusCode.NotFound -> {
-                    Timber.d("No releases found")
+                    Timber.tag(TAG).d("No releases found (404)")
                     Result.success(null)
                 }
                 else -> {
-                    Timber.e("Unexpected status: ${response.status}")
+                    Timber.tag(TAG).e("Unexpected status: ${response.status}")
                     Result.failure(Exception("Failed to fetch release: ${response.status}"))
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "Error fetching release")
+            Timber.tag(TAG).e(e, "API Error: ${e.message}")
             Result.failure(e)
         }
     }
@@ -64,19 +78,26 @@ class UpdateRepositoryImpl(
         repo: String,
         currentVersion: String
     ): Result<GithubRelease?> {
+        Timber.tag(TAG).d("=== VERSION CHECK ===")
+        Timber.tag(TAG).d("Current app version: $currentVersion")
+
         return getLatestRelease(owner, repo).map { release ->
             if (release != null) {
                 val latestVersion = release.version
-                Timber.d("Comparing versions: current=$currentVersion, latest=$latestVersion")
+                Timber.tag(TAG).d("Latest GitHub version: $latestVersion")
 
-                if (isNewerVersion(latestVersion, currentVersion)) {
-                    Timber.d("Update available: $latestVersion")
+                val isNewer = isNewerVersion(latestVersion, currentVersion)
+                Timber.tag(TAG).d("Is newer: $isNewer")
+
+                if (isNewer) {
+                    Timber.tag(TAG).d("→ UPDATE AVAILABLE: $currentVersion → $latestVersion")
                     release
                 } else {
-                    Timber.d("App is up to date")
+                    Timber.tag(TAG).d("→ APP IS UP TO DATE")
                     null
                 }
             } else {
+                Timber.tag(TAG).d("→ No release found")
                 null
             }
         }
@@ -119,6 +140,8 @@ class UpdateRepositoryImpl(
             val newParts = parseVersion(newVersion)
             val currentParts = parseVersion(currentVersion)
 
+            Timber.tag(TAG).d("Parsed versions: new=$newParts, current=$currentParts")
+
             for (i in 0 until maxOf(newParts.size, currentParts.size)) {
                 val newPart = newParts.getOrElse(i) { 0 }
                 val currentPart = currentParts.getOrElse(i) { 0 }
@@ -130,7 +153,7 @@ class UpdateRepositoryImpl(
             }
             return false
         } catch (e: Exception) {
-            Timber.e(e, "Error comparing versions: $newVersion vs $currentVersion")
+            Timber.tag(TAG).e(e, "Error comparing versions: $newVersion vs $currentVersion")
             return false
         }
     }

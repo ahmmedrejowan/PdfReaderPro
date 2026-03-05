@@ -15,6 +15,8 @@ import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
 import com.rejowan.pdfreaderpro.domain.model.UpdateState
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
 import com.rejowan.pdfreaderpro.domain.repository.UpdateRepository
+import com.rejowan.pdfreaderpro.util.ApkDownloadManager
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,13 +24,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 
 class SettingsViewModel(
     private val preferencesRepository: PreferencesRepository,
-    private val updateRepository: UpdateRepository
+    private val updateRepository: UpdateRepository,
+    private val apkDownloadManager: ApkDownloadManager
 ) : ViewModel() {
 
     companion object {
+        private const val TAG = "UpdateChecker"
         private const val GITHUB_OWNER = "ahmmedrejowan"
         private const val GITHUB_REPO = "PdfReaderPro"
     }
@@ -39,12 +44,36 @@ class SettingsViewModel(
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Idle)
     val updateState: StateFlow<UpdateState> = _updateState.asStateFlow()
 
+    private val _downloadState = MutableStateFlow<ApkDownloadManager.DownloadState>(ApkDownloadManager.DownloadState.Idle)
+    val downloadState: StateFlow<ApkDownloadManager.DownloadState> = _downloadState.asStateFlow()
+
     private val _lastCheckTime = MutableStateFlow(0L)
     val lastCheckTime: StateFlow<Long> = _lastCheckTime.asStateFlow()
+
+    private var downloadJob: Job? = null
+    private var pendingInstallFile: File? = null
+
+    private val _hasPendingApk = MutableStateFlow(false)
+    val hasPendingApk: StateFlow<Boolean> = _hasPendingApk.asStateFlow()
+
+    private val _pendingApkVersion = MutableStateFlow<String?>(null)
+    val pendingApkVersion: StateFlow<String?> = _pendingApkVersion.asStateFlow()
 
     init {
         loadLastCheckTime()
         checkForUpdatesIfNeeded()
+        checkPendingApk()
+    }
+
+    private fun checkPendingApk() {
+        val currentVersion = BuildConfig.VERSION_NAME
+        _hasPendingApk.value = apkDownloadManager.hasPendingApk(currentVersion)
+        _pendingApkVersion.value = if (_hasPendingApk.value) {
+            apkDownloadManager.getPendingApkVersion()
+        } else {
+            null
+        }
+        Timber.tag(TAG).d("Pending APK: ${_hasPendingApk.value}, version: ${_pendingApkVersion.value}, current: $currentVersion")
     }
 
     private fun loadLastCheckTime() {
@@ -140,6 +169,109 @@ class SettingsViewModel(
 
     fun getApkDownloadUrl(release: GithubRelease): String? {
         return release.assets.firstOrNull { it.isApk }?.downloadUrl
+    }
+
+    /**
+     * Starts downloading the APK for the given release.
+     */
+    fun startDownload(release: GithubRelease) {
+        val apkAsset = release.assets.firstOrNull { it.isApk }
+        if (apkAsset == null) {
+            Timber.tag(TAG).e("No APK asset found in release")
+            _downloadState.value = ApkDownloadManager.DownloadState.Failed("No APK available")
+            return
+        }
+
+        Timber.tag(TAG).d("Starting download: ${apkAsset.name}")
+
+        downloadJob?.cancel()
+        downloadJob = viewModelScope.launch {
+            apkDownloadManager.downloadApk(apkAsset.downloadUrl, apkAsset.name)
+                .collect { state ->
+                    _downloadState.value = state
+                    Timber.tag(TAG).d("Download state: $state")
+
+                    if (state is ApkDownloadManager.DownloadState.Completed) {
+                        pendingInstallFile = state.file
+                    }
+                }
+        }
+    }
+
+    /**
+     * Cancels the ongoing download.
+     */
+    fun cancelDownload() {
+        Timber.tag(TAG).d("Cancelling download")
+        downloadJob?.cancel()
+        downloadJob = null
+        _downloadState.value = ApkDownloadManager.DownloadState.Cancelled
+    }
+
+    /**
+     * Resets the download state to idle.
+     */
+    fun resetDownloadState() {
+        _downloadState.value = ApkDownloadManager.DownloadState.Idle
+        pendingInstallFile = null
+    }
+
+    /**
+     * Checks if the app has permission to install APKs.
+     */
+    fun canInstallApks(): Boolean {
+        return apkDownloadManager.canInstallApks()
+    }
+
+    /**
+     * Installs the downloaded APK.
+     */
+    fun installDownloadedApk(): Boolean {
+        val file = pendingInstallFile ?: run {
+            Timber.tag(TAG).e("No pending install file")
+            return false
+        }
+        return apkDownloadManager.installApk(file)
+    }
+
+    /**
+     * Installs APK from a specific file.
+     */
+    fun installApk(file: File): Boolean {
+        return apkDownloadManager.installApk(file)
+    }
+
+    /**
+     * Installs the pending APK if one exists.
+     */
+    fun installPendingApk(): Boolean {
+        val file = apkDownloadManager.getPendingApk() ?: run {
+            Timber.tag(TAG).e("No pending APK found")
+            return false
+        }
+        return apkDownloadManager.installApk(file)
+    }
+
+    /**
+     * Clears the pending APK (deletes downloaded file).
+     */
+    fun clearPendingApk() {
+        apkDownloadManager.cleanupOldDownloads()
+        checkPendingApk()
+    }
+
+    /**
+     * Refreshes pending APK state (call on resume).
+     */
+    fun refreshPendingApkState() {
+        checkPendingApk()
+    }
+
+    /**
+     * Opens the system settings to enable install from unknown sources.
+     */
+    fun openInstallPermissionSettings(): android.content.Intent? {
+        return apkDownloadManager.getInstallPermissionIntent()
     }
 
     // App settings

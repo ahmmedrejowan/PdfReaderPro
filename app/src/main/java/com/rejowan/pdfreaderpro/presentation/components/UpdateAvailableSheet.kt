@@ -77,17 +77,25 @@ fun UpdateAvailableSheet(
     currentVersion: String,
     downloadUrl: String?,
     onDismiss: () -> Unit,
-    onSkipVersion: () -> Unit
+    onSkipVersion: () -> Unit,
+    onDownload: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     val context = LocalContext.current
 
+    val hasApk = downloadUrl != null
+
     val onDownloadClick = {
-        val url = downloadUrl ?: release.htmlUrl
-        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-        context.startActivity(intent)
-        onDismiss()
+        if (hasApk) {
+            // Start in-app download
+            onDownload()
+        } else {
+            // Fallback to browser if no APK
+            val intent = Intent(Intent.ACTION_VIEW, release.htmlUrl.toUri())
+            context.startActivity(intent)
+            onDismiss()
+        }
     }
 
     if (isLandscape) {

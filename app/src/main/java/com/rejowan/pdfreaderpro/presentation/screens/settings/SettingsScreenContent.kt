@@ -52,6 +52,7 @@ import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Gavel
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.InstallMobile
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Link
@@ -80,6 +81,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -110,7 +112,9 @@ import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
 import com.rejowan.pdfreaderpro.domain.model.UpdateState
+import com.rejowan.pdfreaderpro.presentation.components.DownloadProgressSheet
 import com.rejowan.pdfreaderpro.presentation.components.UpdateAvailableSheet
+import com.rejowan.pdfreaderpro.util.ApkDownloadManager
 import com.rejowan.licensy.LicenseContent
 import com.rejowan.licensy.Licenses
 import com.rejowan.licensy.compose.LicensyList
@@ -134,10 +138,48 @@ fun SettingsScreenContent(
 ) {
     val preferences by viewModel.preferences.collectAsState()
     val updateState by viewModel.updateState.collectAsState()
+    val downloadState by viewModel.downloadState.collectAsState()
+    val hasPendingApk by viewModel.hasPendingApk.collectAsState()
+    val pendingApkVersion by viewModel.pendingApkVersion.collectAsState()
 
     val context = LocalContext.current
 
+    // Track current release for download
+    var currentRelease by remember { mutableStateOf<com.rejowan.pdfreaderpro.domain.model.GithubRelease?>(null) }
+
     // Sheet visibility states
+    var showDownloadSheet by remember { mutableStateOf(false) }
+
+    // Auto-show download sheet when download starts
+    LaunchedEffect(downloadState) {
+        when (downloadState) {
+            is ApkDownloadManager.DownloadState.Starting,
+            is ApkDownloadManager.DownloadState.Downloading -> {
+                showDownloadSheet = true
+            }
+            is ApkDownloadManager.DownloadState.Completed -> {
+                // Refresh pending APK state when download completes
+                viewModel.refreshPendingApkState()
+            }
+            else -> {}
+        }
+    }
+
+    // Refresh pending APK state on resume (in case user installed from notification)
+    val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                viewModel.refreshPendingApkState()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    // Other sheet visibility states
     var showThemeModeSheet by remember { mutableStateOf(false) }
     var showScrollDirectionSheet by remember { mutableStateOf(false) }
     var showPageAlignmentSheet by remember { mutableStateOf(false) }
@@ -290,6 +332,27 @@ fun SettingsScreenContent(
             onClick = { viewModel.checkForUpdates() },
             animationDelay = 550
         )
+
+        // Show pending install option if APK is downloaded
+        if (hasPendingApk) {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            SettingsOptionItem(
+                icon = Icons.Rounded.InstallMobile,
+                title = "Install Pending Update",
+                subtitle = "v${pendingApkVersion ?: "?"} is ready to install",
+                accentColor = Color(0xFF4CAF50),
+                onClick = {
+                    if (viewModel.canInstallApks()) {
+                        viewModel.installPendingApk()
+                    } else {
+                        // Show download sheet to handle permission
+                        showDownloadSheet = true
+                    }
+                },
+                animationDelay = 560
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -575,7 +638,46 @@ fun SettingsScreenContent(
             currentVersion = availableState.currentVersion,
             downloadUrl = viewModel.getApkDownloadUrl(availableState.release),
             onDismiss = { viewModel.dismissUpdateDialog() },
-            onSkipVersion = { viewModel.skipVersion(availableState.release.version) }
+            onSkipVersion = { viewModel.skipVersion(availableState.release.version) },
+            onDownload = {
+                currentRelease = availableState.release
+                viewModel.startDownload(availableState.release)
+                viewModel.dismissUpdateDialog()
+            }
+        )
+    }
+
+    // Download progress sheet
+    if (showDownloadSheet && downloadState !is ApkDownloadManager.DownloadState.Idle) {
+        DownloadProgressSheet(
+            downloadState = downloadState,
+            versionName = currentRelease?.version ?: "",
+            canInstall = viewModel.canInstallApks(),
+            onDismiss = {
+                showDownloadSheet = false
+                // Reset state if completed/failed/cancelled
+                when (downloadState) {
+                    is ApkDownloadManager.DownloadState.Completed,
+                    is ApkDownloadManager.DownloadState.Failed,
+                    is ApkDownloadManager.DownloadState.Cancelled -> {
+                        viewModel.resetDownloadState()
+                    }
+                    else -> {}
+                }
+            },
+            onCancel = {
+                viewModel.cancelDownload()
+            },
+            onInstall = {
+                viewModel.installDownloadedApk()
+                showDownloadSheet = false
+                viewModel.resetDownloadState()
+            },
+            onRequestPermission = {
+                viewModel.openInstallPermissionSettings()?.let { intent ->
+                    context.startActivity(intent)
+                }
+            }
         )
     }
 }
