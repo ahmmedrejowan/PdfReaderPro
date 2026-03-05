@@ -2022,10 +2022,10 @@ private fun PrivacyPolicyContent() {
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-                PrivacyHighlightItem("No internet connection required")
                 PrivacyHighlightItem("No data collection or sharing")
                 PrivacyHighlightItem("No analytics or tracking")
-                PrivacyHighlightItem("100% offline operation")
+                PrivacyHighlightItem("Optional update checks only")
+                PrivacyHighlightItem("All data stored locally")
             }
         }
 
@@ -2049,8 +2049,13 @@ private fun PrivacyPolicyContent() {
             content = "If you choose to save passwords for protected PDFs, they are stored locally using encrypted storage. Passwords never leave your device."
         )
 
+        PrivacySection(
+            title = "Update Checking",
+            content = "The app can optionally check for updates via GitHub's public API. This feature only retrieves release information and does not send any personal data, device identifiers, or usage statistics. You can disable automatic update checks in Settings or check manually whenever you prefer."
+        )
+
         Text(
-            text = "Last updated: March 1, 2026",
+            text = "Last updated: March 5, 2026",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 16.dp)
