@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,7 +51,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import android.content.res.Configuration
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -76,6 +80,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -105,7 +110,6 @@ private val PresetColors = listOf(
     Color(0xFF66BB6A), // Green
     Color(0xFFFFCA28), // Amber
     Color(0xFFAB47BC), // Purple
-    Color(0xFF26A69A), // Teal
     Color(0xFF000000), // Black
 )
 
@@ -666,12 +670,12 @@ private fun TextWatermarkSettings(
             }
         }
 
-        // Color picker dialog
+        // Color picker sheet
         if (showColorPicker) {
-            ColorPickerDialog(
+            ColorPickerSheet(
                 currentColor = textColor,
-                onColorSelected = {
-                    onColorChange(it)
+                onColorSelected = { color ->
+                    onColorChange(color)
                     showColorPicker = false
                 },
                 onDismiss = { showColorPicker = false }
@@ -849,75 +853,252 @@ private fun ColorCircle(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ColorPickerDialog(
+private fun ColorPickerSheet(
     currentColor: Color,
     onColorSelected: (Color) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var red by remember { mutableStateOf((currentColor.red * 255).toInt().toFloat()) }
-    var green by remember { mutableStateOf((currentColor.green * 255).toInt().toFloat()) }
-    var blue by remember { mutableStateOf((currentColor.blue * 255).toInt().toFloat()) }
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val focusManager = LocalFocusManager.current
 
-    val selectedColor = Color(red.toInt(), green.toInt(), blue.toInt())
+    var red by remember { mutableStateOf((currentColor.red * 255).toInt()) }
+    var green by remember { mutableStateOf((currentColor.green * 255).toInt()) }
+    var blue by remember { mutableStateOf((currentColor.blue * 255).toInt()) }
+    var hexInput by remember { mutableStateOf(String.format("%02X%02X%02X", red, green, blue)) }
 
-    androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
+    // Text field values (to allow intermediate typing states)
+    var redText by remember { mutableStateOf(red.toString()) }
+    var greenText by remember { mutableStateOf(green.toString()) }
+    var blueText by remember { mutableStateOf(blue.toString()) }
+
+    // Validation states
+    val isHexValid = hexInput.length == 6 && hexInput.all { it in '0'..'9' || it in 'A'..'F' }
+    val isRedValid = redText.toIntOrNull()?.let { it in 0..255 } ?: false
+    val isGreenValid = greenText.toIntOrNull()?.let { it in 0..255 } ?: false
+    val isBlueValid = blueText.toIntOrNull()?.let { it in 0..255 } ?: false
+
+    val selectedColor = Color(red, green, blue)
+
+    // Update hex when RGB changes
+    fun updateHexFromRgb() {
+        hexInput = String.format("%02X%02X%02X", red, green, blue)
+    }
+
+    // Update RGB from hex
+    fun updateRgbFromHex(hex: String) {
+        if (hex.length == 6 && hex.all { it in '0'..'9' || it in 'A'..'F' }) {
+            try {
+                val colorInt = hex.toLong(16).toInt()
+                red = (colorInt shr 16) and 0xFF
+                green = (colorInt shr 8) and 0xFF
+                blue = colorInt and 0xFF
+                redText = red.toString()
+                greenText = green.toString()
+                blueText = blue.toString()
+            } catch (_: Exception) { }
+        }
+    }
+
+    @Composable
+    fun ColorPickerContent(modifier: Modifier = Modifier) {
+        Box(
+            modifier = modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { focusManager.clearFocus() }
         ) {
             Column(
-                modifier = Modifier.padding(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    "Pick Color",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Color preview
-                Box(
-                    modifier = Modifier
-                        .size(60.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(selectedColor)
-                        .border(
-                            1.dp,
-                            MaterialTheme.colorScheme.outlineVariant,
-                            RoundedCornerShape(12.dp)
+                // Header
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(AccentCyan.copy(alpha = 0.1f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.WaterDrop,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp),
+                            tint = AccentCyan
                         )
-                )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            "Pick Color",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            "Custom watermark color",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // Color preview with hex
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(selectedColor)
+                            .border(
+                                1.dp,
+                                MaterialTheme.colorScheme.outlineVariant,
+                                RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Column {
+                        Text(
+                            "#${String.format("%02X%02X%02X", red, green, blue)}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = AccentCyan
+                        )
+                        Text(
+                            "RGB($red, $green, $blue)",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Hex input
+                OutlinedTextField(
+                    value = hexInput,
+                    onValueChange = { input ->
+                        val filtered = input.filter { it in '0'..'9' || it.uppercaseChar() in 'A'..'F' }
+                            .take(6).uppercase()
+                        hexInput = filtered
+                        updateRgbFromHex(filtered)
+                    },
+                    label = { Text("Hex") },
+                    prefix = { Text("#") },
+                    singleLine = true,
+                    isError = hexInput.isNotEmpty() && !isHexValid,
+                    supportingText = if (hexInput.isNotEmpty() && !isHexValid) {
+                        { Text("Enter 6 hex characters (0-9, A-F)") }
+                    } else null,
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // RGB inputs
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedTextField(
+                        value = redText,
+                        onValueChange = { input ->
+                            val filtered = input.filter { it.isDigit() }.take(3)
+                            redText = filtered
+                            filtered.toIntOrNull()?.coerceIn(0, 255)?.let {
+                                red = it
+                                updateHexFromRgb()
+                            }
+                        },
+                        label = { Text("R") },
+                        singleLine = true,
+                        isError = redText.isNotEmpty() && !isRedValid,
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = greenText,
+                        onValueChange = { input ->
+                            val filtered = input.filter { it.isDigit() }.take(3)
+                            greenText = filtered
+                            filtered.toIntOrNull()?.coerceIn(0, 255)?.let {
+                                green = it
+                                updateHexFromRgb()
+                            }
+                        },
+                        label = { Text("G") },
+                        singleLine = true,
+                        isError = greenText.isNotEmpty() && !isGreenValid,
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = blueText,
+                        onValueChange = { input ->
+                            val filtered = input.filter { it.isDigit() }.take(3)
+                            blueText = filtered
+                            filtered.toIntOrNull()?.coerceIn(0, 255)?.let {
+                                blue = it
+                                updateHexFromRgb()
+                            }
+                        },
+                        label = { Text("B") },
+                        singleLine = true,
+                        isError = blueText.isNotEmpty() && !isBlueValid,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
 
                 // RGB Sliders
                 ColorSlider(
                     label = "R",
-                    value = red,
+                    value = red.toFloat(),
                     color = Color.Red,
-                    onValueChange = { red = it }
+                    onValueChange = {
+                        red = it.toInt()
+                        redText = red.toString()
+                        updateHexFromRgb()
+                    }
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 ColorSlider(
                     label = "G",
-                    value = green,
+                    value = green.toFloat(),
                     color = Color.Green,
-                    onValueChange = { green = it }
+                    onValueChange = {
+                        green = it.toInt()
+                        greenText = green.toString()
+                        updateHexFromRgb()
+                    }
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 ColorSlider(
                     label = "B",
-                    value = blue,
+                    value = blue.toFloat(),
                     color = Color.Blue,
-                    onValueChange = { blue = it }
+                    onValueChange = {
+                        blue = it.toInt()
+                        blueText = blue.toString()
+                        updateHexFromRgb()
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Buttons
                 Row(
@@ -937,7 +1118,49 @@ private fun ColorPickerDialog(
                         Text("Select")
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
+        }
+    }
+
+    if (isLandscape) {
+        // Side panel for landscape
+        androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                // Scrim on the left
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onDismiss() }
+                )
+                // Panel on the right
+                Card(
+                    modifier = Modifier
+                        .width(320.dp)
+                        .fillMaxHeight(),
+                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    ColorPickerContent(modifier = Modifier.fillMaxSize())
+                }
+            }
+        }
+    } else {
+        // Bottom sheet for portrait
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            ColorPickerContent()
         }
     }
 }
