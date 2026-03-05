@@ -11,7 +11,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -63,7 +62,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -77,7 +75,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -625,6 +622,8 @@ private fun TextWatermarkSettings(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Color picker
+        var showColorPicker by remember { mutableStateOf(false) }
+
         Text(
             "Color",
             style = MaterialTheme.typography.labelMedium,
@@ -642,6 +641,41 @@ private fun TextWatermarkSettings(
                     onClick = { onColorChange(color) }
                 )
             }
+            // Custom color picker button
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(
+                        brush = androidx.compose.ui.graphics.Brush.sweepGradient(
+                            colors = listOf(
+                                Color.Red, Color.Yellow, Color.Green,
+                                Color.Cyan, Color.Blue, Color.Magenta, Color.Red
+                            )
+                        )
+                    )
+                    .clickable { showColorPicker = true },
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surface)
+                )
+            }
+        }
+
+        // Color picker dialog
+        if (showColorPicker) {
+            ColorPickerDialog(
+                currentColor = textColor,
+                onColorSelected = {
+                    onColorChange(it)
+                    showColorPicker = false
+                },
+                onDismiss = { showColorPicker = false }
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -812,6 +846,136 @@ private fun ColorCircle(
                 tint = if (color == Color.Black || color == Color(0xFF808080)) Color.White else Color.Black
             )
         }
+    }
+}
+
+@Composable
+private fun ColorPickerDialog(
+    currentColor: Color,
+    onColorSelected: (Color) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var red by remember { mutableStateOf((currentColor.red * 255).toInt().toFloat()) }
+    var green by remember { mutableStateOf((currentColor.green * 255).toInt().toFloat()) }
+    var blue by remember { mutableStateOf((currentColor.blue * 255).toInt().toFloat()) }
+
+    val selectedColor = Color(red.toInt(), green.toInt(), blue.toInt())
+
+    androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "Pick Color",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Color preview
+                Box(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(selectedColor)
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.outlineVariant,
+                            RoundedCornerShape(12.dp)
+                        )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // RGB Sliders
+                ColorSlider(
+                    label = "R",
+                    value = red,
+                    color = Color.Red,
+                    onValueChange = { red = it }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                ColorSlider(
+                    label = "G",
+                    value = green,
+                    color = Color.Green,
+                    onValueChange = { green = it }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                ColorSlider(
+                    label = "B",
+                    value = blue,
+                    color = Color.Blue,
+                    onValueChange = { blue = it }
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Cancel")
+                    }
+                    Button(
+                        onClick = { onColorSelected(selectedColor) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Select")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ColorSlider(
+    label: String,
+    value: Float,
+    color: Color,
+    onValueChange: (Float) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = color,
+            modifier = Modifier.width(24.dp)
+        )
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
+            valueRange = 0f..255f,
+            modifier = Modifier.weight(1f),
+            colors = SliderDefaults.colors(
+                thumbColor = color,
+                activeTrackColor = color
+            )
+        )
+        Text(
+            value.toInt().toString(),
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.width(32.dp),
+            textAlign = TextAlign.End
+        )
     }
 }
 
