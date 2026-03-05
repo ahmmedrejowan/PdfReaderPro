@@ -123,6 +123,9 @@ dependencies {
     implementation(libs.itext.core) {
         exclude(group = "org.bouncycastle")
     }
+    implementation(libs.itext.bcadapter) {
+        exclude(group = "org.bouncycastle")
+    }
     implementation(libs.bouncycastle.provider)
     implementation(libs.bouncycastle.pkix)
 

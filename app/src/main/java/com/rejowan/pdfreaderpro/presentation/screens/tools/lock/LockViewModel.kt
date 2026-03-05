@@ -31,9 +31,7 @@ data class SourceFile(
 data class LockState(
     val sourceFile: SourceFile? = null,
     val userPassword: String = "",
-    val confirmUserPassword: String = "",
     val ownerPassword: String = "",
-    val confirmOwnerPassword: String = "",
     val allowPrinting: Boolean = false,
     val allowCopying: Boolean = false,
     val allowModifying: Boolean = false,
@@ -136,16 +134,8 @@ class LockViewModel(
         _state.update { it.copy(userPassword = password) }
     }
 
-    fun setConfirmUserPassword(password: String) {
-        _state.update { it.copy(confirmUserPassword = password) }
-    }
-
     fun setOwnerPassword(password: String) {
         _state.update { it.copy(ownerPassword = password) }
-    }
-
-    fun setConfirmOwnerPassword(password: String) {
-        _state.update { it.copy(confirmOwnerPassword = password) }
     }
 
     fun setAllowPrinting(allow: Boolean) {
@@ -193,21 +183,10 @@ class LockViewModel(
             return
         }
 
-        if (currentState.ownerPassword != currentState.confirmOwnerPassword) {
-            _state.update { it.copy(error = "Owner passwords do not match") }
-            return
-        }
-
         // Validate user password if provided
-        if (currentState.userPassword.isNotEmpty()) {
-            if (currentState.userPassword.length < 4) {
-                _state.update { it.copy(error = "User password must be at least 4 characters") }
-                return
-            }
-            if (currentState.userPassword != currentState.confirmUserPassword) {
-                _state.update { it.copy(error = "User passwords do not match") }
-                return
-            }
+        if (currentState.userPassword.isNotEmpty() && currentState.userPassword.length < 4) {
+            _state.update { it.copy(error = "User password must be at least 4 characters") }
+            return
         }
 
         viewModelScope.launch {

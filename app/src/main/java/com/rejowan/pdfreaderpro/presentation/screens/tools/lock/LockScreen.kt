@@ -190,9 +190,7 @@ fun LockScreen(
                     LockContent(
                         state = state,
                         onUserPasswordChange = { viewModel.setUserPassword(it) },
-                        onConfirmUserPasswordChange = { viewModel.setConfirmUserPassword(it) },
                         onOwnerPasswordChange = { viewModel.setOwnerPassword(it) },
-                        onConfirmOwnerPasswordChange = { viewModel.setConfirmOwnerPassword(it) },
                         onAllowPrintingChange = { viewModel.setAllowPrinting(it) },
                         onAllowCopyingChange = { viewModel.setAllowCopying(it) },
                         onAllowModifyingChange = { viewModel.setAllowModifying(it) },
@@ -290,9 +288,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
 private fun LockContent(
     state: LockState,
     onUserPasswordChange: (String) -> Unit,
-    onConfirmUserPasswordChange: (String) -> Unit,
     onOwnerPasswordChange: (String) -> Unit,
-    onConfirmOwnerPasswordChange: (String) -> Unit,
     onAllowPrintingChange: (Boolean) -> Unit,
     onAllowCopyingChange: (Boolean) -> Unit,
     onAllowModifyingChange: (Boolean) -> Unit,
@@ -336,14 +332,6 @@ private fun LockContent(
             label = "Owner Password"
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        PasswordField(
-            value = state.confirmOwnerPassword,
-            onValueChange = onConfirmOwnerPasswordChange,
-            label = "Confirm Owner Password"
-        )
-
         Spacer(modifier = Modifier.height(20.dp))
 
         // User password section (optional)
@@ -362,15 +350,6 @@ private fun LockContent(
             value = state.userPassword,
             onValueChange = onUserPasswordChange,
             label = "User Password"
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        PasswordField(
-            value = state.confirmUserPassword,
-            onValueChange = onConfirmUserPasswordChange,
-            label = "Confirm User Password",
-            enabled = state.userPassword.isNotEmpty()
         )
 
         Spacer(modifier = Modifier.height(20.dp))

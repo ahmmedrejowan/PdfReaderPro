@@ -128,6 +128,7 @@ androidx-webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
 
 # iText PDF
 itext-core = { module = "com.itextpdf:itext-core", version.ref = "itext" }
+itext-bcadapter = { module = "com.itextpdf:bouncy-castle-adapter", version.ref = "itext" }
 bouncycastle-provider = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 bouncycastle-pkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle" }
 
