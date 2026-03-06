@@ -63,7 +63,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import com.rejowan.pdfreaderpro.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -284,19 +286,19 @@ fun HomeScreen(
                     }
                     BottomNavItem.FOLDERS -> {
                         TopAppBar(
-                            title = { Text("Folders") },
+                            title = { Text(stringResource(R.string.folders)) },
                             actions = {
                                 IconButton(onClick = { navController.navigateToSearch() }) {
-                                    Icon(Icons.Default.Search, contentDescription = "Search")
+                                    Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search_pdf))
                                 }
                             }
                         )
                     }
                     BottomNavItem.TOOLS -> {
-                        TopAppBar(title = { Text("PDF Tools") })
+                        TopAppBar(title = { Text(stringResource(R.string.pdf_tools)) })
                     }
                     BottomNavItem.SETTINGS -> {
-                        TopAppBar(title = { Text("Settings") })
+                        TopAppBar(title = { Text(stringResource(R.string.settings)) })
                     }
                 }
             },
@@ -691,7 +693,7 @@ private fun BatchDeleteConfirmSheet(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Delete $count files?",
+                text = stringResource(R.string.delete_count_files, count),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -699,7 +701,7 @@ private fun BatchDeleteConfirmSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "This action cannot be undone. The files will be permanently deleted from your device.",
+                text = stringResource(R.string.delete_warning),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -716,7 +718,7 @@ private fun BatchDeleteConfirmSheet(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
 
                 Button(
@@ -727,7 +729,7 @@ private fun BatchDeleteConfirmSheet(
                         containerColor = Color(0xFFEF5350)
                     )
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.delete))
                 }
             }
 

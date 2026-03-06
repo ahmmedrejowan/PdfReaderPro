@@ -79,7 +79,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -324,7 +326,7 @@ private fun SearchHeader(
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.back),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -353,7 +355,7 @@ private fun SearchHeader(
                     Box(modifier = Modifier.weight(1f)) {
                         if (query.isEmpty()) {
                             Text(
-                                text = "Search your PDFs...",
+                                text = stringResource(R.string.search_your_pdfs_hint),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                             )
@@ -393,7 +395,7 @@ private fun SearchHeader(
                                 Box(contentAlignment = Alignment.Center) {
                                     Icon(
                                         imageVector = Icons.Rounded.Clear,
-                                        contentDescription = "Clear",
+                                        contentDescription = stringResource(R.string.clear),
                                         modifier = Modifier.size(14.dp),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -444,7 +446,7 @@ private fun SearchIdleContent(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Recent Searches",
+                            text = stringResource(R.string.recent_searches),
                             style = MaterialTheme.typography.titleSmall.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
@@ -452,7 +454,7 @@ private fun SearchIdleContent(
                         )
                     }
                     Text(
-                        text = "Clear All",
+                        text = stringResource(R.string.clear_all),
                         style = MaterialTheme.typography.labelMedium,
                         color = SoftPurple,
                         modifier = Modifier
@@ -485,7 +487,7 @@ private fun SearchIdleContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (isRecentExpanded) "Show Less" else "Show All (${recentSearches.size})",
+                            text = if (isRecentExpanded) stringResource(R.string.show_less) else stringResource(R.string.show_all_count, recentSearches.size),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Medium
                             ),
@@ -567,7 +569,7 @@ private fun RecentSearchItem(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Close,
-                contentDescription = "Remove",
+                contentDescription = stringResource(R.string.remove),
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
@@ -593,7 +595,7 @@ private fun SearchTipsSection(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Search Tips",
+                text = stringResource(R.string.search_tips),
                 style = MaterialTheme.typography.titleSmall.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -605,8 +607,8 @@ private fun SearchTipsSection(
 
         SearchTipCard(
             icon = Icons.Outlined.Description,
-            title = "Search by filename",
-            description = "Type part of the PDF name to find it quickly",
+            title = stringResource(R.string.tip_search_filename_title),
+            description = stringResource(R.string.tip_search_filename_desc),
             accentColor = SoftBlue,
             animationDelay = 0
         )
@@ -615,8 +617,8 @@ private fun SearchTipsSection(
 
         SearchTipCard(
             icon = Icons.Outlined.Folder,
-            title = "Search by folder",
-            description = "Enter a folder name to find all PDFs in it",
+            title = stringResource(R.string.tip_search_folder_title),
+            description = stringResource(R.string.tip_search_folder_desc),
             accentColor = SoftTeal,
             animationDelay = 50
         )
@@ -625,8 +627,8 @@ private fun SearchTipsSection(
 
         SearchTipCard(
             icon = Icons.Outlined.Lightbulb,
-            title = "Partial matches work",
-            description = "You don't need the exact name - try shorter words",
+            title = stringResource(R.string.tip_partial_matches_title),
+            description = stringResource(R.string.tip_partial_matches_desc),
             accentColor = SoftPink,
             animationDelay = 100
         )
@@ -760,7 +762,7 @@ private fun SearchResultsHeader(
     ) {
         Column {
             Text(
-                text = "Results for \"$query\"",
+                text = stringResource(R.string.results_for, query),
                 style = MaterialTheme.typography.titleSmall.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -770,7 +772,7 @@ private fun SearchResultsHeader(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "$resultCount ${if (resultCount == 1) "file" else "files"} found",
+                text = if (resultCount == 1) stringResource(R.string.file_found, resultCount) else stringResource(R.string.files_found, resultCount),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
@@ -921,7 +923,7 @@ private fun SearchResultItem(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.MoreVert,
-                    contentDescription = "Options",
+                    contentDescription = stringResource(R.string.options),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

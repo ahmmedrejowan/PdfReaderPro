@@ -1,6 +1,8 @@
 package com.rejowan.pdfreaderpro.presentation.components.dialogs
 
 import android.content.res.Configuration
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -225,14 +227,14 @@ private fun DeleteConfirmContent(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Delete File",
+                    text = stringResource(R.string.delete_file),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "This action cannot be undone",
+                    text = stringResource(R.string.action_cannot_be_undone),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -261,7 +263,7 @@ private fun DeleteConfirmContent(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Are you sure you want to permanently delete this file?",
+                    text = stringResource(R.string.confirm_delete_file),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

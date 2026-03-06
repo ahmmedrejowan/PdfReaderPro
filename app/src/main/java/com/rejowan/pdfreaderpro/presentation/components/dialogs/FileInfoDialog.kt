@@ -1,6 +1,8 @@
 package com.rejowan.pdfreaderpro.presentation.components.dialogs
 
 import android.content.res.Configuration
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -215,7 +217,7 @@ private fun FileInfoContent(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "File Information",
+                    text = stringResource(R.string.file_information),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

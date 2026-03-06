@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import java.util.Calendar
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 
 private fun getGreeting(): String {
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
@@ -82,7 +84,7 @@ fun WelcomeHeader(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "Welcome to your PDF library",
+                    text = stringResource(R.string.welcome_to_library),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                 )

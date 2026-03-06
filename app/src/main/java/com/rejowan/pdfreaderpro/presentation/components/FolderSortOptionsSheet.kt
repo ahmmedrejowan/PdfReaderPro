@@ -1,6 +1,8 @@
 package com.rejowan.pdfreaderpro.presentation.components
 
 import android.content.res.Configuration
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -270,14 +272,14 @@ private fun FolderSortSheetHeader(
 
         Column {
             Text(
-                text = "Sort Folders",
+                text = stringResource(R.string.sort_folders),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Choose how to organize folders",
+                text = stringResource(R.string.choose_sort_folders),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )

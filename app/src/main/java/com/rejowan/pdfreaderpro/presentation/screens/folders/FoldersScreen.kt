@@ -54,8 +54,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.FolderSortOption
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import com.rejowan.pdfreaderpro.presentation.components.EmptyFoldersState
@@ -196,14 +198,14 @@ private fun FoldersHeader(
             StatChip(
                 icon = Icons.Outlined.Folder,
                 value = folderCount.toString(),
-                label = "Folders",
+                label = stringResource(R.string.folders),
                 accentColor = FolderAmber,
                 modifier = Modifier.weight(1f)
             )
             StatChip(
                 icon = Icons.Outlined.Description,
                 value = totalPdfCount.toString(),
-                label = "PDFs",
+                label = stringResource(R.string.pdfs),
                 accentColor = SoftBlue,
                 modifier = Modifier.weight(1f)
             )
@@ -235,7 +237,7 @@ private fun FoldersHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "All Folders",
+                    text = stringResource(R.string.all_folders),
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -253,7 +255,7 @@ private fun FoldersHeader(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Search,
-                            contentDescription = "Search folders",
+                            contentDescription = stringResource(R.string.search_folders_desc),
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -262,7 +264,7 @@ private fun FoldersHeader(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.Sort,
-                            contentDescription = "Sort folders",
+                            contentDescription = stringResource(R.string.sort_folders_desc),
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -319,7 +321,7 @@ private fun SearchBar(
                 decorationBox = { innerTextField ->
                     if (query.isEmpty()) {
                         Text(
-                            text = "Search folders...",
+                            text = stringResource(R.string.search_folders_hint),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
@@ -335,7 +337,7 @@ private fun SearchBar(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Close,
-                        contentDescription = "Clear search",
+                        contentDescription = stringResource(R.string.clear_search),
                         modifier = Modifier.size(18.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -348,7 +350,7 @@ private fun SearchBar(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
-                    contentDescription = "Close search",
+                    contentDescription = stringResource(R.string.close_search),
                     modifier = Modifier.size(18.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -422,12 +424,12 @@ private fun EmptySearchState() {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "No folders found",
+            text = stringResource(R.string.no_folders_found),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "Try a different search term",
+            text = stringResource(R.string.try_different_search),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
         )

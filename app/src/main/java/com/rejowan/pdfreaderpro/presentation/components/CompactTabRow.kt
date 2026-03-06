@@ -28,8 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +76,7 @@ fun CompactTabRow(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = {
                     PlainTooltip {
-                        Text("List view")
+                        Text(stringResource(R.string.list_view))
                     }
                 },
                 state = rememberTooltipState()
@@ -85,7 +87,7 @@ fun CompactTabRow(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.ViewList,
-                        contentDescription = "List view",
+                        contentDescription = stringResource(R.string.list_view),
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -94,7 +96,7 @@ fun CompactTabRow(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = {
                     PlainTooltip {
-                        Text("Grid view")
+                        Text(stringResource(R.string.grid_view))
                     }
                 },
                 state = rememberTooltipState()
@@ -105,7 +107,7 @@ fun CompactTabRow(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.GridView,
-                        contentDescription = "Grid view",
+                        contentDescription = stringResource(R.string.grid_view),
                         modifier = Modifier.size(18.dp)
                     )
                 }

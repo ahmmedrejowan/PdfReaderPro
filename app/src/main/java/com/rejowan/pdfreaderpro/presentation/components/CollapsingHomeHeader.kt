@@ -36,16 +36,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import java.util.Calendar
 
-private fun getGreeting(): String {
+private fun getGreetingResId(): Int {
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     return when {
-        hour < 12 -> "Good morning"
-        hour < 17 -> "Good afternoon"
-        else -> "Good evening"
+        hour < 12 -> R.string.good_morning
+        hour < 17 -> R.string.good_afternoon
+        else -> R.string.good_evening
     }
 }
 
@@ -79,7 +81,8 @@ fun CollapsingHomeHeader(
     onStatsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val greeting = getGreeting()
+    val greetingResId = getGreetingResId()
+    val greeting = stringResource(greetingResId)
     val emoji = getGreetingEmoji()
 
     // Clamp progress between 0 and 1
@@ -116,7 +119,7 @@ fun CollapsingHomeHeader(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "Welcome to your PDF library",
+                    text = stringResource(R.string.welcome_to_library),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                 )
@@ -130,33 +133,33 @@ fun CollapsingHomeHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
+                        contentDescription = stringResource(R.string.search_pdf),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 TooltipBox(
                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                    tooltip = { PlainTooltip { Text("Sort files") } },
+                    tooltip = { PlainTooltip { Text(stringResource(R.string.sort_files_desc)) } },
                     state = rememberTooltipState()
                 ) {
                     IconButton(onClick = onSortClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.Sort,
-                            contentDescription = "Sort files",
+                            contentDescription = stringResource(R.string.sort_files_desc),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
                 TooltipBox(
                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                    tooltip = { PlainTooltip { Text("Library statistics") } },
+                    tooltip = { PlainTooltip { Text(stringResource(R.string.library_stats_desc)) } },
                     state = rememberTooltipState()
                 ) {
                     IconButton(onClick = onStatsClick) {
                         Icon(
                             imageVector = Icons.Outlined.Analytics,
-                            contentDescription = "Library statistics",
+                            contentDescription = stringResource(R.string.library_stats_desc),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -187,13 +190,13 @@ fun CollapsingHomeHeader(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search",
+                            contentDescription = stringResource(R.string.search_pdf),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "Search PDFs...",
+                            text = stringResource(R.string.search_your_pdfs_hint),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
