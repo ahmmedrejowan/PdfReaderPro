@@ -55,9 +55,10 @@ fun RecentTab(
                 EmptyRecentState(onBrowseClick = onBrowseClick)
             }
             viewMode == ViewMode.LIST -> {
+                val bottomPadding = if (isSelectionMode) 160.dp else 80.dp
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(top = 8.dp, bottom = 80.dp)
+                    contentPadding = PaddingValues(top = 8.dp, bottom = bottomPadding)
                 ) {
                     itemsIndexed(
                         items = recentFiles,
@@ -78,10 +79,11 @@ fun RecentTab(
                 }
             }
             else -> {
+                val bottomPadding = if (isSelectionMode) 160.dp else 80.dp
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp)
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = bottomPadding)
                 ) {
                     itemsIndexed(
                         items = recentFiles,

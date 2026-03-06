@@ -234,10 +234,11 @@ fun FolderDetailScreen(
                     )
 
                     // File list/grid
+                    val bottomPadding = if (isSelectionMode) 160.dp else 16.dp
                     if (viewMode == ViewMode.LIST) {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(bottom = 16.dp)
+                            contentPadding = PaddingValues(bottom = bottomPadding)
                         ) {
                             itemsIndexed(
                                 items = files,
@@ -275,7 +276,7 @@ fun FolderDetailScreen(
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
                             modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 16.dp)
+                            contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = bottomPadding)
                         ) {
                             itemsIndexed(
                                 items = files,
