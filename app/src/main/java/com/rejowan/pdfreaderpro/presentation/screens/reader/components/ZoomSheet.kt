@@ -68,8 +68,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScreenOrientation
 import kotlinx.coroutines.delay
 
@@ -260,7 +262,7 @@ private fun ZoomSheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Zoom Presets
-        SectionLabel(text = "Quick Zoom", delay = 100)
+        SectionLabel(text = stringResource(R.string.quick_zoom), delay = 100)
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -270,7 +272,7 @@ private fun ZoomSheetContent(
         ) {
             ZoomPresetChip(
                 icon = Icons.Rounded.FitScreen,
-                label = "Fit Page",
+                label = stringResource(R.string.fit_page),
                 isSelected = false,
                 accentColor = AccentTeal,
                 onClick = { onZoomPreset(ZoomPreset.FIT_PAGE) },
@@ -279,7 +281,7 @@ private fun ZoomSheetContent(
             )
             ZoomPresetChip(
                 icon = Icons.Rounded.Fullscreen,
-                label = "Fit Width",
+                label = stringResource(R.string.fit_width),
                 isSelected = false,
                 accentColor = AccentTeal,
                 onClick = { onZoomPreset(ZoomPreset.FIT_WIDTH) },
@@ -288,7 +290,7 @@ private fun ZoomSheetContent(
             )
             ZoomPresetChip(
                 icon = Icons.Rounded.AspectRatio,
-                label = "100%",
+                label = stringResource(R.string.actual_size),
                 isSelected = false,
                 accentColor = AccentTeal,
                 onClick = { onZoomPreset(ZoomPreset.ACTUAL_SIZE) },
@@ -302,7 +304,7 @@ private fun ZoomSheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Screen Orientation Section
-        SectionLabel(text = "Screen Orientation", delay = 300)
+        SectionLabel(text = stringResource(R.string.screen_orientation), delay = 300)
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -312,7 +314,7 @@ private fun ZoomSheetContent(
         ) {
             OrientationChip(
                 icon = Icons.Rounded.ScreenRotation,
-                label = "Auto",
+                label = stringResource(R.string.orientation_auto),
                 isSelected = currentOrientation == ScreenOrientation.AUTO,
                 accentColor = AccentAmber,
                 onClick = { onOrientationChange(ScreenOrientation.AUTO) },
@@ -321,7 +323,7 @@ private fun ZoomSheetContent(
             )
             OrientationChip(
                 icon = Icons.Rounded.StayCurrentPortrait,
-                label = "Portrait",
+                label = stringResource(R.string.orientation_portrait),
                 isSelected = currentOrientation == ScreenOrientation.PORTRAIT,
                 accentColor = AccentAmber,
                 onClick = { onOrientationChange(ScreenOrientation.PORTRAIT) },
@@ -330,7 +332,7 @@ private fun ZoomSheetContent(
             )
             OrientationChip(
                 icon = Icons.Rounded.StayCurrentLandscape,
-                label = "Landscape",
+                label = stringResource(R.string.orientation_landscape),
                 isSelected = currentOrientation == ScreenOrientation.LANDSCAPE,
                 accentColor = AccentAmber,
                 onClick = { onOrientationChange(ScreenOrientation.LANDSCAPE) },
@@ -367,14 +369,14 @@ private fun ZoomSheetHeader(
 
         Column {
             Text(
-                text = "Zoom & Display",
+                text = stringResource(R.string.zoom_display),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Adjust view size and orientation",
+                text = stringResource(R.string.adjust_view_orientation),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
@@ -465,7 +467,7 @@ private fun ZoomControlsRow(
                     color = AccentTeal
                 )
                 Text(
-                    text = "Current Zoom",
+                    text = stringResource(R.string.current_zoom),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
@@ -708,7 +710,7 @@ private fun OrientationChip(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
-                            contentDescription = "Selected",
+                            contentDescription = stringResource(R.string.option_selected),
                             modifier = Modifier.size(8.dp),
                             tint = Color.White
                         )

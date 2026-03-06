@@ -61,9 +61,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -235,7 +237,7 @@ private fun BookmarksSheetContent(
 
             Column {
                 Text(
-                    text = "Bookmarks",
+                    text = stringResource(R.string.bookmarks_title),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -243,7 +245,8 @@ private fun BookmarksSheetContent(
                 )
                 if (bookmarks.isNotEmpty()) {
                     Text(
-                        text = "${bookmarks.size} ${if (bookmarks.size == 1) "bookmark" else "bookmarks"}",
+                        text = if (bookmarks.size == 1) stringResource(R.string.bookmark_count, bookmarks.size)
+                               else stringResource(R.string.bookmarks_count, bookmarks.size),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )
@@ -359,7 +362,7 @@ private fun BookmarkItem(
             // Title and date
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = bookmark.title ?: "Page ${bookmark.pageNumber + 1}",
+                    text = bookmark.title ?: stringResource(R.string.page_number_title, bookmark.pageNumber + 1),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = if (isCurrentPage) FontWeight.SemiBold else FontWeight.Normal
                     ),
@@ -411,7 +414,7 @@ private fun BookmarkItem(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Delete,
-                    contentDescription = "Delete bookmark",
+                    contentDescription = stringResource(R.string.delete_bookmark),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier.size(16.dp)
                 )
@@ -452,7 +455,7 @@ private fun EmptyBookmarksState(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "No Bookmarks Yet",
+            text = stringResource(R.string.no_bookmarks_yet),
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -462,7 +465,7 @@ private fun EmptyBookmarksState(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Tap the bookmark icon to save pages",
+            text = stringResource(R.string.bookmark_hint),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )

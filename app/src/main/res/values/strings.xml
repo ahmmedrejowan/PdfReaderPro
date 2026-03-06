@@ -528,14 +528,12 @@
     <string name="version_label">Version %s</string>
     <string name="download_background_hint">You can dismiss this sheet. Download will continue in the background with a notification.</string>
     <string name="cancel_download">Cancel Download</string>
-    <string name="download_complete">Download Complete</string>
     <string name="version_ready_to_install">Version %s is ready to install</string>
     <string name="install_update">Install Update</string>
     <string name="permission_required">Permission Required</string>
     <string name="allow_install_apps">Allow installing apps from this source</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="later">Later</string>
-    <string name="download_failed">Download Failed</string>
     <string name="download_cancelled">Download Cancelled</string>
     <string name="try_again_settings">You can try again later from Settings</string>
 
@@ -543,8 +541,8 @@
     <string name="no_release_notes">No release notes available.</string>
 
     <!-- Recent Items -->
-    <string name="selected">Selected</string>
-    <string name="not_selected">Not selected</string>
+    <string name="item_selected">Selected</string>
+    <string name="item_not_selected">Not selected</string>
     <string name="page_progress">Page %d/%d</string>
     <string name="page_progress_time">Page %1$d of %2$d • %3$s</string>
     <string name="just_now">Just now</string>
@@ -586,11 +584,17 @@
     <!-- View Mode Sheet -->
     <string name="view_options">View Options</string>
     <string name="customize_reading_layout">Customize your reading layout</string>
+    <string name="scroll_direction">Scroll Direction</string>
+    <string name="vertical">Vertical</string>
+    <string name="horizontal">Horizontal</string>
+    <string name="page_layout">Page Layout</string>
     <string name="single_layout">Single</string>
     <string name="two_page_layout">Two-Page</string>
+    <string name="page_alignment">Page Alignment</string>
     <string name="left_align">Left</string>
     <string name="center_align">Center</string>
     <string name="right_align">Right</string>
+    <string name="option_selected">Selected</string>
     <string name="snap_to_page">Snap to Page</string>
     <string name="snap_to_page_desc">Automatically align to page boundaries</string>
     <string name="auto_hide_toolbar">Auto-Hide Toolbar</string>
@@ -599,12 +603,15 @@
     <!-- Display Sheet -->
     <string name="display_settings">Display Settings</string>
     <string name="theme_brightness_options">Theme, brightness &amp; screen options</string>
+    <string name="reading_theme">Reading Theme</string>
+    <string name="brightness">Brightness</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
     <string name="sepia_theme">Sepia</string>
     <string name="black_theme">Black</string>
     <string name="low_brightness">Low brightness</string>
     <string name="high_brightness">High brightness</string>
+    <string name="keep_screen_on">Keep Screen On</string>
     <string name="prevent_screen_off">Prevent screen from turning off</string>
 
     <!-- Page Jump Sheet -->
@@ -612,6 +619,86 @@
     <string name="enter_page_range">Enter a page number (1 - %d)</string>
     <string name="page_number_placeholder">Page number</string>
     <string name="enter_valid_page">Please enter a number between 1 and %d</string>
+
+    <!-- Auto Scroll Sheet -->
+    <string name="auto_scroll_title">Auto-Scroll</string>
+    <string name="hands_free_reading">Hands-free reading mode</string>
+    <string name="speed_presets">Speed Presets</string>
+    <string name="speed_slow">Slow</string>
+    <string name="speed_medium">Medium</string>
+    <string name="speed_fast">Fast</string>
+    <string name="speed_very_fast">Very Fast</string>
+    <string name="custom_speed">Custom Speed</string>
+    <string name="speed_pixels">%d px/s</string>
+    <string name="slower">Slower</string>
+    <string name="faster">Faster</string>
+    <string name="start_auto_scroll">Start Auto-Scroll</string>
+    <string name="auto_scroll_hint">Tap screen to pause/resume. Use overlay to stop.</string>
+
+    <!-- Zoom Sheet -->
+    <string name="zoom_display">Zoom &amp; Display</string>
+    <string name="adjust_view_orientation">Adjust view size and orientation</string>
+    <string name="quick_zoom">Quick Zoom</string>
+    <string name="fit_page">Fit Page</string>
+    <string name="fit_width">Fit Width</string>
+    <string name="actual_size">100%</string>
+    <string name="screen_orientation">Screen Orientation</string>
+    <string name="orientation_auto">Auto</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_landscape">Landscape</string>
+    <string name="current_zoom">Current Zoom</string>
+
+    <!-- Bookmarks Sheet -->
+    <string name="bookmarks_title">Bookmarks</string>
+    <string name="bookmark_count">%d bookmark</string>
+    <string name="bookmarks_count">%d bookmarks</string>
+    <string name="delete_bookmark">Delete bookmark</string>
+    <string name="no_bookmarks_yet">No Bookmarks Yet</string>
+    <string name="bookmark_hint">Tap the bookmark icon to save pages</string>
+    <string name="page_number_title">Page %d</string>
+
+    <!-- PDF Info Dialog -->
+    <string name="document_information">Document Information</string>
+    <string name="pages_count">%d pages</string>
+    <string name="pdf_version_label">PDF %s</string>
+    <string name="document_section">Document</string>
+    <string name="subject_label">Subject</string>
+    <string name="keywords_label">Keywords</string>
+    <string name="language_label">Language</string>
+    <string name="author_creator">Author &amp; Creator</string>
+    <string name="author_label">Author</string>
+    <string name="creator_label">Creator</string>
+    <string name="producer_label">Producer</string>
+    <string name="dates_section">Dates</string>
+    <string name="created_label">Created</string>
+    <string name="modified_label">Modified</string>
+    <string name="security_features">Security &amp; Features</string>
+    <string name="encrypted_label">Encrypted</string>
+    <string name="encrypted_type">Encrypted (%s)</string>
+    <string name="forms_label">Forms</string>
+    <string name="signatures_label">Signatures</string>
+    <string name="xfa_label">XFA</string>
+    <string name="web_optimized">Web Optimized</string>
+    <string name="location_section">Location</string>
+
+    <!-- Top Bar Menu Panel -->
+    <string name="document_options">Document Options</string>
+    <string name="share_print_manage">Share, print, and manage</string>
+    <string name="document_actions">Document Actions</string>
+    <string name="document_info_title">Document Info</string>
+    <string name="view_details_metadata">View file details and metadata</string>
+    <string name="share_this_document">Share this document</string>
+    <string name="print_this_document">Print this document</string>
+    <string name="open_with">Open With</string>
+    <string name="open_in_another_app">Open in another app</string>
+    <string name="save_as">Save As</string>
+    <string name="save_copy_location">Save a copy to your chosen location</string>
+    <string name="file_management">File Management</string>
+    <string name="remove_from_favourites">Remove from Favourites</string>
+    <string name="add_to_favourites">Add to Favourites</string>
+    <string name="remove_from_favourites_desc">Remove from your favourites list</string>
+    <string name="add_to_favourites_desc">Add to your favourites list</string>
+    <string name="delete_file_permanently">Permanently delete this file</string>
 
     <!-- Delete Confirm Dialog -->
     <string name="delete_pdf_question">Delete PDF?</string>

@@ -60,8 +60,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
 
 // Design colors
@@ -184,14 +186,14 @@ private fun TopBarMenuContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Document Actions Section
-        SectionLabel(text = "Document Actions", animationDelay = 0)
+        SectionLabel(text = stringResource(R.string.document_actions), animationDelay = 0)
 
         Spacer(modifier = Modifier.height(6.dp))
 
         MenuOptionItem(
             icon = Icons.Outlined.Info,
-            title = "Document Info",
-            subtitle = "View file details and metadata",
+            title = stringResource(R.string.document_info_title),
+            subtitle = stringResource(R.string.view_details_metadata),
             accentColor = AccentBlue,
             onClick = {
                 onDismiss()
@@ -204,8 +206,8 @@ private fun TopBarMenuContent(
 
         MenuOptionItem(
             icon = Icons.Outlined.Share,
-            title = "Share",
-            subtitle = "Share this document",
+            title = stringResource(R.string.share),
+            subtitle = stringResource(R.string.share_this_document),
             accentColor = AccentPink,
             onClick = {
                 onDismiss()
@@ -218,8 +220,8 @@ private fun TopBarMenuContent(
 
         MenuOptionItem(
             icon = Icons.Outlined.Print,
-            title = "Print",
-            subtitle = "Print this document",
+            title = stringResource(R.string.print),
+            subtitle = stringResource(R.string.print_this_document),
             accentColor = AccentAmber,
             onClick = {
                 onDismiss()
@@ -232,8 +234,8 @@ private fun TopBarMenuContent(
 
         MenuOptionItem(
             icon = Icons.AutoMirrored.Outlined.OpenInNew,
-            title = "Open With",
-            subtitle = "Open in another app",
+            title = stringResource(R.string.open_with),
+            subtitle = stringResource(R.string.open_in_another_app),
             accentColor = AccentTeal,
             onClick = {
                 onDismiss()
@@ -246,8 +248,8 @@ private fun TopBarMenuContent(
 
         MenuOptionItem(
             icon = Icons.Outlined.Save,
-            title = "Save As",
-            subtitle = "Save a copy to your chosen location",
+            title = stringResource(R.string.save_as),
+            subtitle = stringResource(R.string.save_copy_location),
             accentColor = AccentPurple,
             onClick = {
                 onDismiss()
@@ -263,14 +265,14 @@ private fun TopBarMenuContent(
         Spacer(modifier = Modifier.height(10.dp))
 
         // File Management Section
-        SectionLabel(text = "File Management", animationDelay = 300)
+        SectionLabel(text = stringResource(R.string.file_management), animationDelay = 300)
 
         Spacer(modifier = Modifier.height(6.dp))
 
         MenuOptionItem(
             icon = if (isFavorite) Icons.Rounded.Favorite else Icons.Outlined.FavoriteBorder,
-            title = if (isFavorite) "Remove from Favourites" else "Add to Favourites",
-            subtitle = if (isFavorite) "Remove from your favourites list" else "Add to your favourites list",
+            title = if (isFavorite) stringResource(R.string.remove_from_favourites) else stringResource(R.string.add_to_favourites),
+            subtitle = if (isFavorite) stringResource(R.string.remove_from_favourites_desc) else stringResource(R.string.add_to_favourites_desc),
             accentColor = AccentPink,
             onClick = {
                 onDismiss()
@@ -283,8 +285,8 @@ private fun TopBarMenuContent(
 
         MenuOptionItem(
             icon = Icons.Outlined.Delete,
-            title = "Delete",
-            subtitle = "Permanently delete this file",
+            title = stringResource(R.string.delete),
+            subtitle = stringResource(R.string.delete_file_permanently),
             accentColor = AccentRed,
             isDestructive = true,
             onClick = {

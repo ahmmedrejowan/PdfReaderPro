@@ -66,8 +66,10 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReadingTheme
 import kotlinx.coroutines.delay
 
@@ -246,7 +248,7 @@ private fun DisplaySheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Reading Theme Section
-        SectionLabel(text = "Reading Theme", delay = 0)
+        SectionLabel(text = stringResource(R.string.reading_theme), delay = 0)
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -261,7 +263,7 @@ private fun DisplaySheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Brightness Section
-        SectionLabel(text = "Brightness", delay = 150)
+        SectionLabel(text = stringResource(R.string.brightness), delay = 150)
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -310,14 +312,14 @@ private fun DisplaySheetHeader(
 
         Column {
             Text(
-                text = "Display Settings",
+                text = stringResource(R.string.display_settings),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Theme, brightness & screen options",
+                text = stringResource(R.string.theme_brightness_options),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
@@ -387,7 +389,7 @@ private fun ThemeSelector(
         ) {
             ThemeOption(
                 theme = ReadingTheme.LIGHT,
-                label = "Light",
+                label = stringResource(R.string.light_theme),
                 backgroundColor = Color(0xFFFAFAFA),
                 textColor = Color(0xFF212121),
                 isSelected = currentTheme == ReadingTheme.LIGHT,
@@ -397,7 +399,7 @@ private fun ThemeSelector(
 
             ThemeOption(
                 theme = ReadingTheme.DARK,
-                label = "Dark",
+                label = stringResource(R.string.dark_theme),
                 backgroundColor = Color(0xFF1E1E1E),
                 textColor = Color(0xFFE0E0E0),
                 isSelected = currentTheme == ReadingTheme.DARK,
@@ -413,7 +415,7 @@ private fun ThemeSelector(
         ) {
             ThemeOption(
                 theme = ReadingTheme.SEPIA,
-                label = "Sepia",
+                label = stringResource(R.string.sepia_theme),
                 backgroundColor = Color(0xFFF5E6D3),
                 textColor = Color(0xFF5D4037),
                 isSelected = currentTheme == ReadingTheme.SEPIA,
@@ -423,7 +425,7 @@ private fun ThemeSelector(
 
             ThemeOption(
                 theme = ReadingTheme.BLACK,
-                label = "Black",
+                label = stringResource(R.string.black_theme),
                 backgroundColor = Color(0xFF000000),
                 textColor = Color(0xFFB0B0B0),
                 isSelected = currentTheme == ReadingTheme.BLACK,
@@ -578,7 +580,7 @@ private fun BrightnessSlider(
         ) {
             Icon(
                 imageVector = Icons.Rounded.BrightnessLow,
-                contentDescription = "Low brightness",
+                contentDescription = stringResource(R.string.low_brightness),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(18.dp)
             )
@@ -599,7 +601,7 @@ private fun BrightnessSlider(
 
             Icon(
                 imageVector = Icons.Rounded.BrightnessHigh,
-                contentDescription = "High brightness",
+                contentDescription = stringResource(R.string.high_brightness),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(18.dp)
             )
@@ -662,14 +664,14 @@ private fun KeepScreenOnRow(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Keep Screen On",
+                    text = stringResource(R.string.keep_screen_on),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Prevent screen from turning off",
+                    text = stringResource(R.string.prevent_screen_off),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

@@ -71,8 +71,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.PageAlignment
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
 import kotlinx.coroutines.delay
@@ -291,15 +293,15 @@ private fun ViewModeSheetContent(
         // Header
         SheetHeader(
             icon = Icons.Rounded.ViewDay,
-            title = "View Options",
-            subtitle = "Customize your reading layout",
+            title = stringResource(R.string.view_options),
+            subtitle = stringResource(R.string.customize_reading_layout),
             accentColor = AccentPurple
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         // Scroll Direction Section
-        SectionLabel(text = "Scroll Direction", delay = 0)
+        SectionLabel(text = stringResource(R.string.scroll_direction), delay = 0)
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -309,7 +311,7 @@ private fun ViewModeSheetContent(
         ) {
             ScrollModeChip(
                 icon = Icons.Rounded.SwapVert,
-                label = "Vertical",
+                label = stringResource(R.string.vertical),
                 isSelected = currentScrollDirection == ScrollDirection.VERTICAL,
                 accentColor = AccentPurple,
                 onClick = { onScrollDirectionChange(ScrollDirection.VERTICAL) },
@@ -318,7 +320,7 @@ private fun ViewModeSheetContent(
             )
             ScrollModeChip(
                 icon = Icons.Rounded.SwapHoriz,
-                label = "Horizontal",
+                label = stringResource(R.string.horizontal),
                 isSelected = currentScrollDirection == ScrollDirection.HORIZONTAL,
                 accentColor = AccentPurple,
                 onClick = { onScrollDirectionChange(ScrollDirection.HORIZONTAL) },
@@ -332,7 +334,7 @@ private fun ViewModeSheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Page Layout Section
-        SectionLabel(text = "Page Layout", delay = 150)
+        SectionLabel(text = stringResource(R.string.page_layout), delay = 150)
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -342,7 +344,7 @@ private fun ViewModeSheetContent(
         ) {
             SpreadModeChip(
                 icon = Icons.Rounded.ViewStream,
-                label = "Single",
+                label = stringResource(R.string.single_layout),
                 isSelected = currentSpreadMode == PageSpreadMode.NONE,
                 accentColor = AccentBlue,
                 onClick = { onSpreadModeChange(PageSpreadMode.NONE) },
@@ -351,7 +353,7 @@ private fun ViewModeSheetContent(
             )
             SpreadModeChip(
                 icon = Icons.Rounded.ViewModule,
-                label = "Two-Page",
+                label = stringResource(R.string.two_page_layout),
                 isSelected = currentSpreadMode == PageSpreadMode.ODD || currentSpreadMode == PageSpreadMode.EVEN,
                 accentColor = AccentBlue,
                 onClick = { onSpreadModeChange(PageSpreadMode.ODD) },
@@ -365,7 +367,7 @@ private fun ViewModeSheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Page Alignment Section
-        SectionLabel(text = "Page Alignment", delay = 300)
+        SectionLabel(text = stringResource(R.string.page_alignment), delay = 300)
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -375,7 +377,7 @@ private fun ViewModeSheetContent(
         ) {
             AlignmentChip(
                 icon = Icons.AutoMirrored.Rounded.FormatAlignLeft,
-                label = "Left",
+                label = stringResource(R.string.left_align),
                 isSelected = currentPageAlignment == PageAlignment.LEFT,
                 accentColor = AccentTeal,
                 onClick = { onPageAlignmentChange(PageAlignment.LEFT) },
@@ -384,7 +386,7 @@ private fun ViewModeSheetContent(
             )
             AlignmentChip(
                 icon = Icons.Rounded.FormatAlignCenter,
-                label = "Center",
+                label = stringResource(R.string.center_align),
                 isSelected = currentPageAlignment == PageAlignment.CENTER,
                 accentColor = AccentTeal,
                 onClick = { onPageAlignmentChange(PageAlignment.CENTER) },
@@ -393,7 +395,7 @@ private fun ViewModeSheetContent(
             )
             AlignmentChip(
                 icon = Icons.AutoMirrored.Rounded.FormatAlignRight,
-                label = "Right",
+                label = stringResource(R.string.right_align),
                 isSelected = currentPageAlignment == PageAlignment.RIGHT,
                 accentColor = AccentTeal,
                 onClick = { onPageAlignmentChange(PageAlignment.RIGHT) },
@@ -598,7 +600,7 @@ private fun ScrollModeChip(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = "Selected",
+                        contentDescription = stringResource(R.string.option_selected),
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -682,14 +684,14 @@ private fun SnapToggleRow(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Snap to Page",
+                    text = stringResource(R.string.snap_to_page),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Automatically align to page boundaries",
+                    text = stringResource(R.string.snap_to_page_desc),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
@@ -850,14 +852,14 @@ private fun AutoHideToggleRow(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Auto-Hide Toolbar",
+                    text = stringResource(R.string.auto_hide_toolbar),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Hide toolbar after 5 seconds",
+                    text = stringResource(R.string.auto_hide_toolbar_desc),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )

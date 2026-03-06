@@ -181,7 +181,7 @@ fun RecentListItem(
                 ) {
                     Icon(
                         imageVector = if (isSelected) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
-                        contentDescription = if (isSelected) stringResource(R.string.selected) else stringResource(R.string.not_selected),
+                        contentDescription = if (isSelected) stringResource(R.string.item_selected) else stringResource(R.string.item_not_selected),
                         modifier = Modifier.size(26.dp),
                         tint = if (isSelected) SelectionBlue else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                     )

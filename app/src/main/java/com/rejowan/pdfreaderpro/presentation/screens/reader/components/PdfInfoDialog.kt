@@ -58,9 +58,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -240,7 +242,7 @@ private fun PdfInfoContent(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Document Information",
+                    text = stringResource(R.string.document_information),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -255,7 +257,7 @@ private fun PdfInfoContent(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             StatChip(
-                label = "${info.pageCount} pages",
+                label = stringResource(R.string.pages_count, info.pageCount),
                 color = AccentBlue,
                 modifier = Modifier.weight(1f)
             )
@@ -266,7 +268,7 @@ private fun PdfInfoContent(
             )
             info.pdfVersion?.let {
                 StatChip(
-                    label = "PDF $it",
+                    label = stringResource(R.string.pdf_version_label, it),
                     color = AccentAmber,
                     modifier = Modifier.weight(1f)
                 )
@@ -277,18 +279,18 @@ private fun PdfInfoContent(
         if (!info.subject.isNullOrBlank() || !info.keywords.isNullOrBlank() || !info.language.isNullOrBlank()) {
             Spacer(modifier = Modifier.height(12.dp))
             InfoSection(
-                title = "Document",
+                title = stringResource(R.string.document_section),
                 icon = Icons.Rounded.Info,
                 accentColor = AccentPurple
             ) {
                 if (!info.subject.isNullOrBlank()) {
-                    InfoItem("Subject", info.subject)
+                    InfoItem(stringResource(R.string.subject_label), info.subject)
                 }
                 if (!info.keywords.isNullOrBlank()) {
-                    InfoItem("Keywords", info.keywords)
+                    InfoItem(stringResource(R.string.keywords_label), info.keywords)
                 }
                 if (!info.language.isNullOrBlank()) {
-                    InfoItem("Language", info.language)
+                    InfoItem(stringResource(R.string.language_label), info.language)
                 }
             }
         }
@@ -297,18 +299,18 @@ private fun PdfInfoContent(
         if (!info.author.isNullOrBlank() || !info.creator.isNullOrBlank() || !info.producer.isNullOrBlank()) {
             Spacer(modifier = Modifier.height(12.dp))
             InfoSection(
-                title = "Author & Creator",
+                title = stringResource(R.string.author_creator),
                 icon = Icons.Rounded.Person,
                 accentColor = AccentBlue
             ) {
                 if (!info.author.isNullOrBlank()) {
-                    InfoItem("Author", info.author)
+                    InfoItem(stringResource(R.string.author_label), info.author)
                 }
                 if (!info.creator.isNullOrBlank()) {
-                    InfoItem("Creator", info.creator)
+                    InfoItem(stringResource(R.string.creator_label), info.creator)
                 }
                 if (!info.producer.isNullOrBlank()) {
-                    InfoItem("Producer", info.producer)
+                    InfoItem(stringResource(R.string.producer_label), info.producer)
                 }
             }
         }
@@ -316,21 +318,21 @@ private fun PdfInfoContent(
         // Dates Section
         Spacer(modifier = Modifier.height(12.dp))
         InfoSection(
-            title = "Dates",
+            title = stringResource(R.string.dates_section),
             icon = Icons.Rounded.Schedule,
             accentColor = AccentTeal
         ) {
             if (!info.creationDate.isNullOrBlank() && info.creationDate != "null") {
-                InfoItem("Created", formatPdfDate(info.creationDate))
+                InfoItem(stringResource(R.string.created_label), formatPdfDate(info.creationDate))
             }
-            InfoItem("Modified", formatDate(info.lastModified))
+            InfoItem(stringResource(R.string.modified_label), formatDate(info.lastModified))
         }
 
         // Security & Features Section
         if (info.isEncrypted || info.hasForms || info.hasSignatures || info.hasXfa || info.isLinearized) {
             Spacer(modifier = Modifier.height(12.dp))
             InfoSection(
-                title = "Security & Features",
+                title = stringResource(R.string.security_features),
                 icon = Icons.Rounded.Lock,
                 accentColor = AccentAmber
             ) {
@@ -341,21 +343,21 @@ private fun PdfInfoContent(
                 ) {
                     if (info.isEncrypted) {
                         FeatureTag(
-                            text = info.encryptionType?.let { "Encrypted ($it)" } ?: "Encrypted",
+                            text = info.encryptionType?.let { stringResource(R.string.encrypted_type, it) } ?: stringResource(R.string.encrypted_label),
                             color = Color(0xFFEF5350)
                         )
                     }
                     if (info.hasForms) {
-                        FeatureTag(text = "Forms", color = AccentBlue)
+                        FeatureTag(text = stringResource(R.string.forms_label), color = AccentBlue)
                     }
                     if (info.hasSignatures) {
-                        FeatureTag(text = "Signatures", color = AccentTeal)
+                        FeatureTag(text = stringResource(R.string.signatures_label), color = AccentTeal)
                     }
                     if (info.hasXfa) {
-                        FeatureTag(text = "XFA", color = AccentPurple)
+                        FeatureTag(text = stringResource(R.string.xfa_label), color = AccentPurple)
                     }
                     if (info.isLinearized) {
-                        FeatureTag(text = "Web Optimized", color = AccentAmber)
+                        FeatureTag(text = stringResource(R.string.web_optimized), color = AccentAmber)
                     }
                 }
             }
@@ -364,7 +366,7 @@ private fun PdfInfoContent(
         // Location Section
         Spacer(modifier = Modifier.height(12.dp))
         InfoSection(
-            title = "Location",
+            title = stringResource(R.string.location_section),
             icon = Icons.Rounded.Folder,
             accentColor = Color(0xFF78909C)
         ) {

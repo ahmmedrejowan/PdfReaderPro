@@ -56,8 +56,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 private val AccentBlue = Color(0xFF64B5F6)
 
@@ -223,14 +225,14 @@ private fun AutoScrollSheetContent(
 
             Column {
                 Text(
-                    text = "Auto-Scroll",
+                    text = stringResource(R.string.auto_scroll_title),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Hands-free reading mode",
+                    text = stringResource(R.string.hands_free_reading),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -241,7 +243,7 @@ private fun AutoScrollSheetContent(
 
         // Speed presets
         Text(
-            text = "Speed Presets",
+            text = stringResource(R.string.speed_presets),
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -289,7 +291,7 @@ private fun AutoScrollSheetContent(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Custom Speed",
+                text = stringResource(R.string.custom_speed),
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -297,7 +299,7 @@ private fun AutoScrollSheetContent(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "${selectedSpeed.toInt()} px/s",
+                text = stringResource(R.string.speed_pixels, selectedSpeed.toInt()),
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -325,12 +327,12 @@ private fun AutoScrollSheetContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Slower",
+                text = stringResource(R.string.slower),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
             Text(
-                text = "Faster",
+                text = stringResource(R.string.faster),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
@@ -355,7 +357,7 @@ private fun AutoScrollSheetContent(
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-                text = "Start Auto-Scroll",
+                text = stringResource(R.string.start_auto_scroll),
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 )
@@ -366,7 +368,7 @@ private fun AutoScrollSheetContent(
 
         // Hint text
         Text(
-            text = "Tap screen to pause/resume. Use overlay to stop.",
+            text = stringResource(R.string.auto_scroll_hint),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
             modifier = Modifier.padding(horizontal = 4.dp)

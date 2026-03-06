@@ -50,8 +50,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 private val AccentPink = Color(0xFFF48FB1)
 
@@ -191,14 +193,14 @@ private fun RemoveFavoriteContent(
 
             Column {
                 Text(
-                    text = "Remove from Favourites?",
+                    text = stringResource(R.string.remove_from_favourites_question),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "This will remove from your list",
+                    text = stringResource(R.string.remove_from_list_message),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -214,7 +216,7 @@ private fun RemoveFavoriteContent(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Cancel", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.cancel), style = MaterialTheme.typography.labelMedium)
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -225,7 +227,7 @@ private fun RemoveFavoriteContent(
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = AccentPink)
             ) {
-                Text("Remove", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.remove), style = MaterialTheme.typography.labelMedium)
             }
         }
     }

@@ -50,9 +50,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 private val AccentRed = Color(0xFFEF5350)
 
@@ -206,14 +208,14 @@ private fun DeleteConfirmContent(
 
             Column {
                 Text(
-                    text = "Delete PDF?",
+                    text = stringResource(R.string.delete_pdf_question),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "This action cannot be undone",
+                    text = stringResource(R.string.action_cannot_undo),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -247,7 +249,7 @@ private fun DeleteConfirmContent(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Cancel", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.cancel), style = MaterialTheme.typography.labelMedium)
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -258,7 +260,7 @@ private fun DeleteConfirmContent(
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = AccentRed)
             ) {
-                Text("Delete", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.delete), style = MaterialTheme.typography.labelMedium)
             }
         }
     }
