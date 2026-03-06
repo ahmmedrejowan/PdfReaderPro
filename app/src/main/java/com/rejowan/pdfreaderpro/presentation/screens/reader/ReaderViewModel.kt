@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.data.local.PasswordStorage
 import com.rejowan.pdfreaderpro.data.local.database.dao.BookmarkDao
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
@@ -604,7 +605,7 @@ class ReaderViewModel(
                         val bookmark = BookmarkEntity(
                             pdfPath = pdfPath,
                             pageNumber = currentPage,
-                            title = "Page ${currentPage + 1}"
+                            title = applicationContext.getString(R.string.page_current, currentPage + 1)
                         )
                         bookmarkDao.insert(bookmark)
                     }

@@ -345,7 +345,7 @@ fun SettingsScreenContent(
 
             SettingsOptionItem(
                 icon = Icons.Rounded.InstallMobile,
-                title = "Install Pending Update",
+                title = stringResource(R.string.install_pending_update),
                 subtitle = "v${pendingApkVersion ?: "?"} is ready to install",
                 accentColor = Color(0xFF4CAF50),
                 onClick = {
@@ -364,7 +364,7 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.Schedule,
-            title = "Auto-check Interval",
+            title = stringResource(R.string.auto_check_interval),
             subtitle = preferences.updateCheckInterval.displayName,
             accentColor = AccentBlue,
             onClick = { showUpdateIntervalSheet = true },
@@ -434,8 +434,8 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.Email,
-            title = "Contact",
-            subtitle = "Get in touch with the developer",
+            title = stringResource(R.string.contact_developer),
+            subtitle = stringResource(R.string.get_in_touch),
             accentColor = AccentTeal,
             onClick = {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
@@ -451,8 +451,8 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.Code,
-            title = "GitHub Repository",
-            subtitle = "View source code",
+            title = stringResource(R.string.github_repository),
+            subtitle = stringResource(R.string.view_source_code),
             accentColor = AccentPurple,
             onClick = {
                 val intent = Intent(
@@ -470,14 +470,14 @@ fun SettingsScreenContent(
     // Theme Mode picker
     if (showThemeModeSheet) {
         SettingsPickerSheet(
-            title = "Theme",
-            subtitle = "Choose app appearance",
+            title = stringResource(R.string.theme),
+            subtitle = stringResource(R.string.choose_appearance),
             icon = Icons.Rounded.Palette,
             accentColor = AccentPurple,
             options = listOf(
-                PickerOption(Icons.Rounded.LightMode, "Light", "Always use light theme"),
-                PickerOption(Icons.Rounded.DarkMode, "Dark", "Always use dark theme"),
-                PickerOption(Icons.Rounded.PhoneAndroid, "System", "Follow system setting")
+                PickerOption(Icons.Rounded.LightMode, stringResource(R.string.light), stringResource(R.string.always_light)),
+                PickerOption(Icons.Rounded.DarkMode, stringResource(R.string.dark), stringResource(R.string.always_dark)),
+                PickerOption(Icons.Rounded.PhoneAndroid, stringResource(R.string.system_theme), stringResource(R.string.follow_system))
             ),
             selectedIndex = ThemeMode.entries.indexOf(preferences.themeMode),
             onSelect = { index ->
@@ -491,13 +491,13 @@ fun SettingsScreenContent(
     // Scroll Direction picker
     if (showScrollDirectionSheet) {
         SettingsPickerSheet(
-            title = "Scroll Direction",
-            subtitle = "Choose how pages scroll",
+            title = stringResource(R.string.scroll_direction),
+            subtitle = stringResource(R.string.choose_scroll),
             icon = Icons.Rounded.SwapVert,
             accentColor = AccentPurple,
             options = listOf(
-                PickerOption(Icons.Rounded.SwapVert, "Vertical", "Scroll up and down"),
-                PickerOption(Icons.Rounded.SwapHoriz, "Horizontal", "Scroll left and right")
+                PickerOption(Icons.Rounded.SwapVert, stringResource(R.string.vertical), stringResource(R.string.scroll_up_down)),
+                PickerOption(Icons.Rounded.SwapHoriz, stringResource(R.string.horizontal), stringResource(R.string.scroll_left_right))
             ),
             selectedIndex = ScrollDirection.entries.indexOf(preferences.readerScrollDirection),
             onSelect = { index ->
@@ -511,14 +511,14 @@ fun SettingsScreenContent(
     // Page Alignment picker
     if (showPageAlignmentSheet) {
         SettingsPickerSheet(
-            title = "Page Alignment",
-            subtitle = "Position pages on screen",
+            title = stringResource(R.string.page_alignment),
+            subtitle = stringResource(R.string.position_pages),
             icon = Icons.Rounded.FormatAlignCenter,
             accentColor = AccentTeal,
             options = listOf(
-                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignLeft, "Left", "Align pages to left"),
-                PickerOption(Icons.Rounded.FormatAlignCenter, "Center", "Center pages"),
-                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignRight, "Right", "Align pages to right")
+                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignLeft, stringResource(R.string.left), stringResource(R.string.align_pages_left)),
+                PickerOption(Icons.Rounded.FormatAlignCenter, stringResource(R.string.center), stringResource(R.string.center_pages)),
+                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignRight, stringResource(R.string.right), stringResource(R.string.align_pages_right))
             ),
             selectedIndex = PageAlignment.entries.indexOf(preferences.readerPageAlignment),
             onSelect = { index ->
@@ -532,14 +532,14 @@ fun SettingsScreenContent(
     // Quick Zoom picker
     if (showQuickZoomSheet) {
         SettingsPickerSheet(
-            title = "Default Zoom",
-            subtitle = "Initial zoom when opening PDFs",
+            title = stringResource(R.string.default_zoom),
+            subtitle = stringResource(R.string.initial_zoom),
             icon = Icons.Rounded.ZoomIn,
             accentColor = AccentBlue,
             options = listOf(
-                PickerOption(Icons.Rounded.FitScreen, "Fit Page", "Show entire page"),
-                PickerOption(Icons.Rounded.Fullscreen, "Fit Width", "Match page width to screen"),
-                PickerOption(Icons.Rounded.AspectRatio, "100%", "Actual size")
+                PickerOption(Icons.Rounded.FitScreen, stringResource(R.string.fit_page), stringResource(R.string.show_entire_page)),
+                PickerOption(Icons.Rounded.Fullscreen, stringResource(R.string.fit_width), stringResource(R.string.match_width)),
+                PickerOption(Icons.Rounded.AspectRatio, stringResource(R.string.actual_size), stringResource(R.string.actual_size_desc))
             ),
             selectedIndex = QuickZoomPreset.entries.indexOf(preferences.readerQuickZoomPreset),
             onSelect = { index ->
@@ -553,15 +553,15 @@ fun SettingsScreenContent(
     // Reading Theme picker
     if (showReadingThemeSheet) {
         SettingsPickerSheet(
-            title = "Reading Theme",
-            subtitle = "Background color while reading",
+            title = stringResource(R.string.reading_theme),
+            subtitle = stringResource(R.string.background_color),
             icon = Icons.Rounded.ColorLens,
             accentColor = AccentAmber,
             options = listOf(
-                PickerOption(Icons.Rounded.LightMode, "Light", "White background"),
-                PickerOption(Icons.Rounded.ColorLens, "Sepia", "Warm paper tone"),
-                PickerOption(Icons.Rounded.DarkMode, "Dark", "Dark gray background"),
-                PickerOption(Icons.Rounded.Brightness1, "Black", "Pure black (AMOLED)")
+                PickerOption(Icons.Rounded.LightMode, stringResource(R.string.light), stringResource(R.string.white_background)),
+                PickerOption(Icons.Rounded.ColorLens, stringResource(R.string.sepia), stringResource(R.string.warm_paper)),
+                PickerOption(Icons.Rounded.DarkMode, stringResource(R.string.dark), stringResource(R.string.dark_gray)),
+                PickerOption(Icons.Rounded.Brightness1, stringResource(R.string.black), stringResource(R.string.pure_black))
             ),
             selectedIndex = ReadingTheme.entries.indexOf(preferences.readerTheme),
             onSelect = { index ->
@@ -615,17 +615,17 @@ fun SettingsScreenContent(
     // Update check interval picker
     if (showUpdateIntervalSheet) {
         SettingsPickerSheet(
-            title = "Auto-check Interval",
-            subtitle = "How often to check for updates",
+            title = stringResource(R.string.update_interval),
+            subtitle = stringResource(R.string.update_interval_desc),
             icon = Icons.Rounded.Schedule,
             accentColor = AccentBlue,
             options = listOf(
-                PickerOption(Icons.Rounded.Schedule, "Never", "Manual check only"),
-                PickerOption(Icons.Rounded.Schedule, "Daily", "Check every day"),
-                PickerOption(Icons.Rounded.Schedule, "Every 3 days", "Check every 3 days"),
-                PickerOption(Icons.Rounded.Schedule, "Weekly", "Check once a week"),
-                PickerOption(Icons.Rounded.Schedule, "Every 2 weeks", "Check every 2 weeks"),
-                PickerOption(Icons.Rounded.Schedule, "Monthly", "Check once a month")
+                PickerOption(Icons.Rounded.Schedule, stringResource(R.string.never), stringResource(R.string.manual_check_only)),
+                PickerOption(Icons.Rounded.Schedule, stringResource(R.string.daily), stringResource(R.string.check_every_day)),
+                PickerOption(Icons.Rounded.Schedule, stringResource(R.string.every_3_days), stringResource(R.string.check_every_3_days)),
+                PickerOption(Icons.Rounded.Schedule, stringResource(R.string.weekly), stringResource(R.string.check_once_week)),
+                PickerOption(Icons.Rounded.Schedule, stringResource(R.string.every_2_weeks), stringResource(R.string.check_every_2_weeks)),
+                PickerOption(Icons.Rounded.Schedule, stringResource(R.string.monthly), stringResource(R.string.check_once_month))
             ),
             selectedIndex = UpdateCheckInterval.entries.indexOf(preferences.updateCheckInterval),
             onSelect = { index ->
@@ -756,7 +756,7 @@ private fun SettingsHeaderCard() {
             // App logo
             Image(
                 painter = painterResource(id = R.drawable.img_splash_logo),
-                contentDescription = "App Logo",
+                contentDescription = stringResource(R.string.app_logo),
                 modifier = Modifier.size(52.dp)
             )
 
@@ -1503,8 +1503,8 @@ private fun BrightnessContent(
 
         BrightnessOptionItem(
             icon = Icons.Rounded.Brightness6,
-            title = "Custom",
-            subtitle = if (!isSystemDefault) "${(sliderValue * 100).toInt()}%" else "Set custom level",
+            title = stringResource(R.string.custom),
+            subtitle = if (!isSystemDefault) "${(sliderValue * 100).toInt()}%" else stringResource(R.string.set_custom_level),
             isSelected = !isSystemDefault,
             accentColor = AccentAmber,
             onClick = {
@@ -1962,36 +1962,36 @@ private fun PrivacyPolicyContent() {
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-                PrivacyHighlightItem("No data collection or sharing")
-                PrivacyHighlightItem("No analytics or tracking")
-                PrivacyHighlightItem("Optional update checks only")
-                PrivacyHighlightItem("All data stored locally")
+                PrivacyHighlightItem(stringResource(R.string.no_data_collection))
+                PrivacyHighlightItem(stringResource(R.string.no_analytics))
+                PrivacyHighlightItem(stringResource(R.string.optional_updates))
+                PrivacyHighlightItem(stringResource(R.string.local_storage))
             }
         }
 
         PrivacySection(
-            title = "No Data Collection",
-            content = "PDF Reader Pro does not collect, store, transmit, or share any personal data. The app operates completely offline and does not require an internet connection. There are no analytics, tracking, or telemetry of any kind."
+            title = stringResource(R.string.privacy_no_collection_title),
+            content = stringResource(R.string.privacy_no_collection_content)
         )
 
         PrivacySection(
-            title = "Local Data Storage",
-            content = "All bookmarks, favorites, and app preferences are stored exclusively on your device. This data never leaves your device and is not accessible to anyone except you. You have complete control and can delete this data at any time."
+            title = stringResource(R.string.privacy_local_storage_title),
+            content = stringResource(R.string.privacy_local_storage_content)
         )
 
         PrivacySection(
-            title = "File Access",
-            content = "PDF Reader Pro requires storage permission to read PDF files from your device. This access is used solely to display your documents and is never used to collect or transmit any information."
+            title = stringResource(R.string.privacy_file_access_title),
+            content = stringResource(R.string.privacy_file_access_content)
         )
 
         PrivacySection(
-            title = "Password Storage",
-            content = "If you choose to save passwords for protected PDFs, they are stored locally using encrypted storage. Passwords never leave your device."
+            title = stringResource(R.string.privacy_password_title),
+            content = stringResource(R.string.privacy_password_content)
         )
 
         PrivacySection(
-            title = "Update Checking",
-            content = "The app can optionally check for updates via GitHub's public API. This feature only retrieves release information and does not send any personal data, device identifiers, or usage statistics. You can disable automatic update checks in Settings or check manually whenever you prefer."
+            title = stringResource(R.string.privacy_update_title),
+            content = stringResource(R.string.privacy_update_content)
         )
 
         Text(
@@ -2366,14 +2366,7 @@ private fun AppLicenseContent() {
             color = MaterialTheme.colorScheme.surfaceContainerLow
         ) {
             Text(
-                text = """
-PDF Reader Pro - Open Source PDF Viewer
-Copyright (C) ${java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)} K M Rejowan Ahmmed
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-                """.trimIndent(),
+                text = stringResource(R.string.gpl_notice, java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(16.dp)
@@ -2393,11 +2386,11 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-                LicenseTermItem("Freedom to use the software for any purpose")
-                LicenseTermItem("Freedom to study and modify the source code")
-                LicenseTermItem("Freedom to distribute copies")
-                LicenseTermItem("Freedom to distribute modified versions")
-                LicenseTermItem("Derivative works must be open source under GPL v3.0")
+                LicenseTermItem(stringResource(R.string.gpl_freedom_use))
+                LicenseTermItem(stringResource(R.string.gpl_freedom_study))
+                LicenseTermItem(stringResource(R.string.gpl_freedom_distribute))
+                LicenseTermItem(stringResource(R.string.gpl_freedom_modify))
+                LicenseTermItem(stringResource(R.string.gpl_derivative))
             }
         }
 

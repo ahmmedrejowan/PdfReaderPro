@@ -802,4 +802,113 @@
     <string name="app_license">App License</string>
     <string name="follow_system_brightness">Follow system brightness</string>
 
+    <!-- Settings Screen - Remaining strings -->
+    <string name="install_pending_update">Install Pending Update</string>
+    <string name="install_downloaded_version">Install downloaded v%s</string>
+    <string name="contact_developer">Contact Developer</string>
+    <string name="get_in_touch">Get in touch with the developer</string>
+    <string name="github_repository">GitHub Repository</string>
+    <string name="view_source_code">View source code</string>
+    <string name="choose_appearance">Choose app appearance</string>
+    <string name="always_light">Always use light theme</string>
+    <string name="always_dark">Always use dark theme</string>
+    <string name="follow_system">Follow system setting</string>
+    <string name="system_theme">System</string>
+    <string name="choose_scroll">Choose how pages scroll</string>
+    <string name="scroll_up_down">Scroll up and down</string>
+    <string name="scroll_left_right">Scroll left and right</string>
+    <string name="position_pages">Position pages on screen</string>
+    <string name="left">Left</string>
+    <string name="center">Center</string>
+    <string name="right">Right</string>
+    <string name="align_pages_left">Align pages to left</string>
+    <string name="center_pages">Center pages</string>
+    <string name="align_pages_right">Align pages to right</string>
+    <string name="initial_zoom">Initial zoom when opening PDFs</string>
+    <string name="show_entire_page">Show entire page</string>
+    <string name="match_width">Match page width to screen</string>
+    <string name="actual_size_desc">Actual size</string>
+    <string name="background_color">Background color while reading</string>
+    <string name="sepia">Sepia</string>
+    <string name="black">Black</string>
+    <string name="white_background">White background</string>
+    <string name="warm_paper">Warm paper tone</string>
+    <string name="dark_gray">Dark gray background</string>
+    <string name="pure_black">Pure black (AMOLED)</string>
+    <string name="update_interval">Update Check Interval</string>
+    <string name="update_interval_desc">How often to check for updates</string>
+    <string name="never">Never</string>
+    <string name="daily">Daily</string>
+    <string name="every_3_days">Every 3 days</string>
+    <string name="weekly">Weekly</string>
+    <string name="every_2_weeks">Every 2 weeks</string>
+    <string name="monthly">Monthly</string>
+    <string name="manual_check_only">Manual check only</string>
+    <string name="check_every_day">Check every day</string>
+    <string name="check_every_3_days">Check every 3 days</string>
+    <string name="check_once_week">Check once a week</string>
+    <string name="check_every_2_weeks">Check every 2 weeks</string>
+    <string name="check_once_month">Check once a month</string>
+    <string name="set_custom_level">Set custom level</string>
+    <string name="custom">Custom</string>
+    <string name="app_logo">App Logo</string>
+
+    <!-- Privacy Policy -->
+    <string name="no_data_collection">No data collection or sharing</string>
+    <string name="no_analytics">No analytics or tracking</string>
+    <string name="optional_updates">Optional update checks only</string>
+    <string name="local_storage">All data stored locally</string>
+    <string name="privacy_no_collection_title">No Data Collection</string>
+    <string name="privacy_no_collection_content">PDF Reader Pro does not collect, store, transmit, or share any personal data. The app operates completely offline and does not require an internet connection. There are no analytics, tracking, or telemetry of any kind.</string>
+    <string name="privacy_local_storage_title">Local Data Storage</string>
+    <string name="privacy_local_storage_content">All bookmarks, favorites, and app preferences are stored exclusively on your device. This data never leaves your device and is not accessible to anyone except you. You have complete control and can delete this data at any time.</string>
+    <string name="privacy_file_access_title">File Access</string>
+    <string name="privacy_file_access_content">PDF Reader Pro requires storage permission to read PDF files from your device. This access is used solely to display your documents and is never used to collect or transmit any information.</string>
+    <string name="privacy_password_title">Password Storage</string>
+    <string name="privacy_password_content">If you choose to save passwords for protected PDFs, they are stored locally using encrypted storage. Passwords never leave your device.</string>
+    <string name="privacy_update_title">Update Checking</string>
+    <string name="privacy_update_content">The app can optionally check for updates via GitHub\'s public API. This feature only retrieves release information and does not send any personal data, device identifiers, or usage statistics. You can disable automatic update checks in Settings or check manually whenever you prefer.</string>
+
+    <!-- GPL License Terms -->
+    <string name="gpl_freedom_use">Freedom to use the software for any purpose</string>
+    <string name="gpl_freedom_study">Freedom to study and modify the source code</string>
+    <string name="gpl_freedom_distribute">Freedom to distribute copies</string>
+    <string name="gpl_freedom_modify">Freedom to distribute modified versions</string>
+    <string name="gpl_derivative">Derivative works must be open source under GPL v3.0</string>
+    <string name="gpl_notice">PDF Reader Pro - Open Source PDF Viewer\nCopyright (C) %d K M Rejowan Ahmmed\n\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome">Welcome to\nPDF Reader Pro</string>
+    <string name="onboarding_welcome_desc">A clean, lightweight PDF reader built for simplicity. Open source, ad-free, and respects your privacy.</string>
+    <string name="onboarding_all_pdfs">All Your PDFs\nin One Place</string>
+    <string name="onboarding_all_pdfs_desc">Automatically discovers PDFs across your device. Browse by folders, sort by name, date, or size, and find any document instantly with search.</string>
+    <string name="onboarding_powerful">Powerful Reader\n&amp; PDF Tools</string>
+    <string name="onboarding_powerful_desc">Search text, customize themes, and adjust display settings. Plus built-in tools to merge, split, compress, and organize your PDFs.</string>
+    <string name="onboarding_storage">Storage Access\nRequired</string>
+    <string name="onboarding_storage_desc">Grant access to scan and display your PDF files. Your documents stay private and are never uploaded.</string>
+
+    <!-- Folder -->
+    <string name="folder_empty">This folder is empty</string>
+    <string name="no_pdf_in_folder">No PDF files found in this folder.</string>
+
+    <!-- Settings - Update Interval (renamed) -->
+    <string name="auto_check_interval">Auto-check Interval</string>
+
+    <!-- Common accessibility strings -->
+    <string name="cd_back">Back</string>
+    <string name="cd_dismiss">Dismiss</string>
+    <string name="cd_close">Close</string>
+    <string name="cd_selected">Selected</string>
+    <string name="cd_preview">Preview</string>
+    <string name="cd_view">View</string>
+    <string name="cd_remove">Remove</string>
+    <string name="cd_list_view">List view</string>
+    <string name="cd_grid_view">Grid view</string>
+    <string name="cd_sort">Sort</string>
+    <string name="cd_low">Low</string>
+    <string name="cd_high">High</string>
+    <string name="cd_watermark_image">Watermark image</string>
+    <string name="cd_watermark_preview">Watermark preview</string>
+    <string name="cd_page_number">Page %d</string>
+
 </resources>

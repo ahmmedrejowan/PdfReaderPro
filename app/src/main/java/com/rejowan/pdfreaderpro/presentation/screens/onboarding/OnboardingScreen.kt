@@ -66,11 +66,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
+import com.rejowan.pdfreaderpro.R
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
@@ -113,11 +115,12 @@ data class OnboardingPage(
     val bgShape4: ShapeConfig? = null // Optional 4th shape for some pages
 )
 
-private val onboardingPages = listOf(
+@Composable
+private fun getOnboardingPages(): List<OnboardingPage> = listOf(
     OnboardingPage(
         icon = Icons.Rounded.PictureAsPdf,
-        title = "Welcome to\nPDF Reader Pro",
-        description = "A clean, lightweight PDF reader built for simplicity. Open source, ad-free, and respects your privacy.",
+        title = stringResource(R.string.onboarding_welcome),
+        description = stringResource(R.string.onboarding_welcome_desc),
         accentColor = Color(0xFF6366F1), // Indigo
         // Circle shape for icon
         topStartCorner = 50,
@@ -153,8 +156,8 @@ private val onboardingPages = listOf(
     ),
     OnboardingPage(
         icon = Icons.Rounded.Folder,
-        title = "All Your PDFs\nin One Place",
-        description = "Automatically discovers PDFs across your device. Browse by folders, sort by name, date, or size, and find any document instantly with search.",
+        title = stringResource(R.string.onboarding_all_pdfs),
+        description = stringResource(R.string.onboarding_all_pdfs_desc),
         accentColor = Color(0xFF8B5CF6), // Purple
         // Asymmetric rounded for icon
         topStartCorner = 40,
@@ -191,8 +194,8 @@ private val onboardingPages = listOf(
     ),
     OnboardingPage(
         icon = Icons.Rounded.Tune,
-        title = "Powerful Reader\n& PDF Tools",
-        description = "Search text, customize themes, and adjust display settings. Plus built-in tools to merge, split, compress, and organize your PDFs.",
+        title = stringResource(R.string.onboarding_powerful),
+        description = stringResource(R.string.onboarding_powerful_desc),
         accentColor = Color(0xFFEC4899), // Pink
         // Diamond-like shape for icon
         topStartCorner = 15,
@@ -229,8 +232,8 @@ private val onboardingPages = listOf(
     ),
     OnboardingPage(
         icon = Icons.Rounded.Security,
-        title = "Storage Access\nRequired",
-        description = "Grant access to scan and display your PDF files. Your documents stay private and are never uploaded.",
+        title = stringResource(R.string.onboarding_storage),
+        description = stringResource(R.string.onboarding_storage_desc),
         accentColor = Color(0xFF10B981), // Emerald
         // Squircle for icon
         topStartCorner = 30,
@@ -275,6 +278,7 @@ fun OnboardingScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val onboardingPages = getOnboardingPages()
 
     val pagerState = rememberPagerState(
         initialPage = 0,

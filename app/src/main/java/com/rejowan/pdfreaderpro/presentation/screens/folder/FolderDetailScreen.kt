@@ -183,7 +183,7 @@ fun FolderDetailScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.cd_back)
                         )
                     }
                 }
@@ -216,8 +216,8 @@ fun FolderDetailScreen(
                 files.isEmpty() -> {
                     EmptyState(
                         icon = Icons.Outlined.Description,
-                        title = "This folder is empty",
-                        message = "No PDF files found in this folder.",
+                        title = stringResource(R.string.folder_empty),
+                        message = stringResource(R.string.no_pdf_in_folder),
                         accentColor = SoftBlue
                     )
                 }
@@ -609,7 +609,7 @@ private fun FolderDetailHeader(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.ViewList,
-                        contentDescription = "List view",
+                        contentDescription = stringResource(R.string.cd_list_view),
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -626,7 +626,7 @@ private fun FolderDetailHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.GridView,
-                        contentDescription = "Grid view",
+                        contentDescription = stringResource(R.string.cd_grid_view),
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -643,7 +643,7 @@ private fun FolderDetailHeader(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.Sort,
-                        contentDescription = "Sort",
+                        contentDescription = stringResource(R.string.cd_sort),
                         modifier = Modifier.size(18.dp)
                     )
                 }
