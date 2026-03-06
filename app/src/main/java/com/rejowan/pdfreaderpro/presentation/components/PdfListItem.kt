@@ -3,8 +3,12 @@ package com.rejowan.pdfreaderpro.presentation.components
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +20,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
@@ -43,6 +50,7 @@ import com.rejowan.pdfreaderpro.util.FormattingUtils
 import kotlinx.coroutines.delay
 
 private val SoftGray = Color(0xFF9E9E9E)
+private val SelectionBlue = Color(0xFF2196F3)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -51,7 +59,11 @@ fun PdfListItem(
     onClick: () -> Unit,
     onOptionsClick: () -> Unit,
     modifier: Modifier = Modifier,
-    animationDelay: Int = 0
+    animationDelay: Int = 0,
+    isSelectionMode: Boolean = false,
+    isSelected: Boolean = false,
+    onLongClick: () -> Unit = onOptionsClick,
+    onSelectionToggle: () -> Unit = {}
 ) {
     var isVisible by remember { mutableStateOf(animationDelay == 0) }
 
@@ -68,18 +80,42 @@ fun PdfListItem(
         label = "item scale"
     )
 
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) {
+            SelectionBlue.copy(alpha = 0.12f)
+        } else {
+            MaterialTheme.colorScheme.surfaceContainerLow
+        },
+        animationSpec = tween(200),
+        label = "background color"
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) SelectionBlue else Color.Transparent,
+        animationSpec = tween(200),
+        label = "border color"
+    )
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
             .padding(horizontal = 12.dp, vertical = 4.dp)
             .clip(RoundedCornerShape(14.dp))
+            .then(
+                if (isSelected) Modifier.border(1.5.dp, borderColor, RoundedCornerShape(14.dp))
+                else Modifier
+            )
             .combinedClickable(
-                onClick = onClick,
-                onLongClick = onOptionsClick
+                onClick = {
+                    if (isSelectionMode) onSelectionToggle() else onClick()
+                },
+                onLongClick = {
+                    if (!isSelectionMode) onLongClick()
+                }
             ),
         shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow
+        color = backgroundColor
     ) {
         Row(
             modifier = Modifier
@@ -164,21 +200,38 @@ fun PdfListItem(
                 }
             }
 
-            // Options button
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    .clickable(onClick = onOptionsClick),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.MoreVert,
-                    contentDescription = "Options",
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                )
+            // Options button or Selection checkbox
+            if (isSelectionMode) {
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .clickable(onClick = onSelectionToggle),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (isSelected) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
+                        contentDescription = if (isSelected) "Selected" else "Not selected",
+                        modifier = Modifier.size(26.dp),
+                        tint = if (isSelected) SelectionBlue else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                        .clickable(onClick = onOptionsClick),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.MoreVert,
+                        contentDescription = "Options",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
             }
         }
     }

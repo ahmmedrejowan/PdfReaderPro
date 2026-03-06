@@ -52,6 +52,13 @@ class HomeViewModel(
     private val _folderSearchQuery = MutableStateFlow("")
     val folderSearchQuery: StateFlow<String> = _folderSearchQuery.asStateFlow()
 
+    // Multi-selection state
+    private val _isSelectionMode = MutableStateFlow(false)
+    val isSelectionMode: StateFlow<Boolean> = _isSelectionMode.asStateFlow()
+
+    private val _selectedPaths = MutableStateFlow<Set<String>>(emptySet())
+    val selectedPaths: StateFlow<Set<String>> = _selectedPaths.asStateFlow()
+
     val allFiles: StateFlow<List<PdfFile>> = combine(
         pdfFileRepository.getAllPdfFiles(),
         _sortOption
@@ -194,6 +201,67 @@ class HomeViewModel(
 
     suspend fun isFavorite(path: String): Boolean {
         return favoriteRepository.isFavorite(path)
+    }
+
+    // Multi-selection functions
+    fun enterSelectionMode(initialPath: String? = null) {
+        _isSelectionMode.value = true
+        if (initialPath != null) {
+            _selectedPaths.value = setOf(initialPath)
+        }
+    }
+
+    fun exitSelectionMode() {
+        _isSelectionMode.value = false
+        _selectedPaths.value = emptySet()
+    }
+
+    fun toggleSelection(path: String) {
+        _selectedPaths.value = if (path in _selectedPaths.value) {
+            _selectedPaths.value - path
+        } else {
+            _selectedPaths.value + path
+        }
+        // Exit selection mode if nothing selected
+        if (_selectedPaths.value.isEmpty()) {
+            _isSelectionMode.value = false
+        }
+    }
+
+    fun selectAll(paths: List<String>) {
+        _selectedPaths.value = paths.toSet()
+    }
+
+    fun clearSelection() {
+        _selectedPaths.value = emptySet()
+        _isSelectionMode.value = false
+    }
+
+    fun getSelectedFiles(): List<PdfFile> {
+        return allFiles.value.filter { it.path in _selectedPaths.value }
+    }
+
+    fun deleteSelectedFiles(onComplete: (Int, Int) -> Unit) {
+        viewModelScope.launch {
+            val paths = _selectedPaths.value.toList()
+            var successCount = 0
+            var failCount = 0
+
+            paths.forEach { path ->
+                val success = FileOperations.deleteFile(path)
+                if (success) {
+                    favoriteRepository.removeFavorite(path)
+                    recentRepository.removeRecent(path)
+                    successCount++
+                } else {
+                    failCount++
+                }
+            }
+
+            pdfFileRepository.refreshPdfs()
+            exitSelectionMode()
+            onComplete(successCount, failCount)
+        }
     }
 
     /**

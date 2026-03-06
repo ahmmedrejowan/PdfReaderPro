@@ -4,10 +4,15 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.ui.geometry.Offset
@@ -28,6 +33,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -46,6 +52,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -53,6 +69,7 @@ import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import com.rejowan.pdfreaderpro.presentation.components.AnimatedBottomNav
+import com.rejowan.pdfreaderpro.presentation.components.AnimatedSelectionActionBar
 import com.rejowan.pdfreaderpro.presentation.components.ClickableSearchBar
 import com.rejowan.pdfreaderpro.presentation.components.CompactTabRow
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
@@ -65,6 +82,7 @@ import com.rejowan.pdfreaderpro.presentation.components.dialogs.ExitConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToFolderDetail
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSearch
 import com.rejowan.pdfreaderpro.presentation.screens.folders.FoldersScreen
@@ -176,7 +194,12 @@ fun HomeScreen(
     val favoriteFiles by viewModel.favoriteFiles.collectAsState()
     val folders by viewModel.folders.collectAsState()
 
+    // Selection mode state
+    val isSelectionMode by viewModel.isSelectionMode.collectAsState()
+    val selectedPaths by viewModel.selectedPaths.collectAsState()
+
     var showSortSheet by remember { mutableStateOf(false) }
+    var showBatchDeleteConfirm by remember { mutableStateOf(false) }
     var showStatsSheet by remember { mutableStateOf(false) }
     var selectedFile by remember { mutableStateOf<PdfFile?>(null) }
     var selectedFileFavorite by remember { mutableStateOf(false) }
@@ -211,14 +234,21 @@ fun HomeScreen(
         }
     }
 
-    // Handle back press: navigate to Home first, then show exit confirmation
+    // Handle back press: exit selection mode first, then navigate to Home, then show exit confirmation
     BackHandler(enabled = true) {
-        if (selectedNavItem != 0) {
-            // If not on Home tab, navigate to Home first
-            selectedNavItem = 0
-        } else {
-            // If already on Home, show exit confirmation
-            showExitConfirmSheet = true
+        when {
+            isSelectionMode -> {
+                // Exit selection mode first
+                viewModel.exitSelectionMode()
+            }
+            selectedNavItem != 0 -> {
+                // If not on Home tab, navigate to Home first
+                selectedNavItem = 0
+            }
+            else -> {
+                // If already on Home, show exit confirmation
+                showExitConfirmSheet = true
+            }
         }
     }
 
@@ -342,7 +372,17 @@ fun HomeScreen(
                                             }
                                         },
                                         onRefresh = { viewModel.refresh() },
-                                        onGrantPermissionClick = openPermissionSettings
+                                        onGrantPermissionClick = openPermissionSettings,
+                                        isSelectionMode = isSelectionMode,
+                                        selectedPaths = selectedPaths,
+                                        onSelectionToggle = { pdf ->
+                                            viewModel.toggleSelection(pdf.path)
+                                        },
+                                        onLongClick = { pdf ->
+                                            if (!isSelectionMode) {
+                                                viewModel.enterSelectionMode(pdf.path)
+                                            }
+                                        }
                                     )
 
                                     HomeSubTab.ALL -> FilesTab(
@@ -362,7 +402,17 @@ fun HomeScreen(
                                             }
                                         },
                                         onRefresh = { viewModel.refresh() },
-                                        onGrantPermissionClick = openPermissionSettings
+                                        onGrantPermissionClick = openPermissionSettings,
+                                        isSelectionMode = isSelectionMode,
+                                        selectedPaths = selectedPaths,
+                                        onSelectionToggle = { pdf ->
+                                            viewModel.toggleSelection(pdf.path)
+                                        },
+                                        onLongClick = { pdf ->
+                                            if (!isSelectionMode) {
+                                                viewModel.enterSelectionMode(pdf.path)
+                                            }
+                                        }
                                     )
                                 }
                             }
@@ -403,17 +453,52 @@ fun HomeScreen(
             }
         }
 
-        // Bottom navigation bar - outside Scaffold, floating on top
-        AnimatedBottomNav(
-            selectedIndex = selectedNavItem,
-            onItemClick = { index ->
-                selectedNavItem = index
-                isBottomBarVisible = true  // Show bottom bar when switching tabs
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .offset(y = bottomBarOffset)
-        )
+        // Bottom: Selection action bar OR Bottom navigation
+        if (isSelectionMode && selectedNavItem == 0) {
+            // Selection action bar at bottom when in selection mode
+            AnimatedSelectionActionBar(
+                visible = true,
+                selectedCount = selectedPaths.size,
+                totalCount = when (homeSubTabPagerState.currentPage) {
+                    HomeSubTab.FAVORITES.ordinal -> favoriteFiles.size
+                    else -> allFiles.size
+                },
+                onClose = { viewModel.exitSelectionMode() },
+                onSelectAll = {
+                    val paths = when (homeSubTabPagerState.currentPage) {
+                        HomeSubTab.FAVORITES.ordinal -> favoriteFiles.map { it.path }
+                        else -> allFiles.map { it.path }
+                    }
+                    viewModel.selectAll(paths)
+                },
+                onMerge = {
+                    val paths = selectedPaths.toList()
+                    viewModel.exitSelectionMode()
+                    navController.navigateToMergeTool(paths)
+                },
+                onShare = {
+                    val paths = selectedPaths.toList()
+                    FileOperations.shareMultiplePdfs(context, paths)
+                    viewModel.exitSelectionMode()
+                },
+                onDelete = {
+                    showBatchDeleteConfirm = true
+                },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        } else {
+            // Bottom navigation bar when not in selection mode
+            AnimatedBottomNav(
+                selectedIndex = selectedNavItem,
+                onItemClick = { index ->
+                    selectedNavItem = index
+                    isBottomBarVisible = true  // Show bottom bar when switching tabs
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .offset(y = bottomBarOffset)
+            )
+        }
     }
 
     // Sort Options Sheet
@@ -530,5 +615,91 @@ fun HomeScreen(
                 activity?.finishAffinity()
             }
         )
+    }
+
+    // Batch Delete Confirmation Sheet
+    if (showBatchDeleteConfirm) {
+        BatchDeleteConfirmSheet(
+            count = selectedPaths.size,
+            onDismiss = { showBatchDeleteConfirm = false },
+            onConfirm = {
+                viewModel.deleteSelectedFiles { success, fail ->
+                    // Could show a snackbar here with results
+                }
+                showBatchDeleteConfirm = false
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BatchDeleteConfirmSheet(
+    count: Int,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                tint = Color(0xFFEF5350)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Delete $count files?",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "This action cannot be undone. The files will be permanently deleted from your device.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Cancel")
+                }
+
+                Button(
+                    onClick = onConfirm,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFEF5350)
+                    )
+                ) {
+                    Text("Delete")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }

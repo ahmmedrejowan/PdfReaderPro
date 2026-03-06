@@ -33,7 +33,11 @@ fun FilesTab(
     onFileOptionsClick: (PdfFile) -> Unit,
     onRefresh: () -> Unit,
     onGrantPermissionClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isSelectionMode: Boolean = false,
+    selectedPaths: Set<String> = emptySet(),
+    onSelectionToggle: (PdfFile) -> Unit = {},
+    onLongClick: (PdfFile) -> Unit = onFileOptionsClick
 ) {
     PullToRefreshBox(
         isRefreshing = isRefreshing,
@@ -64,7 +68,11 @@ fun FilesTab(
                             onClick = { onFileClick(file) },
                             onOptionsClick = { onFileOptionsClick(file) },
                             animationDelay = index * 30,
-                            modifier = Modifier.animateItem()
+                            modifier = Modifier.animateItem(),
+                            isSelectionMode = isSelectionMode,
+                            isSelected = file.path in selectedPaths,
+                            onLongClick = { onLongClick(file) },
+                            onSelectionToggle = { onSelectionToggle(file) }
                         )
                     }
                 }
@@ -84,7 +92,11 @@ fun FilesTab(
                             onClick = { onFileClick(file) },
                             onOptionsClick = { onFileOptionsClick(file) },
                             animationDelay = index * 30,
-                            modifier = Modifier.animateItem()
+                            modifier = Modifier.animateItem(),
+                            isSelectionMode = isSelectionMode,
+                            isSelected = file.path in selectedPaths,
+                            onLongClick = { onLongClick(file) },
+                            onSelectionToggle = { onSelectionToggle(file) }
                         )
                     }
                 }

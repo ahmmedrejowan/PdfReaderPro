@@ -163,6 +163,40 @@ object FileOperations {
         }
     }
 
+    fun shareMultiplePdfs(context: Context, filePaths: List<String>) {
+        try {
+            val uris = ArrayList<Uri>()
+            filePaths.forEach { filePath ->
+                val file = File(filePath)
+                if (file.exists()) {
+                    val uri = FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.provider",
+                        file
+                    )
+                    uris.add(uri)
+                }
+            }
+
+            if (uris.isEmpty()) {
+                Timber.e("No valid files to share")
+                return
+            }
+
+            val shareIntent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                type = "application/pdf"
+                putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            context.startActivity(
+                Intent.createChooser(shareIntent, "Share ${uris.size} PDFs")
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "Error sharing multiple files")
+        }
+    }
+
     /**
      * Renames a file and returns the new file path, or null if rename failed.
      */
