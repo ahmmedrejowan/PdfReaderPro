@@ -441,7 +441,7 @@ class PdfToolsRepositoryImpl(
                 val resources = page.resources
 
                 // Check for XObject (images are stored as XObjects)
-                val xObjects = resources?.getResource(com.itextpdf.kernel.pdf.PdfName.XObject) as? com.itextpdf.kernel.pdf.PdfDictionary
+                val xObjects = resources?.getResource(com.itextpdf.kernel.pdf.PdfName.XObject)
                 if (xObjects != null) {
                     for (key in xObjects.keySet()) {
                         val xObject = xObjects.getAsStream(key)

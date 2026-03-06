@@ -38,6 +38,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.FormatAlignLeft
+import androidx.compose.material.icons.automirrored.rounded.FormatAlignRight
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Brightness6
@@ -169,7 +171,7 @@ fun SettingsScreenContent(
     }
 
     // Refresh pending APK state on resume (in case user installed from notification)
-    val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
             if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
@@ -513,9 +515,9 @@ fun SettingsScreenContent(
             icon = Icons.Rounded.FormatAlignCenter,
             accentColor = AccentTeal,
             options = listOf(
-                PickerOption(Icons.Rounded.FormatAlignLeft, "Left", "Align pages to left"),
+                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignLeft, "Left", "Align pages to left"),
                 PickerOption(Icons.Rounded.FormatAlignCenter, "Center", "Center pages"),
-                PickerOption(Icons.Rounded.FormatAlignRight, "Right", "Align pages to right")
+                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignRight, "Right", "Align pages to right")
             ),
             selectedIndex = PageAlignment.entries.indexOf(preferences.readerPageAlignment),
             onSelect = { index ->
