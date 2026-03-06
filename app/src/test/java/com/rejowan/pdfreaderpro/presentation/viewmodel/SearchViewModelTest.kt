@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.PdfFileRepository
+import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
 import com.rejowan.pdfreaderpro.presentation.screens.search.SearchViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -31,6 +32,7 @@ class SearchViewModelTest {
 
     private lateinit var pdfFileRepository: PdfFileRepository
     private lateinit var favoriteRepository: FavoriteRepository
+    private lateinit var recentRepository: RecentRepository
     private lateinit var viewModel: SearchViewModel
 
     @Before
@@ -39,6 +41,7 @@ class SearchViewModelTest {
 
         pdfFileRepository = mockk(relaxed = true)
         favoriteRepository = mockk(relaxed = true)
+        recentRepository = mockk(relaxed = true)
 
         // Default mocks
         every { pdfFileRepository.searchPdfs(any()) } returns flowOf(emptyList())
@@ -52,7 +55,8 @@ class SearchViewModelTest {
     private fun createViewModel(): SearchViewModel {
         return SearchViewModel(
             pdfFileRepository = pdfFileRepository,
-            favoriteRepository = favoriteRepository
+            favoriteRepository = favoriteRepository,
+            recentRepository = recentRepository
         )
     }
 

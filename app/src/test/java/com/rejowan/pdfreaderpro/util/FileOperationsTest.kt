@@ -284,7 +284,7 @@ class FileOperationsTest {
 
         val result = FileOperations.renameFile(testFile.absolutePath, "new_name")
 
-        assertTrue(result)
+        assertNotNull(result)
         assertFalse(testFile.exists())
         assertTrue(File(tempDir, "new_name.pdf").exists())
     }
@@ -296,7 +296,7 @@ class FileOperationsTest {
 
         val result = FileOperations.renameFile(testFile.absolutePath, "renamed")
 
-        assertTrue(result)
+        assertNotNull(result)
         assertTrue(File(tempDir, "renamed.pdf").exists())
     }
 
@@ -307,19 +307,19 @@ class FileOperationsTest {
 
         val result = FileOperations.renameFile(testFile.absolutePath, "renamed.pdf")
 
-        assertTrue(result)
+        assertNotNull(result)
         assertTrue(File(tempDir, "renamed.pdf").exists())
     }
 
     @Test
-    fun `renameFile returns false for non-existing file`() {
+    fun `renameFile returns null for non-existing file`() {
         val result = FileOperations.renameFile("/nonexistent/file.pdf", "new_name")
 
-        assertFalse(result)
+        assertNull(result)
     }
 
     @Test
-    fun `renameFile returns false when target already exists`() {
+    fun `renameFile returns null when target already exists`() {
         val originalFile = File(tempDir, "original.pdf")
         val targetFile = File(tempDir, "target.pdf")
         originalFile.createNewFile()
@@ -327,7 +327,7 @@ class FileOperationsTest {
 
         val result = FileOperations.renameFile(originalFile.absolutePath, "target")
 
-        assertFalse(result)
+        assertNull(result)
         assertTrue(originalFile.exists()) // Original file should still exist
     }
 
@@ -338,7 +338,7 @@ class FileOperationsTest {
 
         val result = FileOperations.renameFile(testFile.absolutePath, "renamed.PDF")
 
-        assertTrue(result)
+        assertNotNull(result)
         assertTrue(File(tempDir, "renamed.PDF").exists())
     }
     // endregion
@@ -379,7 +379,7 @@ class FileOperationsTest {
 
         val result = FileOperations.renameFile(testFile.absolutePath, "file-with-dashes_and_underscores")
 
-        assertTrue(result)
+        assertNotNull(result)
         assertTrue(File(tempDir, "file-with-dashes_and_underscores.pdf").exists())
     }
 

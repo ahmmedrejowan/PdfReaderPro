@@ -187,13 +187,15 @@ abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge(
     private fun printWithCache() {
         onRenderStart()
 
+        val document = pdfDocument ?: return
+
         cache.forEach { (pageNum, imageBytes) ->
             val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            val page = pdfDocument!!.startPage(pageNum - 1)
+            val page = document.startPage(pageNum - 1)
 
             onRenderPage(page.canvas, page.info, bitmap)
 
-            pdfDocument!!.finishPage(page)
+            document.finishPage(page)
             bitmap.recycle()
         }
 

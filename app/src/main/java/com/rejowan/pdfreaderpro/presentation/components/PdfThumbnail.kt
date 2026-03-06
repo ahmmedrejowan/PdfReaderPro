@@ -66,7 +66,7 @@ fun PdfThumbnail(
             thumbnail != null -> {
                 // Show actual thumbnail
                 Image(
-                    bitmap = thumbnail!!.asImageBitmap(),
+                    bitmap = requireNotNull(thumbnail).asImageBitmap(),
                     contentDescription = "PDF thumbnail",
                     modifier = Modifier
                         .fillMaxSize()
@@ -154,7 +154,7 @@ fun PdfThumbnailGrid(
             thumbnail != null -> {
                 // Show actual thumbnail
                 Image(
-                    bitmap = thumbnail!!.asImageBitmap(),
+                    bitmap = requireNotNull(thumbnail).asImageBitmap(),
                     contentDescription = "PDF thumbnail",
                     modifier = Modifier
                         .fillMaxSize()

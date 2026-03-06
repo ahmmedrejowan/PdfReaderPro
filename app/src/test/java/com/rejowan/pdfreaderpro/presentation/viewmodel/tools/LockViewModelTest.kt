@@ -70,9 +70,7 @@ class LockViewModelTest {
         viewModel.state.test {
             val state = awaitItem()
             assertEquals("", state.userPassword)
-            assertEquals("", state.confirmUserPassword)
             assertEquals("", state.ownerPassword)
-            assertEquals("", state.confirmOwnerPassword)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -171,21 +169,6 @@ class LockViewModelTest {
     }
 
     @Test
-    fun `setConfirmUserPassword updates confirm user password`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.setConfirmUserPassword("mypassword")
-        advanceUntilIdle()
-
-        viewModel.state.test {
-            val state = awaitItem()
-            assertEquals("mypassword", state.confirmUserPassword)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
     fun `setOwnerPassword updates owner password`() = runTest {
         viewModel = createViewModel()
         advanceUntilIdle()
@@ -200,20 +183,6 @@ class LockViewModelTest {
         }
     }
 
-    @Test
-    fun `setConfirmOwnerPassword updates confirm owner password`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.setConfirmOwnerPassword("ownerpass")
-        advanceUntilIdle()
-
-        viewModel.state.test {
-            val state = awaitItem()
-            assertEquals("ownerpass", state.confirmOwnerPassword)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
     // endregion
 
     // region Permission Tests

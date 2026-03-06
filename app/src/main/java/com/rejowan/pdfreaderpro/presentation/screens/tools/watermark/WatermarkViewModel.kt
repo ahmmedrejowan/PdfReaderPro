@@ -305,7 +305,7 @@ class WatermarkViewModel(
                 )
             } else {
                 val config = PdfToolsRepository.ImageWatermarkConfig(
-                    imagePath = currentState.imagePath!!,
+                    imagePath = requireNotNull(currentState.imagePath),
                     scale = currentState.imageScale,
                     opacity = currentState.imageOpacity,
                     position = mapPosition(currentState.position)

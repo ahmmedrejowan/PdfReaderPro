@@ -140,12 +140,12 @@ fun MergeScreen(
     }
 
     // Page Selection Sheet (hybrid: bottom sheet in portrait, side panel in landscape)
-    if (selectedFileForPageSelection != null) {
+    selectedFileForPageSelection?.let { selectedFile ->
         PageSelectionSheet(
-            file = selectedFileForPageSelection!!,
+            file = selectedFile,
             onDismiss = { selectedFileForPageSelection = null },
             onSelectionChanged = { selection ->
-                viewModel.updatePageSelection(selectedFileForPageSelection!!, selection)
+                viewModel.updatePageSelection(selectedFile, selection)
                 selectedFileForPageSelection = null
             }
         )
@@ -203,15 +203,16 @@ fun MergeScreen(
                 )
             } else if (state.result != null) {
                 // Success state
+                val result = requireNotNull(state.result)
                 SuccessState(
-                    result = state.result!!,
+                    result = result,
                     onOpenInApp = {
                         // Open in app's reader screen
-                        navController.navigateToReader(state.result!!.outputPath)
+                        navController.navigateToReader(result.outputPath)
                     },
                     onOpenWith = {
                         // Open with external app via ACTION_VIEW
-                        val file = File(state.result!!.outputPath)
+                        val file = File(result.outputPath)
                         val uri = FileProvider.getUriForFile(
                             context,
                             "${context.packageName}.provider",
@@ -225,7 +226,7 @@ fun MergeScreen(
                     },
                     onShare = {
                         // Share the merged PDF
-                        val file = File(state.result!!.outputPath)
+                        val file = File(result.outputPath)
                         val uri = FileProvider.getUriForFile(
                             context,
                             "${context.packageName}.provider",

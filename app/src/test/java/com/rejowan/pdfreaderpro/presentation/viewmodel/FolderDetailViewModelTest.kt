@@ -9,6 +9,7 @@ import com.rejowan.pdfreaderpro.domain.model.ViewMode
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.PdfFileRepository
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
+import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
 import com.rejowan.pdfreaderpro.presentation.screens.folder.FolderDetailViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -35,6 +36,7 @@ class FolderDetailViewModelTest {
     private lateinit var pdfFileRepository: PdfFileRepository
     private lateinit var favoriteRepository: FavoriteRepository
     private lateinit var preferencesRepository: PreferencesRepository
+    private lateinit var recentRepository: RecentRepository
     private lateinit var viewModel: FolderDetailViewModel
 
     private val mockUri: Uri = mockk(relaxed = true)
@@ -79,6 +81,7 @@ class FolderDetailViewModelTest {
         pdfFileRepository = mockk(relaxed = true)
         favoriteRepository = mockk(relaxed = true)
         preferencesRepository = mockk(relaxed = true)
+        recentRepository = mockk(relaxed = true)
 
         every { preferencesRepository.preferences } returns flowOf(AppPreferences())
         every { pdfFileRepository.getPdfsByFolder(any()) } returns flowOf(testPdfFiles)
@@ -93,7 +96,8 @@ class FolderDetailViewModelTest {
         return FolderDetailViewModel(
             pdfFileRepository = pdfFileRepository,
             favoriteRepository = favoriteRepository,
-            preferencesRepository = preferencesRepository
+            preferencesRepository = preferencesRepository,
+            recentRepository = recentRepository
         )
     }
 

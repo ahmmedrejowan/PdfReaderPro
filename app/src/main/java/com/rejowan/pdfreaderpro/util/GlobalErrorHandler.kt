@@ -40,7 +40,7 @@ object GlobalErrorHandler {
         val context = applicationContext ?: return
 
         val errorMessage = when {
-            throwable.message?.isNotBlank() == true -> throwable.message!!
+            throwable.message?.isNotBlank() == true -> requireNotNull(throwable.message)
             else -> "An unexpected error occurred: ${throwable.javaClass.simpleName}"
         }
 

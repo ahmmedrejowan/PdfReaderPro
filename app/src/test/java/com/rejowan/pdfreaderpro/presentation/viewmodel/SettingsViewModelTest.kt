@@ -9,7 +9,9 @@ import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
+import com.rejowan.pdfreaderpro.domain.repository.UpdateRepository
 import com.rejowan.pdfreaderpro.presentation.screens.settings.SettingsViewModel
+import com.rejowan.pdfreaderpro.util.ApkDownloadManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -32,6 +34,8 @@ class SettingsViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
 
     private lateinit var preferencesRepository: PreferencesRepository
+    private lateinit var updateRepository: UpdateRepository
+    private lateinit var apkDownloadManager: ApkDownloadManager
     private lateinit var viewModel: SettingsViewModel
 
     @Before
@@ -39,6 +43,8 @@ class SettingsViewModelTest {
         Dispatchers.setMain(testDispatcher)
 
         preferencesRepository = mockk(relaxed = true)
+        updateRepository = mockk(relaxed = true)
+        apkDownloadManager = mockk(relaxed = true)
         coEvery { preferencesRepository.preferences } returns flowOf(AppPreferences())
     }
 
@@ -49,7 +55,9 @@ class SettingsViewModelTest {
 
     private fun createViewModel(): SettingsViewModel {
         return SettingsViewModel(
-            preferencesRepository = preferencesRepository
+            preferencesRepository = preferencesRepository,
+            updateRepository = updateRepository,
+            apkDownloadManager = apkDownloadManager
         )
     }
 

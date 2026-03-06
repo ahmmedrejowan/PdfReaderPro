@@ -161,8 +161,9 @@ fun SplitScreen(
                 }
                 state.result != null -> {
                     // Success state
+                    val result = requireNotNull(state.result)
                     SuccessState(
-                        result = state.result!!,
+                        result = result,
                         onViewFile = { filePath ->
                             navController.navigateToReader(filePath)
                         },
@@ -248,7 +249,7 @@ fun SplitScreen(
                                     }
                                 ) {
                                     SourceFileCard(
-                                        sourceFile = state.sourceFile!!,
+                                        sourceFile = requireNotNull(state.sourceFile),
                                         onPreview = {
                                             state.sourceFile?.path?.let { path ->
                                                 navController.navigateToReader(path)

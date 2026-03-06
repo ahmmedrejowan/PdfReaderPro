@@ -153,11 +153,12 @@ fun LockScreen(
                     )
                 }
                 state.result != null -> {
+                    val result = requireNotNull(state.result)
                     SuccessState(
-                        result = state.result!!,
-                        onOpenInApp = { navController.navigateToReader(state.result!!.outputPath) },
+                        result = result,
+                        onOpenInApp = { navController.navigateToReader(result.outputPath) },
                         onShare = {
-                            val file = File(state.result!!.outputPath)
+                            val file = File(result.outputPath)
                             val uri = FileProvider.getUriForFile(
                                 context,
                                 "${context.packageName}.provider",
@@ -200,7 +201,7 @@ fun LockScreen(
                         onLock = { viewModel.lock() },
                         onClearError = { viewModel.clearError() },
                         onChangeFile = { pdfPickerLauncher.launch(arrayOf("application/pdf")) },
-                        onPreview = { navController.navigateToReader(state.sourceFile!!.path) }
+                        onPreview = { state.sourceFile?.path?.let { navController.navigateToReader(it) } }
                     )
                 }
             }
@@ -309,7 +310,7 @@ private fun LockContent(
     ) {
         // Source file card
         SourceFileCard(
-            sourceFile = state.sourceFile!!,
+            sourceFile = requireNotNull(state.sourceFile),
             onPreview = onPreview,
             onChangeFile = onChangeFile
         )

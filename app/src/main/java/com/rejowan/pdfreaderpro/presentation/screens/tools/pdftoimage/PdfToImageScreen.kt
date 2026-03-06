@@ -151,10 +151,11 @@ fun PdfToImageScreen(
                     )
                 }
                 state.result != null -> {
+                    val result = requireNotNull(state.result)
                     SuccessState(
-                        result = state.result!!,
+                        result = result,
                         onShareAll = {
-                            val files = state.result!!.imagePaths.map { File(it) }
+                            val files = result.imagePaths.map { File(it) }
                             val uris = files.map { file ->
                                 FileProvider.getUriForFile(
                                     context,

@@ -176,11 +176,12 @@ fun PageNumbersScreen(
                     )
                 }
                 state.result != null -> {
+                    val result = requireNotNull(state.result)
                     SuccessState(
-                        result = state.result!!,
-                        onOpenInApp = { navController.navigateToReader(state.result!!.outputPath) },
+                        result = result,
+                        onOpenInApp = { navController.navigateToReader(result.outputPath) },
                         onShare = {
-                            val file = File(state.result!!.outputPath)
+                            val file = File(result.outputPath)
                             val uri = FileProvider.getUriForFile(
                                 context,
                                 "${context.packageName}.provider",

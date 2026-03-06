@@ -162,11 +162,12 @@ fun CompressScreen(
                 }
                 state.result != null -> {
                     // Success state
+                    val result = requireNotNull(state.result)
                     SuccessState(
-                        result = state.result!!,
-                        onOpenInApp = { navController.navigateToReader(state.result!!.outputPath) },
+                        result = result,
+                        onOpenInApp = { navController.navigateToReader(result.outputPath) },
                         onOpenWith = {
-                            val file = File(state.result!!.outputPath)
+                            val file = File(result.outputPath)
                             val uri = FileProvider.getUriForFile(
                                 context,
                                 "${context.packageName}.provider",
@@ -179,7 +180,7 @@ fun CompressScreen(
                             context.startActivity(Intent.createChooser(intent, "Open with"))
                         },
                         onShare = {
-                            val file = File(state.result!!.outputPath)
+                            val file = File(result.outputPath)
                             val uri = FileProvider.getUriForFile(
                                 context,
                                 "${context.packageName}.provider",
@@ -248,7 +249,7 @@ fun CompressScreen(
                                         }
                                 ) {
                                     SourceFileCard(
-                                        sourceFile = state.sourceFile!!,
+                                        sourceFile = requireNotNull(state.sourceFile),
                                         onPreview = {
                                             state.sourceFile?.path?.let { path ->
                                                 navController.navigateToReader(path)
@@ -272,7 +273,7 @@ fun CompressScreen(
                                     CompressionLevelSection(
                                         selectedLevel = state.compressionLevel,
                                         onLevelSelected = { viewModel.setCompressionLevel(it) },
-                                        sourceFile = state.sourceFile!!
+                                        sourceFile = requireNotNull(state.sourceFile)
                                     )
                                 }
                             }

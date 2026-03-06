@@ -178,11 +178,12 @@ class ReaderViewModel(
                 }
 
                 // Determine which page to start on
+                val lastPage = storedLastPage // Capture for smart cast
                 val targetPage = when {
                     // If explicitly passed a page (e.g., from recent list), use it
                     initialPage > 0 && initialPage < pagesCount -> initialPage
                     // If we have a stored last page from history, use it
-                    storedLastPage != null && storedLastPage!! > 0 && storedLastPage!! < pagesCount -> storedLastPage!!
+                    lastPage != null && lastPage > 0 && lastPage < pagesCount -> lastPage
                     // First time opening - scroll to top to show padding
                     else -> null
                 }

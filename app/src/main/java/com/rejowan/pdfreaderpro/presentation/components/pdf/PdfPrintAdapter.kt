@@ -81,8 +81,13 @@ class SimplePdfPrintAdapter : PdfPrintBridge() {
             return
         }
 
+        val messageData = message ?: run {
+            callback?.onWriteFailed("No PDF data received")
+            return
+        }
+
         try {
-            val pdfData = decodeBase64OrByteArray(message!!)
+            val pdfData = decodeBase64OrByteArray(messageData)
 
             FileOutputStream(destination?.fileDescriptor).use { outputStream ->
                 outputStream.write(pdfData)
