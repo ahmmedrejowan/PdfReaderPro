@@ -85,6 +85,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyGridState
@@ -131,7 +133,7 @@ fun ReorderScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 actions = {
@@ -139,7 +141,7 @@ fun ReorderScreen(
                         IconButton(onClick = { viewModel.resetOrder() }) {
                             Icon(
                                 Icons.Default.Refresh,
-                                contentDescription = "Reset order",
+                                contentDescription = stringResource(R.string.cd_reset_order),
                                 tint = AccentRed
                             )
                         }
@@ -413,7 +415,7 @@ private fun PageThumbnailItem(
             if (page.thumbnail != null) {
                 Image(
                     bitmap = page.thumbnail.asImageBitmap(),
-                    contentDescription = "Page ${page.pageNumber}",
+                    contentDescription = stringResource(R.string.cd_page_number, page.pageNumber),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Fit
                 )
@@ -444,7 +446,7 @@ private fun PageThumbnailItem(
             ) {
                 Icon(
                     Icons.Default.DragIndicator,
-                    contentDescription = "Drag to reorder",
+                    contentDescription = stringResource(R.string.cd_drag_to_reorder),
                     modifier = Modifier.size(14.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -541,7 +543,7 @@ private fun ReorderBottomSection(
                     ) {
                         Icon(
                             Icons.Default.Close,
-                            contentDescription = "Dismiss",
+                            contentDescription = stringResource(R.string.cd_dismiss),
                             modifier = Modifier.size(16.dp),
                             tint = AccentRed
                         )

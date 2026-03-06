@@ -102,6 +102,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -168,7 +170,7 @@ fun MergeScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 actions = {
@@ -179,7 +181,7 @@ fun MergeScreen(
                         ) {
                             Icon(
                                 Icons.Default.Add,
-                                contentDescription = "Add more PDFs",
+                                contentDescription = stringResource(R.string.cd_add_more_pdfs),
                                 tint = AccentBlue
                             )
                         }
@@ -438,7 +440,7 @@ private fun MergeFileItem(
                 ) {
                     Icon(
                         Icons.Default.DragHandle,
-                        contentDescription = "Drag to reorder",
+                        contentDescription = stringResource(R.string.cd_drag_to_reorder),
                         modifier = Modifier.size(20.dp),
                         tint = if (isDragging) {
                             AccentPurple
@@ -484,7 +486,7 @@ private fun MergeFileItem(
                     if (file.thumbnail != null) {
                         Image(
                             bitmap = file.thumbnail.asImageBitmap(),
-                            contentDescription = "PDF preview",
+                            contentDescription = stringResource(R.string.cd_pdf_preview),
                             modifier = Modifier.fillMaxSize()
                         )
                     } else {
@@ -526,7 +528,7 @@ private fun MergeFileItem(
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "Remove",
+                        contentDescription = stringResource(R.string.cd_remove),
                         modifier = Modifier.size(16.dp),
                         tint = AccentRed
                     )
@@ -697,7 +699,7 @@ private fun MergeBottomSection(
                     ) {
                         Icon(
                             Icons.Default.Close,
-                            contentDescription = "Dismiss",
+                            contentDescription = stringResource(R.string.cd_dismiss),
                             modifier = Modifier.size(16.dp),
                             tint = AccentRed
                         )

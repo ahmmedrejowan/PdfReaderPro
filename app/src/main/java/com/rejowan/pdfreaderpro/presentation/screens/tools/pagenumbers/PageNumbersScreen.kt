@@ -94,6 +94,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -149,7 +151,7 @@ fun PageNumbersScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -561,7 +563,7 @@ private fun PageNumbersContent(
                     ) {
                         Icon(
                             Icons.Default.Close,
-                            contentDescription = "Dismiss",
+                            contentDescription = stringResource(R.string.cd_dismiss),
                             modifier = Modifier.size(16.dp),
                             tint = Color(0xFFEF5350)
                         )

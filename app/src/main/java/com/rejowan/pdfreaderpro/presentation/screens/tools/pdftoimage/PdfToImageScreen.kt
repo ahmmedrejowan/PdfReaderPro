@@ -79,6 +79,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -124,7 +126,7 @@ fun PdfToImageScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -417,7 +419,7 @@ private fun ExportContent(
                     ) {
                         Icon(
                             Icons.Default.Close,
-                            contentDescription = "Dismiss",
+                            contentDescription = stringResource(R.string.cd_dismiss),
                             modifier = Modifier.size(16.dp),
                             tint = AccentRed
                         )
@@ -465,7 +467,7 @@ private fun SourceFileCard(sourceFile: SourceFile) {
                 if (sourceFile.previewBitmap != null) {
                     Image(
                         bitmap = sourceFile.previewBitmap.asImageBitmap(),
-                        contentDescription = "Preview",
+                        contentDescription = stringResource(R.string.cd_preview),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
@@ -818,7 +820,7 @@ private fun ImageResultItem(
             ) {
                 Icon(
                     Icons.Default.Visibility,
-                    contentDescription = "View",
+                    contentDescription = stringResource(R.string.cd_view),
                     modifier = Modifier.size(18.dp),
                     tint = AccentGreen
                 )
@@ -829,7 +831,7 @@ private fun ImageResultItem(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = "Share",
+                    contentDescription = stringResource(R.string.cd_share),
                     modifier = Modifier.size(18.dp),
                     tint = AccentBlue
                 )

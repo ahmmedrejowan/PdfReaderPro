@@ -83,6 +83,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -126,7 +128,7 @@ fun LockScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -424,7 +426,7 @@ private fun LockContent(
                     ) {
                         Icon(
                             Icons.Default.Close,
-                            contentDescription = "Dismiss",
+                            contentDescription = stringResource(R.string.cd_dismiss),
                             modifier = Modifier.size(16.dp),
                             tint = AccentRed
                         )
@@ -603,7 +605,7 @@ private fun PasswordField(
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
                     if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                    contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                    contentDescription = stringResource(if (passwordVisible) R.string.cd_hide_password else R.string.cd_show_password)
                 )
             }
         },

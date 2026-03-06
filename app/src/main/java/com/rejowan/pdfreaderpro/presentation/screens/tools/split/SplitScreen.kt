@@ -88,6 +88,8 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -132,7 +134,7 @@ fun SplitScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -454,7 +456,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         Icons.Outlined.Visibility,
-                        contentDescription = "Preview",
+                        contentDescription = stringResource(R.string.cd_preview),
                         modifier = Modifier.size(18.dp),
                         tint = AccentTeal
                     )
@@ -809,7 +811,7 @@ private fun SplitBottomSection(
                     ) {
                         Icon(
                             Icons.Default.Close,
-                            contentDescription = "Dismiss",
+                            contentDescription = stringResource(R.string.cd_dismiss),
                             modifier = Modifier.size(16.dp),
                             tint = AccentRed
                         )
@@ -1096,7 +1098,7 @@ private fun SplitResultFileItem(
                 ) {
                     Icon(
                         Icons.Outlined.Visibility,
-                        contentDescription = "View",
+                        contentDescription = stringResource(R.string.cd_view),
                         modifier = Modifier.size(16.dp),
                         tint = AccentTeal
                     )
@@ -1119,7 +1121,7 @@ private fun SplitResultFileItem(
                 ) {
                     Icon(
                         Icons.Default.Share,
-                        contentDescription = "Share",
+                        contentDescription = stringResource(R.string.cd_share),
                         modifier = Modifier.size(16.dp),
                         tint = AccentBlue
                     )
