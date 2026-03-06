@@ -53,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -71,13 +72,12 @@ import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import com.rejowan.pdfreaderpro.presentation.components.AnimatedBottomNav
 import com.rejowan.pdfreaderpro.presentation.components.AnimatedSelectionActionBar
-import com.rejowan.pdfreaderpro.presentation.components.ClickableSearchBar
+import com.rejowan.pdfreaderpro.presentation.components.CollapsingHomeHeader
 import com.rejowan.pdfreaderpro.presentation.components.CompactTabRow
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.FolderOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.StatsSheet
-import com.rejowan.pdfreaderpro.presentation.components.WelcomeHeader
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.ExitConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
@@ -220,8 +220,12 @@ fun HomeScreen(
     var selectedFileFromRecent by remember { mutableStateOf(false) }
     var selectedFolder by remember { mutableStateOf<PdfFolder?>(null) }
 
-    // Bottom bar hide on scroll
+    // Bottom bar visibility + Header collapse with smooth scroll tracking
     var isBottomBarVisible by remember { mutableStateOf(true) }
+    var headerScrollOffset by remember { mutableStateOf(0f) }
+    val density = LocalDensity.current
+    val maxHeaderScroll = with(density) { 50.dp.toPx() } // Search bar height
+
     val bottomBarHeight = 120.dp
     val bottomBarOffset by animateDpAsState(
         targetValue = if (isBottomBarVisible) 0.dp else bottomBarHeight,
@@ -229,14 +233,25 @@ fun HomeScreen(
         label = "bottomBarOffset"
     )
 
+    // Calculate collapse progress (0 = expanded, 1 = collapsed)
+    val headerCollapseProgress = (headerScrollOffset / maxHeaderScroll).coerceIn(0f, 1f)
+
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (available.y > 10) {
+                val delta = available.y
+
+                // Update header scroll offset (smooth tracking)
+                val newOffset = (headerScrollOffset - delta).coerceIn(0f, maxHeaderScroll)
+                headerScrollOffset = newOffset
+
+                // Bottom bar visibility (threshold-based)
+                if (delta > 10) {
                     isBottomBarVisible = true
-                } else if (available.y < -10) {
+                } else if (delta < -10) {
                     isBottomBarVisible = false
                 }
+
                 return Offset.Zero
             }
         }
@@ -297,15 +312,12 @@ fun HomeScreen(
                 when (BottomNavItem.entries[selectedNavItem]) {
                     BottomNavItem.HOME -> {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            // Welcome Header with greeting
-                            WelcomeHeader(
+                            // Collapsing header (Welcome + Search)
+                            CollapsingHomeHeader(
+                                collapseProgress = headerCollapseProgress,
+                                onSearchClick = { navController.navigateToSearch() },
                                 onSortClick = { showSortSheet = true },
                                 onStatsClick = { showStatsSheet = true }
-                            )
-
-                            // Search bar
-                            ClickableSearchBar(
-                                onClick = { navController.navigateToSearch() }
                             )
 
                             // Compact tabs with view mode toggle
