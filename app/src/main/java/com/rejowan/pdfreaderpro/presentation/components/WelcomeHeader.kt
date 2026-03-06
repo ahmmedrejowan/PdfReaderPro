@@ -90,7 +90,7 @@ fun WelcomeHeader(
 
             Row {
                 TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = {
                         PlainTooltip {
                             Text("Sort files")
@@ -107,7 +107,7 @@ fun WelcomeHeader(
                     }
                 }
                 TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = {
                         PlainTooltip {
                             Text("Library statistics")

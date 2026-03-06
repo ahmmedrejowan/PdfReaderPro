@@ -597,7 +597,7 @@ private fun FolderDetailHeader(
         ) {
             // List view
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = { PlainTooltip { Text("List view") } },
                 state = rememberTooltipState()
             ) {
@@ -614,7 +614,7 @@ private fun FolderDetailHeader(
             }
             // Grid view
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = { PlainTooltip { Text("Grid view") } },
                 state = rememberTooltipState()
             ) {
@@ -631,7 +631,7 @@ private fun FolderDetailHeader(
             }
             // Sort
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = { PlainTooltip { Text("Sort files") } },
                 state = rememberTooltipState()
             ) {

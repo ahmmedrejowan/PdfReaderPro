@@ -71,7 +71,7 @@ fun CompactTabRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = {
                     PlainTooltip {
                         Text("List view")
@@ -91,7 +91,7 @@ fun CompactTabRow(
                 }
             }
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = {
                     PlainTooltip {
                         Text("Grid view")

@@ -136,7 +136,7 @@ fun CollapsingHomeHeader(
                 }
 
                 TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = { PlainTooltip { Text("Sort files") } },
                     state = rememberTooltipState()
                 ) {
@@ -149,7 +149,7 @@ fun CollapsingHomeHeader(
                     }
                 }
                 TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = { PlainTooltip { Text("Library statistics") } },
                     state = rememberTooltipState()
                 ) {
