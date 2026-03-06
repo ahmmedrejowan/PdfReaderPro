@@ -2325,7 +2325,6 @@ class PdfViewer @JvmOverloads constructor(
         )
     }
 
-    @SuppressLint("SetTextI18n")
     private fun createPageView(context: Context, pageNo: Int): View {
         return TextView(context).apply {
             setBackgroundColor(Color.WHITE)
@@ -2334,7 +2333,7 @@ class PdfViewer @JvmOverloads constructor(
                     setMargins(24, 24, 24, 0)
                 }
             gravity = Gravity.CENTER
-            text = "Page $pageNo"
+            text = context.getString(R.string.page_current, pageNo)
             setTextColor(Color.BLACK)
         }
     }

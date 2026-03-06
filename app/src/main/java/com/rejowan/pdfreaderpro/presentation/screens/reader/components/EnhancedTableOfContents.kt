@@ -67,9 +67,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
 
 private val AccentPurple = Color(0xFF9575CD)
@@ -274,7 +276,7 @@ private fun TocSheetContent(
 
             Column {
                 Text(
-                    text = "Document Navigation",
+                    text = stringResource(R.string.document_navigation),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -545,7 +547,7 @@ private fun EmptyTocState(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "No Contents Available",
+            text = stringResource(R.string.no_contents_available),
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -555,7 +557,7 @@ private fun EmptyTocState(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "This PDF doesn't have a table of contents",
+            text = stringResource(R.string.no_toc_message),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
@@ -701,7 +703,7 @@ private fun EmptyAttachmentsState(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "No Attachments",
+            text = stringResource(R.string.no_attachments),
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -711,7 +713,7 @@ private fun EmptyAttachmentsState(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "This PDF doesn't have any embedded files",
+            text = stringResource(R.string.no_attachments_message),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )

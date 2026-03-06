@@ -68,9 +68,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -461,7 +463,7 @@ private fun BatchDeleteConfirmSheet(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Delete $count files?",
+                text = stringResource(R.string.delete_files_count, count),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -469,7 +471,7 @@ private fun BatchDeleteConfirmSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "This action cannot be undone. The files will be permanently deleted from your device.",
+                text = stringResource(R.string.delete_files_warning),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center

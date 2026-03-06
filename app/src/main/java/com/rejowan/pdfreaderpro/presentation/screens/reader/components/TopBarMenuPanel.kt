@@ -306,14 +306,14 @@ private fun MenuHeader(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = "Document Options",
+            text = stringResource(R.string.document_options),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            text = "Share, print, and manage",
+            text = stringResource(R.string.share_print_manage),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )

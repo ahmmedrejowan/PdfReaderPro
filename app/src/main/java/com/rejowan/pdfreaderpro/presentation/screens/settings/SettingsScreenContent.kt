@@ -108,6 +108,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -214,16 +215,16 @@ fun SettingsScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Appearance Section
-        SectionLabel(text = "Appearance", delay = 0)
+        SectionLabel(text = stringResource(R.string.appearance), delay = 0)
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.Palette,
-            title = "Theme",
+            title = stringResource(R.string.theme),
             subtitle = when (preferences.themeMode) {
-                ThemeMode.LIGHT -> "Light"
-                ThemeMode.DARK -> "Dark"
-                ThemeMode.SYSTEM -> "System Default"
+                ThemeMode.LIGHT -> stringResource(R.string.light)
+                ThemeMode.DARK -> stringResource(R.string.dark)
+                ThemeMode.SYSTEM -> stringResource(R.string.system_default)
             },
             accentColor = AccentPurple,
             onClick = { showThemeModeSheet = true },
@@ -233,13 +234,13 @@ fun SettingsScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Reader Section
-        SectionLabel(text = "Reader", delay = 100)
+        SectionLabel(text = stringResource(R.string.reader_section), delay = 100)
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.Brightness6,
-            title = "Brightness",
-            subtitle = if (preferences.readerBrightness < 0) "System Default" else "${(preferences.readerBrightness * 100).toInt()}%",
+            title = stringResource(R.string.brightness),
+            subtitle = if (preferences.readerBrightness < 0) stringResource(R.string.system_default) else "${(preferences.readerBrightness * 100).toInt()}%",
             accentColor = AccentAmber,
             onClick = { showBrightnessSheet = true },
             animationDelay = 150
@@ -249,7 +250,7 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.SwapVert,
-            title = "Scroll Direction",
+            title = stringResource(R.string.scroll_direction),
             subtitle = preferences.readerScrollDirection.name.lowercase().replaceFirstChar { it.uppercase() },
             accentColor = AccentPurple,
             onClick = { showScrollDirectionSheet = true },
@@ -260,7 +261,7 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.FormatAlignCenter,
-            title = "Page Alignment",
+            title = stringResource(R.string.page_alignment),
             subtitle = preferences.readerPageAlignment.name.lowercase().replaceFirstChar { it.uppercase() },
             accentColor = AccentTeal,
             onClick = { showPageAlignmentSheet = true },
@@ -271,11 +272,11 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.ZoomIn,
-            title = "Default Zoom",
+            title = stringResource(R.string.default_zoom),
             subtitle = when (preferences.readerQuickZoomPreset) {
-                QuickZoomPreset.FIT_PAGE -> "Fit Page"
-                QuickZoomPreset.FIT_WIDTH -> "Fit Width"
-                QuickZoomPreset.ACTUAL_SIZE -> "100%"
+                QuickZoomPreset.FIT_PAGE -> stringResource(R.string.fit_page)
+                QuickZoomPreset.FIT_WIDTH -> stringResource(R.string.fit_width)
+                QuickZoomPreset.ACTUAL_SIZE -> stringResource(R.string.actual_size)
             },
             accentColor = AccentBlue,
             onClick = { showQuickZoomSheet = true },
@@ -286,7 +287,7 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.ColorLens,
-            title = "Reading Theme",
+            title = stringResource(R.string.reading_theme),
             subtitle = preferences.readerTheme.name.lowercase().replaceFirstChar { it.uppercase() },
             accentColor = AccentAmber,
             onClick = { showReadingThemeSheet = true },
@@ -297,8 +298,8 @@ fun SettingsScreenContent(
 
         SettingsToggleItem(
             icon = Icons.Rounded.VisibilityOff,
-            title = "Auto-Hide Toolbar",
-            subtitle = "Hide toolbar automatically while reading",
+            title = stringResource(R.string.auto_hide_toolbar),
+            subtitle = stringResource(R.string.auto_hide_toolbar_desc),
             accentColor = AccentPurple,
             checked = preferences.readerAutoHideToolbar,
             onCheckedChange = { viewModel.setReaderAutoHideToolbar(it) },
@@ -309,8 +310,8 @@ fun SettingsScreenContent(
 
         SettingsToggleItem(
             icon = Icons.Rounded.ScreenLockPortrait,
-            title = "Keep Screen On",
-            subtitle = "Prevent screen from turning off",
+            title = stringResource(R.string.keep_screen_on),
+            subtitle = stringResource(R.string.prevent_screen_off),
             accentColor = AccentTeal,
             checked = preferences.readerKeepScreenOn,
             onCheckedChange = { viewModel.setReaderKeepScreenOn(it) },
@@ -320,18 +321,18 @@ fun SettingsScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Updates Section
-        SectionLabel(text = "Updates", delay = 500)
+        SectionLabel(text = stringResource(R.string.updates), delay = 500)
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.SystemUpdate,
-            title = "Check for Updates",
+            title = stringResource(R.string.check_for_updates),
             subtitle = when (updateState) {
-                is UpdateState.Idle -> "Tap to check for updates"
-                is UpdateState.Checking -> "Checking..."
-                is UpdateState.Available -> "Update available: v${(updateState as UpdateState.Available).release.version}"
-                is UpdateState.UpToDate -> "You're up to date"
-                is UpdateState.Error -> "Error: ${(updateState as UpdateState.Error).message}"
+                is UpdateState.Idle -> stringResource(R.string.tap_to_check)
+                is UpdateState.Checking -> stringResource(R.string.checking)
+                is UpdateState.Available -> stringResource(R.string.update_available_version, (updateState as UpdateState.Available).release.version)
+                is UpdateState.UpToDate -> stringResource(R.string.up_to_date)
+                is UpdateState.Error -> stringResource(R.string.error_message, (updateState as UpdateState.Error).message)
             },
             accentColor = AccentAmber,
             onClick = { viewModel.checkForUpdates() },
@@ -373,13 +374,13 @@ fun SettingsScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         // About Section
-        SectionLabel(text = "About", delay = 650)
+        SectionLabel(text = stringResource(R.string.about_section), delay = 650)
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsOptionItem(
             icon = Icons.Rounded.Info,
-            title = "Version ${BuildConfig.VERSION_NAME}",
-            subtitle = "View changelog",
+            title = stringResource(R.string.version_format, BuildConfig.VERSION_NAME),
+            subtitle = stringResource(R.string.view_changelog),
             accentColor = AccentBlue,
             onClick = { showChangelogSheet = true },
             animationDelay = 700
@@ -389,8 +390,8 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.Policy,
-            title = "Privacy Policy",
-            subtitle = "View our privacy policy",
+            title = stringResource(R.string.privacy_policy),
+            subtitle = stringResource(R.string.view_privacy_policy),
             accentColor = AccentTeal,
             onClick = { showPrivacyPolicySheet = true },
             animationDelay = 750
@@ -400,8 +401,8 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.Gavel,
-            title = "Open Source Licenses",
-            subtitle = "View third-party libraries",
+            title = stringResource(R.string.open_source_licenses),
+            subtitle = stringResource(R.string.view_third_party),
             accentColor = AccentPurple,
             onClick = { showLicensesSheet = true },
             animationDelay = 800
@@ -411,8 +412,8 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.Person,
-            title = "Creator",
-            subtitle = "About the developer",
+            title = stringResource(R.string.creator),
+            subtitle = stringResource(R.string.about_developer),
             accentColor = AccentAmber,
             onClick = { showCreatorSheet = true },
             animationDelay = 850
@@ -422,8 +423,8 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.Gavel,
-            title = "App License",
-            subtitle = "GNU General Public License v3.0",
+            title = stringResource(R.string.app_license),
+            subtitle = stringResource(R.string.gpl_full_name),
             accentColor = AccentBlue,
             onClick = { showAppLicenseSheet = true },
             animationDelay = 900
@@ -763,14 +764,14 @@ private fun SettingsHeaderCard() {
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "PDF Reader Pro",
+                    text = stringResource(R.string.app_name_full),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "Version ${BuildConfig.VERSION_NAME}",
+                    text = stringResource(R.string.version_format, BuildConfig.VERSION_NAME),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -782,7 +783,7 @@ private fun SettingsHeaderCard() {
                 color = AccentTeal.copy(alpha = 0.15f)
             ) {
                 Text(
-                    text = "GPL 3.0",
+                    text = stringResource(R.string.license_gpl),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Medium,
                     color = AccentTeal,
@@ -1471,14 +1472,14 @@ private fun BrightnessContent(
 
             Column {
                 Text(
-                    text = "Brightness",
+                    text = stringResource(R.string.brightness),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Adjust screen brightness",
+                    text = stringResource(R.string.adjust_brightness),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -1490,8 +1491,8 @@ private fun BrightnessContent(
         // Options
         BrightnessOptionItem(
             icon = Icons.Rounded.PhoneAndroid,
-            title = "System Default",
-            subtitle = "Follow system brightness",
+            title = stringResource(R.string.system_default),
+            subtitle = stringResource(R.string.follow_system_brightness),
             isSelected = isSystemDefault,
             accentColor = AccentAmber,
             onClick = { onBrightnessChange(-1f) },
@@ -1805,7 +1806,7 @@ private fun ChangelogContent() {
     ) {
         // Fixed title
         Text(
-            text = "Changelog",
+            text = stringResource(R.string.changelog),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 20.dp)
@@ -1881,7 +1882,7 @@ private fun ChangelogVersionItem(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Version $version",
+                        text = stringResource(R.string.version_format, version),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary
@@ -1892,7 +1893,7 @@ private fun ChangelogVersionItem(
                             color = MaterialTheme.colorScheme.primary
                         ) {
                             Text(
-                                text = "LATEST",
+                                text = stringResource(R.string.latest_badge),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onPrimary,
@@ -1939,7 +1940,7 @@ private fun PrivacyPolicyContent() {
             .padding(bottom = 32.dp)
     ) {
         Text(
-            text = "Privacy Policy",
+            text = stringResource(R.string.privacy_policy),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 20.dp)
@@ -1955,7 +1956,7 @@ private fun PrivacyPolicyContent() {
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Your Privacy is Protected",
+                    text = stringResource(R.string.privacy_protected),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -1994,7 +1995,7 @@ private fun PrivacyPolicyContent() {
         )
 
         Text(
-            text = "Last updated: March 5, 2026",
+            text = stringResource(R.string.last_updated),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 16.dp)
@@ -2171,7 +2172,7 @@ private fun LicensesContent() {
             .padding(bottom = 32.dp)
     ) {
         Text(
-            text = "Open Source Licenses",
+            text = stringResource(R.string.open_source_licenses),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 20.dp)
@@ -2194,28 +2195,28 @@ private fun CreatorContent() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "About the Creator",
+            text = stringResource(R.string.about_creator),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
         Text(
-            text = "K M Rejowan Ahmmed",
+            text = stringResource(R.string.creator_name),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
         )
 
         Text(
-            text = "Senior Android Developer",
+            text = stringResource(R.string.creator_title),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 4.dp, bottom = 20.dp)
         )
 
         Text(
-            text = "PDF Reader Pro was created to provide a free, open-source, and privacy-focused PDF reading experience. With features like bookmarks, favorites, reading themes, and customizable settings, it aims to be a complete PDF solution for Android users.",
+            text = stringResource(R.string.about_app_description),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -2351,7 +2352,7 @@ private fun AppLicenseContent() {
             .padding(bottom = 32.dp)
     ) {
         Text(
-            text = "GNU General Public License v3.0",
+            text = stringResource(R.string.gpl_full_name),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 20.dp)
@@ -2386,7 +2387,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Key Terms",
+                    text = stringResource(R.string.key_terms),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -2417,7 +2418,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
             color = MaterialTheme.colorScheme.primary
         ) {
             Text(
-                text = "View Full GPL v3.0 License",
+                text = stringResource(R.string.view_gpl_license),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onPrimary,

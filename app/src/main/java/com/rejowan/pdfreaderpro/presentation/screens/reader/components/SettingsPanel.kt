@@ -29,7 +29,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +62,7 @@ fun SettingsPanel(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Reading Settings",
+                text = stringResource(R.string.reading_settings),
                 style = MaterialTheme.typography.titleLarge
             )
 
@@ -78,7 +80,7 @@ fun SettingsPanel(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Brightness",
+                    text = stringResource(R.string.brightness),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -118,11 +120,11 @@ fun SettingsPanel(
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Scroll Direction",
+                        text = stringResource(R.string.scroll_direction),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = if (scrollDirection == ScrollDirection.VERTICAL) "Vertical" else "Horizontal",
+                        text = if (scrollDirection == ScrollDirection.VERTICAL) stringResource(R.string.vertical) else stringResource(R.string.horizontal),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -138,11 +140,11 @@ fun SettingsPanel(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Keep Screen On",
+                        text = stringResource(R.string.keep_screen_on),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "Prevent screen from turning off",
+                        text = stringResource(R.string.prevent_screen_off),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -172,11 +174,11 @@ fun SettingsPanel(
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Lock Rotation",
+                        text = stringResource(R.string.lock_rotation),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = if (isRotationLocked) "Rotation locked" else "Auto-rotate enabled",
+                        text = if (isRotationLocked) stringResource(R.string.rotation_locked) else stringResource(R.string.auto_rotate_enabled),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -204,7 +206,7 @@ fun SettingsPanel(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Full Screen Mode")
+                Text(stringResource(R.string.full_screen_mode))
             }
 
             // PDF info button
@@ -217,7 +219,7 @@ fun SettingsPanel(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("PDF Information")
+                Text(stringResource(R.string.pdf_information))
             }
 
             // Delete button
@@ -232,7 +234,7 @@ fun SettingsPanel(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Delete PDF",
+                    text = stringResource(R.string.delete_pdf),
                     color = MaterialTheme.colorScheme.error
                 )
             }

@@ -584,13 +584,8 @@
     <!-- View Mode Sheet -->
     <string name="view_options">View Options</string>
     <string name="customize_reading_layout">Customize your reading layout</string>
-    <string name="scroll_direction">Scroll Direction</string>
-    <string name="vertical">Vertical</string>
-    <string name="horizontal">Horizontal</string>
-    <string name="page_layout">Page Layout</string>
     <string name="single_layout">Single</string>
     <string name="two_page_layout">Two-Page</string>
-    <string name="page_alignment">Page Alignment</string>
     <string name="left_align">Left</string>
     <string name="center_align">Center</string>
     <string name="right_align">Right</string>
@@ -603,15 +598,12 @@
     <!-- Display Sheet -->
     <string name="display_settings">Display Settings</string>
     <string name="theme_brightness_options">Theme, brightness &amp; screen options</string>
-    <string name="reading_theme">Reading Theme</string>
-    <string name="brightness">Brightness</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
     <string name="sepia_theme">Sepia</string>
     <string name="black_theme">Black</string>
     <string name="low_brightness">Low brightness</string>
     <string name="high_brightness">High brightness</string>
-    <string name="keep_screen_on">Keep Screen On</string>
     <string name="prevent_screen_off">Prevent screen from turning off</string>
 
     <!-- Page Jump Sheet -->
@@ -638,28 +630,21 @@
     <!-- Zoom Sheet -->
     <string name="zoom_display">Zoom &amp; Display</string>
     <string name="adjust_view_orientation">Adjust view size and orientation</string>
-    <string name="quick_zoom">Quick Zoom</string>
-    <string name="fit_page">Fit Page</string>
-    <string name="fit_width">Fit Width</string>
-    <string name="actual_size">100%</string>
     <string name="screen_orientation">Screen Orientation</string>
     <string name="orientation_auto">Auto</string>
     <string name="orientation_portrait">Portrait</string>
     <string name="orientation_landscape">Landscape</string>
-    <string name="current_zoom">Current Zoom</string>
+    <string name="current_zoom_label">Current Zoom</string>
 
     <!-- Bookmarks Sheet -->
-    <string name="bookmarks_title">Bookmarks</string>
     <string name="bookmark_count">%d bookmark</string>
     <string name="bookmarks_count">%d bookmarks</string>
     <string name="delete_bookmark">Delete bookmark</string>
-    <string name="no_bookmarks_yet">No Bookmarks Yet</string>
     <string name="bookmark_hint">Tap the bookmark icon to save pages</string>
     <string name="page_number_title">Page %d</string>
 
     <!-- PDF Info Dialog -->
     <string name="document_information">Document Information</string>
-    <string name="pages_count">%d pages</string>
     <string name="pdf_version_label">PDF %s</string>
     <string name="document_section">Document</string>
     <string name="subject_label">Subject</string>
@@ -689,7 +674,6 @@
     <string name="view_details_metadata">View file details and metadata</string>
     <string name="share_this_document">Share this document</string>
     <string name="print_this_document">Print this document</string>
-    <string name="open_with">Open With</string>
     <string name="open_in_another_app">Open in another app</string>
     <string name="save_as">Save As</string>
     <string name="save_copy_location">Save a copy to your chosen location</string>
@@ -756,5 +740,66 @@
     <string name="error_loading">Error loading PDF</string>
     <string name="try_again_message">Something went wrong while loading this PDF. Please try again.</string>
 
+    <!-- Floating Search Bar -->
+    <string name="search_in_document">Search in document…</string>
+
+    <!-- Reader Sidebar -->
+    <string name="reading">Reading</string>
+    <string name="settings_label">Settings</string>
+    <string name="progress">Progress</string>
+    <string name="page_current">Page %d</string>
+    <string name="of_total">of %d</string>
+    <string name="prevent_screen_timeout">Prevent screen timeout</string>
+    <string name="lock_rotation">Lock Rotation</string>
+    <string name="rotation_locked">Rotation locked</string>
+    <string name="auto_rotate">Auto-rotate</string>
+    <string name="swipe_to_close">Swipe right to close</string>
+
+    <!-- Tools Screen -->
+    <string name="coming_soon">Soon</string>
+
+    <!-- Enhanced Table of Contents -->
+    <string name="document_navigation">Document Navigation</string>
+    <string name="no_contents_available">No Contents Available</string>
+    <string name="no_toc_message">This PDF doesn\'t have a table of contents</string>
+    <string name="no_attachments_message">This PDF doesn\'t have any embedded files</string>
+
+    <!-- Settings Panel (Reader) -->
+    <string name="reading_settings">Reading Settings</string>
+    <string name="full_screen_mode">Full Screen Mode</string>
+    <string name="auto_rotate_enabled">Auto-rotate enabled</string>
+    <string name="delete_pdf">Delete PDF</string>
+
+    <!-- Folder Detail Screen -->
+    <string name="delete_files_count">Delete %d files?</string>
+    <string name="delete_files_warning">This action cannot be undone. The files will be permanently deleted from your device.</string>
+
+    <!-- Settings Screen -->
+    <string name="reader_section">Reader</string>
+    <string name="about_section">About</string>
+    <string name="app_name_full">PDF Reader Pro</string>
+    <string name="version_format">Version %s</string>
+    <string name="license_gpl">GPL 3.0</string>
+    <string name="latest_badge">LATEST</string>
+    <string name="privacy_protected">Your Privacy is Protected</string>
+    <string name="about_app_description">PDF Reader Pro was created to provide a free, open-source, and privacy-focused PDF reading experience. With features like bookmarks, favorites, reading themes, and customizable settings, it aims to be a complete PDF solution for Android users.</string>
+    <string name="gpl_full_name">GNU General Public License v3.0</string>
+    <string name="key_terms">Key Terms</string>
+    <string name="view_gpl_license">View Full GPL v3.0 License</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system_default">System Default</string>
+    <string name="default_zoom">Default Zoom</string>
+    <string name="tap_to_check">Tap to check for updates</string>
+    <string name="checking">Checking…</string>
+    <string name="update_available_version">Update available: v%s</string>
+    <string name="up_to_date">You\'re up to date</string>
+    <string name="error_message">Error: %s</string>
+    <string name="view_changelog">View changelog</string>
+    <string name="view_privacy_policy">View our privacy policy</string>
+    <string name="view_third_party">View third-party libraries</string>
+    <string name="about_developer">About the developer</string>
+    <string name="app_license">App License</string>
+    <string name="follow_system_brightness">Follow system brightness</string>
 
 </resources>

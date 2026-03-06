@@ -467,7 +467,7 @@ private fun ZoomControlsRow(
                     color = AccentTeal
                 )
                 Text(
-                    text = stringResource(R.string.current_zoom),
+                    text = stringResource(R.string.current_zoom_label),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )

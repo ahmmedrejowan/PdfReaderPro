@@ -54,8 +54,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import kotlin.math.roundToInt
 
 private val AccentPurple = Color(0xFF9575CD)
@@ -234,14 +236,14 @@ private fun SidebarContent(
 
                     Column {
                         Text(
-                            text = "Reading",
+                            text = stringResource(R.string.reading),
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold
                             ),
                             color = contentColor
                         )
                         Text(
-                            text = "Settings",
+                            text = stringResource(R.string.settings_label),
                             style = MaterialTheme.typography.bodySmall,
                             color = subtleColor
                         )
@@ -263,7 +265,7 @@ private fun SidebarContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Progress",
+                        text = stringResource(R.string.progress),
                         style = MaterialTheme.typography.labelMedium,
                         color = subtleColor
                     )
@@ -292,12 +294,12 @@ private fun SidebarContent(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Page $currentPage",
+                        text = stringResource(R.string.page_current, currentPage),
                         style = MaterialTheme.typography.labelSmall,
                         color = subtleColor
                     )
                     Text(
-                        text = "of $totalPages",
+                        text = stringResource(R.string.of_total, totalPages),
                         style = MaterialTheme.typography.labelSmall,
                         color = subtleColor
                     )
@@ -339,7 +341,7 @@ private fun SidebarContent(
                         }
                     }
                     Text(
-                        text = "Brightness",
+                        text = stringResource(R.string.brightness),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -381,8 +383,8 @@ private fun SidebarContent(
 
             // Keep screen on toggle
             SettingToggleItem(
-                title = "Keep Screen On",
-                subtitle = "Prevent screen timeout",
+                title = stringResource(R.string.keep_screen_on),
+                subtitle = stringResource(R.string.prevent_screen_timeout),
                 icon = Icons.Outlined.WbSunny,
                 isChecked = keepScreenOn,
                 onCheckedChange = onKeepScreenOnChange,
@@ -395,8 +397,8 @@ private fun SidebarContent(
 
             // Rotation lock toggle
             SettingToggleItem(
-                title = "Lock Rotation",
-                subtitle = if (isRotationLocked) "Rotation locked" else "Auto-rotate",
+                title = stringResource(R.string.lock_rotation),
+                subtitle = if (isRotationLocked) stringResource(R.string.rotation_locked) else stringResource(R.string.auto_rotate),
                 icon = if (isRotationLocked) Icons.Filled.ScreenLockRotation else Icons.Filled.ScreenRotation,
                 isChecked = isRotationLocked,
                 onCheckedChange = { onRotationLockChange() },
@@ -415,7 +417,7 @@ private fun SidebarContent(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Swipe right to close",
+                    text = stringResource(R.string.swipe_to_close),
                     style = MaterialTheme.typography.labelSmall,
                     color = subtleColor.copy(alpha = 0.5f)
                 )

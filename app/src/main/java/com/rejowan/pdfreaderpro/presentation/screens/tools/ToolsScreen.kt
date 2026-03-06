@@ -51,9 +51,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
@@ -408,7 +410,7 @@ private fun ComingSoonBadge() {
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
         Text(
-            text = "Soon",
+            text = stringResource(R.string.coming_soon),
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Medium
             ),

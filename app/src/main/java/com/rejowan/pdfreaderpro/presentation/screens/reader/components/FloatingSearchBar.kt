@@ -47,10 +47,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rejowan.pdfreaderpro.R
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentGreen = Color(0xFF81C784)
@@ -139,7 +141,7 @@ fun FloatingSearchBar(
                     Box {
                         if (query.isEmpty()) {
                             Text(
-                                text = "Search in document...",
+                                text = stringResource(R.string.search_in_document),
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontSize = 16.sp
                                 ),
@@ -217,7 +219,7 @@ fun FloatingSearchBar(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close search",
+                    contentDescription = stringResource(R.string.close_search),
                     tint = contentColor,
                     modifier = Modifier.size(20.dp)
                 )
