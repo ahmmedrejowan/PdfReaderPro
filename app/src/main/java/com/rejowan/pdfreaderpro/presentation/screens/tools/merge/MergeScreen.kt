@@ -123,6 +123,13 @@ fun MergeScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
+    // Load initial files if provided
+    LaunchedEffect(initialFiles) {
+        if (initialFiles.isNotEmpty()) {
+            viewModel.addFilesFromPaths(initialFiles)
+        }
+    }
+
     // Page selection sheet state
     var selectedFileForPageSelection by remember { mutableStateOf<MergeFile?>(null) }
 

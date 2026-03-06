@@ -60,7 +60,8 @@ data class MergeFile(
     val size: Long,
     val pageCount: Int = 0,
     val thumbnail: Bitmap? = null,
-    val pageSelection: PageSelection = PageSelection.All
+    val pageSelection: PageSelection = PageSelection.All,
+    val isPasswordProtected: Boolean = false
 )
 
 data class MergeState(
@@ -98,11 +99,19 @@ class MergeViewModel(
 
     fun addFiles(uris: List<Uri>) {
         viewModelScope.launch {
+            val skippedPasswordProtected = mutableListOf<String>()
+
             val newFiles = uris.mapNotNull { uri ->
                 try {
                     val path = getPathFromUri(uri)
                     if (path != null && File(path).exists()) {
                         val file = File(path)
+                        // Check if password protected
+                        val isProtected = pdfToolsRepository.isPasswordProtected(path).getOrDefault(false)
+                        if (isProtected) {
+                            skippedPasswordProtected.add(file.name)
+                            return@mapNotNull null
+                        }
                         val pageCount = pdfToolsRepository.getPageCount(path).getOrDefault(0)
                         val thumbnail = generateThumbnail(path)
                         MergeFile(
@@ -118,12 +127,21 @@ class MergeViewModel(
                         val tempPath = copyUriToCache(uri)
                         if (tempPath != null) {
                             val file = File(tempPath)
+                            val fileName = getFileNameFromUri(uri) ?: file.name
+                            // Check if password protected
+                            val isProtected = pdfToolsRepository.isPasswordProtected(tempPath).getOrDefault(false)
+                            if (isProtected) {
+                                skippedPasswordProtected.add(fileName)
+                                // Clean up temp file for password-protected PDF
+                                file.delete()
+                                return@mapNotNull null
+                            }
                             val pageCount = pdfToolsRepository.getPageCount(tempPath).getOrDefault(0)
                             val thumbnail = generateThumbnail(tempPath)
                             MergeFile(
                                 uri = uri,
                                 path = tempPath,
-                                name = getFileNameFromUri(uri) ?: file.name,
+                                name = fileName,
                                 size = file.length(),
                                 pageCount = pageCount,
                                 thumbnail = thumbnail
@@ -139,9 +157,58 @@ class MergeViewModel(
             _state.update { current ->
                 val existingPaths = current.selectedFiles.map { it.path }.toSet()
                 val filteredNew = newFiles.filter { it.path !in existingPaths }
+                val errorMessage = if (skippedPasswordProtected.isNotEmpty()) {
+                    "Skipped password-protected: ${skippedPasswordProtected.joinToString(", ")}"
+                } else null
                 current.copy(
                     selectedFiles = current.selectedFiles + filteredNew,
-                    error = null
+                    error = errorMessage
+                )
+            }
+        }
+    }
+
+    fun addFilesFromPaths(paths: List<String>) {
+        viewModelScope.launch {
+            val skippedPasswordProtected = mutableListOf<String>()
+
+            val newFiles = paths.mapNotNull { path ->
+                try {
+                    val file = File(path)
+                    if (!file.exists()) return@mapNotNull null
+
+                    // Check if password protected
+                    val isProtected = pdfToolsRepository.isPasswordProtected(path).getOrDefault(false)
+                    if (isProtected) {
+                        skippedPasswordProtected.add(file.name)
+                        return@mapNotNull null
+                    }
+
+                    val pageCount = pdfToolsRepository.getPageCount(path).getOrDefault(0)
+                    val thumbnail = generateThumbnail(path)
+                    MergeFile(
+                        uri = Uri.fromFile(file),
+                        path = path,
+                        name = file.name,
+                        size = file.length(),
+                        pageCount = pageCount,
+                        thumbnail = thumbnail
+                    )
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to add file from path: $path")
+                    null
+                }
+            }
+
+            _state.update { current ->
+                val existingPaths = current.selectedFiles.map { it.path }.toSet()
+                val filteredNew = newFiles.filter { it.path !in existingPaths }
+                val errorMessage = if (skippedPasswordProtected.isNotEmpty()) {
+                    "Skipped password-protected: ${skippedPasswordProtected.joinToString(", ")}"
+                } else null
+                current.copy(
+                    selectedFiles = current.selectedFiles + filteredNew,
+                    error = errorMessage
                 )
             }
         }
@@ -270,6 +337,9 @@ class MergeViewModel(
 
             result.fold(
                 onSuccess = {
+                    // Clean up temp files after successful merge
+                    cleanupTempFiles()
+
                     val outputFile = File(outputPath)
                     val pageCount = pdfToolsRepository.getPageCount(outputPath).getOrDefault(0)
                     _state.update {
@@ -306,10 +376,22 @@ class MergeViewModel(
     }
 
     fun reset() {
+        cleanupTempFiles()
         _state.update {
             MergeState()
         }
         generateDefaultFileName()
+    }
+
+    private fun cleanupTempFiles() {
+        try {
+            val tempDir = File(context.cacheDir, "merge_temp")
+            if (tempDir.exists()) {
+                tempDir.deleteRecursively()
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to cleanup temp files")
+        }
     }
 
     private fun getOutputDirectory(): String {
