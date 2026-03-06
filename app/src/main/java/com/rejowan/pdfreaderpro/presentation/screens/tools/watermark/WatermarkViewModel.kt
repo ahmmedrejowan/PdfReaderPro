@@ -77,6 +77,7 @@ data class WatermarkState(
 
     // Output
     val outputFileName: String = "",
+    val overwriteOriginal: Boolean = false,
 
     // State
     val isLoading: Boolean = false,
@@ -230,6 +231,10 @@ class WatermarkViewModel(
         _state.update { it.copy(outputFileName = name) }
     }
 
+    fun setOverwriteOriginal(overwrite: Boolean) {
+        _state.update { it.copy(overwriteOriginal = overwrite) }
+    }
+
     fun applyWatermark() {
         val currentState = _state.value
         val sourceFile = currentState.sourceFile
@@ -257,15 +262,25 @@ class WatermarkViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isProcessing = true, progress = 0f, error = null) }
 
-            val outputDir = getOutputDirectory()
-            var outputPath = "$outputDir/${currentState.outputFileName}.pdf"
+            val outputPath: String
+            val tempPath: String?
 
-            // Check if file exists and generate unique name
-            var counter = 1
-            while (File(outputPath).exists()) {
-                outputPath = "$outputDir/${currentState.outputFileName}_$counter.pdf"
-                counter++
+            if (currentState.overwriteOriginal) {
+                tempPath = "${context.cacheDir}/watermark_temp_${System.currentTimeMillis()}.pdf"
+                outputPath = sourceFile.path
+            } else {
+                tempPath = null
+                val outputDir = getOutputDirectory()
+                var path = "$outputDir/${currentState.outputFileName}.pdf"
+                var counter = 1
+                while (File(path).exists()) {
+                    path = "$outputDir/${currentState.outputFileName}_$counter.pdf"
+                    counter++
+                }
+                outputPath = path
             }
+
+            val targetPath = tempPath ?: outputPath
 
             // Calculate pages to apply watermark
             val pages = calculatePages(currentState.pageSelection, currentState.customPages, sourceFile.pageCount)
@@ -281,7 +296,7 @@ class WatermarkViewModel(
                 )
                 pdfToolsRepository.addTextWatermark(
                     inputPath = sourceFile.path,
-                    outputPath = outputPath,
+                    outputPath = targetPath,
                     config = config,
                     pages = pages,
                     onProgress = { progress ->
@@ -297,7 +312,7 @@ class WatermarkViewModel(
                 )
                 pdfToolsRepository.addImageWatermark(
                     inputPath = sourceFile.path,
-                    outputPath = outputPath,
+                    outputPath = targetPath,
                     config = config,
                     pages = pages,
                     onProgress = { progress ->
@@ -308,6 +323,20 @@ class WatermarkViewModel(
 
             result.fold(
                 onSuccess = {
+                    if (tempPath != null) {
+                        try {
+                            val tempFile = File(tempPath)
+                            val originalFile = File(outputPath)
+                            originalFile.delete()
+                            tempFile.copyTo(originalFile, overwrite = true)
+                            tempFile.delete()
+                        } catch (e: Exception) {
+                            Timber.e(e, "Failed to replace original file")
+                            _state.update { it.copy(isProcessing = false, error = "Failed to replace original file") }
+                            return@launch
+                        }
+                    }
+
                     val outputFile = File(outputPath)
                     val newPageCount = pdfToolsRepository.getPageCount(outputPath).getOrDefault(0)
                     _state.update {
@@ -324,6 +353,7 @@ class WatermarkViewModel(
                 },
                 onFailure = { error ->
                     Timber.e(error, "Watermark failed")
+                    tempPath?.let { File(it).delete() }
                     _state.update {
                         it.copy(
                             isProcessing = false,

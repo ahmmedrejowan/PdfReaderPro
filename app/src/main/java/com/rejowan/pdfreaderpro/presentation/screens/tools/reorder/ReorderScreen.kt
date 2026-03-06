@@ -49,6 +49,8 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -277,6 +279,8 @@ fun ReorderScreen(
                         ReorderBottomSection(
                             outputFileName = state.outputFileName,
                             onFileNameChange = { viewModel.setOutputFileName(it) },
+                            overwriteOriginal = state.overwriteOriginal,
+                            onOverwriteChange = { viewModel.setOverwriteOriginal(it) },
                             isProcessing = state.isProcessing,
                             progress = state.progress,
                             canSave = state.sourceFile != null && state.hasChanges,
@@ -492,6 +496,8 @@ private fun PageThumbnailItem(
 private fun ReorderBottomSection(
     outputFileName: String,
     onFileNameChange: (String) -> Unit,
+    overwriteOriginal: Boolean,
+    onOverwriteChange: (Boolean) -> Unit,
     isProcessing: Boolean,
     progress: Float,
     canSave: Boolean,
@@ -543,15 +549,37 @@ private fun ReorderBottomSection(
             }
         }
 
+        // Overwrite original checkbox
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = overwriteOriginal,
+                onCheckedChange = onOverwriteChange,
+                colors = CheckboxDefaults.colors(checkedColor = AccentIndigo)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Overwrite original file", style = MaterialTheme.typography.bodyMedium)
+        }
+
         // Output filename
-        OutlinedTextField(
-            value = outputFileName,
-            onValueChange = onFileNameChange,
-            label = { Text("Output file name") },
-            suffix = { Text(".pdf") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
+        AnimatedVisibility(visible = !overwriteOriginal) {
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = outputFileName,
+                    onValueChange = onFileNameChange,
+                    label = { Text("Output file name") },
+                    suffix = { Text(".pdf") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

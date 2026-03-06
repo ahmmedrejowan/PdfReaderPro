@@ -46,6 +46,8 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -188,6 +190,7 @@ fun UnlockScreen(
                         state = state,
                         onPasswordChange = { viewModel.setPassword(it) },
                         onOutputFileNameChange = { viewModel.setOutputFileName(it) },
+                        onOverwriteChange = { viewModel.setOverwriteOriginal(it) },
                         onUnlock = { viewModel.unlock() },
                         onClearError = { viewModel.clearError() },
                         onChangeFile = { pdfPickerLauncher.launch(arrayOf("application/pdf")) }
@@ -280,6 +283,7 @@ private fun UnlockContent(
     state: UnlockState,
     onPasswordChange: (String) -> Unit,
     onOutputFileNameChange: (String) -> Unit,
+    onOverwriteChange: (Boolean) -> Unit,
     onUnlock: () -> Unit,
     onClearError: () -> Unit,
     onChangeFile: () -> Unit
@@ -400,16 +404,39 @@ private fun UnlockContent(
             }
         }
 
-        // Output filename
+        // Output section
         if (state.sourceFile.isPasswordProtected) {
-            OutlinedTextField(
-                value = state.outputFileName,
-                onValueChange = onOutputFileNameChange,
-                label = { Text("Output file name") },
-                suffix = { Text(".pdf") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+            // Overwrite original checkbox
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onOverwriteChange(!state.overwriteOriginal) }
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = state.overwriteOriginal,
+                    onCheckedChange = onOverwriteChange,
+                    colors = CheckboxDefaults.colors(checkedColor = AccentTeal)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Overwrite original file", style = MaterialTheme.typography.bodyMedium)
+            }
+
+            // Output filename
+            AnimatedVisibility(visible = !state.overwriteOriginal) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = state.outputFileName,
+                        onValueChange = onOutputFileNameChange,
+                        label = { Text("Output file name") },
+                        suffix = { Text(".pdf") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

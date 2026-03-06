@@ -50,6 +50,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -280,6 +282,8 @@ fun CompressScreen(
                         CompressBottomSection(
                             outputFileName = state.outputFileName,
                             onFileNameChange = { viewModel.setOutputFileName(it) },
+                            overwriteOriginal = state.overwriteOriginal,
+                            onOverwriteChange = { viewModel.setOverwriteOriginal(it) },
                             isProcessing = state.isProcessing,
                             progress = state.progress,
                             canCompress = state.sourceFile != null,
@@ -691,6 +695,8 @@ private fun SizeEstimatePill(
 private fun CompressBottomSection(
     outputFileName: String,
     onFileNameChange: (String) -> Unit,
+    overwriteOriginal: Boolean,
+    onOverwriteChange: (Boolean) -> Unit,
     isProcessing: Boolean,
     progress: Float,
     canCompress: Boolean,
@@ -742,15 +748,40 @@ private fun CompressBottomSection(
             }
         }
 
-        // Output filename
-        OutlinedTextField(
-            value = outputFileName,
-            onValueChange = onFileNameChange,
-            label = { Text("Output file name") },
-            suffix = { Text(".pdf") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
+        // Overwrite original checkbox
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = overwriteOriginal,
+                onCheckedChange = onOverwriteChange,
+                colors = CheckboxDefaults.colors(checkedColor = AccentTeal)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                "Overwrite original file",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        // Output filename (only show when not overwriting)
+        AnimatedVisibility(visible = !overwriteOriginal) {
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = outputFileName,
+                    onValueChange = onFileNameChange,
+                    label = { Text("Output file name") },
+                    suffix = { Text(".pdf") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

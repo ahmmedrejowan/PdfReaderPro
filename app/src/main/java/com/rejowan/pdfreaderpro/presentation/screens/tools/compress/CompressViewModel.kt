@@ -58,6 +58,7 @@ data class CompressState(
     val sourceFile: SourceFile? = null,
     val compressionLevel: CompressionLevel = CompressionLevel.MEDIUM,
     val outputFileName: String = "",
+    val overwriteOriginal: Boolean = false,
     val isProcessing: Boolean = false,
     val progress: Float = 0f,
     val error: String? = null,
@@ -191,6 +192,10 @@ class CompressViewModel(
         _state.update { it.copy(outputFileName = name) }
     }
 
+    fun setOverwriteOriginal(overwrite: Boolean) {
+        _state.update { it.copy(overwriteOriginal = overwrite) }
+    }
+
     fun compress() {
         val currentState = _state.value
         val sourceFile = currentState.sourceFile
@@ -208,19 +213,32 @@ class CompressViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isProcessing = true, progress = 0f, error = null) }
 
-            val outputDir = getOutputDirectory()
-            var outputPath = "$outputDir/${currentState.outputFileName}.pdf"
+            val outputPath: String
+            val tempPath: String?
 
-            // Check if file exists and generate unique name
-            var counter = 1
-            while (File(outputPath).exists()) {
-                outputPath = "$outputDir/${currentState.outputFileName}_$counter.pdf"
-                counter++
+            if (currentState.overwriteOriginal) {
+                // Write to temp file first, then replace original
+                tempPath = "${context.cacheDir}/compress_temp_${System.currentTimeMillis()}.pdf"
+                outputPath = sourceFile.path
+            } else {
+                tempPath = null
+                val outputDir = getOutputDirectory()
+                var path = "$outputDir/${currentState.outputFileName}.pdf"
+
+                // Check if file exists and generate unique name
+                var counter = 1
+                while (File(path).exists()) {
+                    path = "$outputDir/${currentState.outputFileName}_$counter.pdf"
+                    counter++
+                }
+                outputPath = path
             }
+
+            val targetPath = tempPath ?: outputPath
 
             val result = pdfToolsRepository.compressPdf(
                 inputPath = sourceFile.path,
-                outputPath = outputPath,
+                outputPath = targetPath,
                 quality = currentState.compressionLevel.quality,
                 onProgress = { progress ->
                     _state.update { it.copy(progress = progress) }
@@ -229,6 +247,26 @@ class CompressViewModel(
 
             result.fold(
                 onSuccess = { newSize ->
+                    // If overwriting, replace the original file
+                    if (tempPath != null) {
+                        try {
+                            val tempFile = File(tempPath)
+                            val originalFile = File(outputPath)
+                            originalFile.delete()
+                            tempFile.copyTo(originalFile, overwrite = true)
+                            tempFile.delete()
+                        } catch (e: Exception) {
+                            Timber.e(e, "Failed to replace original file")
+                            _state.update {
+                                it.copy(
+                                    isProcessing = false,
+                                    error = "Failed to replace original file"
+                                )
+                            }
+                            return@launch
+                        }
+                    }
+
                     val pageCount = pdfToolsRepository.getPageCount(outputPath).getOrDefault(0)
                     _state.update {
                         it.copy(
@@ -245,6 +283,8 @@ class CompressViewModel(
                 },
                 onFailure = { error ->
                     Timber.e(error, "Compression failed")
+                    // Clean up temp file if exists
+                    tempPath?.let { File(it).delete() }
                     _state.update {
                         it.copy(
                             isProcessing = false,

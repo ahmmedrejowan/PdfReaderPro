@@ -196,6 +196,7 @@ fun LockScreen(
                         onAllowModifyingChange = { viewModel.setAllowModifying(it) },
                         onAllowAnnotationsChange = { viewModel.setAllowAnnotations(it) },
                         onOutputFileNameChange = { viewModel.setOutputFileName(it) },
+                        onOverwriteChange = { viewModel.setOverwriteOriginal(it) },
                         onLock = { viewModel.lock() },
                         onClearError = { viewModel.clearError() },
                         onChangeFile = { pdfPickerLauncher.launch(arrayOf("application/pdf")) },
@@ -294,6 +295,7 @@ private fun LockContent(
     onAllowModifyingChange: (Boolean) -> Unit,
     onAllowAnnotationsChange: (Boolean) -> Unit,
     onOutputFileNameChange: (String) -> Unit,
+    onOverwriteChange: (Boolean) -> Unit,
     onLock: () -> Unit,
     onClearError: () -> Unit,
     onChangeFile: () -> Unit,
@@ -430,15 +432,37 @@ private fun LockContent(
             }
         }
 
+        // Overwrite original checkbox
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onOverwriteChange(!state.overwriteOriginal) }
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = state.overwriteOriginal,
+                onCheckedChange = onOverwriteChange,
+                colors = CheckboxDefaults.colors(checkedColor = AccentAmber)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Overwrite original file", style = MaterialTheme.typography.bodyMedium)
+        }
+
         // Output filename
-        OutlinedTextField(
-            value = state.outputFileName,
-            onValueChange = onOutputFileNameChange,
-            label = { Text("Output file name") },
-            suffix = { Text(".pdf") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
+        AnimatedVisibility(visible = !state.overwriteOriginal) {
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = state.outputFileName,
+                    onValueChange = onOutputFileNameChange,
+                    label = { Text("Output file name") },
+                    suffix = { Text(".pdf") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

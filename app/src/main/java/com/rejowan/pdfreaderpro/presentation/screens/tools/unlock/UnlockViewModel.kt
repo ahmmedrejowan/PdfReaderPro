@@ -26,6 +26,7 @@ data class UnlockState(
     val sourceFile: SourceFile? = null,
     val password: String = "",
     val outputFileName: String = "",
+    val overwriteOriginal: Boolean = false,
     val isLoading: Boolean = false,
     val isProcessing: Boolean = false,
     val progress: Float = 0f,
@@ -96,6 +97,10 @@ class UnlockViewModel(
         _state.update { it.copy(outputFileName = name) }
     }
 
+    fun setOverwriteOriginal(overwrite: Boolean) {
+        _state.update { it.copy(overwriteOriginal = overwrite) }
+    }
+
     fun unlock() {
         val currentState = _state.value
         val sourceFile = currentState.sourceFile
@@ -123,19 +128,29 @@ class UnlockViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isProcessing = true, progress = 0f, error = null) }
 
-            val outputDir = getOutputDirectory()
-            var outputPath = "$outputDir/${currentState.outputFileName}.pdf"
+            val outputPath: String
+            val tempPath: String?
 
-            // Check if file exists and generate unique name
-            var counter = 1
-            while (File(outputPath).exists()) {
-                outputPath = "$outputDir/${currentState.outputFileName}_$counter.pdf"
-                counter++
+            if (currentState.overwriteOriginal) {
+                tempPath = "${context.cacheDir}/unlock_temp_${System.currentTimeMillis()}.pdf"
+                outputPath = sourceFile.path
+            } else {
+                tempPath = null
+                val outputDir = getOutputDirectory()
+                var path = "$outputDir/${currentState.outputFileName}.pdf"
+                var counter = 1
+                while (File(path).exists()) {
+                    path = "$outputDir/${currentState.outputFileName}_$counter.pdf"
+                    counter++
+                }
+                outputPath = path
             }
+
+            val targetPath = tempPath ?: outputPath
 
             val result = pdfToolsRepository.unlockPdf(
                 inputPath = sourceFile.path,
-                outputPath = outputPath,
+                outputPath = targetPath,
                 password = currentState.password,
                 onProgress = { progress ->
                     _state.update { it.copy(progress = progress) }
@@ -144,6 +159,20 @@ class UnlockViewModel(
 
             result.fold(
                 onSuccess = {
+                    if (tempPath != null) {
+                        try {
+                            val tempFile = File(tempPath)
+                            val originalFile = File(outputPath)
+                            originalFile.delete()
+                            tempFile.copyTo(originalFile, overwrite = true)
+                            tempFile.delete()
+                        } catch (e: Exception) {
+                            Timber.e(e, "Failed to replace original file")
+                            _state.update { it.copy(isProcessing = false, error = "Failed to replace original file") }
+                            return@launch
+                        }
+                    }
+
                     val outputFile = File(outputPath)
                     val pageCount = pdfToolsRepository.getPageCount(outputPath).getOrDefault(0)
                     _state.update {
@@ -160,6 +189,7 @@ class UnlockViewModel(
                 },
                 onFailure = { error ->
                     Timber.e(error, "Unlock failed")
+                    tempPath?.let { File(it).delete() }
                     _state.update {
                         it.copy(
                             isProcessing = false,
