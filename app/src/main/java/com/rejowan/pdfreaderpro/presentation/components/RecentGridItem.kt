@@ -1,10 +1,13 @@
 package com.rejowan.pdfreaderpro.presentation.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,14 +18,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.RecentFile
 import kotlinx.coroutines.delay
 
+private val SelectionBlue = Color(0xFF2196F3)
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RecentGridItem(
@@ -47,7 +56,11 @@ fun RecentGridItem(
     onClick: () -> Unit,
     onOptionsClick: () -> Unit,
     modifier: Modifier = Modifier,
-    animationDelay: Int = 0
+    animationDelay: Int = 0,
+    isSelectionMode: Boolean = false,
+    isSelected: Boolean = false,
+    onLongClick: () -> Unit = onOptionsClick,
+    onSelectionToggle: () -> Unit = {}
 ) {
     var isVisible by remember { mutableStateOf(animationDelay == 0) }
 
@@ -64,18 +77,42 @@ fun RecentGridItem(
         label = "item scale"
     )
 
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) {
+            SelectionBlue.copy(alpha = 0.12f)
+        } else {
+            MaterialTheme.colorScheme.surfaceContainerLow
+        },
+        animationSpec = tween(200),
+        label = "background color"
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) SelectionBlue else Color.Transparent,
+        animationSpec = tween(200),
+        label = "border color"
+    )
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
             .padding(4.dp)
             .clip(RoundedCornerShape(16.dp))
+            .then(
+                if (isSelected) Modifier.border(2.dp, borderColor, RoundedCornerShape(16.dp))
+                else Modifier
+            )
             .combinedClickable(
-                onClick = onClick,
-                onLongClick = onOptionsClick
+                onClick = {
+                    if (isSelectionMode) onSelectionToggle() else onClick()
+                },
+                onLongClick = {
+                    if (!isSelectionMode) onLongClick()
+                }
             ),
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = backgroundColor,
         tonalElevation = 1.dp
     ) {
         Column {
@@ -87,26 +124,46 @@ fun RecentGridItem(
                     pageCount = recentFile.totalPages.takeIf { it > 0 }
                 )
 
-                // Options button
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .size(32.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
-                        .combinedClickable(
-                            onClick = onOptionsClick,
-                            onLongClick = onOptionsClick
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.MoreVert,
-                        contentDescription = "Options",
-                        modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-                    )
+                // Options button or Selection checkbox
+                if (isSelectionMode) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
+                            .clickable(onClick = onSelectionToggle),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = if (isSelected) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
+                            contentDescription = if (isSelected) "Selected" else "Not selected",
+                            modifier = Modifier.size(24.dp),
+                            tint = if (isSelected) SelectionBlue else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                        )
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(32.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
+                            .combinedClickable(
+                                onClick = onOptionsClick,
+                                onLongClick = onOptionsClick
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.MoreVert,
+                            contentDescription = "Options",
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                        )
+                    }
                 }
             }
 

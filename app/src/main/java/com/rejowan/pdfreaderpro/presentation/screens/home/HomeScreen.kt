@@ -40,6 +40,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -198,6 +199,13 @@ fun HomeScreen(
     val isSelectionMode by viewModel.isSelectionMode.collectAsState()
     val selectedPaths by viewModel.selectedPaths.collectAsState()
 
+    // Clear selected items when switching tabs (but keep selection mode active)
+    LaunchedEffect(homeSubTabPagerState.currentPage) {
+        if (isSelectionMode && selectedPaths.isNotEmpty()) {
+            viewModel.clearSelectedItems()
+        }
+    }
+
     var showSortSheet by remember { mutableStateOf(false) }
     var showBatchDeleteConfirm by remember { mutableStateOf(false) }
     var showStatsSheet by remember { mutableStateOf(false) }
@@ -349,7 +357,17 @@ fun HomeScreen(
                                             }
                                         },
                                         onRefresh = { viewModel.refresh() },
-                                        onGrantPermissionClick = openPermissionSettings
+                                        onGrantPermissionClick = openPermissionSettings,
+                                        isSelectionMode = isSelectionMode,
+                                        selectedPaths = selectedPaths,
+                                        onSelectionToggle = { recent ->
+                                            viewModel.toggleSelection(recent.path)
+                                        },
+                                        onLongClick = { recent ->
+                                            if (!isSelectionMode) {
+                                                viewModel.enterSelectionMode(recent.path)
+                                            }
+                                        }
                                     )
 
                                     HomeSubTab.FAVORITES -> FavoritesTab(
@@ -460,12 +478,14 @@ fun HomeScreen(
                 visible = true,
                 selectedCount = selectedPaths.size,
                 totalCount = when (homeSubTabPagerState.currentPage) {
+                    HomeSubTab.RECENT.ordinal -> recentFiles.size
                     HomeSubTab.FAVORITES.ordinal -> favoriteFiles.size
                     else -> allFiles.size
                 },
                 onClose = { viewModel.exitSelectionMode() },
                 onSelectAll = {
                     val paths = when (homeSubTabPagerState.currentPage) {
+                        HomeSubTab.RECENT.ordinal -> recentFiles.map { it.path }
                         HomeSubTab.FAVORITES.ordinal -> favoriteFiles.map { it.path }
                         else -> allFiles.map { it.path }
                     }

@@ -237,6 +237,11 @@ class HomeViewModel(
         _isSelectionMode.value = false
     }
 
+    fun clearSelectedItems() {
+        _selectedPaths.value = emptySet()
+        // Keep selection mode active
+    }
+
     fun getSelectedFiles(): List<PdfFile> {
         return allFiles.value.filter { it.path in _selectedPaths.value }
     }
