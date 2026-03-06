@@ -2,7 +2,10 @@ package com.rejowan.pdfreaderpro.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
+import android.media.MediaScannerConnection
 import android.os.ParcelFileDescriptor
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.geom.PageSize
@@ -355,6 +358,10 @@ class PdfToolsRepositoryImpl(
                         Bitmap.Config.ARGB_8888
                     )
 
+                    // Fill with white background to avoid black edges
+                    val canvas = Canvas(bitmap)
+                    canvas.drawColor(Color.WHITE)
+
                     page.render(
                         bitmap,
                         null,
@@ -383,6 +390,15 @@ class PdfToolsRepositoryImpl(
 
             renderer.close()
             fd.close()
+
+            // Scan files so they appear in gallery
+            MediaScannerConnection.scanFile(
+                context,
+                createdFiles.toTypedArray(),
+                null,
+                null
+            )
+
             Result.success(createdFiles)
         } catch (e: Exception) {
             Timber.e(e, "Failed to export PDF to images")

@@ -42,6 +42,7 @@ import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -181,6 +182,19 @@ fun PdfToImageScreen(
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
                             context.startActivity(Intent.createChooser(shareIntent, "Share Image"))
+                        },
+                        onViewSingle = { path ->
+                            val file = File(path)
+                            val uri = FileProvider.getUriForFile(
+                                context,
+                                "${context.packageName}.provider",
+                                file
+                            )
+                            val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(uri, "image/*")
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            context.startActivity(Intent.createChooser(viewIntent, "View Image"))
                         },
                         onExportMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }
@@ -544,8 +558,9 @@ private fun FormatCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 format.label,
@@ -555,8 +570,8 @@ private fun FormatCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 when (format) {
-                    ImageFormat.PNG -> "Lossless, larger files"
-                    ImageFormat.JPG -> "Compressed, smaller files"
+                    ImageFormat.PNG -> "Lossless quality"
+                    ImageFormat.JPG -> "Smaller file size"
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -619,6 +634,7 @@ private fun SuccessState(
     result: PdfToImageResult,
     onShareAll: () -> Unit,
     onShareSingle: (String) -> Unit,
+    onViewSingle: (String) -> Unit,
     onExportMore: () -> Unit,
     onDone: () -> Unit
 ) {
@@ -663,6 +679,39 @@ private fun SuccessState(
 
         Spacer(modifier = Modifier.height(12.dp))
 
+        // Output location info
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = AccentPurple.copy(alpha = 0.1f)
+            ),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Folder,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = AccentPurple
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    result.outputDir.replace("/storage/emulated/0/", ""),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = AccentPurple,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         // Share all button
         if (result.imageCount > 1) {
             OutlinedButton(
@@ -685,6 +734,7 @@ private fun SuccessState(
                 ImageResultItem(
                     path = path,
                     index = index + 1,
+                    onView = { onViewSingle(path) },
                     onShare = { onShareSingle(path) }
                 )
             }
@@ -717,6 +767,7 @@ private fun SuccessState(
 private fun ImageResultItem(
     path: String,
     index: Int,
+    onView: () -> Unit,
     onShare: () -> Unit
 ) {
     val file = File(path)
@@ -758,6 +809,17 @@ private fun ImageResultItem(
                     formatFileSize(file.length()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            IconButton(
+                onClick = onView,
+                modifier = Modifier.size(36.dp)
+            ) {
+                Icon(
+                    Icons.Default.Visibility,
+                    contentDescription = "View",
+                    modifier = Modifier.size(18.dp),
+                    tint = AccentGreen
                 )
             }
             IconButton(
