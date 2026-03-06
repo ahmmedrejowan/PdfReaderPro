@@ -39,6 +39,13 @@ class FolderDetailViewModel(
     private val _sortOption = MutableStateFlow(SortOption.NAME_ASC)
     val sortOption: StateFlow<SortOption> = _sortOption.asStateFlow()
 
+    // Multi-selection state
+    private val _isSelectionMode = MutableStateFlow(false)
+    val isSelectionMode: StateFlow<Boolean> = _isSelectionMode.asStateFlow()
+
+    private val _selectedPaths = MutableStateFlow<Set<String>>(emptySet())
+    val selectedPaths: StateFlow<Set<String>> = _selectedPaths.asStateFlow()
+
     private var currentFolderPath: String = ""
 
     init {
@@ -101,6 +108,63 @@ class FolderDetailViewModel(
         return favoriteRepository.isFavorite(path)
     }
 
+    // Multi-selection functions
+    fun enterSelectionMode(initialPath: String? = null) {
+        _isSelectionMode.value = true
+        if (initialPath != null) {
+            _selectedPaths.value = setOf(initialPath)
+        }
+    }
+
+    fun exitSelectionMode() {
+        _isSelectionMode.value = false
+        _selectedPaths.value = emptySet()
+    }
+
+    fun toggleSelection(path: String) {
+        _selectedPaths.value = if (path in _selectedPaths.value) {
+            _selectedPaths.value - path
+        } else {
+            _selectedPaths.value + path
+        }
+        // Exit selection mode if nothing selected
+        if (_selectedPaths.value.isEmpty()) {
+            _isSelectionMode.value = false
+        }
+    }
+
+    fun selectAll() {
+        _selectedPaths.value = _files.value.map { it.path }.toSet()
+    }
+
+    fun getSelectedFiles(): List<PdfFile> {
+        return _files.value.filter { it.path in _selectedPaths.value }
+    }
+
+    fun deleteSelectedFiles(onComplete: (Int, Int) -> Unit) {
+        viewModelScope.launch {
+            val paths = _selectedPaths.value.toList()
+            var successCount = 0
+            var failCount = 0
+
+            paths.forEach { path ->
+                val success = FileOperations.deleteFile(path)
+                if (success) {
+                    favoriteRepository.removeFavorite(path)
+                    recentRepository.removeRecent(path)
+                    successCount++
+                } else {
+                    failCount++
+                }
+            }
+
+            // Refresh the main PDF repository - this updates folder list and folder details
+            pdfFileRepository.refreshPdfs()
+            exitSelectionMode()
+            onComplete(successCount, failCount)
+        }
+    }
+
     /**
      * Renames a file and updates the path in favorites and recent databases.
      */
@@ -113,8 +177,8 @@ class FolderDetailViewModel(
                 favoriteRepository.updatePath(oldPath, newPath, newFileName)
                 // Update path in recent if present
                 recentRepository.updatePath(oldPath, newPath, newFileName)
-                // Reload folder contents
-                loadFilesForFolder(currentFolderPath)
+                // Refresh the main PDF repository
+                pdfFileRepository.refreshPdfs()
                 onComplete(true)
             } else {
                 onComplete(false)
@@ -133,8 +197,8 @@ class FolderDetailViewModel(
                 favoriteRepository.removeFavorite(path)
                 // Remove from recent if present
                 recentRepository.removeRecent(path)
-                // Reload folder contents
-                loadFilesForFolder(currentFolderPath)
+                // Refresh the main PDF repository - this updates folder list and folder details
+                pdfFileRepository.refreshPdfs()
                 onComplete(true)
             } else {
                 onComplete(false)

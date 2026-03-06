@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -29,6 +35,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Sort
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.GridView
@@ -69,6 +76,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.domain.model.ViewMode
+import com.rejowan.pdfreaderpro.presentation.components.AnimatedSelectionActionBar
 import com.rejowan.pdfreaderpro.presentation.components.EmptyState
 import com.rejowan.pdfreaderpro.presentation.components.FileOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.LoadingState
@@ -79,6 +87,7 @@ import com.rejowan.pdfreaderpro.presentation.components.SortOptionsSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmSheet
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import com.rejowan.pdfreaderpro.util.FileOperations
 import kotlinx.coroutines.launch
@@ -133,7 +142,12 @@ fun FolderDetailScreen(
     val viewMode by viewModel.viewMode.collectAsState()
     val sortOption by viewModel.sortOption.collectAsState()
 
+    // Selection mode state
+    val isSelectionMode by viewModel.isSelectionMode.collectAsState()
+    val selectedPaths by viewModel.selectedPaths.collectAsState()
+
     var showSortSheet by remember { mutableStateOf(false) }
+    var showBatchDeleteConfirm by remember { mutableStateOf(false) }
     var selectedFile by remember { mutableStateOf<PdfFile?>(null) }
     var selectedFileFavorite by remember { mutableStateOf(false) }
 
@@ -146,6 +160,12 @@ fun FolderDetailScreen(
         viewModel.loadFilesForFolder(folderPath)
     }
 
+    // Handle back press: exit selection mode first, then navigate back
+    BackHandler(enabled = isSelectionMode) {
+        viewModel.exitSelectionMode()
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -226,7 +246,11 @@ fun FolderDetailScreen(
                                 PdfListItem(
                                     pdfFile = file,
                                     onClick = {
-                                        navController.navigateToReader(file.path)
+                                        if (isSelectionMode) {
+                                            viewModel.toggleSelection(file.path)
+                                        } else {
+                                            navController.navigateToReader(file.path)
+                                        }
                                     },
                                     onOptionsClick = {
                                         selectedFile = file
@@ -235,7 +259,15 @@ fun FolderDetailScreen(
                                         }
                                     },
                                     animationDelay = index * 30,
-                                    modifier = Modifier.animateItem()
+                                    modifier = Modifier.animateItem(),
+                                    isSelectionMode = isSelectionMode,
+                                    isSelected = file.path in selectedPaths,
+                                    onLongClick = {
+                                        if (!isSelectionMode) {
+                                            viewModel.enterSelectionMode(file.path)
+                                        }
+                                    },
+                                    onSelectionToggle = { viewModel.toggleSelection(file.path) }
                                 )
                             }
                         }
@@ -252,7 +284,11 @@ fun FolderDetailScreen(
                                 PdfGridItem(
                                     pdfFile = file,
                                     onClick = {
-                                        navController.navigateToReader(file.path)
+                                        if (isSelectionMode) {
+                                            viewModel.toggleSelection(file.path)
+                                        } else {
+                                            navController.navigateToReader(file.path)
+                                        }
                                     },
                                     onOptionsClick = {
                                         selectedFile = file
@@ -261,7 +297,15 @@ fun FolderDetailScreen(
                                         }
                                     },
                                     animationDelay = index * 30,
-                                    modifier = Modifier.animateItem()
+                                    modifier = Modifier.animateItem(),
+                                    isSelectionMode = isSelectionMode,
+                                    isSelected = file.path in selectedPaths,
+                                    onLongClick = {
+                                        if (!isSelectionMode) {
+                                            viewModel.enterSelectionMode(file.path)
+                                        }
+                                    },
+                                    onSelectionToggle = { viewModel.toggleSelection(file.path) }
                                 )
                             }
                         }
@@ -270,6 +314,30 @@ fun FolderDetailScreen(
                 }
             }
         }
+    }
+
+        // Selection action bar at bottom
+        AnimatedSelectionActionBar(
+            visible = isSelectionMode,
+            selectedCount = selectedPaths.size,
+            totalCount = files.size,
+            onClose = { viewModel.exitSelectionMode() },
+            onSelectAll = { viewModel.selectAll() },
+            onMerge = {
+                val paths = selectedPaths.toList()
+                viewModel.exitSelectionMode()
+                navController.navigateToMergeTool(paths)
+            },
+            onShare = {
+                val paths = selectedPaths.toList()
+                FileOperations.shareMultiplePdfs(context, paths)
+                viewModel.exitSelectionMode()
+            },
+            onDelete = {
+                showBatchDeleteConfirm = true
+            },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 
     // Sort Options Sheet
@@ -348,6 +416,90 @@ fun FolderDetailScreen(
                     fileForDialog = null
                 }
             )
+        }
+    }
+
+    // Batch Delete Confirmation Sheet
+    if (showBatchDeleteConfirm) {
+        BatchDeleteConfirmSheet(
+            count = selectedPaths.size,
+            onDismiss = { showBatchDeleteConfirm = false },
+            onConfirm = {
+                viewModel.deleteSelectedFiles { _, _ -> }
+                showBatchDeleteConfirm = false
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BatchDeleteConfirmSheet(
+    count: Int,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                tint = Color(0xFFEF5350)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Delete $count files?",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "This action cannot be undone. The files will be permanently deleted from your device.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Cancel")
+                }
+
+                Button(
+                    onClick = onConfirm,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFEF5350)
+                    )
+                ) {
+                    Text("Delete")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
