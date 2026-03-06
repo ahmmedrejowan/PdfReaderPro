@@ -470,7 +470,7 @@ private fun LockContent(
         Button(
             onClick = onLock,
             modifier = Modifier.fillMaxWidth(),
-            enabled = state.sourceFile != null && !state.isProcessing
+            enabled = !state.isProcessing
         ) {
             Icon(Icons.Default.Lock, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
