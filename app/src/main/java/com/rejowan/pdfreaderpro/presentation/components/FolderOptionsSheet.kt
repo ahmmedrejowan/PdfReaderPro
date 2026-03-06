@@ -65,9 +65,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import kotlinx.coroutines.delay
 
@@ -216,7 +218,7 @@ private fun FolderOptionsContent(
 
         // Info Section
         Text(
-            text = "Info",
+            text = stringResource(R.string.info),
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -229,8 +231,8 @@ private fun FolderOptionsContent(
         // PDF count info
         InfoItem(
             icon = Icons.Outlined.Description,
-            label = "PDF Files",
-            value = "${folder.pdfCount} ${if (folder.pdfCount == 1) "file" else "files"}",
+            label = stringResource(R.string.pdf_files),
+            value = if (folder.pdfCount == 1) stringResource(R.string.file_singular, folder.pdfCount) else stringResource(R.string.files_plural, folder.pdfCount),
             accentColor = AccentBlue,
             animationDelay = 0
         )
@@ -240,7 +242,7 @@ private fun FolderOptionsContent(
         // Path info
         InfoItem(
             icon = Icons.Outlined.LocationOn,
-            label = "Location",
+            label = stringResource(R.string.location),
             value = folder.path,
             accentColor = AccentTeal,
             animationDelay = 50
@@ -250,7 +252,7 @@ private fun FolderOptionsContent(
 
         // Actions Section
         Text(
-            text = "Actions",
+            text = stringResource(R.string.actions),
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -263,8 +265,8 @@ private fun FolderOptionsContent(
         // Open folder
         ActionItem(
             icon = Icons.Outlined.FolderOpen,
-            title = "Open Folder",
-            subtitle = "View PDF files inside",
+            title = stringResource(R.string.open_folder),
+            subtitle = stringResource(R.string.open_folder_desc),
             accentColor = AccentAmber,
             onClick = {
                 onOpenClick()
@@ -276,16 +278,17 @@ private fun FolderOptionsContent(
         Spacer(modifier = Modifier.height(4.dp))
 
         // Copy path
+        val pathCopiedMessage = stringResource(R.string.path_copied)
         ActionItem(
             icon = Icons.Outlined.ContentCopy,
-            title = "Copy Path",
-            subtitle = "Copy folder location to clipboard",
+            title = stringResource(R.string.copy_path),
+            subtitle = stringResource(R.string.copy_path_desc),
             accentColor = AccentBlue,
             onClick = {
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Folder Path", folder.path)
                 clipboard.setPrimaryClip(clip)
-                Toast.makeText(context, "Path copied to clipboard", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, pathCopiedMessage, Toast.LENGTH_SHORT).show()
                 onDismiss()
             },
             animationDelay = 150
@@ -329,7 +332,7 @@ private fun FolderOptionsHeader(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "Folder options",
+                text = stringResource(R.string.folder_options),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )

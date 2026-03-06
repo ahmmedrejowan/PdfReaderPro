@@ -60,10 +60,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.GithubRelease
 
 /**
@@ -173,7 +175,7 @@ fun UpdateAvailableSheet(
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Close,
-                                contentDescription = "Close",
+                                contentDescription = stringResource(R.string.close),
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .size(20.dp),
@@ -244,12 +246,12 @@ private fun UpdateContent(
 
             Column {
                 Text(
-                    text = "Update Available",
+                    text = stringResource(R.string.update_available),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Version ${release.version}",
+                    text = stringResource(R.string.version_label, release.version),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -273,7 +275,7 @@ private fun UpdateContent(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "Current",
+                        text = stringResource(R.string.current),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -292,7 +294,7 @@ private fun UpdateContent(
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "New",
+                        text = stringResource(R.string.new_version),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -320,7 +322,7 @@ private fun UpdateContent(
 
         // Release notes (scrollable)
         Text(
-            text = "What's New",
+            text = stringResource(R.string.whats_new),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.SemiBold
@@ -342,7 +344,7 @@ private fun UpdateContent(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = release.body.ifBlank { "No release notes available." },
+                    text = release.body.ifBlank { stringResource(R.string.no_release_notes) },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -405,7 +407,7 @@ private fun UpdateContent(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Later")
+                Text(stringResource(R.string.later))
             }
 
             Button(
@@ -422,7 +424,7 @@ private fun UpdateContent(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Download")
+                Text(stringResource(R.string.download))
             }
         }
 
@@ -434,7 +436,7 @@ private fun UpdateContent(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = "Skip this version",
+                text = stringResource(R.string.skip_version),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

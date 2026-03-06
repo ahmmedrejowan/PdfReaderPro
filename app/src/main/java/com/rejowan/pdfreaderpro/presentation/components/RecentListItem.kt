@@ -41,9 +41,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.RecentFile
 import kotlinx.coroutines.delay
 
@@ -142,7 +144,7 @@ fun RecentListItem(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Page ${recentFile.lastPage + 1} of ${recentFile.totalPages} • ${formatTimeAgo(recentFile.lastOpened)}",
+                    text = stringResource(R.string.page_progress_time, recentFile.lastPage + 1, recentFile.totalPages, formatTimeAgo(recentFile.lastOpened)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -179,7 +181,7 @@ fun RecentListItem(
                 ) {
                     Icon(
                         imageVector = if (isSelected) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
-                        contentDescription = if (isSelected) "Selected" else "Not selected",
+                        contentDescription = if (isSelected) stringResource(R.string.selected) else stringResource(R.string.not_selected),
                         modifier = Modifier.size(26.dp),
                         tint = if (isSelected) SelectionBlue else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                     )
@@ -195,7 +197,7 @@ fun RecentListItem(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.MoreVert,
-                        contentDescription = "Options",
+                        contentDescription = stringResource(R.string.options),
                         modifier = Modifier.size(20.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )

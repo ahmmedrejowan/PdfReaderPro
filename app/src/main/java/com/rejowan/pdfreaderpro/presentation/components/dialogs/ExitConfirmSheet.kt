@@ -380,7 +380,7 @@ private fun ExitConfirmContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "Stay",
+                    stringResource(R.string.stay),
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.SemiBold
                     )
@@ -405,7 +405,7 @@ private fun ExitConfirmContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "Exit",
+                    stringResource(R.string.exit),
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.SemiBold
                     )

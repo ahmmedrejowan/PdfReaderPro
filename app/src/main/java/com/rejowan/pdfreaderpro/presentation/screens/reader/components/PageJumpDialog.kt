@@ -60,9 +60,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -243,14 +245,14 @@ private fun PageJumpContent(
 
             Column {
                 Text(
-                    text = "Jump to Page",
+                    text = stringResource(R.string.jump_to_page_title),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Enter a page number (1 - $totalPages)",
+                    text = stringResource(R.string.enter_page_range, totalPages),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -272,7 +274,7 @@ private fun PageJumpContent(
                 .focusRequester(focusRequester),
             placeholder = {
                 Text(
-                    text = "Page number",
+                    text = stringResource(R.string.page_number_placeholder),
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             },
@@ -300,7 +302,7 @@ private fun PageJumpContent(
         val showError = pageInput.text.isNotEmpty() && !isValidPage
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "Please enter a number between 1 and $totalPages",
+            text = stringResource(R.string.enter_valid_page, totalPages),
             style = MaterialTheme.typography.labelSmall,
             color = if (showError) MaterialTheme.colorScheme.error else Color.Transparent
         )
@@ -321,7 +323,7 @@ private fun PageJumpContent(
                 ),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Cancel", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.cancel), style = MaterialTheme.typography.labelMedium)
             }
 
             Button(
@@ -336,7 +338,7 @@ private fun PageJumpContent(
                 ),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Go", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.go), style = MaterialTheme.typography.labelMedium)
             }
         }
     }

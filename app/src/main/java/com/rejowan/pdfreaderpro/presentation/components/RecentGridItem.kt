@@ -41,9 +41,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.RecentFile
 import kotlinx.coroutines.delay
 
@@ -138,7 +140,7 @@ fun RecentGridItem(
                     ) {
                         Icon(
                             imageVector = if (isSelected) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
-                            contentDescription = if (isSelected) "Selected" else "Not selected",
+                            contentDescription = if (isSelected) stringResource(R.string.selected) else stringResource(R.string.not_selected),
                             modifier = Modifier.size(24.dp),
                             tint = if (isSelected) SelectionBlue else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                         )
@@ -159,7 +161,7 @@ fun RecentGridItem(
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.MoreVert,
-                            contentDescription = "Options",
+                            contentDescription = stringResource(R.string.options),
                             modifier = Modifier.size(18.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                         )
@@ -220,7 +222,7 @@ fun RecentGridItem(
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                     ) {
                         Text(
-                            text = "Page ${recentFile.lastPage + 1}/${recentFile.totalPages}",
+                            text = stringResource(R.string.page_progress, recentFile.lastPage + 1, recentFile.totalPages),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)

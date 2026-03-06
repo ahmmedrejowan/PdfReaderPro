@@ -29,10 +29,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rejowan.pdfreaderpro.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +80,7 @@ fun PermissionBottomSheet(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Quick access needed",
+                text = stringResource(R.string.quick_access_needed),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -88,7 +90,7 @@ fun PermissionBottomSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Allow storage access so we can find and display your PDF files",
+                text = stringResource(R.string.storage_access_message),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     lineHeight = 22.sp
                 ),
@@ -117,7 +119,7 @@ fun PermissionBottomSheet(
                 )
             ) {
                 Text(
-                    text = "Open Settings",
+                    text = stringResource(R.string.open_settings),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -129,7 +131,7 @@ fun PermissionBottomSheet(
                 onClick = onDismiss
             ) {
                 Text(
-                    text = "Not now",
+                    text = stringResource(R.string.not_now),
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     fontWeight = FontWeight.Normal
                 )

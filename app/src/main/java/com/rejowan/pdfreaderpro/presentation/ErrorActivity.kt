@@ -28,9 +28,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.theme.PdfReaderProTheme
 
 class ErrorActivity : ComponentActivity() {
@@ -39,7 +41,7 @@ class ErrorActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val errorMessage = intent.getStringExtra(EXTRA_ERROR_MESSAGE) ?: "An unexpected error occurred"
+        val errorMessage = intent.getStringExtra(EXTRA_ERROR_MESSAGE) ?: getString(R.string.unexpected_error)
         val errorDetails = intent.getStringExtra(EXTRA_ERROR_DETAILS)
 
         setContent {
@@ -119,7 +121,7 @@ private fun ErrorScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Oops! Something went wrong",
+            text = stringResource(R.string.something_went_wrong),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -159,7 +161,7 @@ private fun ErrorScreen(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = "Go Back",
+                text = stringResource(R.string.go_back),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
             )
         }
@@ -171,7 +173,7 @@ private fun ErrorScreen(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = "Restart App",
+                text = stringResource(R.string.restart_app),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
             )
         }
@@ -183,7 +185,7 @@ private fun ErrorScreen(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = "Close App",
+                text = stringResource(R.string.close_app),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
             )
         }

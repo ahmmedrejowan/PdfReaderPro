@@ -64,9 +64,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.util.FormattingUtils
 import kotlinx.coroutines.delay
@@ -265,15 +267,15 @@ private fun FileOptionsContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Quick actions label
-        SectionLabel(text = "Quick Actions")
+        SectionLabel(text = stringResource(R.string.quick_actions))
 
         Spacer(modifier = Modifier.height(6.dp))
 
         // Action options
         FileActionCard(
             icon = if (isFavorite) Icons.Outlined.Star else Icons.Outlined.StarBorder,
-            label = if (isFavorite) "Remove from Favorites" else "Add to Favorites",
-            description = if (isFavorite) "Remove from your starred collection" else "Save to your favorites for quick access",
+            label = if (isFavorite) stringResource(R.string.remove_from_favorites_action) else stringResource(R.string.add_to_favorites),
+            description = if (isFavorite) stringResource(R.string.remove_favorites_desc) else stringResource(R.string.add_favorites_desc),
             accentColor = AccentAmber,
             animationDelay = 0,
             onClick = {
@@ -288,8 +290,8 @@ private fun FileOptionsContent(
 
             FileActionCard(
                 icon = Icons.Outlined.HistoryToggleOff,
-                label = "Remove from Recents",
-                description = "Clear from recent history",
+                label = stringResource(R.string.remove_from_recents),
+                description = stringResource(R.string.remove_recents_desc),
                 accentColor = AccentOrange,
                 animationDelay = 50,
                 onClick = {
@@ -303,8 +305,8 @@ private fun FileOptionsContent(
 
         FileActionCard(
             icon = Icons.Outlined.Share,
-            label = "Share",
-            description = "Send this PDF to other apps",
+            label = stringResource(R.string.share_pdf),
+            description = stringResource(R.string.share_pdf_desc),
             accentColor = AccentBlue,
             animationDelay = 100,
             onClick = {
@@ -317,8 +319,8 @@ private fun FileOptionsContent(
 
         FileActionCard(
             icon = Icons.Outlined.Edit,
-            label = "Rename",
-            description = "Change the file name",
+            label = stringResource(R.string.rename_action),
+            description = stringResource(R.string.rename_desc),
             accentColor = AccentPurple,
             animationDelay = 150,
             onClick = {
@@ -331,8 +333,8 @@ private fun FileOptionsContent(
 
         FileActionCard(
             icon = Icons.Outlined.Info,
-            label = "File Info",
-            description = "View file details and properties",
+            label = stringResource(R.string.file_info),
+            description = stringResource(R.string.file_info_desc),
             accentColor = AccentTeal,
             animationDelay = 200,
             onClick = {
@@ -350,8 +352,8 @@ private fun FileOptionsContent(
         // Destructive action with different styling
         FileActionCard(
             icon = Icons.Outlined.Delete,
-            label = "Delete",
-            description = "Permanently remove this file",
+            label = stringResource(R.string.delete_action),
+            description = stringResource(R.string.delete_desc),
             accentColor = AccentRed,
             animationDelay = 250,
             isDestructive = true,
@@ -413,7 +415,7 @@ private fun FileOptionsHeader(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
                 Text(
-                    text = "${pdfFile.pageCount} pages",
+                    text = stringResource(R.string.pages_count, pdfFile.pageCount),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

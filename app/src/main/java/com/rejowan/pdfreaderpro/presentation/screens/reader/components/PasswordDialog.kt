@@ -30,10 +30,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 @Composable
 fun PasswordDialog(
@@ -56,12 +58,12 @@ fun PasswordDialog(
             )
         },
         title = {
-            Text("Password Required")
+            Text(stringResource(R.string.password_required))
         },
         text = {
             Column {
                 Text(
-                    text = "This PDF is password protected. Enter the password to open it.",
+                    text = stringResource(R.string.password_protected_message),
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -70,11 +72,11 @@ fun PasswordDialog(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Password") },
+                    label = { Text(stringResource(R.string.password)) },
                     singleLine = true,
                     isError = isError,
                     supportingText = if (isError) {
-                        { Text("Incorrect password", color = MaterialTheme.colorScheme.error) }
+                        { Text(stringResource(R.string.incorrect_password_error), color = MaterialTheme.colorScheme.error) }
                     } else null,
                     visualTransformation = if (passwordVisible) {
                         VisualTransformation.None
@@ -89,7 +91,7 @@ fun PasswordDialog(
                                 } else {
                                     Icons.Default.Visibility
                                 },
-                                contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                                contentDescription = if (passwordVisible) stringResource(R.string.hide_password) else stringResource(R.string.show_password)
                             )
                         }
                     },
@@ -118,7 +120,7 @@ fun PasswordDialog(
                         onCheckedChange = { rememberPassword = it }
                     )
                     Text(
-                        text = "Remember password for this file",
+                        text = stringResource(R.string.remember_password),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -129,12 +131,12 @@ fun PasswordDialog(
                 onClick = { onSubmit(password, rememberPassword) },
                 enabled = password.isNotEmpty()
             ) {
-                Text("Open")
+                Text(stringResource(R.string.open))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

@@ -66,11 +66,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.util.ApkDownloadManager
 
 /**
@@ -168,7 +170,7 @@ fun DownloadProgressSheet(
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Close,
-                                contentDescription = "Close",
+                                contentDescription = stringResource(R.string.close),
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .size(20.dp),
@@ -284,13 +286,13 @@ private fun DownloadingSection(
 
     // Title
     Text(
-        text = if (isStarting) "Starting Download..." else "Downloading Update",
+        text = if (isStarting) stringResource(R.string.starting_download) else stringResource(R.string.downloading_update),
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold
     )
 
     Text(
-        text = "Version $versionName",
+        text = stringResource(R.string.version_label, versionName),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
@@ -355,7 +357,7 @@ private fun DownloadingSection(
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Text(
-            text = "You can dismiss this sheet. Download will continue in the background with a notification.",
+            text = stringResource(R.string.download_background_hint),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -377,7 +379,7 @@ private fun DownloadingSection(
             modifier = Modifier.size(18.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text("Cancel Download")
+        Text(stringResource(R.string.cancel_download))
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -423,13 +425,13 @@ private fun CompletedSection(
     Spacer(modifier = Modifier.height(16.dp))
 
     Text(
-        text = "Download Complete",
+        text = stringResource(R.string.download_complete),
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold
     )
 
     Text(
-        text = "Version $versionName is ready to install",
+        text = stringResource(R.string.version_ready_to_install, versionName),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
@@ -452,7 +454,7 @@ private fun CompletedSection(
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Install Update")
+            Text(stringResource(R.string.install_update))
         }
     } else {
         // Permission required
@@ -474,12 +476,12 @@ private fun CompletedSection(
                 )
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Permission Required",
+                        text = stringResource(R.string.permission_required),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "Allow installing apps from this source",
+                        text = stringResource(R.string.allow_install_apps),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -500,7 +502,7 @@ private fun CompletedSection(
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Grant Permission")
+            Text(stringResource(R.string.grant_permission))
         }
     }
 
@@ -511,7 +513,7 @@ private fun CompletedSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp)
     ) {
-        Text("Later")
+        Text(stringResource(R.string.later))
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -531,7 +533,7 @@ private fun FailedSection(
     Spacer(modifier = Modifier.height(16.dp))
 
     Text(
-        text = "Download Failed",
+        text = stringResource(R.string.download_failed),
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold
     )
@@ -559,7 +561,7 @@ private fun FailedSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp)
     ) {
-        Text("Close")
+        Text(stringResource(R.string.close))
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -578,13 +580,13 @@ private fun CancelledSection(
     Spacer(modifier = Modifier.height(16.dp))
 
     Text(
-        text = "Download Cancelled",
+        text = stringResource(R.string.download_cancelled),
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold
     )
 
     Text(
-        text = "You can try again later from Settings",
+        text = stringResource(R.string.try_again_settings),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
@@ -596,7 +598,7 @@ private fun CancelledSection(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp)
     ) {
-        Text("Close")
+        Text(stringResource(R.string.close))
     }
 
     Spacer(modifier = Modifier.height(16.dp))

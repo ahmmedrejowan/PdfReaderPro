@@ -23,9 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 private val SoftRed = Color(0xFFE57373)
 
@@ -64,7 +66,7 @@ fun ErrorState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Oops! Something went wrong",
+            text = stringResource(R.string.something_went_wrong),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -94,7 +96,7 @@ fun ErrorState(
                 contentPadding = PaddingValues(horizontal = 28.dp, vertical = 12.dp)
             ) {
                 Text(
-                    text = "Try Again",
+                    text = stringResource(R.string.try_again),
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -108,7 +110,7 @@ fun ErrorState(
             contentPadding = PaddingValues(horizontal = 28.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "Go Back",
+                text = stringResource(R.string.go_back),
                 fontWeight = FontWeight.Medium
             )
         }

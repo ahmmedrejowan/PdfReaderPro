@@ -62,8 +62,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
 
 // Design colors
@@ -241,14 +243,14 @@ private fun MoreOptionsSheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Reading Tools Section
-        SectionLabel(text = "Reading Tools")
+        SectionLabel(text = stringResource(R.string.reading_tools))
 
         Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.Bookmark,
-            title = "Bookmarks",
-            subtitle = "View and manage saved pages",
+            title = stringResource(R.string.bookmarks),
+            subtitle = stringResource(R.string.view_manage_bookmarks),
             accentColor = AccentPurple,
             onClick = {
                 onDismiss()
@@ -261,8 +263,8 @@ private fun MoreOptionsSheetContent(
 
         OptionItem(
             icon = Icons.Rounded.PlayArrow,
-            title = "Auto-Scroll",
-            subtitle = "Hands-free reading mode",
+            title = stringResource(R.string.auto_scroll),
+            subtitle = stringResource(R.string.auto_scroll_desc),
             accentColor = AccentBlue,
             onClick = {
                 onDismiss()
@@ -275,8 +277,8 @@ private fun MoreOptionsSheetContent(
 
         OptionItem(
             icon = Icons.Rounded.Numbers,
-            title = "Go to Page",
-            subtitle = "Jump to a specific page",
+            title = stringResource(R.string.go_to_page),
+            subtitle = stringResource(R.string.go_to_page_desc),
             accentColor = AccentTeal,
             onClick = {
                 onDismiss()
@@ -292,14 +294,14 @@ private fun MoreOptionsSheetContent(
         Spacer(modifier = Modifier.height(10.dp))
 
         // Document Actions Section
-        SectionLabel(text = "Document")
+        SectionLabel(text = stringResource(R.string.document))
 
         Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.Share,
-            title = "Share",
-            subtitle = "Share this document",
+            title = stringResource(R.string.share),
+            subtitle = stringResource(R.string.share_document),
             accentColor = AccentPink,
             onClick = {
                 onDismiss()
@@ -312,8 +314,8 @@ private fun MoreOptionsSheetContent(
 
         OptionItem(
             icon = Icons.Rounded.Print,
-            title = "Print",
-            subtitle = "Print this document",
+            title = stringResource(R.string.print),
+            subtitle = stringResource(R.string.print_document),
             accentColor = AccentAmber,
             onClick = {
                 onDismiss()
@@ -326,8 +328,8 @@ private fun MoreOptionsSheetContent(
 
         OptionItem(
             icon = Icons.Rounded.Info,
-            title = "Document Info",
-            subtitle = "View file details and metadata",
+            title = stringResource(R.string.document_info),
+            subtitle = stringResource(R.string.view_file_details),
             accentColor = MaterialTheme.colorScheme.primary,
             onClick = {
                 onDismiss()
@@ -364,14 +366,14 @@ private fun MoreOptionsHeader(
 
         Column {
             Text(
-                text = "More Options",
+                text = stringResource(R.string.more_options),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Additional tools and actions",
+                text = stringResource(R.string.additional_tools),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )

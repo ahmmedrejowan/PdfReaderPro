@@ -54,9 +54,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 
 // Accent color for rename
@@ -225,7 +227,7 @@ private fun RenameContent(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Rename File",
+                    text = stringResource(R.string.rename_file),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -252,14 +254,14 @@ private fun RenameContent(
                         newValue.text.contains("/") ||
                         newValue.text.contains("\\")
             },
-            label = { Text("File name") },
+            label = { Text(stringResource(R.string.file_name_label)) },
             isError = isError,
             supportingText = {
                 if (isError) {
-                    Text("Invalid file name")
+                    Text(stringResource(R.string.invalid_file_name))
                 } else {
                     Text(
-                        text = "The .pdf extension will be added automatically",
+                        text = stringResource(R.string.pdf_extension_hint),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -281,7 +283,7 @@ private fun RenameContent(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Cancel", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.cancel), style = MaterialTheme.typography.labelMedium)
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -298,7 +300,7 @@ private fun RenameContent(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Rename", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.rename), style = MaterialTheme.typography.labelMedium)
             }
         }
     }
