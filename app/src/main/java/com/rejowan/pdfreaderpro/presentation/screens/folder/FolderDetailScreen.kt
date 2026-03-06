@@ -48,6 +48,7 @@ import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
@@ -596,7 +597,7 @@ private fun FolderDetailHeader(
         ) {
             // List view
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
                 tooltip = { PlainTooltip { Text("List view") } },
                 state = rememberTooltipState()
             ) {
@@ -613,7 +614,7 @@ private fun FolderDetailHeader(
             }
             // Grid view
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
                 tooltip = { PlainTooltip { Text("Grid view") } },
                 state = rememberTooltipState()
             ) {
@@ -630,7 +631,7 @@ private fun FolderDetailHeader(
             }
             // Sort
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.OnTop),
                 tooltip = { PlainTooltip { Text("Sort files") } },
                 state = rememberTooltipState()
             ) {
