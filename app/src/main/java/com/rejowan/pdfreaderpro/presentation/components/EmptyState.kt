@@ -35,9 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 // Soft accent colors for different states
 private val SoftBlue = Color(0xFF64B5F6)
@@ -142,10 +144,10 @@ fun EmptyFilesState(
 ) {
     EmptyState(
         icon = Icons.Outlined.Description,
-        title = "No PDFs here yet",
-        message = "We couldn't find any PDF files on your device. Try scanning again or add some PDFs to get started!",
+        title = stringResource(R.string.no_pdfs_title),
+        message = stringResource(R.string.no_pdfs_message),
         accentColor = SoftBlue,
-        actionLabel = "Scan for PDFs",
+        actionLabel = stringResource(R.string.scan_for_pdfs),
         onAction = onScanClick,
         modifier = modifier
     )
@@ -158,10 +160,10 @@ fun EmptyRecentState(
 ) {
     EmptyState(
         icon = Icons.Outlined.History,
-        title = "Your reading journey starts here",
-        message = "PDFs you open will show up here for quick access. Start exploring your files!",
+        title = stringResource(R.string.recent_journey_title),
+        message = stringResource(R.string.recent_journey_message),
         accentColor = SoftTeal,
-        actionLabel = "Browse Files",
+        actionLabel = stringResource(R.string.browse_files),
         onAction = onBrowseClick,
         modifier = modifier
     )
@@ -174,10 +176,10 @@ fun EmptyFavoritesState(
 ) {
     EmptyState(
         icon = Icons.Outlined.FavoriteBorder,
-        title = "No favorites yet",
-        message = "Tap the heart icon on any PDF to save it here for easy access later.",
+        title = stringResource(R.string.no_favorites_title),
+        message = stringResource(R.string.no_favorites_message),
         accentColor = SoftPink,
-        actionLabel = "Browse Files",
+        actionLabel = stringResource(R.string.browse_files),
         onAction = onBrowseClick,
         modifier = modifier
     )
@@ -190,8 +192,8 @@ fun EmptySearchState(
 ) {
     EmptyState(
         icon = Icons.Outlined.SearchOff,
-        title = "No matches found",
-        message = "We couldn't find anything for \"$query\". Try a different search term.",
+        title = stringResource(R.string.no_matches_title),
+        message = stringResource(R.string.no_matches_message, query),
         accentColor = SoftAmber,
         modifier = modifier
     )
@@ -204,10 +206,10 @@ fun EmptyFoldersState(
 ) {
     EmptyState(
         icon = Icons.Outlined.FolderOpen,
-        title = "No folders yet",
-        message = "PDF folders will appear here once your files are scanned. Let's find them!",
+        title = stringResource(R.string.no_folders_title),
+        message = stringResource(R.string.no_folders_message),
         accentColor = SoftPurple,
-        actionLabel = "Scan for PDFs",
+        actionLabel = stringResource(R.string.scan_for_pdfs),
         onAction = onScanClick,
         modifier = modifier
     )
@@ -260,7 +262,7 @@ fun PermissionRequiredState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "We need your permission",
+            text = stringResource(R.string.permission_title),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -271,7 +273,7 @@ fun PermissionRequiredState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "To show your PDF files here, please allow access to your storage",
+            text = stringResource(R.string.permission_message),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
             textAlign = TextAlign.Center,
@@ -289,7 +291,7 @@ fun PermissionRequiredState(
             contentPadding = PaddingValues(horizontal = 28.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "Allow Access",
+                text = stringResource(R.string.allow_access),
                 fontWeight = FontWeight.Medium
             )
         }

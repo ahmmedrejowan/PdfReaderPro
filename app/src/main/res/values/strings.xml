@@ -64,7 +64,6 @@
     <string name="pages_t">Pages:</string>
     <string name="path_t">Path:</string>
     <string name="enter_file_name">Enter File Name</string>
-    <string name="total_pdfs">Total PDFs</string>
     <string name="total_size">Total Size</string>
     <string name="no_pdf_found_by_that_name">No PDF found by that name</string>
     <string name="back_press">BackPress</string>
@@ -454,6 +453,108 @@
     <!-- Navigation -->
     <string name="home">Home</string>
     <string name="tools">Tools</string>
+
+    <!-- Empty States -->
+    <string name="no_pdfs_title">No PDFs here yet</string>
+    <string name="no_pdfs_message">We couldn\'t find any PDF files on your device. Try scanning again or add some PDFs to get started!</string>
+    <string name="scan_for_pdfs">Scan for PDFs</string>
+    <string name="recent_journey_title">Your reading journey starts here</string>
+    <string name="recent_journey_message">PDFs you open will show up here for quick access. Start exploring your files!</string>
+    <string name="browse_files">Browse Files</string>
+    <string name="no_favorites_title">No favorites yet</string>
+    <string name="no_favorites_message">Tap the heart icon on any PDF to save it here for easy access later.</string>
+    <string name="no_matches_title">No matches found</string>
+    <string name="no_matches_message">We couldn\'t find anything for \"%s\". Try a different search term.</string>
+    <string name="no_folders_title">No folders yet</string>
+    <string name="no_folders_message">PDF folders will appear here once your files are scanned. Let\'s find them!</string>
+    <string name="permission_title">We need your permission</string>
+    <string name="permission_message">To show your PDF files here, please allow access to your storage</string>
+
+    <!-- Stats Sheet -->
+    <string name="library_stats">Library Stats</string>
+    <string name="library_stats_subtitle">Your PDF collection at a glance</string>
+    <string name="total_pdfs">Total PDFs</string>
+    <string name="files_in_library">files in your library</string>
+    <string name="storage_used">Storage Used</string>
+    <string name="total_file_size">total file size</string>
+    <string name="percent_of_library">%d%% of your library</string>
+    <string name="no_files_yet">no files yet</string>
+    <string name="recently_opened">recently opened</string>
+
+    <!-- Exit Confirmation -->
+    <string name="stay">Stay</string>
+    <string name="exit_confirm_message">Are you sure you want to close the app?</string>
+
+    <!-- Rename Sheet -->
+    <string name="file_name_label">File name</string>
+    <string name="invalid_file_name">Invalid file name</string>
+    <string name="pdf_extension_hint">The .pdf extension will be added automatically</string>
+
+    <!-- File Options -->
+    <string name="open_file">Open</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="open_folder">Open Folder</string>
+    <string name="folder_options">Folder Options</string>
+    <string name="view_folder_contents">View folder contents</string>
+
+    <!-- Download Progress -->
+    <string name="download_progress">Download Progress</string>
+    <string name="preparing_download">Preparing download…</string>
+    <string name="download_failed_message">Download failed. Please try again.</string>
+    <string name="ready_to_install">Ready to Install</string>
+    <string name="tap_to_install">Tap the button below to install the update</string>
+
+    <!-- Update Sheet -->
+    <string name="a_newer_version">A newer version is available</string>
+
+    <!-- Reader Components -->
+    <string name="go_to_page">Go to page</string>
+    <string name="enter_page">Enter page number (1-%d)</string>
+    <string name="invalid_page">Please enter a valid page number</string>
+    <string name="go">Go</string>
+    <string name="current_zoom">Current: %d%%</string>
+    <string name="zoom_level">Zoom Level</string>
+    <string name="display_settings">Display Settings</string>
+    <string name="scroll_direction_label">Scroll Direction</string>
+    <string name="page_layout_label">Page Layout</string>
+    <string name="fit_mode">Fit Mode</string>
+    <string name="reading_mode">Reading Mode</string>
+    <string name="auto_scroll_settings">Auto Scroll Settings</string>
+    <string name="scroll_speed">Scroll Speed</string>
+    <string name="slow">Slow</string>
+    <string name="fast">Fast</string>
+    <string name="tap_to_start">Tap to start auto-scroll</string>
+    <string name="start_scroll">Start</string>
+    <string name="stop_scroll">Stop</string>
+    <string name="bookmarks_title">Bookmarks</string>
+    <string name="no_bookmarks_yet">No bookmarks yet</string>
+    <string name="add_bookmark_hint">Add bookmarks while reading to quickly return to important pages</string>
+    <string name="page_label">Page %d</string>
+    <string name="toc_title">Table of Contents</string>
+    <string name="no_toc">No table of contents available</string>
+    <string name="attachments_title">Attachments</string>
+    <string name="no_attachments_available">No attachments available</string>
+    <string name="more_options_title">More Options</string>
+    <string name="view_mode_title">View Mode</string>
+    <string name="continuous">Continuous</string>
+    <string name="page_by_page">Page by Page</string>
+    <string name="remove_favorite_title">Remove from Favorites?</string>
+    <string name="remove_favorite_message">This file will be removed from your favorites list</string>
+    <string name="pdf_information">PDF Information</string>
+    <string name="document_title">Title</string>
+    <string name="author">Author</string>
+    <string name="subject">Subject</string>
+    <string name="creator">Creator</string>
+    <string name="producer">Producer</string>
+    <string name="creation_date">Creation Date</string>
+    <string name="modification_date">Modification Date</string>
+    <string name="unknown">Unknown</string>
+    <string name="enter_password_to_open">Enter password to open this PDF</string>
+    <string name="password_hint">Password</string>
+    <string name="wrong_password">Wrong password. Please try again.</string>
+    <string name="open_pdf">Open</string>
+    <string name="error_loading">Error loading PDF</string>
+    <string name="try_again_message">Something went wrong while loading this PDF. Please try again.</string>
 
 
 </resources>

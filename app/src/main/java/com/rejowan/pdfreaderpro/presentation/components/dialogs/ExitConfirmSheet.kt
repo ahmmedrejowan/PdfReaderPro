@@ -62,9 +62,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -325,7 +327,7 @@ private fun ExitConfirmContent(
         )
 
         Text(
-            text = "Exit App",
+            text = stringResource(R.string.exit_app),
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -337,7 +339,7 @@ private fun ExitConfirmContent(
 
         // Subtitle
         Text(
-            text = "Are you sure you want to close the app?",
+            text = stringResource(R.string.exit_confirm_message),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = titleAlpha * 0.7f),
             textAlign = TextAlign.Center

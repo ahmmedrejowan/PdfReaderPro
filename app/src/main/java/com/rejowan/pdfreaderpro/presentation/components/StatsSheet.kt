@@ -59,8 +59,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 import java.util.Locale
 
 // Accent colors matching UI guide
@@ -230,9 +232,9 @@ private fun StatsSheetContent(
         // Stats Cards
         AnimatedStatCard(
             icon = Icons.Outlined.Description,
-            label = "Total PDFs",
+            label = stringResource(R.string.total_pdfs),
             value = totalPdfs.toString(),
-            subtitle = "files in your library",
+            subtitle = stringResource(R.string.files_in_library),
             accentColor = AccentPurple,
             progress = 1f,
             animationDelay = 0
@@ -242,9 +244,9 @@ private fun StatsSheetContent(
 
         AnimatedStatCard(
             icon = Icons.Outlined.Storage,
-            label = "Storage Used",
+            label = stringResource(R.string.storage_used),
             value = formatFileSize(totalSize),
-            subtitle = "total file size",
+            subtitle = stringResource(R.string.total_file_size),
             accentColor = AccentBlue,
             progress = 0.7f,
             animationDelay = 50
@@ -254,9 +256,9 @@ private fun StatsSheetContent(
 
         AnimatedStatCard(
             icon = Icons.Outlined.FavoriteBorder,
-            label = "Favorites",
+            label = stringResource(R.string.favorites),
             value = favoritesCount.toString(),
-            subtitle = if (totalPdfs > 0) "${(favoritesCount * 100 / totalPdfs)}% of your library" else "no files yet",
+            subtitle = if (totalPdfs > 0) stringResource(R.string.percent_of_library, favoritesCount * 100 / totalPdfs) else stringResource(R.string.no_files_yet),
             accentColor = AccentPink,
             progress = if (totalPdfs > 0) favoritesCount.toFloat() / totalPdfs else 0f,
             animationDelay = 100
@@ -266,9 +268,9 @@ private fun StatsSheetContent(
 
         AnimatedStatCard(
             icon = Icons.Outlined.History,
-            label = "Recent Files",
+            label = stringResource(R.string.recent_files),
             value = recentCount.toString(),
-            subtitle = "recently opened",
+            subtitle = stringResource(R.string.recently_opened),
             accentColor = AccentTeal,
             progress = if (totalPdfs > 0) recentCount.toFloat() / totalPdfs else 0f,
             animationDelay = 150
@@ -302,14 +304,14 @@ private fun StatsSheetHeader(
 
         Column {
             Text(
-                text = "Library Stats",
+                text = stringResource(R.string.library_stats),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Your PDF collection at a glance",
+                text = stringResource(R.string.library_stats_subtitle),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
