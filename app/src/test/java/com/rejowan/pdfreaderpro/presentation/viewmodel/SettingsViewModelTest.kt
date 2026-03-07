@@ -45,7 +45,13 @@ class SettingsViewModelTest {
         preferencesRepository = mockk(relaxed = true)
         updateRepository = mockk(relaxed = true)
         apkDownloadManager = mockk(relaxed = true)
+
+        // Setup mocks for init block
         coEvery { preferencesRepository.preferences } returns flowOf(AppPreferences())
+        coEvery { updateRepository.getLastCheckTime() } returns System.currentTimeMillis() // Recent check to skip auto-check
+        coEvery { updateRepository.checkForUpdate(any(), any(), any()) } returns Result.success(null)
+        coEvery { apkDownloadManager.hasPendingApk(any()) } returns false
+        coEvery { apkDownloadManager.getPendingApkVersion() } returns null
     }
 
     @After
