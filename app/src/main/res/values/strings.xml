@@ -1145,4 +1145,28 @@
     <string name="color_b">B</string>
     <string name="skip_first_pages">Skip first N pages</string>
 
+    <!-- Input Validation Messages -->
+    <string name="validation_password_required">Password is required</string>
+    <string name="validation_password_too_short">Password must be at least %1$d characters</string>
+    <string name="validation_password_too_long">Password cannot exceed %1$d characters</string>
+    <string name="validation_filename_required">File name is required</string>
+    <string name="validation_filename_too_long">File name cannot exceed %1$d characters</string>
+    <string name="validation_filename_invalid_chars">File name contains invalid characters</string>
+    <string name="validation_filename_starts_with_dot">File name cannot start with a dot</string>
+    <string name="validation_filename_ends_with_dot">File name cannot end with a dot</string>
+    <string name="validation_page_required">Page number is required</string>
+    <string name="validation_page_invalid">Invalid page number</string>
+    <string name="validation_page_too_low">Page number must be at least 1</string>
+    <string name="validation_page_too_high">Page number cannot exceed %1$d</string>
+    <string name="validation_page_range_required">Page range is required</string>
+    <string name="validation_page_range_format">Invalid format. Use: 1-5, 7, 10-12</string>
+    <string name="validation_page_range_invalid">Start page must be less than end page</string>
+    <string name="validation_value_required">Value is required</string>
+    <string name="validation_value_invalid">Invalid value</string>
+    <string name="validation_value_too_low">Value must be at least %1$d</string>
+    <string name="validation_value_too_high">Value cannot exceed %1$d</string>
+    <string name="validation_color_invalid">Invalid color value</string>
+    <string name="validation_color_range">Color value must be 0-255</string>
+    <string name="password_min_hint">Minimum 4 characters required</string>
+
 </resources>

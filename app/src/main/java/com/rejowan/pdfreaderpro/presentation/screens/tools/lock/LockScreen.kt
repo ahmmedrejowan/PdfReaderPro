@@ -334,7 +334,8 @@ private fun LockContent(
         PasswordField(
             value = state.ownerPassword,
             onValueChange = onOwnerPasswordChange,
-            label = stringResource(R.string.owner_password)
+            label = stringResource(R.string.owner_password),
+            isRequired = true
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -456,12 +457,31 @@ private fun LockContent(
         AnimatedVisibility(visible = !state.overwriteOriginal) {
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
+
+                val filenameValidation = remember(state.outputFileName) {
+                    com.rejowan.pdfreaderpro.util.InputValidation.validateFileName(state.outputFileName)
+                }
+                val isFilenameError = state.outputFileName.isNotEmpty() &&
+                        filenameValidation is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid
+
                 OutlinedTextField(
                     value = state.outputFileName,
                     onValueChange = onOutputFileNameChange,
                     label = { Text(stringResource(R.string.output_file_name)) },
                     suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
+                    isError = isFilenameError,
+                    supportingText = if (isFilenameError && filenameValidation is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid) {
+                        {
+                            Text(
+                                text = stringResource(
+                                    filenameValidation.errorMessageResId,
+                                    *filenameValidation.formatArgs
+                                ),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    } else null,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -589,9 +609,16 @@ private fun PasswordField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    isRequired: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
+
+    // Validate password
+    val validationResult = remember(value) {
+        com.rejowan.pdfreaderpro.util.InputValidation.validatePassword(value, isRequired)
+    }
+    val isError = value.isNotEmpty() && validationResult is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid
 
     OutlinedTextField(
         value = value,
@@ -599,6 +626,26 @@ private fun PasswordField(
         label = { Text(label) },
         singleLine = true,
         enabled = enabled,
+        isError = isError,
+        supportingText = {
+            when {
+                isError && validationResult is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid -> {
+                    Text(
+                        text = stringResource(
+                            validationResult.errorMessageResId,
+                            *validationResult.formatArgs
+                        ),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+                isRequired -> {
+                    Text(
+                        text = stringResource(R.string.password_min_hint),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
