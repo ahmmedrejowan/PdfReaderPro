@@ -488,7 +488,7 @@ private fun BatchDeleteConfirmSheet(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
 
                 Button(
@@ -499,7 +499,7 @@ private fun BatchDeleteConfirmSheet(
                         containerColor = Color(0xFFEF5350)
                     )
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.delete))
                 }
             }
 
@@ -600,7 +600,7 @@ private fun FolderDetailHeader(
             // List view
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                tooltip = { PlainTooltip { Text("List view") } },
+                tooltip = { PlainTooltip { Text(stringResource(R.string.list_view)) } },
                 state = rememberTooltipState()
             ) {
                 ViewModeButton(
@@ -617,7 +617,7 @@ private fun FolderDetailHeader(
             // Grid view
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                tooltip = { PlainTooltip { Text("Grid view") } },
+                tooltip = { PlainTooltip { Text(stringResource(R.string.grid_view)) } },
                 state = rememberTooltipState()
             ) {
                 ViewModeButton(
@@ -634,7 +634,7 @@ private fun FolderDetailHeader(
             // Sort
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                tooltip = { PlainTooltip { Text("Sort files") } },
+                tooltip = { PlainTooltip { Text(stringResource(R.string.sort_files)) } },
                 state = rememberTooltipState()
             ) {
                 ViewModeButton(

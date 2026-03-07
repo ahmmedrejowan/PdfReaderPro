@@ -95,7 +95,7 @@ fun WelcomeHeader(
                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = {
                         PlainTooltip {
-                            Text("Sort files")
+                            Text(stringResource(R.string.sort_files))
                         }
                     },
                     state = rememberTooltipState()
@@ -112,7 +112,7 @@ fun WelcomeHeader(
                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = {
                         PlainTooltip {
-                            Text("Library statistics")
+                            Text(stringResource(R.string.library_statistics))
                         }
                     },
                     state = rememberTooltipState()
