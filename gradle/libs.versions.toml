@@ -5,7 +5,7 @@ targetSdk = "36"
 minSdk = "24"
 
 # Core Android
-agp = "9.0.1"
+agp = "9.1.0"
 kotlin = "2.3.10"
 coreKtx = "1.17.0"
 
