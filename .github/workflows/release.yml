@@ -85,7 +85,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Unit Tests
-        run: ./gradlew :app:testReleaseUnitTest
+        run: ./gradlew :app:testDebugUnitTest
 
       - name: Run Lint
         run: ./gradlew :app:lintRelease
