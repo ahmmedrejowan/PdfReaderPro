@@ -85,10 +85,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Unit Tests
-        run: ./gradlew testReleaseUnitTest
+        run: ./gradlew :app:testReleaseUnitTest
 
       - name: Run Lint
-        run: ./gradlew lintRelease
+        run: ./gradlew :app:lintRelease
 
   build:
     name: Build Release APK
@@ -124,7 +124,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease
+        run: ./gradlew :app:assembleRelease
 
       - name: Verify APK
         run: |

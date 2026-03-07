@@ -38,13 +38,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Lint
-        run: ./gradlew lint
+        run: ./gradlew :app:lint
 
       - name: Run Unit Tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew :app:testDebugUnitTest
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew :app:assembleDebug
 
       - name: Upload Lint Report
         if: always()
