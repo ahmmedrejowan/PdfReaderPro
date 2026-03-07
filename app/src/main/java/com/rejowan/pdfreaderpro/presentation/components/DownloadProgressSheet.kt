@@ -375,7 +375,7 @@ private fun DownloadingSection(
     ) {
         Icon(
             imageVector = Icons.Rounded.Cancel,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_close),
             modifier = Modifier.size(18.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -450,7 +450,7 @@ private fun CompletedSection(
         ) {
             Icon(
                 imageVector = Icons.Rounded.InstallMobile,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -470,7 +470,7 @@ private fun CompletedSection(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Security,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_info),
                     tint = MaterialTheme.colorScheme.error,
                     modifier = Modifier.size(24.dp)
                 )
@@ -498,7 +498,7 @@ private fun CompletedSection(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Security,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -621,7 +621,7 @@ private fun StatusIcon(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(36.dp),
                 tint = iconColor
             )

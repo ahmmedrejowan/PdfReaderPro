@@ -14,6 +14,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -86,6 +88,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
@@ -287,7 +290,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.WaterDrop,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_add_watermark),
                 modifier = Modifier.size(40.dp),
                 tint = AccentCyan
             )
@@ -317,7 +320,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -345,6 +348,8 @@ private fun WatermarkContent(
     onReset: () -> Unit,
     onClearError: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -383,7 +388,7 @@ private fun WatermarkContent(
                 ) {
                     Icon(
                         Icons.Default.WaterDrop,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_add_watermark),
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
@@ -529,6 +534,8 @@ private fun WatermarkContent(
                         label = { Text(stringResource(R.string.output_filename_label)) },
                         suffix = { Text(stringResource(R.string.pdf_extension)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -569,7 +576,7 @@ private fun WatermarkTypeTabs(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.TextFields,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp),
                     tint = if (selectedType == WatermarkType.TEXT)
                         AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
@@ -601,7 +608,7 @@ private fun WatermarkTypeTabs(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.Image,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp),
                     tint = if (selectedType == WatermarkType.IMAGE)
                         AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
@@ -631,6 +638,8 @@ private fun TextWatermarkSettings(
     onOpacityChange: (Float) -> Unit,
     onRotationChange: (Float) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column {
         // Text input
         OutlinedTextField(
@@ -638,6 +647,8 @@ private fun TextWatermarkSettings(
             onValueChange = onTextChange,
             label = { Text(stringResource(R.string.watermark_text_label)) },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -776,7 +787,7 @@ private fun ImageWatermarkSettings(
                     ) {
                         Icon(
                             Icons.Default.Add,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_add),
                             modifier = Modifier.size(40.dp),
                             tint = AccentCyan
                         )
@@ -874,7 +885,7 @@ private fun ColorCircle(
         if (isSelected) {
             Icon(
                 Icons.Default.Check,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_checkbox),
                 modifier = Modifier.size(18.dp),
                 tint = if (color == Color.Black || color == Color(0xFF808080)) Color.White else Color.Black
             )
@@ -961,7 +972,7 @@ private fun ColorPickerSheet(
                     ) {
                         Icon(
                             Icons.Default.WaterDrop,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_add_watermark),
                             modifier = Modifier.size(20.dp),
                             tint = AccentCyan
                         )
@@ -1033,6 +1044,8 @@ private fun ColorPickerSheet(
                     supportingText = if (hexInput.isNotEmpty() && !isHexValid) {
                         { Text(stringResource(R.string.hex_help)) }
                     } else null,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth(),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
                 )
@@ -1057,6 +1070,8 @@ private fun ColorPickerSheet(
                         label = { Text(stringResource(R.string.color_r)) },
                         singleLine = true,
                         isError = redText.isNotEmpty() && !isRedValid,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
@@ -1072,6 +1087,8 @@ private fun ColorPickerSheet(
                         label = { Text(stringResource(R.string.color_g)) },
                         singleLine = true,
                         isError = greenText.isNotEmpty() && !isGreenValid,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
@@ -1087,6 +1104,8 @@ private fun ColorPickerSheet(
                         label = { Text(stringResource(R.string.color_b)) },
                         singleLine = true,
                         isError = blueText.isNotEmpty() && !isBlueValid,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -1422,7 +1441,7 @@ private fun WatermarkElement(
             } else {
                 Icon(
                     Icons.Default.Image,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .size(if (isTiled) 16.dp else 28.dp)
                         .graphicsLayer { alpha = 0.3f },
@@ -1441,6 +1460,8 @@ private fun PageSelector(
     onSelectionChange: (PageSelection) -> Unit,
     onCustomPagesChange: (String) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column {
         Text(
             "APPLY TO PAGES",
@@ -1504,6 +1525,8 @@ private fun PageSelector(
                     label = { Text(stringResource(R.string.page_numbers_label)) },
                     placeholder = { Text(stringResource(R.string.page_numbers_hint)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -1537,7 +1560,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -1577,7 +1600,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentBlue
                 )
@@ -1613,7 +1636,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -1625,7 +1648,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_share),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

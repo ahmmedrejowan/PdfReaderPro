@@ -260,7 +260,7 @@ private fun FolderSortSheetHeader(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Sort,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -340,7 +340,7 @@ private fun FolderSortCategoryCard(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier
                             .padding(6.dp)
                             .size(16.dp),
@@ -470,7 +470,8 @@ private fun FolderSortOptionChip(
             // Direction icon
             Icon(
                 imageVector = chipIcon,
-                contentDescription = null,
+                contentDescription = if (option == FolderSortOption.NAME_ASC || option == FolderSortOption.COUNT_ASC)
+                    stringResource(R.string.cd_sort_ascending) else stringResource(R.string.cd_sort_descending),
                 modifier = Modifier.size(14.dp),
                 tint = contentColor
             )

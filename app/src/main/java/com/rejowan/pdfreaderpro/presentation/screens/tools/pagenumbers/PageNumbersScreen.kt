@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -87,6 +88,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -278,7 +280,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.FormatListNumbered,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_add_page_numbers),
                 modifier = Modifier.size(40.dp),
                 tint = AccentOrange
             )
@@ -308,7 +310,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -336,6 +338,7 @@ private fun PageNumbersContent(
     onApply: () -> Unit,
     onClearError: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -387,6 +390,8 @@ private fun PageNumbersContent(
                         label = { Text(stringResource(R.string.prefix_label)) },
                         placeholder = { Text(stringResource(R.string.prefix_hint)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
@@ -395,6 +400,8 @@ private fun PageNumbersContent(
                         label = { Text(stringResource(R.string.suffix_label)) },
                         placeholder = { Text(stringResource(R.string.suffix_hint)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -488,7 +495,8 @@ private fun PageNumbersContent(
                 onValueChange = { it.toIntOrNull()?.let(onStartNumberChange) },
                 label = { Text(stringResource(R.string.start_number)) },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -599,6 +607,8 @@ private fun PageNumbersContent(
                     label = { Text(stringResource(R.string.output_filename_label)) },
                     suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -612,7 +622,7 @@ private fun PageNumbersContent(
             modifier = Modifier.fillMaxWidth(),
             enabled = !state.isProcessing
         ) {
-            Icon(Icons.Default.FormatListNumbered, contentDescription = null)
+            Icon(Icons.Default.FormatListNumbered, contentDescription = stringResource(R.string.cd_add_page_numbers))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.tool_add_page_numbers))
         }
@@ -775,7 +785,7 @@ private fun ColorCircle(
         if (isSelected) {
             Icon(
                 Icons.Default.Check,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_checkbox),
                 modifier = Modifier.size(18.dp),
                 tint = if (color == Color.Black || color == Color(0xFF424242)) Color.White else Color.Black
             )
@@ -944,7 +954,7 @@ private fun ColorPickerSheet(
                     ) {
                         Icon(
                             Icons.Default.FormatListNumbered,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_add_page_numbers),
                             modifier = Modifier.size(20.dp),
                             tint = AccentOrange
                         )
@@ -1012,6 +1022,8 @@ private fun ColorPickerSheet(
                     label = { Text(stringResource(R.string.hex_label)) },
                     prefix = { Text(stringResource(R.string.hex_prefix)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     isError = hexInput.isNotEmpty() && !isHexValid,
                     supportingText = if (hexInput.isNotEmpty() && !isHexValid) {
                         { Text(stringResource(R.string.hex_help)) }
@@ -1039,6 +1051,8 @@ private fun ColorPickerSheet(
                         },
                         label = { Text(stringResource(R.string.color_r)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         isError = redText.isNotEmpty() && !isRedValid,
                         modifier = Modifier.weight(1f)
                     )
@@ -1054,6 +1068,8 @@ private fun ColorPickerSheet(
                         },
                         label = { Text(stringResource(R.string.color_g)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         isError = greenText.isNotEmpty() && !isGreenValid,
                         modifier = Modifier.weight(1f)
                     )
@@ -1069,6 +1085,8 @@ private fun ColorPickerSheet(
                         },
                         label = { Text(stringResource(R.string.color_b)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         isError = blueText.isNotEmpty() && !isBlueValid,
                         modifier = Modifier.weight(1f)
                     )
@@ -1186,6 +1204,7 @@ private fun PageSelector(
     onCustomPagesChange: (String) -> Unit,
     onSkipFirstNChange: (Int) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column {
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -1246,7 +1265,8 @@ private fun PageSelector(
                     onValueChange = { it.toIntOrNull()?.let(onSkipFirstNChange) },
                     label = { Text(stringResource(R.string.skip_first_pages)) },
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -1261,6 +1281,8 @@ private fun PageSelector(
                     label = { Text(stringResource(R.string.page_numbers_label)) },
                     placeholder = { Text(stringResource(R.string.page_numbers_hint)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -1294,7 +1316,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -1334,7 +1356,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentBlue
                 )
@@ -1370,7 +1392,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -1382,7 +1404,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_share),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

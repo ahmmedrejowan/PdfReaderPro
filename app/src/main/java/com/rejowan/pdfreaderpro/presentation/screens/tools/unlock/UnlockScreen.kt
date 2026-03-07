@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -73,6 +74,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -244,7 +246,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.LockOpen,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(40.dp),
                 tint = AccentTeal
             )
@@ -274,7 +276,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -322,7 +324,7 @@ private fun UnlockContent(
                 ) {
                     Icon(
                         Icons.Default.LockOpen,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(24.dp),
                         tint = AccentGreen
                     )
@@ -428,6 +430,7 @@ private fun UnlockContent(
 
             // Output filename
             AnimatedVisibility(visible = !state.overwriteOriginal) {
+                val focusManager = LocalFocusManager.current
                 Column {
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
@@ -436,6 +439,8 @@ private fun UnlockContent(
                         label = { Text(stringResource(R.string.output_file_name)) },
                         suffix = { Text(stringResource(R.string.pdf_extension)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -451,7 +456,7 @@ private fun UnlockContent(
                          state.password.isNotBlank() &&
                          !state.isProcessing
             ) {
-                Icon(Icons.Default.LockOpen, contentDescription = null)
+                Icon(Icons.Default.LockOpen, contentDescription = stringResource(R.string.cd_unlock_pdf))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.tool_unlock_pdf))
             }
@@ -503,7 +508,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         if (sourceFile.isPasswordProtected) Icons.Default.Lock else Icons.Default.LockOpen,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(28.dp),
                         tint = if (sourceFile.isPasswordProtected) AccentAmber else AccentGreen
                     )
@@ -547,6 +552,7 @@ private fun PasswordField(
     label: String
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     OutlinedTextField(
         value = value,
@@ -554,7 +560,13 @@ private fun PasswordField(
         label = { Text(label) },
         singleLine = true,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { focusManager.clearFocus() }
+        ),
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
@@ -593,7 +605,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -634,7 +646,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentTeal
                 )
@@ -656,7 +668,7 @@ private fun SuccessState(
                 }
                 Icon(
                     Icons.Default.LockOpen,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp),
                     tint = AccentGreen
                 )
@@ -676,7 +688,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -688,7 +700,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_share),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

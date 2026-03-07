@@ -22,8 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 @Composable
 fun SearchOverlay(
@@ -83,7 +85,7 @@ fun SearchOverlay(
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowUp,
-                    contentDescription = "Previous result",
+                    contentDescription = stringResource(R.string.cd_previous_result),
                     tint = if (currentIndex > 0) Color.White else Color.White.copy(alpha = 0.3f)
                 )
             }
@@ -94,7 +96,7 @@ fun SearchOverlay(
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Next result",
+                    contentDescription = stringResource(R.string.cd_next_result),
                     tint = if (currentIndex < resultCount - 1) Color.White else Color.White.copy(alpha = 0.3f)
                 )
             }
@@ -103,7 +105,7 @@ fun SearchOverlay(
         IconButton(onClick = onClose) {
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = "Close search",
+                contentDescription = stringResource(R.string.cd_close_search),
                 tint = Color.White
             )
         }

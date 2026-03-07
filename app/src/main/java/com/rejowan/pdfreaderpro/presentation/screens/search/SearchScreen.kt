@@ -345,7 +345,7 @@ private fun SearchHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(20.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                     )
@@ -440,7 +440,7 @@ private fun SearchIdleContent(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Outlined.History,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_decorative),
                             modifier = Modifier.size(18.dp),
                             tint = SoftPurple
                         )
@@ -547,7 +547,7 @@ private fun RecentSearchItem(
         ) {
             Icon(
                 imageVector = Icons.Outlined.AccessTime,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .padding(8.dp)
                     .size(16.dp),
@@ -592,7 +592,7 @@ private fun SearchTipsSection(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.Outlined.TipsAndUpdates,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(18.dp),
                 tint = SoftAmber
             )
@@ -677,7 +677,7 @@ private fun SearchTipCard(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(10.dp)
                         .size(20.dp),
@@ -901,7 +901,7 @@ private fun SearchResultItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Folder,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(14.dp),
                         tint = Color(0xFF9E9E9E).copy(alpha = 0.7f)
                     )

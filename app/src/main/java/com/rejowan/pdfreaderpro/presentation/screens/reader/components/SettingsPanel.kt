@@ -75,7 +75,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.Brightness6,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -114,7 +114,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.SwapVert,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -168,7 +168,7 @@ fun SettingsPanel(
                     } else {
                         Icons.Default.ScreenRotation
                     },
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -203,7 +203,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.Fullscreen,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.cd_decorative)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.full_screen_mode))
@@ -216,7 +216,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.Info,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.cd_info)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.pdf_information))
@@ -229,7 +229,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_delete),
                     tint = MaterialTheme.colorScheme.error
                 )
                 Spacer(modifier = Modifier.width(8.dp))

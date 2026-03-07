@@ -196,7 +196,7 @@ private fun DeleteConfirmContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.DeleteForever,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_delete),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),

@@ -685,7 +685,7 @@ private fun BatchDeleteConfirmSheet(
         ) {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(48.dp),
                 tint = Color(0xFFEF5350)
             )

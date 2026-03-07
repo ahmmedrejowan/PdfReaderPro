@@ -381,7 +381,7 @@ private fun FileOptionsHeader(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Description,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_file_options),
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -498,7 +498,7 @@ private fun FileActionCard(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),

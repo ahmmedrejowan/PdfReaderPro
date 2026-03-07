@@ -278,7 +278,7 @@ private fun SortSheetHeader(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Sort,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -358,7 +358,7 @@ private fun SortCategoryCard(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier
                             .padding(6.dp)
                             .size(16.dp),
@@ -488,7 +488,8 @@ private fun SortOptionChip(
             // Direction icon
             Icon(
                 imageVector = chipIcon,
-                contentDescription = null,
+                contentDescription = if (option == SortOption.NAME_ASC || option == SortOption.DATE_ASC || option == SortOption.SIZE_ASC)
+                    stringResource(R.string.cd_sort_ascending) else stringResource(R.string.cd_sort_descending),
                 modifier = Modifier.size(14.dp),
                 tint = contentColor
             )

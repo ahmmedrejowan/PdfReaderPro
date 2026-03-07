@@ -96,8 +96,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -353,7 +357,7 @@ private fun EmptyState(
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.CallMerge,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_merge_pdfs),
                 modifier = Modifier.size(40.dp),
                 tint = AccentBlue
             )
@@ -382,7 +386,7 @@ private fun EmptyState(
             onClick = onAddFiles,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.Add, contentDescription = null)
+            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.cd_add_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdfs))
         }
@@ -494,7 +498,7 @@ private fun MergeFileItem(
                     } else {
                         Icon(
                             Icons.Default.PictureAsPdf,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_pdf_file),
                             modifier = Modifier.size(20.dp),
                             tint = AccentRed
                         )
@@ -591,7 +595,7 @@ private fun ActionChip(
     ) {
         Icon(
             icon,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_decorative),
             modifier = Modifier.size(16.dp),
             tint = color
         )
@@ -637,7 +641,7 @@ private fun AddMoreFilesCard(
             ) {
                 Icon(
                     Icons.Default.Add,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_add_files),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(18.dp),
@@ -666,6 +670,8 @@ private fun MergeBottomSection(
     onMerge: () -> Unit,
     onClearError: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     // Check if error is recoverable (storage/network issues allow retry)
     val isRecoverableError = error != null && (
         error.contains("storage", ignoreCase = true) ||
@@ -744,7 +750,9 @@ private fun MergeBottomSection(
             singleLine = true,
             enabled = !isProcessing,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -756,7 +764,7 @@ private fun MergeBottomSection(
         ) {
             Icon(
                 Icons.Default.FolderOpen,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_open),
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -777,7 +785,7 @@ private fun MergeBottomSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp)
         ) {
-            Icon(Icons.AutoMirrored.Filled.CallMerge, contentDescription = null)
+            Icon(Icons.AutoMirrored.Filled.CallMerge, contentDescription = stringResource(R.string.cd_merge_pdfs))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.tool_merge_pdfs))
         }
@@ -874,7 +882,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_success),
                     modifier = Modifier.size(48.dp),
                     tint = AccentGreen
                 )
@@ -907,7 +915,7 @@ private fun SuccessState(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Default.PictureAsPdf,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_pdf_file),
                         modifier = Modifier.size(24.dp),
                         tint = AccentRed
                     )
@@ -951,7 +959,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.Visibility,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_page_preview),
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -972,7 +980,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.OpenInNew,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -986,7 +994,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_share),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -1160,6 +1168,8 @@ private fun PageSelectionContent(
     onSelectionChanged: (PageSelection) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
+
     // Determine initial mode from current selection
     val initialMode = when (file.pageSelection) {
         is PageSelection.All -> SelectionMode.ALL
@@ -1213,7 +1223,7 @@ private fun PageSelectionContent(
             ) {
                 Icon(
                     Icons.Default.Pages,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_page_preview),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1257,7 +1267,7 @@ private fun PageSelectionContent(
             ) {
                 Icon(
                     Icons.Default.PictureAsPdf,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(16.dp),
                     tint = AccentRed
                 )
@@ -1340,7 +1350,7 @@ private fun PageSelectionContent(
                     ) {
                         Icon(
                             Icons.Default.CheckCircle,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_success),
                             modifier = Modifier.size(18.dp),
                             tint = AccentGreen
                         )
@@ -1367,7 +1377,9 @@ private fun PageSelectionContent(
                         label = { Text(stringResource(R.string.from_page)) },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(8.dp),
-                        singleLine = true
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
                     OutlinedTextField(
                         value = rangeEnd,
@@ -1375,7 +1387,9 @@ private fun PageSelectionContent(
                         label = { Text(stringResource(R.string.to_page)) },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(8.dp),
-                        singleLine = true
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
                 }
                 Spacer(modifier = Modifier.height(6.dp))
@@ -1397,7 +1411,9 @@ private fun PageSelectionContent(
                     shape = RoundedCornerShape(8.dp),
                     supportingText = {
                         Text(stringResource(R.string.page_numbers_help))
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
             }
         }

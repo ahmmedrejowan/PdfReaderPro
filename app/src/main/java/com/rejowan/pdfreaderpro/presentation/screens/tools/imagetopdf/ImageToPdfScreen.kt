@@ -14,6 +14,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -73,6 +75,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -245,7 +248,7 @@ private fun EmptyState(onSelectImages: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Image,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_image_to_pdf),
                 modifier = Modifier.size(40.dp),
                 tint = AccentTeal
             )
@@ -275,7 +278,7 @@ private fun EmptyState(onSelectImages: () -> Unit) {
             onClick = onSelectImages,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.Image, contentDescription = null)
+            Icon(Icons.Default.Image, contentDescription = stringResource(R.string.cd_decorative))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_images))
         }
@@ -323,7 +326,7 @@ private fun ImageListContent(
                     ) {
                         Icon(
                             Icons.Default.Add,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_decorative),
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -385,7 +388,7 @@ private fun ImageThumbnailItem(
                 ) {
                     Icon(
                         Icons.Default.Image,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_image),
                         modifier = Modifier.size(32.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
@@ -439,6 +442,7 @@ private fun ConvertBottomSection(
     onConvert: () -> Unit,
     onClearError: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -490,6 +494,8 @@ private fun ConvertBottomSection(
             label = { Text(stringResource(R.string.output_file_name)) },
             suffix = { Text(stringResource(R.string.pdf_extension)) },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -500,7 +506,7 @@ private fun ConvertBottomSection(
             onClick = onConvert,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_decorative))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.create_pdf_pages, imageCount))
         }
@@ -532,7 +538,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -571,7 +577,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentBlue
                 )
@@ -606,7 +612,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -618,7 +624,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

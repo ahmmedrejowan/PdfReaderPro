@@ -86,7 +86,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -377,7 +380,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.RotateRight,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(40.dp),
                 tint = AccentOrange
             )
@@ -407,7 +410,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_decorative))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -479,7 +482,7 @@ private fun RotationChip(
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.RotateRight,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .size(18.dp)
                     .rotate(angle.degrees.toFloat() - 90f),
@@ -653,7 +656,7 @@ private fun PageThumbnailItem(
                 ) {
                     Icon(
                         Icons.Default.PictureAsPdf,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(32.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
@@ -690,7 +693,7 @@ private fun PageThumbnailItem(
                 ) {
                     Icon(
                         Icons.Default.CheckCircle,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_checkbox),
                         modifier = Modifier.size(16.dp),
                         tint = Color.White
                     )
@@ -776,6 +779,7 @@ private fun RotateBottomSection(
 
         // Output filename
         AnimatedVisibility(visible = !overwriteOriginal) {
+            val focusManager = LocalFocusManager.current
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
@@ -784,6 +788,8 @@ private fun RotateBottomSection(
                     label = { Text(stringResource(R.string.output_file_name)) },
                     suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -805,7 +811,7 @@ private fun RotateBottomSection(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                Icon(Icons.AutoMirrored.Filled.RotateRight, contentDescription = null)
+                Icon(Icons.AutoMirrored.Filled.RotateRight, contentDescription = stringResource(R.string.cd_decorative))
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(stringResource(if (isProcessing) R.string.rotating else R.string.rotate_pages))
@@ -840,7 +846,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -880,7 +886,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(20.dp),
                     tint = AccentOrange
                 )
@@ -916,7 +922,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -928,7 +934,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

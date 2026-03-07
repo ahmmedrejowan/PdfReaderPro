@@ -57,7 +57,7 @@ fun ErrorState(
         ) {
             Icon(
                 imageVector = Icons.Outlined.ErrorOutline,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_error),
                 modifier = Modifier.size(48.dp),
                 tint = SoftRed
             )

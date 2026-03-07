@@ -233,7 +233,7 @@ private fun PageJumpContent(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Numbers,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_go_to_page),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),

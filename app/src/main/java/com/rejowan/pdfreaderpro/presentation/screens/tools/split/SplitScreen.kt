@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -80,6 +81,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -355,7 +357,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.CallSplit,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_split_pdf),
                 modifier = Modifier.size(40.dp),
                 tint = AccentAmber
             )
@@ -384,7 +386,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -419,7 +421,7 @@ private fun SourceFileCard(
             ) {
                 Icon(
                     Icons.Default.PictureAsPdf,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(24.dp),
                     tint = AccentRed
                 )
@@ -585,6 +587,7 @@ private fun SplitOptionsSection(
     onEveryNChange: (Int) -> Unit,
     onSpecificPagesChange: (String) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column {
         Text(
             "Options",
@@ -610,7 +613,9 @@ private fun SplitOptionsSection(
                         },
                         isError = hasError,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
 
                     if (rangeCount > 0 && !hasError) {
@@ -630,7 +635,7 @@ private fun SplitOptionsSection(
                             ) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.CallSplit,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(R.string.cd_split_pdf),
                                     modifier = Modifier.size(18.dp),
                                     tint = AccentAmber
                                 )
@@ -687,7 +692,7 @@ private fun SplitOptionsSection(
                     ) {
                         Icon(
                             Icons.Default.Description,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_pdf_file),
                             modifier = Modifier.size(24.dp),
                             tint = AccentAmber
                         )
@@ -725,7 +730,8 @@ private fun SplitOptionsSection(
                         isError = hasError,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
 
                     if (pageCount > 0 && !hasError) {
@@ -745,7 +751,7 @@ private fun SplitOptionsSection(
                             ) {
                                 Icon(
                                     Icons.Default.Description,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(R.string.cd_pdf_file),
                                     modifier = Modifier.size(18.dp),
                                     tint = AccentBlue
                                 )
@@ -776,6 +782,7 @@ private fun SplitBottomSection(
     onSplit: () -> Unit,
     onClearError: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -828,7 +835,9 @@ private fun SplitBottomSection(
             singleLine = true,
             enabled = !isProcessing,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -840,7 +849,7 @@ private fun SplitBottomSection(
         ) {
             Icon(
                 Icons.Default.FolderOpen,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -863,7 +872,7 @@ private fun SplitBottomSection(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp)
         ) {
-            Icon(Icons.AutoMirrored.Filled.CallSplit, contentDescription = null)
+            Icon(Icons.AutoMirrored.Filled.CallSplit, contentDescription = stringResource(R.string.cd_split_pdf))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.tool_split_pdf))
         }
@@ -963,7 +972,7 @@ private fun SuccessState(
                 ) {
                     Icon(
                         Icons.Default.CheckCircle,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_success),
                         modifier = Modifier.size(36.dp),
                         tint = AccentGreen
                     )
@@ -1060,7 +1069,7 @@ private fun SplitResultFileItem(
             ) {
                 Icon(
                     Icons.Default.PictureAsPdf,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentRed
                 )

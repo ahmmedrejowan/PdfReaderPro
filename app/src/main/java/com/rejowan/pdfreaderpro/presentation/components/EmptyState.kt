@@ -91,7 +91,7 @@ fun EmptyState(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_illustration),
                 modifier = Modifier.size(48.dp),
                 tint = accentColor
             )
@@ -253,7 +253,7 @@ fun PermissionRequiredState(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Folder,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_folder),
                 modifier = Modifier.size(48.dp),
                 tint = SoftPurple
             )

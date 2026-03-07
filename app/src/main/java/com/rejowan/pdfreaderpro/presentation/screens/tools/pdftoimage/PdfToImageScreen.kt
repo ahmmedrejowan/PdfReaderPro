@@ -73,7 +73,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -270,7 +273,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Photo,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_pdf_to_image),
                 modifier = Modifier.size(40.dp),
                 tint = AccentPurple
             )
@@ -300,7 +303,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -368,7 +371,7 @@ private fun ExportContent(
             ) {
                 Icon(
                     Icons.Outlined.Image,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_image),
                     modifier = Modifier.size(18.dp),
                     tint = AccentPurple
                 )
@@ -433,7 +436,7 @@ private fun ExportContent(
             onClick = onExport,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(Icons.Default.Photo, contentDescription = null)
+            Icon(Icons.Default.Photo, contentDescription = stringResource(R.string.cd_image))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.export_images))
         }
@@ -474,7 +477,7 @@ private fun SourceFileCard(sourceFile: SourceFile) {
                 } else {
                     Icon(
                         Icons.Default.PictureAsPdf,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_pdf_file),
                         modifier = Modifier.size(32.dp),
                         tint = AccentPurple
                     )
@@ -619,6 +622,7 @@ private fun PageSelector(
         }
 
         AnimatedVisibility(visible = selectedSelection == PageSelection.CUSTOM) {
+            val focusManager = LocalFocusManager.current
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
@@ -627,6 +631,8 @@ private fun PageSelector(
                     label = { Text(stringResource(R.string.page_numbers_label)) },
                     placeholder = { Text(stringResource(R.string.page_numbers_hint)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -662,7 +668,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_success),
                     modifier = Modifier.size(28.dp),
                     tint = AccentGreen
                 )
@@ -700,7 +706,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Folder,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp),
                     tint = AccentPurple
                 )
@@ -723,7 +729,7 @@ private fun SuccessState(
                 onClick = onShareAll,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp))
+                Icon(Icons.Default.Share, contentDescription = stringResource(R.string.cd_share), modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.share_all_images))
             }

@@ -459,13 +459,134 @@
     <string name="pdf_reader_pro">PDF Reader Pro</string>
     <string name="no_pdf_data">No PDF data received</string>
 
-    <!-- Content Descriptions -->
+    <!-- Content Descriptions - Accessibility -->
     <string name="sort_files_desc">Sort files</string>
     <string name="library_stats_desc">Library statistics</string>
     <string name="grid_view">Grid view</string>
     <string name="list_view">List view</string>
     <string name="more">More</string>
     <string name="favorite">Favorite</string>
+
+    <!-- Content Descriptions - Navigation -->
+    <string name="cd_navigate_back">Navigate back</string>
+    <string name="cd_close">Close</string>
+    <string name="cd_dismiss">Dismiss</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_options">Options</string>
+    <string name="cd_expand">Expand</string>
+    <string name="cd_collapse">Collapse</string>
+
+    <!-- Content Descriptions - Actions -->
+    <string name="cd_add">Add</string>
+    <string name="cd_remove">Remove</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_edit">Edit</string>
+    <string name="cd_save">Save</string>
+    <string name="cd_share">Share</string>
+    <string name="cd_download">Download</string>
+    <string name="cd_upload">Upload</string>
+    <string name="cd_refresh">Refresh</string>
+    <string name="cd_search">Search</string>
+    <string name="cd_clear_search">Clear search</string>
+    <string name="cd_close_search">Close search</string>
+    <string name="cd_previous_result">Previous result</string>
+    <string name="cd_next_result">Next result</string>
+    <string name="cd_select">Select</string>
+    <string name="cd_deselect">Deselect</string>
+    <string name="cd_select_all">Select all</string>
+    <string name="cd_deselect_all">Deselect all</string>
+    <string name="cd_reorder">Reorder</string>
+    <string name="cd_drag_handle">Drag to reorder</string>
+    <string name="cd_copy">Copy</string>
+    <string name="cd_move">Move</string>
+    <string name="cd_rename">Rename</string>
+    <string name="cd_info">Information</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_print">Print</string>
+    <string name="cd_open">Open</string>
+    <string name="cd_open_with">Open with</string>
+    <string name="cd_retry">Retry</string>
+
+    <!-- Content Descriptions - PDF Reader -->
+    <string name="cd_zoom_in">Zoom in</string>
+    <string name="cd_zoom_out">Zoom out</string>
+    <string name="cd_fit_width">Fit to width</string>
+    <string name="cd_fit_page">Fit to page</string>
+    <string name="cd_next_page">Next page</string>
+    <string name="cd_previous_page">Previous page</string>
+    <string name="cd_first_page">Go to first page</string>
+    <string name="cd_last_page">Go to last page</string>
+    <string name="cd_go_to_page">Go to page</string>
+    <string name="cd_bookmark">Bookmark</string>
+    <string name="cd_add_bookmark">Add bookmark</string>
+    <string name="cd_remove_bookmark">Remove bookmark</string>
+    <string name="cd_table_of_contents">Table of contents</string>
+    <string name="cd_rotate_left">Rotate left</string>
+    <string name="cd_rotate_right">Rotate right</string>
+    <string name="cd_toggle_night_mode">Toggle night mode</string>
+    <string name="cd_auto_scroll">Auto scroll</string>
+    <string name="cd_increase_speed">Increase speed</string>
+    <string name="cd_decrease_speed">Decrease speed</string>
+    <string name="cd_play">Play</string>
+    <string name="cd_pause">Pause</string>
+    <string name="cd_stop">Stop</string>
+
+    <!-- Content Descriptions - Files -->
+    <string name="cd_pdf_file">PDF file</string>
+    <string name="cd_folder">Folder</string>
+    <string name="cd_image">Image</string>
+    <string name="cd_file_thumbnail">File thumbnail</string>
+    <string name="cd_add_files">Add files</string>
+    <string name="cd_select_files">Select files</string>
+    <string name="cd_file_options">File options</string>
+    <string name="cd_folder_options">Folder options</string>
+    <string name="cd_selected">Selected</string>
+    <string name="cd_not_selected">Not selected</string>
+
+    <!-- Content Descriptions - Status -->
+    <string name="cd_loading">Loading</string>
+    <string name="cd_success">Success</string>
+    <string name="cd_error">Error</string>
+    <string name="cd_warning">Warning</string>
+    <string name="cd_processing">Processing</string>
+    <string name="cd_completed">Completed</string>
+    <string name="cd_progress">Progress indicator</string>
+    <string name="cd_checkbox">Checkbox</string>
+    <string name="cd_checked">Checked</string>
+    <string name="cd_unchecked">Unchecked</string>
+    <string name="cd_toggle">Toggle</string>
+    <string name="cd_enabled">Enabled</string>
+    <string name="cd_disabled">Disabled</string>
+
+    <!-- Content Descriptions - PDF Tools -->
+    <string name="cd_merge_pdfs">Merge PDFs</string>
+    <string name="cd_split_pdf">Split PDF</string>
+    <string name="cd_compress_pdf">Compress PDF</string>
+    <string name="cd_rotate_pdf">Rotate PDF</string>
+    <string name="cd_reorder_pages">Reorder pages</string>
+    <string name="cd_remove_pages">Remove pages</string>
+    <string name="cd_add_watermark">Add watermark</string>
+    <string name="cd_add_page_numbers">Add page numbers</string>
+    <string name="cd_lock_pdf">Lock PDF</string>
+    <string name="cd_unlock_pdf">Unlock PDF</string>
+    <string name="cd_pdf_to_image">Convert PDF to image</string>
+    <string name="cd_image_to_pdf">Convert image to PDF</string>
+    <string name="cd_page_preview">Page preview</string>
+    <string name="cd_page_number">Page %1$d</string>
+    <string name="cd_page_selected">Page %1$d selected</string>
+    <string name="cd_page_not_selected">Page %1$d not selected</string>
+
+    <!-- Content Descriptions - UI Elements -->
+    <string name="cd_app_logo">PDF Reader Pro logo</string>
+    <string name="cd_decorative">Decorative image</string>
+    <string name="cd_illustration">Illustration</string>
+    <string name="cd_sort_ascending">Sort ascending</string>
+    <string name="cd_sort_descending">Sort descending</string>
+    <string name="cd_current_page">Current page</string>
+    <string name="cd_password_visibility">Toggle password visibility</string>
+    <string name="cd_color_picker">Color picker</string>
+    <string name="cd_slider">Slider</string>
+    <string name="cd_dropdown">Dropdown menu</string>
 
     <!-- Navigation -->
     <string name="home">Home</string>
@@ -911,29 +1032,24 @@
     <!-- Settings - Update Interval (renamed) -->
     <string name="auto_check_interval">Auto-check Interval</string>
 
-    <!-- Common accessibility strings -->
+    <!-- Additional accessibility strings (unique) -->
     <string name="cd_back">Back</string>
-    <string name="cd_dismiss">Dismiss</string>
-    <string name="cd_close">Close</string>
-    <string name="cd_selected">Selected</string>
     <string name="cd_preview">Preview</string>
     <string name="cd_view">View</string>
-    <string name="cd_remove">Remove</string>
-    <string name="cd_list_view">List view</string>
-    <string name="cd_grid_view">Grid view</string>
     <string name="cd_sort">Sort</string>
     <string name="cd_low">Low</string>
     <string name="cd_high">High</string>
+    <string name="cd_list_view">List view</string>
+    <string name="cd_grid_view">Grid view</string>
+    <string name="cd_drag_to_reorder">Drag to reorder</string>
     <string name="cd_watermark_image">Watermark image</string>
     <string name="cd_watermark_preview">Watermark preview</string>
-    <string name="cd_page_number">Page %d</string>
-    <string name="cd_share">Share</string>
-    <string name="cd_drag_to_reorder">Drag to reorder</string>
     <string name="cd_reset_order">Reset order</string>
     <string name="cd_add_more_pdfs">Add more PDFs</string>
     <string name="cd_pdf_preview">PDF preview</string>
     <string name="cd_show_password">Show password</string>
     <string name="cd_hide_password">Hide password</string>
+    <string name="cd_favorite">Favorite</string>
 
     <!-- Tool Screen Titles -->
     <string name="tool_rotate_pages">Rotate Pages</string>

@@ -300,7 +300,7 @@ private fun SearchBar(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Search,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(20.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
@@ -416,7 +416,7 @@ private fun EmptySearchState() {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = Icons.Outlined.Search,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(28.dp),
                     tint = FolderAmber
                 )
@@ -460,7 +460,7 @@ private fun StatChip(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp),

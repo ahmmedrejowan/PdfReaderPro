@@ -71,7 +71,7 @@ fun PermissionBottomSheet(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Folder,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_folder),
                     modifier = Modifier.size(40.dp),
                     tint = softPurple
                 )

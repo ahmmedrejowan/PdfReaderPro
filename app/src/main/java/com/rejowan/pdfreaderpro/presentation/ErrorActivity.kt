@@ -110,7 +110,7 @@ private fun ErrorScreen(
         ) {
             Icon(
                 imageVector = Icons.Outlined.BugReport,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_error),
                 modifier = Modifier
                     .padding(20.dp)
                     .size(48.dp),

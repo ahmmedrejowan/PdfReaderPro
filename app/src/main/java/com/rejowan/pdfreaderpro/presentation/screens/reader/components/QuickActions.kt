@@ -39,9 +39,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
 
 private val AccentPurple = Color(0xFF9575CD)
@@ -266,7 +268,7 @@ private fun QuickActionButton(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_decorative),
             tint = contentColor,
             modifier = Modifier.size(20.dp)
         )

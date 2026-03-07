@@ -52,10 +52,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
@@ -194,6 +198,16 @@ private fun RenameContent(
     }
     var isError by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val submitRename = {
+        val trimmedName = textFieldValue.text.trim()
+        if (trimmedName.isNotBlank() && !isError) {
+            keyboardController?.hide()
+            onRename(trimmedName)
+            onDismiss()
+        }
+    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -215,7 +229,7 @@ private fun RenameContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.DriveFileRenameOutline,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -269,6 +283,8 @@ private fun RenameContent(
             },
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { submitRename() }),
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
@@ -289,13 +305,7 @@ private fun RenameContent(
             Spacer(modifier = Modifier.width(10.dp))
 
             Button(
-                onClick = {
-                    val trimmedName = textFieldValue.text.trim()
-                    if (trimmedName.isNotBlank() && !isError) {
-                        onRename(trimmedName)
-                        onDismiss()
-                    }
-                },
+                onClick = { submitRename() },
                 enabled = !isError && textFieldValue.text.isNotBlank(),
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)

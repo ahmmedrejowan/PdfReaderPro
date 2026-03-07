@@ -334,7 +334,7 @@ private fun SidebarContent(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.WbSunny,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.cd_decorative),
                                 modifier = Modifier.size(18.dp),
                                 tint = AccentBlue
                             )
@@ -355,7 +355,7 @@ private fun SidebarContent(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.LightMode,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(16.dp),
                         tint = subtleColor
                     )
@@ -372,7 +372,7 @@ private fun SidebarContent(
                     )
                     Icon(
                         imageVector = Icons.Filled.Brightness6,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(18.dp),
                         tint = subtleColor
                     )
@@ -455,7 +455,7 @@ private fun SettingToggleItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp),
                     tint = accentColor
                 )

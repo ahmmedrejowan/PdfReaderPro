@@ -53,7 +53,7 @@ fun PasswordDialog(
         icon = {
             Icon(
                 imageVector = Icons.Default.Lock,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 tint = MaterialTheme.colorScheme.primary
             )
         },

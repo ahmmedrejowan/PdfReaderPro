@@ -300,7 +300,7 @@ private fun DisplaySheetHeader(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Palette,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -525,7 +525,7 @@ private fun ThemeOption(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_selected),
                         tint = Color.White,
                         modifier = Modifier.size(10.dp)
                     )
@@ -653,7 +653,7 @@ private fun KeepScreenOnRow(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.BrightnessMedium,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         tint = AccentPurple,
                         modifier = Modifier.size(16.dp)
                     )

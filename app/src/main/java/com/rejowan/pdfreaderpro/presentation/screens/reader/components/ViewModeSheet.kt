@@ -446,7 +446,7 @@ private fun SheetHeader(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -574,7 +574,7 @@ private fun ScrollModeChip(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(20.dp),
                 tint = contentColor
             )
@@ -600,7 +600,7 @@ private fun ScrollModeChip(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.option_selected),
+                        contentDescription = stringResource(R.string.cd_checkbox),
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -672,7 +672,7 @@ private fun SnapToggleRow(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.GridView,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(8.dp)
                         .size(18.dp),
@@ -782,7 +782,7 @@ private fun AlignmentChip(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(20.dp),
                 tint = contentColor
             )
@@ -840,7 +840,7 @@ private fun AutoHideToggleRow(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Timer,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(8.dp)
                         .size(18.dp),

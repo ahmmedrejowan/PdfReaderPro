@@ -307,7 +307,7 @@ private fun ExitConfirmContent(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_warning),
                         modifier = Modifier
                             .size(24.dp)
                             .scale(iconScale),
@@ -375,7 +375,7 @@ private fun ExitConfirmContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_close),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -400,7 +400,7 @@ private fun ExitConfirmContent(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))

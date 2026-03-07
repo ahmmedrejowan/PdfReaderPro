@@ -34,7 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
@@ -98,7 +100,7 @@ fun FolderItem(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Folder,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_folder),
                         modifier = Modifier.size(28.dp),
                         tint = FolderAmberDark
                     )

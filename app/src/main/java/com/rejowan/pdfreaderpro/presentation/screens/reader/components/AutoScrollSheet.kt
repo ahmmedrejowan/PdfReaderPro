@@ -213,7 +213,7 @@ private fun AutoScrollSheetContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.PlayArrow,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_auto_scroll),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -285,7 +285,7 @@ private fun AutoScrollSheetContent(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Speed,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(16.dp)
             )
@@ -352,7 +352,7 @@ private fun AutoScrollSheetContent(
         ) {
             Icon(
                 imageVector = Icons.Rounded.PlayArrow,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_play),
                 modifier = Modifier.size(16.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))

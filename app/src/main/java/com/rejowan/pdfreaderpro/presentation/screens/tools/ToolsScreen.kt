@@ -339,7 +339,7 @@ private fun ToolItem(
             ) {
                 Icon(
                     imageVector = tool.icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(10.dp)
                         .size(24.dp),
@@ -390,7 +390,7 @@ private fun ToolItem(
             if (tool.isEnabled) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )

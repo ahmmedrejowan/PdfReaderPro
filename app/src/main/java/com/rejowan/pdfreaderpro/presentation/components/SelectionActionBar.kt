@@ -32,8 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.R
 
 private val SelectionBlue = Color(0xFF2196F3)
 private val AccentRed = Color(0xFFEF5350)
@@ -109,7 +111,7 @@ fun SelectionActionBar(
                     ) {
                         Icon(
                             Icons.Default.SelectAll,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_decorative),
                             modifier = Modifier.size(18.dp),
                             tint = if (selectedCount == totalCount) SelectionBlue
                             else MaterialTheme.colorScheme.onSurfaceVariant

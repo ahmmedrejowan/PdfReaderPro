@@ -78,7 +78,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -234,7 +237,7 @@ fun ReorderScreen(
                             ) {
                                 Icon(
                                     Icons.Default.SwapVert,
-                                    contentDescription = null,
+                                    contentDescription = stringResource(R.string.cd_decorative),
                                     modifier = Modifier.size(18.dp),
                                     tint = AccentIndigo
                                 )
@@ -338,7 +341,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.SwapVert,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_reorder_pages),
                 modifier = Modifier.size(40.dp),
                 tint = AccentIndigo
             )
@@ -368,7 +371,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -426,7 +429,7 @@ private fun PageThumbnailItem(
                 ) {
                     Icon(
                         Icons.Default.PictureAsPdf,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_page_preview),
                         modifier = Modifier.size(32.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
@@ -571,6 +574,7 @@ private fun ReorderBottomSection(
 
         // Output filename
         AnimatedVisibility(visible = !overwriteOriginal) {
+            val focusManager = LocalFocusManager.current
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
@@ -579,6 +583,8 @@ private fun ReorderBottomSection(
                     label = { Text(stringResource(R.string.output_file_name)) },
                     suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -600,7 +606,7 @@ private fun ReorderBottomSection(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                Icon(Icons.Default.SwapVert, contentDescription = null)
+                Icon(Icons.Default.SwapVert, contentDescription = stringResource(R.string.cd_decorative))
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(stringResource(if (isProcessing) R.string.saving else R.string.save_reordered_pdf))
@@ -635,7 +641,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -676,7 +682,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentIndigo
                 )
@@ -712,7 +718,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -724,7 +730,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_share),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

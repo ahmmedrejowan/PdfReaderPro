@@ -63,7 +63,7 @@ fun ErrorDisplay(
         ) {
             Icon(
                 imageVector = Icons.Rounded.ErrorOutline,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_error),
                 tint = ErrorRed,
                 modifier = Modifier.size(32.dp)
             )
@@ -110,7 +110,7 @@ fun ErrorDisplay(
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Refresh,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.cd_retry),
                                 modifier = Modifier.size(18.dp)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
@@ -189,7 +189,7 @@ fun ErrorBanner(
         ) {
             Icon(
                 imageVector = Icons.Rounded.WarningAmber,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_error),
                 tint = ErrorRed,
                 modifier = Modifier.size(20.dp)
             )
@@ -259,7 +259,7 @@ fun FullScreenError(
         ) {
             Icon(
                 imageVector = Icons.Rounded.ErrorOutline,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_error),
                 tint = ErrorRed,
                 modifier = Modifier
                     .padding(16.dp)
@@ -308,7 +308,7 @@ fun FullScreenError(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Refresh,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_retry),
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))

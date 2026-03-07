@@ -42,7 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
@@ -186,7 +188,7 @@ fun PdfListItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Folder,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(14.dp),
                         tint = SoftGray.copy(alpha = 0.7f)
                     )

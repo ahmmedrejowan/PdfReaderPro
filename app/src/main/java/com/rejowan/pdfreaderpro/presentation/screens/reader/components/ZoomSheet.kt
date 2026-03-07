@@ -357,7 +357,7 @@ private fun ZoomSheetHeader(
         ) {
             Icon(
                 imageVector = Icons.Rounded.ZoomIn,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -508,7 +508,9 @@ private fun ZoomButton(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(
+                    if (icon == Icons.Rounded.Add) R.string.cd_zoom_in else R.string.cd_zoom_out
+                ),
                 tint = accentColor,
                 modifier = Modifier.size(20.dp)
             )
@@ -594,7 +596,7 @@ private fun ZoomPresetChip(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp),
                     tint = contentColor
                 )
@@ -692,7 +694,7 @@ private fun OrientationChip(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(18.dp),
                         tint = contentColor
                     )

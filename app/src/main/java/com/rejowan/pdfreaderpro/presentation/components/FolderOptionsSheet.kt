@@ -311,7 +311,7 @@ private fun FolderOptionsHeader(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Folder,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_folder_options),
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -381,7 +381,7 @@ private fun InfoItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -460,7 +460,7 @@ private fun ActionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -487,7 +487,7 @@ private fun ActionItem(
 
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
             )

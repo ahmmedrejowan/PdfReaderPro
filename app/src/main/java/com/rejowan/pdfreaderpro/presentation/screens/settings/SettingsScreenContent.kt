@@ -843,7 +843,7 @@ private fun SettingsOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp),
@@ -871,7 +871,7 @@ private fun SettingsOptionItem(
 
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(20.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
@@ -925,7 +925,7 @@ private fun SettingsToggleItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp),
@@ -1155,7 +1155,7 @@ private fun PickerContent(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1269,7 +1269,7 @@ private fun PickerOptionItem(
             ) {
                 Icon(
                     imageVector = option.icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1460,7 +1460,7 @@ private fun BrightnessContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Brightness6,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1640,7 +1640,7 @@ private fun BrightnessOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -2011,7 +2011,7 @@ private fun PrivacyHighlightItem(text: String) {
     ) {
         Icon(
             imageVector = Icons.Rounded.CheckCircle,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_decorative),
             modifier = Modifier.size(18.dp),
             tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
@@ -2308,7 +2308,7 @@ private fun CreatorLinkItem(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier
                     .padding(8.dp)
                     .size(18.dp),
@@ -2333,7 +2333,7 @@ private fun CreatorLinkItem(
         }
         Icon(
             imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_decorative),
             modifier = Modifier.size(20.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
         )
@@ -2432,7 +2432,7 @@ private fun LicenseTermItem(text: String) {
     ) {
         Icon(
             imageVector = Icons.Rounded.CheckCircle,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_decorative),
             modifier = Modifier.size(18.dp),
             tint = MaterialTheme.colorScheme.onPrimaryContainer
         )

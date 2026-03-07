@@ -79,6 +79,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -313,7 +316,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.DeleteSweep,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_remove_pages),
                 modifier = Modifier.size(40.dp),
                 tint = AccentRed
             )
@@ -343,7 +346,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -567,6 +570,7 @@ private fun RangeInputDialog(
     onDismiss: () -> Unit,
     onConfirm: (Int, Int) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     var startPage by remember { mutableStateOf("1") }
     var endPage by remember { mutableStateOf(totalPages.toString()) }
     var error by remember { mutableStateOf<String?>(null) }
@@ -591,6 +595,8 @@ private fun RangeInputDialog(
                         onValueChange = { startPage = it.filter { c -> c.isDigit() } },
                         label = { Text(stringResource(R.string.from_page)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.weight(1f)
                     )
                     Text(stringResource(R.string.to_page).lowercase(), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -599,6 +605,8 @@ private fun RangeInputDialog(
                         onValueChange = { endPage = it.filter { c -> c.isDigit() } },
                         label = { Text(stringResource(R.string.to_page)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -639,6 +647,7 @@ private fun PageInputDialog(
     onDismiss: () -> Unit,
     onConfirm: (Int) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     var pageInput by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
 
@@ -658,6 +667,8 @@ private fun PageInputDialog(
                     onValueChange = { pageInput = it.filter { c -> c.isDigit() } },
                     label = { Text(label) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
                 error?.let {
@@ -732,7 +743,7 @@ private fun PageThumbnailItem(
                 ) {
                     Icon(
                         Icons.Default.PictureAsPdf,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_page_preview),
                         modifier = Modifier.size(32.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
@@ -769,7 +780,7 @@ private fun PageThumbnailItem(
                 ) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_delete),
                         modifier = Modifier.size(14.dp),
                         tint = Color.White
                     )
@@ -793,6 +804,7 @@ private fun RemoveBottomSection(
     onRemove: () -> Unit,
     onClearError: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -818,7 +830,7 @@ private fun RemoveBottomSection(
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_close),
                         modifier = Modifier.size(18.dp),
                         tint = AccentRed
                     )
@@ -897,6 +909,8 @@ private fun RemoveBottomSection(
                     label = { Text(stringResource(R.string.output_filename_label)) },
                     suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -918,7 +932,7 @@ private fun RemoveBottomSection(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                Icon(Icons.Default.Delete, contentDescription = null)
+                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.cd_delete))
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(
@@ -955,7 +969,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -995,7 +1009,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentBlue
                 )
@@ -1070,7 +1084,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -1082,7 +1096,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_share),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

@@ -112,7 +112,7 @@ fun FloatingSearchBar(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Search,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_search),
                     tint = AccentPurple,
                     modifier = Modifier.size(20.dp)
                 )
@@ -271,7 +271,7 @@ private fun SearchNavButton(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_decorative),
             tint = if (enabled) contentColor else contentColor.copy(alpha = 0.3f),
             modifier = Modifier.size(22.dp)
         )

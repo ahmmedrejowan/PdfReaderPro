@@ -745,7 +745,7 @@ fun OnboardingScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
                                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.cd_decorative),
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -942,7 +942,7 @@ private fun OnboardingPageContent(
             ) {
                 Icon(
                     imageVector = page.icon,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_illustration),
                     modifier = Modifier
                         .size(56.dp)
                         .scale(1f + (pulseScale - 1f) * 0.25f),

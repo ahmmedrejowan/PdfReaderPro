@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -74,6 +75,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -251,7 +253,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Lock,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 modifier = Modifier.size(40.dp),
                 tint = AccentAmber
             )
@@ -281,7 +283,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_decorative))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -464,6 +466,7 @@ private fun LockContent(
                 val isFilenameError = state.outputFileName.isNotEmpty() &&
                         filenameValidation is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid
 
+                val focusManager = LocalFocusManager.current
                 OutlinedTextField(
                     value = state.outputFileName,
                     onValueChange = onOutputFileNameChange,
@@ -482,6 +485,8 @@ private fun LockContent(
                             )
                         }
                     } else null,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -495,7 +500,7 @@ private fun LockContent(
             modifier = Modifier.fillMaxWidth(),
             enabled = !state.isProcessing
         ) {
-            Icon(Icons.Default.Lock, contentDescription = null)
+            Icon(Icons.Default.Lock, contentDescription = stringResource(R.string.cd_decorative))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.tool_lock_pdf))
         }
@@ -542,14 +547,14 @@ private fun SourceFileCard(
                     if (sourceFile.thumbnail != null) {
                         Image(
                             bitmap = sourceFile.thumbnail.asImageBitmap(),
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_file_thumbnail),
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop
                         )
                     } else {
                         Icon(
                             Icons.Default.PictureAsPdf,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_pdf_file),
                             modifier = Modifier.size(28.dp),
                             tint = AccentAmber
                         )
@@ -587,7 +592,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         Icons.Outlined.Visibility,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_decorative),
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
@@ -613,6 +618,7 @@ private fun PasswordField(
     isRequired: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     // Validate password
     val validationResult = remember(value) {
@@ -647,7 +653,11 @@ private fun PasswordField(
             }
         },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
@@ -714,7 +724,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -755,7 +765,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentAmber
                 )
@@ -777,7 +787,7 @@ private fun SuccessState(
                 }
                 Icon(
                     Icons.Default.Lock,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_lock_pdf),
                     modifier = Modifier.size(18.dp),
                     tint = AccentAmber
                 )
@@ -797,7 +807,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -809,7 +819,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

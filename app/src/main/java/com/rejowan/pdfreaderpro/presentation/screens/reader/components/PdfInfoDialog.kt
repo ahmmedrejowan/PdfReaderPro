@@ -221,7 +221,7 @@ private fun PdfInfoContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_info),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -421,7 +421,7 @@ private fun InfoSection(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_decorative),
                 tint = accentColor,
                 modifier = Modifier.size(14.dp)
             )

@@ -17,6 +17,8 @@ import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -83,6 +85,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -341,7 +344,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Compress,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_compress_pdf),
                 modifier = Modifier.size(40.dp),
                 tint = AccentPurple
             )
@@ -370,7 +373,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -411,14 +414,14 @@ private fun SourceFileCard(
                     if (sourceFile.thumbnail != null) {
                         Image(
                             bitmap = sourceFile.thumbnail.asImageBitmap(),
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_file_thumbnail),
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop
                         )
                     } else {
                         Icon(
                             Icons.Default.PictureAsPdf,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_pdf_file),
                             modifier = Modifier.size(32.dp),
                             tint = AccentRed
                         )
@@ -461,7 +464,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         Icons.Outlined.Visibility,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_page_preview),
                         modifier = Modifier.size(18.dp),
                         tint = AccentTeal
                     )
@@ -477,7 +480,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         Icons.Default.SwapVert,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_select_files),
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -566,7 +569,7 @@ private fun CompressionLevelItem(
             ) {
                 Icon(
                     imageVector = Icons.Default.Compress,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_compress_pdf),
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp),
@@ -594,7 +597,7 @@ private fun CompressionLevelItem(
             if (isSelected) {
                 Icon(
                     Icons.Default.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_checkbox),
                     modifier = Modifier.size(20.dp),
                     tint = accentColor
                 )
@@ -657,7 +660,7 @@ private fun SizeEstimatePill(
             ) {
                 Icon(
                     Icons.Default.Compress,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_compress_pdf),
                     modifier = Modifier.size(20.dp),
                     tint = pillColor
                 )
@@ -707,6 +710,7 @@ private fun CompressBottomSection(
     onCompress: () -> Unit,
     onClearError: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -781,6 +785,8 @@ private fun CompressBottomSection(
                     label = { Text(stringResource(R.string.output_filename_label)) },
                     suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -802,7 +808,7 @@ private fun CompressBottomSection(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                Icon(Icons.Default.Compress, contentDescription = null)
+                Icon(Icons.Default.Compress, contentDescription = stringResource(R.string.cd_compress_pdf))
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(if (isProcessing) "Compressing..." else "Compress PDF")
@@ -837,7 +843,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_success),
                 modifier = Modifier.size(48.dp),
                 tint = AccentGreen
             )
@@ -967,7 +973,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_pdf_file),
                     modifier = Modifier.size(20.dp),
                     tint = AccentPurple
                 )
@@ -1003,7 +1009,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -1015,7 +1021,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.OpenInNew,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_open),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -1032,7 +1038,7 @@ private fun SuccessState(
         ) {
             Icon(
                 Icons.Default.Share,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.cd_share),
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))

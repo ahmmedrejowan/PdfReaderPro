@@ -181,7 +181,7 @@ private fun RemoveFavoriteContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.HeartBroken,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_favorite),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),

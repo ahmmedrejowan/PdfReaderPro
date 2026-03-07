@@ -236,7 +236,7 @@ private fun UpdateContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.NewReleases,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_info),
                     modifier = Modifier
                         .padding(12.dp)
                         .size(28.dp),
@@ -288,7 +288,7 @@ private fun UpdateContent(
 
                 Icon(
                     imageVector = Icons.Rounded.SkipNext,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     tint = MaterialTheme.colorScheme.primary
                 )
 
@@ -369,7 +369,7 @@ private fun UpdateContent(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Download,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.cd_download),
                         modifier = Modifier.size(18.dp),
                         tint = MaterialTheme.colorScheme.secondary
                     )
@@ -403,7 +403,7 @@ private fun UpdateContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Schedule,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -420,7 +420,7 @@ private fun UpdateContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Download,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_download),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))

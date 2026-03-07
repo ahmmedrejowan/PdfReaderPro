@@ -264,7 +264,7 @@ private fun TocSheetContent(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.MenuBook,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_table_of_contents),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -327,7 +327,7 @@ private fun TocSheetContent(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Rounded.AttachFile,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_decorative),
                             modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -510,7 +510,7 @@ private fun TocItem(
                         Spacer(modifier = Modifier.width(2.dp))
                         Icon(
                             imageVector = Icons.Rounded.ChevronRight,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_current_page),
                             modifier = Modifier.size(12.dp),
                             tint = Color.White
                         )
@@ -543,7 +543,7 @@ private fun EmptyTocState(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.MenuBook,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     tint = AccentBlue,
                     modifier = Modifier.size(28.dp)
                 )
@@ -620,7 +620,7 @@ private fun AttachmentListItem(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.InsertDriveFile,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -666,7 +666,7 @@ private fun AttachmentListItem(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Download,
-                    contentDescription = "Download",
+                    contentDescription = stringResource(R.string.cd_download),
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -699,7 +699,7 @@ private fun EmptyAttachmentsState(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.AttachFile,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_decorative),
                     tint = AccentTeal,
                     modifier = Modifier.size(28.dp)
                 )
