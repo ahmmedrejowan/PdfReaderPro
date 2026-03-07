@@ -432,6 +432,23 @@
     <string name="error_corrupted_pdf">PDF file is corrupted</string>
     <string name="error_password_required">Password required</string>
     <string name="error_generic">Something went wrong</string>
+    <string name="error_wrong_password">Incorrect password</string>
+    <string name="error_storage_full">Storage is full</string>
+    <string name="error_network">Network error</string>
+    <string name="error_timeout">Operation timed out</string>
+    <string name="error_out_of_memory">Not enough memory</string>
+
+    <!-- Error Recovery Hints -->
+    <string name="error_hint_corrupted_pdf">The file may be damaged. Try downloading it again.</string>
+    <string name="error_hint_invalid_pdf">This file is not a valid PDF document.</string>
+    <string name="error_hint_password_required">Enter the password to open this PDF.</string>
+    <string name="error_hint_wrong_password">Please check your password and try again.</string>
+    <string name="error_hint_storage_full">Free up space by deleting unused files or apps.</string>
+    <string name="error_hint_permission_denied">Grant storage permission in Settings.</string>
+    <string name="error_hint_network">Check your internet connection and try again.</string>
+    <string name="error_hint_timeout">The operation took too long. Try again.</string>
+    <string name="error_hint_out_of_memory">Close other apps and try again with a smaller file.</string>
+    <string name="error_hint_generic">Please try again. If the problem persists, restart the app.</string>
 
     <!-- PDF Thumbnail -->
     <string name="pdf">PDF</string>

@@ -60,6 +60,7 @@ import androidx.compose.material.icons.outlined.Visibility
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -78,6 +79,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -664,13 +666,22 @@ private fun MergeBottomSection(
     onMerge: () -> Unit,
     onClearError: () -> Unit
 ) {
+    // Check if error is recoverable (storage/network issues allow retry)
+    val isRecoverableError = error != null && (
+        error.contains("storage", ignoreCase = true) ||
+        error.contains("space", ignoreCase = true) ||
+        error.contains("network", ignoreCase = true) ||
+        error.contains("timeout", ignoreCase = true) ||
+        error.contains("try again", ignoreCase = true)
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .padding(16.dp)
     ) {
-        // Error message
+        // Error message with retry option
         AnimatedVisibility(visible = error != null) {
             Card(
                 modifier = Modifier
@@ -693,6 +704,22 @@ private fun MergeBottomSection(
                         color = AccentRed,
                         modifier = Modifier.weight(1f)
                     )
+                    if (isRecoverableError && !isProcessing) {
+                        TextButton(
+                            onClick = {
+                                onClearError()
+                                onMerge()
+                            },
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = AccentRed
+                            )
+                        ) {
+                            Text(
+                                stringResource(R.string.retry),
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
+                    }
                     IconButton(
                         onClick = onClearError,
                         modifier = Modifier.size(24.dp)

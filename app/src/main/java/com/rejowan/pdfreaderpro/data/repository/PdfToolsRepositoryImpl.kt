@@ -29,11 +29,13 @@ import com.itextpdf.layout.properties.VerticalAlignment
 import kotlin.math.cos
 import kotlin.math.sin
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
+import com.rejowan.pdfreaderpro.util.ErrorUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 class PdfToolsRepositoryImpl(
     private val context: Context
@@ -46,6 +48,12 @@ class PdfToolsRepositoryImpl(
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             require(inputPaths.size >= 2) { "At least 2 PDFs required for merging" }
+
+            // Estimate required space (sum of input files + 10% overhead)
+            val estimatedSize = inputPaths.sumOf { File(it).length() } * 11 / 10
+            if (!ErrorUtils.hasEnoughStorage(estimatedSize)) {
+                return@withContext Result.failure(IOException("Storage is full. Free up space and try again."))
+            }
 
             val pdfDoc = PdfDocument(PdfWriter(outputPath))
             val merger = PdfMerger(pdfDoc)
@@ -73,6 +81,12 @@ class PdfToolsRepositoryImpl(
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             require(selections.isNotEmpty()) { "At least 1 PDF required for merging" }
+
+            // Pre-flight storage check
+            val estimatedSize = selections.sumOf { File(it.path).length() } * 11 / 10
+            if (!ErrorUtils.hasEnoughStorage(estimatedSize)) {
+                return@withContext Result.failure(IOException("Storage is full. Free up space and try again."))
+            }
 
             val pdfDoc = PdfDocument(PdfWriter(outputPath))
             val merger = PdfMerger(pdfDoc)
