@@ -7,26 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Comprehensive error handling with user-friendly messages
-- Storage space pre-flight checks before file operations
-- Retry functionality for recoverable errors
-- Database indexes for improved query performance
-
-### Changed
-- Optimized app startup time with deferred initialization
-- Improved WebView memory management for large PDFs
-
-### Fixed
-- Fixed recomposition issues with stable keys in lazy lists
-- Fixed input validation for passwords and filenames
-
 ---
 
 ## [2.0.0] - 2026-03-07
 
 ### Added
 - **Complete UI Rewrite** - Rebuilt entirely with Jetpack Compose and Material 3
+- Comprehensive error handling with user-friendly messages
+- Storage space pre-flight checks before file operations
+- Retry functionality for recoverable errors
+- Database indexes for improved query performance
 - **PDF Tools Suite**
   - Merge multiple PDFs with page selection
   - Split PDFs by page ranges
@@ -62,6 +52,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **DI Framework** - Updated Koin configuration with lazy singletons
 - **Minimum SDK** - Raised to API 24 (Android 7.0)
 - **Target SDK** - Updated to API 35 (Android 15)
+- Optimized app startup time with deferred initialization
+- Improved WebView memory management for large PDFs
+
+### Fixed
+- Fixed recomposition issues with stable keys in lazy lists
+- Fixed input validation for passwords and filenames
+- Fixed keyboard handling with proper IME actions across all text fields
+- Fixed accessibility with content descriptions on all interactive elements
 
 ### Removed
 - Legacy XML layouts (replaced with Compose)
