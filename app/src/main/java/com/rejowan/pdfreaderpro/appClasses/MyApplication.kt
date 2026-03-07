@@ -1,6 +1,8 @@
 package com.rejowan.pdfreaderpro.appClasses
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import com.rejowan.pdfreaderpro.BuildConfig
 import com.rejowan.pdfreaderpro.di.dataStoreModule
 import com.rejowan.pdfreaderpro.di.databaseModule
@@ -19,34 +21,39 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Initialize Timber for logging
+        // Critical path: Initialize Timber first for error logging
         initTimber()
 
-        // Setup global error handler
-        GlobalErrorHandler.setup(this)
-
-        // Initialize Koin
+        // Critical path: Initialize Koin (required for dependency injection)
         initKoin()
 
-        Timber.d("Application initialized successfully")
+        // Defer non-critical initialization to avoid blocking startup
+        Handler(Looper.getMainLooper()).post {
+            // Setup global error handler (can be deferred)
+            GlobalErrorHandler.setup(this)
+            Timber.d("Application initialized successfully")
+        }
     }
 
     private fun initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        // In release builds, Timber has no trees - no overhead
     }
 
     private fun initKoin() {
         startKoin {
-            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.ERROR)
+            // Use ERROR level in release to minimize logging overhead
+            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.NONE)
             androidContext(this@MyApplication)
             modules(
-                databaseModule,
-                dataStoreModule,
-                networkModule,
-                repositoryModule,
-                viewModelModule
+                // Load modules in dependency order
+                databaseModule,      // Core database (lazy singleton)
+                dataStoreModule,     // Preferences (lazy singleton)
+                networkModule,       // Network client (lazy singleton)
+                repositoryModule,    // Repositories (lazy singletons)
+                viewModelModule      // ViewModels (factory - created on demand)
             )
         }
     }

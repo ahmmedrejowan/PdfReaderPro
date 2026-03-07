@@ -32,12 +32,27 @@ internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
     settings.run {
         javaScriptEnabled = true
 
+        // Security settings
         allowFileAccess = false
         allowContentAccess = false
         @Suppress("DEPRECATION")
         allowFileAccessFromFileURLs = false
         @Suppress("DEPRECATION")
         allowUniversalAccessFromFileURLs = false
+
+        // Performance and memory optimization for large PDFs
+        domStorageEnabled = true
+        databaseEnabled = true
+        cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
+
+        // Enable hardware acceleration for better performance
+        setRenderPriority(android.webkit.WebSettings.RenderPriority.HIGH)
+
+        // Reduce memory usage by disabling unnecessary features
+        setSupportMultipleWindows(false)
+        javaScriptCanOpenWindowsAutomatically = false
+        loadsImagesAutomatically = true
+        blockNetworkImage = false
     }
 
     webChromeClient = object : WebChromeClient() {

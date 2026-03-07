@@ -356,7 +356,10 @@ private fun TocSheetContent(
                             .fillMaxWidth()
                             .weight(1f)
                     ) {
-                        itemsIndexed(items) { index, item ->
+                        itemsIndexed(
+                            items = items,
+                            key = { index, item -> "toc_${item.page}_$index" }
+                        ) { index, item ->
                             TocItem(
                                 item = item,
                                 isCurrentSection = item.page == currentPage,
@@ -381,7 +384,10 @@ private fun TocSheetContent(
                             .fillMaxWidth()
                             .weight(1f)
                     ) {
-                        itemsIndexed(attachments) { index, attachment ->
+                        itemsIndexed(
+                            items = attachments,
+                            key = { index, attachment -> "attachment_${attachment.title}_$index" }
+                        ) { index, attachment ->
                             AttachmentListItem(
                                 attachment = attachment,
                                 onOpen = { onAttachmentOpen(attachment) },

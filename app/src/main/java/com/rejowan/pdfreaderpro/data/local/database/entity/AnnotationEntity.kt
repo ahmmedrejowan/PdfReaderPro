@@ -1,13 +1,20 @@
 package com.rejowan.pdfreaderpro.data.local.database.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Entity for PDF annotations (highlights, notes, etc.)
  * New in v2 - allows users to add annotations to PDFs.
  */
-@Entity(tableName = "annotations")
+@Entity(
+    tableName = "annotations",
+    indices = [
+        Index(value = ["pdfPath"]),
+        Index(value = ["pdfPath", "pageNumber"])
+    ]
+)
 data class AnnotationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

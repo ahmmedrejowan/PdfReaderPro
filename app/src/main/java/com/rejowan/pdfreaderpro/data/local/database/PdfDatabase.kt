@@ -20,7 +20,7 @@ import com.rejowan.pdfreaderpro.data.local.database.entity.RecentEntity
         BookmarkEntity::class,
         AnnotationEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
 abstract class PdfDatabase : RoomDatabase() {
@@ -34,13 +34,28 @@ abstract class PdfDatabase : RoomDatabase() {
         const val DATABASE_NAME = "pdf_reader_db"
 
         /**
-         * Migration from legacy SQLite (v4) to Room (v5).
-         * This migration:
-         * 1. Creates new tables with Room-compatible schema
-         * 2. Copies data from old tables to new ones
-         * 3. Drops old tables
-         * 4. Creates new bookmark and annotation tables
+         * Migration from v6 to v7.
+         * Adds performance indexes on frequently queried columns:
+         * - favorites: path (unique), name
+         * - bookmarks: pdfPath, pdfPath+pageNumber (unique)
+         * - annotations: pdfPath, pdfPath+pageNumber
          */
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Add indexes to favorites table
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_favorites_path ON favorites (path)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_favorites_name ON favorites (name)")
+
+                // Add indexes to bookmarks table
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_bookmarks_pdfPath ON bookmarks (pdfPath)")
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_bookmarks_pdfPath_pageNumber ON bookmarks (pdfPath, pageNumber)")
+
+                // Add indexes to annotations table
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_annotations_pdfPath ON annotations (pdfPath)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_annotations_pdfPath_pageNumber ON annotations (pdfPath, pageNumber)")
+            }
+        }
+
         /**
          * Migration from v5 to v6.
          * Adds unique index on path column in recent table.
@@ -156,6 +171,6 @@ abstract class PdfDatabase : RoomDatabase() {
             }
         }
 
-        val migrations = arrayOf(MIGRATION_4_5, MIGRATION_5_6)
+        val migrations = arrayOf(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
     }
 }

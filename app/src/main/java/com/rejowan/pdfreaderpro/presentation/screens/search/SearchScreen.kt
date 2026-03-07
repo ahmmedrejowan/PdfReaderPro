@@ -465,7 +465,10 @@ private fun SearchIdleContent(
                 }
             }
 
-            itemsIndexed(displayedSearches) { index, query ->
+            itemsIndexed(
+                items = displayedSearches,
+                key = { _, query -> "recent_$query" }
+            ) { index, query ->
                 RecentSearchItem(
                     query = query,
                     onClick = { onRecentClick(query) },

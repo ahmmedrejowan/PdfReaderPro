@@ -269,7 +269,10 @@ private fun BookmarksSheetContent(
                     .fillMaxWidth()
                     .weight(1f, fill = false)
             ) {
-                itemsIndexed(bookmarks) { index, bookmark ->
+                itemsIndexed(
+                    items = bookmarks,
+                    key = { _, bookmark -> bookmark.id }
+                ) { index, bookmark ->
                     BookmarkItem(
                         bookmark = bookmark,
                         isCurrentPage = bookmark.pageNumber == currentPage,
