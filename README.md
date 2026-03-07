@@ -1,9 +1,7 @@
-# PDF Reader Pro
-
 <div align="center">
   <img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/logo.png" alt="PDF Reader Pro Logo" width="120" height="120">
 
-<h3>Modern PDF Viewer & Editor for Android</h3>
+<h3>Modern PDF Viewer for Android</h3>
 
   <p>
     A feature-rich, privacy-focused PDF app built with Jetpack Compose and Material 3. View, edit, and manage PDFs with 12 powerful tools.
