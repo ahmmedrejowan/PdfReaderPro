@@ -158,7 +158,7 @@ fun MergeScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Merge PDFs")
+                        Text(stringResource(R.string.tool_merge_pdfs))
                         if (state.selectedFiles.isNotEmpty()) {
                             Text(
                                 "${state.selectedFiles.size} files selected",
@@ -382,7 +382,7 @@ private fun EmptyState(
         ) {
             Icon(Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDFs")
+            Text(stringResource(R.string.select_pdfs))
         }
     }
 }
@@ -712,8 +712,8 @@ private fun MergeBottomSection(
         OutlinedTextField(
             value = outputFileName,
             onValueChange = onFileNameChange,
-            label = { Text("Output filename") },
-            suffix = { Text(".pdf") },
+            label = { Text(stringResource(R.string.output_filename_label)) },
+            suffix = { Text(stringResource(R.string.pdf_extension)) },
             singleLine = true,
             enabled = !isProcessing,
             modifier = Modifier.fillMaxWidth(),
@@ -752,7 +752,7 @@ private fun MergeBottomSection(
         ) {
             Icon(Icons.AutoMirrored.Filled.CallMerge, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Merge PDFs")
+            Text(stringResource(R.string.tool_merge_pdfs))
         }
     }
 }
@@ -1266,7 +1266,7 @@ private fun PageSelectionContent(
             FilterChip(
                 selected = selectionMode == SelectionMode.ALL,
                 onClick = { selectionMode = SelectionMode.ALL },
-                label = { Text("All") },
+                label = { Text(stringResource(R.string.quick_select_all)) },
                 modifier = Modifier.weight(1f),
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentAmber.copy(alpha = 0.15f),
@@ -1276,7 +1276,7 @@ private fun PageSelectionContent(
             FilterChip(
                 selected = selectionMode == SelectionMode.RANGE,
                 onClick = { selectionMode = SelectionMode.RANGE },
-                label = { Text("Range") },
+                label = { Text(stringResource(R.string.range_option)) },
                 modifier = Modifier.weight(1f),
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentAmber.copy(alpha = 0.15f),
@@ -1286,7 +1286,7 @@ private fun PageSelectionContent(
             FilterChip(
                 selected = selectionMode == SelectionMode.CUSTOM,
                 onClick = { selectionMode = SelectionMode.CUSTOM },
-                label = { Text("Custom") },
+                label = { Text(stringResource(R.string.custom)) },
                 modifier = Modifier.weight(1f),
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentAmber.copy(alpha = 0.15f),
@@ -1337,7 +1337,7 @@ private fun PageSelectionContent(
                     OutlinedTextField(
                         value = rangeStart,
                         onValueChange = { rangeStart = it.filter { c -> c.isDigit() } },
-                        label = { Text("From") },
+                        label = { Text(stringResource(R.string.from_page)) },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(8.dp),
                         singleLine = true
@@ -1345,7 +1345,7 @@ private fun PageSelectionContent(
                     OutlinedTextField(
                         value = rangeEnd,
                         onValueChange = { rangeEnd = it.filter { c -> c.isDigit() } },
-                        label = { Text("To") },
+                        label = { Text(stringResource(R.string.to_page)) },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(8.dp),
                         singleLine = true
@@ -1364,12 +1364,12 @@ private fun PageSelectionContent(
                 OutlinedTextField(
                     value = customPages,
                     onValueChange = { customPages = it },
-                    label = { Text("Page numbers") },
-                    placeholder = { Text("e.g., 1, 3, 5-8, 12") },
+                    label = { Text(stringResource(R.string.page_numbers_label)) },
+                    placeholder = { Text(stringResource(R.string.page_numbers_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
                     supportingText = {
-                        Text("Enter page numbers or ranges separated by commas")
+                        Text(stringResource(R.string.page_numbers_help))
                     }
                 )
             }

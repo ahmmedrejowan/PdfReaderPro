@@ -137,7 +137,7 @@ fun PageNumbersScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Add Page Numbers")
+                        Text(stringResource(R.string.tool_add_page_numbers))
                         state.sourceFile?.let { file ->
                             Text(
                                 file.name,
@@ -208,7 +208,7 @@ fun PageNumbersScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(color = AccentOrange)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Loading PDF...")
+                            Text(stringResource(R.string.loading_pdf))
                         }
                     }
                 }
@@ -310,7 +310,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -384,16 +384,16 @@ private fun PageNumbersContent(
                     OutlinedTextField(
                         value = state.customPrefix,
                         onValueChange = onPrefixChange,
-                        label = { Text("Prefix") },
-                        placeholder = { Text("e.g., Page ") },
+                        label = { Text(stringResource(R.string.prefix_label)) },
+                        placeholder = { Text(stringResource(R.string.prefix_hint)) },
                         singleLine = true,
                         modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
                         value = state.customSuffix,
                         onValueChange = onSuffixChange,
-                        label = { Text("Suffix") },
-                        placeholder = { Text("e.g., .") },
+                        label = { Text(stringResource(R.string.suffix_label)) },
+                        placeholder = { Text(stringResource(R.string.suffix_hint)) },
                         singleLine = true,
                         modifier = Modifier.weight(1f)
                     )
@@ -486,7 +486,7 @@ private fun PageNumbersContent(
             OutlinedTextField(
                 value = state.startNumber.toString(),
                 onValueChange = { it.toIntOrNull()?.let(onStartNumberChange) },
-                label = { Text("Start Number") },
+                label = { Text(stringResource(R.string.start_number)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f)
@@ -596,8 +596,8 @@ private fun PageNumbersContent(
                 OutlinedTextField(
                     value = state.outputFileName,
                     onValueChange = onOutputFileNameChange,
-                    label = { Text("Output file name") },
-                    suffix = { Text(".pdf") },
+                    label = { Text(stringResource(R.string.output_filename_label)) },
+                    suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -614,7 +614,7 @@ private fun PageNumbersContent(
         ) {
             Icon(Icons.Default.FormatListNumbered, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Add Page Numbers")
+            Text(stringResource(R.string.tool_add_page_numbers))
         }
 
         Spacer(modifier = Modifier.height(80.dp))
@@ -1009,12 +1009,12 @@ private fun ColorPickerSheet(
                         hexInput = filtered
                         updateRgbFromHex(filtered)
                     },
-                    label = { Text("Hex") },
-                    prefix = { Text("#") },
+                    label = { Text(stringResource(R.string.hex_label)) },
+                    prefix = { Text(stringResource(R.string.hex_prefix)) },
                     singleLine = true,
                     isError = hexInput.isNotEmpty() && !isHexValid,
                     supportingText = if (hexInput.isNotEmpty() && !isHexValid) {
-                        { Text("Enter 6 hex characters (0-9, A-F)") }
+                        { Text(stringResource(R.string.hex_help)) }
                     } else null,
                     modifier = Modifier.fillMaxWidth(),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
@@ -1037,7 +1037,7 @@ private fun ColorPickerSheet(
                                 updateHexFromRgb()
                             }
                         },
-                        label = { Text("R") },
+                        label = { Text(stringResource(R.string.color_r)) },
                         singleLine = true,
                         isError = redText.isNotEmpty() && !isRedValid,
                         modifier = Modifier.weight(1f)
@@ -1052,7 +1052,7 @@ private fun ColorPickerSheet(
                                 updateHexFromRgb()
                             }
                         },
-                        label = { Text("G") },
+                        label = { Text(stringResource(R.string.color_g)) },
                         singleLine = true,
                         isError = greenText.isNotEmpty() && !isGreenValid,
                         modifier = Modifier.weight(1f)
@@ -1067,7 +1067,7 @@ private fun ColorPickerSheet(
                                 updateHexFromRgb()
                             }
                         },
-                        label = { Text("B") },
+                        label = { Text(stringResource(R.string.color_b)) },
                         singleLine = true,
                         isError = blueText.isNotEmpty() && !isBlueValid,
                         modifier = Modifier.weight(1f)
@@ -1097,10 +1097,10 @@ private fun ColorPickerSheet(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                     Button(onClick = { onColorSelected(selectedColor) }, modifier = Modifier.weight(1f)) {
-                        Text("Select")
+                        Text(stringResource(R.string.select_action))
                     }
                 }
 
@@ -1244,7 +1244,7 @@ private fun PageSelector(
                 OutlinedTextField(
                     value = skipFirstN.toString(),
                     onValueChange = { it.toIntOrNull()?.let(onSkipFirstNChange) },
-                    label = { Text("Skip first N pages") },
+                    label = { Text(stringResource(R.string.skip_first_pages)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
@@ -1258,8 +1258,8 @@ private fun PageSelector(
                 OutlinedTextField(
                     value = customPages,
                     onValueChange = onCustomPagesChange,
-                    label = { Text("Page numbers") },
-                    placeholder = { Text("e.g., 1-5, 8, 10-12") },
+                    label = { Text(stringResource(R.string.page_numbers_label)) },
+                    placeholder = { Text(stringResource(R.string.page_numbers_hint)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )

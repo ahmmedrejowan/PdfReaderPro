@@ -918,4 +918,231 @@
     <string name="cd_show_password">Show password</string>
     <string name="cd_hide_password">Hide password</string>
 
+    <!-- Tool Screen Titles -->
+    <string name="tool_rotate_pages">Rotate Pages</string>
+    <string name="tool_reorder_pages">Reorder Pages</string>
+    <string name="tool_lock_pdf">Lock PDF</string>
+    <string name="tool_unlock_pdf">Unlock PDF</string>
+    <string name="tool_split_pdf">Split PDF</string>
+    <string name="tool_compress_pdf">Compress PDF</string>
+    <string name="tool_merge_pdfs">Merge PDFs</string>
+    <string name="tool_pdf_to_images">PDF to Images</string>
+    <string name="tool_image_to_pdf">Image to PDF</string>
+    <string name="tool_remove_pages">Remove Pages</string>
+    <string name="tool_add_page_numbers">Add Page Numbers</string>
+    <string name="tool_add_watermark">Add Watermark</string>
+    <string name="tool_rotate_pdf_pages">Rotate PDF Pages</string>
+    <string name="tool_reorder_pdf_pages">Reorder PDF Pages</string>
+
+    <!-- Tool Screen Subtitles/Descriptions -->
+    <string name="tool_rotate_desc">Select a PDF file to rotate its pages by 90°, 180°, or 270°</string>
+    <string name="tool_reorder_desc">Drag and drop pages to rearrange their order in the PDF</string>
+    <string name="tool_lock_desc">Add password protection to prevent unauthorized access</string>
+    <string name="tool_unlock_desc">Remove password protection from a PDF file</string>
+    <string name="tool_split_desc">Split a PDF into multiple smaller files</string>
+    <string name="tool_compress_desc">Reduce PDF file size while maintaining quality</string>
+    <string name="tool_merge_desc">Combine multiple PDF files into one</string>
+    <string name="tool_pdf_to_images_desc">Export PDF pages as image files</string>
+    <string name="tool_image_to_pdf_desc">Convert your images into a single PDF document</string>
+    <string name="tool_remove_pages_desc">Remove unwanted pages from your PDF</string>
+    <string name="tool_page_numbers_desc">Add page numbers to your PDF</string>
+    <string name="tool_watermark_desc">Add text or image watermark to your PDF</string>
+
+    <!-- Common Tool Actions -->
+    <string name="new_file">New File</string>
+    <string name="new_export">New Export</string>
+    <string name="new_conversion">New Conversion</string>
+    <string name="add_more">Add More</string>
+    <string name="share_all_images">Share All Images</string>
+    <string name="export_images">Export Images</string>
+    <string name="rotate_pages">Rotate Pages</string>
+    <string name="save_reordered_pdf">Save Reordered PDF</string>
+    <string name="create_pdf">Create PDF</string>
+    <string name="overwrite_original_file">Overwrite original file</string>
+
+    <!-- Loading/Processing Messages -->
+    <string name="loading_pages">Loading pages…</string>
+    <string name="loading_pdf">Loading PDF…</string>
+    <string name="checking_pdf">Checking PDF…</string>
+    <string name="rotating">Rotating…</string>
+    <string name="saving">Saving…</string>
+    <string name="locking">Locking…</string>
+    <string name="unlocking">Unlocking…</string>
+    <string name="splitting">Splitting…</string>
+    <string name="compressing">Compressing…</string>
+    <string name="merging">Merging…</string>
+    <string name="exporting">Exporting…</string>
+    <string name="creating_pdf">Creating PDF…</string>
+    <string name="removing_pages">Removing…</string>
+    <string name="adding_page_numbers">Adding page numbers…</string>
+    <string name="adding_watermark">Adding watermark…</string>
+
+    <!-- Success Messages -->
+    <string name="rotation_complete">Rotation Complete!</string>
+    <string name="pages_reordered">Pages Reordered!</string>
+    <string name="pdf_locked">PDF Locked!</string>
+    <string name="pdf_unlocked">PDF Unlocked!</string>
+    <string name="pdf_split">PDF Split!</string>
+    <string name="pdf_compressed">PDF Compressed!</string>
+    <string name="pdfs_merged">PDFs Merged!</string>
+    <string name="images_exported">Images Exported!</string>
+    <string name="pdf_created">PDF Created!</string>
+    <string name="page_numbers_added">Page Numbers Added!</string>
+
+    <!-- Success Descriptions -->
+    <string name="pages_rotated_count">%d page(s) rotated</string>
+    <string name="pdf_saved_new_order">Your PDF has been saved with the new page order</string>
+    <string name="pdf_password_protected">Your PDF is now password protected</string>
+    <string name="password_protection_removed">Password protection has been removed</string>
+    <string name="images_created_count">%d %s image(s) created</string>
+    <string name="images_converted_count">%d image(s) converted</string>
+    <string name="pages_removed_count">%d page(s) removed</string>
+
+    <!-- Section Labels -->
+    <string name="section_rotation">ROTATION</string>
+    <string name="section_select_pages">SELECT PAGES</string>
+    <string name="section_owner_password">OWNER PASSWORD (REQUIRED)</string>
+    <string name="section_user_password">USER PASSWORD (OPTIONAL)</string>
+    <string name="section_permissions">PERMISSIONS</string>
+    <string name="section_enter_password">ENTER PASSWORD</string>
+    <string name="section_output_format">OUTPUT FORMAT</string>
+    <string name="section_pages_to_export">PAGES TO EXPORT</string>
+    <string name="section_images">IMAGES</string>
+    <string name="section_split_mode">SPLIT MODE</string>
+    <string name="section_compression_level">COMPRESSION LEVEL</string>
+    <string name="section_position">POSITION</string>
+    <string name="section_appearance">APPEARANCE</string>
+    <string name="section_watermark_type">WATERMARK TYPE</string>
+    <string name="section_text_settings">TEXT SETTINGS</string>
+    <string name="section_start_page">START PAGE</string>
+
+    <!-- Password Descriptions -->
+    <string name="owner_password_desc">Full access password for editing permissions</string>
+    <string name="user_password_desc">Required to open the PDF. Leave empty for no open password.</string>
+    <string name="enter_password_desc">Enter the password to unlock this PDF</string>
+    <string name="permissions_desc">What users can do when opening with user password</string>
+    <string name="allow_copying_content">Allow Copying Content</string>
+
+    <!-- Protection Status -->
+    <string name="password_protected">Password protected</string>
+    <string name="not_protected">Not protected</string>
+    <string name="no_password_protection">No Password Protection</string>
+
+    <!-- Page Selection -->
+    <string name="all_pages_count">All %d pages</string>
+    <string name="selected_of_count">%d of %d selected</string>
+    <string name="pages_modified">%d pages • Modified</string>
+    <string name="page_numbers_label">Page numbers</string>
+    <string name="page_numbers_hint">e.g., 1-5, 8, 10-12</string>
+    <string name="all_pages_label">All Pages (%d)</string>
+    <string name="quick_select_all">All</string>
+    <string name="quick_select_odd">Odd</string>
+    <string name="quick_select_even">Even</string>
+    <string name="quick_select_first_half">1st ½</string>
+    <string name="quick_select_second_half">2nd ½</string>
+    <string name="was_page">was %d</string>
+
+    <!-- Reorder -->
+    <string name="drag_hint">Long press and drag pages to reorder</string>
+
+    <!-- Format Options -->
+    <string name="format_png">PNG</string>
+    <string name="format_jpg">JPG</string>
+    <string name="format_lossless">Lossless quality</string>
+    <string name="format_smaller_size">Smaller file size</string>
+    <string name="will_create_images">Will create %d %s image(s)</string>
+
+    <!-- Compression Levels -->
+    <string name="compression_low">Low</string>
+    <string name="compression_medium">Medium</string>
+    <string name="compression_high">High</string>
+    <string name="compression_extreme">Extreme</string>
+    <string name="compression_low_desc">Best quality, larger file</string>
+    <string name="compression_medium_desc">Balanced quality and size</string>
+    <string name="compression_high_desc">Smaller file, reduced quality</string>
+    <string name="compression_extreme_desc">Smallest file, lowest quality</string>
+
+    <!-- Split Modes -->
+    <string name="split_extract_pages">Extract Pages</string>
+    <string name="split_single_pages">Single Pages</string>
+    <string name="split_range_desc">Split into a single PDF from page range</string>
+    <string name="split_extract_desc">Extract specific pages as a new PDF</string>
+    <string name="split_single_desc">Each page as separate PDF file</string>
+
+    <!-- Merge -->
+    <string name="no_pdfs_selected">No PDFs Selected</string>
+    <string name="add_pdfs_to_merge">Add two or more PDF files to merge them into a single document</string>
+    <string name="files_selected">%d files selected</string>
+    <string name="files_merged">%d files merged</string>
+
+    <!-- Image to PDF -->
+    <string name="images_selected">%d image(s) selected</string>
+    <string name="create_pdf_pages">Create PDF (%d pages)</string>
+
+    <!-- Page Numbers -->
+    <string name="position_bottom_left">Bottom Left</string>
+    <string name="position_bottom_center">Bottom Center</string>
+    <string name="position_bottom_right">Bottom Right</string>
+    <string name="position_top_left">Top Left</string>
+    <string name="position_top_center">Top Center</string>
+    <string name="position_top_right">Top Right</string>
+    <string name="format_simple">1, 2, 3</string>
+    <string name="format_dash">- 1 -</string>
+    <string name="format_page_of">Page 1 of N</string>
+
+    <!-- Watermark -->
+    <string name="watermark_text_label">Watermark Text</string>
+    <string name="watermark_text_hint">Enter watermark text</string>
+    <string name="watermark_type_text">Text</string>
+    <string name="watermark_type_image">Image</string>
+    <string name="scale">Scale</string>
+    <string name="watermark_preview_area">Watermark preview area</string>
+    <string name="no_image_selected">No image selected</string>
+
+    <!-- Remove Pages -->
+    <string name="pages_to_remove">%d pages to remove</string>
+    <string name="remove_selected_pages">Remove %d Pages</string>
+    <string name="remove_pages_btn">Remove Pages</string>
+    <string name="select_pages_to_remove_hint">Tap pages to select them for removal</string>
+
+    <!-- File Info in Results -->
+    <string name="pages_size_format">%d pages • %s</string>
+
+    <!-- Merge Screen -->
+    <string name="pdf_extension">.pdf</string>
+    <string name="select_pdfs">Select PDFs</string>
+    <string name="output_filename_label">Output filename</string>
+    <string name="range_option">Range</string>
+    <string name="from_page">From</string>
+    <string name="to_page">To</string>
+    <string name="page_numbers_example">e.g., 1, 3, 5-8, 12</string>
+    <string name="page_numbers_help">Enter page numbers or ranges separated by commas</string>
+
+    <!-- Split Screen -->
+    <string name="change">Change</string>
+    <string name="page_ranges_label">Page Ranges</string>
+    <string name="page_ranges_example">e.g., 1-5, 6-10, 11-15</string>
+    <string name="pages_to_extract_label">Pages to Extract</string>
+    <string name="split_range_help">Each range creates a separate PDF. Pages: 1-%d</string>
+    <string name="extract_pages_help">Creates a single PDF with selected pages. Pages: 1-%d</string>
+    <string name="output_prefix_label">Output prefix</string>
+    <string name="split_another_pdf">Split Another PDF</string>
+
+    <!-- Remove Pages Screen -->
+    <string name="select_page_range">Select Page Range</string>
+    <string name="select_action">Select</string>
+
+    <!-- Page Numbers Screen -->
+    <string name="prefix_label">Prefix</string>
+    <string name="prefix_hint">e.g., Page</string>
+    <string name="suffix_label">Suffix</string>
+    <string name="suffix_hint">e.g., .</string>
+    <string name="hex_label">Hex</string>
+    <string name="hex_prefix">#</string>
+    <string name="hex_help">Enter 6 hex characters (0-9, A-F)</string>
+    <string name="color_r">R</string>
+    <string name="color_g">G</string>
+    <string name="color_b">B</string>
+    <string name="skip_first_pages">Skip first N pages</string>
+
 </resources>

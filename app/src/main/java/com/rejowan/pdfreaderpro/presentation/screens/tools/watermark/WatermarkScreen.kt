@@ -145,7 +145,7 @@ fun WatermarkScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Add Watermark")
+                        Text(stringResource(R.string.tool_add_watermark))
                         state.sourceFile?.let { file ->
                             Text(
                                 file.name,
@@ -216,7 +216,7 @@ fun WatermarkScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(color = AccentCyan)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Loading PDF...")
+                            Text(stringResource(R.string.loading_pdf))
                         }
                     }
                 }
@@ -319,7 +319,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -387,13 +387,13 @@ private fun WatermarkContent(
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("Apply")
+                    Text(stringResource(R.string.apply))
                 }
                 OutlinedButton(
                     onClick = onReset,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Reset")
+                    Text(stringResource(R.string.reset))
                 }
             }
         }
@@ -526,8 +526,8 @@ private fun WatermarkContent(
                     OutlinedTextField(
                         value = state.outputFileName,
                         onValueChange = onOutputFileNameChange,
-                        label = { Text("Output file name") },
-                        suffix = { Text(".pdf") },
+                        label = { Text(stringResource(R.string.output_filename_label)) },
+                        suffix = { Text(stringResource(R.string.pdf_extension)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -636,7 +636,7 @@ private fun TextWatermarkSettings(
         OutlinedTextField(
             value = text,
             onValueChange = onTextChange,
-            label = { Text("Watermark text") },
+            label = { Text(stringResource(R.string.watermark_text_label)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -1026,12 +1026,12 @@ private fun ColorPickerSheet(
                         hexInput = filtered
                         updateRgbFromHex(filtered)
                     },
-                    label = { Text("Hex") },
-                    prefix = { Text("#") },
+                    label = { Text(stringResource(R.string.hex_label)) },
+                    prefix = { Text(stringResource(R.string.hex_prefix)) },
                     singleLine = true,
                     isError = hexInput.isNotEmpty() && !isHexValid,
                     supportingText = if (hexInput.isNotEmpty() && !isHexValid) {
-                        { Text("Enter 6 hex characters (0-9, A-F)") }
+                        { Text(stringResource(R.string.hex_help)) }
                     } else null,
                     modifier = Modifier.fillMaxWidth(),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
@@ -1054,7 +1054,7 @@ private fun ColorPickerSheet(
                                 updateHexFromRgb()
                             }
                         },
-                        label = { Text("R") },
+                        label = { Text(stringResource(R.string.color_r)) },
                         singleLine = true,
                         isError = redText.isNotEmpty() && !isRedValid,
                         modifier = Modifier.weight(1f)
@@ -1069,7 +1069,7 @@ private fun ColorPickerSheet(
                                 updateHexFromRgb()
                             }
                         },
-                        label = { Text("G") },
+                        label = { Text(stringResource(R.string.color_g)) },
                         singleLine = true,
                         isError = greenText.isNotEmpty() && !isGreenValid,
                         modifier = Modifier.weight(1f)
@@ -1084,7 +1084,7 @@ private fun ColorPickerSheet(
                                 updateHexFromRgb()
                             }
                         },
-                        label = { Text("B") },
+                        label = { Text(stringResource(R.string.color_b)) },
                         singleLine = true,
                         isError = blueText.isNotEmpty() && !isBlueValid,
                         modifier = Modifier.weight(1f)
@@ -1138,13 +1138,13 @@ private fun ColorPickerSheet(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                     Button(
                         onClick = { onColorSelected(selectedColor) },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Select")
+                        Text(stringResource(R.string.select_action))
                     }
                 }
 
@@ -1501,8 +1501,8 @@ private fun PageSelector(
                 OutlinedTextField(
                     value = customPages,
                     onValueChange = onCustomPagesChange,
-                    label = { Text("Page numbers") },
-                    placeholder = { Text("e.g., 1-5, 8, 10-12") },
+                    label = { Text(stringResource(R.string.page_numbers_label)) },
+                    placeholder = { Text(stringResource(R.string.page_numbers_hint)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )

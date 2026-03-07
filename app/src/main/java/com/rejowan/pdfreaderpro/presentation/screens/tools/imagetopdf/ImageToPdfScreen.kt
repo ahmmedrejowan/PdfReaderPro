@@ -113,10 +113,10 @@ fun ImageToPdfScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Image to PDF")
+                        Text(stringResource(R.string.tool_image_to_pdf))
                         if (state.images.isNotEmpty()) {
                             Text(
-                                "${state.images.size} image${if (state.images.size > 1) "s" else ""} selected",
+                                stringResource(R.string.images_selected, state.images.size),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = AccentTeal
                             )
@@ -254,7 +254,7 @@ private fun EmptyState(onSelectImages: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Image to PDF",
+            stringResource(R.string.tool_image_to_pdf),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -262,7 +262,7 @@ private fun EmptyState(onSelectImages: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Convert your images into a single PDF document",
+            stringResource(R.string.tool_image_to_pdf_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -277,7 +277,7 @@ private fun EmptyState(onSelectImages: () -> Unit) {
         ) {
             Icon(Icons.Default.Image, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select Images")
+            Text(stringResource(R.string.select_images))
         }
     }
 }
@@ -309,7 +309,7 @@ private fun ImageListContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "IMAGES (${state.images.size})",
+                        stringResource(R.string.section_images) + " (${state.images.size})",
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.SemiBold,
                             letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
@@ -327,7 +327,7 @@ private fun ImageListContent(
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Add More", style = MaterialTheme.typography.labelSmall)
+                        Text(stringResource(R.string.add_more), style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }
@@ -487,8 +487,8 @@ private fun ConvertBottomSection(
         OutlinedTextField(
             value = outputFileName,
             onValueChange = onFileNameChange,
-            label = { Text("Output file name") },
-            suffix = { Text(".pdf") },
+            label = { Text(stringResource(R.string.output_file_name)) },
+            suffix = { Text(stringResource(R.string.pdf_extension)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -502,7 +502,7 @@ private fun ConvertBottomSection(
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Create PDF ($imageCount page${if (imageCount > 1) "s" else ""})")
+            Text(stringResource(R.string.create_pdf_pages, imageCount))
         }
     }
 }
@@ -541,7 +541,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "PDF Created!",
+            stringResource(R.string.pdf_created),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -549,7 +549,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "${result.pageCount} image${if (result.pageCount > 1) "s" else ""} converted",
+            stringResource(R.string.images_converted_count, result.pageCount),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -586,7 +586,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${result.pageCount} pages - ${formatFileSize(result.fileSize)}",
+                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -610,7 +610,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open", maxLines = 1)
+                Text(stringResource(R.string.open), maxLines = 1)
             }
             OutlinedButton(
                 onClick = onShare,
@@ -622,7 +622,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Share", maxLines = 1)
+                Text(stringResource(R.string.share), maxLines = 1)
             }
         }
 
@@ -636,13 +636,13 @@ private fun SuccessState(
                 onClick = onConvertMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("New Conversion", maxLines = 1)
+                Text(stringResource(R.string.new_conversion), maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done", maxLines = 1)
+                Text(stringResource(R.string.done), maxLines = 1)
             }
         }
     }
@@ -678,7 +678,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Creating PDF...",
+                    stringResource(R.string.creating_pdf),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     )

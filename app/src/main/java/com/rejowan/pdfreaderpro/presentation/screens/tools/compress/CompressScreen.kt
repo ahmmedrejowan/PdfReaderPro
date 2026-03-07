@@ -123,7 +123,7 @@ fun CompressScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Compress PDF")
+                        Text(stringResource(R.string.tool_compress_pdf))
                         state.sourceFile?.let { file ->
                             Text(
                                 "${file.pageCount} pages • ${formatFileSize(file.size)}",
@@ -372,7 +372,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -466,7 +466,7 @@ private fun SourceFileCard(
                         tint = AccentTeal
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Preview")
+                    Text(stringResource(R.string.preview))
                 }
 
                 // Change file button
@@ -481,7 +481,7 @@ private fun SourceFileCard(
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Change File")
+                    Text(stringResource(R.string.change_file))
                 }
             }
         }
@@ -778,8 +778,8 @@ private fun CompressBottomSection(
                 OutlinedTextField(
                     value = outputFileName,
                     onValueChange = onFileNameChange,
-                    label = { Text("Output file name") },
-                    suffix = { Text(".pdf") },
+                    label = { Text(stringResource(R.string.output_filename_label)) },
+                    suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -1007,7 +1007,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open in App")
+                Text(stringResource(R.string.open_in_app))
             }
             OutlinedButton(
                 onClick = onOpenWith,
@@ -1019,7 +1019,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open With")
+                Text(stringResource(R.string.open_with))
             }
         }
 
@@ -1036,7 +1036,7 @@ private fun SuccessState(
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Share")
+            Text(stringResource(R.string.share))
         }
 
         Spacer(modifier = Modifier.weight(1f))

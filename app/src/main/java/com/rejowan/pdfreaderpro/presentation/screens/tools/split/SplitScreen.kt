@@ -122,7 +122,7 @@ fun SplitScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Split PDF")
+                        Text(stringResource(R.string.tool_split_pdf))
                         state.sourceFile?.let { file ->
                             Text(
                                 "${file.pageCount} pages • ${state.splitMode.toDisplayName()}",
@@ -386,7 +386,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -469,7 +469,7 @@ private fun SourceFileCard(
                 onClick = onChangeFile,
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Change")
+                Text(stringResource(R.string.change))
             }
         }
     }
@@ -601,12 +601,12 @@ private fun SplitOptionsSection(
                     OutlinedTextField(
                         value = state.rangesInput,
                         onValueChange = onRangesChange,
-                        label = { Text("Page Ranges") },
-                        placeholder = { Text("e.g., 1-5, 6-10, 11-15") },
+                        label = { Text(stringResource(R.string.page_ranges_label)) },
+                        placeholder = { Text(stringResource(R.string.page_ranges_example)) },
                         supportingText = {
                             state.rangesError?.let { error ->
                                 Text(error, color = AccentRed)
-                            } ?: Text("Each range creates a separate PDF. Pages: 1-${state.sourceFile?.pageCount ?: 0}")
+                            } ?: Text(stringResource(R.string.split_range_help, state.sourceFile?.pageCount ?: 0))
                         },
                         isError = hasError,
                         modifier = Modifier.fillMaxWidth(),
@@ -715,12 +715,12 @@ private fun SplitOptionsSection(
                     OutlinedTextField(
                         value = state.specificPagesInput,
                         onValueChange = onSpecificPagesChange,
-                        label = { Text("Pages to Extract") },
-                        placeholder = { Text("e.g., 1, 3, 5-8, 12") },
+                        label = { Text(stringResource(R.string.pages_to_extract_label)) },
+                        placeholder = { Text(stringResource(R.string.page_numbers_example)) },
                         supportingText = {
                             state.specificPagesError?.let { error ->
                                 Text(error, color = AccentRed)
-                            } ?: Text("Creates a single PDF with selected pages. Pages: 1-${state.sourceFile?.pageCount ?: 0}")
+                            } ?: Text(stringResource(R.string.extract_pages_help, state.sourceFile?.pageCount ?: 0))
                         },
                         isError = hasError,
                         modifier = Modifier.fillMaxWidth(),
@@ -824,7 +824,7 @@ private fun SplitBottomSection(
         OutlinedTextField(
             value = outputPrefix,
             onValueChange = onPrefixChange,
-            label = { Text("Output prefix") },
+            label = { Text(stringResource(R.string.output_prefix_label)) },
             singleLine = true,
             enabled = !isProcessing,
             modifier = Modifier.fillMaxWidth(),
@@ -865,7 +865,7 @@ private fun SplitBottomSection(
         ) {
             Icon(Icons.AutoMirrored.Filled.CallSplit, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Split PDF")
+            Text(stringResource(R.string.tool_split_pdf))
         }
     }
 }
@@ -1015,7 +1015,7 @@ private fun SuccessState(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Split Another PDF")
+                Text(stringResource(R.string.split_another_pdf))
             }
 
             OutlinedButton(
@@ -1023,7 +1023,7 @@ private fun SuccessState(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Done")
+                Text(stringResource(R.string.done))
             }
         }
     }

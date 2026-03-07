@@ -115,10 +115,10 @@ fun UnlockScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Unlock PDF")
+                        Text(stringResource(R.string.tool_unlock_pdf))
                         state.sourceFile?.let { file ->
                             Text(
-                                if (file.isPasswordProtected) "Password protected" else "Not protected",
+                                stringResource(if (file.isPasswordProtected) R.string.password_protected else R.string.not_protected),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = if (file.isPasswordProtected) AccentAmber else AccentGreen
                             )
@@ -184,7 +184,7 @@ fun UnlockScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(color = AccentTeal)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Checking PDF...")
+                            Text(stringResource(R.string.checking_pdf))
                         }
                     }
                 }
@@ -253,7 +253,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Unlock PDF",
+            stringResource(R.string.tool_unlock_pdf),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -261,7 +261,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Remove password protection from a PDF file",
+            stringResource(R.string.tool_unlock_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -276,7 +276,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -329,14 +329,14 @@ private fun UnlockContent(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            "No Password Protection",
+                            stringResource(R.string.no_password_protection),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium
                             ),
                             color = AccentGreen
                         )
                         Text(
-                            "This PDF is not password protected",
+                            stringResource(R.string.pdf_not_protected),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -349,11 +349,11 @@ private fun UnlockContent(
 
         // Password section
         if (state.sourceFile.isPasswordProtected) {
-            SectionLabel("ENTER PASSWORD")
+            SectionLabel(stringResource(R.string.section_enter_password))
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                "Enter the password to unlock this PDF",
+                stringResource(R.string.enter_password_desc),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -363,7 +363,7 @@ private fun UnlockContent(
             PasswordField(
                 value = state.password,
                 onValueChange = onPasswordChange,
-                label = "Password"
+                label = stringResource(R.string.password)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -423,7 +423,7 @@ private fun UnlockContent(
                     colors = CheckboxDefaults.colors(checkedColor = AccentTeal)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Overwrite original file", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.overwrite_original_file), style = MaterialTheme.typography.bodyMedium)
             }
 
             // Output filename
@@ -433,8 +433,8 @@ private fun UnlockContent(
                     OutlinedTextField(
                         value = state.outputFileName,
                         onValueChange = onOutputFileNameChange,
-                        label = { Text("Output file name") },
-                        suffix = { Text(".pdf") },
+                        label = { Text(stringResource(R.string.output_file_name)) },
+                        suffix = { Text(stringResource(R.string.pdf_extension)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -453,7 +453,7 @@ private fun UnlockContent(
             ) {
                 Icon(Icons.Default.LockOpen, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Unlock PDF")
+                Text(stringResource(R.string.tool_unlock_pdf))
             }
         }
 
@@ -534,7 +534,7 @@ private fun SourceFileCard(
                 onClick = onChangeFile,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Change File")
+                Text(stringResource(R.string.change_file))
             }
         }
     }
@@ -602,7 +602,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "PDF Unlocked!",
+            stringResource(R.string.pdf_unlocked),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -610,7 +610,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Password protection has been removed",
+            stringResource(R.string.password_protection_removed),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -649,7 +649,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${result.pageCount} pages • ${formatFileSize(result.fileSize)}",
+                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -680,7 +680,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open", maxLines = 1)
+                Text(stringResource(R.string.open), maxLines = 1)
             }
             OutlinedButton(
                 onClick = onShare,
@@ -692,7 +692,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Share", maxLines = 1)
+                Text(stringResource(R.string.share), maxLines = 1)
             }
         }
 
@@ -707,13 +707,13 @@ private fun SuccessState(
                 onClick = onUnlockMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("New File", maxLines = 1)
+                Text(stringResource(R.string.new_file), maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done", maxLines = 1)
+                Text(stringResource(R.string.done), maxLines = 1)
             }
         }
     }
@@ -749,7 +749,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Unlocking...",
+                    stringResource(R.string.unlocking),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     )

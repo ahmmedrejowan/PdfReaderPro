@@ -121,10 +121,10 @@ fun ReorderScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Reorder Pages")
+                        Text(stringResource(R.string.tool_reorder_pages))
                         state.sourceFile?.let { file ->
                             Text(
-                                "${file.pageCount} pages${if (state.hasChanges) " • Modified" else ""}",
+                                if (state.hasChanges) stringResource(R.string.pages_modified, file.pageCount) else stringResource(R.string.pages_count, file.pageCount),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = if (state.hasChanges) AccentIndigo else MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -214,7 +214,7 @@ fun ReorderScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(color = AccentIndigo)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Loading pages...")
+                            Text(stringResource(R.string.loading_pages))
                         }
                     }
                 }
@@ -240,7 +240,7 @@ fun ReorderScreen(
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    "Long press and drag pages to reorder",
+                                    stringResource(R.string.drag_hint),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = AccentIndigo
                                 )
@@ -347,7 +347,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Reorder PDF Pages",
+            stringResource(R.string.tool_reorder_pdf_pages),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -355,7 +355,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Drag and drop pages to rearrange their order in the PDF",
+            stringResource(R.string.tool_reorder_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -370,7 +370,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -485,7 +485,7 @@ private fun PageThumbnailItem(
                         .padding(horizontal = 6.dp, vertical = 2.dp)
                 ) {
                     Text(
-                        "was ${page.pageNumber}",
+                        stringResource(R.string.was_page, page.pageNumber),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -566,7 +566,7 @@ private fun ReorderBottomSection(
                 colors = CheckboxDefaults.colors(checkedColor = AccentIndigo)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Overwrite original file", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.overwrite_original_file), style = MaterialTheme.typography.bodyMedium)
         }
 
         // Output filename
@@ -576,8 +576,8 @@ private fun ReorderBottomSection(
                 OutlinedTextField(
                     value = outputFileName,
                     onValueChange = onFileNameChange,
-                    label = { Text("Output file name") },
-                    suffix = { Text(".pdf") },
+                    label = { Text(stringResource(R.string.output_file_name)) },
+                    suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -603,7 +603,7 @@ private fun ReorderBottomSection(
                 Icon(Icons.Default.SwapVert, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text(if (isProcessing) "Saving..." else "Save Reordered PDF")
+            Text(stringResource(if (isProcessing) R.string.saving else R.string.save_reordered_pdf))
         }
     }
 }
@@ -644,7 +644,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Pages Reordered!",
+            stringResource(R.string.pages_reordered),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -652,7 +652,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Your PDF has been saved with the new page order",
+            stringResource(R.string.pdf_saved_new_order),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -691,7 +691,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${result.pageCount} pages • ${formatFileSize(result.fileSize)}",
+                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -716,7 +716,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open", maxLines = 1)
+                Text(stringResource(R.string.open), maxLines = 1)
             }
             OutlinedButton(
                 onClick = onShare,
@@ -728,7 +728,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Share", maxLines = 1)
+                Text(stringResource(R.string.share), maxLines = 1)
             }
         }
 
@@ -743,13 +743,13 @@ private fun SuccessState(
                 onClick = onReorderMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("New File", maxLines = 1)
+                Text(stringResource(R.string.new_file), maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done", maxLines = 1)
+                Text(stringResource(R.string.done), maxLines = 1)
             }
         }
     }
@@ -785,7 +785,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Saving...",
+                    stringResource(R.string.saving),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     )

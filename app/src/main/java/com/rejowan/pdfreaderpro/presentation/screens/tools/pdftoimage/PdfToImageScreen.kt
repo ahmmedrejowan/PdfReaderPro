@@ -112,7 +112,7 @@ fun PdfToImageScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("PDF to Images")
+                        Text(stringResource(R.string.tool_pdf_to_images))
                         state.sourceFile?.let { file ->
                             Text(
                                 file.name,
@@ -211,7 +211,7 @@ fun PdfToImageScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(color = AccentPurple)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Loading PDF...")
+                            Text(stringResource(R.string.loading_pdf))
                         }
                     }
                 }
@@ -279,7 +279,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "PDF to Images",
+            stringResource(R.string.tool_pdf_to_images),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -287,7 +287,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Export PDF pages as image files",
+            stringResource(R.string.tool_pdf_to_images_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -302,7 +302,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -330,7 +330,7 @@ private fun ExportContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Image format selection
-        SectionLabel("OUTPUT FORMAT")
+        SectionLabel(stringResource(R.string.section_output_format))
         Spacer(modifier = Modifier.height(8.dp))
         FormatSelector(
             selectedFormat = state.imageFormat,
@@ -340,7 +340,7 @@ private fun ExportContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Page selection
-        SectionLabel("PAGES TO EXPORT")
+        SectionLabel(stringResource(R.string.section_pages_to_export))
         Spacer(modifier = Modifier.height(8.dp))
         PageSelector(
             selectedSelection = state.pageSelection,
@@ -381,7 +381,7 @@ private fun ExportContent(
                     }
                 }
                 Text(
-                    "Will create $pageCount ${state.imageFormat.extension.uppercase()} image${if (pageCount != 1) "s" else ""}",
+                    stringResource(R.string.will_create_images, pageCount, state.imageFormat.extension.uppercase()),
                     style = MaterialTheme.typography.bodySmall,
                     color = AccentPurple
                 )
@@ -435,7 +435,7 @@ private fun ExportContent(
         ) {
             Icon(Icons.Default.Photo, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Export Images")
+            Text(stringResource(R.string.export_images))
         }
 
         Spacer(modifier = Modifier.height(80.dp))
@@ -572,10 +572,12 @@ private fun FormatCard(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                when (format) {
-                    ImageFormat.PNG -> "Lossless quality"
-                    ImageFormat.JPG -> "Smaller file size"
-                },
+                stringResource(
+                    when (format) {
+                        ImageFormat.PNG -> R.string.format_lossless
+                        ImageFormat.JPG -> R.string.format_smaller_size
+                    }
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -599,7 +601,7 @@ private fun PageSelector(
             FilterChip(
                 selected = selectedSelection == PageSelection.ALL,
                 onClick = { onSelectionChange(PageSelection.ALL) },
-                label = { Text("All Pages ($totalPages)") },
+                label = { Text(stringResource(R.string.all_pages_label, totalPages)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentPurple.copy(alpha = 0.2f),
                     selectedLabelColor = AccentPurple
@@ -608,7 +610,7 @@ private fun PageSelector(
             FilterChip(
                 selected = selectedSelection == PageSelection.CUSTOM,
                 onClick = { onSelectionChange(PageSelection.CUSTOM) },
-                label = { Text("Custom") },
+                label = { Text(stringResource(R.string.custom)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentPurple.copy(alpha = 0.2f),
                     selectedLabelColor = AccentPurple
@@ -622,8 +624,8 @@ private fun PageSelector(
                 OutlinedTextField(
                     value = customPages,
                     onValueChange = onCustomPagesChange,
-                    label = { Text("Page numbers") },
-                    placeholder = { Text("e.g., 1-5, 8, 10-12") },
+                    label = { Text(stringResource(R.string.page_numbers_label)) },
+                    placeholder = { Text(stringResource(R.string.page_numbers_hint)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -668,12 +670,12 @@ private fun SuccessState(
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    "Images Exported!",
+                    stringResource(R.string.images_exported),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    "${result.imageCount} ${result.format} image${if (result.imageCount > 1) "s" else ""} created",
+                    stringResource(R.string.images_created_count, result.imageCount, result.format),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -723,7 +725,7 @@ private fun SuccessState(
             ) {
                 Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Share All Images")
+                Text(stringResource(R.string.share_all_images))
             }
             Spacer(modifier = Modifier.height(12.dp))
         }
@@ -754,13 +756,13 @@ private fun SuccessState(
                 onClick = onExportMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("New Export", maxLines = 1)
+                Text(stringResource(R.string.new_export), maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done", maxLines = 1)
+                Text(stringResource(R.string.done), maxLines = 1)
             }
         }
     }
@@ -870,7 +872,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Exporting...",
+                    stringResource(R.string.exporting),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     )

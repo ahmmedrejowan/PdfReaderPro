@@ -128,12 +128,12 @@ fun RotateScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Rotate Pages")
+                        Text(stringResource(R.string.tool_rotate_pages))
                         state.sourceFile?.let { file ->
                             val selectedCount = file.pages.count { it.isSelected }
                             val selectionText = when (state.selectionMode) {
-                                PageSelectionMode.ALL_PAGES -> "All ${file.pageCount} pages"
-                                PageSelectionMode.SELECTED_PAGES -> "$selectedCount of ${file.pageCount} selected"
+                                PageSelectionMode.ALL_PAGES -> stringResource(R.string.all_pages_count, file.pageCount)
+                                PageSelectionMode.SELECTED_PAGES -> stringResource(R.string.selected_of_count, selectedCount, file.pageCount)
                             }
                             Text(
                                 selectionText,
@@ -215,7 +215,7 @@ fun RotateScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(color = AccentOrange)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Loading pages...")
+                            Text(stringResource(R.string.loading_pages))
                         }
                     }
                 }
@@ -386,7 +386,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Rotate PDF Pages",
+            stringResource(R.string.tool_rotate_pdf_pages),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -394,7 +394,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Select a PDF file to rotate its pages by 90°, 180°, or 270°",
+            stringResource(R.string.tool_rotate_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -409,7 +409,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -422,7 +422,7 @@ private fun RotationOptionsSection(
 ) {
     Column(modifier = modifier) {
         Text(
-            "ROTATION",
+            stringResource(R.string.section_rotation),
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
@@ -514,7 +514,7 @@ private fun QuickSelectionSection(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "SELECT PAGES",
+                    stringResource(R.string.section_select_pages),
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
@@ -540,7 +540,7 @@ private fun QuickSelectionSection(
                     color = AccentRed.copy(alpha = 0.1f)
                 ) {
                     Text(
-                        "Clear",
+                        stringResource(R.string.clear),
                         style = MaterialTheme.typography.labelSmall,
                         color = AccentRed,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
@@ -557,27 +557,27 @@ private fun QuickSelectionSection(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             QuickSelectionChip(
-                label = "All",
+                label = stringResource(R.string.quick_select_all),
                 onClick = { onQuickSelect(QuickSelection.ALL) },
                 modifier = Modifier.weight(1f)
             )
             QuickSelectionChip(
-                label = "Odd",
+                label = stringResource(R.string.quick_select_odd),
                 onClick = { onQuickSelect(QuickSelection.ODD) },
                 modifier = Modifier.weight(1f)
             )
             QuickSelectionChip(
-                label = "Even",
+                label = stringResource(R.string.quick_select_even),
                 onClick = { onQuickSelect(QuickSelection.EVEN) },
                 modifier = Modifier.weight(1f)
             )
             QuickSelectionChip(
-                label = "1st ½",
+                label = stringResource(R.string.quick_select_first_half),
                 onClick = { onQuickSelect(QuickSelection.FIRST_HALF) },
                 modifier = Modifier.weight(1f)
             )
             QuickSelectionChip(
-                label = "2nd ½",
+                label = stringResource(R.string.quick_select_second_half),
                 onClick = { onQuickSelect(QuickSelection.SECOND_HALF) },
                 modifier = Modifier.weight(1f)
             )
@@ -771,7 +771,7 @@ private fun RotateBottomSection(
                 colors = CheckboxDefaults.colors(checkedColor = AccentOrange)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Overwrite original file", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.overwrite_original_file), style = MaterialTheme.typography.bodyMedium)
         }
 
         // Output filename
@@ -781,8 +781,8 @@ private fun RotateBottomSection(
                 OutlinedTextField(
                     value = outputFileName,
                     onValueChange = onFileNameChange,
-                    label = { Text("Output file name") },
-                    suffix = { Text(".pdf") },
+                    label = { Text(stringResource(R.string.output_file_name)) },
+                    suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -808,7 +808,7 @@ private fun RotateBottomSection(
                 Icon(Icons.AutoMirrored.Filled.RotateRight, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text(if (isProcessing) "Rotating..." else "Rotate Pages")
+            Text(stringResource(if (isProcessing) R.string.rotating else R.string.rotate_pages))
         }
     }
 }
@@ -849,7 +849,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Rotation Complete!",
+            stringResource(R.string.rotation_complete),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -857,7 +857,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "${result.rotatedPages} page${if (result.rotatedPages > 1) "s" else ""} rotated",
+            stringResource(R.string.pages_rotated_count, result.rotatedPages),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -895,7 +895,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${result.pageCount} pages • ${formatFileSize(result.fileSize)}",
+                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -920,7 +920,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open", maxLines = 1)
+                Text(stringResource(R.string.open), maxLines = 1)
             }
             OutlinedButton(
                 onClick = onShare,
@@ -932,7 +932,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Share", maxLines = 1)
+                Text(stringResource(R.string.share), maxLines = 1)
             }
         }
 
@@ -947,13 +947,13 @@ private fun SuccessState(
                 onClick = onRotateMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("New File", maxLines = 1)
+                Text(stringResource(R.string.new_file), maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done", maxLines = 1)
+                Text(stringResource(R.string.done), maxLines = 1)
             }
         }
     }
@@ -989,7 +989,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Rotating...",
+                    stringResource(R.string.rotating),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     )

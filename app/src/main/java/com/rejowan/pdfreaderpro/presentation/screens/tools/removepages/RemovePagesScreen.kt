@@ -118,7 +118,7 @@ fun RemovePagesScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Remove Pages")
+                        Text(stringResource(R.string.tool_remove_pages))
                         state.sourceFile?.let { file ->
                             val selectedCount = file.pages.count { it.isSelected }
                             if (selectedCount > 0) {
@@ -209,7 +209,7 @@ fun RemovePagesScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(color = AccentRed)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Loading pages...")
+                            Text(stringResource(R.string.loading_pages))
                         }
                     }
                 }
@@ -345,7 +345,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Select PDF")
+            Text(stringResource(R.string.select_pdf))
         }
     }
 }
@@ -573,7 +573,7 @@ private fun RangeInputDialog(
 
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Select Page Range") },
+        title = { Text(stringResource(R.string.select_page_range)) },
         text = {
             Column {
                 Text(
@@ -589,15 +589,15 @@ private fun RangeInputDialog(
                     OutlinedTextField(
                         value = startPage,
                         onValueChange = { startPage = it.filter { c -> c.isDigit() } },
-                        label = { Text("From") },
+                        label = { Text(stringResource(R.string.from_page)) },
                         singleLine = true,
                         modifier = Modifier.weight(1f)
                     )
-                    Text("to", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.to_page).lowercase(), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     OutlinedTextField(
                         value = endPage,
                         onValueChange = { endPage = it.filter { c -> c.isDigit() } },
-                        label = { Text("To") },
+                        label = { Text(stringResource(R.string.to_page)) },
                         singleLine = true,
                         modifier = Modifier.weight(1f)
                     )
@@ -619,12 +619,12 @@ private fun RangeInputDialog(
                     else -> onConfirm(start, end)
                 }
             }) {
-                Text("Select")
+                Text(stringResource(R.string.select_action))
             }
         },
         dismissButton = {
             OutlinedButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -674,12 +674,12 @@ private fun PageInputDialog(
                     else -> onConfirm(page)
                 }
             }) {
-                Text("Select")
+                Text(stringResource(R.string.select_action))
             }
         },
         dismissButton = {
             OutlinedButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -894,8 +894,8 @@ private fun RemoveBottomSection(
                 OutlinedTextField(
                     value = outputFileName,
                     onValueChange = onFileNameChange,
-                    label = { Text("Output file name") },
-                    suffix = { Text(".pdf") },
+                    label = { Text(stringResource(R.string.output_filename_label)) },
+                    suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
