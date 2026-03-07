@@ -1,0 +1,950 @@
+package com.rejowan.pdfreaderpro.presentation.screens.reader
+
+import android.content.Context
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.rejowan.pdfreaderpro.R
+import com.rejowan.pdfreaderpro.data.local.PasswordStorage
+import com.rejowan.pdfreaderpro.data.local.database.dao.BookmarkDao
+import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
+import com.rejowan.pdfreaderpro.domain.model.PageAlignment as DomainPageAlignment
+import com.rejowan.pdfreaderpro.domain.model.PageLayout
+import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
+import com.rejowan.pdfreaderpro.domain.model.ReadingTheme as DomainReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScrollDirection as DomainScrollDirection
+import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
+import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
+import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
+import kotlinx.coroutines.flow.first
+import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer
+import com.rejowan.pdfreaderpro.presentation.components.pdf.addListener
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AttachmentItem
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.OutlineItem
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfo
+import android.os.Environment
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.File
+
+class ReaderViewModel(
+    private val recentRepository: RecentRepository,
+    private val favoriteRepository: FavoriteRepository,
+    private val preferencesRepository: PreferencesRepository,
+    private val bookmarkDao: BookmarkDao,
+    private val applicationContext: Context,
+    savedStateHandle: SavedStateHandle,
+    private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
+) : ViewModel() {
+
+    val pdfPath: String = savedStateHandle.get<String>("path") ?: ""
+    private val initialPage: Int = savedStateHandle.get<Int>("initialPage") ?: 0
+
+    private val _state = MutableStateFlow(ReaderState(documentPath = pdfPath))
+    val state: StateFlow<ReaderState> = _state.asStateFlow()
+
+    private val _events = Channel<ReaderEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
+
+    private var pdfViewer: PdfViewer? = null
+    private var storedLastPage: Int? = null
+    private var isFirstOpen: Boolean = true
+    private var pendingAttachmentAction: AttachmentAction? = null
+
+    private enum class AttachmentAction { OPEN, DOWNLOAD }
+
+    init {
+        // Set document title from file name
+        val file = File(pdfPath)
+        _state.update { it.copy(documentTitle = file.nameWithoutExtension) }
+
+        // Load last read page from recent history
+        viewModelScope.launch {
+            storedLastPage = recentRepository.getLastPage(pdfPath)
+            isFirstOpen = storedLastPage == null
+        }
+
+        // Load global reader settings from preferences
+        viewModelScope.launch {
+            val prefs = preferencesRepository.preferences.first()
+            _state.update { state ->
+                state.copy(
+                    brightness = prefs.readerBrightness,
+                    scrollDirection = mapDomainScrollDirection(prefs.readerScrollDirection),
+                    readingTheme = mapDomainReadingTheme(prefs.readerTheme),
+                    pageAlignment = mapDomainPageAlignment(prefs.readerPageAlignment),
+                    autoHideToolbar = prefs.readerAutoHideToolbar,
+                    keepScreenOn = prefs.readerKeepScreenOn
+                )
+            }
+        }
+
+        // Observe bookmarks for this PDF
+        bookmarkDao.getBookmarksForPdf(pdfPath)
+            .onEach { bookmarks ->
+                _state.update { state ->
+                    val isCurrentBookmarked = bookmarks.any { it.pageNumber == state.currentPage }
+                    state.copy(
+                        bookmarks = bookmarks,
+                        isCurrentPageBookmarked = isCurrentBookmarked
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
+
+        // Load favorite state
+        viewModelScope.launch {
+            val isFav = favoriteRepository.isFavorite(pdfPath)
+            _state.update { it.copy(isFavorite = isFav) }
+        }
+    }
+
+    // Mapping functions from domain models to reader state models
+    private fun mapDomainScrollDirection(direction: DomainScrollDirection): ScrollDirection {
+        return when (direction) {
+            DomainScrollDirection.VERTICAL -> ScrollDirection.VERTICAL
+            DomainScrollDirection.HORIZONTAL -> ScrollDirection.HORIZONTAL
+        }
+    }
+
+    private fun mapDomainReadingTheme(theme: DomainReadingTheme): ReadingTheme {
+        return when (theme) {
+            DomainReadingTheme.LIGHT -> ReadingTheme.LIGHT
+            DomainReadingTheme.SEPIA -> ReadingTheme.SEPIA
+            DomainReadingTheme.DARK -> ReadingTheme.DARK
+            DomainReadingTheme.BLACK -> ReadingTheme.BLACK
+        }
+    }
+
+    private fun mapDomainPageAlignment(alignment: DomainPageAlignment): PageAlignment {
+        return when (alignment) {
+            DomainPageAlignment.LEFT -> PageAlignment.LEFT
+            DomainPageAlignment.CENTER -> PageAlignment.CENTER
+            DomainPageAlignment.RIGHT -> PageAlignment.RIGHT
+        }
+    }
+
+    fun setPdfViewer(viewer: PdfViewer) {
+        pdfViewer = viewer
+        setupPdfViewerListeners(viewer)
+    }
+
+    private fun applyInitialSettings(viewer: PdfViewer) {
+        viewModelScope.launch {
+            try {
+                val prefs = preferencesRepository.preferences.first()
+
+                // Apply scroll direction
+                val scrollMode = when (prefs.readerScrollDirection) {
+                    DomainScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    DomainScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                }
+                viewer.pageScrollMode = scrollMode
+
+                // Apply reading theme
+                val themeName = when (prefs.readerTheme) {
+                    DomainReadingTheme.LIGHT -> "light"
+                    DomainReadingTheme.SEPIA -> "sepia"
+                    DomainReadingTheme.DARK -> "dark"
+                    DomainReadingTheme.BLACK -> "black"
+                }
+                viewer.ui.setReadingTheme(themeName)
+            } catch (e: Exception) {
+                // Viewer not yet initialized, settings will be applied when ready
+            }
+        }
+    }
+
+    private fun setupPdfViewerListeners(viewer: PdfViewer) {
+        viewer.addListener(
+            onPageLoadStart = {
+                _state.update { it.copy(isLoading = true, error = null) }
+            },
+            onPageLoadSuccess = { pagesCount ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        totalPages = pagesCount,
+                        error = null,
+                        passwordSubmitted = false
+                    )
+                }
+
+                // Determine which page to start on
+                val lastPage = storedLastPage // Capture for smart cast
+                val targetPage = when {
+                    // If explicitly passed a page (e.g., from recent list), use it
+                    initialPage > 0 && initialPage < pagesCount -> initialPage
+                    // If we have a stored last page from history, use it
+                    lastPage != null && lastPage > 0 && lastPage < pagesCount -> lastPage
+                    // First time opening - scroll to top to show padding
+                    else -> null
+                }
+
+                if (targetPage != null) {
+                    viewer.goToPage(targetPage + 1) // Library uses 1-based indexing
+                } else {
+                    // First time opening - scroll to absolute top to show the padding
+                    viewer.scrollTo(0)
+                }
+
+                // Add to recent files and apply settings
+                viewModelScope.launch {
+                    addToRecent()
+
+                    // Apply initial settings (scroll direction, reading theme)
+                    applyInitialSettings(viewer)
+
+                    // Apply quick zoom preset from settings
+                    val prefs = preferencesRepository.preferences.first()
+                    when (prefs.readerQuickZoomPreset) {
+                        QuickZoomPreset.FIT_PAGE -> viewer.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                        QuickZoomPreset.FIT_WIDTH -> viewer.zoomTo(PdfViewer.Zoom.PAGE_WIDTH)
+                        QuickZoomPreset.ACTUAL_SIZE -> viewer.zoomTo(PdfViewer.Zoom.ACTUAL_SIZE)
+                    }
+                }
+            },
+            onPageLoadFailed = { exception ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = exception.message ?: "Failed to load PDF"
+                    )
+                }
+            },
+            onPageChange = { pageNumber ->
+                // Library uses 1-based indexing, our state uses 0-based
+                val page = pageNumber - 1
+                _state.update { state ->
+                    val isBookmarked = state.bookmarks.any { it.pageNumber == page }
+                    state.copy(currentPage = page, isCurrentPageBookmarked = isBookmarked)
+                }
+                // Save last read page to database
+                viewModelScope.launch {
+                    recentRepository.updateLastPage(pdfPath, page)
+                }
+            },
+            onScaleChange = { scale ->
+                _state.update { it.copy(zoom = scale) }
+            },
+            onPasswordDialogChange = { isOpen ->
+                _state.update { currentState ->
+                    if (isOpen && currentState.passwordSubmitted) {
+                        // Password dialog reopened after submission = wrong password
+                        currentState.copy(isPasswordRequired = true, isPasswordError = true)
+                    } else if (isOpen) {
+                        currentState.copy(isPasswordRequired = true)
+                    } else {
+                        // Dialog closed - keep passwordSubmitted flag (library may reopen if wrong)
+                        currentState.copy(isPasswordRequired = false, isPasswordError = false)
+                    }
+                }
+            },
+            onSingleClick = {
+                onAction(ReaderAction.ToggleToolbar)
+            },
+            onDoubleClick = {
+                // Toggle zoom between PAGE_FIT and 2x
+                viewer.let { v ->
+                    if (v.currentPageScale > 1.5f) {
+                        v.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                    } else {
+                        v.scalePageTo(2f)
+                    }
+                }
+            },
+            onLoadOutline = { sidebarItems ->
+                // Convert SideBarTreeItem to OutlineItem
+                val outlineItems = flattenOutline(sidebarItems, 0)
+                _state.update { it.copy(outline = outlineItems) }
+            },
+            onFindMatchStart = {
+                _state.update { it.copy(isSearching = true) }
+            },
+            onFindMatchChange = { current, total ->
+                _state.update {
+                    it.copy(
+                        searchResultCount = total,
+                        currentSearchIndex = current
+                    )
+                }
+            },
+            onFindMatchComplete = { found ->
+                _state.update { it.copy(isSearching = false) }
+            },
+            onScrollModeChange = { scrollMode ->
+                val direction = when (scrollMode) {
+                    PdfViewer.PageScrollMode.HORIZONTAL -> ScrollDirection.HORIZONTAL
+                    else -> ScrollDirection.VERTICAL
+                }
+                _state.update { it.copy(scrollDirection = direction) }
+            },
+            onAutoScrollEnd = {
+                _state.update {
+                    it.copy(
+                        isAutoScrollActive = false,
+                        isAutoScrollPaused = false
+                    )
+                }
+                viewModelScope.launch {
+                    _events.send(ReaderEvent.ShowMessage("Reached end of document"))
+                }
+            },
+            onLoadAttachments = { sidebarItems ->
+                val attachmentItems = sidebarItems.map { item ->
+                    AttachmentItem(
+                        title = item.title ?: "Unknown",
+                        id = item.id,
+                        dest = item.dest
+                    )
+                }
+                _state.update { it.copy(attachments = attachmentItems) }
+            },
+            onDownload = { fileBytes, fileName, mimeType ->
+                viewModelScope.launch {
+                    when (pendingAttachmentAction) {
+                        AttachmentAction.OPEN -> openAttachmentFile(fileBytes, fileName, mimeType)
+                        AttachmentAction.DOWNLOAD -> saveAttachmentFile(fileBytes, fileName)
+                        null -> saveAttachmentFile(fileBytes, fileName) // Default to save
+                    }
+                    pendingAttachmentAction = null
+                }
+            },
+            onLinkClick = { link ->
+                onAction(ReaderAction.OpenLink(link))
+            }
+        )
+    }
+
+    private fun flattenOutline(
+        items: List<com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem>,
+        level: Int
+    ): List<OutlineItem> {
+        val result = mutableListOf<OutlineItem>()
+        for (item in items) {
+            result.add(
+                OutlineItem(
+                    title = item.title ?: "",
+                    page = item.page,
+                    level = level,
+                    id = item.id,
+                    dest = item.dest
+                )
+            )
+            // Recursively add children
+            result.addAll(flattenOutline(item.children, level + 1))
+        }
+        return result
+    }
+
+    /**
+     * Navigate to an outline item using its page number.
+     */
+    fun navigateToOutlineItem(item: OutlineItem) {
+        // page is 0-based, goToPage expects 1-based
+        _state.update { it.copy(currentPage = item.page) }
+        pdfViewer?.goToPage(item.page + 1)
+    }
+
+    private suspend fun addToRecent() {
+        val file = File(pdfPath)
+        recentRepository.addOrUpdateRecent(
+            path = pdfPath,
+            name = _state.value.documentTitle ?: file.name,
+            size = file.length(),
+            totalPages = _state.value.totalPages,
+            currentPage = _state.value.currentPage
+        )
+    }
+
+    fun onAction(action: ReaderAction) {
+        when (action) {
+            is ReaderAction.GoToPage -> {
+                // Our state uses 0-based, library uses 1-based
+                _state.update { it.copy(currentPage = action.page) }
+                pdfViewer?.goToPage(action.page + 1)
+            }
+            is ReaderAction.NextPage -> {
+                pdfViewer?.goToNextPage()
+            }
+            is ReaderAction.PreviousPage -> {
+                pdfViewer?.goToPreviousPage()
+            }
+
+            is ReaderAction.SetZoom -> {
+                _state.update { it.copy(zoom = action.zoom.coerceIn(it.minZoom, it.maxZoom)) }
+                pdfViewer?.scalePageTo(action.zoom)
+            }
+            is ReaderAction.ZoomIn -> {
+                pdfViewer?.zoomIn()
+            }
+            is ReaderAction.ZoomOut -> {
+                pdfViewer?.zoomOut()
+            }
+            is ReaderAction.ResetZoom -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+            }
+            is ReaderAction.ZoomFitPage -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderQuickZoomPreset(QuickZoomPreset.FIT_PAGE)
+                }
+            }
+            is ReaderAction.ZoomFitWidth -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.PAGE_WIDTH)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderQuickZoomPreset(QuickZoomPreset.FIT_WIDTH)
+                }
+            }
+            is ReaderAction.ZoomActualSize -> {
+                pdfViewer?.zoomTo(PdfViewer.Zoom.ACTUAL_SIZE)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderQuickZoomPreset(QuickZoomPreset.ACTUAL_SIZE)
+                }
+            }
+
+            is ReaderAction.ToggleToolbar -> {
+                // If auto-scroll is active, toggle pause instead of toolbar
+                if (_state.value.isAutoScrollActive) {
+                    onAction(ReaderAction.ToggleAutoScrollPause)
+                } else {
+                    _state.update {
+                        // If in full screen, exit full screen mode and show toolbar
+                        if (it.isFullScreen) {
+                            it.copy(isFullScreen = false, isToolbarVisible = true)
+                        } else {
+                            it.copy(isToolbarVisible = !it.isToolbarVisible)
+                        }
+                    }
+                }
+            }
+            is ReaderAction.ToggleControlBarExpanded -> _state.update { it.copy(isControlBarExpanded = !it.isControlBarExpanded) }
+            is ReaderAction.ToggleFullScreen -> _state.update { it.copy(isFullScreen = !it.isFullScreen, isToolbarVisible = it.isFullScreen) }
+            is ReaderAction.ToggleQuickActions -> _state.update { it.copy(showQuickActions = !it.showQuickActions) }
+            is ReaderAction.ShowPageJumpDialog -> _state.update { it.copy(isPageJumpDialogVisible = true) }
+            is ReaderAction.HidePageJumpDialog -> _state.update { it.copy(isPageJumpDialogVisible = false) }
+            is ReaderAction.ShowTableOfContents -> _state.update { it.copy(isTableOfContentsVisible = true) }
+            is ReaderAction.HideTableOfContents -> _state.update { it.copy(isTableOfContentsVisible = false) }
+            is ReaderAction.ShowPageThumbnails -> _state.update { it.copy(isPageThumbnailsVisible = true) }
+            is ReaderAction.HidePageThumbnails -> _state.update { it.copy(isPageThumbnailsVisible = false) }
+            is ReaderAction.ShowSettingsPanel -> _state.update { it.copy(isSettingsPanelVisible = true) }
+            is ReaderAction.HideSettingsPanel -> _state.update { it.copy(isSettingsPanelVisible = false) }
+
+            // Bottom bar sheets
+            is ReaderAction.ShowViewModeSheet -> _state.update { it.copy(isViewModeSheetVisible = true) }
+            is ReaderAction.HideViewModeSheet -> _state.update { it.copy(isViewModeSheetVisible = false) }
+            is ReaderAction.ShowZoomSheet -> _state.update { it.copy(isZoomSheetVisible = true) }
+            is ReaderAction.HideZoomSheet -> _state.update { it.copy(isZoomSheetVisible = false) }
+            is ReaderAction.ShowDisplaySheet -> _state.update { it.copy(isDisplaySheetVisible = true) }
+            is ReaderAction.HideDisplaySheet -> _state.update { it.copy(isDisplaySheetVisible = false) }
+            is ReaderAction.ShowBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = true) }
+            is ReaderAction.HideBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = false) }
+            is ReaderAction.ShowMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = true) }
+            is ReaderAction.HideMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = false) }
+
+            is ReaderAction.SetBrightness -> {
+                _state.update { it.copy(brightness = action.brightness) }
+                viewModelScope.launch {
+                    preferencesRepository.setReaderBrightness(action.brightness)
+                }
+            }
+            is ReaderAction.SetScrollDirection -> {
+                _state.update { it.copy(scrollDirection = action.direction) }
+                val scrollMode = when (action.direction) {
+                    ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                }
+                pdfViewer?.pageScrollMode = scrollMode
+                // Persist to global settings
+                viewModelScope.launch {
+                    val domainDirection = when (action.direction) {
+                        ScrollDirection.VERTICAL -> DomainScrollDirection.VERTICAL
+                        ScrollDirection.HORIZONTAL -> DomainScrollDirection.HORIZONTAL
+                    }
+                    preferencesRepository.setReaderScrollDirection(domainDirection)
+                }
+            }
+            is ReaderAction.SetSpreadMode -> {
+                _state.update { it.copy(spreadMode = action.mode) }
+                val spreadMode = when (action.mode) {
+                    SpreadMode.NONE -> PdfViewer.PageSpreadMode.NONE
+                    SpreadMode.ODD -> PdfViewer.PageSpreadMode.ODD
+                    SpreadMode.EVEN -> PdfViewer.PageSpreadMode.EVEN
+                }
+                pdfViewer?.pageSpreadMode = spreadMode
+            }
+            is ReaderAction.SetSnapEnabled -> {
+                _state.update { it.copy(isSnapEnabled = action.enabled) }
+                pdfViewer?.snapPage = action.enabled
+            }
+            is ReaderAction.SetKeepScreenOn -> {
+                _state.update { it.copy(keepScreenOn = action.enabled) }
+                viewModelScope.launch {
+                    preferencesRepository.setReaderKeepScreenOn(action.enabled)
+                }
+            }
+            is ReaderAction.SetScreenOrientation -> _state.update { it.copy(screenOrientation = action.orientation) }
+            is ReaderAction.SetReadingTheme -> {
+                _state.update { it.copy(readingTheme = action.theme) }
+                val themeName = when (action.theme) {
+                    ReadingTheme.LIGHT -> "light"
+                    ReadingTheme.DARK -> "dark"
+                    ReadingTheme.SEPIA -> "sepia"
+                    ReadingTheme.BLACK -> "black"
+                }
+                pdfViewer?.ui?.setReadingTheme(themeName)
+                // Persist to global settings
+                viewModelScope.launch {
+                    val domainTheme = when (action.theme) {
+                        ReadingTheme.LIGHT -> DomainReadingTheme.LIGHT
+                        ReadingTheme.SEPIA -> DomainReadingTheme.SEPIA
+                        ReadingTheme.DARK -> DomainReadingTheme.DARK
+                        ReadingTheme.BLACK -> DomainReadingTheme.BLACK
+                    }
+                    preferencesRepository.setReaderTheme(domainTheme)
+                }
+            }
+
+            is ReaderAction.SetPageAlignment -> {
+                _state.update { it.copy(pageAlignment = action.alignment) }
+                // Persist to global settings
+                viewModelScope.launch {
+                    val domainAlignment = when (action.alignment) {
+                        PageAlignment.LEFT -> DomainPageAlignment.LEFT
+                        PageAlignment.CENTER -> DomainPageAlignment.CENTER
+                        PageAlignment.RIGHT -> DomainPageAlignment.RIGHT
+                    }
+                    preferencesRepository.setReaderPageAlignment(domainAlignment)
+                }
+            }
+
+            is ReaderAction.SetAutoHideToolbar -> {
+                _state.update { it.copy(autoHideToolbar = action.enabled) }
+                viewModelScope.launch {
+                    preferencesRepository.setReaderAutoHideToolbar(action.enabled)
+                }
+            }
+
+            is ReaderAction.Search -> {
+                _state.update { it.copy(searchQuery = action.query, isSearching = true) }
+                if (action.query.isNotBlank()) {
+                    pdfViewer?.findController?.startFind(action.query)
+                } else {
+                    pdfViewer?.findController?.stopFind()
+                    _state.update { it.copy(isSearching = false, searchResultCount = 0, currentSearchIndex = 0) }
+                }
+            }
+            is ReaderAction.NextSearchResult -> {
+                pdfViewer?.findController?.findNext()
+            }
+            is ReaderAction.PreviousSearchResult -> {
+                pdfViewer?.findController?.findPrevious()
+            }
+            is ReaderAction.ClearSearch -> {
+                pdfViewer?.findController?.stopFind()
+                _state.update { it.copy(searchQuery = "", isSearching = false, searchResultCount = 0, currentSearchIndex = 0) }
+            }
+            is ReaderAction.ToggleSearch -> _state.update { it.copy(isSearchActive = !it.isSearchActive) }
+
+            is ReaderAction.SubmitPassword -> submitPassword(action.password, action.remember)
+
+            is ReaderAction.ToggleFavorite -> toggleFavorite()
+            is ReaderAction.AddToFavorite -> addToFavorite()
+            is ReaderAction.ShowRemoveFavoriteDialog -> _state.update { it.copy(isRemoveFavoriteDialogVisible = true) }
+            is ReaderAction.HideRemoveFavoriteDialog -> _state.update { it.copy(isRemoveFavoriteDialogVisible = false) }
+            is ReaderAction.ConfirmRemoveFavorite -> confirmRemoveFavorite()
+            is ReaderAction.ShareDocument -> viewModelScope.launch { _events.send(ReaderEvent.ShareDocument) }
+            is ReaderAction.PrintDocument -> printDocument()
+            is ReaderAction.OpenWithExternal -> openWithExternal()
+            is ReaderAction.SaveDocument -> saveDocument()
+            is ReaderAction.SaveDocumentWithPicker -> viewModelScope.launch { _events.send(ReaderEvent.SaveDocumentPicker) }
+            is ReaderAction.CloseDocument -> viewModelScope.launch { _events.send(ReaderEvent.DocumentClosed) }
+            is ReaderAction.OpenLink -> openLink(action.url)
+
+            // Top bar menu
+            is ReaderAction.ShowTopBarMenu -> _state.update { it.copy(isTopBarMenuVisible = true) }
+            is ReaderAction.HideTopBarMenu -> _state.update { it.copy(isTopBarMenuVisible = false) }
+
+            is ReaderAction.ShowInfoDialog -> _state.update { it.copy(isInfoDialogVisible = true) }
+            is ReaderAction.HideInfoDialog -> _state.update { it.copy(isInfoDialogVisible = false) }
+            is ReaderAction.ShowDeleteDialog -> _state.update { it.copy(isDeleteDialogVisible = true) }
+            is ReaderAction.HideDeleteDialog -> _state.update { it.copy(isDeleteDialogVisible = false) }
+            is ReaderAction.ConfirmDelete -> deleteDocument()
+
+            is ReaderAction.ToggleRotationLock -> _state.update { it.copy(isRotationLocked = !it.isRotationLocked) }
+
+            // Page rotation
+            is ReaderAction.RotateClockwise -> {
+                pdfViewer?.rotateClockWise()
+                _state.update { it.copy(pageRotation = (it.pageRotation + 90) % 360) }
+            }
+            is ReaderAction.RotateCounterClockwise -> {
+                pdfViewer?.rotateCounterClockWise()
+                _state.update { it.copy(pageRotation = (it.pageRotation - 90 + 360) % 360) }
+            }
+
+            // Bookmark current page
+            is ReaderAction.TogglePageBookmark -> {
+                viewModelScope.launch {
+                    val currentPage = _state.value.currentPage
+                    val isCurrentlyBookmarked = _state.value.isCurrentPageBookmarked
+
+                    if (isCurrentlyBookmarked) {
+                        // Remove bookmark
+                        bookmarkDao.deleteByPage(pdfPath, currentPage)
+                    } else {
+                        // Add bookmark
+                        val bookmark = BookmarkEntity(
+                            pdfPath = pdfPath,
+                            pageNumber = currentPage,
+                            title = applicationContext.getString(R.string.page_current, currentPage + 1)
+                        )
+                        bookmarkDao.insert(bookmark)
+                    }
+                    // State will be updated automatically by the Flow observer
+                }
+            }
+
+            is ReaderAction.DeleteBookmark -> {
+                viewModelScope.launch {
+                    bookmarkDao.delete(action.bookmark)
+                }
+            }
+
+            is ReaderAction.GoToBookmark -> {
+                val page = action.bookmark.pageNumber
+                _state.update { state ->
+                    val isBookmarked = state.bookmarks.any { it.pageNumber == page }
+                    state.copy(
+                        currentPage = page,
+                        isCurrentPageBookmarked = isBookmarked,
+                        isBookmarksSheetVisible = false
+                    )
+                }
+                pdfViewer?.goToPage(page + 1)
+            }
+
+            // Auto-scroll actions
+            is ReaderAction.ShowAutoScrollSheet -> _state.update { it.copy(isAutoScrollSheetVisible = true) }
+            is ReaderAction.HideAutoScrollSheet -> _state.update { it.copy(isAutoScrollSheetVisible = false) }
+
+            is ReaderAction.StartAutoScroll -> {
+                _state.update {
+                    it.copy(
+                        isAutoScrollActive = true,
+                        isAutoScrollPaused = false,
+                        autoScrollSpeed = action.speed,
+                        isAutoScrollSheetVisible = false,
+                        isToolbarVisible = false
+                    )
+                }
+                pdfViewer?.ui?.autoScroll?.start(action.speed)
+            }
+
+            is ReaderAction.StopAutoScroll -> {
+                _state.update {
+                    it.copy(
+                        isAutoScrollActive = false,
+                        isAutoScrollPaused = false
+                    )
+                }
+                pdfViewer?.ui?.autoScroll?.stop()
+            }
+
+            is ReaderAction.ToggleAutoScrollPause -> {
+                val isPaused = _state.value.isAutoScrollPaused
+                _state.update { it.copy(isAutoScrollPaused = !isPaused) }
+                if (isPaused) {
+                    pdfViewer?.ui?.autoScroll?.resume()
+                } else {
+                    pdfViewer?.ui?.autoScroll?.pause()
+                }
+            }
+
+            is ReaderAction.SetAutoScrollSpeed -> {
+                _state.update { it.copy(autoScrollSpeed = action.speed) }
+                pdfViewer?.ui?.autoScroll?.setSpeed(action.speed)
+            }
+
+            is ReaderAction.OpenAttachment -> {
+                pendingAttachmentAction = AttachmentAction.OPEN
+                viewModelScope.launch {
+                    pdfViewer?.ui?.performSidebarTreeItemClick(action.attachment.id)
+                }
+            }
+
+            is ReaderAction.DownloadAttachment -> {
+                pendingAttachmentAction = AttachmentAction.DOWNLOAD
+                viewModelScope.launch {
+                    pdfViewer?.ui?.performSidebarTreeItemClick(action.attachment.id)
+                }
+            }
+        }
+    }
+
+    private fun submitPassword(password: String, remember: Boolean) {
+        viewModelScope.launch {
+            if (remember) {
+                passwordStorage.savePassword(pdfPath, password)
+            }
+            // Mark that we submitted a password (to detect wrong password if dialog reopens)
+            _state.update { it.copy(passwordSubmitted = true) }
+            pdfViewer?.ui?.passwordDialog?.submitPassword(password)
+        }
+    }
+
+    private fun toggleFavorite() {
+        viewModelScope.launch {
+            val file = File(pdfPath)
+            val pdfFile = com.rejowan.pdfreaderpro.domain.model.PdfFile(
+                id = pdfPath.hashCode().toLong(),
+                name = _state.value.documentTitle ?: file.name,
+                path = pdfPath,
+                uri = android.net.Uri.fromFile(file),
+                size = file.length(),
+                dateModified = file.lastModified(),
+                dateAdded = file.lastModified(),
+                pageCount = _state.value.totalPages,
+                parentFolder = file.parent ?: ""
+            )
+            favoriteRepository.toggleFavorite(pdfFile)
+            // Update state
+            val isFav = favoriteRepository.isFavorite(pdfPath)
+            _state.update { it.copy(isFavorite = isFav) }
+        }
+    }
+
+    private fun addToFavorite() {
+        viewModelScope.launch {
+            val file = File(pdfPath)
+            val pdfFile = com.rejowan.pdfreaderpro.domain.model.PdfFile(
+                id = pdfPath.hashCode().toLong(),
+                name = _state.value.documentTitle ?: file.name,
+                path = pdfPath,
+                uri = android.net.Uri.fromFile(file),
+                size = file.length(),
+                dateModified = file.lastModified(),
+                dateAdded = file.lastModified(),
+                pageCount = _state.value.totalPages,
+                parentFolder = file.parent ?: ""
+            )
+            favoriteRepository.addFavorite(pdfFile)
+            _state.update { it.copy(isFavorite = true) }
+            _events.send(ReaderEvent.FavoriteAdded)
+        }
+    }
+
+    private fun confirmRemoveFavorite() {
+        viewModelScope.launch {
+            _state.update { it.copy(isRemoveFavoriteDialogVisible = false) }
+            favoriteRepository.removeFavorite(pdfPath)
+            _state.update { it.copy(isFavorite = false) }
+            _events.send(ReaderEvent.ShowMessage("Removed from favourites"))
+        }
+    }
+
+    private fun openWithExternal() {
+        viewModelScope.launch {
+            try {
+                val file = File(pdfPath)
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    applicationContext,
+                    "${applicationContext.packageName}.provider",
+                    file
+                )
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "application/pdf")
+                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                // Create chooser to let user pick the app
+                val chooser = android.content.Intent.createChooser(intent, "Open with")
+                chooser.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                applicationContext.startActivity(chooser)
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to open with external app: ${e.message}"))
+            }
+        }
+    }
+
+    private fun openLink(url: String) {
+        viewModelScope.launch {
+            try {
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                    data = android.net.Uri.parse(url)
+                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                applicationContext.startActivity(intent)
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to open link: ${e.message}"))
+            }
+        }
+    }
+
+    private fun saveDocument() {
+        viewModelScope.launch {
+            try {
+                val sourceFile = File(pdfPath)
+                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val destFile = File(downloadsDir, sourceFile.name)
+
+                // If file already exists, add number suffix
+                var finalFile = destFile
+                var counter = 1
+                while (finalFile.exists()) {
+                    val nameWithoutExt = sourceFile.nameWithoutExtension
+                    val ext = sourceFile.extension
+                    finalFile = File(downloadsDir, "${nameWithoutExt}_$counter.$ext")
+                    counter++
+                }
+
+                sourceFile.copyTo(finalFile)
+                _events.send(ReaderEvent.ShowMessage("Saved to Downloads: ${finalFile.name}"))
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to save document: ${e.message}"))
+            }
+        }
+    }
+
+    private fun deleteDocument() {
+        viewModelScope.launch {
+            _state.update { it.copy(isDeleteDialogVisible = false) }
+            try {
+                val file = File(pdfPath)
+                if (file.exists() && file.delete()) {
+                    recentRepository.removeRecent(pdfPath)
+                    favoriteRepository.removeFavorite(pdfPath)
+                    passwordStorage.removePassword(pdfPath)
+                    _events.send(ReaderEvent.DocumentDeleted)
+                } else {
+                    _events.send(ReaderEvent.Error("Failed to delete file"))
+                }
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Error: ${e.message}"))
+            }
+        }
+    }
+
+    private suspend fun saveAttachmentFile(fileBytes: ByteArray, fileName: String?) {
+        try {
+            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val finalFileName = fileName ?: "attachment_${System.currentTimeMillis()}"
+            val file = File(downloadsDir, finalFileName)
+
+            file.writeBytes(fileBytes)
+            _events.send(ReaderEvent.ShowMessage("Saved to Downloads: $finalFileName"))
+        } catch (e: Exception) {
+            _events.send(ReaderEvent.Error("Failed to save attachment: ${e.message}"))
+        }
+    }
+
+    private suspend fun openAttachmentFile(fileBytes: ByteArray, fileName: String?, mimeType: String?) {
+        try {
+            // Save to cache directory
+            val cacheDir = File(applicationContext.cacheDir, "attachments")
+            if (!cacheDir.exists()) cacheDir.mkdirs()
+
+            val finalFileName = fileName ?: "attachment_${System.currentTimeMillis()}"
+            val file = File(cacheDir, finalFileName)
+            file.writeBytes(fileBytes)
+
+            // Get content URI using FileProvider
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                applicationContext,
+                "${applicationContext.packageName}.provider",
+                file
+            )
+
+            // Determine MIME type
+            val resolvedMimeType = mimeType
+                ?: android.webkit.MimeTypeMap.getSingleton()
+                    .getMimeTypeFromExtension(file.extension.lowercase())
+                ?: "*/*"
+
+            // Create open intent
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, resolvedMimeType)
+                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+
+            // Check if there's an app that can handle this
+            if (intent.resolveActivity(applicationContext.packageManager) != null) {
+                applicationContext.startActivity(intent)
+            } else {
+                // No app found, offer to save instead
+                _events.send(ReaderEvent.ShowMessage("No app found to open this file. Saving to Downloads..."))
+                saveAttachmentFile(fileBytes, fileName)
+            }
+        } catch (e: Exception) {
+            _events.send(ReaderEvent.Error("Failed to open attachment: ${e.message}"))
+        }
+    }
+
+    fun printDocument() {
+        try {
+            val fileName = _state.value.documentTitle ?: File(pdfPath).nameWithoutExtension
+            pdfViewer?.printFile(fileName)
+        } catch (e: Exception) {
+            viewModelScope.launch {
+                _events.send(ReaderEvent.Error("Print error: ${e.message}"))
+            }
+        }
+    }
+
+    fun getPdfInfo(): PdfInfo {
+        val file = File(pdfPath)
+        val properties = pdfViewer?.properties
+        return PdfInfo(
+            title = properties?.title?.takeIf { it.isNotBlank() } ?: _state.value.documentTitle,
+            author = properties?.author?.takeIf { it.isNotBlank() },
+            subject = properties?.subject?.takeIf { it.isNotBlank() },
+            creator = properties?.creator?.takeIf { it.isNotBlank() },
+            producer = properties?.producer?.takeIf { it.isNotBlank() },
+            creationDate = properties?.creationDate?.takeIf { it.isNotBlank() && it != "null" },
+            keywords = properties?.keywords?.takeIf { it.isNotBlank() },
+            language = properties?.language?.takeIf { it.isNotBlank() },
+            pdfVersion = properties?.pdfFormatVersion?.takeIf { it.isNotBlank() },
+            path = pdfPath,
+            pageCount = _state.value.totalPages,
+            fileSize = properties?.fileSize ?: file.length(),
+            lastModified = file.lastModified(),
+            isLinearized = properties?.isLinearized ?: false,
+            isEncrypted = !properties?.encryptFilterName.isNullOrBlank(),
+            encryptionType = properties?.encryptFilterName?.takeIf { it.isNotBlank() },
+            hasForms = properties?.isAcroFormPresent ?: false,
+            hasSignatures = properties?.isSignaturesPresent ?: false,
+            hasXfa = properties?.isXFAPresent ?: false
+        )
+    }
+
+    suspend fun isFavorite(): Boolean = favoriteRepository.isFavorite(pdfPath)
+
+    fun saveToUri(uri: android.net.Uri) {
+        viewModelScope.launch {
+            try {
+                val sourceFile = File(pdfPath)
+                applicationContext.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    sourceFile.inputStream().use { inputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+                _events.send(ReaderEvent.ShowMessage("Document saved successfully"))
+            } catch (e: Exception) {
+                _events.send(ReaderEvent.Error("Failed to save: ${e.message}"))
+            }
+        }
+    }
+
+    fun getDocumentFileName(): String {
+        return File(pdfPath).name
+    }
+}

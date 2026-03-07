@@ -1,0 +1,214 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_override:
+        description: 'Version name (leave empty to use build.gradle version)'
+        required: false
+        default: ''
+      release_type:
+        description: 'Release type'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+          - release
+          - prerelease
+      release_notes:
+        description: 'Release notes'
+        required: false
+        default: 'Bug fixes and improvements'
+
+jobs:
+  validate:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version_override }}" ]; then
+            VERSION="${{ github.event.inputs.version_override }}"
+            echo "Using override version: $VERSION"
+          else
+            VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
+            echo "Using gradle version: $VERSION"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Validate version format
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version format: $VERSION"
+            echo "Use semantic versioning (e.g., 2.0.0)"
+            exit 1
+          fi
+
+      - name: Check if tag exists
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "Tag v$VERSION already exists!"
+            exit 1
+          fi
+          echo "Tag v$VERSION is available"
+
+  test:
+    name: Run Tests
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.validate.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Unit Tests
+        run: ./gradlew testReleaseUnitTest
+
+      - name: Run Lint
+        run: ./gradlew lintRelease
+
+  build:
+    name: Build Release APK
+    needs: [validate, test]
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.validate.outputs.version }}
+      APK_NAME: PdfReaderPro-v${{ needs.validate.outputs.version }}.apk
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Decode Keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > app/release.keystore
+
+      - name: Build Release APK
+        env:
+          KEYSTORE_FILE: release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease
+
+      - name: Verify APK
+        run: |
+          APK_PATH="app/build/outputs/apk/release/app-release.apk"
+          # Find latest build-tools version
+          BUILD_TOOLS=$(ls -1 $ANDROID_HOME/build-tools/ | sort -V | tail -1)
+          echo "Using build-tools: $BUILD_TOOLS"
+          echo ""
+          echo "APK Info:"
+          echo "========="
+          $ANDROID_HOME/build-tools/$BUILD_TOOLS/aapt dump badging "$APK_PATH" | grep -E "package:|application-label:|sdkVersion:|targetSdkVersion:"
+
+      - name: Rename APK
+        run: |
+          mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/${{ env.APK_NAME }}
+
+      - name: Generate checksums
+        run: |
+          cd app/build/outputs/apk/release
+          sha256sum ${{ env.APK_NAME }} > ${{ env.APK_NAME }}.sha256
+          md5sum ${{ env.APK_NAME }} > ${{ env.APK_NAME }}.md5
+
+      - name: Get APK size
+        id: apk_size
+        run: |
+          SIZE=$(du -h app/build/outputs/apk/release/${{ env.APK_NAME }} | cut -f1)
+          echo "size=$SIZE" >> $GITHUB_OUTPUT
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: |
+            app/build/outputs/apk/release/${{ env.APK_NAME }}
+            app/build/outputs/apk/release/${{ env.APK_NAME }}.sha256
+            app/build/outputs/apk/release/${{ env.APK_NAME }}.md5
+          retention-days: 90
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: PDF Reader Pro v${{ env.VERSION }}
+          body: |
+            ## What's New
+
+            ${{ github.event.inputs.release_notes }}
+
+            ## Download
+
+            | File | Size |
+            |------|------|
+            | `${{ env.APK_NAME }}` | ${{ steps.apk_size.outputs.size }} |
+
+            ## Installation
+
+            1. Download `${{ env.APK_NAME }}` below
+            2. Enable "Install from unknown sources" if prompted
+            3. Open the APK to install
+
+            ## Verify Download (Optional)
+
+            ```bash
+            # SHA-256
+            sha256sum -c ${{ env.APK_NAME }}.sha256
+
+            # MD5
+            md5sum -c ${{ env.APK_NAME }}.md5
+            ```
+
+            ---
+
+            **Full Changelog:** [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/v${{ env.VERSION }}/CHANGELOG.md)
+            **Compare:** [v${{ env.VERSION }}...HEAD](https://github.com/${{ github.repository }}/compare/v${{ env.VERSION }}...HEAD)
+          files: |
+            app/build/outputs/apk/release/${{ env.APK_NAME }}
+            app/build/outputs/apk/release/${{ env.APK_NAME }}.sha256
+            app/build/outputs/apk/release/${{ env.APK_NAME }}.md5
+          draft: false
+          prerelease: ${{ github.event.inputs.release_type == 'prerelease' }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup Keystore
+        if: always()
+        run: rm -f app/release.keystore

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: README & Documentation
+    url: https://github.com/ahmmedrejowan/PdfReaderPro#readme
+    about: Check the README before opening an issue
+  - name: Known Issues
+    url: https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/KNOWN_ISSUES.md
+    about: Check if your issue is already documented
+  - name: Discussions
+    url: https://github.com/ahmmedrejowan/PdfReaderPro/discussions
+    about: Ask questions and share ideas

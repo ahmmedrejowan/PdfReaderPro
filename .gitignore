@@ -18,5 +18,14 @@ local.properties
 .externalNativeBuild
 .cxx
 
+# Signing
+keystore.properties
+*.keystore
+*.jks
+signing/
+
 # Claude
 .claude/
+
+# Documentation (local only)
+/doc/

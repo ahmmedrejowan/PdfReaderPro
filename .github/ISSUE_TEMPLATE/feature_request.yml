@@ -1,0 +1,68 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please fill out the form below.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Describe it.
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like.
+      placeholder: "I would like to be able to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternatives?
+      placeholder: "I've also thought about..."
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: What area of the app does this relate to?
+      options:
+        - PDF Viewer / Reader
+        - PDF Tools (merge, split, etc.)
+        - File Management
+        - UI / UX
+        - Accessibility
+        - Performance
+        - Settings / Preferences
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups / Examples
+      description: If you have any mockups, screenshots from other apps, or examples, please share them.
+      placeholder: Drag and drop images here...
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to make sure this is not a duplicate
+          required: true
+        - label: I am willing to help implement this feature
+          required: false

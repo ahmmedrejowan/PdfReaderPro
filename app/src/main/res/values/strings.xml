@@ -64,7 +64,6 @@
     <string name="pages_t">Pages:</string>
     <string name="path_t">Path:</string>
     <string name="enter_file_name">Enter File Name</string>
-    <string name="total_pdfs">Total PDFs</string>
     <string name="total_size">Total Size</string>
     <string name="no_pdf_found_by_that_name">No PDF found by that name</string>
     <string name="back_press">BackPress</string>
@@ -77,5 +76,1230 @@
     <string name="enter_page_number">Enter Page Number</string>
     <string name="remove">Remove</string>
 
+    <!-- Common Actions -->
+    <string name="done">Done</string>
+    <string name="save">Save</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+    <string name="open">Open</string>
+    <string name="open_with">Open With</string>
+    <string name="open_in_app">Open in App</string>
+    <string name="clear_all">Clear All</string>
+    <string name="show_all">Show All</string>
+    <string name="show_less">Show Less</string>
+    <string name="select_all">Select All</string>
+    <string name="deselect_all">Deselect All</string>
+    <string name="merge">Merge</string>
+    <string name="download">Download</string>
+    <string name="update">Update</string>
+    <string name="skip">Skip</string>
+    <string name="continue_text">Continue</string>
+    <string name="confirm">Confirm</string>
+    <string name="apply">Apply</string>
+    <string name="reset">Reset</string>
+    <string name="preview">Preview</string>
+    <string name="change_file">Change File</string>
+    <string name="add_files">Add Files</string>
+    <string name="select_file">Select File</string>
+    <string name="select_pdf">Select PDF</string>
+    <string name="select_images">Select Images</string>
+
+    <!-- Sort Options -->
+    <string name="sort_files">Sort Files</string>
+    <string name="sort_folders">Sort Folders</string>
+    <string name="choose_sort_pdfs">Choose how to organize your PDFs</string>
+    <string name="choose_sort_folders">Choose how to organize folders</string>
+    <string name="sort_by_name">By Name</string>
+    <string name="sort_by_date">By Date</string>
+    <string name="sort_by_size">By Size</string>
+    <string name="sort_ascending">Ascending</string>
+    <string name="sort_descending">Descending</string>
+
+    <!-- Home Screen -->
+    <string name="good_morning">Good morning</string>
+    <string name="good_afternoon">Good afternoon</string>
+    <string name="good_evening">Good evening</string>
+    <string name="welcome_to_library">Welcome to your PDF library</string>
+    <string name="all_files">All Files</string>
+    <string name="favorites">Favorites</string>
+    <string name="recent">Recent</string>
+    <string name="no_files">No files</string>
+    <string name="no_favorites">No favorites yet</string>
+    <string name="no_recent">No recent files</string>
+    <string name="add_favorites_hint">Add PDFs to favorites to see them here</string>
+    <string name="open_pdf_hint">Open some PDFs to see them here</string>
+    <string name="delete_count_files">Delete %d files?</string>
+    <string name="delete_warning">This action cannot be undone. The files will be permanently deleted from your device.</string>
+
+    <!-- Folders Screen -->
+    <string name="all_folders">All Folders</string>
+    <string name="search_folders">Search folders…</string>
+    <string name="search_folders_hint">Search folders...</string>
+    <string name="no_folders_found">No folders found</string>
+    <string name="try_different_search">Try a different search term</string>
+    <string name="folder_count">%d folders</string>
+    <string name="file_count">%d files</string>
+    <string name="pdfs">PDFs</string>
+    <string name="search_folders_desc">Search folders</string>
+    <string name="sort_folders_desc">Sort folders</string>
+    <string name="clear_search">Clear search</string>
+    <string name="close_search">Close search</string>
+
+    <!-- Search Screen -->
+    <string name="search_your_pdfs">Search your PDFs…</string>
+    <string name="search_your_pdfs_hint">Search your PDFs...</string>
+    <string name="recent_searches">Recent Searches</string>
+    <string name="search_tips">Search Tips</string>
+    <string name="results_for">Results for \"%s\"</string>
+    <string name="no_results">No results found</string>
+    <string name="clear">Clear</string>
+    <string name="show_all_count">Show All (%d)</string>
+    <string name="file_found">%d file found</string>
+    <string name="files_found">%d files found</string>
+    <string name="options">Options</string>
+    <string name="tip_search_filename_title">Search by filename</string>
+    <string name="tip_search_filename_desc">Type part of the PDF name to find it quickly</string>
+    <string name="tip_search_folder_title">Search by folder</string>
+    <string name="tip_search_folder_desc">Enter a folder name to find all PDFs in it</string>
+    <string name="tip_partial_matches_title">Partial matches work</string>
+    <string name="tip_partial_matches_desc">You don\'t need the exact name - try shorter words</string>
+
+    <!-- File Info -->
+    <string name="file_information">File Information</string>
+    <string name="file_name">File Name</string>
+    <string name="file_path">File Path</string>
+    <string name="file_size">File Size</string>
+    <string name="page_count">Page Count</string>
+    <string name="last_modified">Last Modified</string>
+    <string name="created">Created</string>
+
+    <!-- Delete Confirmation -->
+    <string name="delete_file">Delete File</string>
+    <string name="delete_files">Delete Files</string>
+    <string name="action_cannot_be_undone">This action cannot be undone</string>
+    <string name="confirm_delete_file">Are you sure you want to permanently delete this file?</string>
+    <string name="confirm_delete_files">Are you sure you want to permanently delete these files?</string>
+
+    <!-- Rename -->
+    <string name="rename_file">Rename File</string>
+    <string name="new_name">New Name</string>
+
+    <!-- Stats -->
+    <string name="library_statistics">Library Statistics</string>
+    <string name="total_files">Total Files</string>
+    <string name="favorite_files">Favorite Files</string>
+    <string name="recent_files">Recent Files</string>
+
+    <!-- Settings Screen -->
+    <string name="appearance">Appearance</string>
+    <string name="reader">Reader</string>
+    <string name="updates">Updates</string>
+    <string name="about">About</string>
+    <string name="theme">Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+    <string name="dynamic_colors">Dynamic Colors</string>
+    <string name="scroll_direction">Scroll Direction</string>
+    <string name="vertical">Vertical</string>
+    <string name="horizontal">Horizontal</string>
+    <string name="page_layout">Page Layout</string>
+    <string name="single_page">Single Page</string>
+    <string name="two_pages">Two Pages</string>
+    <string name="page_alignment">Page Alignment</string>
+    <string name="align_left">Left</string>
+    <string name="align_center">Center</string>
+    <string name="align_right">Right</string>
+    <string name="quick_zoom">Quick Zoom</string>
+    <string name="fit_width">Fit Width</string>
+    <string name="fit_page">Fit Page</string>
+    <string name="actual_size">Actual Size</string>
+    <string name="reading_theme">Reading Theme</string>
+    <string name="keep_screen_on">Keep Screen On</string>
+    <string name="check_for_updates">Check for Updates</string>
+    <string name="auto_check_updates">Auto Check Updates</string>
+    <string name="version">Version %s</string>
+    <string name="gpl_license">GPL 3.0</string>
+    <string name="adjust_brightness">Adjust screen brightness</string>
+    <string name="changelog">Changelog</string>
+    <string name="latest">LATEST</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="your_privacy_protected">Your Privacy is Protected</string>
+    <string name="last_updated">Last updated: %s</string>
+    <string name="open_source_licenses">Open Source Licenses</string>
+    <string name="about_creator">About the Creator</string>
+    <string name="creator_name">K M Rejowan Ahmmed</string>
+    <string name="creator_title">Senior Android Developer</string>
+    <string name="creator_description">PDF Reader Pro was created to provide a free, open-source, and privacy-focused PDF reading experience. With features like bookmarks, favorites, reading themes, and customizable settings, it aims to be a complete PDF solution for Android users.</string>
+    <string name="gnu_license">GNU General Public License v3.0</string>
+
+    <!-- Update Sheet -->
+    <string name="update_available">Update Available</string>
+    <string name="current">Current</string>
+    <string name="new_version">New</string>
+    <string name="whats_new">What\'s New</string>
+    <string name="skip_version">Skip this version</string>
+    <string name="download_update">Download Update</string>
+
+    <!-- Download Progress -->
+    <string name="downloading">Downloading…</string>
+    <string name="download_complete">Download Complete</string>
+    <string name="download_failed">Download Failed</string>
+    <string name="install">Install</string>
+    <string name="retry">Retry</string>
+
+    <!-- Reader Screen -->
+    <string name="page_of">Page %d of %d</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="no_bookmarks">No bookmarks</string>
+    <string name="add_bookmark">Add Bookmark</string>
+    <string name="remove_bookmark">Remove Bookmark</string>
+    <string name="bookmark_added">Bookmark added</string>
+    <string name="bookmark_removed">Bookmark removed</string>
+    <string name="table_of_contents">Table of Contents</string>
+    <string name="no_table_of_contents">No table of contents</string>
+    <string name="attachments">Attachments</string>
+    <string name="no_attachments">No attachments</string>
+    <string name="zoom">Zoom</string>
+    <string name="auto_scroll">Auto Scroll</string>
+    <string name="auto_scroll_speed">Speed</string>
+    <string name="print">Print</string>
+    <string name="pdf_info">PDF Info</string>
+    <string name="more_options">More Options</string>
+    <string name="view_mode">View Mode</string>
+    <string name="display">Display</string>
+    <string name="reading_tools">Reading Tools</string>
+    <string name="document">Document</string>
+    <string name="find_in_document">Find in Document</string>
+    <string name="search_text">Search text…</string>
+    <string name="no_matches">No matches</string>
+    <string name="match_count">%d of %d</string>
+
+    <!-- Remove Favorite -->
+    <string name="remove_favorite">Remove Favorite</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="confirm_remove_favorite">Are you sure you want to remove this file from favorites?</string>
+
+    <!-- Exit Confirmation -->
+    <string name="exit_app">Exit App</string>
+    <string name="confirm_exit">Are you sure you want to exit?</string>
+    <string name="exit">Exit</string>
+
+    <!-- Tools Screen -->
+    <string name="pdf_tools">PDF Tools</string>
+    <string name="merge_pdfs">Merge PDFs</string>
+    <string name="split_pdf">Split PDF</string>
+    <string name="compress_pdf">Compress PDF</string>
+    <string name="rotate_pdf">Rotate PDF</string>
+    <string name="lock_pdf">Lock PDF</string>
+    <string name="unlock_pdf">Unlock PDF</string>
+    <string name="add_watermark">Add Watermark</string>
+    <string name="remove_pages">Remove Pages</string>
+    <string name="reorder_pages">Reorder Pages</string>
+    <string name="add_page_numbers">Add Page Numbers</string>
+    <string name="images_to_pdf">Images to PDF</string>
+    <string name="pdf_to_images">PDF to Images</string>
+
+    <!-- Tool Common -->
+    <string name="select_source_file">Select a PDF file to get started</string>
+    <string name="processing">Processing…</string>
+    <string name="success">Success!</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="output_file_name">Output File Name</string>
+    <string name="overwrite_original">Overwrite Original</string>
+    <string name="pages">Pages</string>
+    <string name="all_pages">All Pages</string>
+    <string name="custom_pages">Custom Pages</string>
+    <string name="page_range">Page Range</string>
+    <string name="page_range_hint">e.g., 1-3, 5, 7-10</string>
+    <string name="invalid_page_range">Invalid page range</string>
+
+    <!-- Merge -->
+    <string name="add_pdfs">Add PDFs to merge</string>
+    <string name="drag_to_reorder">Drag to reorder</string>
+    <string name="merge_files">Merge Files</string>
+    <string name="merge_more">Merge More</string>
+    <string name="merged_successfully">PDFs merged successfully</string>
+
+    <!-- Split -->
+    <string name="split_mode">Split Mode</string>
+    <string name="split_by_pages">Split by Pages</string>
+    <string name="split_by_range">Split by Range</string>
+    <string name="extract_pages">Extract Pages</string>
+    <string name="pages_per_file">Pages per File</string>
+    <string name="split">Split</string>
+    <string name="split_more">Split More</string>
+    <string name="split_successfully">PDF split successfully</string>
+
+    <!-- Compress -->
+    <string name="compression_level">Compression Level</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="estimated_size">Estimated size: %s</string>
+    <string name="compress">Compress</string>
+    <string name="compress_more">Compress More</string>
+    <string name="compressed_successfully">PDF compressed successfully</string>
+    <string name="size_reduced">Size reduced by %s</string>
+
+    <!-- Rotate -->
+    <string name="rotation">Rotation</string>
+    <string name="rotate_left">Rotate Left</string>
+    <string name="rotate_right">Rotate Right</string>
+    <string name="rotate_180">Rotate 180°</string>
+    <string name="apply_to_all">Apply to All Pages</string>
+    <string name="rotate_more">Rotate More</string>
+    <string name="rotated_successfully">PDF rotated successfully</string>
+
+    <!-- Lock/Unlock -->
+    <string name="password">Password</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="user_password">User Password</string>
+    <string name="owner_password">Owner Password</string>
+    <string name="permissions">Permissions</string>
+    <string name="allow_printing">Allow Printing</string>
+    <string name="allow_copying">Allow Copying</string>
+    <string name="allow_modifying">Allow Modifying</string>
+    <string name="allow_annotations">Allow Annotations</string>
+    <string name="lock">Lock</string>
+    <string name="unlock">Unlock</string>
+    <string name="lock_more">Lock More</string>
+    <string name="unlock_more">Unlock More</string>
+    <string name="locked_successfully">PDF locked successfully</string>
+    <string name="unlocked_successfully">PDF unlocked successfully</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="pdf_not_protected">This PDF is not password protected</string>
+    <string name="pdf_protected">This PDF is password protected</string>
+
+    <!-- Watermark -->
+    <string name="watermark">Watermark</string>
+    <string name="text_watermark">Text Watermark</string>
+    <string name="image_watermark">Image Watermark</string>
+    <string name="watermark_text">Watermark Text</string>
+    <string name="select_image">Select Image</string>
+    <string name="position">Position</string>
+    <string name="opacity">Opacity</string>
+    <string name="font_size">Font Size</string>
+    <string name="color">Color</string>
+    <string name="add">Add</string>
+    <string name="watermark_more">Add More</string>
+    <string name="watermark_added">Watermark added successfully</string>
+
+    <!-- Remove Pages -->
+    <string name="select_pages_to_remove">Select pages to remove</string>
+    <string name="remove_selected">Remove Selected</string>
+    <string name="pages_removed">Pages removed successfully</string>
+    <string name="remove_more">Remove More</string>
+
+    <!-- Reorder -->
+    <string name="drag_to_reorder_pages">Drag pages to reorder</string>
+    <string name="reorder">Reorder</string>
+    <string name="reorder_more">Reorder More</string>
+    <string name="reordered_successfully">Pages reordered successfully</string>
+
+    <!-- Page Numbers -->
+    <string name="number_format">Number Format</string>
+    <string name="start_number">Start Number</string>
+    <string name="number_position">Position</string>
+    <string name="add_numbers">Add Numbers</string>
+    <string name="numbers_added">Page numbers added successfully</string>
+    <string name="number_more">Number More</string>
+
+    <!-- Images to PDF -->
+    <string name="add_images">Add images to convert</string>
+    <string name="image_quality">Image Quality</string>
+    <string name="convert">Convert</string>
+    <string name="convert_more">Convert More</string>
+    <string name="converted_successfully">Images converted to PDF</string>
+
+    <!-- PDF to Images -->
+    <string name="output_format">Output Format</string>
+    <string name="png">PNG</string>
+    <string name="jpg">JPG</string>
+    <string name="image_resolution">Resolution</string>
+    <string name="export">Export</string>
+    <string name="export_more">Export More</string>
+    <string name="exported_successfully">PDF exported as images</string>
+    <string name="share_all">Share All</string>
+    <string name="view_images">View Images</string>
+    <string name="images_saved_to">Images saved to: %s</string>
+
+    <!-- Error Messages -->
+    <string name="error_loading_pdf">Error loading PDF</string>
+    <string name="error_file_not_found">File not found</string>
+    <string name="error_permission_denied">Permission denied</string>
+    <string name="error_invalid_pdf">Invalid PDF file</string>
+    <string name="error_corrupted_pdf">PDF file is corrupted</string>
+    <string name="error_password_required">Password required</string>
+    <string name="error_generic">Something went wrong</string>
+    <string name="error_wrong_password">Incorrect password</string>
+    <string name="error_storage_full">Storage is full</string>
+    <string name="error_network">Network error</string>
+    <string name="error_timeout">Operation timed out</string>
+    <string name="error_out_of_memory">Not enough memory</string>
+
+    <!-- Error Recovery Hints -->
+    <string name="error_hint_corrupted_pdf">The file may be damaged. Try downloading it again.</string>
+    <string name="error_hint_invalid_pdf">This file is not a valid PDF document.</string>
+    <string name="error_hint_password_required">Enter the password to open this PDF.</string>
+    <string name="error_hint_wrong_password">Please check your password and try again.</string>
+    <string name="error_hint_storage_full">Free up space by deleting unused files or apps.</string>
+    <string name="error_hint_permission_denied">Grant storage permission in Settings.</string>
+    <string name="error_hint_network">Check your internet connection and try again.</string>
+    <string name="error_hint_timeout">The operation took too long. Try again.</string>
+    <string name="error_hint_out_of_memory">Close other apps and try again with a smaller file.</string>
+    <string name="error_hint_generic">Please try again. If the problem persists, restart the app.</string>
+
+    <!-- PDF Thumbnail -->
+    <string name="pdf">PDF</string>
+    <string name="pdf_thumbnail">PDF thumbnail</string>
+    <string name="loading">Loading…</string>
+
+    <!-- Misc -->
+    <string name="pdf_reader_pro">PDF Reader Pro</string>
+    <string name="no_pdf_data">No PDF data received</string>
+
+    <!-- Content Descriptions - Accessibility -->
+    <string name="sort_files_desc">Sort files</string>
+    <string name="library_stats_desc">Library statistics</string>
+    <string name="grid_view">Grid view</string>
+    <string name="list_view">List view</string>
+    <string name="more">More</string>
+    <string name="favorite">Favorite</string>
+
+    <!-- Content Descriptions - Navigation -->
+    <string name="cd_navigate_back">Navigate back</string>
+    <string name="cd_close">Close</string>
+    <string name="cd_dismiss">Dismiss</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_options">Options</string>
+    <string name="cd_expand">Expand</string>
+    <string name="cd_collapse">Collapse</string>
+
+    <!-- Content Descriptions - Actions -->
+    <string name="cd_add">Add</string>
+    <string name="cd_remove">Remove</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_edit">Edit</string>
+    <string name="cd_save">Save</string>
+    <string name="cd_share">Share</string>
+    <string name="cd_download">Download</string>
+    <string name="cd_upload">Upload</string>
+    <string name="cd_refresh">Refresh</string>
+    <string name="cd_search">Search</string>
+    <string name="cd_clear_search">Clear search</string>
+    <string name="cd_close_search">Close search</string>
+    <string name="cd_previous_result">Previous result</string>
+    <string name="cd_next_result">Next result</string>
+    <string name="cd_select">Select</string>
+    <string name="cd_deselect">Deselect</string>
+    <string name="cd_select_all">Select all</string>
+    <string name="cd_deselect_all">Deselect all</string>
+    <string name="cd_reorder">Reorder</string>
+    <string name="cd_drag_handle">Drag to reorder</string>
+    <string name="cd_copy">Copy</string>
+    <string name="cd_move">Move</string>
+    <string name="cd_rename">Rename</string>
+    <string name="cd_info">Information</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_print">Print</string>
+    <string name="cd_open">Open</string>
+    <string name="cd_open_with">Open with</string>
+    <string name="cd_retry">Retry</string>
+
+    <!-- Content Descriptions - PDF Reader -->
+    <string name="cd_zoom_in">Zoom in</string>
+    <string name="cd_zoom_out">Zoom out</string>
+    <string name="cd_fit_width">Fit to width</string>
+    <string name="cd_fit_page">Fit to page</string>
+    <string name="cd_next_page">Next page</string>
+    <string name="cd_previous_page">Previous page</string>
+    <string name="cd_first_page">Go to first page</string>
+    <string name="cd_last_page">Go to last page</string>
+    <string name="cd_go_to_page">Go to page</string>
+    <string name="cd_bookmark">Bookmark</string>
+    <string name="cd_add_bookmark">Add bookmark</string>
+    <string name="cd_remove_bookmark">Remove bookmark</string>
+    <string name="cd_table_of_contents">Table of contents</string>
+    <string name="cd_rotate_left">Rotate left</string>
+    <string name="cd_rotate_right">Rotate right</string>
+    <string name="cd_toggle_night_mode">Toggle night mode</string>
+    <string name="cd_auto_scroll">Auto scroll</string>
+    <string name="cd_increase_speed">Increase speed</string>
+    <string name="cd_decrease_speed">Decrease speed</string>
+    <string name="cd_play">Play</string>
+    <string name="cd_pause">Pause</string>
+    <string name="cd_stop">Stop</string>
+
+    <!-- Content Descriptions - Files -->
+    <string name="cd_pdf_file">PDF file</string>
+    <string name="cd_folder">Folder</string>
+    <string name="cd_image">Image</string>
+    <string name="cd_file_thumbnail">File thumbnail</string>
+    <string name="cd_add_files">Add files</string>
+    <string name="cd_select_files">Select files</string>
+    <string name="cd_file_options">File options</string>
+    <string name="cd_folder_options">Folder options</string>
+    <string name="cd_selected">Selected</string>
+    <string name="cd_not_selected">Not selected</string>
+
+    <!-- Content Descriptions - Status -->
+    <string name="cd_loading">Loading</string>
+    <string name="cd_success">Success</string>
+    <string name="cd_error">Error</string>
+    <string name="cd_warning">Warning</string>
+    <string name="cd_processing">Processing</string>
+    <string name="cd_completed">Completed</string>
+    <string name="cd_progress">Progress indicator</string>
+    <string name="cd_checkbox">Checkbox</string>
+    <string name="cd_checked">Checked</string>
+    <string name="cd_unchecked">Unchecked</string>
+    <string name="cd_toggle">Toggle</string>
+    <string name="cd_enabled">Enabled</string>
+    <string name="cd_disabled">Disabled</string>
+
+    <!-- Content Descriptions - PDF Tools -->
+    <string name="cd_merge_pdfs">Merge PDFs</string>
+    <string name="cd_split_pdf">Split PDF</string>
+    <string name="cd_compress_pdf">Compress PDF</string>
+    <string name="cd_rotate_pdf">Rotate PDF</string>
+    <string name="cd_reorder_pages">Reorder pages</string>
+    <string name="cd_remove_pages">Remove pages</string>
+    <string name="cd_add_watermark">Add watermark</string>
+    <string name="cd_add_page_numbers">Add page numbers</string>
+    <string name="cd_lock_pdf">Lock PDF</string>
+    <string name="cd_unlock_pdf">Unlock PDF</string>
+    <string name="cd_pdf_to_image">Convert PDF to image</string>
+    <string name="cd_image_to_pdf">Convert image to PDF</string>
+    <string name="cd_page_preview">Page preview</string>
+    <string name="cd_page_number">Page %1$d</string>
+    <string name="cd_page_selected">Page %1$d selected</string>
+    <string name="cd_page_not_selected">Page %1$d not selected</string>
+
+    <!-- Content Descriptions - UI Elements -->
+    <string name="cd_app_logo">PDF Reader Pro logo</string>
+    <string name="cd_decorative">Decorative image</string>
+    <string name="cd_illustration">Illustration</string>
+    <string name="cd_sort_ascending">Sort ascending</string>
+    <string name="cd_sort_descending">Sort descending</string>
+    <string name="cd_current_page">Current page</string>
+    <string name="cd_password_visibility">Toggle password visibility</string>
+    <string name="cd_color_picker">Color picker</string>
+    <string name="cd_slider">Slider</string>
+    <string name="cd_dropdown">Dropdown menu</string>
+
+    <!-- Navigation -->
+    <string name="home">Home</string>
+    <string name="tools">Tools</string>
+
+    <!-- Empty States -->
+    <string name="no_pdfs_title">No PDFs here yet</string>
+    <string name="no_pdfs_message">We couldn\'t find any PDF files on your device. Try scanning again or add some PDFs to get started!</string>
+    <string name="scan_for_pdfs">Scan for PDFs</string>
+    <string name="recent_journey_title">Your reading journey starts here</string>
+    <string name="recent_journey_message">PDFs you open will show up here for quick access. Start exploring your files!</string>
+    <string name="browse_files">Browse Files</string>
+    <string name="no_favorites_title">No favorites yet</string>
+    <string name="no_favorites_message">Tap the heart icon on any PDF to save it here for easy access later.</string>
+    <string name="no_matches_title">No matches found</string>
+    <string name="no_matches_message">We couldn\'t find anything for \"%s\". Try a different search term.</string>
+    <string name="no_folders_title">No folders yet</string>
+    <string name="no_folders_message">PDF folders will appear here once your files are scanned. Let\'s find them!</string>
+    <string name="permission_title">We need your permission</string>
+    <string name="permission_message">To show your PDF files here, please allow access to your storage</string>
+
+    <!-- Stats Sheet -->
+    <string name="library_stats">Library Stats</string>
+    <string name="library_stats_subtitle">Your PDF collection at a glance</string>
+    <string name="total_pdfs">Total PDFs</string>
+    <string name="files_in_library">files in your library</string>
+    <string name="storage_used">Storage Used</string>
+    <string name="total_file_size">total file size</string>
+    <string name="percent_of_library">%d%% of your library</string>
+    <string name="no_files_yet">no files yet</string>
+    <string name="recently_opened">recently opened</string>
+
+    <!-- Exit Confirmation -->
+    <string name="stay">Stay</string>
+    <string name="exit_confirm_message">Are you sure you want to close the app?</string>
+
+    <!-- Rename Sheet -->
+    <string name="file_name_label">File name</string>
+    <string name="invalid_file_name">Invalid file name</string>
+    <string name="pdf_extension_hint">The .pdf extension will be added automatically</string>
+
+    <!-- File Options -->
+    <string name="quick_actions">Quick Actions</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites_action">Remove from Favorites</string>
+    <string name="add_favorites_desc">Save to your favorites for quick access</string>
+    <string name="remove_favorites_desc">Remove from your starred collection</string>
+    <string name="remove_from_recents">Remove from Recents</string>
+    <string name="remove_recents_desc">Clear from recent history</string>
+    <string name="share_pdf">Share</string>
+    <string name="share_pdf_desc">Send this PDF to other apps</string>
+    <string name="rename_action">Rename</string>
+    <string name="rename_desc">Change the file name</string>
+    <string name="file_info">File Info</string>
+    <string name="file_info_desc">View file details and properties</string>
+    <string name="delete_action">Delete</string>
+    <string name="delete_desc">Permanently remove this file</string>
+    <string name="pages_count">%d pages</string>
+
+    <!-- Folder Options -->
+    <string name="folder_options">Folder Options</string>
+    <string name="pdf_files">PDF Files</string>
+    <string name="file_singular">%d file</string>
+    <string name="files_plural">%d files</string>
+    <string name="location">Location</string>
+    <string name="actions">Actions</string>
+    <string name="open_folder">Open Folder</string>
+    <string name="open_folder_desc">View PDF files inside</string>
+    <string name="copy_path">Copy Path</string>
+    <string name="copy_path_desc">Copy folder location to clipboard</string>
+    <string name="path_copied">Path copied to clipboard</string>
+
+    <!-- Download Progress -->
+    <string name="download_progress">Download Progress</string>
+    <string name="starting_download">Starting Download…</string>
+    <string name="downloading_update">Downloading Update</string>
+    <string name="version_label">Version %s</string>
+    <string name="download_background_hint">You can dismiss this sheet. Download will continue in the background with a notification.</string>
+    <string name="cancel_download">Cancel Download</string>
+    <string name="version_ready_to_install">Version %s is ready to install</string>
+    <string name="install_update">Install Update</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="allow_install_apps">Allow installing apps from this source</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="later">Later</string>
+    <string name="download_cancelled">Download Cancelled</string>
+    <string name="try_again_settings">You can try again later from Settings</string>
+
+    <!-- Update Sheet -->
+    <string name="no_release_notes">No release notes available.</string>
+
+    <!-- Recent Items -->
+    <string name="item_selected">Selected</string>
+    <string name="item_not_selected">Not selected</string>
+    <string name="page_progress">Page %d/%d</string>
+    <string name="page_progress_time">Page %1$d of %2$d • %3$s</string>
+    <string name="just_now">Just now</string>
+    <string name="minutes_ago">%dm ago</string>
+    <string name="hours_ago">%dh ago</string>
+    <string name="days_ago">%dd ago</string>
+
+    <!-- Permission Bottom Sheet -->
+    <string name="quick_access_needed">Quick access needed</string>
+    <string name="storage_access_message">Allow storage access so we can find and display your PDF files</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="not_now">Not now</string>
+
+    <!-- Error Activity -->
+    <string name="unexpected_error">An unexpected error occurred</string>
+    <string name="something_went_wrong">Oops! Something went wrong</string>
+    <string name="go_back">Go Back</string>
+    <string name="restart_app">Restart App</string>
+    <string name="close_app">Close App</string>
+
+    <!-- Password Dialog -->
+    <string name="password_required">Password Required</string>
+    <string name="password_protected_message">This PDF is password protected. Enter the password to open it.</string>
+    <string name="incorrect_password_error">Incorrect password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="remember_password">Remember password for this file</string>
+
+    <!-- More Options Sheet -->
+    <string name="additional_tools">Additional tools and actions</string>
+    <string name="view_manage_bookmarks">View and manage saved pages</string>
+    <string name="auto_scroll_desc">Hands-free reading mode</string>
+    <string name="go_to_page_desc">Jump to a specific page</string>
+    <string name="share_document">Share this document</string>
+    <string name="print_document">Print this document</string>
+    <string name="document_info">Document Info</string>
+    <string name="view_file_details">View file details and metadata</string>
+
+    <!-- View Mode Sheet -->
+    <string name="view_options">View Options</string>
+    <string name="customize_reading_layout">Customize your reading layout</string>
+    <string name="single_layout">Single</string>
+    <string name="two_page_layout">Two-Page</string>
+    <string name="left_align">Left</string>
+    <string name="center_align">Center</string>
+    <string name="right_align">Right</string>
+    <string name="option_selected">Selected</string>
+    <string name="snap_to_page">Snap to Page</string>
+    <string name="snap_to_page_desc">Automatically align to page boundaries</string>
+    <string name="auto_hide_toolbar">Auto-Hide Toolbar</string>
+    <string name="auto_hide_toolbar_desc">Hide toolbar after 5 seconds</string>
+
+    <!-- Display Sheet -->
+    <string name="display_settings">Display Settings</string>
+    <string name="theme_brightness_options">Theme, brightness &amp; screen options</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="sepia_theme">Sepia</string>
+    <string name="black_theme">Black</string>
+    <string name="low_brightness">Low brightness</string>
+    <string name="high_brightness">High brightness</string>
+    <string name="prevent_screen_off">Prevent screen from turning off</string>
+
+    <!-- Page Jump Sheet -->
+    <string name="jump_to_page_title">Jump to Page</string>
+    <string name="enter_page_range">Enter a page number (1 - %d)</string>
+    <string name="page_number_placeholder">Page number</string>
+    <string name="enter_valid_page">Please enter a number between 1 and %d</string>
+
+    <!-- Auto Scroll Sheet -->
+    <string name="auto_scroll_title">Auto-Scroll</string>
+    <string name="hands_free_reading">Hands-free reading mode</string>
+    <string name="speed_presets">Speed Presets</string>
+    <string name="speed_slow">Slow</string>
+    <string name="speed_medium">Medium</string>
+    <string name="speed_fast">Fast</string>
+    <string name="speed_very_fast">Very Fast</string>
+    <string name="custom_speed">Custom Speed</string>
+    <string name="speed_pixels">%d px/s</string>
+    <string name="slower">Slower</string>
+    <string name="faster">Faster</string>
+    <string name="start_auto_scroll">Start Auto-Scroll</string>
+    <string name="auto_scroll_hint">Tap screen to pause/resume. Use overlay to stop.</string>
+
+    <!-- Zoom Sheet -->
+    <string name="zoom_display">Zoom &amp; Display</string>
+    <string name="adjust_view_orientation">Adjust view size and orientation</string>
+    <string name="screen_orientation">Screen Orientation</string>
+    <string name="orientation_auto">Auto</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_landscape">Landscape</string>
+    <string name="current_zoom_label">Current Zoom</string>
+
+    <!-- Bookmarks Sheet -->
+    <string name="bookmark_count">%d bookmark</string>
+    <string name="bookmarks_count">%d bookmarks</string>
+    <string name="delete_bookmark">Delete bookmark</string>
+    <string name="bookmark_hint">Tap the bookmark icon to save pages</string>
+    <string name="page_number_title">Page %d</string>
+
+    <!-- PDF Info Dialog -->
+    <string name="document_information">Document Information</string>
+    <string name="pdf_version_label">PDF %s</string>
+    <string name="document_section">Document</string>
+    <string name="subject_label">Subject</string>
+    <string name="keywords_label">Keywords</string>
+    <string name="language_label">Language</string>
+    <string name="author_creator">Author &amp; Creator</string>
+    <string name="author_label">Author</string>
+    <string name="creator_label">Creator</string>
+    <string name="producer_label">Producer</string>
+    <string name="dates_section">Dates</string>
+    <string name="created_label">Created</string>
+    <string name="modified_label">Modified</string>
+    <string name="security_features">Security &amp; Features</string>
+    <string name="encrypted_label">Encrypted</string>
+    <string name="encrypted_type">Encrypted (%s)</string>
+    <string name="forms_label">Forms</string>
+    <string name="signatures_label">Signatures</string>
+    <string name="xfa_label">XFA</string>
+    <string name="web_optimized">Web Optimized</string>
+    <string name="location_section">Location</string>
+
+    <!-- Top Bar Menu Panel -->
+    <string name="document_options">Document Options</string>
+    <string name="share_print_manage">Share, print, and manage</string>
+    <string name="document_actions">Document Actions</string>
+    <string name="document_info_title">Document Info</string>
+    <string name="view_details_metadata">View file details and metadata</string>
+    <string name="share_this_document">Share this document</string>
+    <string name="print_this_document">Print this document</string>
+    <string name="open_in_another_app">Open in another app</string>
+    <string name="save_as">Save As</string>
+    <string name="save_copy_location">Save a copy to your chosen location</string>
+    <string name="file_management">File Management</string>
+    <string name="remove_from_favourites">Remove from Favourites</string>
+    <string name="add_to_favourites">Add to Favourites</string>
+    <string name="remove_from_favourites_desc">Remove from your favourites list</string>
+    <string name="add_to_favourites_desc">Add to your favourites list</string>
+    <string name="delete_file_permanently">Permanently delete this file</string>
+
+    <!-- Delete Confirm Dialog -->
+    <string name="delete_pdf_question">Delete PDF?</string>
+    <string name="action_cannot_undo">This action cannot be undone</string>
+
+    <!-- Remove Favorite Sheet -->
+    <string name="remove_from_favourites_question">Remove from Favourites?</string>
+    <string name="remove_from_list_message">This will remove from your list</string>
+
+    <!-- Reader Components -->
+    <string name="go_to_page">Go to page</string>
+    <string name="enter_page">Enter page number (1-%d)</string>
+    <string name="invalid_page">Please enter a valid page number</string>
+    <string name="go">Go</string>
+    <string name="current_zoom">Current: %d%%</string>
+    <string name="zoom_level">Zoom Level</string>
+    <string name="scroll_direction_label">Scroll Direction</string>
+    <string name="page_layout_label">Page Layout</string>
+    <string name="fit_mode">Fit Mode</string>
+    <string name="reading_mode">Reading Mode</string>
+    <string name="auto_scroll_settings">Auto Scroll Settings</string>
+    <string name="scroll_speed">Scroll Speed</string>
+    <string name="slow">Slow</string>
+    <string name="fast">Fast</string>
+    <string name="tap_to_start">Tap to start auto-scroll</string>
+    <string name="start_scroll">Start</string>
+    <string name="stop_scroll">Stop</string>
+    <string name="bookmarks_title">Bookmarks</string>
+    <string name="no_bookmarks_yet">No bookmarks yet</string>
+    <string name="add_bookmark_hint">Add bookmarks while reading to quickly return to important pages</string>
+    <string name="page_label">Page %d</string>
+    <string name="toc_title">Table of Contents</string>
+    <string name="no_toc">No table of contents available</string>
+    <string name="attachments_title">Attachments</string>
+    <string name="no_attachments_available">No attachments available</string>
+    <string name="more_options_title">More Options</string>
+    <string name="view_mode_title">View Mode</string>
+    <string name="continuous">Continuous</string>
+    <string name="page_by_page">Page by Page</string>
+    <string name="remove_favorite_title">Remove from Favorites?</string>
+    <string name="remove_favorite_message">This file will be removed from your favorites list</string>
+    <string name="pdf_information">PDF Information</string>
+    <string name="document_title">Title</string>
+    <string name="author">Author</string>
+    <string name="subject">Subject</string>
+    <string name="creator">Creator</string>
+    <string name="producer">Producer</string>
+    <string name="creation_date">Creation Date</string>
+    <string name="modification_date">Modification Date</string>
+    <string name="unknown">Unknown</string>
+    <string name="enter_password_to_open">Enter password to open this PDF</string>
+    <string name="password_hint">Password</string>
+    <string name="wrong_password">Wrong password. Please try again.</string>
+    <string name="open_pdf">Open</string>
+    <string name="error_loading">Error loading PDF</string>
+    <string name="try_again_message">Something went wrong while loading this PDF. Please try again.</string>
+
+    <!-- Floating Search Bar -->
+    <string name="search_in_document">Search in document…</string>
+
+    <!-- Reader Sidebar -->
+    <string name="reading">Reading</string>
+    <string name="settings_label">Settings</string>
+    <string name="progress">Progress</string>
+    <string name="page_current">Page %d</string>
+    <string name="of_total">of %d</string>
+    <string name="prevent_screen_timeout">Prevent screen timeout</string>
+    <string name="lock_rotation">Lock Rotation</string>
+    <string name="rotation_locked">Rotation locked</string>
+    <string name="auto_rotate">Auto-rotate</string>
+    <string name="swipe_to_close">Swipe right to close</string>
+
+    <!-- Tools Screen -->
+    <string name="coming_soon">Soon</string>
+
+    <!-- Enhanced Table of Contents -->
+    <string name="document_navigation">Document Navigation</string>
+    <string name="no_contents_available">No Contents Available</string>
+    <string name="no_toc_message">This PDF doesn\'t have a table of contents</string>
+    <string name="no_attachments_message">This PDF doesn\'t have any embedded files</string>
+
+    <!-- Settings Panel (Reader) -->
+    <string name="reading_settings">Reading Settings</string>
+    <string name="full_screen_mode">Full Screen Mode</string>
+    <string name="auto_rotate_enabled">Auto-rotate enabled</string>
+    <string name="delete_pdf">Delete PDF</string>
+
+    <!-- Folder Detail Screen -->
+    <string name="delete_files_count">Delete %d files?</string>
+    <string name="delete_files_warning">This action cannot be undone. The files will be permanently deleted from your device.</string>
+
+    <!-- Settings Screen -->
+    <string name="reader_section">Reader</string>
+    <string name="about_section">About</string>
+    <string name="app_name_full">PDF Reader Pro</string>
+    <string name="version_format">Version %s</string>
+    <string name="license_gpl">GPL 3.0</string>
+    <string name="latest_badge">LATEST</string>
+    <string name="privacy_protected">Your Privacy is Protected</string>
+    <string name="about_app_description">PDF Reader Pro was created to provide a free, open-source, and privacy-focused PDF reading experience. With features like bookmarks, favorites, reading themes, and customizable settings, it aims to be a complete PDF solution for Android users.</string>
+    <string name="gpl_full_name">GNU General Public License v3.0</string>
+    <string name="key_terms">Key Terms</string>
+    <string name="view_gpl_license">View Full GPL v3.0 License</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system_default">System Default</string>
+    <string name="default_zoom">Default Zoom</string>
+    <string name="tap_to_check">Tap to check for updates</string>
+    <string name="checking">Checking…</string>
+    <string name="update_available_version">Update available: v%s</string>
+    <string name="up_to_date">You\'re up to date</string>
+    <string name="error_message">Error: %s</string>
+    <string name="view_changelog">View changelog</string>
+    <string name="view_privacy_policy">View our privacy policy</string>
+    <string name="view_third_party">View third-party libraries</string>
+    <string name="about_developer">About the developer</string>
+    <string name="app_license">App License</string>
+    <string name="follow_system_brightness">Follow system brightness</string>
+
+    <!-- Settings Screen - Remaining strings -->
+    <string name="install_pending_update">Install Pending Update</string>
+    <string name="install_downloaded_version">Install downloaded v%s</string>
+    <string name="contact_developer">Contact Developer</string>
+    <string name="get_in_touch">Get in touch with the developer</string>
+    <string name="github_repository">GitHub Repository</string>
+    <string name="view_source_code">View source code</string>
+    <string name="choose_appearance">Choose app appearance</string>
+    <string name="always_light">Always use light theme</string>
+    <string name="always_dark">Always use dark theme</string>
+    <string name="follow_system">Follow system setting</string>
+    <string name="system_theme">System</string>
+    <string name="choose_scroll">Choose how pages scroll</string>
+    <string name="scroll_up_down">Scroll up and down</string>
+    <string name="scroll_left_right">Scroll left and right</string>
+    <string name="position_pages">Position pages on screen</string>
+    <string name="left">Left</string>
+    <string name="center">Center</string>
+    <string name="right">Right</string>
+    <string name="align_pages_left">Align pages to left</string>
+    <string name="center_pages">Center pages</string>
+    <string name="align_pages_right">Align pages to right</string>
+    <string name="initial_zoom">Initial zoom when opening PDFs</string>
+    <string name="show_entire_page">Show entire page</string>
+    <string name="match_width">Match page width to screen</string>
+    <string name="actual_size_desc">Actual size</string>
+    <string name="background_color">Background color while reading</string>
+    <string name="sepia">Sepia</string>
+    <string name="black">Black</string>
+    <string name="white_background">White background</string>
+    <string name="warm_paper">Warm paper tone</string>
+    <string name="dark_gray">Dark gray background</string>
+    <string name="pure_black">Pure black (AMOLED)</string>
+    <string name="update_interval">Update Check Interval</string>
+    <string name="update_interval_desc">How often to check for updates</string>
+    <string name="never">Never</string>
+    <string name="daily">Daily</string>
+    <string name="every_3_days">Every 3 days</string>
+    <string name="weekly">Weekly</string>
+    <string name="every_2_weeks">Every 2 weeks</string>
+    <string name="monthly">Monthly</string>
+    <string name="manual_check_only">Manual check only</string>
+    <string name="check_every_day">Check every day</string>
+    <string name="check_every_3_days">Check every 3 days</string>
+    <string name="check_once_week">Check once a week</string>
+    <string name="check_every_2_weeks">Check every 2 weeks</string>
+    <string name="check_once_month">Check once a month</string>
+    <string name="set_custom_level">Set custom level</string>
+    <string name="custom">Custom</string>
+    <string name="app_logo">App Logo</string>
+
+    <!-- Privacy Policy -->
+    <string name="no_data_collection">No data collection or sharing</string>
+    <string name="no_analytics">No analytics or tracking</string>
+    <string name="optional_updates">Optional update checks only</string>
+    <string name="local_storage">All data stored locally</string>
+    <string name="privacy_no_collection_title">No Data Collection</string>
+    <string name="privacy_no_collection_content">PDF Reader Pro does not collect, store, transmit, or share any personal data. The app operates completely offline and does not require an internet connection. There are no analytics, tracking, or telemetry of any kind.</string>
+    <string name="privacy_local_storage_title">Local Data Storage</string>
+    <string name="privacy_local_storage_content">All bookmarks, favorites, and app preferences are stored exclusively on your device. This data never leaves your device and is not accessible to anyone except you. You have complete control and can delete this data at any time.</string>
+    <string name="privacy_file_access_title">File Access</string>
+    <string name="privacy_file_access_content">PDF Reader Pro requires storage permission to read PDF files from your device. This access is used solely to display your documents and is never used to collect or transmit any information.</string>
+    <string name="privacy_password_title">Password Storage</string>
+    <string name="privacy_password_content">If you choose to save passwords for protected PDFs, they are stored locally using encrypted storage. Passwords never leave your device.</string>
+    <string name="privacy_update_title">Update Checking</string>
+    <string name="privacy_update_content">The app can optionally check for updates via GitHub\'s public API. This feature only retrieves release information and does not send any personal data, device identifiers, or usage statistics. You can disable automatic update checks in Settings or check manually whenever you prefer.</string>
+
+    <!-- GPL License Terms -->
+    <string name="gpl_freedom_use">Freedom to use the software for any purpose</string>
+    <string name="gpl_freedom_study">Freedom to study and modify the source code</string>
+    <string name="gpl_freedom_distribute">Freedom to distribute copies</string>
+    <string name="gpl_freedom_modify">Freedom to distribute modified versions</string>
+    <string name="gpl_derivative">Derivative works must be open source under GPL v3.0</string>
+    <string name="gpl_notice">PDF Reader Pro - Open Source PDF Viewer\nCopyright (C) %d K M Rejowan Ahmmed\n\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome">Welcome to\nPDF Reader Pro</string>
+    <string name="onboarding_welcome_desc">A clean, lightweight PDF reader built for simplicity. Open source, ad-free, and respects your privacy.</string>
+    <string name="onboarding_all_pdfs">All Your PDFs\nin One Place</string>
+    <string name="onboarding_all_pdfs_desc">Automatically discovers PDFs across your device. Browse by folders, sort by name, date, or size, and find any document instantly with search.</string>
+    <string name="onboarding_powerful">Powerful Reader\n&amp; PDF Tools</string>
+    <string name="onboarding_powerful_desc">Search text, customize themes, and adjust display settings. Plus built-in tools to merge, split, compress, and organize your PDFs.</string>
+    <string name="onboarding_storage">Storage Access\nRequired</string>
+    <string name="onboarding_storage_desc">Grant access to scan and display your PDF files. Your documents stay private and are never uploaded.</string>
+
+    <!-- Folder -->
+    <string name="folder_empty">This folder is empty</string>
+    <string name="no_pdf_in_folder">No PDF files found in this folder.</string>
+
+    <!-- Settings - Update Interval (renamed) -->
+    <string name="auto_check_interval">Auto-check Interval</string>
+
+    <!-- Additional accessibility strings (unique) -->
+    <string name="cd_back">Back</string>
+    <string name="cd_preview">Preview</string>
+    <string name="cd_view">View</string>
+    <string name="cd_sort">Sort</string>
+    <string name="cd_low">Low</string>
+    <string name="cd_high">High</string>
+    <string name="cd_list_view">List view</string>
+    <string name="cd_grid_view">Grid view</string>
+    <string name="cd_drag_to_reorder">Drag to reorder</string>
+    <string name="cd_watermark_image">Watermark image</string>
+    <string name="cd_watermark_preview">Watermark preview</string>
+    <string name="cd_reset_order">Reset order</string>
+    <string name="cd_add_more_pdfs">Add more PDFs</string>
+    <string name="cd_pdf_preview">PDF preview</string>
+    <string name="cd_show_password">Show password</string>
+    <string name="cd_hide_password">Hide password</string>
+    <string name="cd_favorite">Favorite</string>
+
+    <!-- Tool Screen Titles -->
+    <string name="tool_rotate_pages">Rotate Pages</string>
+    <string name="tool_reorder_pages">Reorder Pages</string>
+    <string name="tool_lock_pdf">Lock PDF</string>
+    <string name="tool_unlock_pdf">Unlock PDF</string>
+    <string name="tool_split_pdf">Split PDF</string>
+    <string name="tool_compress_pdf">Compress PDF</string>
+    <string name="tool_merge_pdfs">Merge PDFs</string>
+    <string name="tool_pdf_to_images">PDF to Images</string>
+    <string name="tool_image_to_pdf">Image to PDF</string>
+    <string name="tool_remove_pages">Remove Pages</string>
+    <string name="tool_add_page_numbers">Add Page Numbers</string>
+    <string name="tool_add_watermark">Add Watermark</string>
+    <string name="tool_rotate_pdf_pages">Rotate PDF Pages</string>
+    <string name="tool_reorder_pdf_pages">Reorder PDF Pages</string>
+
+    <!-- Tool Screen Subtitles/Descriptions -->
+    <string name="tool_rotate_desc">Select a PDF file to rotate its pages by 90°, 180°, or 270°</string>
+    <string name="tool_reorder_desc">Drag and drop pages to rearrange their order in the PDF</string>
+    <string name="tool_lock_desc">Add password protection to prevent unauthorized access</string>
+    <string name="tool_unlock_desc">Remove password protection from a PDF file</string>
+    <string name="tool_split_desc">Split a PDF into multiple smaller files</string>
+    <string name="tool_compress_desc">Reduce PDF file size while maintaining quality</string>
+    <string name="tool_merge_desc">Combine multiple PDF files into one</string>
+    <string name="tool_pdf_to_images_desc">Export PDF pages as image files</string>
+    <string name="tool_image_to_pdf_desc">Convert your images into a single PDF document</string>
+    <string name="tool_remove_pages_desc">Remove unwanted pages from your PDF</string>
+    <string name="tool_page_numbers_desc">Add page numbers to your PDF</string>
+    <string name="tool_watermark_desc">Add text or image watermark to your PDF</string>
+
+    <!-- Common Tool Actions -->
+    <string name="new_file">New File</string>
+    <string name="new_export">New Export</string>
+    <string name="new_conversion">New Conversion</string>
+    <string name="add_more">Add More</string>
+    <string name="share_all_images">Share All Images</string>
+    <string name="export_images">Export Images</string>
+    <string name="rotate_pages">Rotate Pages</string>
+    <string name="save_reordered_pdf">Save Reordered PDF</string>
+    <string name="create_pdf">Create PDF</string>
+    <string name="overwrite_original_file">Overwrite original file</string>
+
+    <!-- Loading/Processing Messages -->
+    <string name="loading_pages">Loading pages…</string>
+    <string name="loading_pdf">Loading PDF…</string>
+    <string name="checking_pdf">Checking PDF…</string>
+    <string name="rotating">Rotating…</string>
+    <string name="saving">Saving…</string>
+    <string name="locking">Locking…</string>
+    <string name="unlocking">Unlocking…</string>
+    <string name="splitting">Splitting…</string>
+    <string name="compressing">Compressing…</string>
+    <string name="merging">Merging…</string>
+    <string name="exporting">Exporting…</string>
+    <string name="creating_pdf">Creating PDF…</string>
+    <string name="removing_pages">Removing…</string>
+    <string name="adding_page_numbers">Adding page numbers…</string>
+    <string name="adding_watermark">Adding watermark…</string>
+
+    <!-- Success Messages -->
+    <string name="rotation_complete">Rotation Complete!</string>
+    <string name="pages_reordered">Pages Reordered!</string>
+    <string name="pdf_locked">PDF Locked!</string>
+    <string name="pdf_unlocked">PDF Unlocked!</string>
+    <string name="pdf_split">PDF Split!</string>
+    <string name="pdf_compressed">PDF Compressed!</string>
+    <string name="pdfs_merged">PDFs Merged!</string>
+    <string name="images_exported">Images Exported!</string>
+    <string name="pdf_created">PDF Created!</string>
+    <string name="page_numbers_added">Page Numbers Added!</string>
+
+    <!-- Success Descriptions -->
+    <string name="pages_rotated_count">%d page(s) rotated</string>
+    <string name="pdf_saved_new_order">Your PDF has been saved with the new page order</string>
+    <string name="pdf_password_protected">Your PDF is now password protected</string>
+    <string name="password_protection_removed">Password protection has been removed</string>
+    <string name="images_created_count">%d %s image(s) created</string>
+    <string name="images_converted_count">%d image(s) converted</string>
+    <string name="pages_removed_count">%d page(s) removed</string>
+
+    <!-- Section Labels -->
+    <string name="section_rotation">ROTATION</string>
+    <string name="section_select_pages">SELECT PAGES</string>
+    <string name="section_owner_password">OWNER PASSWORD (REQUIRED)</string>
+    <string name="section_user_password">USER PASSWORD (OPTIONAL)</string>
+    <string name="section_permissions">PERMISSIONS</string>
+    <string name="section_enter_password">ENTER PASSWORD</string>
+    <string name="section_output_format">OUTPUT FORMAT</string>
+    <string name="section_pages_to_export">PAGES TO EXPORT</string>
+    <string name="section_images">IMAGES</string>
+    <string name="section_split_mode">SPLIT MODE</string>
+    <string name="section_compression_level">COMPRESSION LEVEL</string>
+    <string name="section_position">POSITION</string>
+    <string name="section_appearance">APPEARANCE</string>
+    <string name="section_watermark_type">WATERMARK TYPE</string>
+    <string name="section_text_settings">TEXT SETTINGS</string>
+    <string name="section_start_page">START PAGE</string>
+
+    <!-- Password Descriptions -->
+    <string name="owner_password_desc">Full access password for editing permissions</string>
+    <string name="user_password_desc">Required to open the PDF. Leave empty for no open password.</string>
+    <string name="enter_password_desc">Enter the password to unlock this PDF</string>
+    <string name="permissions_desc">What users can do when opening with user password</string>
+    <string name="allow_copying_content">Allow Copying Content</string>
+
+    <!-- Protection Status -->
+    <string name="password_protected">Password protected</string>
+    <string name="not_protected">Not protected</string>
+    <string name="no_password_protection">No Password Protection</string>
+
+    <!-- Page Selection -->
+    <string name="all_pages_count">All %d pages</string>
+    <string name="selected_of_count">%d of %d selected</string>
+    <string name="pages_modified">%d pages • Modified</string>
+    <string name="page_numbers_label">Page numbers</string>
+    <string name="page_numbers_hint">e.g., 1-5, 8, 10-12</string>
+    <string name="all_pages_label">All Pages (%d)</string>
+    <string name="quick_select_all">All</string>
+    <string name="quick_select_odd">Odd</string>
+    <string name="quick_select_even">Even</string>
+    <string name="quick_select_first_half">1st ½</string>
+    <string name="quick_select_second_half">2nd ½</string>
+    <string name="was_page">was %d</string>
+
+    <!-- Reorder -->
+    <string name="drag_hint">Long press and drag pages to reorder</string>
+
+    <!-- Format Options -->
+    <string name="format_png">PNG</string>
+    <string name="format_jpg">JPG</string>
+    <string name="format_lossless">Lossless quality</string>
+    <string name="format_smaller_size">Smaller file size</string>
+    <string name="will_create_images">Will create %d %s image(s)</string>
+
+    <!-- Compression Levels -->
+    <string name="compression_low">Low</string>
+    <string name="compression_medium">Medium</string>
+    <string name="compression_high">High</string>
+    <string name="compression_extreme">Extreme</string>
+    <string name="compression_low_desc">Best quality, larger file</string>
+    <string name="compression_medium_desc">Balanced quality and size</string>
+    <string name="compression_high_desc">Smaller file, reduced quality</string>
+    <string name="compression_extreme_desc">Smallest file, lowest quality</string>
+
+    <!-- Split Modes -->
+    <string name="split_extract_pages">Extract Pages</string>
+    <string name="split_single_pages">Single Pages</string>
+    <string name="split_range_desc">Split into a single PDF from page range</string>
+    <string name="split_extract_desc">Extract specific pages as a new PDF</string>
+    <string name="split_single_desc">Each page as separate PDF file</string>
+
+    <!-- Merge -->
+    <string name="no_pdfs_selected">No PDFs Selected</string>
+    <string name="add_pdfs_to_merge">Add two or more PDF files to merge them into a single document</string>
+    <string name="files_selected">%d files selected</string>
+    <string name="files_merged">%d files merged</string>
+
+    <!-- Image to PDF -->
+    <string name="images_selected">%d image(s) selected</string>
+    <string name="create_pdf_pages">Create PDF (%d pages)</string>
+
+    <!-- Page Numbers -->
+    <string name="position_bottom_left">Bottom Left</string>
+    <string name="position_bottom_center">Bottom Center</string>
+    <string name="position_bottom_right">Bottom Right</string>
+    <string name="position_top_left">Top Left</string>
+    <string name="position_top_center">Top Center</string>
+    <string name="position_top_right">Top Right</string>
+    <string name="format_simple">1, 2, 3</string>
+    <string name="format_dash">- 1 -</string>
+    <string name="format_page_of">Page 1 of N</string>
+
+    <!-- Watermark -->
+    <string name="watermark_text_label">Watermark Text</string>
+    <string name="watermark_text_hint">Enter watermark text</string>
+    <string name="watermark_type_text">Text</string>
+    <string name="watermark_type_image">Image</string>
+    <string name="scale">Scale</string>
+    <string name="watermark_preview_area">Watermark preview area</string>
+    <string name="no_image_selected">No image selected</string>
+
+    <!-- Remove Pages -->
+    <string name="pages_to_remove">%d pages to remove</string>
+    <string name="remove_selected_pages">Remove %d Pages</string>
+    <string name="remove_pages_btn">Remove Pages</string>
+    <string name="select_pages_to_remove_hint">Tap pages to select them for removal</string>
+
+    <!-- File Info in Results -->
+    <string name="pages_size_format">%d pages • %s</string>
+
+    <!-- Merge Screen -->
+    <string name="pdf_extension">.pdf</string>
+    <string name="select_pdfs">Select PDFs</string>
+    <string name="output_filename_label">Output filename</string>
+    <string name="range_option">Range</string>
+    <string name="from_page">From</string>
+    <string name="to_page">To</string>
+    <string name="page_numbers_example">e.g., 1, 3, 5-8, 12</string>
+    <string name="page_numbers_help">Enter page numbers or ranges separated by commas</string>
+
+    <!-- Split Screen -->
+    <string name="change">Change</string>
+    <string name="page_ranges_label">Page Ranges</string>
+    <string name="page_ranges_example">e.g., 1-5, 6-10, 11-15</string>
+    <string name="pages_to_extract_label">Pages to Extract</string>
+    <string name="split_range_help">Each range creates a separate PDF. Pages: 1-%d</string>
+    <string name="extract_pages_help">Creates a single PDF with selected pages. Pages: 1-%d</string>
+    <string name="output_prefix_label">Output prefix</string>
+    <string name="split_another_pdf">Split Another PDF</string>
+
+    <!-- Remove Pages Screen -->
+    <string name="select_page_range">Select Page Range</string>
+    <string name="select_action">Select</string>
+
+    <!-- Page Numbers Screen -->
+    <string name="prefix_label">Prefix</string>
+    <string name="prefix_hint">e.g., Page</string>
+    <string name="suffix_label">Suffix</string>
+    <string name="suffix_hint">e.g., .</string>
+    <string name="hex_label">Hex</string>
+    <string name="hex_prefix">#</string>
+    <string name="hex_help">Enter 6 hex characters (0-9, A-F)</string>
+    <string name="color_r">R</string>
+    <string name="color_g">G</string>
+    <string name="color_b">B</string>
+    <string name="skip_first_pages">Skip first N pages</string>
+
+    <!-- Input Validation Messages -->
+    <string name="validation_password_required">Password is required</string>
+    <string name="validation_password_too_short">Password must be at least %1$d characters</string>
+    <string name="validation_password_too_long">Password cannot exceed %1$d characters</string>
+    <string name="validation_filename_required">File name is required</string>
+    <string name="validation_filename_too_long">File name cannot exceed %1$d characters</string>
+    <string name="validation_filename_invalid_chars">File name contains invalid characters</string>
+    <string name="validation_filename_starts_with_dot">File name cannot start with a dot</string>
+    <string name="validation_filename_ends_with_dot">File name cannot end with a dot</string>
+    <string name="validation_page_required">Page number is required</string>
+    <string name="validation_page_invalid">Invalid page number</string>
+    <string name="validation_page_too_low">Page number must be at least 1</string>
+    <string name="validation_page_too_high">Page number cannot exceed %1$d</string>
+    <string name="validation_page_range_required">Page range is required</string>
+    <string name="validation_page_range_format">Invalid format. Use: 1-5, 7, 10-12</string>
+    <string name="validation_page_range_invalid">Start page must be less than end page</string>
+    <string name="validation_value_required">Value is required</string>
+    <string name="validation_value_invalid">Invalid value</string>
+    <string name="validation_value_too_low">Value must be at least %1$d</string>
+    <string name="validation_value_too_high">Value cannot exceed %1$d</string>
+    <string name="validation_color_invalid">Invalid color value</string>
+    <string name="validation_color_range">Color value must be 0-255</string>
+    <string name="password_min_hint">Minimum 4 characters required</string>
 
 </resources>
