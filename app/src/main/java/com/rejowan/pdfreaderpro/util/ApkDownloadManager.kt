@@ -89,7 +89,7 @@ class ApkDownloadManager(private val context: Context) {
         // Create download request
         val request = DownloadManager.Request(Uri.parse(url)).apply {
             setTitle("Downloading Update")
-            setDescription("PDF Reader Pro v${extractVersion(fileName)}")
+            setDescription("PDF Reader Pro v${VersionUtils.extractVersionFromFileName(fileName)}")
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             setDestinationInExternalFilesDir(context, null, "$UPDATES_DIR/$fileName")
             setAllowedOverMetered(true)
@@ -330,7 +330,7 @@ class ApkDownloadManager(private val context: Context) {
         val pendingVersion = getPendingApkVersion() ?: return false
 
         // If pending version <= current version, it's already installed
-        if (!isNewerVersion(pendingVersion, currentAppVersion)) {
+        if (!VersionUtils.isNewerVersion(pendingVersion, currentAppVersion)) {
             Timber.tag(TAG).d("Pending APK v$pendingVersion is not newer than current v$currentAppVersion - cleaning up")
             cleanupOldDownloads()
             return false
@@ -350,7 +350,7 @@ class ApkDownloadManager(private val context: Context) {
             }
         } else {
             // Fallback to extracting from filename
-            getPendingApk()?.name?.let { extractVersion(it) }
+            getPendingApk()?.name?.let { VersionUtils.extractVersionFromFileName(it) }
         }
     }
 
@@ -375,51 +375,6 @@ class ApkDownloadManager(private val context: Context) {
             versionFile.delete()
             Timber.tag(TAG).d("Cleared pending version file")
         }
-    }
-
-    /**
-     * Compares two semantic version strings.
-     * @return true if [newVersion] is greater than [currentVersion]
-     */
-    private fun isNewerVersion(newVersion: String, currentVersion: String): Boolean {
-        try {
-            val newParts = parseVersion(newVersion)
-            val currentParts = parseVersion(currentVersion)
-
-            for (i in 0 until maxOf(newParts.size, currentParts.size)) {
-                val newPart = newParts.getOrElse(i) { 0 }
-                val currentPart = currentParts.getOrElse(i) { 0 }
-
-                when {
-                    newPart > currentPart -> return true
-                    newPart < currentPart -> return false
-                }
-            }
-            return false
-        } catch (e: Exception) {
-            Timber.tag(TAG).e(e, "Error comparing versions: $newVersion vs $currentVersion")
-            return false
-        }
-    }
-
-    /**
-     * Parses a version string into a list of integers.
-     */
-    private fun parseVersion(version: String): List<Int> {
-        return version
-            .removePrefix("v")
-            .removePrefix("V")
-            .split("-")[0]
-            .split(".")
-            .mapNotNull { it.toIntOrNull() }
-    }
-
-    private fun extractVersion(fileName: String): String {
-        // Extract version from filename like "app-release-2.0.0.apk"
-        return fileName
-            .removeSuffix(".apk")
-            .substringAfterLast("-")
-            .ifEmpty { "update" }
     }
 
     private fun getFailureReason(reason: Int): String {
