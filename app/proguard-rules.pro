@@ -68,6 +68,17 @@
 -keep class com.itextpdf.** { *; }
 -keep class org.bouncycastle.** { *; }
 
+# iText - Ignore missing Java SE classes (not available on Android)
+-dontwarn java.awt.**
+-dontwarn javax.imageio.**
+-dontwarn javax.xml.stream.**
+-dontwarn com.itextpdf.bouncycastlefips.**
+-dontwarn com.itextpdf.eutrustedlistsresources.**
+-dontwarn sharpen.config.**
+-dontwarn aQute.bnd.annotation.**
+-dontwarn org.codehaus.stax2.**
+-dontwarn com.ctc.wstx.**
+
 # ==========================================
 # Kotlin Serialization
 # ==========================================
