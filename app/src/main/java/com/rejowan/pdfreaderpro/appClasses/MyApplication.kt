@@ -36,16 +36,17 @@ class MyApplication : Application() {
     }
 
     private fun initTimber() {
-        if (BuildConfig.DEBUG) {
+        // Only plant Timber tree if logging is enabled (debug builds only)
+        if (BuildConfig.ENABLE_LOGGING) {
             Timber.plant(Timber.DebugTree())
         }
-        // In release builds, Timber has no trees - no overhead
+        // In release builds: no trees planted = no logging overhead
     }
 
     private fun initKoin() {
         startKoin {
-            // Use ERROR level in release to minimize logging overhead
-            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.NONE)
+            // Disable Koin logging in release to minimize overhead
+            androidLogger(if (BuildConfig.ENABLE_LOGGING) Level.DEBUG else Level.NONE)
             androidContext(this@MyApplication)
             modules(
                 // Load modules in dependency order

@@ -1,31 +1,46 @@
 <p align="center"><img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/logo.svg" width="100%" align="center"/></p>
 <p align="center"> <a href="https://www.android.com"><img src="https://img.shields.io/badge/platform-Android-yellow.svg" alt="platform"></a>
- <a href="https://android-arsenal.com/api?level=21"><img src="https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat" alt="API"></a> <a href="https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/LICENSE"><img src="https://img.shields.io/github/license/ahmmedrejowan/PdfReaderPro" alt="GitHub license"></a> </p>
+ <a href="https://android-arsenal.com/api?level=24"><img src="https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat" alt="API"></a> <a href="https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/LICENSE"><img src="https://img.shields.io/github/license/ahmmedrejowan/PdfReaderPro" alt="GitHub license"></a> </p>
 
  <p align="center"> <a href="https://github.com/ahmmedrejowan/PdfReaderPro/issues"><img src="https://img.shields.io/github/issues/ahmmedrejowan/PdfReaderPro" alt="GitHub issues"></a> <a href="https://github.com/ahmmedrejowan/PdfReaderPro/network"><img src="https://img.shields.io/github/forks/ahmmedrejowan/PdfReaderPro" alt="GitHub forks"></a> <a href="https://github.com/ahmmedrejowan/PdfReaderPro/stargazers"><img src="https://img.shields.io/github/stars/ahmmedrejowan/PdfReaderPro" alt="GitHub stars"></a> <a href="https://github.com/ahmmedrejowan/PdfReaderPro/graphs/contributors"> <img src="https://img.shields.io/github/contributors/ahmmedrejowan/PdfReaderPro" alt="GitHub contributors"></a>   </p>
 <hr>
 
-## Idea and Motivation
-There is a lot of PDF Reader apps available on Play Store but some of them has very minimal features and some of them has a lot of features that is distracting. So, I decided to make a PDF Reader app with minimal features and beautiful UI. I also tried to make it simple and also resourceful. This was a project to try out new things and learn new things.
+## About
 
+PDF Reader Pro is a modern, feature-rich PDF viewer for Android built with Jetpack Compose and Material 3. It offers a clean, intuitive interface with powerful PDF tools, all while respecting user privacy with no ads and no tracking.
+
+**Version 2.0** is a complete rewrite using modern Android development practices including Kotlin, Jetpack Compose, Clean Architecture, and a custom PDF.js-based rendering engine.
 
 ## Features
-The app consists of five main components that work together to provide a seamless user experience.
 
-- **Home (Overview, Recent, Favorite)** - Home consists of three main sections:
-    - Overview: Provides a summary of all PDF files on the device.
-    - Recent: Displays the most recently opened PDF files.
-    - Favorite: Shows the user's favorite PDF files.
+### Core Features
+- **PDF Viewing** - Smooth, responsive PDF rendering with zoom, scroll, and page navigation
+- **File Management** - Browse, search, sort, and organize PDF files
+- **Bookmarks** - Save and manage bookmarks within documents
+- **Table of Contents** - Navigate documents using built-in outlines
+- **Recent Files** - Quick access to recently viewed documents
+- **Favorites** - Mark and access your favorite PDFs
 
-- **Files** - The Files section has list of all PDF files on the device. Users can view and sort the files based on different criteria.
+### PDF Tools
+- **Merge PDFs** - Combine multiple PDF files into one
+- **Split PDF** - Extract pages or split into multiple files
+- **Compress** - Reduce PDF file size
+- **Rotate Pages** - Rotate individual or all pages
+- **Reorder Pages** - Rearrange page order
+- **Remove Pages** - Delete unwanted pages
+- **Add Page Numbers** - Insert page numbers with customizable position
+- **Add Watermark** - Text or image watermarks
+- **Lock/Unlock** - Password protect or remove protection
+- **PDF to Images** - Convert pages to images
+- **Images to PDF** - Create PDF from images
 
-- **Folder** - The Folder section displays all folders containing PDF files. Users can navigate through the folders and view the PDF files within them.
-
-- **Search** - The Search feature allows users to search for PDF files on the device. Users can enter keywords to find specific files quickly.
-
-- **Reader** - Upon selecting a PDF file, the app opens the Reader section, where users can view the PDF file. The reader supports various features such as zooming, scrolling, and page navigation.
-
-- **Other Features** - The app also includes additional features such as list and grid view, theme selection (light, dark, and system default), and settings customization.
+### User Experience
+- **Material 3 Design** - Modern, clean interface with dynamic colors
+- **Dark/Light Theme** - System default or manual selection
+- **Responsive Layouts** - Optimized for phones and tablets, portrait and landscape
+- **Auto-Scroll** - Hands-free reading with adjustable speed
+- **Search** - Full-text search within documents
+- **Share** - Share PDFs with other apps
 
 ## Screenshots
 
@@ -33,75 +48,127 @@ The app consists of five main components that work together to provide a seamles
 | ----- | ----- | ----- |
 | ![Screenshot 1](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(1).png) | ![Screenshot 2](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(2).png) | ![Screenshot 5](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(5).png) |
 | ![Screenshot 6](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(6).png) | ![Screenshot 3](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(3).png) | ![Screenshot 4](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(4).png) |
-| ![Screenshot 8](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(8).png) | ![Screenshot 9](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(9).png) | ![Screenshot 7](https://raw.githubusercontent.com/8ane/PDFReaderPro/main/Shots/Shots%20(7).png) |
-
 
 ## Download
 
-The app is not available on the Play Store yet. You can download the latest version (1.0.0) APK from here
+Download the latest release from GitHub:
 
-<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/download/1.0.0/PdfReaderPro.apk">
+<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest">
 <img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/1.png" width="256px" align="center"/>
 </a>
 
 <br>
 
-Check out the [releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases) section for more details.
+Check out the [releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases) section for all versions and changelogs.
 
 ## Tech Stack
-<p><strong>Programming Languages</strong></p>
-<ul>
-<li><strong>Java &amp; Kotlin</strong>: For robust and efficient app development.</li>
-<li><strong>XML</strong>: To craft the user interface with precision.</li>
-</ul>
-<p><strong>Database</strong></p>
-<ul>
-<li><strong>SQLite</strong>: For reliable local data storage and management.</li>
-</ul>
-<p><strong>Design Architecture</strong></p>
-<ul>
-<li><strong>MVVM (Model-View-ViewModel)</strong>: Ensures a clean separation of concerns and an organized codebase.</li>
-</ul>
-<p><strong>Integrated Development Environment (IDE)</strong></p>
-<ul>
-<li><strong>Android Studio</strong>: The official IDE for Android development, providing a comprehensive suite of tools for building apps.</li>
-</ul>
-<p><strong>Design Tools</strong></p>
-<ul>
-<li><strong>Figma</strong>: Utilized for high-fidelity UI/UX design and prototyping.</li>
-</ul>
-<p><strong>Libraries</strong></p>
-<ul>
-<li><strong><a href="https://github.com/airbnb/lottie-android" target="_blank" rel="noopener noreferrer">Lottie</a></strong>: For adding high-quality animations to the app.</li>
-<li><strong><a href="https://github.com/InsertKoinIO/koin" target="_new">Koin</a>:</strong> A pragmatic lightweight dependency injection framework.</li>
-<li><strong><a href="https://github.com/barteksc/AndroidPdfViewer" target="_blank" rel="noopener noreferrer">AndroidPdfViewer</a></strong>: For rendering PDF files in the app.</li>
-</ul>
-<p><strong>Version Control</strong></p>
-<ul>
-<li><strong>GitHub</strong>: Used for source code management, allowing for collaborative development and version tracking.</li>
-</ul>
 
-## Releases
-- [Verison 1.0.0](https://github.com/ahmmedrejowan/PdfReaderPro/releases/tag/1.0.0)
-    - Initial release
+| Component | Technology |
+|-----------|------------|
+| **Language** | Kotlin |
+| **UI Framework** | Jetpack Compose |
+| **Design System** | Material 3 with Dynamic Colors |
+| **Architecture** | Clean Architecture + MVVM |
+| **Dependency Injection** | Koin |
+| **Database** | Room |
+| **Preferences** | DataStore |
+| **PDF Rendering** | Custom PDF.js WebView |
+| **PDF Processing** | iText 7 |
+| **Async** | Kotlin Coroutines + Flow |
+| **Image Loading** | Coil |
+| **Minimum SDK** | API 24 (Android 7.0) |
+| **Target SDK** | API 35 (Android 15) |
+
+## Building from Source
+
+### Prerequisites
+- Android Studio Ladybug (2024.2.1) or newer
+- JDK 17 or higher
+- Android SDK with API 35
+
+### Build Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ahmmedrejowan/PdfReaderPro.git
+   cd PdfReaderPro
+   ```
+
+2. **Open in Android Studio**
+   - Open Android Studio
+   - Select "Open an existing project"
+   - Navigate to the cloned directory
+
+3. **Build the project**
+   ```bash
+   # Debug build
+   ./gradlew assembleDebug
+
+   # Release build (requires signing configuration)
+   ./gradlew assembleRelease
+   ```
+
+4. **Run tests**
+   ```bash
+   # Unit tests
+   ./gradlew testDebugUnitTest
+
+   # All tests
+   ./gradlew test
+   ```
+
+### Project Structure
+```
+app/src/main/java/com/rejowan/pdfreaderpro/
+├── appClasses/        # Application class, global setup
+├── di/                # Koin dependency injection modules
+├── data/
+│   ├── local/         # Room database, DAOs, entities
+│   └── repository/    # Repository implementations
+├── domain/
+│   ├── model/         # Domain models
+│   └── repository/    # Repository interfaces
+├── presentation/
+│   ├── components/    # Reusable UI components
+│   ├── navigation/    # Navigation graph
+│   ├── screens/       # Screen composables
+│   └── theme/         # Material 3 theming
+└── util/              # Utilities and helpers
+```
+
+## Known Issues
+
+See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for a list of known issues and workarounds.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please fork this repository and contribute back using [pull requests](https://github.com/ahmmedrejowan/PdfReaderPro/pulls).
+Contributions are welcome! Please read our contributing guidelines before submitting pull requests.
 
-Any contributions, large or small, major features, bug fixes, are welcomed and appreciated.
+### How to Contribute
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Let me know which features you want in the future in `Request Feature` tab.
+### Guidelines
+- Follow the existing code style and architecture
+- Write unit tests for new features
+- Update documentation as needed
+- Keep pull requests focused and small
 
-If this project helps you a little bit, then give a to Star ⭐ the Repo.
+For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-[Apache Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+[Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 ```
-Copyright 2024 ahmmedrejowan
+Copyright 2024-2026 ahmmedrejowan
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -114,5 +181,11 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
 ```
+
+## Acknowledgments
+
+- [PDF.js](https://mozilla.github.io/pdf.js/) - Mozilla's PDF rendering library
+- [iText](https://itextpdf.com/) - PDF processing library
+- [Koin](https://insert-koin.io/) - Dependency injection framework
+- [Coil](https://coil-kt.github.io/coil/) - Image loading library
