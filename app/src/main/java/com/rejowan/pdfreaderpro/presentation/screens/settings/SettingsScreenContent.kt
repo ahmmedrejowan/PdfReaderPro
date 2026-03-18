@@ -65,9 +65,12 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
+import androidx.compose.material.icons.rounded.ScreenLockLandscape
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
+import androidx.compose.material.icons.rounded.ScreenRotation
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.ViewAgenda
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SystemUpdate
@@ -192,6 +195,7 @@ fun SettingsScreenContent(
     var showQuickZoomSheet by remember { mutableStateOf(false) }
     var showReadingThemeSheet by remember { mutableStateOf(false) }
     var showBrightnessSheet by remember { mutableStateOf(false) }
+    var showScreenOrientationSheet by remember { mutableStateOf(false) }
 
     // About section sheets
     var showChangelogSheet by remember { mutableStateOf(false) }
@@ -304,6 +308,29 @@ fun SettingsScreenContent(
             checked = preferences.readerAutoHideToolbar,
             onCheckedChange = { viewModel.setReaderAutoHideToolbar(it) },
             animationDelay = 400
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsToggleItem(
+            icon = Icons.Rounded.ViewAgenda,
+            title = "Snap to Pages",
+            subtitle = "Enable page snapping by default",
+            accentColor = AccentBlue,
+            checked = preferences.readerSnapEnabled,
+            onCheckedChange = { viewModel.setReaderSnapEnabled(it) },
+            animationDelay = 450
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.ScreenRotation,
+            title = "Screen Orientation",
+            subtitle = preferences.readerScreenOrientation.name.lowercase().replaceFirstChar { it.uppercase() },
+            accentColor = AccentIndigo,
+            onClick = { showScreenOrientationSheet = true },
+            animationDelay = 500
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -578,6 +605,27 @@ fun SettingsScreenContent(
             currentBrightness = preferences.readerBrightness,
             onBrightnessChange = { viewModel.setReaderBrightness(it) },
             onDismiss = { showBrightnessSheet = false }
+        )
+    }
+
+    // Screen orientation picker
+    if (showScreenOrientationSheet) {
+        SettingsPickerSheet(
+            title = "Screen Orientation",
+            subtitle = "Choose default orientation",
+            icon = Icons.Rounded.ScreenRotation,
+            accentColor = AccentIndigo,
+            options = listOf(
+                PickerOption(Icons.Rounded.ScreenRotation, "Auto", "Follow device rotation"),
+                PickerOption(Icons.Rounded.ScreenLockPortrait, "Portrait", "Lock to portrait mode"),
+                PickerOption(Icons.Rounded.ScreenLockLandscape, "Landscape", "Lock to landscape mode")
+            ),
+            selectedIndex = com.rejowan.pdfreaderpro.domain.model.ScreenOrientation.entries.indexOf(preferences.readerScreenOrientation),
+            onSelect = { index ->
+                viewModel.setReaderScreenOrientation(com.rejowan.pdfreaderpro.domain.model.ScreenOrientation.entries[index])
+                showScreenOrientationSheet = false
+            },
+            onDismiss = { showScreenOrientationSheet = false }
         )
     }
 

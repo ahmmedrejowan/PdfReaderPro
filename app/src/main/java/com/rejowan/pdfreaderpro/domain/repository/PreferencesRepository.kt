@@ -5,6 +5,7 @@ import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
@@ -33,4 +34,6 @@ interface PreferencesRepository {
     suspend fun setReaderQuickZoomPreset(preset: QuickZoomPreset)
     suspend fun setReaderKeepScreenOn(enabled: Boolean)
     suspend fun setReaderTheme(theme: ReadingTheme)
+    suspend fun setReaderSnapEnabled(enabled: Boolean)
+    suspend fun setReaderScreenOrientation(orientation: ScreenOrientation)
 }

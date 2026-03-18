@@ -9,6 +9,7 @@ import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
@@ -333,6 +334,18 @@ class SettingsViewModel(
     fun setReaderTheme(theme: ReadingTheme) {
         viewModelScope.launch {
             preferencesRepository.setReaderTheme(theme)
+        }
+    }
+
+    fun setReaderSnapEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setReaderSnapEnabled(enabled)
+        }
+    }
+
+    fun setReaderScreenOrientation(orientation: ScreenOrientation) {
+        viewModelScope.launch {
+            preferencesRepository.setReaderScreenOrientation(orientation)
         }
     }
 }
