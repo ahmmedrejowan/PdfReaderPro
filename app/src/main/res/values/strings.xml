@@ -772,6 +772,8 @@
     <string name="orientation_auto">Auto</string>
     <string name="orientation_portrait">Portrait</string>
     <string name="orientation_landscape">Landscape</string>
+    <string name="lock_portrait">Lock to portrait mode</string>
+    <string name="lock_landscape">Lock to landscape mode</string>
     <string name="current_zoom_label">Current Zoom</string>
 
     <!-- Bookmarks Sheet -->

@@ -11,6 +11,7 @@ import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
@@ -43,6 +44,8 @@ class PreferencesRepositoryImpl(
         val READER_QUICK_ZOOM_PRESET = stringPreferencesKey("reader_quick_zoom_preset")
         val READER_KEEP_SCREEN_ON = booleanPreferencesKey("reader_keep_screen_on")
         val READER_THEME = stringPreferencesKey("reader_theme")
+        val READER_SNAP_TO_PAGES = booleanPreferencesKey("reader_snap_to_pages")
+        val READER_SCREEN_ORIENTATION = stringPreferencesKey("reader_screen_orientation")
     }
 
     override val preferences: Flow<AppPreferences> = dataStore.data.map { prefs ->
@@ -64,7 +67,9 @@ class PreferencesRepositoryImpl(
             readerAutoHideToolbar = prefs[Keys.READER_AUTO_HIDE_TOOLBAR] ?: false,
             readerQuickZoomPreset = prefs[Keys.READER_QUICK_ZOOM_PRESET]?.let { QuickZoomPreset.valueOf(it) } ?: QuickZoomPreset.FIT_WIDTH,
             readerKeepScreenOn = prefs[Keys.READER_KEEP_SCREEN_ON] ?: false,
-            readerTheme = prefs[Keys.READER_THEME]?.let { ReadingTheme.valueOf(it) } ?: ReadingTheme.LIGHT
+            readerTheme = prefs[Keys.READER_THEME]?.let { ReadingTheme.valueOf(it) } ?: ReadingTheme.LIGHT,
+            readerSnapToPages = prefs[Keys.READER_SNAP_TO_PAGES] ?: false,
+            readerScreenOrientation = prefs[Keys.READER_SCREEN_ORIENTATION]?.let { ScreenOrientation.valueOf(it) } ?: ScreenOrientation.AUTO
         )
     }
 
@@ -128,5 +133,13 @@ class PreferencesRepositoryImpl(
 
     override suspend fun setReaderTheme(theme: ReadingTheme) {
         dataStore.edit { it[Keys.READER_THEME] = theme.name }
+    }
+
+    override suspend fun setReaderSnapToPages(enabled: Boolean) {
+        dataStore.edit { it[Keys.READER_SNAP_TO_PAGES] = enabled }
+    }
+
+    override suspend fun setReaderScreenOrientation(orientation: ScreenOrientation) {
+        dataStore.edit { it[Keys.READER_SCREEN_ORIENTATION] = orientation.name }
     }
 }

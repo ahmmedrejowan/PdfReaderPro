@@ -18,7 +18,9 @@ data class AppPreferences(
     val readerAutoHideToolbar: Boolean = false,
     val readerQuickZoomPreset: QuickZoomPreset = QuickZoomPreset.FIT_WIDTH,
     val readerKeepScreenOn: Boolean = false,
-    val readerTheme: ReadingTheme = ReadingTheme.LIGHT
+    val readerTheme: ReadingTheme = ReadingTheme.LIGHT,
+    val readerSnapToPages: Boolean = false,
+    val readerScreenOrientation: ScreenOrientation = ScreenOrientation.AUTO
 )
 
 enum class ThemeMode {
@@ -54,6 +56,12 @@ enum class ReadingTheme {
     SEPIA,
     DARK,
     BLACK // AMOLED
+}
+
+enum class ScreenOrientation {
+    AUTO,
+    PORTRAIT,
+    LANDSCAPE
 }
 
 enum class UpdateCheckInterval(val days: Int, val displayName: String) {

@@ -11,6 +11,7 @@ import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
@@ -43,6 +44,8 @@ class PreferencesRepositoryTest {
     private val readerQuickZoomPresetKey = stringPreferencesKey("reader_quick_zoom_preset")
     private val readerKeepScreenOnKey = booleanPreferencesKey("reader_keep_screen_on")
     private val readerThemeKey = stringPreferencesKey("reader_theme")
+    private val readerSnapToPagesKey = booleanPreferencesKey("reader_snap_to_pages")
+    private val readerScreenOrientationKey = stringPreferencesKey("reader_screen_orientation")
 
     @Before
     fun setup() {
@@ -75,6 +78,8 @@ class PreferencesRepositoryTest {
             assertEquals(QuickZoomPreset.FIT_WIDTH, prefs.readerQuickZoomPreset)
             assertFalse(prefs.readerKeepScreenOn)
             assertEquals(ReadingTheme.LIGHT, prefs.readerTheme)
+            assertFalse(prefs.readerSnapToPages)
+            assertEquals(ScreenOrientation.AUTO, prefs.readerScreenOrientation)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -95,7 +100,9 @@ class PreferencesRepositoryTest {
             readerAutoHideToolbarKey to true,
             readerQuickZoomPresetKey to QuickZoomPreset.ACTUAL_SIZE.name,
             readerKeepScreenOnKey to true,
-            readerThemeKey to ReadingTheme.SEPIA.name
+            readerThemeKey to ReadingTheme.SEPIA.name,
+            readerSnapToPagesKey to true,
+            readerScreenOrientationKey to ScreenOrientation.PORTRAIT.name
         )
         repository = createRepository(storedPrefs)
 
@@ -115,6 +122,8 @@ class PreferencesRepositoryTest {
             assertEquals(QuickZoomPreset.ACTUAL_SIZE, prefs.readerQuickZoomPreset)
             assertTrue(prefs.readerKeepScreenOn)
             assertEquals(ReadingTheme.SEPIA, prefs.readerTheme)
+            assertTrue(prefs.readerSnapToPages)
+            assertEquals(ScreenOrientation.PORTRAIT, prefs.readerScreenOrientation)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -402,6 +411,40 @@ class PreferencesRepositoryTest {
     }
     // endregion
 
+    // region setReaderSnapToPages Tests
+    @Test
+    fun `setReaderSnapToPages with true does not throw`() = runTest {
+        repository = createRepository()
+        repository.setReaderSnapToPages(true)
+    }
+
+    @Test
+    fun `setReaderSnapToPages with false does not throw`() = runTest {
+        repository = createRepository()
+        repository.setReaderSnapToPages(false)
+    }
+    // endregion
+
+    // region setReaderScreenOrientation Tests
+    @Test
+    fun `setReaderScreenOrientation with AUTO does not throw`() = runTest {
+        repository = createRepository()
+        repository.setReaderScreenOrientation(ScreenOrientation.AUTO)
+    }
+
+    @Test
+    fun `setReaderScreenOrientation with PORTRAIT does not throw`() = runTest {
+        repository = createRepository()
+        repository.setReaderScreenOrientation(ScreenOrientation.PORTRAIT)
+    }
+
+    @Test
+    fun `setReaderScreenOrientation with LANDSCAPE does not throw`() = runTest {
+        repository = createRepository()
+        repository.setReaderScreenOrientation(ScreenOrientation.LANDSCAPE)
+    }
+    // endregion
+
     // region Enum Coverage Tests
     @Test
     fun `ThemeMode has 3 values`() {
@@ -441,6 +484,11 @@ class PreferencesRepositoryTest {
     @Test
     fun `ReadingTheme has 4 values`() {
         assertEquals(4, ReadingTheme.entries.size)
+    }
+
+    @Test
+    fun `ScreenOrientation has 3 values`() {
+        assertEquals(3, ScreenOrientation.entries.size)
     }
     // endregion
 }

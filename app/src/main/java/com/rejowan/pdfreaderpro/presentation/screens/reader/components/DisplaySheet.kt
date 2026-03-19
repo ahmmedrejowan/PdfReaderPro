@@ -36,10 +36,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.rounded.Brightness6
 import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.BrightnessMedium
 import androidx.compose.material.icons.rounded.Palette
+import androidx.compose.material.icons.rounded.PhoneAndroid
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -265,9 +268,9 @@ private fun DisplaySheetContent(
         // Brightness Section
         SectionLabel(text = stringResource(R.string.brightness), delay = 150)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        BrightnessSlider(
+        BrightnessSection(
             brightness = brightness,
             onBrightnessChange = onBrightnessChange,
             animationDelay = 200
@@ -546,6 +549,185 @@ private fun ThemeOption(
 }
 
 @Composable
+private fun BrightnessSection(
+    brightness: Float,
+    onBrightnessChange: (Float) -> Unit,
+    animationDelay: Int,
+    modifier: Modifier = Modifier
+) {
+    val isSystemDefault = brightness < 0
+    var sliderValue by remember { mutableFloatStateOf(if (isSystemDefault) 0.5f else brightness) }
+
+    // Update slider value when brightness changes externally
+    LaunchedEffect(brightness) {
+        if (brightness >= 0) {
+            sliderValue = brightness
+        }
+    }
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // System Default option
+        BrightnessOptionItem(
+            icon = Icons.Rounded.PhoneAndroid,
+            title = stringResource(R.string.system_default),
+            subtitle = stringResource(R.string.follow_system_brightness),
+            isSelected = isSystemDefault,
+            accentColor = AccentAmber,
+            onClick = { onBrightnessChange(-1f) },
+            animationDelay = animationDelay
+        )
+
+        // Custom option
+        BrightnessOptionItem(
+            icon = Icons.Rounded.Brightness6,
+            title = stringResource(R.string.custom),
+            subtitle = if (!isSystemDefault) "${(sliderValue * 100).toInt()}%" else stringResource(R.string.set_custom_level),
+            isSelected = !isSystemDefault,
+            accentColor = AccentAmber,
+            onClick = {
+                if (isSystemDefault) {
+                    onBrightnessChange(sliderValue)
+                }
+            },
+            animationDelay = animationDelay + 50
+        )
+
+        // Brightness slider (only when custom selected)
+        AnimatedVisibility(visible = !isSystemDefault) {
+            BrightnessSlider(
+                brightness = sliderValue,
+                onBrightnessChange = {
+                    sliderValue = it
+                    onBrightnessChange(it)
+                },
+                animationDelay = animationDelay + 100
+            )
+        }
+    }
+}
+
+@Composable
+private fun BrightnessOptionItem(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String,
+    subtitle: String,
+    isSelected: Boolean,
+    accentColor: Color,
+    onClick: () -> Unit,
+    animationDelay: Int,
+    modifier: Modifier = Modifier
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(animationDelay.toLong())
+        isVisible = true
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.95f,
+        animationSpec = tween(250, easing = FastOutSlowInEasing),
+        label = "brightness option scale"
+    )
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.12f)
+        else MaterialTheme.colorScheme.surfaceContainerLow,
+        animationSpec = tween(200),
+        label = "brightness option bg"
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) accentColor.copy(alpha = 0.5f)
+        else Color.Transparent,
+        animationSpec = tween(200),
+        label = "brightness option border"
+    )
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = accentColor),
+                onClick = onClick
+            )
+            .then(
+                if (isSelected) Modifier.border(
+                    width = 1.5.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(8.dp)
+                ) else Modifier
+            ),
+        shape = RoundedCornerShape(8.dp),
+        color = backgroundColor
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(44.dp)
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                shape = RoundedCornerShape(8.dp),
+                color = if (isSelected) accentColor.copy(alpha = 0.2f)
+                else MaterialTheme.colorScheme.surfaceContainerHigh
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = stringResource(R.string.cd_decorative),
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(16.dp),
+                    tint = if (isSelected) accentColor
+                    else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
+                    ),
+                    color = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                )
+            }
+
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .size(18.dp)
+                        .clip(CircleShape)
+                        .background(accentColor),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = stringResource(R.string.cd_selected),
+                        modifier = Modifier.size(12.dp),
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun BrightnessSlider(
     brightness: Float,
     onBrightnessChange: (Float) -> Unit,
@@ -588,7 +770,7 @@ private fun BrightnessSlider(
             Slider(
                 value = brightness,
                 onValueChange = onBrightnessChange,
-                valueRange = 0f..1f,
+                valueRange = 0.1f..1f,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 8.dp),

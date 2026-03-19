@@ -12,6 +12,7 @@ import com.rejowan.pdfreaderpro.domain.model.PageAlignment as DomainPageAlignmen
 import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme as DomainReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation as DomainScreenOrientation
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection as DomainScrollDirection
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
@@ -82,7 +83,9 @@ class ReaderViewModel(
                     readingTheme = mapDomainReadingTheme(prefs.readerTheme),
                     pageAlignment = mapDomainPageAlignment(prefs.readerPageAlignment),
                     autoHideToolbar = prefs.readerAutoHideToolbar,
-                    keepScreenOn = prefs.readerKeepScreenOn
+                    keepScreenOn = prefs.readerKeepScreenOn,
+                    isSnapEnabled = prefs.readerSnapToPages,
+                    screenOrientation = mapDomainScreenOrientation(prefs.readerScreenOrientation)
                 )
             }
         }
@@ -132,6 +135,14 @@ class ReaderViewModel(
         }
     }
 
+    private fun mapDomainScreenOrientation(orientation: DomainScreenOrientation): ScreenOrientation {
+        return when (orientation) {
+            DomainScreenOrientation.AUTO -> ScreenOrientation.AUTO
+            DomainScreenOrientation.PORTRAIT -> ScreenOrientation.PORTRAIT
+            DomainScreenOrientation.LANDSCAPE -> ScreenOrientation.LANDSCAPE
+        }
+    }
+
     fun setPdfViewer(viewer: PdfViewer) {
         pdfViewer = viewer
         setupPdfViewerListeners(viewer)
@@ -157,6 +168,9 @@ class ReaderViewModel(
                     DomainReadingTheme.BLACK -> "black"
                 }
                 viewer.ui.setReadingTheme(themeName)
+
+                // Apply snap to pages
+                viewer.snapPage = prefs.readerSnapToPages
             } catch (e: Exception) {
                 // Viewer not yet initialized, settings will be applied when ready
             }
@@ -484,6 +498,10 @@ class ReaderViewModel(
             is ReaderAction.SetSnapEnabled -> {
                 _state.update { it.copy(isSnapEnabled = action.enabled) }
                 pdfViewer?.snapPage = action.enabled
+                // Persist to global settings
+                viewModelScope.launch {
+                    preferencesRepository.setReaderSnapToPages(action.enabled)
+                }
             }
             is ReaderAction.SetKeepScreenOn -> {
                 _state.update { it.copy(keepScreenOn = action.enabled) }
@@ -491,7 +509,18 @@ class ReaderViewModel(
                     preferencesRepository.setReaderKeepScreenOn(action.enabled)
                 }
             }
-            is ReaderAction.SetScreenOrientation -> _state.update { it.copy(screenOrientation = action.orientation) }
+            is ReaderAction.SetScreenOrientation -> {
+                _state.update { it.copy(screenOrientation = action.orientation) }
+                // Persist to global settings
+                viewModelScope.launch {
+                    val domainOrientation = when (action.orientation) {
+                        ScreenOrientation.AUTO -> DomainScreenOrientation.AUTO
+                        ScreenOrientation.PORTRAIT -> DomainScreenOrientation.PORTRAIT
+                        ScreenOrientation.LANDSCAPE -> DomainScreenOrientation.LANDSCAPE
+                    }
+                    preferencesRepository.setReaderScreenOrientation(domainOrientation)
+                }
+            }
             is ReaderAction.SetReadingTheme -> {
                 _state.update { it.copy(readingTheme = action.theme) }
                 val themeName = when (action.theme) {

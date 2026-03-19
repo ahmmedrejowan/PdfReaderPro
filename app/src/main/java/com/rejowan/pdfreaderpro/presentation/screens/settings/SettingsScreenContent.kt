@@ -66,8 +66,12 @@ import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
+import androidx.compose.material.icons.rounded.ScreenRotation
+import androidx.compose.material.icons.rounded.StayCurrentLandscape
+import androidx.compose.material.icons.rounded.StayCurrentPortrait
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.ViewDay
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SystemUpdate
@@ -118,6 +122,7 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
+import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
 import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
@@ -192,6 +197,7 @@ fun SettingsScreenContent(
     var showQuickZoomSheet by remember { mutableStateOf(false) }
     var showReadingThemeSheet by remember { mutableStateOf(false) }
     var showBrightnessSheet by remember { mutableStateOf(false) }
+    var showScreenOrientationSheet by remember { mutableStateOf(false) }
 
     // About section sheets
     var showChangelogSheet by remember { mutableStateOf(false) }
@@ -294,7 +300,34 @@ fun SettingsScreenContent(
             animationDelay = 350
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.ScreenRotation,
+            title = stringResource(R.string.screen_orientation),
+            subtitle = when (preferences.readerScreenOrientation) {
+                ScreenOrientation.AUTO -> stringResource(R.string.orientation_auto)
+                ScreenOrientation.PORTRAIT -> stringResource(R.string.orientation_portrait)
+                ScreenOrientation.LANDSCAPE -> stringResource(R.string.orientation_landscape)
+            },
+            accentColor = AccentBlue,
+            onClick = { showScreenOrientationSheet = true },
+            animationDelay = 375
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        SettingsToggleItem(
+            icon = Icons.Rounded.ViewDay,
+            title = stringResource(R.string.snap_to_page),
+            subtitle = stringResource(R.string.snap_to_page_desc),
+            accentColor = AccentTeal,
+            checked = preferences.readerSnapToPages,
+            onCheckedChange = { viewModel.setReaderSnapToPages(it) },
+            animationDelay = 385
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsToggleItem(
             icon = Icons.Rounded.VisibilityOff,
@@ -569,6 +602,27 @@ fun SettingsScreenContent(
                 showReadingThemeSheet = false
             },
             onDismiss = { showReadingThemeSheet = false }
+        )
+    }
+
+    // Screen Orientation picker
+    if (showScreenOrientationSheet) {
+        SettingsPickerSheet(
+            title = stringResource(R.string.screen_orientation),
+            subtitle = stringResource(R.string.adjust_view_orientation),
+            icon = Icons.Rounded.ScreenRotation,
+            accentColor = AccentBlue,
+            options = listOf(
+                PickerOption(Icons.Rounded.ScreenRotation, stringResource(R.string.orientation_auto), stringResource(R.string.follow_system)),
+                PickerOption(Icons.Rounded.StayCurrentPortrait, stringResource(R.string.orientation_portrait), stringResource(R.string.lock_portrait)),
+                PickerOption(Icons.Rounded.StayCurrentLandscape, stringResource(R.string.orientation_landscape), stringResource(R.string.lock_landscape))
+            ),
+            selectedIndex = ScreenOrientation.entries.indexOf(preferences.readerScreenOrientation),
+            onSelect = { index ->
+                viewModel.setReaderScreenOrientation(ScreenOrientation.entries[index])
+                showScreenOrientationSheet = false
+            },
+            onDismiss = { showScreenOrientationSheet = false }
         )
     }
 
