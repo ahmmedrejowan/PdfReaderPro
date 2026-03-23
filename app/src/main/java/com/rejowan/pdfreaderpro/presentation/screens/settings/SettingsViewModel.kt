@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.rejowan.pdfreaderpro.BuildConfig
 import com.rejowan.pdfreaderpro.domain.model.AppPreferences
 import com.rejowan.pdfreaderpro.domain.model.GithubRelease
-import com.rejowan.pdfreaderpro.domain.model.PageAlignment
-import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
-import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
+import com.rejowan.pdfreaderpro.domain.model.ScrollMode
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
 import com.rejowan.pdfreaderpro.domain.model.UpdateState
@@ -295,21 +293,9 @@ class SettingsViewModel(
         }
     }
 
-    fun setReaderScrollDirection(direction: ScrollDirection) {
+    fun setReaderScrollMode(mode: ScrollMode) {
         viewModelScope.launch {
-            preferencesRepository.setReaderScrollDirection(direction)
-        }
-    }
-
-    fun setReaderPageLayout(layout: PageLayout) {
-        viewModelScope.launch {
-            preferencesRepository.setReaderPageLayout(layout)
-        }
-    }
-
-    fun setReaderPageAlignment(alignment: PageAlignment) {
-        viewModelScope.launch {
-            preferencesRepository.setReaderPageAlignment(alignment)
+            preferencesRepository.setReaderScrollMode(mode)
         }
     }
 

@@ -8,12 +8,10 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.data.local.PasswordStorage
 import com.rejowan.pdfreaderpro.data.local.database.dao.BookmarkDao
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
-import com.rejowan.pdfreaderpro.domain.model.PageAlignment as DomainPageAlignment
-import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme as DomainReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation as DomainScreenOrientation
-import com.rejowan.pdfreaderpro.domain.model.ScrollDirection as DomainScrollDirection
+import com.rejowan.pdfreaderpro.domain.model.ScrollMode as DomainScrollMode
 import com.rejowan.pdfreaderpro.domain.repository.FavoriteRepository
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
 import com.rejowan.pdfreaderpro.domain.repository.RecentRepository
@@ -79,9 +77,8 @@ class ReaderViewModel(
             _state.update { state ->
                 state.copy(
                     brightness = prefs.readerBrightness,
-                    scrollDirection = mapDomainScrollDirection(prefs.readerScrollDirection),
+                    scrollMode = mapDomainScrollMode(prefs.readerScrollMode),
                     readingTheme = mapDomainReadingTheme(prefs.readerTheme),
-                    pageAlignment = mapDomainPageAlignment(prefs.readerPageAlignment),
                     autoHideToolbar = prefs.readerAutoHideToolbar,
                     keepScreenOn = prefs.readerKeepScreenOn,
                     isSnapEnabled = prefs.readerSnapToPages,
@@ -111,10 +108,10 @@ class ReaderViewModel(
     }
 
     // Mapping functions from domain models to reader state models
-    private fun mapDomainScrollDirection(direction: DomainScrollDirection): ScrollDirection {
-        return when (direction) {
-            DomainScrollDirection.VERTICAL -> ScrollDirection.VERTICAL
-            DomainScrollDirection.HORIZONTAL -> ScrollDirection.HORIZONTAL
+    private fun mapDomainScrollMode(mode: DomainScrollMode): ScrollMode {
+        return when (mode) {
+            DomainScrollMode.VERTICAL -> ScrollMode.VERTICAL
+            DomainScrollMode.HORIZONTAL -> ScrollMode.HORIZONTAL
         }
     }
 
@@ -124,14 +121,6 @@ class ReaderViewModel(
             DomainReadingTheme.SEPIA -> ReadingTheme.SEPIA
             DomainReadingTheme.DARK -> ReadingTheme.DARK
             DomainReadingTheme.BLACK -> ReadingTheme.BLACK
-        }
-    }
-
-    private fun mapDomainPageAlignment(alignment: DomainPageAlignment): PageAlignment {
-        return when (alignment) {
-            DomainPageAlignment.LEFT -> PageAlignment.LEFT
-            DomainPageAlignment.CENTER -> PageAlignment.CENTER
-            DomainPageAlignment.RIGHT -> PageAlignment.RIGHT
         }
     }
 
@@ -153,10 +142,10 @@ class ReaderViewModel(
             try {
                 val prefs = preferencesRepository.preferences.first()
 
-                // Apply scroll direction
-                val scrollMode = when (prefs.readerScrollDirection) {
-                    DomainScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
-                    DomainScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                // Apply scroll mode
+                val scrollMode = when (prefs.readerScrollMode) {
+                    DomainScrollMode.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    DomainScrollMode.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
                 }
                 viewer.pageScrollMode = scrollMode
 
@@ -294,12 +283,13 @@ class ReaderViewModel(
             onFindMatchComplete = { found ->
                 _state.update { it.copy(isSearching = false) }
             },
-            onScrollModeChange = { scrollMode ->
-                val direction = when (scrollMode) {
-                    PdfViewer.PageScrollMode.HORIZONTAL -> ScrollDirection.HORIZONTAL
-                    else -> ScrollDirection.VERTICAL
+            onScrollModeChange = { pdfScrollMode ->
+                val scrollMode = when (pdfScrollMode) {
+                    PdfViewer.PageScrollMode.VERTICAL -> ScrollMode.VERTICAL
+                    PdfViewer.PageScrollMode.HORIZONTAL -> ScrollMode.HORIZONTAL
+                    else -> ScrollMode.VERTICAL // Default to vertical for unsupported modes
                 }
-                _state.update { it.copy(scrollDirection = direction) }
+                _state.update { it.copy(scrollMode = scrollMode) }
             },
             onAutoScrollEnd = {
                 _state.update {
@@ -470,30 +460,21 @@ class ReaderViewModel(
                     preferencesRepository.setReaderBrightness(action.brightness)
                 }
             }
-            is ReaderAction.SetScrollDirection -> {
-                _state.update { it.copy(scrollDirection = action.direction) }
-                val scrollMode = when (action.direction) {
-                    ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
-                    ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+            is ReaderAction.SetScrollMode -> {
+                _state.update { it.copy(scrollMode = action.mode) }
+                val scrollMode = when (action.mode) {
+                    ScrollMode.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    ScrollMode.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
                 }
                 pdfViewer?.pageScrollMode = scrollMode
                 // Persist to global settings
                 viewModelScope.launch {
-                    val domainDirection = when (action.direction) {
-                        ScrollDirection.VERTICAL -> DomainScrollDirection.VERTICAL
-                        ScrollDirection.HORIZONTAL -> DomainScrollDirection.HORIZONTAL
+                    val domainMode = when (action.mode) {
+                        ScrollMode.VERTICAL -> DomainScrollMode.VERTICAL
+                        ScrollMode.HORIZONTAL -> DomainScrollMode.HORIZONTAL
                     }
-                    preferencesRepository.setReaderScrollDirection(domainDirection)
+                    preferencesRepository.setReaderScrollMode(domainMode)
                 }
-            }
-            is ReaderAction.SetSpreadMode -> {
-                _state.update { it.copy(spreadMode = action.mode) }
-                val spreadMode = when (action.mode) {
-                    SpreadMode.NONE -> PdfViewer.PageSpreadMode.NONE
-                    SpreadMode.ODD -> PdfViewer.PageSpreadMode.ODD
-                    SpreadMode.EVEN -> PdfViewer.PageSpreadMode.EVEN
-                }
-                pdfViewer?.pageSpreadMode = spreadMode
             }
             is ReaderAction.SetSnapEnabled -> {
                 _state.update { it.copy(isSnapEnabled = action.enabled) }
@@ -539,19 +520,6 @@ class ReaderViewModel(
                         ReadingTheme.BLACK -> DomainReadingTheme.BLACK
                     }
                     preferencesRepository.setReaderTheme(domainTheme)
-                }
-            }
-
-            is ReaderAction.SetPageAlignment -> {
-                _state.update { it.copy(pageAlignment = action.alignment) }
-                // Persist to global settings
-                viewModelScope.launch {
-                    val domainAlignment = when (action.alignment) {
-                        PageAlignment.LEFT -> DomainPageAlignment.LEFT
-                        PageAlignment.CENTER -> DomainPageAlignment.CENTER
-                        PageAlignment.RIGHT -> DomainPageAlignment.RIGHT
-                    }
-                    preferencesRepository.setReaderPageAlignment(domainAlignment)
                 }
             }
 

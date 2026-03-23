@@ -32,17 +32,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
-import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPanel(
     brightness: Float,
-    scrollDirection: ScrollDirection,
+    scrollMode: ScrollMode,
     keepScreenOn: Boolean,
     isRotationLocked: Boolean,
     onBrightnessChange: (Float) -> Unit,
-    onScrollDirectionChange: (ScrollDirection) -> Unit,
+    onScrollModeChange: (ScrollMode) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
     onRotationLockChange: () -> Unit,
     onFullScreenClick: () -> Unit,
@@ -96,16 +96,16 @@ fun SettingsPanel(
             HorizontalDivider()
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Scroll direction
+            // Scroll mode
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        onScrollDirectionChange(
-                            if (scrollDirection == ScrollDirection.VERTICAL) {
-                                ScrollDirection.HORIZONTAL
+                        onScrollModeChange(
+                            if (scrollMode == ScrollMode.VERTICAL) {
+                                ScrollMode.HORIZONTAL
                             } else {
-                                ScrollDirection.VERTICAL
+                                ScrollMode.VERTICAL
                             }
                         )
                     }
@@ -120,11 +120,14 @@ fun SettingsPanel(
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = stringResource(R.string.scroll_direction),
+                        text = stringResource(R.string.scroll_mode),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = if (scrollDirection == ScrollDirection.VERTICAL) stringResource(R.string.vertical) else stringResource(R.string.horizontal),
+                        text = when (scrollMode) {
+                            ScrollMode.VERTICAL -> stringResource(R.string.vertical)
+                            ScrollMode.HORIZONTAL -> stringResource(R.string.horizontal)
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

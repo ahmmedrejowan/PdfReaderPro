@@ -12,9 +12,7 @@ data class AppPreferences(
 
     // Reader settings (global)
     val readerBrightness: Float = -1f, // -1 = system default, 0-1 = custom
-    val readerScrollDirection: ScrollDirection = ScrollDirection.VERTICAL,
-    val readerPageLayout: PageLayout = PageLayout.CONTINUOUS,
-    val readerPageAlignment: PageAlignment = PageAlignment.CENTER,
+    val readerScrollMode: ScrollMode = ScrollMode.VERTICAL,
     val readerAutoHideToolbar: Boolean = false,
     val readerQuickZoomPreset: QuickZoomPreset = QuickZoomPreset.FIT_WIDTH,
     val readerKeepScreenOn: Boolean = false,
@@ -29,20 +27,9 @@ enum class ThemeMode {
     SYSTEM
 }
 
-enum class ScrollDirection {
+enum class ScrollMode {
     VERTICAL,
     HORIZONTAL
-}
-
-enum class PageLayout {
-    SINGLE_PAGE,
-    CONTINUOUS
-}
-
-enum class PageAlignment {
-    LEFT,
-    CENTER,
-    RIGHT
 }
 
 enum class QuickZoomPreset {

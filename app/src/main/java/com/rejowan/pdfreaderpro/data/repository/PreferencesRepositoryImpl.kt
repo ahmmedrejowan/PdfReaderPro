@@ -7,12 +7,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.rejowan.pdfreaderpro.domain.model.AppPreferences
-import com.rejowan.pdfreaderpro.domain.model.PageAlignment
-import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
-import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
+import com.rejowan.pdfreaderpro.domain.model.ScrollMode
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
@@ -37,9 +35,7 @@ class PreferencesRepositoryImpl(
 
         // Reader settings
         val READER_BRIGHTNESS = floatPreferencesKey("reader_brightness")
-        val READER_SCROLL_DIRECTION = stringPreferencesKey("reader_scroll_direction")
-        val READER_PAGE_LAYOUT = stringPreferencesKey("reader_page_layout")
-        val READER_PAGE_ALIGNMENT = stringPreferencesKey("reader_page_alignment")
+        val READER_SCROLL_MODE = stringPreferencesKey("reader_scroll_mode")
         val READER_AUTO_HIDE_TOOLBAR = booleanPreferencesKey("reader_auto_hide_toolbar")
         val READER_QUICK_ZOOM_PRESET = stringPreferencesKey("reader_quick_zoom_preset")
         val READER_KEEP_SCREEN_ON = booleanPreferencesKey("reader_keep_screen_on")
@@ -61,9 +57,7 @@ class PreferencesRepositoryImpl(
 
             // Reader settings
             readerBrightness = prefs[Keys.READER_BRIGHTNESS] ?: -1f,
-            readerScrollDirection = prefs[Keys.READER_SCROLL_DIRECTION]?.let { ScrollDirection.valueOf(it) } ?: ScrollDirection.VERTICAL,
-            readerPageLayout = prefs[Keys.READER_PAGE_LAYOUT]?.let { PageLayout.valueOf(it) } ?: PageLayout.CONTINUOUS,
-            readerPageAlignment = prefs[Keys.READER_PAGE_ALIGNMENT]?.let { PageAlignment.valueOf(it) } ?: PageAlignment.CENTER,
+            readerScrollMode = prefs[Keys.READER_SCROLL_MODE]?.let { ScrollMode.valueOf(it) } ?: ScrollMode.VERTICAL,
             readerAutoHideToolbar = prefs[Keys.READER_AUTO_HIDE_TOOLBAR] ?: false,
             readerQuickZoomPreset = prefs[Keys.READER_QUICK_ZOOM_PRESET]?.let { QuickZoomPreset.valueOf(it) } ?: QuickZoomPreset.FIT_WIDTH,
             readerKeepScreenOn = prefs[Keys.READER_KEEP_SCREEN_ON] ?: false,
@@ -107,16 +101,8 @@ class PreferencesRepositoryImpl(
         dataStore.edit { it[Keys.READER_BRIGHTNESS] = brightness }
     }
 
-    override suspend fun setReaderScrollDirection(direction: ScrollDirection) {
-        dataStore.edit { it[Keys.READER_SCROLL_DIRECTION] = direction.name }
-    }
-
-    override suspend fun setReaderPageLayout(layout: PageLayout) {
-        dataStore.edit { it[Keys.READER_PAGE_LAYOUT] = layout.name }
-    }
-
-    override suspend fun setReaderPageAlignment(alignment: PageAlignment) {
-        dataStore.edit { it[Keys.READER_PAGE_ALIGNMENT] = alignment.name }
+    override suspend fun setReaderScrollMode(mode: ScrollMode) {
+        dataStore.edit { it[Keys.READER_SCROLL_MODE] = mode.name }
     }
 
     override suspend fun setReaderAutoHideToolbar(enabled: Boolean) {

@@ -64,7 +64,6 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDi
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderSidebar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ViewModeSheet
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageSpreadMode
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomPreset
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DisplaySheet
@@ -324,9 +323,9 @@ fun ReaderScreen(
             },
             modifier = Modifier.fillMaxSize(),
             update = { pdfViewer ->
-                val targetScrollMode = when (state.scrollDirection) {
-                    ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
-                    ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                val targetScrollMode = when (state.scrollMode) {
+                    ScrollMode.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    ScrollMode.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
                 }
                 if (pdfViewer.isInitialized && pdfViewer.pageScrollMode != targetScrollMode) {
                     pdfViewer.pageScrollMode = targetScrollMode
@@ -516,31 +515,14 @@ fun ReaderScreen(
     // View Mode Sheet
     if (state.isViewModeSheetVisible) {
         ViewModeSheet(
-            currentScrollDirection = state.scrollDirection,
-            currentSpreadMode = when (state.spreadMode) {
-                SpreadMode.NONE -> PageSpreadMode.NONE
-                SpreadMode.ODD -> PageSpreadMode.ODD
-                SpreadMode.EVEN -> PageSpreadMode.EVEN
-            },
+            currentScrollMode = state.scrollMode,
             isSnapEnabled = state.isSnapEnabled,
-            currentPageAlignment = state.pageAlignment,
             isAutoHideToolbar = state.autoHideToolbar,
-            onScrollDirectionChange = { direction ->
-                viewModel.onAction(ReaderAction.SetScrollDirection(direction))
-            },
-            onSpreadModeChange = { mode ->
-                val spreadMode = when (mode) {
-                    PageSpreadMode.NONE -> SpreadMode.NONE
-                    PageSpreadMode.ODD -> SpreadMode.ODD
-                    PageSpreadMode.EVEN -> SpreadMode.EVEN
-                }
-                viewModel.onAction(ReaderAction.SetSpreadMode(spreadMode))
+            onScrollModeChange = { mode ->
+                viewModel.onAction(ReaderAction.SetScrollMode(mode))
             },
             onSnapToggle = { enabled ->
                 viewModel.onAction(ReaderAction.SetSnapEnabled(enabled))
-            },
-            onPageAlignmentChange = { alignment ->
-                viewModel.onAction(ReaderAction.SetPageAlignment(alignment))
             },
             onAutoHideToolbarToggle = { enabled ->
                 viewModel.onAction(ReaderAction.SetAutoHideToolbar(enabled))

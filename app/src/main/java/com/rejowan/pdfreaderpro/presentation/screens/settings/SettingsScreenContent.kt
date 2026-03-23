@@ -47,6 +47,7 @@ import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.ColorLens
 import androidx.compose.material.icons.rounded.Brightness1
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.FormatAlignCenter
 import androidx.compose.material.icons.rounded.FormatAlignLeft
@@ -119,11 +120,10 @@ import androidx.core.net.toUri
 import androidx.compose.ui.res.painterResource
 import com.rejowan.pdfreaderpro.BuildConfig
 import com.rejowan.pdfreaderpro.R
-import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
-import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
+import com.rejowan.pdfreaderpro.domain.model.ScrollMode
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
 import com.rejowan.pdfreaderpro.domain.model.UpdateState
@@ -192,8 +192,7 @@ fun SettingsScreenContent(
 
     // Other sheet visibility states
     var showThemeModeSheet by remember { mutableStateOf(false) }
-    var showScrollDirectionSheet by remember { mutableStateOf(false) }
-    var showPageAlignmentSheet by remember { mutableStateOf(false) }
+    var showScrollModeSheet by remember { mutableStateOf(false) }
     var showQuickZoomSheet by remember { mutableStateOf(false) }
     var showReadingThemeSheet by remember { mutableStateOf(false) }
     var showBrightnessSheet by remember { mutableStateOf(false) }
@@ -256,22 +255,11 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.SwapVert,
-            title = stringResource(R.string.scroll_direction),
-            subtitle = preferences.readerScrollDirection.name.lowercase().replaceFirstChar { it.uppercase() },
+            title = stringResource(R.string.scroll_mode),
+            subtitle = preferences.readerScrollMode.name.lowercase().replace("_", " ").replaceFirstChar { it.uppercase() },
             accentColor = AccentPurple,
-            onClick = { showScrollDirectionSheet = true },
+            onClick = { showScrollModeSheet = true },
             animationDelay = 200
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        SettingsOptionItem(
-            icon = Icons.Rounded.FormatAlignCenter,
-            title = stringResource(R.string.page_alignment),
-            subtitle = preferences.readerPageAlignment.name.lowercase().replaceFirstChar { it.uppercase() },
-            accentColor = AccentTeal,
-            onClick = { showPageAlignmentSheet = true },
-            animationDelay = 250
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -521,10 +509,10 @@ fun SettingsScreenContent(
         )
     }
 
-    // Scroll Direction picker
-    if (showScrollDirectionSheet) {
+    // Scroll Mode picker
+    if (showScrollModeSheet) {
         SettingsPickerSheet(
-            title = stringResource(R.string.scroll_direction),
+            title = stringResource(R.string.scroll_mode),
             subtitle = stringResource(R.string.choose_scroll),
             icon = Icons.Rounded.SwapVert,
             accentColor = AccentPurple,
@@ -532,33 +520,12 @@ fun SettingsScreenContent(
                 PickerOption(Icons.Rounded.SwapVert, stringResource(R.string.vertical), stringResource(R.string.scroll_up_down)),
                 PickerOption(Icons.Rounded.SwapHoriz, stringResource(R.string.horizontal), stringResource(R.string.scroll_left_right))
             ),
-            selectedIndex = ScrollDirection.entries.indexOf(preferences.readerScrollDirection),
+            selectedIndex = ScrollMode.entries.indexOf(preferences.readerScrollMode),
             onSelect = { index ->
-                viewModel.setReaderScrollDirection(ScrollDirection.entries[index])
-                showScrollDirectionSheet = false
+                viewModel.setReaderScrollMode(ScrollMode.entries[index])
+                showScrollModeSheet = false
             },
-            onDismiss = { showScrollDirectionSheet = false }
-        )
-    }
-
-    // Page Alignment picker
-    if (showPageAlignmentSheet) {
-        SettingsPickerSheet(
-            title = stringResource(R.string.page_alignment),
-            subtitle = stringResource(R.string.position_pages),
-            icon = Icons.Rounded.FormatAlignCenter,
-            accentColor = AccentTeal,
-            options = listOf(
-                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignLeft, stringResource(R.string.left), stringResource(R.string.align_pages_left)),
-                PickerOption(Icons.Rounded.FormatAlignCenter, stringResource(R.string.center), stringResource(R.string.center_pages)),
-                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignRight, stringResource(R.string.right), stringResource(R.string.align_pages_right))
-            ),
-            selectedIndex = PageAlignment.entries.indexOf(preferences.readerPageAlignment),
-            onSelect = { index ->
-                viewModel.setReaderPageAlignment(PageAlignment.entries[index])
-                showPageAlignmentSheet = false
-            },
-            onDismiss = { showPageAlignmentSheet = false }
+            onDismiss = { showScrollModeSheet = false }
         )
     }
 

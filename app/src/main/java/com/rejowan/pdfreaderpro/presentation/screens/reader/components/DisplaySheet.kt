@@ -78,7 +78,6 @@ import kotlinx.coroutines.delay
 
 // Design colors
 private val AccentAmber = Color(0xFFFFB74D)
-private val AccentPurple = Color(0xFF9575CD)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -266,14 +265,14 @@ private fun DisplaySheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Brightness Section
-        SectionLabel(text = stringResource(R.string.brightness), delay = 150)
+        SectionLabel(text = stringResource(R.string.brightness), delay = 100)
 
         Spacer(modifier = Modifier.height(8.dp))
 
         BrightnessSection(
             brightness = brightness,
             onBrightnessChange = onBrightnessChange,
-            animationDelay = 200
+            animationDelay = 150
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -284,7 +283,7 @@ private fun DisplaySheetContent(
         KeepScreenOnRow(
             keepScreenOn = keepScreenOn,
             onKeepScreenOnChange = onKeepScreenOnChange,
-            animationDelay = 300
+            animationDelay = 250
         )
     }
 }
@@ -547,6 +546,7 @@ private fun ThemeOption(
         )
     }
 }
+
 
 @Composable
 private fun BrightnessSection(
@@ -826,7 +826,7 @@ private fun KeepScreenOnRow(
         ) {
             Surface(
                 shape = CircleShape,
-                color = AccentPurple.copy(alpha = 0.12f),
+                color = AccentAmber.copy(alpha = 0.12f),
                 modifier = Modifier.size(32.dp)
             ) {
                 Box(
@@ -836,7 +836,7 @@ private fun KeepScreenOnRow(
                     Icon(
                         imageVector = Icons.Rounded.BrightnessMedium,
                         contentDescription = stringResource(R.string.cd_decorative),
-                        tint = AccentPurple,
+                        tint = AccentAmber,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -863,8 +863,8 @@ private fun KeepScreenOnRow(
                 checked = keepScreenOn,
                 onCheckedChange = onKeepScreenOnChange,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = AccentPurple,
-                    checkedTrackColor = AccentPurple.copy(alpha = 0.5f)
+                    checkedThumbColor = AccentAmber,
+                    checkedTrackColor = AccentAmber.copy(alpha = 0.5f)
                 )
             )
         }

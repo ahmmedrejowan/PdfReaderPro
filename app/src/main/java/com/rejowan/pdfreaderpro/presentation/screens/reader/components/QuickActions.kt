@@ -24,10 +24,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.FitScreen
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.ViewDay
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -44,7 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rejowan.pdfreaderpro.R
-import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollMode
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
@@ -116,7 +118,7 @@ fun ZoomControlPill(
 
 @Composable
 fun ScrollDirectionToggle(
-    currentDirection: ScrollDirection,
+    currentScrollMode: ScrollMode,
     onToggle: () -> Unit,
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
@@ -124,10 +126,9 @@ fun ScrollDirectionToggle(
     val surfaceColor = if (isDarkMode) SurfaceDark.copy(alpha = 0.95f) else Color.White.copy(alpha = 0.95f)
     val contentColor = if (isDarkMode) Color.White else Color.Black
 
-    val icon = if (currentDirection == ScrollDirection.VERTICAL) {
-        Icons.Rounded.SwapVert
-    } else {
-        Icons.Rounded.SwapHoriz
+    val icon = when (currentScrollMode) {
+        ScrollMode.VERTICAL -> Icons.Rounded.SwapVert
+        ScrollMode.HORIZONTAL -> Icons.Rounded.SwapHoriz
     }
 
     Surface(
@@ -198,11 +199,11 @@ fun FitScreenButton(
 fun QuickActionsColumn(
     isVisible: Boolean,
     currentZoom: Float,
-    scrollDirection: ScrollDirection,
+    scrollMode: ScrollMode,
     onZoomIn: () -> Unit,
     onZoomOut: () -> Unit,
     onResetZoom: () -> Unit,
-    onScrollDirectionToggle: () -> Unit,
+    onScrollModeToggle: () -> Unit,
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
 ) {
@@ -244,8 +245,8 @@ fun QuickActionsColumn(
             exit = scaleOut() + fadeOut()
         ) {
             ScrollDirectionToggle(
-                currentDirection = scrollDirection,
-                onToggle = onScrollDirectionToggle,
+                currentScrollMode = scrollMode,
+                onToggle = onScrollModeToggle,
                 isDarkMode = isDarkMode
             )
         }

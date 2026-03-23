@@ -722,14 +722,24 @@
     <!-- View Mode Sheet -->
     <string name="view_options">View Options</string>
     <string name="customize_reading_layout">Customize your reading layout</string>
+    <string name="scroll_mode">Scroll Mode</string>
+    <string name="wrapped">Wrapped</string>
+    <string name="single_page_mode">Single Page</string>
+    <string name="spread_mode">Page Spread</string>
     <string name="single_layout">Single</string>
     <string name="two_page_layout">Two-Page</string>
+    <string name="spread_odd">Odd</string>
+    <string name="spread_even">Even</string>
     <string name="left_align">Left</string>
     <string name="center_align">Center</string>
     <string name="right_align">Right</string>
     <string name="option_selected">Selected</string>
     <string name="snap_to_page">Snap to Page</string>
     <string name="snap_to_page_desc">Automatically align to page boundaries</string>
+    <string name="single_page_arrangement">Single Page Arrangement</string>
+    <string name="single_page_arrangement_desc">Remove margins between pages</string>
+    <string name="scroll_speed_limit">Scroll Speed Limit</string>
+    <string name="scroll_speed_limit_desc">Prevent accidental page skipping</string>
     <string name="auto_hide_toolbar">Auto-Hide Toolbar</string>
     <string name="auto_hide_toolbar_desc">Hide toolbar after 5 seconds</string>
 
@@ -957,6 +967,10 @@
     <string name="choose_scroll">Choose how pages scroll</string>
     <string name="scroll_up_down">Scroll up and down</string>
     <string name="scroll_left_right">Scroll left and right</string>
+    <string name="choose_spread">Choose page spread mode</string>
+    <string name="spread_single_desc">Show one page at a time</string>
+    <string name="spread_odd_desc">First page alone, then pairs</string>
+    <string name="spread_even_desc">Start with page pairs</string>
     <string name="position_pages">Position pages on screen</string>
     <string name="left">Left</string>
     <string name="center">Center</string>
