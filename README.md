@@ -115,7 +115,7 @@ app/
 - **Gradle**: 9.4.0
 - **AGP**: 9.1.0
 - **Kotlin**: 2.3.10
-- **Java**: 17
+- **Java**: 21
 
 ### Permissions
 
