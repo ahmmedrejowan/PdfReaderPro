@@ -396,15 +396,30 @@ fun ReaderScreen(
                     )
                 }
 
-                // Page scrubber on right edge (shows with toolbar OR when scrolling in immersive mode)
+                // Page scrubber (shows with toolbar OR when scrolling in immersive mode)
+                // Vertical scrubber on right edge for vertical scroll mode
+                // Horizontal scrubber above bottom bar for horizontal scroll mode
                 val showScrubber = (state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen) || isScrolling
+                val isHorizontalScroll = state.scrollMode == ScrollMode.HORIZONTAL
+
+                // When toolbar visible: above control bar. When hidden: just above system nav
+                val toolbarVisible = state.isToolbarVisible && !state.isFullScreen
+
                 PageScrubber(
                     currentPage = state.currentPage,
                     totalPages = state.totalPages,
                     isVisible = showScrubber,
                     onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
+                    isHorizontal = isHorizontalScroll,
                     isDarkMode = isDarkMode,
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    modifier = if (isHorizontalScroll) {
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .windowInsetsPadding(WindowInsets.navigationBars)
+                            .padding(bottom = if (toolbarVisible) 80.dp else 8.dp)
+                    } else {
+                        Modifier.align(Alignment.TopEnd)
+                    }
                 )
 
                 // Floating control bar at bottom
