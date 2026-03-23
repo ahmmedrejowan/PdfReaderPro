@@ -1,0 +1,32 @@
+Categories:
+  - Reading
+  - Office
+License: GPL-3.0-only
+AuthorName: K M Rejowan Ahmmed
+AuthorEmail: kmrejowan@gmail.com
+WebSite: https://github.com/ahmmedrejowan/PdfReaderPro
+SourceCode: https://github.com/ahmmedrejowan/PdfReaderPro
+IssueTracker: https://github.com/ahmmedrejowan/PdfReaderPro/issues
+Changelog: https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/CHANGELOG.md
+
+AutoName: PDF Reader Pro
+
+RepoType: git
+Repo: https://github.com/ahmmedrejowan/PdfReaderPro.git
+
+Builds:
+  - versionName: 2.1.0
+    versionCode: 3
+    commit: v2.1.0
+    subdir: app
+    sudo:
+      - apt-get update
+      - apt-get install -y openjdk-21-jdk-headless
+      - update-java-alternatives -a
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags ^v[0-9.]+$
+CurrentVersion: 2.1.0
+CurrentVersionCode: 3
