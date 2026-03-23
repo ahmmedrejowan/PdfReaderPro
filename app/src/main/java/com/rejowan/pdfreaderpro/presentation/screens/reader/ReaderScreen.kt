@@ -64,7 +64,6 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PdfInfoDi
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderSidebar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderTopBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ViewModeSheet
-import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageSpreadMode
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ZoomPreset
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.DisplaySheet
@@ -324,9 +323,9 @@ fun ReaderScreen(
             },
             modifier = Modifier.fillMaxSize(),
             update = { pdfViewer ->
-                val targetScrollMode = when (state.scrollDirection) {
-                    ScrollDirection.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
-                    ScrollDirection.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
+                val targetScrollMode = when (state.scrollMode) {
+                    ScrollMode.VERTICAL -> PdfViewer.PageScrollMode.VERTICAL
+                    ScrollMode.HORIZONTAL -> PdfViewer.PageScrollMode.HORIZONTAL
                 }
                 if (pdfViewer.isInitialized && pdfViewer.pageScrollMode != targetScrollMode) {
                     pdfViewer.pageScrollMode = targetScrollMode
@@ -397,15 +396,30 @@ fun ReaderScreen(
                     )
                 }
 
-                // Page scrubber on right edge (shows with toolbar OR when scrolling in immersive mode)
+                // Page scrubber (shows with toolbar OR when scrolling in immersive mode)
+                // Vertical scrubber on right edge for vertical scroll mode
+                // Horizontal scrubber above bottom bar for horizontal scroll mode
                 val showScrubber = (state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen) || isScrolling
+                val isHorizontalScroll = state.scrollMode == ScrollMode.HORIZONTAL
+
+                // When toolbar visible: above control bar. When hidden: just above system nav
+                val toolbarVisible = state.isToolbarVisible && !state.isFullScreen
+
                 PageScrubber(
                     currentPage = state.currentPage,
                     totalPages = state.totalPages,
                     isVisible = showScrubber,
                     onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
+                    isHorizontal = isHorizontalScroll,
                     isDarkMode = isDarkMode,
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    modifier = if (isHorizontalScroll) {
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .windowInsetsPadding(WindowInsets.navigationBars)
+                            .padding(bottom = if (toolbarVisible) 80.dp else 8.dp)
+                    } else {
+                        Modifier.align(Alignment.TopEnd)
+                    }
                 )
 
                 // Floating control bar at bottom
@@ -516,31 +530,14 @@ fun ReaderScreen(
     // View Mode Sheet
     if (state.isViewModeSheetVisible) {
         ViewModeSheet(
-            currentScrollDirection = state.scrollDirection,
-            currentSpreadMode = when (state.spreadMode) {
-                SpreadMode.NONE -> PageSpreadMode.NONE
-                SpreadMode.ODD -> PageSpreadMode.ODD
-                SpreadMode.EVEN -> PageSpreadMode.EVEN
-            },
+            currentScrollMode = state.scrollMode,
             isSnapEnabled = state.isSnapEnabled,
-            currentPageAlignment = state.pageAlignment,
             isAutoHideToolbar = state.autoHideToolbar,
-            onScrollDirectionChange = { direction ->
-                viewModel.onAction(ReaderAction.SetScrollDirection(direction))
-            },
-            onSpreadModeChange = { mode ->
-                val spreadMode = when (mode) {
-                    PageSpreadMode.NONE -> SpreadMode.NONE
-                    PageSpreadMode.ODD -> SpreadMode.ODD
-                    PageSpreadMode.EVEN -> SpreadMode.EVEN
-                }
-                viewModel.onAction(ReaderAction.SetSpreadMode(spreadMode))
+            onScrollModeChange = { mode ->
+                viewModel.onAction(ReaderAction.SetScrollMode(mode))
             },
             onSnapToggle = { enabled ->
                 viewModel.onAction(ReaderAction.SetSnapEnabled(enabled))
-            },
-            onPageAlignmentChange = { alignment ->
-                viewModel.onAction(ReaderAction.SetPageAlignment(alignment))
             },
             onAutoHideToolbarToggle = { enabled ->
                 viewModel.onAction(ReaderAction.SetAutoHideToolbar(enabled))

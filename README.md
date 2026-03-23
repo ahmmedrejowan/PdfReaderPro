@@ -219,6 +219,12 @@ GNU General Public License for more details.
 
 ## Changelog
 
+### v2.1.0 (2026-03-23)
+
+- Horizontal page scrubber for horizontal scroll mode
+- Global settings for snap-to-pages and screen orientation
+- Simplified view mode options
+
 ### v2.0.0 (2026-03-07) - Complete Rewrite
 
 - Complete UI rewrite with Jetpack Compose and Material 3

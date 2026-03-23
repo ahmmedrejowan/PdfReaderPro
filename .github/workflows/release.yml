@@ -20,6 +20,9 @@ on:
         required: false
         default: 'Bug fixes and improvements'
 
+permissions:
+  contents: write
+
 jobs:
   validate:
     name: Validate Release

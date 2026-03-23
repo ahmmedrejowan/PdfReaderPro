@@ -36,16 +36,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.automirrored.rounded.FormatAlignLeft
-import androidx.compose.material.icons.automirrored.rounded.FormatAlignRight
-import androidx.compose.material.icons.rounded.FormatAlignCenter
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.ViewDay
-import androidx.compose.material.icons.rounded.ViewModule
-import androidx.compose.material.icons.rounded.ViewStream
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -75,42 +70,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
-import com.rejowan.pdfreaderpro.presentation.screens.reader.PageAlignment
-import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollMode
 import kotlinx.coroutines.delay
 
 // Design colors
 private val AccentPurple = Color(0xFF9575CD)
-private val AccentBlue = Color(0xFF64B5F6)
 private val AccentTeal = Color(0xFF4DB6AC)
-
-// Scroll modes
-enum class PageScrollMode {
-    VERTICAL,
-    HORIZONTAL,
-    SINGLE_PAGE,
-    WRAPPED
-}
-
-// Spread modes
-enum class PageSpreadMode {
-    NONE,
-    ODD,
-    EVEN
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewModeSheet(
-    currentScrollDirection: ScrollDirection,
-    currentSpreadMode: PageSpreadMode,
+    currentScrollMode: ScrollMode,
     isSnapEnabled: Boolean,
-    currentPageAlignment: PageAlignment,
     isAutoHideToolbar: Boolean,
-    onScrollDirectionChange: (ScrollDirection) -> Unit,
-    onSpreadModeChange: (PageSpreadMode) -> Unit,
+    onScrollModeChange: (ScrollMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
-    onPageAlignmentChange: (PageAlignment) -> Unit,
     onAutoHideToolbarToggle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -119,29 +93,21 @@ fun ViewModeSheet(
 
     if (isLandscape) {
         ViewModeSideSheet(
-            currentScrollDirection = currentScrollDirection,
-            currentSpreadMode = currentSpreadMode,
+            currentScrollMode = currentScrollMode,
             isSnapEnabled = isSnapEnabled,
-            currentPageAlignment = currentPageAlignment,
             isAutoHideToolbar = isAutoHideToolbar,
-            onScrollDirectionChange = onScrollDirectionChange,
-            onSpreadModeChange = onSpreadModeChange,
+            onScrollModeChange = onScrollModeChange,
             onSnapToggle = onSnapToggle,
-            onPageAlignmentChange = onPageAlignmentChange,
             onAutoHideToolbarToggle = onAutoHideToolbarToggle,
             onDismiss = onDismiss
         )
     } else {
         ViewModeBottomSheet(
-            currentScrollDirection = currentScrollDirection,
-            currentSpreadMode = currentSpreadMode,
+            currentScrollMode = currentScrollMode,
             isSnapEnabled = isSnapEnabled,
-            currentPageAlignment = currentPageAlignment,
             isAutoHideToolbar = isAutoHideToolbar,
-            onScrollDirectionChange = onScrollDirectionChange,
-            onSpreadModeChange = onSpreadModeChange,
+            onScrollModeChange = onScrollModeChange,
             onSnapToggle = onSnapToggle,
-            onPageAlignmentChange = onPageAlignmentChange,
             onAutoHideToolbarToggle = onAutoHideToolbarToggle,
             onDismiss = onDismiss
         )
@@ -151,15 +117,11 @@ fun ViewModeSheet(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ViewModeBottomSheet(
-    currentScrollDirection: ScrollDirection,
-    currentSpreadMode: PageSpreadMode,
+    currentScrollMode: ScrollMode,
     isSnapEnabled: Boolean,
-    currentPageAlignment: PageAlignment,
     isAutoHideToolbar: Boolean,
-    onScrollDirectionChange: (ScrollDirection) -> Unit,
-    onSpreadModeChange: (PageSpreadMode) -> Unit,
+    onScrollModeChange: (ScrollMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
-    onPageAlignmentChange: (PageAlignment) -> Unit,
     onAutoHideToolbarToggle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -173,15 +135,11 @@ private fun ViewModeBottomSheet(
         tonalElevation = 2.dp
     ) {
         ViewModeSheetContent(
-            currentScrollDirection = currentScrollDirection,
-            currentSpreadMode = currentSpreadMode,
+            currentScrollMode = currentScrollMode,
             isSnapEnabled = isSnapEnabled,
-            currentPageAlignment = currentPageAlignment,
             isAutoHideToolbar = isAutoHideToolbar,
-            onScrollDirectionChange = onScrollDirectionChange,
-            onSpreadModeChange = onSpreadModeChange,
+            onScrollModeChange = onScrollModeChange,
             onSnapToggle = onSnapToggle,
-            onPageAlignmentChange = onPageAlignmentChange,
             onAutoHideToolbarToggle = onAutoHideToolbarToggle,
             modifier = Modifier.padding(bottom = 24.dp)
         )
@@ -190,15 +148,11 @@ private fun ViewModeBottomSheet(
 
 @Composable
 private fun ViewModeSideSheet(
-    currentScrollDirection: ScrollDirection,
-    currentSpreadMode: PageSpreadMode,
+    currentScrollMode: ScrollMode,
     isSnapEnabled: Boolean,
-    currentPageAlignment: PageAlignment,
     isAutoHideToolbar: Boolean,
-    onScrollDirectionChange: (ScrollDirection) -> Unit,
-    onSpreadModeChange: (PageSpreadMode) -> Unit,
+    onScrollModeChange: (ScrollMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
-    onPageAlignmentChange: (PageAlignment) -> Unit,
     onAutoHideToolbarToggle: (Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -248,15 +202,11 @@ private fun ViewModeSideSheet(
                 shadowElevation = 8.dp
             ) {
                 ViewModeSheetContent(
-                    currentScrollDirection = currentScrollDirection,
-                    currentSpreadMode = currentSpreadMode,
+                    currentScrollMode = currentScrollMode,
                     isSnapEnabled = isSnapEnabled,
-                    currentPageAlignment = currentPageAlignment,
                     isAutoHideToolbar = isAutoHideToolbar,
-                    onScrollDirectionChange = onScrollDirectionChange,
-                    onSpreadModeChange = onSpreadModeChange,
+                    onScrollModeChange = onScrollModeChange,
                     onSnapToggle = onSnapToggle,
-                    onPageAlignmentChange = onPageAlignmentChange,
                     onAutoHideToolbarToggle = onAutoHideToolbarToggle,
                     modifier = Modifier
                         .fillMaxSize()
@@ -273,15 +223,11 @@ private fun ViewModeSideSheet(
 
 @Composable
 private fun ViewModeSheetContent(
-    currentScrollDirection: ScrollDirection,
-    currentSpreadMode: PageSpreadMode,
+    currentScrollMode: ScrollMode,
     isSnapEnabled: Boolean,
-    currentPageAlignment: PageAlignment,
     isAutoHideToolbar: Boolean,
-    onScrollDirectionChange: (ScrollDirection) -> Unit,
-    onSpreadModeChange: (PageSpreadMode) -> Unit,
+    onScrollModeChange: (ScrollMode) -> Unit,
     onSnapToggle: (Boolean) -> Unit,
-    onPageAlignmentChange: (PageAlignment) -> Unit,
     onAutoHideToolbarToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -300,8 +246,8 @@ private fun ViewModeSheetContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Scroll Direction Section
-        SectionLabel(text = stringResource(R.string.scroll_direction), delay = 0)
+        // Scroll Mode Section (2 options in single row)
+        SectionLabel(text = stringResource(R.string.scroll_mode), delay = 0)
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -309,21 +255,21 @@ private fun ViewModeSheetContent(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ScrollModeChip(
+            ModeChip(
                 icon = Icons.Rounded.SwapVert,
                 label = stringResource(R.string.vertical),
-                isSelected = currentScrollDirection == ScrollDirection.VERTICAL,
+                isSelected = currentScrollMode == ScrollMode.VERTICAL,
                 accentColor = AccentPurple,
-                onClick = { onScrollDirectionChange(ScrollDirection.VERTICAL) },
+                onClick = { onScrollModeChange(ScrollMode.VERTICAL) },
                 modifier = Modifier.weight(1f),
                 animationDelay = 50
             )
-            ScrollModeChip(
+            ModeChip(
                 icon = Icons.Rounded.SwapHoriz,
                 label = stringResource(R.string.horizontal),
-                isSelected = currentScrollDirection == ScrollDirection.HORIZONTAL,
+                isSelected = currentScrollMode == ScrollMode.HORIZONTAL,
                 accentColor = AccentPurple,
-                onClick = { onScrollDirectionChange(ScrollDirection.HORIZONTAL) },
+                onClick = { onScrollModeChange(ScrollMode.HORIZONTAL) },
                 modifier = Modifier.weight(1f),
                 animationDelay = 100
             )
@@ -333,97 +279,27 @@ private fun ViewModeSheetContent(
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Page Layout Section
-        SectionLabel(text = stringResource(R.string.page_layout), delay = 150)
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            SpreadModeChip(
-                icon = Icons.Rounded.ViewStream,
-                label = stringResource(R.string.single_layout),
-                isSelected = currentSpreadMode == PageSpreadMode.NONE,
-                accentColor = AccentBlue,
-                onClick = { onSpreadModeChange(PageSpreadMode.NONE) },
-                modifier = Modifier.weight(1f),
-                animationDelay = 200
-            )
-            SpreadModeChip(
-                icon = Icons.Rounded.ViewModule,
-                label = stringResource(R.string.two_page_layout),
-                isSelected = currentSpreadMode == PageSpreadMode.ODD || currentSpreadMode == PageSpreadMode.EVEN,
-                accentColor = AccentBlue,
-                onClick = { onSpreadModeChange(PageSpreadMode.ODD) },
-                modifier = Modifier.weight(1f),
-                animationDelay = 250
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Page Alignment Section
-        SectionLabel(text = stringResource(R.string.page_alignment), delay = 300)
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            AlignmentChip(
-                icon = Icons.AutoMirrored.Rounded.FormatAlignLeft,
-                label = stringResource(R.string.left_align),
-                isSelected = currentPageAlignment == PageAlignment.LEFT,
-                accentColor = AccentTeal,
-                onClick = { onPageAlignmentChange(PageAlignment.LEFT) },
-                modifier = Modifier.weight(1f),
-                animationDelay = 350
-            )
-            AlignmentChip(
-                icon = Icons.Rounded.FormatAlignCenter,
-                label = stringResource(R.string.center_align),
-                isSelected = currentPageAlignment == PageAlignment.CENTER,
-                accentColor = AccentTeal,
-                onClick = { onPageAlignmentChange(PageAlignment.CENTER) },
-                modifier = Modifier.weight(1f),
-                animationDelay = 400
-            )
-            AlignmentChip(
-                icon = Icons.AutoMirrored.Rounded.FormatAlignRight,
-                label = stringResource(R.string.right_align),
-                isSelected = currentPageAlignment == PageAlignment.RIGHT,
-                accentColor = AccentTeal,
-                onClick = { onPageAlignmentChange(PageAlignment.RIGHT) },
-                modifier = Modifier.weight(1f),
-                animationDelay = 450
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Snap Toggle
-        SnapToggleRow(
+        // Toggles Section
+        ToggleRow(
+            icon = Icons.Rounded.GridView,
+            title = stringResource(R.string.snap_to_page),
+            description = stringResource(R.string.snap_to_page_desc),
             isEnabled = isSnapEnabled,
             onToggle = onSnapToggle,
             accentColor = AccentTeal,
-            animationDelay = 500
+            animationDelay = 150
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Auto-Hide Toolbar Toggle
-        AutoHideToggleRow(
+        ToggleRow(
+            icon = Icons.Rounded.Timer,
+            title = stringResource(R.string.auto_hide_toolbar),
+            description = stringResource(R.string.auto_hide_toolbar_desc),
             isEnabled = isAutoHideToolbar,
             onToggle = onAutoHideToolbarToggle,
-            accentColor = AccentPurple,
-            animationDelay = 550
+            accentColor = AccentTeal,
+            animationDelay = 200
         )
     }
 }
@@ -446,7 +322,7 @@ private fun SheetHeader(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -503,7 +379,7 @@ private fun SectionLabel(
 }
 
 @Composable
-private fun ScrollModeChip(
+private fun ModeChip(
     icon: ImageVector,
     label: String,
     isSelected: Boolean,
@@ -568,40 +444,40 @@ private fun ScrollModeChip(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(horizontal = 12.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = stringResource(R.string.cd_decorative),
-                modifier = Modifier.size(20.dp),
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
                 tint = contentColor
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(6.dp))
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelLarge.copy(
+                style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
                 ),
                 color = contentColor
             )
 
             if (isSelected) {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(6.dp))
                 Box(
                     modifier = Modifier
-                        .size(18.dp)
+                        .size(16.dp)
                         .clip(CircleShape)
                         .background(accentColor),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.cd_checkbox),
-                        modifier = Modifier.size(12.dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(10.dp),
                         tint = Color.White
                     )
                 }
@@ -611,29 +487,10 @@ private fun ScrollModeChip(
 }
 
 @Composable
-private fun SpreadModeChip(
+private fun ToggleRow(
     icon: ImageVector,
-    label: String,
-    isSelected: Boolean,
-    accentColor: Color,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    animationDelay: Int = 0
-) {
-    // Reuse the same implementation as ScrollModeChip
-    ScrollModeChip(
-        icon = icon,
-        label = label,
-        isSelected = isSelected,
-        accentColor = accentColor,
-        onClick = onClick,
-        modifier = modifier,
-        animationDelay = animationDelay
-    )
-}
-
-@Composable
-private fun SnapToggleRow(
+    title: String,
+    description: String,
     isEnabled: Boolean,
     onToggle: (Boolean) -> Unit,
     accentColor: Color,
@@ -671,8 +528,8 @@ private fun SnapToggleRow(
                 color = accentColor.copy(alpha = 0.12f)
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.GridView,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    imageVector = icon,
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(8.dp)
                         .size(18.dp),
@@ -684,182 +541,14 @@ private fun SnapToggleRow(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = stringResource(R.string.snap_to_page),
+                    text = title,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = stringResource(R.string.snap_to_page_desc),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                )
-            }
-
-            Switch(
-                checked = isEnabled,
-                onCheckedChange = onToggle,
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = accentColor,
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                )
-            )
-        }
-    }
-}
-
-@Composable
-private fun AlignmentChip(
-    icon: ImageVector,
-    label: String,
-    isSelected: Boolean,
-    accentColor: Color,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    animationDelay: Int = 0
-) {
-    var isVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        delay(animationDelay.toLong())
-        isVisible = true
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0.95f,
-        animationSpec = tween(250, easing = FastOutSlowInEasing),
-        label = "alignment chip scale"
-    )
-
-    val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor.copy(alpha = 0.12f)
-        else MaterialTheme.colorScheme.surfaceContainerHigh,
-        animationSpec = tween(200),
-        label = "alignment chip bg"
-    )
-
-    val borderColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor.copy(alpha = 0.5f)
-        else Color.Transparent,
-        animationSpec = tween(200),
-        label = "alignment chip border"
-    )
-
-    val contentColor by animateColorAsState(
-        targetValue = if (isSelected) accentColor
-        else MaterialTheme.colorScheme.onSurfaceVariant,
-        animationSpec = tween(200),
-        label = "alignment chip content"
-    )
-
-    Surface(
-        modifier = modifier
-            .scale(scale)
-            .clip(RoundedCornerShape(12.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = accentColor),
-                onClick = onClick
-            )
-            .then(
-                if (isSelected) Modifier.border(
-                    width = 1.5.dp,
-                    color = borderColor,
-                    shape = RoundedCornerShape(12.dp)
-                ) else Modifier
-            ),
-        shape = RoundedCornerShape(12.dp),
-        color = backgroundColor
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = stringResource(R.string.cd_decorative),
-                modifier = Modifier.size(20.dp),
-                tint = contentColor
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
-                ),
-                color = contentColor
-            )
-        }
-    }
-}
-
-@Composable
-private fun AutoHideToggleRow(
-    isEnabled: Boolean,
-    onToggle: (Boolean) -> Unit,
-    accentColor: Color,
-    animationDelay: Int,
-    modifier: Modifier = Modifier
-) {
-    var isVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        delay(animationDelay.toLong())
-        isVisible = true
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0.95f,
-        animationSpec = tween(250, easing = FastOutSlowInEasing),
-        label = "auto hide toggle scale"
-    )
-
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .scale(scale),
-        shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Surface(
-                shape = RoundedCornerShape(10.dp),
-                color = accentColor.copy(alpha = 0.12f)
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Timer,
-                    contentDescription = stringResource(R.string.cd_decorative),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(18.dp),
-                    tint = accentColor
-                )
-            }
-
-            Spacer(modifier = Modifier.width(14.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.auto_hide_toolbar),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Medium
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(R.string.auto_hide_toolbar_desc),
+                    text = description,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )

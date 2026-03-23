@@ -16,7 +16,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderAction
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderEvent
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReaderViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReadingTheme
-import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollDirection
+import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollMode
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -296,15 +296,15 @@ class ReaderViewModelTest {
     }
 
     @Test
-    fun `set scroll direction updates state and persists`() = runTest {
+    fun `set scroll mode updates state and persists`() = runTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.onAction(ReaderAction.SetScrollDirection(ScrollDirection.HORIZONTAL))
+        viewModel.onAction(ReaderAction.SetScrollMode(ScrollMode.HORIZONTAL))
         advanceUntilIdle()
 
-        assertEquals(ScrollDirection.HORIZONTAL, viewModel.state.value.scrollDirection)
-        coVerify { preferencesRepository.setReaderScrollDirection(any()) }
+        assertEquals(ScrollMode.HORIZONTAL, viewModel.state.value.scrollMode)
+        coVerify { preferencesRepository.setReaderScrollMode(any()) }
     }
 
     @Test

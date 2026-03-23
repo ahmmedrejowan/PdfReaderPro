@@ -24,8 +24,7 @@ data class ReaderState(
     val zoom: Float = 1f,
     val minZoom: Float = 0.5f,
     val maxZoom: Float = 5f,
-    val scrollDirection: ScrollDirection = ScrollDirection.VERTICAL,
-    val spreadMode: SpreadMode = SpreadMode.NONE,
+    val scrollMode: ScrollMode = ScrollMode.VERTICAL,
     val isSnapEnabled: Boolean = false,
 
     // UI visibility
@@ -77,9 +76,6 @@ data class ReaderState(
     // Reading theme
     val readingTheme: ReadingTheme = ReadingTheme.LIGHT,
 
-    // Page alignment
-    val pageAlignment: PageAlignment = PageAlignment.CENTER,
-
     // Auto-hide toolbar
     val autoHideToolbar: Boolean = false,
 
@@ -121,20 +117,11 @@ data class ReaderState(
 }
 
 /**
- * Scroll direction for PDF viewer.
+ * Scroll mode for PDF viewer.
  */
-enum class ScrollDirection {
+enum class ScrollMode {
     VERTICAL,
     HORIZONTAL
-}
-
-/**
- * Page spread mode for PDF viewer.
- */
-enum class SpreadMode {
-    NONE,
-    ODD,
-    EVEN
 }
 
 /**
@@ -154,15 +141,6 @@ enum class ReadingTheme {
     DARK,
     SEPIA,
     BLACK  // AMOLED black
-}
-
-/**
- * Page alignment options.
- */
-enum class PageAlignment {
-    LEFT,
-    CENTER,
-    RIGHT
 }
 
 /**
@@ -225,13 +203,11 @@ sealed class ReaderAction {
 
     // Reading settings
     data class SetBrightness(val brightness: Float) : ReaderAction()
-    data class SetScrollDirection(val direction: ScrollDirection) : ReaderAction()
-    data class SetSpreadMode(val mode: SpreadMode) : ReaderAction()
+    data class SetScrollMode(val mode: ScrollMode) : ReaderAction()
     data class SetSnapEnabled(val enabled: Boolean) : ReaderAction()
     data class SetKeepScreenOn(val enabled: Boolean) : ReaderAction()
     data class SetScreenOrientation(val orientation: ScreenOrientation) : ReaderAction()
     data class SetReadingTheme(val theme: ReadingTheme) : ReaderAction()
-    data class SetPageAlignment(val alignment: PageAlignment) : ReaderAction()
     data class SetAutoHideToolbar(val enabled: Boolean) : ReaderAction()
     data class OpenLink(val url: String) : ReaderAction()
 

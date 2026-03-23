@@ -2,11 +2,9 @@ package com.rejowan.pdfreaderpro.presentation.viewmodel
 
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.model.AppPreferences
-import com.rejowan.pdfreaderpro.domain.model.PageAlignment
-import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
-import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
+import com.rejowan.pdfreaderpro.domain.model.ScrollMode
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.repository.PreferencesRepository
 import com.rejowan.pdfreaderpro.domain.repository.UpdateRepository
@@ -105,37 +103,13 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `initial state has default scroll direction`() = runTest {
+    fun `initial state has default scroll mode`() = runTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
         viewModel.preferences.test {
             val prefs = awaitItem()
-            assertEquals(ScrollDirection.VERTICAL, prefs.readerScrollDirection)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `initial state has default page layout`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.preferences.test {
-            val prefs = awaitItem()
-            assertEquals(PageLayout.CONTINUOUS, prefs.readerPageLayout)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `initial state has default page alignment`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.preferences.test {
-            val prefs = awaitItem()
-            assertEquals(PageAlignment.CENTER, prefs.readerPageAlignment)
+            assertEquals(ScrollMode.VERTICAL, prefs.readerScrollMode)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -247,86 +221,27 @@ class SettingsViewModelTest {
     }
     // endregion
 
-    // region setReaderScrollDirection Tests
+    // region setReaderScrollMode Tests
     @Test
-    fun `setReaderScrollDirection calls repository with VERTICAL`() = runTest {
+    fun `setReaderScrollMode calls repository with VERTICAL`() = runTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.setReaderScrollDirection(ScrollDirection.VERTICAL)
+        viewModel.setReaderScrollMode(ScrollMode.VERTICAL)
         advanceUntilIdle()
 
-        coVerify { preferencesRepository.setReaderScrollDirection(ScrollDirection.VERTICAL) }
+        coVerify { preferencesRepository.setReaderScrollMode(ScrollMode.VERTICAL) }
     }
 
     @Test
-    fun `setReaderScrollDirection calls repository with HORIZONTAL`() = runTest {
+    fun `setReaderScrollMode calls repository with HORIZONTAL`() = runTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.setReaderScrollDirection(ScrollDirection.HORIZONTAL)
+        viewModel.setReaderScrollMode(ScrollMode.HORIZONTAL)
         advanceUntilIdle()
 
-        coVerify { preferencesRepository.setReaderScrollDirection(ScrollDirection.HORIZONTAL) }
-    }
-    // endregion
-
-    // region setReaderPageLayout Tests
-    @Test
-    fun `setReaderPageLayout calls repository with CONTINUOUS`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.setReaderPageLayout(PageLayout.CONTINUOUS)
-        advanceUntilIdle()
-
-        coVerify { preferencesRepository.setReaderPageLayout(PageLayout.CONTINUOUS) }
-    }
-
-    @Test
-    fun `setReaderPageLayout calls repository with SINGLE_PAGE`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.setReaderPageLayout(PageLayout.SINGLE_PAGE)
-        advanceUntilIdle()
-
-        coVerify { preferencesRepository.setReaderPageLayout(PageLayout.SINGLE_PAGE) }
-    }
-    // endregion
-
-    // region setReaderPageAlignment Tests
-    @Test
-    fun `setReaderPageAlignment calls repository with CENTER`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.setReaderPageAlignment(PageAlignment.CENTER)
-        advanceUntilIdle()
-
-        coVerify { preferencesRepository.setReaderPageAlignment(PageAlignment.CENTER) }
-    }
-
-    @Test
-    fun `setReaderPageAlignment calls repository with LEFT`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.setReaderPageAlignment(PageAlignment.LEFT)
-        advanceUntilIdle()
-
-        coVerify { preferencesRepository.setReaderPageAlignment(PageAlignment.LEFT) }
-    }
-
-    @Test
-    fun `setReaderPageAlignment calls repository with RIGHT`() = runTest {
-        viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.setReaderPageAlignment(PageAlignment.RIGHT)
-        advanceUntilIdle()
-
-        coVerify { preferencesRepository.setReaderPageAlignment(PageAlignment.RIGHT) }
+        coVerify { preferencesRepository.setReaderScrollMode(ScrollMode.HORIZONTAL) }
     }
     // endregion
 
@@ -454,7 +369,7 @@ class SettingsViewModelTest {
         val updatedPrefs = AppPreferences(
             themeMode = ThemeMode.DARK,
             readerBrightness = 0.75f,
-            readerScrollDirection = ScrollDirection.HORIZONTAL
+            readerScrollMode = ScrollMode.HORIZONTAL
         )
         coEvery { preferencesRepository.preferences } returns flowOf(updatedPrefs)
 
@@ -465,7 +380,7 @@ class SettingsViewModelTest {
             val prefs = awaitItem()
             assertEquals(ThemeMode.DARK, prefs.themeMode)
             assertEquals(0.75f, prefs.readerBrightness)
-            assertEquals(ScrollDirection.HORIZONTAL, prefs.readerScrollDirection)
+            assertEquals(ScrollMode.HORIZONTAL, prefs.readerScrollMode)
             cancelAndIgnoreRemainingEvents()
         }
     }

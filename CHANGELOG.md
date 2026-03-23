@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.0] - 2026-03-23
+
+### Added
+- **Horizontal Page Scrubber** - Page scrubber now adapts to scroll direction; horizontal scrubber appears above the bottom bar in horizontal scroll mode (closes #16)
+- **Global Snap to Pages Setting** - Persist snap-to-pages preference across sessions
+- **Global Screen Orientation Setting** - Lock screen to auto/portrait/landscape from settings
+
+### Changed
+- Simplified view mode options by removing unsupported spread modes and page alignment
+- Streamlined reader settings UI in ViewModeSheet
+
+### Fixed
+- Fixed GitHub release workflow permissions for APK uploads
+
+---
+
 ## [2.0.0] - 2026-03-07
 
 ### Added
@@ -91,11 +107,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| 2.1.0 | 2026-03-23 | Horizontal scrubber, global settings |
 | 2.0.0 | 2026-03-07 | Complete Compose rewrite, PDF tools |
 | 1.0.0 | 2024-01-15 | Initial release |
 
 ---
 
-[Unreleased]: https://github.com/ahmmedrejowan/PdfReaderPro/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/ahmmedrejowan/PdfReaderPro/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/ahmmedrejowan/PdfReaderPro/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ahmmedrejowan/PdfReaderPro/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/ahmmedrejowan/PdfReaderPro/releases/tag/v1.0.0

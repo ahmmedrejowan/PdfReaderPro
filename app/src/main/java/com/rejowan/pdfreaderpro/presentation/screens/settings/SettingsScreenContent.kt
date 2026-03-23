@@ -47,6 +47,7 @@ import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.ColorLens
 import androidx.compose.material.icons.rounded.Brightness1
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.FormatAlignCenter
 import androidx.compose.material.icons.rounded.FormatAlignLeft
@@ -66,8 +67,12 @@ import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
+import androidx.compose.material.icons.rounded.ScreenRotation
+import androidx.compose.material.icons.rounded.StayCurrentLandscape
+import androidx.compose.material.icons.rounded.StayCurrentPortrait
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.ViewDay
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SystemUpdate
@@ -115,10 +120,10 @@ import androidx.core.net.toUri
 import androidx.compose.ui.res.painterResource
 import com.rejowan.pdfreaderpro.BuildConfig
 import com.rejowan.pdfreaderpro.R
-import com.rejowan.pdfreaderpro.domain.model.PageAlignment
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
-import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
+import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
+import com.rejowan.pdfreaderpro.domain.model.ScrollMode
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.UpdateCheckInterval
 import com.rejowan.pdfreaderpro.domain.model.UpdateState
@@ -187,11 +192,11 @@ fun SettingsScreenContent(
 
     // Other sheet visibility states
     var showThemeModeSheet by remember { mutableStateOf(false) }
-    var showScrollDirectionSheet by remember { mutableStateOf(false) }
-    var showPageAlignmentSheet by remember { mutableStateOf(false) }
+    var showScrollModeSheet by remember { mutableStateOf(false) }
     var showQuickZoomSheet by remember { mutableStateOf(false) }
     var showReadingThemeSheet by remember { mutableStateOf(false) }
     var showBrightnessSheet by remember { mutableStateOf(false) }
+    var showScreenOrientationSheet by remember { mutableStateOf(false) }
 
     // About section sheets
     var showChangelogSheet by remember { mutableStateOf(false) }
@@ -250,22 +255,11 @@ fun SettingsScreenContent(
 
         SettingsOptionItem(
             icon = Icons.Rounded.SwapVert,
-            title = stringResource(R.string.scroll_direction),
-            subtitle = preferences.readerScrollDirection.name.lowercase().replaceFirstChar { it.uppercase() },
+            title = stringResource(R.string.scroll_mode),
+            subtitle = preferences.readerScrollMode.name.lowercase().replace("_", " ").replaceFirstChar { it.uppercase() },
             accentColor = AccentPurple,
-            onClick = { showScrollDirectionSheet = true },
+            onClick = { showScrollModeSheet = true },
             animationDelay = 200
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        SettingsOptionItem(
-            icon = Icons.Rounded.FormatAlignCenter,
-            title = stringResource(R.string.page_alignment),
-            subtitle = preferences.readerPageAlignment.name.lowercase().replaceFirstChar { it.uppercase() },
-            accentColor = AccentTeal,
-            onClick = { showPageAlignmentSheet = true },
-            animationDelay = 250
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -294,7 +288,34 @@ fun SettingsScreenContent(
             animationDelay = 350
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.ScreenRotation,
+            title = stringResource(R.string.screen_orientation),
+            subtitle = when (preferences.readerScreenOrientation) {
+                ScreenOrientation.AUTO -> stringResource(R.string.orientation_auto)
+                ScreenOrientation.PORTRAIT -> stringResource(R.string.orientation_portrait)
+                ScreenOrientation.LANDSCAPE -> stringResource(R.string.orientation_landscape)
+            },
+            accentColor = AccentBlue,
+            onClick = { showScreenOrientationSheet = true },
+            animationDelay = 375
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        SettingsToggleItem(
+            icon = Icons.Rounded.ViewDay,
+            title = stringResource(R.string.snap_to_page),
+            subtitle = stringResource(R.string.snap_to_page_desc),
+            accentColor = AccentTeal,
+            checked = preferences.readerSnapToPages,
+            onCheckedChange = { viewModel.setReaderSnapToPages(it) },
+            animationDelay = 385
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         SettingsToggleItem(
             icon = Icons.Rounded.VisibilityOff,
@@ -488,10 +509,10 @@ fun SettingsScreenContent(
         )
     }
 
-    // Scroll Direction picker
-    if (showScrollDirectionSheet) {
+    // Scroll Mode picker
+    if (showScrollModeSheet) {
         SettingsPickerSheet(
-            title = stringResource(R.string.scroll_direction),
+            title = stringResource(R.string.scroll_mode),
             subtitle = stringResource(R.string.choose_scroll),
             icon = Icons.Rounded.SwapVert,
             accentColor = AccentPurple,
@@ -499,33 +520,12 @@ fun SettingsScreenContent(
                 PickerOption(Icons.Rounded.SwapVert, stringResource(R.string.vertical), stringResource(R.string.scroll_up_down)),
                 PickerOption(Icons.Rounded.SwapHoriz, stringResource(R.string.horizontal), stringResource(R.string.scroll_left_right))
             ),
-            selectedIndex = ScrollDirection.entries.indexOf(preferences.readerScrollDirection),
+            selectedIndex = ScrollMode.entries.indexOf(preferences.readerScrollMode),
             onSelect = { index ->
-                viewModel.setReaderScrollDirection(ScrollDirection.entries[index])
-                showScrollDirectionSheet = false
+                viewModel.setReaderScrollMode(ScrollMode.entries[index])
+                showScrollModeSheet = false
             },
-            onDismiss = { showScrollDirectionSheet = false }
-        )
-    }
-
-    // Page Alignment picker
-    if (showPageAlignmentSheet) {
-        SettingsPickerSheet(
-            title = stringResource(R.string.page_alignment),
-            subtitle = stringResource(R.string.position_pages),
-            icon = Icons.Rounded.FormatAlignCenter,
-            accentColor = AccentTeal,
-            options = listOf(
-                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignLeft, stringResource(R.string.left), stringResource(R.string.align_pages_left)),
-                PickerOption(Icons.Rounded.FormatAlignCenter, stringResource(R.string.center), stringResource(R.string.center_pages)),
-                PickerOption(Icons.AutoMirrored.Rounded.FormatAlignRight, stringResource(R.string.right), stringResource(R.string.align_pages_right))
-            ),
-            selectedIndex = PageAlignment.entries.indexOf(preferences.readerPageAlignment),
-            onSelect = { index ->
-                viewModel.setReaderPageAlignment(PageAlignment.entries[index])
-                showPageAlignmentSheet = false
-            },
-            onDismiss = { showPageAlignmentSheet = false }
+            onDismiss = { showScrollModeSheet = false }
         )
     }
 
@@ -569,6 +569,27 @@ fun SettingsScreenContent(
                 showReadingThemeSheet = false
             },
             onDismiss = { showReadingThemeSheet = false }
+        )
+    }
+
+    // Screen Orientation picker
+    if (showScreenOrientationSheet) {
+        SettingsPickerSheet(
+            title = stringResource(R.string.screen_orientation),
+            subtitle = stringResource(R.string.adjust_view_orientation),
+            icon = Icons.Rounded.ScreenRotation,
+            accentColor = AccentBlue,
+            options = listOf(
+                PickerOption(Icons.Rounded.ScreenRotation, stringResource(R.string.orientation_auto), stringResource(R.string.follow_system)),
+                PickerOption(Icons.Rounded.StayCurrentPortrait, stringResource(R.string.orientation_portrait), stringResource(R.string.lock_portrait)),
+                PickerOption(Icons.Rounded.StayCurrentLandscape, stringResource(R.string.orientation_landscape), stringResource(R.string.lock_landscape))
+            ),
+            selectedIndex = ScreenOrientation.entries.indexOf(preferences.readerScreenOrientation),
+            onSelect = { index ->
+                viewModel.setReaderScreenOrientation(ScreenOrientation.entries[index])
+                showScreenOrientationSheet = false
+            },
+            onDismiss = { showScreenOrientationSheet = false }
         )
     }
 
@@ -1819,9 +1840,23 @@ private fun ChangelogContent() {
                 .verticalScroll(rememberScrollState())
         ) {
             ChangelogVersionItem(
-                version = "2.0.0",
+                version = "2.1.0",
                 date = "March 2026",
                 isLatest = true,
+                changes = listOf(
+                    "Horizontal page scrubber for horizontal scroll mode",
+                    "Global settings for snap-to-pages preference",
+                    "Global settings for screen orientation lock",
+                    "Simplified view mode options"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
+                version = "2.0.0",
+                date = "March 2026",
+                isLatest = false,
                 changes = listOf(
                     "Complete UI redesign with Material 3",
                     "New PDF viewer with PDF.js engine",
