@@ -7,12 +7,10 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
 import app.cash.turbine.test
-import com.rejowan.pdfreaderpro.domain.model.PageAlignment
-import com.rejowan.pdfreaderpro.domain.model.PageLayout
 import com.rejowan.pdfreaderpro.domain.model.QuickZoomPreset
 import com.rejowan.pdfreaderpro.domain.model.ReadingTheme
 import com.rejowan.pdfreaderpro.domain.model.ScreenOrientation
-import com.rejowan.pdfreaderpro.domain.model.ScrollDirection
+import com.rejowan.pdfreaderpro.domain.model.ScrollMode
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import com.rejowan.pdfreaderpro.domain.model.ThemeMode
 import com.rejowan.pdfreaderpro.domain.model.ViewMode
@@ -37,9 +35,7 @@ class PreferencesRepositoryTest {
     private val defaultSortOptionKey = stringPreferencesKey("default_sort_option")
     private val rememberPasswordsKey = booleanPreferencesKey("remember_passwords")
     private val readerBrightnessKey = floatPreferencesKey("reader_brightness")
-    private val readerScrollDirectionKey = stringPreferencesKey("reader_scroll_direction")
-    private val readerPageLayoutKey = stringPreferencesKey("reader_page_layout")
-    private val readerPageAlignmentKey = stringPreferencesKey("reader_page_alignment")
+    private val readerScrollModeKey = stringPreferencesKey("reader_scroll_mode")
     private val readerAutoHideToolbarKey = booleanPreferencesKey("reader_auto_hide_toolbar")
     private val readerQuickZoomPresetKey = stringPreferencesKey("reader_quick_zoom_preset")
     private val readerKeepScreenOnKey = booleanPreferencesKey("reader_keep_screen_on")
@@ -71,9 +67,7 @@ class PreferencesRepositoryTest {
             assertEquals(SortOption.NAME_ASC, prefs.defaultSortOption)
             assertTrue(prefs.rememberPasswords)
             assertEquals(-1f, prefs.readerBrightness)
-            assertEquals(ScrollDirection.VERTICAL, prefs.readerScrollDirection)
-            assertEquals(PageLayout.CONTINUOUS, prefs.readerPageLayout)
-            assertEquals(PageAlignment.CENTER, prefs.readerPageAlignment)
+            assertEquals(ScrollMode.VERTICAL, prefs.readerScrollMode)
             assertFalse(prefs.readerAutoHideToolbar)
             assertEquals(QuickZoomPreset.FIT_WIDTH, prefs.readerQuickZoomPreset)
             assertFalse(prefs.readerKeepScreenOn)
@@ -94,9 +88,7 @@ class PreferencesRepositoryTest {
             defaultSortOptionKey to SortOption.DATE_DESC.name,
             rememberPasswordsKey to false,
             readerBrightnessKey to 0.8f,
-            readerScrollDirectionKey to ScrollDirection.HORIZONTAL.name,
-            readerPageLayoutKey to PageLayout.SINGLE_PAGE.name,
-            readerPageAlignmentKey to PageAlignment.LEFT.name,
+            readerScrollModeKey to ScrollMode.HORIZONTAL.name,
             readerAutoHideToolbarKey to true,
             readerQuickZoomPresetKey to QuickZoomPreset.ACTUAL_SIZE.name,
             readerKeepScreenOnKey to true,
@@ -115,9 +107,7 @@ class PreferencesRepositoryTest {
             assertEquals(SortOption.DATE_DESC, prefs.defaultSortOption)
             assertFalse(prefs.rememberPasswords)
             assertEquals(0.8f, prefs.readerBrightness)
-            assertEquals(ScrollDirection.HORIZONTAL, prefs.readerScrollDirection)
-            assertEquals(PageLayout.SINGLE_PAGE, prefs.readerPageLayout)
-            assertEquals(PageAlignment.LEFT, prefs.readerPageAlignment)
+            assertEquals(ScrollMode.HORIZONTAL, prefs.readerScrollMode)
             assertTrue(prefs.readerAutoHideToolbar)
             assertEquals(QuickZoomPreset.ACTUAL_SIZE, prefs.readerQuickZoomPreset)
             assertTrue(prefs.readerKeepScreenOn)
@@ -289,51 +279,17 @@ class PreferencesRepositoryTest {
     }
     // endregion
 
-    // region setReaderScrollDirection Tests
+    // region setReaderScrollMode Tests
     @Test
-    fun `setReaderScrollDirection with VERTICAL does not throw`() = runTest {
+    fun `setReaderScrollMode with VERTICAL does not throw`() = runTest {
         repository = createRepository()
-        repository.setReaderScrollDirection(ScrollDirection.VERTICAL)
+        repository.setReaderScrollMode(ScrollMode.VERTICAL)
     }
 
     @Test
-    fun `setReaderScrollDirection with HORIZONTAL does not throw`() = runTest {
+    fun `setReaderScrollMode with HORIZONTAL does not throw`() = runTest {
         repository = createRepository()
-        repository.setReaderScrollDirection(ScrollDirection.HORIZONTAL)
-    }
-    // endregion
-
-    // region setReaderPageLayout Tests
-    @Test
-    fun `setReaderPageLayout with CONTINUOUS does not throw`() = runTest {
-        repository = createRepository()
-        repository.setReaderPageLayout(PageLayout.CONTINUOUS)
-    }
-
-    @Test
-    fun `setReaderPageLayout with SINGLE_PAGE does not throw`() = runTest {
-        repository = createRepository()
-        repository.setReaderPageLayout(PageLayout.SINGLE_PAGE)
-    }
-    // endregion
-
-    // region setReaderPageAlignment Tests
-    @Test
-    fun `setReaderPageAlignment with CENTER does not throw`() = runTest {
-        repository = createRepository()
-        repository.setReaderPageAlignment(PageAlignment.CENTER)
-    }
-
-    @Test
-    fun `setReaderPageAlignment with LEFT does not throw`() = runTest {
-        repository = createRepository()
-        repository.setReaderPageAlignment(PageAlignment.LEFT)
-    }
-
-    @Test
-    fun `setReaderPageAlignment with RIGHT does not throw`() = runTest {
-        repository = createRepository()
-        repository.setReaderPageAlignment(PageAlignment.RIGHT)
+        repository.setReaderScrollMode(ScrollMode.HORIZONTAL)
     }
     // endregion
 
@@ -462,18 +418,8 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun `ScrollDirection has 2 values`() {
-        assertEquals(2, ScrollDirection.entries.size)
-    }
-
-    @Test
-    fun `PageLayout has 2 values`() {
-        assertEquals(2, PageLayout.entries.size)
-    }
-
-    @Test
-    fun `PageAlignment has 3 values`() {
-        assertEquals(3, PageAlignment.entries.size)
+    fun `ScrollMode has 2 values`() {
+        assertEquals(2, ScrollMode.entries.size)
     }
 
     @Test
