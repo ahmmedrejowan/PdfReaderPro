@@ -1840,9 +1840,23 @@ private fun ChangelogContent() {
                 .verticalScroll(rememberScrollState())
         ) {
             ChangelogVersionItem(
-                version = "2.0.0",
+                version = "2.1.0",
                 date = "March 2026",
                 isLatest = true,
+                changes = listOf(
+                    "Horizontal page scrubber for horizontal scroll mode",
+                    "Global settings for snap-to-pages preference",
+                    "Global settings for screen orientation lock",
+                    "Simplified view mode options"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
+                version = "2.0.0",
+                date = "March 2026",
+                isLatest = false,
                 changes = listOf(
                     "Complete UI redesign with Material 3",
                     "New PDF viewer with PDF.js engine",
