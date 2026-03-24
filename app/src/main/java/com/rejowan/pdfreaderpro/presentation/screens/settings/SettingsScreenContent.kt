@@ -1840,9 +1840,20 @@ private fun ChangelogContent() {
                 .verticalScroll(rememberScrollState())
         ) {
             ChangelogVersionItem(
-                version = "2.1.0",
+                version = "2.1.1",
                 date = "March 2026",
                 isLatest = true,
+                changes = listOf(
+                    "F-Droid metadata and fastlane structure"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
+                version = "2.1.0",
+                date = "March 2026",
+                isLatest = false,
                 changes = listOf(
                     "Horizontal page scrubber for horizontal scroll mode",
                     "Global settings for snap-to-pages preference",
