@@ -18,10 +18,6 @@ Builds:
     versionCode: 5
     commit: v2.1.2
     subdir: app
-    sudo:
-      - apt-get update
-      - apt-get install -y openjdk-21-jdk-headless
-      - update-java-alternatives -a
     gradle:
       - yes
 
