@@ -1840,9 +1840,20 @@ private fun ChangelogContent() {
                 .verticalScroll(rememberScrollState())
         ) {
             ChangelogVersionItem(
-                version = "2.1.2",
+                version = "2.1.3",
                 date = "March 2026",
                 isLatest = true,
+                changes = listOf(
+                    "F-Droid build compatibility"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
+                version = "2.1.2",
+                date = "March 2026",
+                isLatest = false,
                 changes = listOf(
                     "Fixed build compatibility with standard OpenJDK"
                 )

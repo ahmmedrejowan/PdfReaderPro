@@ -219,6 +219,10 @@ GNU General Public License for more details.
 
 ## Changelog
 
+### v2.1.3 (2026-03-24)
+
+- F-Droid build compatibility (removed JVM toolchain)
+
 ### v2.1.2 (2026-03-24)
 
 - Fixed build compatibility with standard OpenJDK
