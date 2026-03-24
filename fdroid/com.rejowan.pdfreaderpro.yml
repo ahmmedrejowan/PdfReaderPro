@@ -14,7 +14,7 @@ RepoType: git
 Repo: https://github.com/ahmmedrejowan/PdfReaderPro.git
 
 Builds:
-  - versionName: 2.1.2
+  - versionName: '2.1.2'
     versionCode: 5
     commit: v2.1.2
     subdir: app
@@ -27,5 +27,5 @@ Builds:
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags ^v[0-9.]+$
-CurrentVersion: 2.1.2
+CurrentVersion: '2.1.2'
 CurrentVersionCode: 5
