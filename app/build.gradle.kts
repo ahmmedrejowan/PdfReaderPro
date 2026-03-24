@@ -23,8 +23,8 @@ android {
         applicationId = "com.rejowan.pdfreaderpro"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 5
-        versionName = "2.1.2"
+        versionCode = 6
+        versionName = "2.1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
