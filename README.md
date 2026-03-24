@@ -219,6 +219,10 @@ GNU General Public License for more details.
 
 ## Changelog
 
+### v2.1.1 (2026-03-24)
+
+- F-Droid metadata and fastlane structure for app store listing
+
 ### v2.1.0 (2026-03-23)
 
 - Horizontal page scrubber for horizontal scroll mode
