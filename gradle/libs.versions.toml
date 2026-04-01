@@ -6,7 +6,7 @@ minSdk = "24"
 
 # Core Android
 agp = "9.1.0"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 coreKtx = "1.17.0"
 
 # Compose
