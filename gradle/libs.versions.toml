@@ -7,11 +7,11 @@ minSdk = "24"
 # Core Android
 agp = "9.1.0"
 kotlin = "2.3.10"
-coreKtx = "1.17.0"
+coreKtx = "1.18.0"
 
 # Compose
 composeBom = "2026.02.01"
-activityCompose = "1.12.4"
+activityCompose = "1.13.0"
 lifecycleRuntimeCompose = "2.10.0"
 navigationCompose = "2.9.7"
 
@@ -19,7 +19,7 @@ navigationCompose = "2.9.7"
 room = "2.8.4"
 
 # DataStore
-datastore = "1.2.0"
+datastore = "1.2.1"
 
 # Koin
 koin = "4.1.1"
