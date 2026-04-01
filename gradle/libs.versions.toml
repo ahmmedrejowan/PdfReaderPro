@@ -10,7 +10,7 @@ kotlin = "2.3.10"
 coreKtx = "1.17.0"
 
 # Compose
-composeBom = "2026.02.01"
+composeBom = "2026.03.01"
 activityCompose = "1.12.4"
 lifecycleRuntimeCompose = "2.10.0"
 navigationCompose = "2.9.7"
