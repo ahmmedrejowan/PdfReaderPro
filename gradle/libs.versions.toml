@@ -6,12 +6,12 @@ minSdk = "24"
 
 # Core Android
 agp = "9.1.0"
-kotlin = "2.3.10"
-coreKtx = "1.17.0"
+kotlin = "2.3.20"
+coreKtx = "1.18.0"
 
 # Compose
-composeBom = "2026.02.01"
-activityCompose = "1.12.4"
+composeBom = "2026.03.01"
+activityCompose = "1.13.0"
 lifecycleRuntimeCompose = "2.10.0"
 navigationCompose = "2.9.7"
 
@@ -19,17 +19,17 @@ navigationCompose = "2.9.7"
 room = "2.8.4"
 
 # DataStore
-datastore = "1.2.0"
+datastore = "1.2.1"
 
 # Koin
-koin = "4.1.1"
-koinCompose = "4.1.1"
+koin = "4.2.0"
+koinCompose = "4.2.0"
 
 # Kotlin Serialization
 kotlinxSerialization = "1.10.0"
 
 # Ktor HTTP Client
-ktor = "3.4.1"
+ktor = "3.4.2"
 
 
 # Image Loading
@@ -54,7 +54,7 @@ splashscreen = "1.2.0"
 webkit = "1.15.0"
 
 # iText PDF
-itext = "9.5.0"
+itext = "9.6.0"
 bouncycastle = "1.83"
 
 
