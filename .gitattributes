@@ -1,0 +1,2 @@
+# Mark PDF.js assets as vendored so GitHub Linguist ignores them in language stats
+app/src/main/assets/** linguist-vendored
