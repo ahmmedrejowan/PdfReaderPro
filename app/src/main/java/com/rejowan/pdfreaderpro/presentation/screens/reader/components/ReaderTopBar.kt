@@ -38,8 +38,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 private val AccentPurple = Color(0xFF9575CD)
-private val SurfaceDark = Color(0xFF1C1C1E)
-private val SurfaceLight = Color(0xFFF5F5F7)
 
 @Composable
 fun ReaderTopBar(
@@ -105,8 +103,8 @@ private fun TopBarContent(
     onMenuClick: () -> Unit,
     isDarkMode: Boolean
 ) {
-    val surfaceColor = if (isDarkMode) SurfaceDark.copy(alpha = 0.95f) else SurfaceLight.copy(alpha = 0.95f)
-    val contentColor = if (isDarkMode) Color.White else Color.Black
+    val surfaceColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.95f)
+    val contentColor = MaterialTheme.colorScheme.onSurface
 
     Surface(
         modifier = Modifier

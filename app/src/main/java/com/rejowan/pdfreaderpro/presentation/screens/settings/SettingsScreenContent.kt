@@ -230,6 +230,7 @@ fun SettingsScreenContent(
             subtitle = when (preferences.themeMode) {
                 ThemeMode.LIGHT -> stringResource(R.string.light)
                 ThemeMode.DARK -> stringResource(R.string.dark)
+                ThemeMode.BLACK -> stringResource(R.string.black)
                 ThemeMode.SYSTEM -> stringResource(R.string.system_default)
             },
             accentColor = AccentPurple,
@@ -510,6 +511,7 @@ fun SettingsScreenContent(
             options = listOf(
                 PickerOption(Icons.Rounded.LightMode, stringResource(R.string.light), stringResource(R.string.always_light)),
                 PickerOption(Icons.Rounded.DarkMode, stringResource(R.string.dark), stringResource(R.string.always_dark)),
+                PickerOption(Icons.Rounded.Brightness1, stringResource(R.string.black), stringResource(R.string.pure_black)),
                 PickerOption(Icons.Rounded.PhoneAndroid, stringResource(R.string.system_theme), stringResource(R.string.follow_system))
             ),
             selectedIndex = ThemeMode.entries.indexOf(preferences.themeMode),

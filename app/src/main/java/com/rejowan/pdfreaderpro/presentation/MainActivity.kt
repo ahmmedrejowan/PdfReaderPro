@@ -119,6 +119,7 @@ class MainActivity : ComponentActivity() {
             val themeMode = when (preferences.themeMode) {
                 com.rejowan.pdfreaderpro.domain.model.ThemeMode.LIGHT -> ThemeMode.LIGHT
                 com.rejowan.pdfreaderpro.domain.model.ThemeMode.DARK -> ThemeMode.DARK
+                com.rejowan.pdfreaderpro.domain.model.ThemeMode.BLACK -> ThemeMode.BLACK
                 com.rejowan.pdfreaderpro.domain.model.ThemeMode.SYSTEM -> ThemeMode.SYSTEM
             }
 

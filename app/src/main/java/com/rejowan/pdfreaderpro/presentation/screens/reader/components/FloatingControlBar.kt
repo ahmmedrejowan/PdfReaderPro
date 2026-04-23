@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.ViewDay
 import androidx.compose.material.icons.rounded.ZoomIn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -37,8 +38,6 @@ private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
 private val AccentTeal = Color(0xFF4DB6AC)
 private val AccentAmber = Color(0xFFFFB74D)
-private val SurfaceDark = Color(0xFF1C1C1E)
-private val SurfaceLight = Color(0xFFF5F5F7)
 
 @Composable
 fun FloatingControlBar(
@@ -52,8 +51,8 @@ fun FloatingControlBar(
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
 ) {
-    val surfaceColor = if (isDarkMode) SurfaceDark.copy(alpha = 0.95f) else SurfaceLight.copy(alpha = 0.95f)
-    val contentColor = if (isDarkMode) Color.White else Color.Black
+    val surfaceColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.95f)
+    val barContentColor = MaterialTheme.colorScheme.onSurface
 
     Surface(
         modifier = modifier
@@ -120,7 +119,7 @@ fun FloatingControlBar(
                 icon = Icons.Rounded.MoreHoriz,
                 contentDescription = "More Options",
                 onClick = onMoreClick,
-                tint = contentColor.copy(alpha = 0.7f),
+                tint = barContentColor.copy(alpha = 0.7f),
                 isDarkMode = isDarkMode
             )
         }

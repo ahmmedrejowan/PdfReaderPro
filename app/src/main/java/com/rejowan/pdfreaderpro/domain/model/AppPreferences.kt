@@ -25,6 +25,7 @@ data class AppPreferences(
 enum class ThemeMode {
     LIGHT,
     DARK,
+    BLACK,
     SYSTEM
 }
 

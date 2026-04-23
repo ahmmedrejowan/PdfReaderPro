@@ -53,6 +53,35 @@ object DarkSurfaces {
 }
 
 // ============================================================================
+// SHARED BLACK (AMOLED) SURFACE COLORS
+// ============================================================================
+
+object BlackSurfaces {
+    val background = Color(0xFF000000)
+    val onBackground = Color(0xFFE8E5F0)
+    val surface = Color(0xFF000000)
+    val onSurface = Color(0xFFE8E5F0)
+    val surfaceVariant = Color(0xFF1A191F)
+    val onSurfaceVariant = Color(0xFFC9C5D4)
+    val outline = Color(0xFF8C899A)
+    val outlineVariant = Color(0xFF2A282F)
+    val scrim = Color(0xFF000000)
+    val inverseSurface = Color(0xFFE8E5F0)
+    val inverseOnSurface = Color(0xFF1C1B1F)
+    val surfaceDim = Color(0xFF000000)
+    val surfaceBright = Color(0xFF1A191F)
+    val surfaceContainerLowest = Color(0xFF000000)
+    val surfaceContainerLow = Color(0xFF0A090D)
+    val surfaceContainer = Color(0xFF101014)
+    val surfaceContainerHigh = Color(0xFF17161B)
+    val surfaceContainerHighest = Color(0xFF1D1C22)
+    val error = Color(0xFFD32F2F)
+    val onError = Color(0xFFFFFFFF)
+    val errorContainer = Color(0xFFEF5350)
+    val onErrorContainer = Color(0xFFFFFFFF)
+}
+
+// ============================================================================
 // SHARED LIGHT SURFACE COLORS
 // ============================================================================
 
