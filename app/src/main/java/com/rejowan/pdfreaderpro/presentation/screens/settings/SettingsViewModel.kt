@@ -286,6 +286,12 @@ class SettingsViewModel(
         }
     }
 
+    fun setShowToolsTab(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setShowToolsTab(enabled)
+        }
+    }
+
     // Reader settings
     fun setReaderBrightness(brightness: Float) {
         viewModelScope.launch {
@@ -308,6 +314,12 @@ class SettingsViewModel(
     fun setReaderQuickZoomPreset(preset: QuickZoomPreset) {
         viewModelScope.launch {
             preferencesRepository.setReaderQuickZoomPreset(preset)
+        }
+    }
+
+    fun setReaderDoubleTapZoom(zoom: Float) {
+        viewModelScope.launch {
+            preferencesRepository.setReaderDoubleTapZoom(zoom)
         }
     }
 

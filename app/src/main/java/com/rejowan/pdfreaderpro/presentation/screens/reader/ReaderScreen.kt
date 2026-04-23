@@ -14,7 +14,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +23,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -85,7 +85,7 @@ fun ReaderScreen(
     val context = LocalContext.current
     val view = LocalView.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val isDarkMode = isSystemInDarkTheme()
+    val isDarkMode = com.rejowan.pdfreaderpro.presentation.theme.LocalIsDarkTheme.current
 
     // SAF launcher for saving document
     val saveDocumentLauncher = rememberLauncherForActivityResult(
@@ -98,8 +98,8 @@ fun ReaderScreen(
 
     val activity = context as? Activity
 
-    // Background color for PdfViewer
-    val backgroundColor = if (isDarkMode) Color(0xFF121212) else Color(0xFFF5F5F5)
+    // Background color for PdfViewer — follows the app theme (true black in Black theme)
+    val backgroundColor = MaterialTheme.colorScheme.background
     val backgroundColorArgb = backgroundColor.toArgb()
 
     // Track scrolling activity for showing page scrubber in immersive mode
@@ -551,6 +551,7 @@ fun ReaderScreen(
         ZoomSheet(
             currentZoom = state.zoom,
             currentOrientation = state.screenOrientation,
+            currentDoubleTapZoom = state.doubleTapZoom,
             onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
             onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
             onZoomPreset = { preset ->
@@ -562,6 +563,9 @@ fun ReaderScreen(
             },
             onOrientationChange = { orientation ->
                 viewModel.onAction(ReaderAction.SetScreenOrientation(orientation))
+            },
+            onDoubleTapZoomChange = { zoom ->
+                viewModel.onAction(ReaderAction.SetDoubleTapZoom(zoom))
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideZoomSheet) }
         )

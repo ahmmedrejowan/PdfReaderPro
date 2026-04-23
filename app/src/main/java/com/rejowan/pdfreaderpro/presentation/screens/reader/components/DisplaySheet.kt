@@ -350,7 +350,7 @@ private fun SectionLabel(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.labelSmall.copy(
+        style = MaterialTheme.typography.labelMedium.copy(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
@@ -539,7 +539,7 @@ private fun ThemeOption(
 
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall.copy(
+            style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
             ),
             color = if (isSelected) AccentAmber else MaterialTheme.colorScheme.onSurfaceVariant

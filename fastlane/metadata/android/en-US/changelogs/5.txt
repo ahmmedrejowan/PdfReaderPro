@@ -1,1 +1,0 @@
-• Fixed build compatibility with standard OpenJDK

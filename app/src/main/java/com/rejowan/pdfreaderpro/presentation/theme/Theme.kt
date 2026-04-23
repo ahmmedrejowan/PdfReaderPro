@@ -27,6 +27,7 @@ val LocalIsDarkTheme = staticCompositionLocalOf { true }
 enum class ThemeMode(val displayName: String) {
     DARK("Dark"),
     LIGHT("Light"),
+    BLACK("Black"),
     SYSTEM("System Default")
 }
 
@@ -70,6 +71,48 @@ private val darkColorScheme = darkColorScheme(
     surfaceContainer = DarkSurfaces.surfaceContainer,
     surfaceContainerHigh = DarkSurfaces.surfaceContainerHigh,
     surfaceContainerHighest = DarkSurfaces.surfaceContainerHighest,
+)
+
+// ============================================================================
+// BLACK (AMOLED) COLOR SCHEME — reuses dark palette over true-black surfaces
+// ============================================================================
+
+private val blackColorScheme = darkColorScheme(
+    primary = primaryDark,
+    onPrimary = onPrimaryDark,
+    primaryContainer = primaryContainerDark,
+    onPrimaryContainer = onPrimaryContainerDark,
+    secondary = secondaryDark,
+    onSecondary = onSecondaryDark,
+    secondaryContainer = secondaryContainerDark,
+    onSecondaryContainer = onSecondaryContainerDark,
+    tertiary = tertiaryDark,
+    onTertiary = onTertiaryDark,
+    tertiaryContainer = tertiaryContainerDark,
+    onTertiaryContainer = onTertiaryContainerDark,
+    error = BlackSurfaces.error,
+    onError = BlackSurfaces.onError,
+    errorContainer = BlackSurfaces.errorContainer,
+    onErrorContainer = BlackSurfaces.onErrorContainer,
+    background = BlackSurfaces.background,
+    onBackground = BlackSurfaces.onBackground,
+    surface = BlackSurfaces.surface,
+    onSurface = BlackSurfaces.onSurface,
+    surfaceVariant = BlackSurfaces.surfaceVariant,
+    onSurfaceVariant = BlackSurfaces.onSurfaceVariant,
+    outline = BlackSurfaces.outline,
+    outlineVariant = BlackSurfaces.outlineVariant,
+    scrim = BlackSurfaces.scrim,
+    inverseSurface = BlackSurfaces.inverseSurface,
+    inverseOnSurface = BlackSurfaces.inverseOnSurface,
+    inversePrimary = inversePrimaryDark,
+    surfaceDim = BlackSurfaces.surfaceDim,
+    surfaceBright = BlackSurfaces.surfaceBright,
+    surfaceContainerLowest = BlackSurfaces.surfaceContainerLowest,
+    surfaceContainerLow = BlackSurfaces.surfaceContainerLow,
+    surfaceContainer = BlackSurfaces.surfaceContainer,
+    surfaceContainerHigh = BlackSurfaces.surfaceContainerHigh,
+    surfaceContainerHighest = BlackSurfaces.surfaceContainerHighest,
 )
 
 // ============================================================================
@@ -126,6 +169,7 @@ fun PdfReaderProTheme(
     val systemInDarkTheme = isSystemInDarkTheme()
     val isDarkTheme = when (themeMode) {
         ThemeMode.DARK -> true
+        ThemeMode.BLACK -> true
         ThemeMode.LIGHT -> false
         ThemeMode.SYSTEM -> systemInDarkTheme
     }
@@ -139,6 +183,7 @@ fun PdfReaderProTheme(
                 dynamicLightColorScheme(context)
             }
         }
+        themeMode == ThemeMode.BLACK -> blackColorScheme
         isDarkTheme -> darkColorScheme
         else -> lightColorScheme
     }

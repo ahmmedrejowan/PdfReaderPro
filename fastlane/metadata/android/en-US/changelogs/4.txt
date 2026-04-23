@@ -1,1 +1,0 @@
-• Added F-Droid metadata and fastlane structure for app store listing

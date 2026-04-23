@@ -50,6 +50,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -57,6 +59,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -92,10 +95,12 @@ enum class ZoomPreset {
 fun ZoomSheet(
     currentZoom: Float,
     currentOrientation: ScreenOrientation,
+    currentDoubleTapZoom: Float,
     onZoomIn: () -> Unit,
     onZoomOut: () -> Unit,
     onZoomPreset: (ZoomPreset) -> Unit,
     onOrientationChange: (ScreenOrientation) -> Unit,
+    onDoubleTapZoomChange: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -105,20 +110,24 @@ fun ZoomSheet(
         ZoomSideSheet(
             currentZoom = currentZoom,
             currentOrientation = currentOrientation,
+            currentDoubleTapZoom = currentDoubleTapZoom,
             onZoomIn = onZoomIn,
             onZoomOut = onZoomOut,
             onZoomPreset = onZoomPreset,
             onOrientationChange = onOrientationChange,
+            onDoubleTapZoomChange = onDoubleTapZoomChange,
             onDismiss = onDismiss
         )
     } else {
         ZoomBottomSheet(
             currentZoom = currentZoom,
             currentOrientation = currentOrientation,
+            currentDoubleTapZoom = currentDoubleTapZoom,
             onZoomIn = onZoomIn,
             onZoomOut = onZoomOut,
             onZoomPreset = onZoomPreset,
             onOrientationChange = onOrientationChange,
+            onDoubleTapZoomChange = onDoubleTapZoomChange,
             onDismiss = onDismiss
         )
     }
@@ -129,10 +138,12 @@ fun ZoomSheet(
 private fun ZoomBottomSheet(
     currentZoom: Float,
     currentOrientation: ScreenOrientation,
+    currentDoubleTapZoom: Float,
     onZoomIn: () -> Unit,
     onZoomOut: () -> Unit,
     onZoomPreset: (ZoomPreset) -> Unit,
     onOrientationChange: (ScreenOrientation) -> Unit,
+    onDoubleTapZoomChange: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -147,10 +158,12 @@ private fun ZoomBottomSheet(
         ZoomSheetContent(
             currentZoom = currentZoom,
             currentOrientation = currentOrientation,
+            currentDoubleTapZoom = currentDoubleTapZoom,
             onZoomIn = onZoomIn,
             onZoomOut = onZoomOut,
             onZoomPreset = onZoomPreset,
             onOrientationChange = onOrientationChange,
+            onDoubleTapZoomChange = onDoubleTapZoomChange,
             modifier = Modifier.padding(bottom = 24.dp)
         )
     }
@@ -160,10 +173,12 @@ private fun ZoomBottomSheet(
 private fun ZoomSideSheet(
     currentZoom: Float,
     currentOrientation: ScreenOrientation,
+    currentDoubleTapZoom: Float,
     onZoomIn: () -> Unit,
     onZoomOut: () -> Unit,
     onZoomPreset: (ZoomPreset) -> Unit,
     onOrientationChange: (ScreenOrientation) -> Unit,
+    onDoubleTapZoomChange: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
@@ -214,10 +229,12 @@ private fun ZoomSideSheet(
                 ZoomSheetContent(
                     currentZoom = currentZoom,
                     currentOrientation = currentOrientation,
+                    currentDoubleTapZoom = currentDoubleTapZoom,
                     onZoomIn = onZoomIn,
                     onZoomOut = onZoomOut,
                     onZoomPreset = onZoomPreset,
                     onOrientationChange = onOrientationChange,
+                    onDoubleTapZoomChange = onDoubleTapZoomChange,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
@@ -235,10 +252,12 @@ private fun ZoomSideSheet(
 private fun ZoomSheetContent(
     currentZoom: Float,
     currentOrientation: ScreenOrientation,
+    currentDoubleTapZoom: Float,
     onZoomIn: () -> Unit,
     onZoomOut: () -> Unit,
     onZoomPreset: (ZoomPreset) -> Unit,
     onOrientationChange: (ScreenOrientation) -> Unit,
+    onDoubleTapZoomChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -298,6 +317,21 @@ private fun ZoomSheetContent(
                 animationDelay = 250
             )
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Double Tap Zoom Section
+        SectionLabel(text = stringResource(R.string.double_tap_zoom), delay = 275)
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        DoubleTapZoomSlider(
+            currentValue = currentDoubleTapZoom,
+            onValueChange = onDoubleTapZoomChange,
+            accentColor = AccentBlue
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
@@ -405,7 +439,7 @@ private fun SectionLabel(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.labelSmall.copy(
+        style = MaterialTheme.typography.labelMedium.copy(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
@@ -606,7 +640,7 @@ private fun ZoomPresetChip(
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(
+                style = MaterialTheme.typography.labelLarge.copy(
                     fontWeight = FontWeight.Medium
                 ),
                 color = contentColor
@@ -724,10 +758,68 @@ private fun OrientationChip(
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(
+                style = MaterialTheme.typography.labelLarge.copy(
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
                 ),
                 color = contentColor
+            )
+        }
+    }
+}
+
+@Composable
+private fun DoubleTapZoomSlider(
+    currentValue: Float,
+    onValueChange: (Float) -> Unit,
+    accentColor: Color,
+    modifier: Modifier = Modifier
+) {
+    var sliderValue by remember(currentValue) {
+        mutableFloatStateOf(currentValue.coerceIn(1.1f, 5f))
+    }
+    val displayValue = (sliderValue * 10f).toInt() / 10f
+
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "1.1×",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+                Text(
+                    text = "${displayValue}×",
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color = accentColor
+                )
+                Text(
+                    text = "5.0×",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            }
+            Slider(
+                value = sliderValue,
+                onValueChange = { sliderValue = it },
+                onValueChangeFinished = { onValueChange((sliderValue * 10f).toInt() / 10f) },
+                valueRange = 1.1f..5f,
+                colors = SliderDefaults.colors(
+                    thumbColor = accentColor,
+                    activeTrackColor = accentColor,
+                    inactiveTrackColor = accentColor.copy(alpha = 0.2f)
+                )
             )
         }
     }

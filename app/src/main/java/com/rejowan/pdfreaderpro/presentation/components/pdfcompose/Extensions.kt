@@ -268,15 +268,15 @@ fun PdfState.singleClickFlow(): Flow<Unit> = flowIt { emit ->
 }
 
 /**
- * A flow that emits when a double click occurs on the PDF document.
+ * A flow that emits the tap coordinates (x, y) when a double click occurs on the PDF document.
  *
- * @return A flow of [Unit].
+ * @return A flow of `Pair<Float, Float>` — x and y in CSS pixels relative to the viewer container.
  * @see PdfListener.onDoubleClick
  */
-fun PdfState.doubleClickFlow(): Flow<Unit> = flowIt { emit ->
+fun PdfState.doubleClickFlow(): Flow<Pair<Float, Float>> = flowIt { emit ->
     object : PdfListener {
-        override fun onDoubleClick() {
-            emit(Unit)
+        override fun onDoubleClick(x: Float, y: Float) {
+            emit(x to y)
         }
     }
 }

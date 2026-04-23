@@ -21,6 +21,7 @@ interface PreferencesRepository {
     suspend fun setDefaultViewMode(mode: ViewMode)
     suspend fun setDefaultSortOption(option: SortOption)
     suspend fun setRememberPasswords(enabled: Boolean)
+    suspend fun setShowToolsTab(enabled: Boolean)
     suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval)
 
     // Reader settings
@@ -28,6 +29,7 @@ interface PreferencesRepository {
     suspend fun setReaderScrollMode(mode: ScrollMode)
     suspend fun setReaderAutoHideToolbar(enabled: Boolean)
     suspend fun setReaderQuickZoomPreset(preset: QuickZoomPreset)
+    suspend fun setReaderDoubleTapZoom(zoom: Float)
     suspend fun setReaderKeepScreenOn(enabled: Boolean)
     suspend fun setReaderTheme(theme: ReadingTheme)
     suspend fun setReaderSnapToPages(enabled: Boolean)

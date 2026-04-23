@@ -341,7 +341,7 @@ private fun SectionLabel(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.labelSmall.copy(
+        style = MaterialTheme.typography.labelMedium.copy(
             fontWeight = FontWeight.SemiBold
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f * alpha),

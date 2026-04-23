@@ -31,6 +31,7 @@ class PreferencesRepositoryImpl(
         val DEFAULT_VIEW_MODE = stringPreferencesKey("default_view_mode")
         val DEFAULT_SORT_OPTION = stringPreferencesKey("default_sort_option")
         val REMEMBER_PASSWORDS = booleanPreferencesKey("remember_passwords")
+        val SHOW_TOOLS_TAB = booleanPreferencesKey("show_tools_tab")
         val UPDATE_CHECK_INTERVAL = stringPreferencesKey("update_check_interval")
 
         // Reader settings
@@ -38,6 +39,7 @@ class PreferencesRepositoryImpl(
         val READER_SCROLL_MODE = stringPreferencesKey("reader_scroll_mode")
         val READER_AUTO_HIDE_TOOLBAR = booleanPreferencesKey("reader_auto_hide_toolbar")
         val READER_QUICK_ZOOM_PRESET = stringPreferencesKey("reader_quick_zoom_preset")
+        val READER_DOUBLE_TAP_ZOOM = floatPreferencesKey("reader_double_tap_zoom")
         val READER_KEEP_SCREEN_ON = booleanPreferencesKey("reader_keep_screen_on")
         val READER_THEME = stringPreferencesKey("reader_theme")
         val READER_SNAP_TO_PAGES = booleanPreferencesKey("reader_snap_to_pages")
@@ -53,6 +55,7 @@ class PreferencesRepositoryImpl(
             defaultViewMode = prefs[Keys.DEFAULT_VIEW_MODE]?.let { ViewMode.valueOf(it) } ?: ViewMode.LIST,
             defaultSortOption = prefs[Keys.DEFAULT_SORT_OPTION]?.let { SortOption.valueOf(it) } ?: SortOption.NAME_ASC,
             rememberPasswords = prefs[Keys.REMEMBER_PASSWORDS] ?: true,
+            showToolsTab = prefs[Keys.SHOW_TOOLS_TAB] ?: true,
             updateCheckInterval = prefs[Keys.UPDATE_CHECK_INTERVAL]?.let { UpdateCheckInterval.valueOf(it) } ?: UpdateCheckInterval.WEEKLY,
 
             // Reader settings
@@ -60,6 +63,7 @@ class PreferencesRepositoryImpl(
             readerScrollMode = prefs[Keys.READER_SCROLL_MODE]?.let { ScrollMode.valueOf(it) } ?: ScrollMode.VERTICAL,
             readerAutoHideToolbar = prefs[Keys.READER_AUTO_HIDE_TOOLBAR] ?: false,
             readerQuickZoomPreset = prefs[Keys.READER_QUICK_ZOOM_PRESET]?.let { QuickZoomPreset.valueOf(it) } ?: QuickZoomPreset.FIT_WIDTH,
+            readerDoubleTapZoom = prefs[Keys.READER_DOUBLE_TAP_ZOOM] ?: 2.0f,
             readerKeepScreenOn = prefs[Keys.READER_KEEP_SCREEN_ON] ?: false,
             readerTheme = prefs[Keys.READER_THEME]?.let { ReadingTheme.valueOf(it) } ?: ReadingTheme.LIGHT,
             readerSnapToPages = prefs[Keys.READER_SNAP_TO_PAGES] ?: false,
@@ -92,6 +96,10 @@ class PreferencesRepositoryImpl(
         dataStore.edit { it[Keys.REMEMBER_PASSWORDS] = enabled }
     }
 
+    override suspend fun setShowToolsTab(enabled: Boolean) {
+        dataStore.edit { it[Keys.SHOW_TOOLS_TAB] = enabled }
+    }
+
     override suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval) {
         dataStore.edit { it[Keys.UPDATE_CHECK_INTERVAL] = interval.name }
     }
@@ -111,6 +119,10 @@ class PreferencesRepositoryImpl(
 
     override suspend fun setReaderQuickZoomPreset(preset: QuickZoomPreset) {
         dataStore.edit { it[Keys.READER_QUICK_ZOOM_PRESET] = preset.name }
+    }
+
+    override suspend fun setReaderDoubleTapZoom(zoom: Float) {
+        dataStore.edit { it[Keys.READER_DOUBLE_TAP_ZOOM] = zoom }
     }
 
     override suspend fun setReaderKeepScreenOn(enabled: Boolean) {

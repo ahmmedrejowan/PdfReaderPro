@@ -1,4 +1,0 @@
-• Horizontal page scrubber for horizontal scroll mode
-• Global settings for snap-to-pages preference
-• Global settings for screen orientation lock
-• Simplified view mode options

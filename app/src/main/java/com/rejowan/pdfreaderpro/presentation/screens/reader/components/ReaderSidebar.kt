@@ -62,8 +62,6 @@ import kotlin.math.roundToInt
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
-private val SurfaceDark = Color(0xFF1C1C1E)
-private val SurfaceLight = Color(0xFFF8F8FA)
 
 @Composable
 fun ReaderSidebar(
@@ -191,9 +189,9 @@ private fun SidebarContent(
     isDarkMode: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val surfaceColor = if (isDarkMode) SurfaceDark else SurfaceLight
-    val contentColor = if (isDarkMode) Color.White else Color.Black
-    val subtleColor = if (isDarkMode) Color.White.copy(alpha = 0.6f) else Color.Black.copy(alpha = 0.6f)
+    val surfaceColor = MaterialTheme.colorScheme.surfaceContainerHigh
+    val contentColor = MaterialTheme.colorScheme.onSurface
+    val subtleColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
 
     val progress = if (totalPages > 0) currentPage.toFloat() / totalPages else 0f
 

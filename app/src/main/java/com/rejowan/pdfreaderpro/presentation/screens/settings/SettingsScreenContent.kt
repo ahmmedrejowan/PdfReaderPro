@@ -194,6 +194,7 @@ fun SettingsScreenContent(
     var showThemeModeSheet by remember { mutableStateOf(false) }
     var showScrollModeSheet by remember { mutableStateOf(false) }
     var showQuickZoomSheet by remember { mutableStateOf(false) }
+    var showDoubleTapZoomSheet by remember { mutableStateOf(false) }
     var showReadingThemeSheet by remember { mutableStateOf(false) }
     var showBrightnessSheet by remember { mutableStateOf(false) }
     var showScreenOrientationSheet by remember { mutableStateOf(false) }
@@ -229,11 +230,24 @@ fun SettingsScreenContent(
             subtitle = when (preferences.themeMode) {
                 ThemeMode.LIGHT -> stringResource(R.string.light)
                 ThemeMode.DARK -> stringResource(R.string.dark)
+                ThemeMode.BLACK -> stringResource(R.string.black)
                 ThemeMode.SYSTEM -> stringResource(R.string.system_default)
             },
             accentColor = AccentPurple,
             onClick = { showThemeModeSheet = true },
             animationDelay = 50
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsToggleItem(
+            icon = Icons.Rounded.Work,
+            title = stringResource(R.string.show_tools_tab),
+            subtitle = stringResource(R.string.show_tools_tab_subtitle),
+            checked = preferences.showToolsTab,
+            accentColor = AccentPurple,
+            onCheckedChange = { viewModel.setShowToolsTab(it) },
+            animationDelay = 75
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -275,6 +289,17 @@ fun SettingsScreenContent(
             accentColor = AccentBlue,
             onClick = { showQuickZoomSheet = true },
             animationDelay = 300
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.ZoomIn,
+            title = stringResource(R.string.double_tap_zoom),
+            subtitle = "${(preferences.readerDoubleTapZoom * 10f).toInt() / 10f}×",
+            accentColor = AccentBlue,
+            onClick = { showDoubleTapZoomSheet = true },
+            animationDelay = 325
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -498,6 +523,7 @@ fun SettingsScreenContent(
             options = listOf(
                 PickerOption(Icons.Rounded.LightMode, stringResource(R.string.light), stringResource(R.string.always_light)),
                 PickerOption(Icons.Rounded.DarkMode, stringResource(R.string.dark), stringResource(R.string.always_dark)),
+                PickerOption(Icons.Rounded.Brightness1, stringResource(R.string.black), stringResource(R.string.pure_black)),
                 PickerOption(Icons.Rounded.PhoneAndroid, stringResource(R.string.system_theme), stringResource(R.string.follow_system))
             ),
             selectedIndex = ThemeMode.entries.indexOf(preferences.themeMode),
@@ -547,6 +573,15 @@ fun SettingsScreenContent(
                 showQuickZoomSheet = false
             },
             onDismiss = { showQuickZoomSheet = false }
+        )
+    }
+
+    // Double Tap Zoom slider
+    if (showDoubleTapZoomSheet) {
+        DoubleTapZoomSheet(
+            currentValue = preferences.readerDoubleTapZoom,
+            onValueChange = { viewModel.setReaderDoubleTapZoom(it) },
+            onDismiss = { showDoubleTapZoomSheet = false }
         )
     }
 
@@ -1840,9 +1875,26 @@ private fun ChangelogContent() {
                 .verticalScroll(rememberScrollState())
         ) {
             ChangelogVersionItem(
+                version = "2.2.0",
+                date = "April 2026",
+                isLatest = true,
+                changes = listOf(
+                    "AMOLED black theme option",
+                    "Customizable double-tap zoom level (1.1×–5×)",
+                    "Double-tap now zooms toward the tapped location",
+                    "Setting to hide the Tools tab from the bottom navigation",
+                    "Remember Password now auto-fills on reopen",
+                    "Larger typography and looser spacing in reader sheets",
+                    "Reader chrome and home nav follow the selected app theme"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
                 version = "2.1.3",
                 date = "March 2026",
-                isLatest = true,
+                isLatest = false,
                 changes = listOf(
                     "F-Droid build compatibility"
                 )
@@ -2510,5 +2562,104 @@ private fun LicenseTermItem(text: String) {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DoubleTapZoomSheet(
+    currentValue: Float,
+    onValueChange: (Float) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 2.dp
+    ) {
+        var sliderValue by remember(currentValue) {
+            mutableFloatStateOf(currentValue.coerceIn(1.1f, 5f))
+        }
+        val displayValue = (sliderValue * 10f).toInt() / 10f
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(bottom = 24.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = AccentBlue.copy(alpha = 0.12f)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.ZoomIn,
+                        contentDescription = stringResource(R.string.cd_decorative),
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .size(16.dp),
+                        tint = AccentBlue
+                    )
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Column {
+                    Text(
+                        text = stringResource(R.string.double_tap_zoom),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = stringResource(R.string.double_tap_zoom_subtitle),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "${displayValue}×",
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = AccentBlue,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
+
+            Slider(
+                value = sliderValue,
+                onValueChange = { sliderValue = it },
+                onValueChangeFinished = { onValueChange((sliderValue * 10f).toInt() / 10f) },
+                valueRange = 1.1f..5f,
+                colors = SliderDefaults.colors(
+                    thumbColor = AccentBlue,
+                    activeTrackColor = AccentBlue,
+                    inactiveTrackColor = AccentBlue.copy(alpha = 0.2f)
+                )
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "1.1×",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = "5.0×",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
 }

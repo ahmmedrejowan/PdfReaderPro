@@ -180,6 +180,22 @@ fun HomeScreen(
     }
 
     var selectedNavItem by rememberSaveable { mutableIntStateOf(0) }
+
+    val showToolsTab by viewModel.showToolsTab.collectAsState()
+    val visibleTabs = remember(showToolsTab) {
+        if (showToolsTab) BottomNavItem.entries
+        else BottomNavItem.entries.filter { it != BottomNavItem.TOOLS }
+    }
+    val visibleNavItems = remember(showToolsTab) {
+        if (showToolsTab) com.rejowan.pdfreaderpro.presentation.components.NavItem.entries.toList()
+        else com.rejowan.pdfreaderpro.presentation.components.NavItem.entries.filter {
+            it != com.rejowan.pdfreaderpro.presentation.components.NavItem.TOOLS
+        }
+    }
+    // Clamp selection if the hidden tab was selected
+    if (selectedNavItem > visibleTabs.lastIndex) {
+        selectedNavItem = 0
+    }
     val homeSubTabPagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { HomeSubTab.entries.size }
@@ -280,7 +296,7 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
         Scaffold(
             topBar = {
-                when (BottomNavItem.entries[selectedNavItem]) {
+                when (visibleTabs[selectedNavItem]) {
                     BottomNavItem.HOME -> {
                         // No TopAppBar for HOME - using WelcomeHeader instead
                     }
@@ -311,7 +327,7 @@ fun HomeScreen(
                     .fillMaxSize()
                     .padding(top = paddingValues.calculateTopPadding())
             ) {
-                when (BottomNavItem.entries[selectedNavItem]) {
+                when (visibleTabs[selectedNavItem]) {
                     BottomNavItem.HOME -> {
                         Column(modifier = Modifier.fillMaxSize()) {
                             // Collapsing header (Welcome + Search)
@@ -530,7 +546,8 @@ fun HomeScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .offset(y = bottomBarOffset)
+                    .offset(y = bottomBarOffset),
+                items = visibleNavItems
             )
         }
     }
