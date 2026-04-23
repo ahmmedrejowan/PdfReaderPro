@@ -1,1 +1,0 @@
-• F-Droid build compatibility (removed JVM toolchain requirement)

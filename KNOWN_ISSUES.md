@@ -130,7 +130,10 @@ Issues that have been fixed in recent releases:
 | Storage full errors not handled | v2.0.0 | Added pre-flight storage checks |
 | Bookmark loss on app restart | v2.0.0 | Fixed Room database migration |
 | Landscape layout issues | v2.0.0 | Implemented responsive sheets |
+| Remember password not auto-filling (#43) | v2.2.0 | Saved password is now auto-submitted on reopen; stale entries cleaned up |
+| Double-tap zoom locked to 200% and top-left anchored (#42) | v2.2.0 | Zoom level is configurable (1.1×–5×) and now centers on the tapped point |
+| Reader/home chrome ignoring app theme | v2.2.0 | Colors routed through Material color scheme so Dark/Black themes apply |
 
 ---
 
-*Last updated: 2026-03-07*
+*Last updated: 2026-04-23*

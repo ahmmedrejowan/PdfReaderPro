@@ -219,6 +219,16 @@ GNU General Public License for more details.
 
 ## Changelog
 
+### v2.2.0 (2026-04-23)
+
+- AMOLED black theme option (Appearance → Theme)
+- Customizable double-tap zoom level (1.1×–5×) with slider
+- Double-tap now zooms toward the tapped location
+- Setting to hide the Tools tab from the bottom navigation
+- Remember Password now auto-fills on reopen (#43)
+- Larger typography and looser spacing in reader sheets (#44)
+- Reader chrome and home nav now properly follow the selected app theme
+
 ### v2.1.3 (2026-03-24)
 
 - F-Droid build compatibility (removed JVM toolchain)

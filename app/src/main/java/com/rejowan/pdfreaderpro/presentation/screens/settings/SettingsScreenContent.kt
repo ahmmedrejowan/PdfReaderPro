@@ -1875,9 +1875,26 @@ private fun ChangelogContent() {
                 .verticalScroll(rememberScrollState())
         ) {
             ChangelogVersionItem(
+                version = "2.2.0",
+                date = "April 2026",
+                isLatest = true,
+                changes = listOf(
+                    "AMOLED black theme option",
+                    "Customizable double-tap zoom level (1.1×–5×)",
+                    "Double-tap now zooms toward the tapped location",
+                    "Setting to hide the Tools tab from the bottom navigation",
+                    "Remember Password now auto-fills on reopen",
+                    "Larger typography and looser spacing in reader sheets",
+                    "Reader chrome and home nav follow the selected app theme"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
                 version = "2.1.3",
                 date = "March 2026",
-                isLatest = true,
+                isLatest = false,
                 changes = listOf(
                     "F-Droid build compatibility"
                 )

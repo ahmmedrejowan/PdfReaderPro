@@ -1,4 +1,0 @@
-• Initial release
-• Basic PDF viewing functionality
-• Light and dark theme support
-• File browser integration

@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.0] - 2026-04-23
+
+### Added
+- **AMOLED Black Theme** - True-black variant under Appearance → Theme for OLED displays
+- **Customizable Double-Tap Zoom** - Slider in Settings and the reader's zoom sheet sets the zoom level (1.1×–5×) applied on double-tap
+- **Focal-Point Double-Tap** - Double-tap now zooms around the tapped location instead of anchoring to the top-left; zoom-out preserves the focal point as well
+- **Hide Tools Tab** - Setting to remove the Tools tab from the bottom navigation for a reader-only experience
+
+### Changed
+- **Reader Sheet Typography** - Section headers and chip labels enlarged for legibility; More Options rows given more breathing room (closes #44)
+- **Reader Chrome Theming** - Top bar, floating control bar, and sidebar now follow the active Material color scheme (fixes reader chrome not adopting Dark/Black themes)
+- **Home Bottom Navigation** - Selected/unselected text colors now follow the app theme instead of the system theme (fixes invisible text in Black theme)
+
+### Fixed
+- **Remember Password** - Saved password is now auto-submitted on next open of a locked PDF; stale entries are cleaned up on silent-attempt failure (closes #43)
+
+---
+
 ## [2.1.3] - 2026-03-24
 
 ### Fixed
