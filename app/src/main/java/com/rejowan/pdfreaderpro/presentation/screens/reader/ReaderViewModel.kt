@@ -277,13 +277,16 @@ class ReaderViewModel(
             onSingleClick = {
                 onAction(ReaderAction.ToggleToolbar)
             },
-            onDoubleClick = {
+            onDoubleClick = { x, y ->
                 viewer.let { v ->
                     val target = _state.value.doubleTapZoom
                     if (v.currentPageScale >= target - 0.05f) {
-                        v.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                        v.getActualScaleFor(PdfViewer.Zoom.PAGE_FIT) { fitScale ->
+                            if (fitScale != null) v.scalePageToAt(fitScale, x, y)
+                            else v.zoomTo(PdfViewer.Zoom.PAGE_FIT)
+                        }
                     } else {
-                        v.scalePageTo(target)
+                        v.scalePageToAt(target, x, y)
                     }
                 }
             },

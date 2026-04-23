@@ -1335,6 +1335,41 @@ class PdfViewer @JvmOverloads constructor(
     }
 
     /**
+     * Scales the page to the specified level, zooming around the given focal point.
+     *
+     * Unlike [scalePageTo], the view is adjusted so that the document point under ([x], [y])
+     * stays near that same screen location after the zoom — the tap target does not drift.
+     *
+     * @param scale The target scale. Only positive direct scales are supported here;
+     *              [Zoom] enum values fall back to [zoomTo].
+     * @param x Focal point X in CSS pixels relative to the viewer container's top-left.
+     * @param y Focal point Y in CSS pixels relative to the viewer container's top-left.
+     */
+    fun scalePageToAt(
+        @FloatRange(from = -4.0, to = 10.0) scale: Float,
+        x: Float,
+        y: Float
+    ) {
+        if (scale in ZOOM_SCALE_RANGE) {
+            zoomTo(Zoom.entries[abs(scale.toInt()) - 1])
+            return
+        }
+        if (actualMaxPageScale < actualMinPageScale)
+            throw RuntimeException("Max Page Scale($actualMaxPageScale) is less than Min Page Scale($actualMinPageScale)")
+        val target = scale.coerceIn(actualMinPageScale, actualMaxPageScale)
+        val current = currentPageScale
+        if (current <= 0f) {
+            webView set "pdfViewer.currentScale"(target)
+            return
+        }
+        val factor = target / current
+        if (factor == 1f) return
+        webView call "pdfViewer.updateScale"(
+            "{ scaleFactor: $factor, origin: [$x, $y], drawingDelay: -1 }"
+        )
+    }
+
+    /**
      * Increases the current zoom level by a predefined step.
      *
      * The zoom will stop once it reaches the maximum limit defined by [maxPageScale].

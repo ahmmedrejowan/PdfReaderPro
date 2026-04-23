@@ -170,7 +170,8 @@ function doOnLast() {
 
     viewerContainer.addEventListener("dblclick", (e) => {
         clearTimeout(singleClickTimer);
-        JWI.onDoubleClick();
+        const rect = viewerContainer.getBoundingClientRect();
+        JWI.onDoubleClick(e.clientX - rect.left, e.clientY - rect.top);
     });
 
     viewerContainer.addEventListener("touchstart", (e) => {

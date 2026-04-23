@@ -17,7 +17,7 @@ try {
         onLinkClick() { },
         onSingleClick() { },
         getValidCustomProtocols() { return ""; },
-        onDoubleClick() { },
+        onDoubleClick(x, y) { },
         onLongClick() { },
         onScaleChange() { },
         onPageChange() { },

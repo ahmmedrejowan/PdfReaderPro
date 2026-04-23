@@ -118,8 +118,8 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
-    fun onDoubleClick() = post {
-        pdfViewer.listeners.forEach { it.onDoubleClick() }
+    fun onDoubleClick(x: Float, y: Float) = post {
+        pdfViewer.listeners.forEach { it.onDoubleClick(x, y) }
     }
 
     @JavascriptInterface
