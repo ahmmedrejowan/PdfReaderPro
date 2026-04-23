@@ -403,8 +403,8 @@ class PreferencesRepositoryTest {
 
     // region Enum Coverage Tests
     @Test
-    fun `ThemeMode has 3 values`() {
-        assertEquals(3, ThemeMode.entries.size)
+    fun `ThemeMode has 4 values`() {
+        assertEquals(4, ThemeMode.entries.size)
     }
 
     @Test
