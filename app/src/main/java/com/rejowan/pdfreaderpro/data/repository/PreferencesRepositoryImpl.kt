@@ -38,6 +38,7 @@ class PreferencesRepositoryImpl(
         val READER_SCROLL_MODE = stringPreferencesKey("reader_scroll_mode")
         val READER_AUTO_HIDE_TOOLBAR = booleanPreferencesKey("reader_auto_hide_toolbar")
         val READER_QUICK_ZOOM_PRESET = stringPreferencesKey("reader_quick_zoom_preset")
+        val READER_DOUBLE_TAP_ZOOM = floatPreferencesKey("reader_double_tap_zoom")
         val READER_KEEP_SCREEN_ON = booleanPreferencesKey("reader_keep_screen_on")
         val READER_THEME = stringPreferencesKey("reader_theme")
         val READER_SNAP_TO_PAGES = booleanPreferencesKey("reader_snap_to_pages")
@@ -60,6 +61,7 @@ class PreferencesRepositoryImpl(
             readerScrollMode = prefs[Keys.READER_SCROLL_MODE]?.let { ScrollMode.valueOf(it) } ?: ScrollMode.VERTICAL,
             readerAutoHideToolbar = prefs[Keys.READER_AUTO_HIDE_TOOLBAR] ?: false,
             readerQuickZoomPreset = prefs[Keys.READER_QUICK_ZOOM_PRESET]?.let { QuickZoomPreset.valueOf(it) } ?: QuickZoomPreset.FIT_WIDTH,
+            readerDoubleTapZoom = prefs[Keys.READER_DOUBLE_TAP_ZOOM] ?: 2.0f,
             readerKeepScreenOn = prefs[Keys.READER_KEEP_SCREEN_ON] ?: false,
             readerTheme = prefs[Keys.READER_THEME]?.let { ReadingTheme.valueOf(it) } ?: ReadingTheme.LIGHT,
             readerSnapToPages = prefs[Keys.READER_SNAP_TO_PAGES] ?: false,
@@ -111,6 +113,10 @@ class PreferencesRepositoryImpl(
 
     override suspend fun setReaderQuickZoomPreset(preset: QuickZoomPreset) {
         dataStore.edit { it[Keys.READER_QUICK_ZOOM_PRESET] = preset.name }
+    }
+
+    override suspend fun setReaderDoubleTapZoom(zoom: Float) {
+        dataStore.edit { it[Keys.READER_DOUBLE_TAP_ZOOM] = zoom }
     }
 
     override suspend fun setReaderKeepScreenOn(enabled: Boolean) {

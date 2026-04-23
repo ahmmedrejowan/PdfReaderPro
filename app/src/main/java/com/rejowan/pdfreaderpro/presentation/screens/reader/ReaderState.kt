@@ -24,6 +24,7 @@ data class ReaderState(
     val zoom: Float = 1f,
     val minZoom: Float = 0.5f,
     val maxZoom: Float = 5f,
+    val doubleTapZoom: Float = 2f,
     val scrollMode: ScrollMode = ScrollMode.VERTICAL,
     val isSnapEnabled: Boolean = false,
 
@@ -174,6 +175,7 @@ sealed class ReaderAction {
     data object ZoomFitPage : ReaderAction()
     data object ZoomFitWidth : ReaderAction()
     data object ZoomActualSize : ReaderAction()
+    data class SetDoubleTapZoom(val zoom: Float) : ReaderAction()
 
     // UI
     data object ToggleToolbar : ReaderAction()

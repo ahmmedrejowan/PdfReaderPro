@@ -551,6 +551,7 @@ fun ReaderScreen(
         ZoomSheet(
             currentZoom = state.zoom,
             currentOrientation = state.screenOrientation,
+            currentDoubleTapZoom = state.doubleTapZoom,
             onZoomIn = { viewModel.onAction(ReaderAction.ZoomIn) },
             onZoomOut = { viewModel.onAction(ReaderAction.ZoomOut) },
             onZoomPreset = { preset ->
@@ -562,6 +563,9 @@ fun ReaderScreen(
             },
             onOrientationChange = { orientation ->
                 viewModel.onAction(ReaderAction.SetScreenOrientation(orientation))
+            },
+            onDoubleTapZoomChange = { zoom ->
+                viewModel.onAction(ReaderAction.SetDoubleTapZoom(zoom))
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideZoomSheet) }
         )

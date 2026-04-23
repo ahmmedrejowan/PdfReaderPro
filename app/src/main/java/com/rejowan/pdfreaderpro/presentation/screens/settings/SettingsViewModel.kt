@@ -311,6 +311,12 @@ class SettingsViewModel(
         }
     }
 
+    fun setReaderDoubleTapZoom(zoom: Float) {
+        viewModelScope.launch {
+            preferencesRepository.setReaderDoubleTapZoom(zoom)
+        }
+    }
+
     fun setReaderKeepScreenOn(enabled: Boolean) {
         viewModelScope.launch {
             preferencesRepository.setReaderKeepScreenOn(enabled)

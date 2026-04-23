@@ -28,6 +28,7 @@ interface PreferencesRepository {
     suspend fun setReaderScrollMode(mode: ScrollMode)
     suspend fun setReaderAutoHideToolbar(enabled: Boolean)
     suspend fun setReaderQuickZoomPreset(preset: QuickZoomPreset)
+    suspend fun setReaderDoubleTapZoom(zoom: Float)
     suspend fun setReaderKeepScreenOn(enabled: Boolean)
     suspend fun setReaderTheme(theme: ReadingTheme)
     suspend fun setReaderSnapToPages(enabled: Boolean)

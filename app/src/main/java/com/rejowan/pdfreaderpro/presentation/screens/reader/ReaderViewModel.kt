@@ -84,7 +84,8 @@ class ReaderViewModel(
                     autoHideToolbar = prefs.readerAutoHideToolbar,
                     keepScreenOn = prefs.readerKeepScreenOn,
                     isSnapEnabled = prefs.readerSnapToPages,
-                    screenOrientation = mapDomainScreenOrientation(prefs.readerScreenOrientation)
+                    screenOrientation = mapDomainScreenOrientation(prefs.readerScreenOrientation),
+                    doubleTapZoom = prefs.readerDoubleTapZoom
                 )
             }
         }
@@ -277,12 +278,12 @@ class ReaderViewModel(
                 onAction(ReaderAction.ToggleToolbar)
             },
             onDoubleClick = {
-                // Toggle zoom between PAGE_FIT and 2x
                 viewer.let { v ->
-                    if (v.currentPageScale > 1.5f) {
+                    val target = _state.value.doubleTapZoom
+                    if (v.currentPageScale >= target - 0.05f) {
                         v.zoomTo(PdfViewer.Zoom.PAGE_FIT)
                     } else {
-                        v.scalePageTo(2f)
+                        v.scalePageTo(target)
                     }
                 }
             },
@@ -542,6 +543,13 @@ class ReaderViewModel(
                         ReadingTheme.BLACK -> DomainReadingTheme.BLACK
                     }
                     preferencesRepository.setReaderTheme(domainTheme)
+                }
+            }
+
+            is ReaderAction.SetDoubleTapZoom -> {
+                _state.update { it.copy(doubleTapZoom = action.zoom) }
+                viewModelScope.launch {
+                    preferencesRepository.setReaderDoubleTapZoom(action.zoom)
                 }
             }
 

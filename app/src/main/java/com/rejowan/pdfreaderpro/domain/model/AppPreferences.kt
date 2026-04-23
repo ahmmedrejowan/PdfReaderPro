@@ -15,6 +15,7 @@ data class AppPreferences(
     val readerScrollMode: ScrollMode = ScrollMode.VERTICAL,
     val readerAutoHideToolbar: Boolean = false,
     val readerQuickZoomPreset: QuickZoomPreset = QuickZoomPreset.FIT_WIDTH,
+    val readerDoubleTapZoom: Float = 2.0f,
     val readerKeepScreenOn: Boolean = false,
     val readerTheme: ReadingTheme = ReadingTheme.LIGHT,
     val readerSnapToPages: Boolean = false,
