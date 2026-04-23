@@ -57,6 +57,8 @@ class ReaderViewModel(
     private var storedLastPage: Int? = null
     private var isFirstOpen: Boolean = true
     private var pendingAttachmentAction: AttachmentAction? = null
+    private var triedStoredPassword: Boolean = false
+    private var awaitingStoredPasswordResult: Boolean = false
 
     private enum class AttachmentAction { OPEN, DOWNLOAD }
 
@@ -239,15 +241,35 @@ class ReaderViewModel(
                 _state.update { it.copy(zoom = scale) }
             },
             onPasswordDialogChange = { isOpen ->
-                _state.update { currentState ->
-                    if (isOpen && currentState.passwordSubmitted) {
-                        // Password dialog reopened after submission = wrong password
-                        currentState.copy(isPasswordRequired = true, isPasswordError = true)
-                    } else if (isOpen) {
-                        currentState.copy(isPasswordRequired = true)
-                    } else {
-                        // Dialog closed - keep passwordSubmitted flag (library may reopen if wrong)
-                        currentState.copy(isPasswordRequired = false, isPasswordError = false)
+                when {
+                    isOpen && !triedStoredPassword -> {
+                        triedStoredPassword = true
+                        viewModelScope.launch {
+                            val rememberEnabled = preferencesRepository.preferences.first().rememberPasswords
+                            val stored = if (rememberEnabled) passwordStorage.getPassword(pdfPath) else null
+                            if (stored != null) {
+                                awaitingStoredPasswordResult = true
+                                _state.update { it.copy(passwordSubmitted = true) }
+                                pdfViewer?.ui?.passwordDialog?.submitPassword(stored)
+                            } else {
+                                _state.update { it.copy(isPasswordRequired = true) }
+                            }
+                        }
+                    }
+                    isOpen && awaitingStoredPasswordResult -> {
+                        // Silent auto-submit failed — stored password is stale.
+                        awaitingStoredPasswordResult = false
+                        viewModelScope.launch { passwordStorage.removePassword(pdfPath) }
+                        _state.update { it.copy(isPasswordRequired = true, isPasswordError = true, passwordSubmitted = false) }
+                    }
+                    isOpen && _state.value.passwordSubmitted -> {
+                        _state.update { it.copy(isPasswordRequired = true, isPasswordError = true) }
+                    }
+                    isOpen -> {
+                        _state.update { it.copy(isPasswordRequired = true) }
+                    }
+                    else -> {
+                        _state.update { it.copy(isPasswordRequired = false, isPasswordError = false) }
                     }
                 }
             },
@@ -689,11 +711,11 @@ class ReaderViewModel(
 
     private fun submitPassword(password: String, remember: Boolean) {
         viewModelScope.launch {
-            if (remember) {
+            if (remember && preferencesRepository.preferences.first().rememberPasswords) {
                 passwordStorage.savePassword(pdfPath, password)
             }
-            // Mark that we submitted a password (to detect wrong password if dialog reopens)
-            _state.update { it.copy(passwordSubmitted = true) }
+            awaitingStoredPasswordResult = false
+            _state.update { it.copy(passwordSubmitted = true, isPasswordRequired = false) }
             pdfViewer?.ui?.passwordDialog?.submitPassword(password)
         }
     }
