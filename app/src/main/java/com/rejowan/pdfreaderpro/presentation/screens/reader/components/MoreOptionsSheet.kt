@@ -259,7 +259,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 0
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.PlayArrow,
@@ -273,7 +273,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 50
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.Numbers,
@@ -310,7 +310,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 150
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.Print,
@@ -324,7 +324,7 @@ private fun MoreOptionsSheetContent(
             animationDelay = 200
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         OptionItem(
             icon = Icons.Rounded.Info,
@@ -388,7 +388,7 @@ private fun SectionLabel(
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.labelSmall.copy(
+        style = MaterialTheme.typography.labelMedium.copy(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
@@ -435,8 +435,8 @@ private fun OptionItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(44.dp)
-                .padding(horizontal = 10.dp),
+                .height(52.dp)
+                .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Icon
@@ -448,26 +448,26 @@ private fun OptionItem(
                     imageVector = icon,
                     contentDescription = stringResource(R.string.cd_decorative),
                     modifier = Modifier
-                        .padding(6.dp)
-                        .size(16.dp),
+                        .padding(7.dp)
+                        .size(18.dp),
                     tint = accentColor
                 )
             }
 
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             // Text
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodySmall.copy(
+                    style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
             }
@@ -476,7 +476,7 @@ private fun OptionItem(
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
                 contentDescription = stringResource(R.string.cd_decorative),
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(18.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
             )
         }
