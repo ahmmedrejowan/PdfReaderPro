@@ -286,6 +286,12 @@ class SettingsViewModel(
         }
     }
 
+    fun setShowToolsTab(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setShowToolsTab(enabled)
+        }
+    }
+
     // Reader settings
     fun setReaderBrightness(brightness: Float) {
         viewModelScope.launch {

@@ -31,6 +31,7 @@ class PreferencesRepositoryImpl(
         val DEFAULT_VIEW_MODE = stringPreferencesKey("default_view_mode")
         val DEFAULT_SORT_OPTION = stringPreferencesKey("default_sort_option")
         val REMEMBER_PASSWORDS = booleanPreferencesKey("remember_passwords")
+        val SHOW_TOOLS_TAB = booleanPreferencesKey("show_tools_tab")
         val UPDATE_CHECK_INTERVAL = stringPreferencesKey("update_check_interval")
 
         // Reader settings
@@ -54,6 +55,7 @@ class PreferencesRepositoryImpl(
             defaultViewMode = prefs[Keys.DEFAULT_VIEW_MODE]?.let { ViewMode.valueOf(it) } ?: ViewMode.LIST,
             defaultSortOption = prefs[Keys.DEFAULT_SORT_OPTION]?.let { SortOption.valueOf(it) } ?: SortOption.NAME_ASC,
             rememberPasswords = prefs[Keys.REMEMBER_PASSWORDS] ?: true,
+            showToolsTab = prefs[Keys.SHOW_TOOLS_TAB] ?: true,
             updateCheckInterval = prefs[Keys.UPDATE_CHECK_INTERVAL]?.let { UpdateCheckInterval.valueOf(it) } ?: UpdateCheckInterval.WEEKLY,
 
             // Reader settings
@@ -92,6 +94,10 @@ class PreferencesRepositoryImpl(
 
     override suspend fun setRememberPasswords(enabled: Boolean) {
         dataStore.edit { it[Keys.REMEMBER_PASSWORDS] = enabled }
+    }
+
+    override suspend fun setShowToolsTab(enabled: Boolean) {
+        dataStore.edit { it[Keys.SHOW_TOOLS_TAB] = enabled }
     }
 
     override suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval) {

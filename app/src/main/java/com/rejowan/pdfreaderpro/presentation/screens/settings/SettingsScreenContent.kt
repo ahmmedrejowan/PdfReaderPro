@@ -238,6 +238,18 @@ fun SettingsScreenContent(
             animationDelay = 50
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsToggleItem(
+            icon = Icons.Rounded.Work,
+            title = stringResource(R.string.show_tools_tab),
+            subtitle = stringResource(R.string.show_tools_tab_subtitle),
+            checked = preferences.showToolsTab,
+            accentColor = AccentPurple,
+            onCheckedChange = { viewModel.setShowToolsTab(it) },
+            animationDelay = 75
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
 
         // Reader Section

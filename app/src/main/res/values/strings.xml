@@ -942,6 +942,8 @@
     <string name="default_zoom">Default Zoom</string>
     <string name="double_tap_zoom">Double Tap Zoom</string>
     <string name="double_tap_zoom_subtitle">Zoom level when double tapping</string>
+    <string name="show_tools_tab">Show Tools Tab</string>
+    <string name="show_tools_tab_subtitle">Hide to use the app as a PDF reader only</string>
     <string name="tap_to_check">Tap to check for updates</string>
     <string name="checking">Checking…</string>
     <string name="update_available_version">Update available: v%s</string>

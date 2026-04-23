@@ -8,6 +8,7 @@ data class AppPreferences(
     val defaultViewMode: ViewMode = ViewMode.LIST,
     val defaultSortOption: SortOption = SortOption.NAME_ASC,
     val rememberPasswords: Boolean = true,
+    val showToolsTab: Boolean = true,
     val updateCheckInterval: UpdateCheckInterval = UpdateCheckInterval.WEEKLY,
 
     // Reader settings (global)

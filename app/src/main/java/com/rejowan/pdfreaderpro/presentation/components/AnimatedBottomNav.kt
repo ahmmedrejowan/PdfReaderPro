@@ -78,10 +78,10 @@ enum class NavItem(
 fun AnimatedBottomNav(
     selectedIndex: Int,
     onItemClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    items: List<NavItem> = NavItem.entries
 ) {
     val circleRadius = 20.dp
-    val items = NavItem.entries
 
     val selectedTextColor = MaterialTheme.colorScheme.onSurface
     val selectedIconColor = MaterialTheme.colorScheme.onPrimary
@@ -96,8 +96,8 @@ fun AnimatedBottomNav(
 
     var barSize by remember { mutableStateOf(IntSize(0, 0)) }
 
-    val offsetStep = remember(barSize) {
-        barSize.width.toFloat() / (items.size * 2)
+    val offsetStep = remember(barSize, items.size) {
+        if (items.isEmpty()) 0f else barSize.width.toFloat() / (items.size * 2)
     }
     val offset = remember(currentSelected, offsetStep) {
         offsetStep + currentSelected * 2 * offsetStep

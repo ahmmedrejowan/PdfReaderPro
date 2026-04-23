@@ -21,6 +21,7 @@ interface PreferencesRepository {
     suspend fun setDefaultViewMode(mode: ViewMode)
     suspend fun setDefaultSortOption(option: SortOption)
     suspend fun setRememberPasswords(enabled: Boolean)
+    suspend fun setShowToolsTab(enabled: Boolean)
     suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval)
 
     // Reader settings

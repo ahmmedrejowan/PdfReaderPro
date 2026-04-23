@@ -16,6 +16,7 @@ import com.rejowan.pdfreaderpro.util.FileOperations
 import java.io.File
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -89,6 +90,10 @@ class HomeViewModel(
     ) { results, query ->
         if (query.isBlank()) emptyList() else results
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    val showToolsTab: StateFlow<Boolean> = preferencesRepository.preferences
+        .map { it.showToolsTab }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
     init {
         loadInitialData()
