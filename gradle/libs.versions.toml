@@ -13,7 +13,7 @@ coreKtx = "1.18.0"
 composeBom = "2026.03.01"
 activityCompose = "1.13.0"
 lifecycleRuntimeCompose = "2.10.0"
-navigationCompose = "2.9.7"
+navigationCompose = "2.9.8"
 
 # Room
 room = "2.8.4"
