@@ -6,7 +6,7 @@ minSdk = "24"
 
 # Core Android
 agp = "9.1.0"
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 coreKtx = "1.18.0"
 
 # Compose
@@ -26,7 +26,7 @@ koin = "4.2.0"
 koinCompose = "4.2.0"
 
 # Kotlin Serialization
-kotlinxSerialization = "1.10.0"
+kotlinxSerialization = "1.11.0"
 
 # Ktor HTTP Client
 ktor = "3.4.2"
