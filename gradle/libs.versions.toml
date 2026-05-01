@@ -22,8 +22,8 @@ room = "2.8.4"
 datastore = "1.2.1"
 
 # Koin
-koin = "4.2.0"
-koinCompose = "4.2.0"
+koin = "4.2.1"
+koinCompose = "4.2.1"
 
 # Kotlin Serialization
 kotlinxSerialization = "1.10.0"
