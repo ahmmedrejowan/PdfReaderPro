@@ -55,7 +55,7 @@ webkit = "1.15.0"
 
 # iText PDF
 itext = "9.6.0"
-bouncycastle = "1.83"
+bouncycastle = "1.84"
 
 
 # Testing
