@@ -54,7 +54,7 @@ splashscreen = "1.2.0"
 webkit = "1.16.0"
 
 # iText PDF
-itext = "9.6.0"
+itext = "9.7.1"
 bouncycastle = "1.83"
 
 
