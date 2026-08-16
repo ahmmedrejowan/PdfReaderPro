@@ -69,8 +69,17 @@ data class ReaderState(
     /** Set while a decrypted copy is being written. */
     val isSavingDecryptedCopy: Boolean = false,
 
-    /** True while the signature tool is active in the viewer. */
-    val isSigning: Boolean = false,
+    /** The app's own signature sheet is showing. */
+    val isSignatureSheetVisible: Boolean = false,
+
+    /** Signatures the user has kept for reuse. */
+    val savedSignatures: List<SavedSignatureUi> = emptyList(),
+
+    /**
+     * How many signatures are placed but not written to a copy yet. Drives the
+     * save prompt, which stays out of the way until there is something to save.
+     */
+    val placedSignatures: Int = 0,
 
     /** Set while the signed copy is being written out. */
     val isSavingSignedCopy: Boolean = false,
@@ -273,6 +282,12 @@ enum class ReadingTheme {
 /**
  * Reader events for one-time actions.
  */
+/** A stored signature, as the reader needs it. */
+data class SavedSignatureUi(
+    val id: String,
+    val filePath: String
+)
+
 sealed class ReaderEvent {
     data class ShowMessage(val message: String) : ReaderEvent()
     data class NavigateToPage(val page: Int) : ReaderEvent()
@@ -440,12 +455,19 @@ sealed class ReaderAction {
     data object SaveDecryptedCopy : ReaderAction()
 
     // Signing
-    /** Turn on the viewer's signature tool and open its "add a signature" dialog. */
+    /** Open the app's signature sheet. */
     data object StartSigning : ReaderAction()
 
-    /** Leave the signature tool without writing anything. */
-    data object CancelSigning : ReaderAction()
+    data object HideSignatureSheet : ReaderAction()
 
-    /** Write a copy carrying the placed signature. */
+    /** Place a signature the user kept earlier. */
+    data class PlaceSavedSignature(val id: String) : ReaderAction()
+
+    data class DeleteSavedSignature(val id: String) : ReaderAction()
+
+    /** Throw away placements that have not been written to a copy. */
+    data object DiscardSignatures : ReaderAction()
+
+    /** Write a copy carrying the placed signatures. */
     data object SaveSignedCopy : ReaderAction()
 }

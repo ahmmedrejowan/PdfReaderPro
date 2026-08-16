@@ -35,6 +35,7 @@ try {
         onPrintProcessProgress() { },
         onShowEditorMessage() { },
         onAnnotationEditor() { },
+        onSignaturePlaced() { },
         onEditorStateChange() { },
         onOutlineLoaded() { },
         onAttachmentsLoaded() { },

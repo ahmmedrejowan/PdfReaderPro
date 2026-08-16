@@ -57,6 +57,7 @@ class ReaderViewModel(
     private val annotationDao: AnnotationDao,
     private val filePreferenceDao: FilePreferenceDao,
     private val pdfToolsRepository: com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository,
+    private val signatureStore: com.rejowan.pdfreaderpro.data.local.SignatureStore,
     private val applicationContext: Application,
     savedStateHandle: SavedStateHandle,
     private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
@@ -487,6 +488,26 @@ class ReaderViewModel(
             },
             onPrintCancelled = {
                 _state.update { it.copy(printProgress = null) }
+            },
+            onSignaturePlaced = { success ->
+                if (success) {
+                    _state.update { it.copy(placedSignatures = it.placedSignatures + 1) }
+                    viewModelScope.launch {
+                        _events.send(
+                            ReaderEvent.ShowMessage(
+                                applicationContext.getString(R.string.sign_placed)
+                            )
+                        )
+                    }
+                } else {
+                    viewModelScope.launch {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_place_failed)
+                            )
+                        )
+                    }
+                }
             },
             onPageChange = { pageNumber ->
                 // Library uses 1-based indexing, our state uses 0-based
@@ -1117,20 +1138,60 @@ class ReaderViewModel(
             }
 
             is ReaderAction.StartSigning -> {
-                pdfViewer?.editor?.addSignature()
-                _state.update { it.copy(isSigning = true) }
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(
+                            isSignatureSheetVisible = true,
+                            savedSignatures = signatureStore.list().map { saved ->
+                                SavedSignatureUi(saved.id, saved.file.absolutePath)
+                            }
+                        )
+                    }
+                }
             }
 
-            is ReaderAction.CancelSigning -> {
+            is ReaderAction.HideSignatureSheet -> {
+                _state.update { it.copy(isSignatureSheetVisible = false) }
+            }
+
+            is ReaderAction.PlaceSavedSignature -> {
+                viewModelScope.launch {
+                    val bitmap = signatureStore.load(action.id)
+                    if (bitmap == null) {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_place_failed)
+                            )
+                        )
+                    } else {
+                        placeSignature(bitmap)
+                    }
+                }
+            }
+
+            is ReaderAction.DeleteSavedSignature -> {
+                viewModelScope.launch {
+                    signatureStore.delete(action.id)
+                    _state.update {
+                        it.copy(
+                            savedSignatures = signatureStore.list().map { saved ->
+                                SavedSignatureUi(saved.id, saved.file.absolutePath)
+                            }
+                        )
+                    }
+                }
+            }
+
+            is ReaderAction.DiscardSignatures -> {
+                // The placements only exist in the viewer, so reloading the
+                // document is what throws them away.
                 pdfViewer?.editor?.signatureOn = false
-                _state.update { it.copy(isSigning = false) }
+                _state.update { it.copy(placedSignatures = 0) }
+                pdfViewer?.loadFromFile(pdfPath)
             }
 
             is ReaderAction.SaveSignedCopy -> {
-                // Leave the tool first so the viewer commits whatever is being
-                // edited, then ask where to put the copy.
                 pdfViewer?.editor?.signatureOn = false
-                _state.update { it.copy(isSigning = false) }
                 viewModelScope.launch { _events.send(ReaderEvent.SaveSignedCopyPicker) }
             }
 
@@ -1637,6 +1698,43 @@ class ReaderViewModel(
     /** Suggested filename for the signed copy. */
     fun getSignedFileName(): String {
         return "${File(pdfPath).nameWithoutExtension}-signed.pdf"
+    }
+
+    /** Captured in the app's own UI, optionally kept for next time. */
+    fun onSignatureCaptured(bitmap: android.graphics.Bitmap, remember: Boolean) {
+        viewModelScope.launch {
+            if (remember) {
+                signatureStore.save(bitmap)
+                _state.update {
+                    it.copy(
+                        savedSignatures = signatureStore.list().map { saved ->
+                            SavedSignatureUi(saved.id, saved.file.absolutePath)
+                        }
+                    )
+                }
+            }
+            placeSignature(bitmap)
+        }
+    }
+
+    private suspend fun placeSignature(bitmap: android.graphics.Bitmap) {
+        val viewer = pdfViewer
+        if (viewer == null) {
+            _events.send(
+                ReaderEvent.Error(applicationContext.getString(R.string.sign_place_failed))
+            )
+            return
+        }
+        val dataUrl = withContext(Dispatchers.IO) {
+            java.io.ByteArrayOutputStream().use { out ->
+                bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
+                "data:image/png;base64," + android.util.Base64.encodeToString(
+                    out.toByteArray(), android.util.Base64.NO_WRAP
+                )
+            }
+        }
+        _state.update { it.copy(isSignatureSheetVisible = false) }
+        viewer.editor.placeSignatureImage(dataUrl, "Signature")
     }
 
     /**

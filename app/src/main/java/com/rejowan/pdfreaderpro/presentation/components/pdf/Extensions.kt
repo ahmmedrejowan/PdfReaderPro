@@ -136,6 +136,7 @@ fun PdfViewer.addListener(
     onPrintProcessProgress: ((progress: Float) -> Unit)? = null,
     onPrintProcessEnd: (() -> Unit)? = null,
     onPrintCancelled: (() -> Unit)? = null,
+    onSignaturePlaced: ((success: Boolean) -> Unit)? = null,
     onShowEditorMessage: ((message: String) -> Unit)? = null,
     onAnnotationEditor: ((type: PdfEditor.AnnotationEventType) -> Unit)? = null,
     onEditorModeStateChange: ((state: PdfEditor.EditorModeState) -> Unit)? = null,
@@ -306,6 +307,10 @@ fun PdfViewer.addListener(
 
         override fun onPrintProcessProgress(progress: Float) {
             onPrintProcessProgress?.invoke(progress)
+        }
+
+        override fun onSignaturePlaced(success: Boolean) {
+            onSignaturePlaced?.invoke(success)
         }
 
         override fun onPrintProcessEnd() {

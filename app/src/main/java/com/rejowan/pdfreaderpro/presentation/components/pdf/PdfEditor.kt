@@ -8,6 +8,7 @@ import androidx.annotation.IntRange
 import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.Companion.defaultHighlightEditorColors
 import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
 import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsString
 
 /**
  * Provides functionality to edit a PDF document.
@@ -67,13 +68,35 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
         }
 
     /**
-     * Turns the signature tool on and opens the "add a signature" dialog, so the
-     * first tap lands on something useful rather than a bare editor toolbar.
+     * Places a signature captured in the app's own UI onto the current page.
+     *
+     * The viewer's own signature dialog is never shown; it is driven behind the
+     * scenes so the placed signature still gets the viewer's drag, resize and
+     * delete handles and is serialised with the document. The result arrives on
+     * [PdfListener.onSignaturePlaced].
+     *
+     * @param pngDataUrl a PNG data URL, transparent background
+     * @param description alt text stored with the annotation
      */
-    fun addSignature() {
+    fun placeSignatureImage(pngDataUrl: String, description: String) {
         pdfViewer.checkViewer()
-        signatureOn = true
-        pdfViewer.webView callDirectly "addSignature"()
+        field_signatureOn(true)
+        pdfViewer.webView callDirectly "placeSignatureImage"(
+            pngDataUrl.toJsString(), description.toJsString()
+        )
+    }
+
+    /** Keeps [signatureOn] in step without re-issuing the viewer toggle. */
+    private fun field_signatureOn(value: Boolean) {
+        if (signatureOn != value) signatureOn = value
+    }
+
+    /** How many signatures are placed but not yet written to a copy. */
+    fun countPlacedSignatures(onResult: (Int) -> Unit) {
+        pdfViewer.checkViewer()
+        pdfViewer.webView.evaluateJavascript("countPlacedSignatures();") { result ->
+            onResult(result?.trim('"')?.toIntOrNull() ?: 0)
+        }
     }
 
     /**

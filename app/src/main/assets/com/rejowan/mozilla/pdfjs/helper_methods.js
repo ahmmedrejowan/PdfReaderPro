@@ -1024,6 +1024,90 @@ function addSignature() {
     editorSignatureAddSignature.click();
 }
 
+/**
+ * Places a signature that was drawn, typed or picked in the app's own UI.
+ *
+ * The viewer's signature dialog is never shown. It is driven headlessly: the
+ * image is handed to its file input, which is the one path that accepts a
+ * picture without a user gesture, and the dialog is kept hidden throughout. The
+ * viewer still owns placement, so the result keeps its drag, resize and delete
+ * handles and is serialised with the document like any other annotation.
+ *
+ * @param dataUrl a PNG data URL of the signature, transparent background
+ * @param description alt text stored with the annotation
+ */
+function placeSignatureImage(dataUrl, description) {
+    const dialog = $("#addSignatureDialog");
+    const picker = $("#addSignatureFilePicker");
+    const imageTab = $("#addSignatureImageButton");
+    const addButton = $("#addSignatureAddButton");
+    const descInput = $("#addSignatureDescInput");
+    const saveCheckbox = $("#addSignatureSaveCheckbox");
+
+    if (!dialog || !picker || !addButton) {
+        JWI.onSignaturePlaced(false);
+        return;
+    }
+
+    dialog.classList.add("jwiOffscreen");
+
+    const finish = (ok) => {
+        dialog.classList.remove("jwiOffscreen");
+        JWI.onSignaturePlaced(ok);
+    };
+
+    try {
+        openEditorSignature();
+        editorSignatureAddSignature.click();
+
+        waitFor(() => dialog.open, 2000, () => {
+            imageTab?.click();
+
+            const base64 = dataUrl.substring(dataUrl.indexOf(",") + 1);
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+            const transfer = new DataTransfer();
+            transfer.items.add(new File([bytes], "signature.png", { type: "image/png" }));
+            picker.files = transfer.files;
+            picker.dispatchEvent(new Event("change", { bubbles: true }));
+
+            // The app keeps its own list of signatures, so there is no reason to
+            // duplicate them in the viewer's storage as well.
+            if (saveCheckbox && saveCheckbox.checked) saveCheckbox.click();
+
+            waitFor(() => !addButton.disabled, 4000, () => {
+                if (descInput && description) descInput.value = description;
+                addButton.click();
+                finish(true);
+            }, () => finish(false));
+        }, () => finish(false));
+    } catch (e) {
+        finish(false);
+    }
+}
+
+/** Polls until `test` passes, then runs `onReady`, or `onTimeout` if it never does. */
+function waitFor(test, timeoutMs, onReady, onTimeout) {
+    const started = Date.now();
+    const tick = () => {
+        if (test()) {
+            onReady();
+        } else if (Date.now() - started > timeoutMs) {
+            if (onTimeout) onTimeout();
+        } else {
+            setTimeout(tick, 40);
+        }
+    };
+    tick();
+}
+
+/** How many signatures are currently placed but not yet written to a copy. */
+function countPlacedSignatures() {
+    return document.querySelectorAll(".signatureEditor").length;
+}
+
 function setHighlighterThickness(thickness) {
     editorFreeHighlightThickness.value = thickness;
     editorFreeHighlightThickness.dispatchEvent(new Event("input"));

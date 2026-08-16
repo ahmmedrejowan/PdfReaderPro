@@ -18,6 +18,7 @@ private val Context.readerSettingsDataStore: DataStore<Preferences> by preferenc
 
 val dataStoreModule = module {
     // Settings DataStore
+    single { com.rejowan.pdfreaderpro.data.local.SignatureStore(androidContext()) }
     single { androidContext().settingsDataStore }
 
     // Reader Settings DataStore (separate store for reader-specific preferences)

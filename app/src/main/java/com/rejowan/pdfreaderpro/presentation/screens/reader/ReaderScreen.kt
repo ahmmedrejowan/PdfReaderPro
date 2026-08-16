@@ -36,6 +36,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -90,6 +91,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrol
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.TopBarMenuPanel
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.RemoveFavoriteSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SelectionActionBar
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SignatureSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -419,10 +421,10 @@ fun ReaderScreen(
             }
         }
 
-        // Signing bar. The viewer's own editor toolbar is hidden, so this is the
-        // only way back out of signature mode, and the only way to keep the result.
+        // Unsaved-signature prompt. Deliberately absent until something is actually
+        // placed: a banner that sits there through the whole session is noise.
         AnimatedVisibility(
-            visible = state.isSigning,
+            visible = state.placedSignatures > 0,
             enter = fadeIn(),
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter)
@@ -442,29 +444,30 @@ fun ReaderScreen(
                         bottom = if (state.isToolbarVisible && !state.isFullScreen) 96.dp else 24.dp
                     )
             ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Row(
+                    modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.sign_mode_hint),
+                        text = pluralStringResource(
+                            R.plurals.sign_unsaved_count,
+                            state.placedSignatures,
+                            state.placedSignatures
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row {
-                        TextButton(
-                            onClick = { viewModel.onAction(ReaderAction.CancelSigning) }
-                        ) {
-                            Text(stringResource(R.string.sign_cancel))
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Button(
-                            onClick = { viewModel.onAction(ReaderAction.SaveSignedCopy) },
-                            shape = RoundedCornerShape(8.dp)
-                        ) {
-                            Text(stringResource(R.string.sign_save))
-                        }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    TextButton(
+                        onClick = { viewModel.onAction(ReaderAction.DiscardSignatures) }
+                    ) {
+                        Text(stringResource(R.string.sign_discard))
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(ReaderAction.SaveSignedCopy) },
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(stringResource(R.string.sign_save))
                     }
                 }
             }
@@ -833,6 +836,16 @@ fun ReaderScreen(
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideHighlightsSheet) },
             initialQuery = state.highlightsSheetQuery
+        )
+    }
+
+    if (state.isSignatureSheetVisible) {
+        SignatureSheet(
+            saved = state.savedSignatures,
+            onPlaceSaved = { viewModel.onAction(ReaderAction.PlaceSavedSignature(it)) },
+            onDeleteSaved = { viewModel.onAction(ReaderAction.DeleteSavedSignature(it)) },
+            onCaptured = { bitmap, remember -> viewModel.onSignatureCaptured(bitmap, remember) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideSignatureSheet) }
         )
     }
 
