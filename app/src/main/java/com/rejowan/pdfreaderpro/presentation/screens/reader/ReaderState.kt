@@ -69,6 +69,12 @@ data class ReaderState(
     /** Set while a decrypted copy is being written. */
     val isSavingDecryptedCopy: Boolean = false,
 
+    /** True while the signature tool is active in the viewer. */
+    val isSigning: Boolean = false,
+
+    /** Set while the signed copy is being written out. */
+    val isSavingSignedCopy: Boolean = false,
+
     /**
      * Progress of the print render, 0..1, or null when no print job is running.
      * Preparing a print job rasterises every page and can take the better part of
@@ -276,6 +282,7 @@ sealed class ReaderEvent {
     data object SaveDocumentPicker : ReaderEvent()
     data object BakeHighlightsPicker : ReaderEvent()
     data object SaveDecryptedCopyPicker : ReaderEvent()
+    data object SaveSignedCopyPicker : ReaderEvent()
     data object FavoriteAdded : ReaderEvent()
     data class Error(val message: String) : ReaderEvent()
 }
@@ -431,4 +438,14 @@ sealed class ReaderAction {
 
     /** Write a copy of a password protected document with the encryption removed. */
     data object SaveDecryptedCopy : ReaderAction()
+
+    // Signing
+    /** Turn on the viewer's signature tool and open its "add a signature" dialog. */
+    data object StartSigning : ReaderAction()
+
+    /** Leave the signature tool without writing anything. */
+    data object CancelSigning : ReaderAction()
+
+    /** Write a copy carrying the placed signature. */
+    data object SaveSignedCopy : ReaderAction()
 }

@@ -20,6 +20,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSignTool
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CallMerge
 import androidx.compose.material.icons.automirrored.filled.CallSplit
@@ -29,6 +33,7 @@ import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.Draw
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
@@ -175,6 +180,14 @@ private val pdfTools = listOf(
         isEnabled = true
     ),
     PdfTool(
+        "sign_pdf",
+        "Sign PDF",
+        "Add your handwritten signature",
+        Icons.Default.Draw,
+        ToolCategory.SECURITY,
+        isEnabled = true
+    ),
+    PdfTool(
         "img_to_pdf",
         "Image to PDF",
         "Convert images to PDF document",
@@ -197,6 +210,19 @@ fun ToolsScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
+    // Signing needs the page in view, so this tool picks a file and hands it to
+    // the reader with the signature editor already on.
+    val signPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri ?: return@rememberLauncherForActivityResult
+        val path = com.rejowan.pdfreaderpro.util.FileOperations.copyContentUriToCache(context, uri)
+        if (path != null) navController.navigateToSignTool(path)
+    }
+    val pickPdfToSign = { signPickerLauncher.launch(arrayOf("application/pdf")) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -234,6 +260,7 @@ fun ToolsScreen(
                                 "reorder" -> navController.navigateToReorderTool("")
                                 "lock_pdf" -> navController.navigateToLockTool("")
                                 "unlock_pdf" -> navController.navigateToUnlockTool("")
+                                "sign_pdf" -> pickPdfToSign()
                                 "remove_pages" -> navController.navigateToRemovePagesTool("")
                                 "watermark" -> navController.navigateToWatermarkTool("")
                                 "page_numbers" -> navController.navigateToPageNumbersTool("")

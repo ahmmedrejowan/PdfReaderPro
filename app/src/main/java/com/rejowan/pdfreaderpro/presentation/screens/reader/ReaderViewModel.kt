@@ -85,6 +85,13 @@ class ReaderViewModel(
      */
     private var documentPassword: String? = null
 
+    /**
+     * Where to write the signed copy once the viewer hands back the serialised
+     * document. The viewer's save is asynchronous and arrives on the download
+     * listener, so the chosen destination has to wait here in between.
+     */
+    private var pendingSignedCopyUri: android.net.Uri? = null
+
     private enum class AttachmentAction { OPEN, DOWNLOAD }
 
     init {
@@ -624,13 +631,23 @@ class ReaderViewModel(
                 _state.update { it.copy(attachments = attachmentItems) }
             },
             onDownload = { fileBytes, fileName, mimeType ->
-                viewModelScope.launch {
-                    when (pendingAttachmentAction) {
-                        AttachmentAction.OPEN -> openAttachmentFile(fileBytes, fileName, mimeType)
-                        AttachmentAction.DOWNLOAD -> saveAttachmentFile(fileBytes, fileName)
-                        null -> saveAttachmentFile(fileBytes, fileName) // Default to save
+                // The viewer serialises the whole document, annotation edits
+                // included, through this same callback. When we asked for it in
+                // order to save a signature, these bytes are the signed document
+                // rather than an attachment.
+                val signedTarget = pendingSignedCopyUri
+                if (signedTarget != null) {
+                    pendingSignedCopyUri = null
+                    writeSignedCopy(signedTarget, fileBytes)
+                } else {
+                    viewModelScope.launch {
+                        when (pendingAttachmentAction) {
+                            AttachmentAction.OPEN -> openAttachmentFile(fileBytes, fileName, mimeType)
+                            AttachmentAction.DOWNLOAD -> saveAttachmentFile(fileBytes, fileName)
+                            null -> saveAttachmentFile(fileBytes, fileName) // Default to save
+                        }
+                        pendingAttachmentAction = null
                     }
-                    pendingAttachmentAction = null
                 }
             },
             onLinkClick = { link ->
@@ -1097,6 +1114,24 @@ class ReaderViewModel(
 
             is ReaderAction.HideBakeHighlightsDialog -> {
                 _state.update { it.copy(isBakeHighlightsDialogVisible = false) }
+            }
+
+            is ReaderAction.StartSigning -> {
+                pdfViewer?.editor?.addSignature()
+                _state.update { it.copy(isSigning = true) }
+            }
+
+            is ReaderAction.CancelSigning -> {
+                pdfViewer?.editor?.signatureOn = false
+                _state.update { it.copy(isSigning = false) }
+            }
+
+            is ReaderAction.SaveSignedCopy -> {
+                // Leave the tool first so the viewer commits whatever is being
+                // edited, then ask where to put the copy.
+                pdfViewer?.editor?.signatureOn = false
+                _state.update { it.copy(isSigning = false) }
+                viewModelScope.launch { _events.send(ReaderEvent.SaveSignedCopyPicker) }
             }
 
             is ReaderAction.SaveDecryptedCopy -> {
@@ -1597,6 +1632,56 @@ class ReaderViewModel(
     /** Suggested filename for the decrypted copy. */
     fun getDecryptedFileName(): String {
         return "${File(pdfPath).nameWithoutExtension}-unlocked.pdf"
+    }
+
+    /** Suggested filename for the signed copy. */
+    fun getSignedFileName(): String {
+        return "${File(pdfPath).nameWithoutExtension}-signed.pdf"
+    }
+
+    /**
+     * Ask the viewer to serialise the document with the signature in it. The bytes
+     * come back on the download listener, which writes them to [uri].
+     */
+    fun requestSignedCopy(uri: android.net.Uri) {
+        val viewer = pdfViewer
+        if (viewer == null) {
+            viewModelScope.launch {
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.sign_failed, "viewer not ready")
+                    )
+                )
+            }
+            return
+        }
+        pendingSignedCopyUri = uri
+        _state.update { it.copy(isSavingSignedCopy = true) }
+        viewer.downloadFile()
+    }
+
+    private fun writeSignedCopy(uri: android.net.Uri, bytes: ByteArray) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    applicationContext.contentResolver.openOutputStream(uri)?.use { output ->
+                        output.write(bytes)
+                    } ?: throw IOException("Could not open the destination file")
+                }
+                _events.send(
+                    ReaderEvent.ShowMessage(applicationContext.getString(R.string.sign_done))
+                )
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to write the signed copy")
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.sign_failed, e.message ?: "")
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isSavingSignedCopy = false) }
+            }
+        }
     }
 
     fun getDocumentFileName(): String {

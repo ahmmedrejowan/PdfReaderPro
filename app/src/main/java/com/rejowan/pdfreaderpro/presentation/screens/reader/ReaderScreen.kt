@@ -16,7 +16,10 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -25,8 +28,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -35,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -90,6 +97,7 @@ fun ReaderScreen(
     navController: NavController,
     path: String,
     initialPage: Int = 0,
+    startSigning: Boolean = false,
     viewModel: ReaderViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -118,7 +126,23 @@ fun ReaderScreen(
         uri?.let { viewModel.saveDecryptedCopyToUri(it) }
     }
 
+    val signedCopyLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri ->
+        uri?.let { viewModel.requestSignedCopy(it) }
+    }
+
     val state by viewModel.state.collectAsState()
+
+    // Arriving from the Sign PDF tool. The signature editor needs a loaded
+    // document, so wait for the first render rather than firing on entry.
+    var signingStarted by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(startSigning, state.isLoading) {
+        if (startSigning && !state.isLoading && !signingStarted) {
+            signingStarted = true
+            viewModel.onAction(ReaderAction.StartSigning)
+        }
+    }
 
     val activity = context as? Activity
 
@@ -290,6 +314,9 @@ fun ReaderScreen(
                 is ReaderEvent.SaveDecryptedCopyPicker -> {
                     decryptedCopyLauncher.launch(viewModel.getDecryptedFileName())
                 }
+                is ReaderEvent.SaveSignedCopyPicker -> {
+                    signedCopyLauncher.launch(viewModel.getSignedFileName())
+                }
                 is ReaderEvent.FavoriteAdded -> {
                     snackbarHostState.showSnackbar("Added to favourites")
                 }
@@ -392,10 +419,62 @@ fun ReaderScreen(
             }
         }
 
+        // Signing bar. The viewer's own editor toolbar is hidden, so this is the
+        // only way back out of signature mode, and the only way to keep the result.
+        AnimatedVisibility(
+            visible = state.isSigning,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 3.dp,
+                modifier = Modifier
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+                    // Sit above the floating control bar rather than behind it,
+                    // the same clearance the highlight nav strip uses.
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 16.dp,
+                        bottom = if (state.isToolbarVisible && !state.isFullScreen) 96.dp else 24.dp
+                    )
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(R.string.sign_mode_hint),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row {
+                        TextButton(
+                            onClick = { viewModel.onAction(ReaderAction.CancelSigning) }
+                        ) {
+                            Text(stringResource(R.string.sign_cancel))
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Button(
+                            onClick = { viewModel.onAction(ReaderAction.SaveSignedCopy) },
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(stringResource(R.string.sign_save))
+                        }
+                    }
+                }
+            }
+        }
+
         // Print preparation overlay. Rasterising every page takes tens of seconds
         // on a longer document, and until this existed the reader simply sat there.
         AnimatedVisibility(
-            visible = state.printProgress != null || state.isSavingDecryptedCopy,
+            visible = state.printProgress != null || state.isSavingDecryptedCopy ||
+                state.isSavingSignedCopy,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -418,6 +497,7 @@ fun ReaderScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = when {
+                            state.isSavingSignedCopy -> stringResource(R.string.sign_saving)
                             state.isSavingDecryptedCopy ->
                                 stringResource(R.string.save_decrypted_copy)
                             progress != null && progress > 0f -> stringResource(
@@ -767,6 +847,9 @@ fun ReaderScreen(
             },
             onSaveDecryptedCopyClick = {
                 viewModel.onAction(ReaderAction.SaveDecryptedCopy)
+            },
+            onSignClick = {
+                viewModel.onAction(ReaderAction.StartSigning)
             },
             isPasswordProtected = state.isPasswordProtected,
             hasHighlights = state.highlights.isNotEmpty(),

@@ -29,7 +29,9 @@ data class FolderDetail(
 data class Reader(
     val path: String,
     val page: Int = 0,
-    val fromIntent: Boolean = false
+    val fromIntent: Boolean = false,
+    /** Open straight into the signature tool, used by the Sign PDF tool. */
+    val startSigning: Boolean = false
 )
 
 @Serializable

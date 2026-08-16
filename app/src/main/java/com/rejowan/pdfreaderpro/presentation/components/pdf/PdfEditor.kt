@@ -54,6 +54,29 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
         }
 
     /**
+     * Enables or disables the signature tool.
+     *
+     * The viewer carries a full signature editor already: draw, type or pick an
+     * image, optionally remembered for reuse. This only turns it on.
+     */
+    var signatureOn = false
+        set(value) {
+            pdfViewer.checkViewer()
+            field = value
+            pdfViewer.webView callDirectly if (value) "openEditorSignature"() else "closeEditorSignature"()
+        }
+
+    /**
+     * Turns the signature tool on and opens the "add a signature" dialog, so the
+     * first tap lands on something useful rather than a bare editor toolbar.
+     */
+    fun addSignature() {
+        pdfViewer.checkViewer()
+        signatureOn = true
+        pdfViewer.webView callDirectly "addSignature"()
+    }
+
+    /**
      * The current color used for highlighting text.
      */
     var highlightColor =
@@ -154,7 +177,7 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
     /**
      * Returns true if any of the editor modes (text highlight, free text, ink, stamp) are active.
      */
-    val isEditing: Boolean get() = textHighlighterOn || freeTextOn || inkOn || stampOn
+    val isEditing: Boolean get() = textHighlighterOn || freeTextOn || inkOn || stampOn || signatureOn
 
     /**
      * Undoes the last editing action.

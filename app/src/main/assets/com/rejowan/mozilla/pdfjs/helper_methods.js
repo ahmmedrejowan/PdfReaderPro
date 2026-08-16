@@ -1007,6 +1007,23 @@ function closeEditorStamp() {
     editorStampButton.click();
 }
 
+function openEditorSignature() {
+    if (editorSignatureButton.classList.contains("toggled")) return;
+    editorSignatureButton.click();
+}
+
+function closeEditorSignature() {
+    if (!editorSignatureButton.classList.contains("toggled")) return;
+    editorSignatureButton.click();
+}
+
+// Opens the "add a signature" dialog straight away, so the first tap lands on
+// something useful rather than an empty editor toolbar.
+function addSignature() {
+    openEditorSignature();
+    editorSignatureAddSignature.click();
+}
+
 function setHighlighterThickness(thickness) {
     editorFreeHighlightThickness.value = thickness;
     editorFreeHighlightThickness.dispatchEvent(new Event("input"));

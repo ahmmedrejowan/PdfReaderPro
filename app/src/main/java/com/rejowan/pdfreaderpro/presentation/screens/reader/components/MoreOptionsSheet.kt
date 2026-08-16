@@ -33,6 +33,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.Draw
 import androidx.compose.material.icons.rounded.FormatColorFill
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LockOpen
@@ -87,6 +88,7 @@ fun MoreOptionsSheet(
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
     hasHighlights: Boolean,
+    onSignClick: () -> Unit,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -105,6 +107,7 @@ fun MoreOptionsSheet(
             onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
             isPasswordProtected = isPasswordProtected,
             hasHighlights = hasHighlights,
+            onSignClick = onSignClick,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -120,6 +123,7 @@ fun MoreOptionsSheet(
             onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
             isPasswordProtected = isPasswordProtected,
             hasHighlights = hasHighlights,
+            onSignClick = onSignClick,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -139,6 +143,7 @@ private fun MoreOptionsBottomSheet(
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
     hasHighlights: Boolean,
+    onSignClick: () -> Unit,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -162,6 +167,7 @@ private fun MoreOptionsBottomSheet(
             onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
             isPasswordProtected = isPasswordProtected,
             hasHighlights = hasHighlights,
+            onSignClick = onSignClick,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -181,6 +187,7 @@ private fun MoreOptionsSideSheet(
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
     hasHighlights: Boolean,
+    onSignClick: () -> Unit,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -240,6 +247,7 @@ private fun MoreOptionsSideSheet(
                     onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
                     isPasswordProtected = isPasswordProtected,
                     hasHighlights = hasHighlights,
+                    onSignClick = onSignClick,
                     onAutoScrollClick = onAutoScrollClick,
                     onGoToPageClick = onGoToPageClick,
                     onPrintClick = onPrintClick,
@@ -267,6 +275,7 @@ private fun MoreOptionsSheetContent(
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
     hasHighlights: Boolean,
+    onSignClick: () -> Unit,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -335,6 +344,20 @@ private fun MoreOptionsSheetContent(
 
             Spacer(modifier = Modifier.height(6.dp))
         }
+
+        OptionItem(
+            icon = Icons.Rounded.Draw,
+            title = stringResource(R.string.sign_document),
+            subtitle = stringResource(R.string.sign_document_desc),
+            accentColor = AccentPink,
+            onClick = {
+                onDismiss()
+                onSignClick()
+            },
+            animationDelay = 38
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
 
         // Only meaningful once a password has actually been entered for this file.
         if (isPasswordProtected) {

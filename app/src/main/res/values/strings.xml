@@ -288,6 +288,16 @@
     <string name="save_decrypted_done">Saved a copy with the password removed</string>
     <string name="save_decrypted_failed">Could not save the copy: %s</string>
     <string name="save_decrypted_no_password">Open the document with its password first</string>
+    <string name="sign_document">Sign this document</string>
+    <string name="sign_document_desc">Draw, type or add an image of your signature</string>
+    <string name="sign_done">Saved a signed copy</string>
+    <string name="sign_failed">Could not save the signed copy: %s</string>
+    <string name="sign_saving">Saving the signed copy…</string>
+    <string name="sign_mode_hint">Place your signature, then save a copy</string>
+    <string name="sign_save">Save signed copy</string>
+    <string name="sign_cancel">Cancel</string>
+    <string name="tool_sign_pdf">Sign PDF</string>
+    <string name="tool_sign_pdf_desc">Add your handwritten signature</string>
     <string name="print_preparing">Preparing pages for printing…</string>
     <string name="print_preparing_percent">Preparing pages for printing… %1$d%%</string>
     <string name="bake_highlights_none">There are no highlights to save</string>
