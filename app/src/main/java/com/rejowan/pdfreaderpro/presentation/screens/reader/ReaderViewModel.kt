@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader
 
-import android.content.Context
+import android.app.Application
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -56,7 +56,7 @@ class ReaderViewModel(
     private val bookmarkDao: BookmarkDao,
     private val annotationDao: AnnotationDao,
     private val filePreferenceDao: FilePreferenceDao,
-    private val applicationContext: Context,
+    private val applicationContext: Application,
     savedStateHandle: SavedStateHandle,
     private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
 ) : ViewModel() {
@@ -348,6 +348,20 @@ class ReaderViewModel(
         // Both may have loaded from the database before the viewer attached.
         renderHighlights(_state.value.highlights)
         applyHorizontalScrollLock(_state.value.lockHorizontalScroll)
+    }
+
+    /**
+     * Drop the viewer reference when the view leaves. This ViewModel outlives the
+     * Activity across configuration changes, and [pdfViewer] is a WebView-backed
+     * View, so holding it past that point keeps the old Activity alive.
+     */
+    fun clearPdfViewer() {
+        pdfViewer = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        pdfViewer = null
     }
 
     private fun applyInitialSettings(viewer: PdfViewer) {

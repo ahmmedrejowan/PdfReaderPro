@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.unlock
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.ViewModel
@@ -42,7 +42,7 @@ data class UnlockResult(
 
 class UnlockViewModel(
     private val pdfToolsRepository: PdfToolsRepository,
-    private val context: Context
+    private val context: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(UnlockState())

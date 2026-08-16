@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
-import android.content.Context
+import android.app.Application
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.imagetopdf.ImageItem
@@ -25,7 +25,7 @@ class ImageToPdfViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
 
     private lateinit var pdfToolsRepository: PdfToolsRepository
-    private lateinit var context: Context
+    private lateinit var context: Application
     private lateinit var viewModel: ImageToPdfViewModel
 
     @Before

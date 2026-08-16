@@ -249,7 +249,7 @@
     <string name="retry">Retry</string>
 
     <!-- Reader Screen -->
-    <string name="page_of">Page %d of %d</string>
+    <string name="page_of">Page %1$d of %2$d</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="no_bookmarks">No bookmarks</string>
     <string name="add_bookmark">Add Bookmark</string>
@@ -311,7 +311,7 @@
     <string name="find_in_document">Find in Document</string>
     <string name="search_text">Search text…</string>
     <string name="no_matches">No matches</string>
-    <string name="match_count">%d of %d</string>
+    <string name="match_count">%1$d of %2$d</string>
 
     <!-- Remove Favorite -->
     <string name="remove_favorite">Remove Favorite</string>
@@ -719,7 +719,7 @@
     <!-- Recent Items -->
     <string name="item_selected">Selected</string>
     <string name="item_not_selected">Not selected</string>
-    <string name="page_progress">Page %d/%d</string>
+    <string name="page_progress">Page %1$d/%2$d</string>
     <string name="page_progress_time">Page %1$d of %2$d • %3$s</string>
     <string name="just_now">Just now</string>
     <string name="minutes_ago">%dm ago</string>
@@ -1189,7 +1189,7 @@
     <string name="pdf_saved_new_order">Your PDF has been saved with the new page order</string>
     <string name="pdf_password_protected">Your PDF is now password protected</string>
     <string name="password_protection_removed">Password protection has been removed</string>
-    <string name="images_created_count">%d %s image(s) created</string>
+    <string name="images_created_count">%1$d %2$s image(s) created</string>
     <string name="images_converted_count">%d image(s) converted</string>
     <string name="pages_removed_count">%d page(s) removed</string>
 
@@ -1225,7 +1225,7 @@
 
     <!-- Page Selection -->
     <string name="all_pages_count">All %d pages</string>
-    <string name="selected_of_count">%d of %d selected</string>
+    <string name="selected_of_count">%1$d of %2$d selected</string>
     <string name="pages_modified">%d pages • Modified</string>
     <string name="page_numbers_label">Page numbers</string>
     <string name="page_numbers_hint">e.g., 1-5, 8, 10-12</string>
@@ -1245,7 +1245,7 @@
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Lossless quality</string>
     <string name="format_smaller_size">Smaller file size</string>
-    <string name="will_create_images">Will create %d %s image(s)</string>
+    <string name="will_create_images">Will create %1$d %2$s image(s)</string>
 
     <!-- Compression Levels -->
     <string name="compression_low">Low</string>
@@ -1301,7 +1301,7 @@
     <string name="select_pages_to_remove_hint">Tap pages to select them for removal</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%d pages • %s</string>
+    <string name="pages_size_format">%1$d pages • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>

@@ -356,7 +356,8 @@ fun ReaderScreen(
                 if (pdfViewer.isInitialized && pdfViewer.pageScrollMode != targetScrollMode) {
                     pdfViewer.pageScrollMode = targetScrollMode
                 }
-            }
+            },
+            onRelease = { viewModel.clearPdfViewer() }
         )
 
         // Loading overlay

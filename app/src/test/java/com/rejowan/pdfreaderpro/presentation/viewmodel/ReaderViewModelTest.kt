@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.viewmodel
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
@@ -58,7 +58,7 @@ class ReaderViewModelTest {
     private lateinit var bookmarkDao: BookmarkDao
     private lateinit var annotationDao: AnnotationDao
     private lateinit var filePreferenceDao: FilePreferenceDao
-    private lateinit var applicationContext: Context
+    private lateinit var applicationContext: Application
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var passwordStorage: PasswordStorage
     private lateinit var viewModel: ReaderViewModel

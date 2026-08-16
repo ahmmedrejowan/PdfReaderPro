@@ -18,7 +18,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageNumbe
 import com.rejowan.pdfreaderpro.presentation.screens.tools.imagetopdf.ImageToPdfViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage.PdfToImageViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitViewModel
-import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -29,17 +29,17 @@ val viewModelModule = module {
     viewModelOf(::SearchViewModel)
     viewModelOf(::SettingsViewModel)
     viewModelOf(::OnboardingViewModel)
-    viewModel { params -> ReaderViewModel(get(), get(), get(), get(), get(), get(), androidContext(), params.get()) }
-    viewModel { MergeViewModel(get(), androidContext()) }
-    viewModel { SplitViewModel(get(), androidContext()) }
-    viewModel { CompressViewModel(get(), androidContext()) }
-    viewModel { RotateViewModel(get(), androidContext()) }
-    viewModel { ReorderViewModel(get(), androidContext()) }
-    viewModel { LockViewModel(get(), androidContext()) }
-    viewModel { UnlockViewModel(get(), androidContext()) }
-    viewModel { RemovePagesViewModel(get(), androidContext()) }
-    viewModel { WatermarkViewModel(get(), androidContext()) }
-    viewModel { PageNumbersViewModel(get(), androidContext()) }
-    viewModel { ImageToPdfViewModel(get(), androidContext()) }
-    viewModel { PdfToImageViewModel(get(), androidContext()) }
+    viewModel { params -> ReaderViewModel(get(), get(), get(), get(), get(), get(), androidApplication(), params.get()) }
+    viewModel { MergeViewModel(get(), androidApplication()) }
+    viewModel { SplitViewModel(get(), androidApplication()) }
+    viewModel { CompressViewModel(get(), androidApplication()) }
+    viewModel { RotateViewModel(get(), androidApplication()) }
+    viewModel { ReorderViewModel(get(), androidApplication()) }
+    viewModel { LockViewModel(get(), androidApplication()) }
+    viewModel { UnlockViewModel(get(), androidApplication()) }
+    viewModel { RemovePagesViewModel(get(), androidApplication()) }
+    viewModel { WatermarkViewModel(get(), androidApplication()) }
+    viewModel { PageNumbersViewModel(get(), androidApplication()) }
+    viewModel { ImageToPdfViewModel(get(), androidApplication()) }
+    viewModel { PdfToImageViewModel(get(), androidApplication()) }
 }

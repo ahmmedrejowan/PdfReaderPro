@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.domain.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.Locale
 
 /**
  * Represents a GitHub release from the GitHub API.
@@ -54,8 +55,8 @@ data class ReleaseAsset(
             val kb = size / 1024.0
             val mb = kb / 1024.0
             return when {
-                mb >= 1.0 -> String.format("%.1f MB", mb)
-                kb >= 1.0 -> String.format("%.1f KB", kb)
+                mb >= 1.0 -> String.format(Locale.getDefault(), "%.1f MB", mb)
+                kb >= 1.0 -> String.format(Locale.getDefault(), "%.1f KB", kb)
                 else -> "$size bytes"
             }
         }

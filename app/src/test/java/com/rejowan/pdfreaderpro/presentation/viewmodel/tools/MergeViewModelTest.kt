@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
@@ -30,7 +30,7 @@ class MergeViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
 
     private lateinit var pdfToolsRepository: PdfToolsRepository
-    private lateinit var context: Context
+    private lateinit var context: Application
     private lateinit var viewModel: MergeViewModel
 
     @Before

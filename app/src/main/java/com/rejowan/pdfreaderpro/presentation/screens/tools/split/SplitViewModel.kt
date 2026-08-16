@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.split
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.ViewModel
@@ -55,7 +55,7 @@ data class SplitResult(
 
 class SplitViewModel(
     private val pdfToolsRepository: PdfToolsRepository,
-    private val context: Context
+    private val context: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SplitState())

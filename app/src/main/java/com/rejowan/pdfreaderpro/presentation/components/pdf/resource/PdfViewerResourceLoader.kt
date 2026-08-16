@@ -2,9 +2,9 @@ package com.rejowan.pdfreaderpro.presentation.components.pdf.resource
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.webkit.WebResourceResponse
 import androidx.webkit.WebViewAssetLoader
+import timber.log.Timber
 
 internal class PdfViewerResourceLoader(
     context: Context,
@@ -28,7 +28,7 @@ internal class PdfViewerResourceLoader(
 
     override fun shouldInterceptRequest(uri: Uri): WebResourceResponse? {
         if (Uri.decode(uri.path) == "${PATH}com/rejowan/mozilla/pdfjs/sample.pdf") {
-            Log.i("PdfViewer", "It seems like no source is provided!")
+            Timber.i("It seems like no source is provided!")
             return null
         }
         return assetLoader.shouldInterceptRequest(uri)
