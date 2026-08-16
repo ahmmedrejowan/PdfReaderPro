@@ -10,7 +10,7 @@ kotlin = "2.4.10"
 coreKtx = "1.19.0"
 
 # Compose
-composeBom = "2026.06.01"
+composeBom = "2026.08.00"
 activityCompose = "1.13.0"
 lifecycleRuntimeCompose = "2.11.0"
 navigationCompose = "2.9.8"
@@ -29,7 +29,7 @@ koinCompose = "4.2.2"
 kotlinxSerialization = "1.11.0"
 
 # Ktor HTTP Client
-ktor = "3.5.1"
+ktor = "3.5.2"
 
 
 # Image Loading
@@ -51,11 +51,11 @@ licensy = "1.1.0"
 splashscreen = "1.2.0"
 
 # webkit
-webkit = "1.16.0"
+webkit = "1.17.0"
 
 # iText PDF
-itext = "9.6.0"
-bouncycastle = "1.83"
+itext = "9.7.1"
+bouncycastle = "1.85"
 
 
 # Testing
