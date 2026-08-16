@@ -444,9 +444,11 @@ fun ReaderScreen(
                         bottom = if (state.isToolbarVisible && !state.isFullScreen) 96.dp else 24.dp
                     )
             ) {
-                Row(
-                    modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                // Count on its own line: the three actions plus the count do not
+                // fit across a phone, and squeezing them wraps the button labels
+                // one letter per line.
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
                 ) {
                     Text(
                         text = pluralStringResource(
@@ -457,17 +459,31 @@ fun ReaderScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    TextButton(
-                        onClick = { viewModel.onAction(ReaderAction.DiscardSignatures) }
-                    ) {
-                        Text(stringResource(R.string.sign_discard))
-                    }
-                    Button(
-                        onClick = { viewModel.onAction(ReaderAction.SaveSignedCopy) },
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(stringResource(R.string.sign_save))
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        TextButton(
+                            onClick = { viewModel.onAction(ReaderAction.DiscardSignatures) }
+                        ) {
+                            Text(stringResource(R.string.sign_discard), maxLines = 1)
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+                        TextButton(
+                            onClick = { viewModel.onAction(ReaderAction.SaveSignedCopy) }
+                        ) {
+                            Text(stringResource(R.string.sign_save), maxLines = 1)
+                        }
+                        // Only offered when the reader is on the user's own file.
+                        // Opened through a content uri, it is a cache copy, and
+                        // writing there would report success and change nothing.
+                        if (state.canSaveInPlace) {
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Button(
+                                onClick = { viewModel.onAction(ReaderAction.SaveSignedInPlace) },
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Text(stringResource(R.string.sign_save_here), maxLines = 1)
+                            }
+                        }
                     }
                 }
             }

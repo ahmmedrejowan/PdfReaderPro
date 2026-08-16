@@ -66,7 +66,21 @@ class ReaderViewModel(
     val pdfPath: String = savedStateHandle.get<String>("path") ?: ""
     private val initialPage: Int = savedStateHandle.get<Int>("initialPage") ?: 0
 
-    private val _state = MutableStateFlow(ReaderState(documentPath = pdfPath))
+    /**
+     * True when [pdfPath] is the user's own file rather than a copy the app made
+     * in its cache. Anything opened through a content uri is staged in
+     * cacheDir first, and writing there changes nothing the user can see.
+     */
+    private val isOwnCacheCopy: Boolean
+        get() = pdfPath.startsWith(applicationContext.cacheDir.absolutePath) ||
+                pdfPath.startsWith(applicationContext.codeCacheDir.absolutePath)
+
+    private val _state = MutableStateFlow(
+        ReaderState(
+            documentPath = pdfPath,
+            canSaveInPlace = !isOwnCacheCopy && File(pdfPath).canWrite()
+        )
+    )
     val state: StateFlow<ReaderState> = _state.asStateFlow()
 
     private val _events = Channel<ReaderEvent>(Channel.BUFFERED)
@@ -92,6 +106,9 @@ class ReaderViewModel(
      * listener, so the chosen destination has to wait here in between.
      */
     private var pendingSignedCopyUri: android.net.Uri? = null
+
+    /** Set when the signed document should replace the file it came from. */
+    private var signedOverwriteRequested: Boolean = false
 
     private enum class AttachmentAction { OPEN, DOWNLOAD }
 
@@ -660,6 +677,9 @@ class ReaderViewModel(
                 if (signedTarget != null) {
                     pendingSignedCopyUri = null
                     writeSignedCopy(signedTarget, fileBytes)
+                } else if (signedOverwriteRequested) {
+                    signedOverwriteRequested = false
+                    overwriteWithSigned(fileBytes)
                 } else {
                     viewModelScope.launch {
                         when (pendingAttachmentAction) {
@@ -1193,6 +1213,33 @@ class ReaderViewModel(
             is ReaderAction.SaveSignedCopy -> {
                 pdfViewer?.editor?.signatureOn = false
                 viewModelScope.launch { _events.send(ReaderEvent.SaveSignedCopyPicker) }
+            }
+
+            is ReaderAction.SaveSignedInPlace -> {
+                val viewer = pdfViewer
+                if (viewer == null) {
+                    viewModelScope.launch {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_failed, "viewer not ready")
+                            )
+                        )
+                    }
+                } else if (!_state.value.canSaveInPlace) {
+                    // Reached only if the button is shown when it should not be.
+                    viewModelScope.launch {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_cannot_save_here)
+                            )
+                        )
+                    }
+                } else {
+                    viewer.editor.signatureOn = false
+                    signedOverwriteRequested = true
+                    _state.update { it.copy(isSavingSignedCopy = true) }
+                    viewer.downloadFile()
+                }
             }
 
             is ReaderAction.SaveDecryptedCopy -> {
@@ -1756,6 +1803,53 @@ class ReaderViewModel(
         pendingSignedCopyUri = uri
         _state.update { it.copy(isSavingSignedCopy = true) }
         viewer.downloadFile()
+    }
+
+    /**
+     * Replaces the open document with the signed version.
+     *
+     * Written to a neighbouring temporary file and renamed over the original, so a
+     * failure part way through cannot leave the user with a truncated PDF. The
+     * viewer is reloaded afterwards: it is still showing the pre-save render, and
+     * the placements are now part of the file rather than pending edits.
+     */
+    private fun overwriteWithSigned(bytes: ByteArray) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val target = File(pdfPath)
+                    if (!target.canWrite()) throw IOException("This file is read only")
+
+                    val staging = File(target.parentFile, "${target.name}.signing")
+                    try {
+                        staging.outputStream().use { it.write(bytes) }
+                        if (!staging.renameTo(target)) {
+                            // Different filesystem, or a provider that will not
+                            // rename: fall back to copying the bytes across.
+                            staging.inputStream().use { input ->
+                                target.outputStream().use { output -> input.copyTo(output) }
+                            }
+                        }
+                    } finally {
+                        if (staging.exists()) staging.delete()
+                    }
+                }
+                _state.update { it.copy(placedSignatures = 0) }
+                _events.send(
+                    ReaderEvent.ShowMessage(applicationContext.getString(R.string.sign_saved_in_place))
+                )
+                pdfViewer?.loadFromFile(pdfPath)
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to write the signatures into the document")
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.sign_failed, e.message ?: "")
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isSavingSignedCopy = false) }
+            }
+        }
     }
 
     private fun writeSignedCopy(uri: android.net.Uri, bytes: ByteArray) {

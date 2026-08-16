@@ -85,6 +85,15 @@ data class ReaderState(
     val isSavingSignedCopy: Boolean = false,
 
     /**
+     * Whether the signatures can be written back into the document itself.
+     *
+     * False when the reader is showing a cache copy, which happens for anything
+     * opened through a content uri. Writing there would succeed and change
+     * nothing the user can see, so the option is not offered.
+     */
+    val canSaveInPlace: Boolean = false,
+
+    /**
      * Progress of the print render, 0..1, or null when no print job is running.
      * Preparing a print job rasterises every page and can take the better part of
      * a minute, so it needs to be visible rather than silent.
@@ -470,4 +479,7 @@ sealed class ReaderAction {
 
     /** Write a copy carrying the placed signatures. */
     data object SaveSignedCopy : ReaderAction()
+
+    /** Write the placed signatures back into the document itself. */
+    data object SaveSignedInPlace : ReaderAction()
 }
