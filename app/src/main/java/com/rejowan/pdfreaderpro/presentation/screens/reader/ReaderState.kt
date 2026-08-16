@@ -63,6 +63,19 @@ data class ReaderState(
     val isPasswordError: Boolean = false,
     val passwordSubmitted: Boolean = false,
 
+    /** True once this document has been opened with a password. */
+    val isPasswordProtected: Boolean = false,
+
+    /** Set while a decrypted copy is being written. */
+    val isSavingDecryptedCopy: Boolean = false,
+
+    /**
+     * Progress of the print render, 0..1, or null when no print job is running.
+     * Preparing a print job rasterises every page and can take the better part of
+     * a minute, so it needs to be visible rather than silent.
+     */
+    val printProgress: Float? = null,
+
     // Page jump dialog
     val isPageJumpDialogVisible: Boolean = false,
 
@@ -262,6 +275,7 @@ sealed class ReaderEvent {
     data object ShareDocument : ReaderEvent()
     data object SaveDocumentPicker : ReaderEvent()
     data object BakeHighlightsPicker : ReaderEvent()
+    data object SaveDecryptedCopyPicker : ReaderEvent()
     data object FavoriteAdded : ReaderEvent()
     data class Error(val message: String) : ReaderEvent()
 }
@@ -414,4 +428,7 @@ sealed class ReaderAction {
     data object ShowBakeHighlightsDialog : ReaderAction()
     data object HideBakeHighlightsDialog : ReaderAction()
     data object ConfirmBakeHighlights : ReaderAction()
+
+    /** Write a copy of a password protected document with the encryption removed. */
+    data object SaveDecryptedCopy : ReaderAction()
 }

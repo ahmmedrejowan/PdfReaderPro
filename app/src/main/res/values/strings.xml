@@ -283,6 +283,13 @@
     <string name="bake_highlights_action">Save copy</string>
     <string name="bake_highlights_done">Saved %d highlights into the copy</string>
     <string name="bake_highlights_failed">Could not save the copy: %s</string>
+    <string name="save_decrypted_copy">Save a copy without the password</string>
+    <string name="save_decrypted_copy_desc">Write an unprotected copy of this document</string>
+    <string name="save_decrypted_done">Saved a copy with the password removed</string>
+    <string name="save_decrypted_failed">Could not save the copy: %s</string>
+    <string name="save_decrypted_no_password">Open the document with its password first</string>
+    <string name="print_preparing">Preparing pages for printing…</string>
+    <string name="print_preparing_percent">Preparing pages for printing… %1$d%%</string>
     <string name="bake_highlights_none">There are no highlights to save</string>
     <string name="next_highlight">Next highlight</string>
     <string name="previous_highlight">Previous highlight</string>

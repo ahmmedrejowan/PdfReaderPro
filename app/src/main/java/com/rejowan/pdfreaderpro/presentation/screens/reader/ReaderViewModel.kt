@@ -56,6 +56,7 @@ class ReaderViewModel(
     private val bookmarkDao: BookmarkDao,
     private val annotationDao: AnnotationDao,
     private val filePreferenceDao: FilePreferenceDao,
+    private val pdfToolsRepository: com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository,
     private val applicationContext: Application,
     savedStateHandle: SavedStateHandle,
     private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
@@ -76,6 +77,13 @@ class ReaderViewModel(
     private var pendingAttachmentAction: AttachmentAction? = null
     private var triedStoredPassword: Boolean = false
     private var awaitingStoredPasswordResult: Boolean = false
+
+    /**
+     * The password this document was opened with, kept only for the lifetime of the
+     * reader so a decrypted copy can be written without asking for it again. Never
+     * persisted from here; [passwordStorage] owns that decision.
+     */
+    private var documentPassword: String? = null
 
     private enum class AttachmentAction { OPEN, DOWNLOAD }
 
@@ -458,6 +466,21 @@ class ReaderViewModel(
                     )
                 }
             },
+            // Preparing a print job rasterises every page, which takes tens of
+            // seconds on a longer document. Without this the reader looked frozen
+            // and people assumed printing was unsupported.
+            onPrintProcessStart = {
+                _state.update { it.copy(printProgress = 0f) }
+            },
+            onPrintProcessProgress = { progress ->
+                _state.update { it.copy(printProgress = progress.coerceIn(0f, 1f)) }
+            },
+            onPrintProcessEnd = {
+                _state.update { it.copy(printProgress = null) }
+            },
+            onPrintCancelled = {
+                _state.update { it.copy(printProgress = null) }
+            },
             onPageChange = { pageNumber ->
                 // Library uses 1-based indexing, our state uses 0-based
                 val page = pageNumber - 1
@@ -505,20 +528,27 @@ class ReaderViewModel(
                             val stored = if (rememberEnabled) passwordStorage.getPassword(pdfPath) else null
                             if (stored != null) {
                                 awaitingStoredPasswordResult = true
-                                _state.update { it.copy(passwordSubmitted = true) }
+                                documentPassword = stored
+                                _state.update {
+                                    it.copy(passwordSubmitted = true, isPasswordProtected = true)
+                                }
                                 pdfViewer?.ui?.passwordDialog?.submitPassword(stored)
                             } else {
-                                _state.update { it.copy(isPasswordRequired = true) }
+                                _state.update {
+                                    it.copy(isPasswordRequired = true, isPasswordProtected = true)
+                                }
                             }
                         }
                     }
                     isOpen && awaitingStoredPasswordResult -> {
                         // Silent auto-submit failed — stored password is stale.
                         awaitingStoredPasswordResult = false
+                        documentPassword = null
                         viewModelScope.launch { passwordStorage.removePassword(pdfPath) }
                         _state.update { it.copy(isPasswordRequired = true, isPasswordError = true, passwordSubmitted = false) }
                     }
                     isOpen && _state.value.passwordSubmitted -> {
+                        documentPassword = null
                         _state.update { it.copy(isPasswordRequired = true, isPasswordError = true) }
                     }
                     isOpen -> {
@@ -1069,6 +1099,20 @@ class ReaderViewModel(
                 _state.update { it.copy(isBakeHighlightsDialogVisible = false) }
             }
 
+            is ReaderAction.SaveDecryptedCopy -> {
+                viewModelScope.launch {
+                    if (documentPassword == null) {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.save_decrypted_no_password)
+                            )
+                        )
+                    } else {
+                        _events.send(ReaderEvent.SaveDecryptedCopyPicker)
+                    }
+                }
+            }
+
             is ReaderAction.ConfirmBakeHighlights -> {
                 _state.update { it.copy(isBakeHighlightsDialogVisible = false) }
                 viewModelScope.launch { _events.send(ReaderEvent.BakeHighlightsPicker) }
@@ -1189,7 +1233,17 @@ class ReaderViewModel(
                 passwordStorage.savePassword(pdfPath, password)
             }
             awaitingStoredPasswordResult = false
-            _state.update { it.copy(passwordSubmitted = true, isPasswordRequired = false) }
+            // Held so a decrypted copy can be written without asking again. Cleared
+            // below if the viewer comes back asking for the password, which means
+            // this one was wrong.
+            documentPassword = password
+            _state.update {
+                it.copy(
+                    passwordSubmitted = true,
+                    isPasswordRequired = false,
+                    isPasswordProtected = true
+                )
+            }
             pdfViewer?.ui?.passwordDialog?.submitPassword(password)
         }
     }
@@ -1477,6 +1531,72 @@ class ReaderViewModel(
                 _state.update { it.copy(isBakingHighlights = false) }
             }
         }
+    }
+
+    /**
+     * Write a copy of this document with the encryption stripped, reusing the
+     * password it was already opened with.
+     *
+     * This exists because the print menu's "Save as PDF" was the only route people
+     * found, and that rasterises every page: slow, much larger, and the text stops
+     * being selectable. Going through iText keeps the document intact.
+     */
+    fun saveDecryptedCopyToUri(uri: android.net.Uri) {
+        val password = documentPassword
+        if (password == null) {
+            viewModelScope.launch {
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.save_decrypted_no_password)
+                    )
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(isSavingDecryptedCopy = true) }
+            try {
+                withContext(Dispatchers.IO) {
+                    // unlockPdf writes to a path, the picker hands back a document
+                    // uri, so stage it in the cache and stream it across.
+                    val staged = File.createTempFile("decrypted", ".pdf", applicationContext.cacheDir)
+                    try {
+                        pdfToolsRepository
+                            .unlockPdf(pdfPath, staged.absolutePath, password)
+                            .getOrThrow()
+
+                        applicationContext.contentResolver.openOutputStream(uri)?.use { output ->
+                            staged.inputStream().use { it.copyTo(output) }
+                        } ?: throw IOException("Could not open the destination file")
+                    } finally {
+                        staged.delete()
+                    }
+                }
+                _events.send(
+                    ReaderEvent.ShowMessage(
+                        applicationContext.getString(R.string.save_decrypted_done)
+                    )
+                )
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to write a decrypted copy")
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(
+                            R.string.save_decrypted_failed,
+                            e.message ?: ""
+                        )
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isSavingDecryptedCopy = false) }
+            }
+        }
+    }
+
+    /** Suggested filename for the decrypted copy. */
+    fun getDecryptedFileName(): String {
+        return "${File(pdfPath).nameWithoutExtension}-unlocked.pdf"
     }
 
     fun getDocumentFileName(): String {

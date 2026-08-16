@@ -35,6 +35,7 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.FormatColorFill
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Numbers
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -83,6 +84,8 @@ fun MoreOptionsSheet(
     onBookmarksClick: () -> Unit,
     onHighlightsClick: () -> Unit,
     onSaveWithHighlightsClick: () -> Unit,
+    onSaveDecryptedCopyClick: () -> Unit,
+    isPasswordProtected: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -98,6 +101,8 @@ fun MoreOptionsSheet(
             onBookmarksClick = onBookmarksClick,
             onHighlightsClick = onHighlightsClick,
             onSaveWithHighlightsClick = onSaveWithHighlightsClick,
+            onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
+            isPasswordProtected = isPasswordProtected,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -110,6 +115,8 @@ fun MoreOptionsSheet(
             onBookmarksClick = onBookmarksClick,
             onHighlightsClick = onHighlightsClick,
             onSaveWithHighlightsClick = onSaveWithHighlightsClick,
+            onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
+            isPasswordProtected = isPasswordProtected,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -126,6 +133,8 @@ private fun MoreOptionsBottomSheet(
     onBookmarksClick: () -> Unit,
     onHighlightsClick: () -> Unit,
     onSaveWithHighlightsClick: () -> Unit,
+    onSaveDecryptedCopyClick: () -> Unit,
+    isPasswordProtected: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -146,6 +155,8 @@ private fun MoreOptionsBottomSheet(
             onBookmarksClick = onBookmarksClick,
             onHighlightsClick = onHighlightsClick,
             onSaveWithHighlightsClick = onSaveWithHighlightsClick,
+            onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
+            isPasswordProtected = isPasswordProtected,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -162,6 +173,8 @@ private fun MoreOptionsSideSheet(
     onBookmarksClick: () -> Unit,
     onHighlightsClick: () -> Unit,
     onSaveWithHighlightsClick: () -> Unit,
+    onSaveDecryptedCopyClick: () -> Unit,
+    isPasswordProtected: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -218,6 +231,8 @@ private fun MoreOptionsSideSheet(
                     onBookmarksClick = onBookmarksClick,
                     onHighlightsClick = onHighlightsClick,
                     onSaveWithHighlightsClick = onSaveWithHighlightsClick,
+                    onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
+                    isPasswordProtected = isPasswordProtected,
                     onAutoScrollClick = onAutoScrollClick,
                     onGoToPageClick = onGoToPageClick,
                     onPrintClick = onPrintClick,
@@ -242,6 +257,8 @@ private fun MoreOptionsSheetContent(
     onBookmarksClick: () -> Unit,
     onHighlightsClick: () -> Unit,
     onSaveWithHighlightsClick: () -> Unit,
+    onSaveDecryptedCopyClick: () -> Unit,
+    isPasswordProtected: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -306,6 +323,23 @@ private fun MoreOptionsSheetContent(
         )
 
         Spacer(modifier = Modifier.height(6.dp))
+
+        // Only meaningful once a password has actually been entered for this file.
+        if (isPasswordProtected) {
+            OptionItem(
+                icon = Icons.Rounded.LockOpen,
+                title = stringResource(R.string.save_decrypted_copy),
+                subtitle = stringResource(R.string.save_decrypted_copy_desc),
+                accentColor = AccentTeal,
+                onClick = {
+                    onDismiss()
+                    onSaveDecryptedCopyClick()
+                },
+                animationDelay = 40
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        }
 
         OptionItem(
             icon = Icons.Rounded.PlayArrow,

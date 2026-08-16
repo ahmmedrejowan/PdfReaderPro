@@ -15,8 +15,11 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -26,6 +29,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -105,6 +110,12 @@ fun ReaderScreen(
         contract = ActivityResultContracts.CreateDocument("application/pdf")
     ) { uri ->
         uri?.let { viewModel.bakeHighlightsToUri(it) }
+    }
+
+    val decryptedCopyLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri ->
+        uri?.let { viewModel.saveDecryptedCopyToUri(it) }
     }
 
     val state by viewModel.state.collectAsState()
@@ -276,6 +287,9 @@ fun ReaderScreen(
                 is ReaderEvent.BakeHighlightsPicker -> {
                     bakeHighlightsLauncher.launch(viewModel.getHighlightedFileName())
                 }
+                is ReaderEvent.SaveDecryptedCopyPicker -> {
+                    decryptedCopyLauncher.launch(viewModel.getDecryptedFileName())
+                }
                 is ReaderEvent.FavoriteAdded -> {
                     snackbarHostState.showSnackbar("Added to favourites")
                 }
@@ -375,6 +389,47 @@ fun ReaderScreen(
                 CircularProgressIndicator(
                     color = Color(0xFF9575CD)
                 )
+            }
+        }
+
+        // Print preparation overlay. Rasterising every page takes tens of seconds
+        // on a longer document, and until this existed the reader simply sat there.
+        AnimatedVisibility(
+            visible = state.printProgress != null || state.isSavingDecryptedCopy,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            val progress = state.printProgress
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor.copy(alpha = 0.85f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (progress != null) {
+                        CircularProgressIndicator(
+                            progress = { progress },
+                            color = Color(0xFF9575CD)
+                        )
+                    } else {
+                        CircularProgressIndicator(color = Color(0xFF9575CD))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = when {
+                            state.isSavingDecryptedCopy ->
+                                stringResource(R.string.save_decrypted_copy)
+                            progress != null && progress > 0f -> stringResource(
+                                R.string.print_preparing_percent,
+                                (progress * 100).toInt()
+                            )
+                            else -> stringResource(R.string.print_preparing)
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
 
@@ -710,6 +765,10 @@ fun ReaderScreen(
             onSaveWithHighlightsClick = {
                 viewModel.onAction(ReaderAction.ShowBakeHighlightsDialog)
             },
+            onSaveDecryptedCopyClick = {
+                viewModel.onAction(ReaderAction.SaveDecryptedCopy)
+            },
+            isPasswordProtected = state.isPasswordProtected,
             onBookmarksClick = {
                 viewModel.onAction(ReaderAction.ShowBookmarksSheet)
             },
