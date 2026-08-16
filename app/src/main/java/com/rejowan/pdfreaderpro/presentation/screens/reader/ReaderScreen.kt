@@ -769,6 +769,7 @@ fun ReaderScreen(
                 viewModel.onAction(ReaderAction.SaveDecryptedCopy)
             },
             isPasswordProtected = state.isPasswordProtected,
+            hasHighlights = state.highlights.isNotEmpty(),
             onBookmarksClick = {
                 viewModel.onAction(ReaderAction.ShowBookmarksSheet)
             },

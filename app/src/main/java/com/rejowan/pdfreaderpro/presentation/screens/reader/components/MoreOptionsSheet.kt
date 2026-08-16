@@ -86,6 +86,7 @@ fun MoreOptionsSheet(
     onSaveWithHighlightsClick: () -> Unit,
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
+    hasHighlights: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -103,6 +104,7 @@ fun MoreOptionsSheet(
             onSaveWithHighlightsClick = onSaveWithHighlightsClick,
             onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
             isPasswordProtected = isPasswordProtected,
+            hasHighlights = hasHighlights,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -117,6 +119,7 @@ fun MoreOptionsSheet(
             onSaveWithHighlightsClick = onSaveWithHighlightsClick,
             onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
             isPasswordProtected = isPasswordProtected,
+            hasHighlights = hasHighlights,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -135,6 +138,7 @@ private fun MoreOptionsBottomSheet(
     onSaveWithHighlightsClick: () -> Unit,
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
+    hasHighlights: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -157,6 +161,7 @@ private fun MoreOptionsBottomSheet(
             onSaveWithHighlightsClick = onSaveWithHighlightsClick,
             onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
             isPasswordProtected = isPasswordProtected,
+            hasHighlights = hasHighlights,
             onAutoScrollClick = onAutoScrollClick,
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
@@ -175,6 +180,7 @@ private fun MoreOptionsSideSheet(
     onSaveWithHighlightsClick: () -> Unit,
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
+    hasHighlights: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -233,6 +239,7 @@ private fun MoreOptionsSideSheet(
                     onSaveWithHighlightsClick = onSaveWithHighlightsClick,
                     onSaveDecryptedCopyClick = onSaveDecryptedCopyClick,
                     isPasswordProtected = isPasswordProtected,
+                    hasHighlights = hasHighlights,
                     onAutoScrollClick = onAutoScrollClick,
                     onGoToPageClick = onGoToPageClick,
                     onPrintClick = onPrintClick,
@@ -259,6 +266,7 @@ private fun MoreOptionsSheetContent(
     onSaveWithHighlightsClick: () -> Unit,
     onSaveDecryptedCopyClick: () -> Unit,
     isPasswordProtected: Boolean,
+    hasHighlights: Boolean,
     onAutoScrollClick: () -> Unit,
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
@@ -310,19 +318,23 @@ private fun MoreOptionsSheetContent(
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        OptionItem(
-            icon = Icons.Rounded.SaveAlt,
-            title = stringResource(R.string.save_with_highlights),
-            subtitle = stringResource(R.string.save_with_highlights_desc),
-            accentColor = AccentTeal,
-            onClick = {
-                onDismiss()
-                onSaveWithHighlightsClick()
-            },
-            animationDelay = 35
-        )
+        // Nothing to bake without our own highlights, and the document's read only
+        // ones are already in the file, so offering this would only ever fail.
+        if (hasHighlights) {
+            OptionItem(
+                icon = Icons.Rounded.SaveAlt,
+                title = stringResource(R.string.save_with_highlights),
+                subtitle = stringResource(R.string.save_with_highlights_desc),
+                accentColor = AccentTeal,
+                onClick = {
+                    onDismiss()
+                    onSaveWithHighlightsClick()
+                },
+                animationDelay = 35
+            )
 
-        Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(6.dp))
+        }
 
         // Only meaningful once a password has actually been entered for this file.
         if (isPasswordProtected) {
