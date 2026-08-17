@@ -10,6 +10,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -17,6 +18,10 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import io.mockk.every
+import java.io.ByteArrayInputStream
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -28,6 +33,9 @@ class SplitViewModelTest {
     private lateinit var context: Application
     private lateinit var viewModel: SplitViewModel
 
+    @get:Rule
+    val folder = TemporaryFolder()
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -35,7 +43,31 @@ class SplitViewModelTest {
         pdfToolsRepository = mockk(relaxed = true)
         context = mockk(relaxed = true)
 
+        // The view model copies the picked document into the cache before it can
+        // report a page count, and everything that validates page ranges needs that
+        // page count. Giving it a real directory and a real stream makes that path
+        // succeed, which is what puts the range logic within reach of a test.
+        every { context.cacheDir } returns folder.newFolder("cache")
+        every { context.contentResolver.openInputStream(any()) } answers {
+            ByteArrayInputStream("%PDF-1.4 pretend document".toByteArray())
+        }
+        every { context.contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
+    }
+
+    /**
+     * A view model with the document already loaded.
+     *
+     * Loading is asynchronous, so this waits for it. Without that the page count is
+     * still zero, every range validates trivially, and the tests pass for the wrong
+     * reason.
+     */
+    private fun TestScope.viewModelWithSource(): SplitViewModel {
+        val vm = createViewModel()
+        vm.setSourceFile(mockk(relaxed = true))
+        advanceUntilIdle()
+        return vm
     }
 
     @After
@@ -485,6 +517,166 @@ class SplitViewModelTest {
     @Test
     fun `SplitMode has 4 values`() {
         assertEquals(4, SplitMode.entries.size)
+    }
+    // endregion
+
+    // region Range validation
+    // Reached through setRangesInput, which is what the screen calls on every
+    // keystroke. Nothing here was covered before: the validation only runs once a
+    // document is loaded, and no test had loaded one.
+
+    private fun TestScope.rangesErrorFor(input: String): String? {
+        val vm = viewModelWithSource()
+        vm.setRangesInput(input)
+        return vm.state.value.rangesError
+    }
+
+    @Test
+    fun `a valid single range is accepted`() = runTest {
+        assertNull(rangesErrorFor("1-5"))
+    }
+
+    @Test
+    fun `several valid ranges are accepted`() = runTest {
+        assertNull(rangesErrorFor("1-3, 4-6, 7-10"))
+    }
+
+    @Test
+    fun `a single page is a valid range`() = runTest {
+        assertNull(rangesErrorFor("7"))
+    }
+
+    @Test
+    fun `blank input is not an error, it is just unfinished`() = runTest {
+        assertNull(rangesErrorFor("   "))
+    }
+
+    @Test
+    fun `a page beyond the document is rejected`() = runTest {
+        val error = rangesErrorFor("11")
+        assertNotNull(error)
+        assertTrue(error!!.contains("11"))
+    }
+
+    @Test
+    fun `a range ending beyond the document is rejected`() = runTest {
+        assertNotNull(rangesErrorFor("5-11"))
+    }
+
+    @Test
+    fun `page zero is rejected, pages are counted from one`() = runTest {
+        assertNotNull(rangesErrorFor("0"))
+    }
+
+    @Test
+    fun `a backwards range is rejected`() = runTest {
+        val error = rangesErrorFor("8-3")
+        assertNotNull(error)
+        assertTrue(error!!.contains("start > end"))
+    }
+
+    @Test
+    fun `text where a number belongs is rejected`() = runTest {
+        assertNotNull(rangesErrorFor("one-five"))
+    }
+
+    @Test
+    fun `too many dashes is rejected rather than guessed at`() = runTest {
+        assertNotNull(rangesErrorFor("1-5-9"))
+    }
+
+    @Test
+    fun `surrounding spaces are tolerated`() = runTest {
+        assertNull(rangesErrorFor("  1 - 5 ,  6 - 10  "))
+    }
+
+    @Test
+    fun `an empty segment between commas is skipped`() = runTest {
+        assertNull(rangesErrorFor("1-5, , 6-10"))
+    }
+
+    @Test
+    fun `the input is kept even when it does not validate`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setRangesInput("99")
+        // Rejecting the text as well as flagging it would delete what is being typed.
+        assertEquals("99", vm.state.value.rangesInput)
+    }
+    // endregion
+
+    // region Specific page validation
+    private fun TestScope.specificErrorFor(input: String): String? {
+        val vm = viewModelWithSource()
+        vm.setSpecificPagesInput(input)
+        return vm.state.value.specificPagesError
+    }
+
+    @Test
+    fun `a list of single pages is accepted`() = runTest {
+        assertNull(specificErrorFor("1, 3, 5"))
+    }
+
+    @Test
+    fun `pages and ranges can be mixed`() = runTest {
+        assertNull(specificErrorFor("1, 3-5, 9"))
+    }
+
+    @Test
+    fun `a specific page beyond the document is rejected`() = runTest {
+        assertNotNull(specificErrorFor("1, 99"))
+    }
+
+    @Test
+    fun `a backwards range among specific pages is rejected`() = runTest {
+        assertNotNull(specificErrorFor("9-2"))
+    }
+
+    @Test
+    fun `text among specific pages is rejected`() = runTest {
+        assertNotNull(specificErrorFor("1, two, 3"))
+    }
+    // endregion
+
+    // region Defaults from the loaded document
+    @Test
+    fun `loading a document fills in a default range covering all of it`() = runTest {
+        val vm = viewModelWithSource()
+
+        val ranges = vm.state.value.rangesInput
+        assertTrue("expected a default range, got '$ranges'", ranges.isNotBlank())
+        // Ten pages splits down the middle rather than offering one huge range.
+        assertEquals("1-5, 6-10", ranges)
+    }
+
+    @Test
+    fun `a short document gets a single range`() = runTest {
+        coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(4)
+        val vm = viewModelWithSource()
+
+        assertEquals("1-4", vm.state.value.rangesInput)
+    }
+
+    @Test
+    fun `loading a document records its page count`() = runTest {
+        val vm = viewModelWithSource()
+
+        assertEquals(10, vm.state.value.sourceFile?.pageCount)
+    }
+
+    @Test
+    fun `every n pages is clamped to the document length`() = runTest {
+        val vm = viewModelWithSource()
+
+        vm.setEveryNPages(500)
+        assertEquals(10, vm.state.value.everyNPages)
+    }
+
+    @Test
+    fun `every n pages is never less than one`() = runTest {
+        val vm = viewModelWithSource()
+
+        vm.setEveryNPages(0)
+        assertEquals(1, vm.state.value.everyNPages)
     }
     // endregion
 }
