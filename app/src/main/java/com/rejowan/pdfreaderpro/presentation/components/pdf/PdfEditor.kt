@@ -100,6 +100,40 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
     }
 
     /**
+     * Where each placed signature currently sits, as the viewer reports it.
+     *
+     * Hands back the raw JSON, `[{key, pageIndex, rect}]`, with rect in PDF user
+     * space as [left, bottom, right, top].
+     */
+    fun getPlacedSignatures(onResult: (String) -> Unit) {
+        pdfViewer.checkViewer()
+        pdfViewer.webView.evaluateJavascript("getPlacedSignatures();") { result ->
+            // evaluateJavascript hands back a JSON-encoded return value, so the
+            // payload arrives wrapped in quotes and escaped.
+            val unwrapped = try {
+                if (result.isNullOrBlank() || result == "null") "[]"
+                else kotlinx.serialization.json.Json.decodeFromString<String>(result)
+            } catch (e: Exception) {
+                "[]"
+            }
+            onResult(unwrapped)
+        }
+    }
+
+    /**
+     * Puts a placed signature's top left corner on a point in PDF user space.
+     *
+     * Used to restore a stored placement. Goes through a synthesised drag rather
+     * than moving the element, which is what keeps the viewer's own model in step.
+     */
+    fun moveSignatureTo(key: String, left: Float, top: Float) {
+        pdfViewer.checkViewer()
+        pdfViewer.webView.evaluateJavascript(
+            "moveSignatureTo(${key.toJsString()}, $left, $top);", null
+        )
+    }
+
+    /**
      * The current color used for highlighting text.
      */
     var highlightColor =

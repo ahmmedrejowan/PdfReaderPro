@@ -422,73 +422,6 @@ fun ReaderScreen(
             }
         }
 
-        // Unsaved-signature prompt. Deliberately absent until something is actually
-        // placed: a banner that sits there through the whole session is noise.
-        AnimatedVisibility(
-            visible = state.placedSignatures > 0,
-            enter = fadeIn(),
-            exit = fadeOut(),
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = 3.dp,
-                modifier = Modifier
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    // Sit above the floating control bar rather than behind it,
-                    // the same clearance the highlight nav strip uses.
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 16.dp,
-                        bottom = if (state.isToolbarVisible && !state.isFullScreen) 96.dp else 24.dp
-                    )
-            ) {
-                // Count on its own line: the three actions plus the count do not
-                // fit across a phone, and squeezing them wraps the button labels
-                // one letter per line.
-                Column(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
-                ) {
-                    Text(
-                        text = pluralStringResource(
-                            R.plurals.sign_unsaved_count,
-                            state.placedSignatures,
-                            state.placedSignatures
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        TextButton(
-                            onClick = { viewModel.onAction(ReaderAction.DiscardSignatures) }
-                        ) {
-                            Text(stringResource(R.string.sign_discard), maxLines = 1)
-                        }
-                        Spacer(modifier = Modifier.width(4.dp))
-                        TextButton(
-                            onClick = { viewModel.onAction(ReaderAction.SaveSignedCopy) }
-                        ) {
-                            Text(stringResource(R.string.sign_save), maxLines = 1)
-                        }
-                        // Only offered when the reader is on the user's own file.
-                        // Opened through a content uri, it is a cache copy, and
-                        // writing there would report success and change nothing.
-                        if (state.canSaveInPlace) {
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Button(
-                                onClick = { viewModel.onAction(ReaderAction.ConfirmSaveSignedInPlace) },
-                                shape = RoundedCornerShape(8.dp)
-                            ) {
-                                Text(stringResource(R.string.sign_save_here), maxLines = 1)
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         // Print preparation overlay. Rasterising every page takes tens of seconds
         // on a longer document, and until this existed the reader simply sat there.
@@ -884,10 +817,17 @@ fun ReaderScreen(
 
     if (state.isSignatureSheetVisible) {
         SignatureSheet(
+            placed = state.placedSignatureList,
             saved = state.savedSignatures,
+            canSaveInPlace = state.canSaveInPlace,
             onPlaceSaved = { viewModel.onAction(ReaderAction.PlaceSavedSignature(it)) },
             onDeleteSaved = { viewModel.onAction(ReaderAction.DeleteSavedSignature(it)) },
+            onRemovePlaced = { viewModel.onAction(ReaderAction.RemovePlacedSignature(it)) },
+            onGoToPlaced = { viewModel.onAction(ReaderAction.GoToPlacedSignature(it.pageIndex)) },
             onCaptured = { bitmap, remember -> viewModel.onSignatureCaptured(bitmap, remember) },
+            onSaveIntoFile = { viewModel.onAction(ReaderAction.ConfirmSaveSignedInPlace) },
+            onSaveAsCopy = { viewModel.onAction(ReaderAction.SaveSignedCopy) },
+            onRemoveAll = { viewModel.onAction(ReaderAction.DiscardSignatures) },
             onDismiss = { viewModel.onAction(ReaderAction.HideSignatureSheet) }
         )
     }

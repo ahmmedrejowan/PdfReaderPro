@@ -48,6 +48,7 @@ import org.junit.Test
 import java.io.File
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.data.local.SignatureStore
+import com.rejowan.pdfreaderpro.data.local.database.dao.SignatureDao
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReaderViewModelTest {
@@ -62,6 +63,7 @@ class ReaderViewModelTest {
     private lateinit var filePreferenceDao: FilePreferenceDao
     private lateinit var pdfToolsRepository: PdfToolsRepository
     private lateinit var signatureStore: SignatureStore
+    private lateinit var signatureDao: SignatureDao
     private lateinit var applicationContext: Application
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var passwordStorage: PasswordStorage
@@ -82,6 +84,7 @@ class ReaderViewModelTest {
         filePreferenceDao = mockk(relaxed = true)
         pdfToolsRepository = mockk(relaxed = true)
         signatureStore = mockk(relaxed = true)
+        signatureDao = mockk(relaxed = true)
         applicationContext = mockk(relaxed = true)
         passwordStorage = mockk(relaxed = true)
 
@@ -117,6 +120,7 @@ class ReaderViewModelTest {
             filePreferenceDao = filePreferenceDao,
             pdfToolsRepository = pdfToolsRepository,
             signatureStore = signatureStore,
+            signatureDao = signatureDao,
             applicationContext = applicationContext,
             savedStateHandle = savedStateHandle,
             passwordStorage = passwordStorage

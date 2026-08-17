@@ -1057,35 +1057,60 @@ function placeSignatureImage(dataUrl, description) {
     };
 
     try {
-        openEditorSignature();
-        editorSignatureAddSignature.click();
+        // The first attempt after a document loads used to do nothing. Toggling the
+        // editor and clicking straight through assumed both had taken effect, and
+        // neither has while the editor layer is still being built, so the click
+        // landed on a button that was not listening yet. Each step now waits for
+        // the state it needs.
+        waitFor(() => isSignatureEditorReady(), 6000, () => {
+            openEditorSignature();
 
-        waitFor(() => dialog.open, 2000, () => {
-            imageTab?.click();
+            waitFor(() => editorSignatureButton.classList.contains("toggled"), 3000, () => {
+                editorSignatureAddSignature.click();
+
+                waitFor(() => dialog.open, 3000, () => {
+                    imageTab?.click();
 
             const base64 = dataUrl.substring(dataUrl.indexOf(",") + 1);
             const binary = atob(base64);
             const bytes = new Uint8Array(binary.length);
             for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 
-            const transfer = new DataTransfer();
-            transfer.items.add(new File([bytes], "signature.png", { type: "image/png" }));
-            picker.files = transfer.files;
-            picker.dispatchEvent(new Event("change", { bubbles: true }));
+                    const transfer = new DataTransfer();
+                    transfer.items.add(new File([bytes], "signature.png", { type: "image/png" }));
+                    picker.files = transfer.files;
+                    picker.dispatchEvent(new Event("change", { bubbles: true }));
 
-            // The app keeps its own list of signatures, so there is no reason to
-            // duplicate them in the viewer's storage as well.
-            if (saveCheckbox && saveCheckbox.checked) saveCheckbox.click();
+                    // The app keeps its own list of signatures, so there is no
+                    // reason to duplicate them in the viewer's storage as well.
+                    if (saveCheckbox && saveCheckbox.checked) saveCheckbox.click();
 
-            waitFor(() => !addButton.disabled, 4000, () => {
-                if (descInput && description) descInput.value = description;
-                addButton.click();
-                finish(true);
+                    waitFor(() => !addButton.disabled, 4000, () => {
+                        if (descInput && description) descInput.value = description;
+                        addButton.click();
+                        finish(true);
+                    }, () => finish(false));
+                }, () => finish(false));
             }, () => finish(false));
         }, () => finish(false));
     } catch (e) {
         finish(false);
     }
+}
+
+/**
+ * Whether the signature editor can actually be driven yet.
+ *
+ * The buttons exist in the markup from the start, so their presence proves
+ * nothing. What matters is that the document is loaded and the editor layer for
+ * the current page has been built, which is when the viewer starts listening.
+ */
+function isSignatureEditorReady() {
+    if (!editorSignatureButton || editorSignatureButton.disabled) return false;
+    const app = PDFViewerApplication;
+    if (!app?.pdfDocument) return false;
+    const page = app.pdfViewer?.getPageView(app.pdfViewer.currentPageNumber - 1);
+    return !!page?.annotationEditorLayer;
 }
 
 /** Polls until `test` passes, then runs `onReady`, or `onTimeout` if it never does. */

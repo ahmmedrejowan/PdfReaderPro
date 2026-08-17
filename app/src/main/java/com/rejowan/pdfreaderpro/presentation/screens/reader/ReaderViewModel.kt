@@ -10,6 +10,7 @@ import com.rejowan.pdfreaderpro.data.local.database.dao.AnnotationDao
 import com.rejowan.pdfreaderpro.data.local.database.dao.BookmarkDao
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import com.rejowan.pdfreaderpro.data.local.database.dao.FilePreferenceDao
+import com.rejowan.pdfreaderpro.data.local.database.entity.SignatureEntity
 import com.rejowan.pdfreaderpro.data.local.database.entity.FilePreferenceEntity
 import com.rejowan.pdfreaderpro.data.mapper.toEntity
 import com.rejowan.pdfreaderpro.data.mapper.toRendered
@@ -58,6 +59,7 @@ class ReaderViewModel(
     private val filePreferenceDao: FilePreferenceDao,
     private val pdfToolsRepository: com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository,
     private val signatureStore: com.rejowan.pdfreaderpro.data.local.SignatureStore,
+    private val signatureDao: com.rejowan.pdfreaderpro.data.local.database.dao.SignatureDao,
     private val applicationContext: Application,
     savedStateHandle: SavedStateHandle,
     private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
@@ -109,6 +111,25 @@ class ReaderViewModel(
 
     /** Set when the signed document should replace the file it came from. */
     private var signedOverwriteRequested: Boolean = false
+
+    /**
+     * Page to return to once the document has been rebuilt.
+     *
+     * The viewer offers no way to drop one placed signature, so removing one means
+     * reloading and replaying the rest. Losing the reader's position on the way
+     * would be worse than the reload itself.
+     */
+    private var pageToRestoreAfterReload: Int? = null
+
+    /** The stored placements still waiting to be replayed into the viewer. */
+    private var signaturesToRestore: MutableList<SignatureEntity> = mutableListOf()
+
+    /** True while stored placements are being replayed, so they are not re-saved. */
+    private var isRestoringSignatures: Boolean = false
+
+    /** The captured image the next placement came from, so it can be recorded. */
+    private var pendingPlacementImage: File? = null
+    private var pendingPlacementSavedId: String? = null
 
     private enum class AttachmentAction { OPEN, DOWNLOAD }
 
@@ -448,10 +469,18 @@ class ReaderViewModel(
                 applyHorizontalScrollLock(_state.value.lockHorizontalScroll)
                 // The file's own highlights only become readable once it is open.
                 viewer.loadDocumentHighlights()
+                // Signatures placed but never written into the file, replayed for the
+                // same reason highlights are pushed again here.
+                restoreStoredSignatures()
 
                 // Determine which page to start on
                 val lastPage = storedLastPage // Capture for smart cast
+                val afterReload = pageToRestoreAfterReload
+                pageToRestoreAfterReload = null
                 val targetPage = when {
+                    // Removing a placement rebuilds the page, so put the reader back
+                    // where it was rather than sending it to the top.
+                    afterReload != null && afterReload < pagesCount -> afterReload
                     // If explicitly passed a page (e.g., from recent list), use it
                     initialPage > 0 && initialPage < pagesCount -> initialPage
                     // If we have a stored last page from history, use it
@@ -508,13 +537,13 @@ class ReaderViewModel(
             },
             onSignaturePlaced = { success ->
                 if (success) {
-                    _state.update { it.copy(placedSignatures = it.placedSignatures + 1) }
-                    viewModelScope.launch {
-                        _events.send(
-                            ReaderEvent.ShowMessage(
-                                applicationContext.getString(R.string.sign_placed)
-                            )
-                        )
+                    // Record where it landed so it survives leaving the document,
+                    // the same way a highlight does. Restores skip this: they are
+                    // replaying rows that already exist.
+                    if (isRestoringSignatures) {
+                        onRestoredSignaturePlaced()
+                    } else {
+                        persistNewestPlacement()
                     }
                 } else {
                     viewModelScope.launch {
@@ -1158,6 +1187,7 @@ class ReaderViewModel(
             }
 
             is ReaderAction.StartSigning -> {
+                refreshPlacedSignatures()
                 viewModelScope.launch {
                     _state.update {
                         it.copy(
@@ -1176,6 +1206,7 @@ class ReaderViewModel(
 
             is ReaderAction.PlaceSavedSignature -> {
                 viewModelScope.launch {
+                    pendingPlacementSavedId = action.id
                     val bitmap = signatureStore.load(action.id)
                     if (bitmap == null) {
                         _events.send(
@@ -1202,12 +1233,34 @@ class ReaderViewModel(
                 }
             }
 
+            is ReaderAction.RemovePlacedSignature -> {
+                viewModelScope.launch {
+                    signatureDao.deleteById(action.id)
+                    refreshPlacedSignatures()
+                    // The viewer has no handle on a single placement, so the document
+                    // is rebuilt from what remains. Hold the current page so the
+                    // reader comes back to where the user was.
+                    pageToRestoreAfterReload = _state.value.currentPage
+                    pdfViewer?.editor?.signatureOn = false
+                    pdfViewer?.loadFromFile(pdfPath)
+                }
+            }
+
+            is ReaderAction.GoToPlacedSignature -> {
+                _state.update { it.copy(isSignatureSheetVisible = false) }
+                pdfViewer?.goToPage(action.pageIndex + 1)
+            }
+
             is ReaderAction.DiscardSignatures -> {
-                // The placements only exist in the viewer, so reloading the
-                // document is what throws them away.
+                // Only ever the pending ones. Anything already written into the PDF
+                // belongs to the file now, exactly as with baked highlights.
                 pdfViewer?.editor?.signatureOn = false
-                _state.update { it.copy(placedSignatures = 0) }
-                pdfViewer?.loadFromFile(pdfPath)
+                viewModelScope.launch {
+                    signatureDao.deleteAllFor(pdfPath)
+                    refreshPlacedSignatures()
+                    pageToRestoreAfterReload = _state.value.currentPage
+                    pdfViewer?.loadFromFile(pdfPath)
+                }
             }
 
             is ReaderAction.SaveSignedCopy -> {
@@ -1773,6 +1826,136 @@ class ReaderViewModel(
         }
     }
 
+    /**
+     * Records the placement the viewer has just made.
+     *
+     * The viewer assigns the position, so this reads it back rather than assuming
+     * it, and stores the row that lets the placement be replayed later.
+     */
+    private fun persistNewestPlacement() {
+        val viewer = pdfViewer ?: return
+        val image = pendingPlacementImage
+        val savedId = pendingPlacementSavedId
+        pendingPlacementImage = null
+        pendingPlacementSavedId = null
+
+        viewer.editor.getPlacedSignatures { json ->
+            viewModelScope.launch {
+                val placed = decodePlaced(json)
+                // The newest is the one the viewer just created; earlier entries are
+                // already stored.
+                val newest = placed.lastOrNull()
+                if (newest != null && image != null) {
+                    signatureDao.insert(
+                        SignatureEntity(
+                            pdfPath = pdfPath,
+                            pageIndex = newest.pageIndex,
+                            rectLeft = newest.left,
+                            rectBottom = newest.bottom,
+                            rectRight = newest.right,
+                            rectTop = newest.top,
+                            savedSignatureId = savedId,
+                            imagePath = image.absolutePath
+                        )
+                    )
+                }
+                refreshPlacedSignatures()
+                _events.send(
+                    ReaderEvent.ShowMessage(applicationContext.getString(R.string.sign_placed))
+                )
+            }
+        }
+    }
+
+    private fun decodePlaced(json: String): List<PlacedSignatureJson> = try {
+        placedJson.decodeFromString<List<PlacedSignatureJson>>(json)
+    } catch (e: Exception) {
+        Timber.w(e, "Could not read the placed signatures back")
+        emptyList()
+    }
+
+    /**
+     * Replays the stored placements into the viewer, one at a time.
+     *
+     * Serialised deliberately: each placement has to be created and then moved to
+     * its stored position before the next one starts, otherwise there is no way to
+     * tell the new element apart from the ones already there.
+     */
+    /** Mirrors the stored placements into state so the sheet can list them. */
+    private fun refreshPlacedSignatures() {
+        viewModelScope.launch {
+            val rows = signatureDao.get(pdfPath)
+            _state.update { current ->
+                current.copy(
+                    placedSignatureList = rows.map {
+                        PlacedSignatureUi(it.id, it.pageIndex, it.imagePath)
+                    },
+                    placedSignatures = rows.size
+                )
+            }
+        }
+    }
+
+    private fun restoreStoredSignatures() {
+        viewModelScope.launch {
+            val stored = signatureDao.get(pdfPath)
+            if (stored.isEmpty()) return@launch
+            signaturesToRestore = stored.toMutableList()
+            isRestoringSignatures = true
+            _state.update { it.copy(placedSignatures = 0) }
+            restoreNextSignature()
+        }
+    }
+
+    private fun restoreNextSignature() {
+        val next = signaturesToRestore.removeFirstOrNull()
+        if (next == null) {
+            isRestoringSignatures = false
+            return
+        }
+        val viewer = pdfViewer ?: run { isRestoringSignatures = false; return }
+        val file = File(next.imagePath)
+        if (!file.exists()) {
+            // The image is gone, so the row cannot be replayed. Drop it rather than
+            // leaving a placement the user can never see.
+            viewModelScope.launch {
+                signatureDao.deleteById(next.id)
+                restoreNextSignature()
+            }
+            return
+        }
+        restoringInto = next
+        viewModelScope.launch {
+            val dataUrl = withContext(Dispatchers.IO) {
+                "data:image/png;base64," + android.util.Base64.encodeToString(
+                    file.readBytes(), android.util.Base64.NO_WRAP
+                )
+            }
+            viewer.editor.placeSignatureImage(dataUrl, "Signature")
+        }
+    }
+
+    /** The row currently being replayed, so its position can be applied. */
+    private var restoringInto: SignatureEntity? = null
+
+    private fun onRestoredSignaturePlaced() {
+        val target = restoringInto
+        restoringInto = null
+        val viewer = pdfViewer
+        if (target == null || viewer == null) {
+            isRestoringSignatures = false
+            return
+        }
+        viewer.editor.getPlacedSignatures { json ->
+            val newest = decodePlaced(json).lastOrNull()
+            if (newest != null) {
+                viewer.editor.moveSignatureTo(newest.key, target.rectLeft, target.rectTop)
+            }
+            _state.update { it.copy(placedSignatures = it.placedSignatures + 1) }
+            restoreNextSignature()
+        }
+    }
+
     private suspend fun placeSignature(bitmap: android.graphics.Bitmap) {
         val viewer = pdfViewer
         if (viewer == null) {
@@ -1781,14 +1964,25 @@ class ReaderViewModel(
             )
             return
         }
-        val dataUrl = withContext(Dispatchers.IO) {
-            java.io.ByteArrayOutputStream().use { out ->
+        val (dataUrl, copy) = withContext(Dispatchers.IO) {
+            val bytes = java.io.ByteArrayOutputStream().use { out ->
                 bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
-                "data:image/png;base64," + android.util.Base64.encodeToString(
-                    out.toByteArray(), android.util.Base64.NO_WRAP
-                )
+                out.toByteArray()
             }
+            // A placement keeps its own copy of the image, so deleting the saved
+            // signature it came from does not empty a document that used it.
+            val directory = File(applicationContext.filesDir, PLACEMENT_IMAGES).apply {
+                if (!exists()) mkdirs()
+            }
+            val file = File(directory, "${java.util.UUID.randomUUID()}.png")
+            file.writeBytes(bytes)
+
+            val url = "data:image/png;base64," + android.util.Base64.encodeToString(
+                bytes, android.util.Base64.NO_WRAP
+            )
+            url to file
         }
+        pendingPlacementImage = copy
         _state.update { it.copy(isSignatureSheetVisible = false) }
         viewer.editor.placeSignatureImage(dataUrl, "Signature")
     }
@@ -1843,7 +2037,9 @@ class ReaderViewModel(
                         if (staging.exists()) staging.delete()
                     }
                 }
-                _state.update { it.copy(placedSignatures = 0) }
+                // They are part of the document now, so they stop being pending.
+                signatureDao.deleteAllFor(pdfPath)
+                refreshPlacedSignatures()
                 _events.send(
                     ReaderEvent.ShowMessage(applicationContext.getString(R.string.sign_saved_in_place))
                 )
@@ -1903,5 +2099,11 @@ class ReaderViewModel(
         // Time allowed for a page to render after goToPage before trying to pulse a
         // highlight on it. scrollToHighlight only finds elements on rendered pages.
         const val HIGHLIGHT_SCROLL_DELAY_MS = 350L
+
+        /** Where a placement's own copy of its image lives. */
+        const val PLACEMENT_IMAGES = "signature_placements"
+
+        /** Shared, since the viewer may report placements many times a session. */
+        val placedJson = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
     }
 }

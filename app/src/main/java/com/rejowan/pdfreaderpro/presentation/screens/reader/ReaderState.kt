@@ -76,9 +76,12 @@ data class ReaderState(
     val savedSignatures: List<SavedSignatureUi> = emptyList(),
 
     /**
-     * How many signatures are placed but not written to a copy yet. Drives the
-     * save prompt, which stays out of the way until there is something to save.
+     * Signatures placed on this document and not yet written into the file. Held
+     * like highlights, so nothing has to be decided the moment one is placed.
      */
+    val placedSignatureList: List<PlacedSignatureUi> = emptyList(),
+
+    /** How many are placed but not written into the file yet. */
     val placedSignatures: Int = 0,
 
     /** Set while the signed copy is being written out. */
@@ -300,6 +303,13 @@ data class SavedSignatureUi(
     val filePath: String
 )
 
+/** A signature placed on the open document but not yet written into the file. */
+data class PlacedSignatureUi(
+    val id: Long,
+    val pageIndex: Int,
+    val imagePath: String
+)
+
 sealed class ReaderEvent {
     data class ShowMessage(val message: String) : ReaderEvent()
     data class NavigateToPage(val page: Int) : ReaderEvent()
@@ -477,8 +487,14 @@ sealed class ReaderAction {
 
     data class DeleteSavedSignature(val id: String) : ReaderAction()
 
-    /** Throw away placements that have not been written to a copy. */
+    /** Throw away placements that have not been written into the file. */
     data object DiscardSignatures : ReaderAction()
+
+    /** Remove a single placement. */
+    data class RemovePlacedSignature(val id: Long) : ReaderAction()
+
+    /** Jump to the page a placement sits on. */
+    data class GoToPlacedSignature(val pageIndex: Int) : ReaderAction()
 
     /** Write a copy carrying the placed signatures. */
     data object SaveSignedCopy : ReaderAction()
