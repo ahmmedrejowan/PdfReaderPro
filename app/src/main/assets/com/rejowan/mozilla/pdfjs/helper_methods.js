@@ -1108,6 +1108,92 @@ function countPlacedSignatures() {
     return document.querySelectorAll(".signatureEditor").length;
 }
 
+/**
+ * Every placed signature, as `[{key, pageIndex, rect}]`.
+ *
+ * `rect` is [left, bottom, right, top] in PDF user space, which is the form the
+ * viewer both reports and accepts, so the app stores it unconverted.
+ */
+function getPlacedSignatures() {
+    const storage = PDFViewerApplication.pdfDocument?.annotationStorage;
+    if (!storage) return "[]";
+    const out = [];
+    for (const [key, value] of storage.serializable?.map ?? []) {
+        if (value?.isSignature) {
+            out.push({ key: key, pageIndex: value.pageIndex, rect: value.rect });
+        }
+    }
+    return JSON.stringify(out);
+}
+
+/**
+ * Moves a placed signature so its top left corner lands on a target point.
+ *
+ * Done by synthesising the same pointer sequence a drag produces, because that is
+ * the only route that updates the viewer's own model as well as the element.
+ * Setting the element's position directly moves it on screen but leaves the
+ * stored rectangle behind, which would look right and save wrong.
+ */
+function moveSignatureTo(key, targetLeft, targetTop) {
+    const storage = PDFViewerApplication.pdfDocument?.annotationStorage;
+    if (!storage) return false;
+
+    const entry = storage.serializable?.map?.get(key);
+    if (!entry) return false;
+
+    const pageView = PDFViewerApplication.pdfViewer.getPageView(entry.pageIndex);
+    if (!pageView) return false;
+
+    // Which element carries this annotation. There is no key on the node, so the
+    // one whose position matches the entry is the one to move.
+    const candidates = Array.from(document.querySelectorAll(".signatureEditor"));
+    if (candidates.length === 0) return false;
+
+    const scale = pageView.viewport.scale;
+    const dxCss = (targetLeft - entry.rect[0]) * scale;
+    // PDF space counts upwards from the bottom, the screen counts downwards.
+    const dyCss = (entry.rect[3] - targetTop) * scale;
+
+    const div = candidates.length === 1 ? candidates[0] : nearestEditorTo(candidates, entry, pageView);
+    if (!div) return false;
+
+    const box = div.getBoundingClientRect();
+    const from = { x: box.left + box.width / 2, y: box.top + box.height / 2 };
+    const to = { x: from.x + dxCss, y: from.y + dyCss };
+    const opts = (p) => ({
+        bubbles: true, cancelable: true, composed: true,
+        pointerId: 1, pointerType: "mouse", isPrimary: true, buttons: 1,
+        clientX: p.x, clientY: p.y
+    });
+
+    div.dispatchEvent(new PointerEvent("pointerdown", opts(from)));
+    window.dispatchEvent(new PointerEvent("pointermove", opts({
+        x: (from.x + to.x) / 2, y: (from.y + to.y) / 2
+    })));
+    window.dispatchEvent(new PointerEvent("pointermove", opts(to)));
+    window.dispatchEvent(new PointerEvent("pointerup", opts(to)));
+    return true;
+}
+
+/** Picks whichever editor element currently sits where `entry` says it does. */
+function nearestEditorTo(candidates, entry, pageView) {
+    const [x, y] = pageView.viewport.convertToViewportPoint(entry.rect[0], entry.rect[3]);
+    const pageBox = pageView.div.getBoundingClientRect();
+    const wantX = pageBox.left + x;
+    const wantY = pageBox.top + y;
+    let best = null;
+    let bestDistance = Infinity;
+    for (const div of candidates) {
+        const box = div.getBoundingClientRect();
+        const distance = Math.hypot(box.left - wantX, box.top - wantY);
+        if (distance < bestDistance) {
+            bestDistance = distance;
+            best = div;
+        }
+    }
+    return best;
+}
+
 function setHighlighterThickness(thickness) {
     editorFreeHighlightThickness.value = thickness;
     editorFreeHighlightThickness.dispatchEvent(new Event("input"));

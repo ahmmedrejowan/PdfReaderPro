@@ -12,6 +12,8 @@ import com.rejowan.pdfreaderpro.data.local.database.dao.RecentDao
 import com.rejowan.pdfreaderpro.data.local.database.entity.AnnotationEntity
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import com.rejowan.pdfreaderpro.data.local.database.entity.FilePreferenceEntity
+import com.rejowan.pdfreaderpro.data.local.database.dao.SignatureDao
+import com.rejowan.pdfreaderpro.data.local.database.entity.SignatureEntity
 import com.rejowan.pdfreaderpro.data.local.database.entity.FavoriteEntity
 import com.rejowan.pdfreaderpro.data.local.database.entity.RecentEntity
 
@@ -21,12 +23,15 @@ import com.rejowan.pdfreaderpro.data.local.database.entity.RecentEntity
         FavoriteEntity::class,
         BookmarkEntity::class,
         AnnotationEntity::class,
-        FilePreferenceEntity::class
+        FilePreferenceEntity::class,
+        SignatureEntity::class
     ],
-    version = 9,
+    version = 10,
     exportSchema = true
 )
 abstract class PdfDatabase : RoomDatabase() {
+
+    abstract fun signatureDao(): SignatureDao
 
     abstract fun recentDao(): RecentDao
     abstract fun favoriteDao(): FavoriteDao
@@ -43,6 +48,40 @@ abstract class PdfDatabase : RoomDatabase() {
          * on `recent`, so clearing the recent list does not wipe a document's
          * settings.
          */
+        /**
+         * Migration from v9 to v10.
+         *
+         * Adds the signatures table. Placing a signature used to force an immediate
+         * save-or-discard; keeping pending placements here lets them behave like
+         * highlights and survive leaving the document.
+         */
+        val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Column definitions match the exported v10 schema exactly, defaults
+                // included, since Room validates them at startup.
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS signatures (
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        pdfPath TEXT NOT NULL,
+                        pageIndex INTEGER NOT NULL,
+                        rectLeft REAL NOT NULL,
+                        rectBottom REAL NOT NULL,
+                        rectRight REAL NOT NULL,
+                        rectTop REAL NOT NULL,
+                        savedSignatureId TEXT,
+                        imagePath TEXT NOT NULL,
+                        createdAt INTEGER NOT NULL
+                    )
+                    """
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_signatures_pdfPath ON signatures (pdfPath)")
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS index_signatures_pdfPath_pageIndex ON signatures (pdfPath, pageIndex)"
+                )
+            }
+        }
+
         val MIGRATION_8_9 = object : Migration(8, 9) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 // Column definitions match the exported v9 schema exactly, defaults
@@ -219,6 +258,9 @@ abstract class PdfDatabase : RoomDatabase() {
         }
 
         val migrations =
-            arrayOf(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
+            arrayOf(
+                MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7,
+                MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10
+            )
     }
 }
