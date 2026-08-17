@@ -310,7 +310,11 @@
     <string name="sign_saving">Saving the signed copy…</string>
     <string name="sign_save">Save copy</string>
     <string name="sign_discard">Discard</string>
-    <string name="sign_save_here">Save here</string>
+    <string name="sign_save_here">Save</string>
+    <string name="sign_save_confirm_title">Save into this document?</string>
+    <string name="sign_save_confirm_body">The signatures will be written into %s. This cannot be undone.</string>
+    <string name="sign_save_confirm_action">Save</string>
+    <string name="sign_save_confirm_cancel">Cancel</string>
     <string name="sign_cannot_save_here">This document was opened as a copy, so it can only be saved as a new file</string>
     <string name="sign_saved_in_place">Signatures written into this file</string>
     <string name="sign_cancel">Cancel</string>

@@ -93,6 +93,9 @@ data class ReaderState(
      */
     val canSaveInPlace: Boolean = false,
 
+    /** Confirmation before signatures are written into the document itself. */
+    val isSignSaveConfirmVisible: Boolean = false,
+
     /**
      * Progress of the print render, 0..1, or null when no print job is running.
      * Preparing a print job rasterises every page and can take the better part of
@@ -479,6 +482,11 @@ sealed class ReaderAction {
 
     /** Write a copy carrying the placed signatures. */
     data object SaveSignedCopy : ReaderAction()
+
+    /** Ask before writing the placed signatures into the document itself. */
+    data object ConfirmSaveSignedInPlace : ReaderAction()
+
+    data object DismissSignSaveConfirm : ReaderAction()
 
     /** Write the placed signatures back into the document itself. */
     data object SaveSignedInPlace : ReaderAction()

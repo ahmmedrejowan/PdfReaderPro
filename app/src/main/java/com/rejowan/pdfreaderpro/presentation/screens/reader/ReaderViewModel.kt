@@ -1215,7 +1215,16 @@ class ReaderViewModel(
                 viewModelScope.launch { _events.send(ReaderEvent.SaveSignedCopyPicker) }
             }
 
+            is ReaderAction.ConfirmSaveSignedInPlace -> {
+                _state.update { it.copy(isSignSaveConfirmVisible = true) }
+            }
+
+            is ReaderAction.DismissSignSaveConfirm -> {
+                _state.update { it.copy(isSignSaveConfirmVisible = false) }
+            }
+
             is ReaderAction.SaveSignedInPlace -> {
+                _state.update { it.copy(isSignSaveConfirmVisible = false) }
                 val viewer = pdfViewer
                 if (viewer == null) {
                     viewModelScope.launch {

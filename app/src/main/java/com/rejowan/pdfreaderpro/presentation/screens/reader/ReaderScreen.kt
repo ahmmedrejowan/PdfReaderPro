@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -478,7 +479,7 @@ fun ReaderScreen(
                         if (state.canSaveInPlace) {
                             Spacer(modifier = Modifier.width(4.dp))
                             Button(
-                                onClick = { viewModel.onAction(ReaderAction.SaveSignedInPlace) },
+                                onClick = { viewModel.onAction(ReaderAction.ConfirmSaveSignedInPlace) },
                                 shape = RoundedCornerShape(8.dp)
                             ) {
                                 Text(stringResource(R.string.sign_save_here), maxLines = 1)
@@ -852,6 +853,32 @@ fun ReaderScreen(
             },
             onDismiss = { viewModel.onAction(ReaderAction.HideHighlightsSheet) },
             initialQuery = state.highlightsSheetQuery
+        )
+    }
+
+    if (state.isSignSaveConfirmVisible) {
+        AlertDialog(
+            onDismissRequest = { viewModel.onAction(ReaderAction.DismissSignSaveConfirm) },
+            title = { Text(stringResource(R.string.sign_save_confirm_title)) },
+            text = {
+                Text(
+                    stringResource(
+                        R.string.sign_save_confirm_body,
+                        viewModel.getDocumentFileName()
+                    )
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = { viewModel.onAction(ReaderAction.SaveSignedInPlace) },
+                    shape = RoundedCornerShape(8.dp)
+                ) { Text(stringResource(R.string.sign_save_confirm_action)) }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { viewModel.onAction(ReaderAction.DismissSignSaveConfirm) }
+                ) { Text(stringResource(R.string.sign_save_confirm_cancel)) }
+            }
         )
     }
 
