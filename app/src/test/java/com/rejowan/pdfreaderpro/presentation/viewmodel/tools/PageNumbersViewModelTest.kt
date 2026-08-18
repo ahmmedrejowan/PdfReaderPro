@@ -8,7 +8,14 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.NumberFor
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.NumberPosition
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageNumbersViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageSelection
+import android.os.Environment
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.slot
+import io.mockk.coVerify
+import java.io.ByteArrayInputStream
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,6 +27,12 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,6 +44,9 @@ class PageNumbersViewModelTest {
     private lateinit var context: Application
     private lateinit var viewModel: PageNumbersViewModel
 
+    @get:Rule
+    val folder = TemporaryFolder()
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -38,11 +54,30 @@ class PageNumbersViewModelTest {
         pdfToolsRepository = mockk(relaxed = true)
         context = mockk(relaxed = true)
 
+        // Loading a document is what gives the view model a page count, and every
+        // page selection rule is expressed against it. A relaxed mock quietly fails
+        // that copy, leaving the count at zero and the rules untestable, so the
+        // cache directory and the stream are real here.
+        every { context.cacheDir } returns folder.newFolder("cache")
+        every { context.contentResolver.openInputStream(any()) } answers {
+            ByteArrayInputStream("%PDF-1.4 pretend document".toByteArray())
+        }
+        every { context.contentResolver.query(any(), any(), any(), any(), any()) } returns null
+
+        // The tool writes into the public Documents directory, which does not exist
+        // off-device. Unmocked it throws inside the coroutine, so the repository is
+        // never reached and the failure surfaces in whichever test runs next.
+        mockkStatic(Environment::class)
+        every {
+            Environment.getExternalStoragePublicDirectory(any())
+        } returns folder.newFolder("documents")
+
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
     }
 
     @After
     fun teardown() {
+        unmockkStatic(Environment::class)
         Dispatchers.resetMain()
     }
 
@@ -879,6 +914,202 @@ class PageNumbersViewModelTest {
     @Test
     fun `PageSelection has 5 values`() {
         assertEquals(5, PageSelection.entries.size)
+    }
+    // endregion
+
+    // region Which pages get numbered
+    // The selection rules decide which pages are touched, and none of them were
+    // covered: they only run once a document is loaded, and no test loaded one.
+
+    /**
+     * Loads a document and waits for it to actually arrive.
+     *
+     * Loading renders a preview on Dispatchers.IO, which the test scheduler does not
+     * control, so advanceUntilIdle returns before the document is in state. Waiting
+     * on the state itself is what makes this deterministic.
+     */
+    private fun TestScope.loadDocument(vm: PageNumbersViewModel) {
+        vm.setSourceFile(mockk(relaxed = true))
+        // Loading starts on the main dispatcher, which only runs when the scheduler
+        // is advanced, then renders a preview on Dispatchers.IO, which runs in real
+        // time and the scheduler knows nothing about. Neither waiting alone is
+        // enough, so this drives one and waits on the other.
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.sourceFile != null) return
+            Thread.sleep(10)
+        }
+        error("document never loaded")
+    }
+
+    /** Runs the tool and reports the page list handed to the repository. */
+    private fun TestScope.pagesNumberedWith(
+        configure: (PageNumbersViewModel) -> Unit
+    ): List<Int>? {
+        val captured = slot<List<Int>?>()
+        coEvery {
+            pdfToolsRepository.addPageNumbers(any(), any(), any(), captureNullable(captured), any())
+        } returns Result.success(Unit)
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        configure(vm)
+        vm.applyPageNumbers()
+        advanceUntilIdle()
+
+        return captured.captured
+    }
+
+    @Test
+    fun `numbering every page passes no page list, meaning all of them`() = runTest {
+        val pages = pagesNumberedWith { it.setPageSelection(PageSelection.ALL) }
+        assertNull(pages)
+    }
+
+    @Test
+    fun `odd only numbers the odd pages`() = runTest {
+        val pages = pagesNumberedWith { it.setPageSelection(PageSelection.ODD) }
+        assertEquals(listOf(1, 3, 5, 7, 9), pages)
+    }
+
+    @Test
+    fun `even only numbers the even pages`() = runTest {
+        val pages = pagesNumberedWith { it.setPageSelection(PageSelection.EVEN) }
+        assertEquals(listOf(2, 4, 6, 8, 10), pages)
+    }
+
+    @Test
+    fun `skipping the first few starts after them`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.SKIP_FIRST)
+            it.setSkipFirstN(3)
+        }
+        assertEquals(listOf(4, 5, 6, 7, 8, 9, 10), pages)
+    }
+
+    @Test
+    fun `a custom list of single pages is honoured`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("2, 5, 9")
+        }
+        assertEquals(listOf(2, 5, 9), pages)
+    }
+
+    @Test
+    fun `a custom range is expanded`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("3-6")
+        }
+        assertEquals(listOf(3, 4, 5, 6), pages)
+    }
+
+    @Test
+    fun `custom pages and ranges can be mixed`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("1, 4-6, 10")
+        }
+        assertEquals(listOf(1, 4, 5, 6, 10), pages)
+    }
+
+    @Test
+    fun `custom pages come back in order however they were typed`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("9, 2, 5")
+        }
+        assertEquals(listOf(2, 5, 9), pages)
+    }
+
+    @Test
+    fun `a page named twice is only numbered once`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("4, 4, 3-5")
+        }
+        assertEquals(listOf(3, 4, 5), pages)
+    }
+
+    @Test
+    fun `custom pages past the end of the document are dropped`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("5, 99, 200")
+        }
+        assertEquals(listOf(5), pages)
+    }
+
+    @Test
+    fun `page zero and negatives are dropped rather than numbered`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("0, -3, 2")
+        }
+        assertEquals(listOf(2), pages)
+    }
+
+    @Test
+    fun `text among custom pages is skipped, the rest still count`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("2, banana, 7")
+        }
+        assertEquals(listOf(2, 7), pages)
+    }
+
+    @Test
+    fun `a custom range that runs backwards numbers nothing`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("8-3")
+        }
+        assertEquals(emptyList<Int>(), pages)
+    }
+
+    @Test
+    fun `an empty custom list numbers nothing`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("")
+        }
+        assertEquals(emptyList<Int>(), pages)
+    }
+
+    @Test
+    fun `a range partly past the end keeps the part that fits`() = runTest {
+        val pages = pagesNumberedWith {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("8-20")
+        }
+        assertEquals(listOf(8, 9, 10), pages)
+    }
+    // endregion
+
+    // region The document reaches the tool
+    @Test
+    fun `loading a document records its page count`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        assertEquals(10, vm.state.value.sourceFile?.pageCount)
+    }
+
+    @Test
+    fun `the tool is run against the loaded document`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        val path = vm.state.value.sourceFile?.path
+
+        coEvery {
+            pdfToolsRepository.addPageNumbers(any(), any(), any(), any(), any())
+        } returns Result.success(Unit)
+
+        vm.applyPageNumbers()
+        advanceUntilIdle()
+
+        coVerify { pdfToolsRepository.addPageNumbers(path!!, any(), any(), any(), any()) }
     }
     // endregion
 }
