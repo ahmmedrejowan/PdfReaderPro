@@ -4,6 +4,13 @@ import android.app.Application
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.lock.LockViewModel
+import android.os.Environment
+import io.mockk.every
+import io.mockk.slot
+import io.mockk.coVerify
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import java.io.ByteArrayInputStream
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +22,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import kotlinx.coroutines.test.TestScope
 import org.junit.Before
 import org.junit.Test
 
@@ -27,6 +37,9 @@ class LockViewModelTest {
     private lateinit var context: Application
     private lateinit var viewModel: LockViewModel
 
+    @get:Rule
+    val folder = TemporaryFolder()
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -34,11 +47,26 @@ class LockViewModelTest {
         pdfToolsRepository = mockk(relaxed = true)
         context = mockk(relaxed = true)
 
+        // Loading a document is what the tool's guards are written against, and the
+        // copy behind it fails silently against a relaxed mock. Environment is
+        // mocked because the output directory is the public Documents folder, which
+        // off-device throws inside the coroutine and surfaces in the next test.
+        every { context.cacheDir } returns folder.newFolder("cache")
+        every { context.contentResolver.openInputStream(any()) } answers {
+            ByteArrayInputStream("%PDF-1.4 pretend document".toByteArray())
+        }
+        every { context.contentResolver.query(any(), any(), any(), any(), any()) } returns null
+        mockkStatic(Environment::class)
+        every {
+            Environment.getExternalStoragePublicDirectory(any())
+        } returns folder.newFolder("documents")
+
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
     }
 
     @After
     fun teardown() {
+        unmockkStatic(Environment::class)
         Dispatchers.resetMain()
     }
 
@@ -358,6 +386,174 @@ class LockViewModelTest {
             assertNull(state.result)
             cancelAndIgnoreRemainingEvents()
         }
+    }
+    // endregion
+
+    /**
+     * Loads a document and waits for it to arrive.
+     *
+     * Loading starts on the main dispatcher, which only runs when the scheduler is
+     * advanced, and then does file work off it. Neither wait alone is enough.
+     */
+    private fun TestScope.loadDocument(vm: LockViewModel) {
+        vm.setSourceFile(mockk(relaxed = true))
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.sourceFile != null) return
+            Thread.sleep(10)
+        }
+        error("document never loaded")
+    }
+
+    // region Refusing to lock
+    // Every one of these returns before the repository is touched. That matters:
+    // the tool can overwrite the original, so a half specified lock must not run.
+
+    private fun TestScope.lockedWith(configure: (LockViewModel) -> Unit): LockViewModel {
+        coEvery {
+            pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any())
+        } returns Result.success(Unit)
+        val vm = createViewModel()
+        loadDocument(vm)
+        configure(vm)
+        vm.lock()
+        advanceUntilIdle()
+        return vm
+    }
+
+    @Test
+    fun `without a document it asks for one and locks nothing`() = runTest {
+        val vm = createViewModel()
+        vm.setOwnerPassword("secret")
+        vm.lock()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `an owner password is required`() = runTest {
+        val vm = lockedWith { it.setOwnerPassword("") }
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `a short owner password is refused rather than silently accepted`() = runTest {
+        val vm = lockedWith { it.setOwnerPassword("abc") }
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `an owner password of exactly four characters is allowed`() = runTest {
+        lockedWith { it.setOwnerPassword("abcd") }
+
+        coVerify { pdfToolsRepository.lockPdf(any(), any(), any(), "abcd", any(), any()) }
+    }
+
+    @Test
+    fun `a short user password is refused`() = runTest {
+        val vm = lockedWith {
+            it.setOwnerPassword("secret")
+            it.setUserPassword("ab")
+        }
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `no user password at all is fine, it only restricts editing`() = runTest {
+        lockedWith {
+            it.setOwnerPassword("secret")
+            it.setUserPassword("")
+        }
+
+        coVerify { pdfToolsRepository.lockPdf(any(), any(), "", "secret", any(), any()) }
+    }
+
+    @Test
+    fun `without an output name it asks for one and locks nothing`() = runTest {
+        val vm = lockedWith {
+            it.setOwnerPassword("secret")
+            it.setOutputFileName("")
+        }
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any()) }
+    }
+    // endregion
+
+    // region What gets locked
+    @Test
+    fun `both passwords reach the repository as given`() = runTest {
+        lockedWith {
+            it.setOwnerPassword("owner-pass")
+            it.setUserPassword("user-pass")
+        }
+
+        coVerify {
+            pdfToolsRepository.lockPdf(any(), any(), "user-pass", "owner-pass", any(), any())
+        }
+    }
+
+    @Test
+    fun `the permissions chosen are the permissions applied`() = runTest {
+        val permissions = slot<PdfToolsRepository.PdfPermissions>()
+        coEvery {
+            pdfToolsRepository.lockPdf(any(), any(), any(), any(), capture(permissions), any())
+        } returns Result.success(Unit)
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOwnerPassword("secret")
+        vm.setAllowPrinting(true)
+        vm.setAllowCopying(false)
+        vm.setAllowModifying(false)
+        vm.setAllowAnnotations(true)
+        vm.lock()
+        advanceUntilIdle()
+
+        assertTrue(permissions.captured.allowPrinting)
+        assertFalse(permissions.captured.allowCopying)
+        assertFalse(permissions.captured.allowModifying)
+        assertTrue(permissions.captured.allowAnnotations)
+    }
+
+    @Test
+    fun `the document that was loaded is the one locked`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        val path = vm.state.value.sourceFile?.path
+        coEvery {
+            pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any())
+        } returns Result.success(Unit)
+
+        vm.setOwnerPassword("secret")
+        vm.lock()
+        advanceUntilIdle()
+
+        coVerify { pdfToolsRepository.lockPdf(path!!, any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `a failure is surfaced and processing stops`() = runTest {
+        coEvery {
+            pdfToolsRepository.lockPdf(any(), any(), any(), any(), any(), any())
+        } returns Result.failure(RuntimeException("no space"))
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOwnerPassword("secret")
+        vm.lock()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        assertFalse(vm.state.value.isProcessing)
     }
     // endregion
 }
