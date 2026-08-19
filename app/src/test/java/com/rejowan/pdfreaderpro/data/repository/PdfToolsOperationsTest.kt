@@ -14,7 +14,16 @@ import com.itextpdf.layout.element.AreaBreak
 import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.properties.AreaBreakType
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
+import io.mockk.unmockkConstructor
+import io.mockk.unmockkStatic
+import org.junit.After
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -49,6 +58,43 @@ class PdfToolsOperationsTest {
     fun setUp() {
         context = mockk(relaxed = true)
         repository = PdfToolsRepositoryImpl(context)
+
+        // Exporting pages as images goes through the platform renderer, which has
+        // no JVM implementation.
+        mockkStatic(ParcelFileDescriptor::class)
+        every { ParcelFileDescriptor.open(any(), any()) } returns mockk(relaxed = true)
+        mockkConstructor(PdfRenderer::class)
+        val page = mockk<PdfRenderer.Page>(relaxed = true)
+        every { page.width } returns 600
+        every { page.height } returns 800
+        every { anyConstructed<PdfRenderer>().pageCount } returns 3
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns page
+        mockkStatic(Bitmap::class)
+        every { Bitmap.createBitmap(any<Int>(), any<Int>(), any()) } answers {
+            mockk<Bitmap>(relaxed = true).also {
+                every { it.width } returns firstArg()
+                every { it.height } returns secondArg()
+                every { it.compress(any(), any(), any()) } answers {
+                    (thirdArg() as java.io.OutputStream).write("image-bytes".toByteArray())
+                    true
+                }
+            }
+        }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(ParcelFileDescriptor::class)
+        unmockkStatic(Bitmap::class)
+        unmockkConstructor(PdfRenderer::class)
+    }
+
+    /** A real one-pixel PNG, since the watermark is read by an image decoder. */
+    private fun pngFile(name: String = "stamp.png"): File {
+        val bytes = java.util.Base64.getDecoder().decode(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+        )
+        return folder.newFile(name).apply { writeBytes(bytes) }
     }
 
     /** A PDF whose pages read "Page 1 of alpha", and so on. */
@@ -556,6 +602,182 @@ class PdfToolsOperationsTest {
     fun `a page that does not exist is a failure, not a silent skip`() = runTest {
         val source = pdf("alpha", pages = 2)
         assertTrue(repository.extractPages(source.absolutePath, out("y.pdf"), listOf(9)).isFailure)
+    }
+    // endregion
+
+    // region Exporting pages as images
+    @Test
+    fun `every page becomes an image, named after the page it came from`() = runTest {
+        val source = pdf("alpha", pages = 3)
+        val outputDir = folder.newFolder("images")
+
+        val created = repository.pdfToImages(
+            source.absolutePath, outputDir.absolutePath, "png", null
+        ).getOrThrow()
+
+        assertEquals(3, created.size)
+        assertTrue(created[0].endsWith("alpha_page1.png"))
+        assertTrue(created[2].endsWith("alpha_page3.png"))
+        created.forEach { assertTrue(File(it).exists()) }
+    }
+
+    @Test
+    fun `only the pages asked for are exported`() = runTest {
+        val source = pdf("alpha", pages = 3)
+        val outputDir = folder.newFolder("images2")
+
+        val created = repository.pdfToImages(
+            source.absolutePath, outputDir.absolutePath, "png", listOf(2)
+        ).getOrThrow()
+
+        assertEquals(1, created.size)
+        assertTrue(created.single().endsWith("alpha_page2.png"))
+    }
+
+    @Test
+    fun `a page the document does not have is skipped rather than failing`() = runTest {
+        val source = pdf("alpha", pages = 3)
+        val outputDir = folder.newFolder("images3")
+
+        val created = repository.pdfToImages(
+            source.absolutePath, outputDir.absolutePath, "png", listOf(1, 99)
+        ).getOrThrow()
+
+        assertEquals(1, created.size)
+    }
+
+    @Test
+    fun `asking for jpg gives jpg files`() = runTest {
+        val source = pdf("alpha", pages = 1)
+        val outputDir = folder.newFolder("images4")
+
+        val created = repository.pdfToImages(
+            source.absolutePath, outputDir.absolutePath, "jpg", listOf(1)
+        ).getOrThrow()
+
+        assertTrue(created.single().endsWith(".jpg"))
+    }
+
+    @Test
+    fun `an unknown format is written as png rather than refused`() = runTest {
+        val source = pdf("alpha", pages = 1)
+        val outputDir = folder.newFolder("images5")
+
+        val created = repository.pdfToImages(
+            source.absolutePath, outputDir.absolutePath, "tiff", listOf(1)
+        ).getOrThrow()
+
+        assertTrue(created.single().endsWith(".png"))
+    }
+
+    @Test
+    fun `export progress runs to one`() = runTest {
+        val source = pdf("alpha", pages = 3)
+        val outputDir = folder.newFolder("images6")
+        val seen = mutableListOf<Float>()
+
+        repository.pdfToImages(
+            source.absolutePath, outputDir.absolutePath, "png", null
+        ) { seen += it }.getOrThrow()
+
+        assertEquals(1f, seen.last(), 0.001f)
+        assertEquals(seen.sorted(), seen)
+    }
+    // endregion
+
+    // region Image watermarks
+    @Test
+    fun `an image watermark keeps the document readable`() = runTest {
+        val source = pdf("alpha", pages = 3)
+        val output = out("image-watermarked.pdf")
+
+        repository.addImageWatermark(
+            source.absolutePath,
+            output,
+            PdfToolsRepository.ImageWatermarkConfig(imagePath = pngFile().absolutePath)
+        ).getOrThrow()
+
+        assertEquals(3, pageCountOf(output))
+        assertEquals(listOf("Page 1 of alpha", "Page 2 of alpha", "Page 3 of alpha"), textOf(output))
+    }
+
+    @Test
+    fun `an image watermark can be put on chosen pages only`() = runTest {
+        val source = pdf("alpha", pages = 3)
+        val output = out("image-watermarked-some.pdf")
+
+        repository.addImageWatermark(
+            source.absolutePath,
+            output,
+            PdfToolsRepository.ImageWatermarkConfig(imagePath = pngFile("some.png").absolutePath),
+            pages = listOf(2)
+        ).getOrThrow()
+
+        assertEquals(3, pageCountOf(output))
+    }
+
+    @Test
+    fun `every watermark position produces a document`() = runTest {
+        // Each position computes its own coordinates, and a sign error there would
+        // put the stamp off the page.
+        val source = pdf("alpha", pages = 1)
+        val image = pngFile("positions.png").absolutePath
+
+        PdfToolsRepository.WatermarkPosition.entries.forEach { position ->
+            val output = out("image-watermarked-$position.pdf")
+            repository.addImageWatermark(
+                source.absolutePath,
+                output,
+                PdfToolsRepository.ImageWatermarkConfig(imagePath = image, position = position)
+            ).getOrThrow()
+
+            assertEquals(1, pageCountOf(output))
+        }
+    }
+
+    @Test
+    fun `a watermark image that is not there fails rather than writing a broken file`() = runTest {
+        val source = pdf("alpha", pages = 1)
+
+        val result = repository.addImageWatermark(
+            source.absolutePath,
+            out("no-image.pdf"),
+            PdfToolsRepository.ImageWatermarkConfig(imagePath = "/nowhere/gone.png")
+        )
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `every text watermark position produces a document`() = runTest {
+        val source = pdf("alpha", pages = 1)
+
+        PdfToolsRepository.WatermarkPosition.entries.forEach { position ->
+            val output = out("text-watermarked-$position.pdf")
+            repository.addTextWatermark(
+                source.absolutePath,
+                output,
+                PdfToolsRepository.TextWatermarkConfig(text = "DRAFT", position = position)
+            ).getOrThrow()
+
+            assertEquals(1, pageCountOf(output))
+        }
+    }
+
+    @Test
+    fun `every page number position produces a document`() = runTest {
+        val source = pdf("alpha", pages = 1)
+
+        PdfToolsRepository.PageNumberPosition.entries.forEach { position ->
+            val output = out("numbered-$position.pdf")
+            repository.addPageNumbers(
+                source.absolutePath,
+                output,
+                PdfToolsRepository.PageNumberConfig(position = position)
+            ).getOrThrow()
+
+            assertTrue(textOf(output)[0].contains("1"))
+        }
     }
     // endregion
 }

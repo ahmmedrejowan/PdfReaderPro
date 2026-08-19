@@ -29,7 +29,10 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
@@ -41,6 +44,9 @@ class HomeViewModelTest {
     private lateinit var favoriteRepository: FavoriteRepository
     private lateinit var preferencesRepository: PreferencesRepository
     private lateinit var viewModel: HomeViewModel
+
+    @get:Rule
+    val folder = TemporaryFolder()
 
     @Before
     fun setup() {
@@ -582,6 +588,129 @@ class HomeViewModelTest {
 
         // Should complete without crashing
         assertFalse(viewModel.isLoading.value)
+    }
+    // endregion
+
+    // region Deleting the files the user picked
+    private fun documents(vararg names: String) = names.map { name ->
+        folder.newFile(name).apply { writeText("%PDF-1.4 $name") }
+    }
+
+    @Test
+    fun `deleting removes the files and everything the app remembers about them`() = runTest {
+        val (first, second) = documents("one.pdf", "two.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        vm.enterSelectionMode(first.absolutePath)
+        vm.toggleSelection(second.absolutePath)
+        var deleted = -1
+
+        vm.deleteSelectedFiles { succeeded, _ -> deleted = succeeded }
+        advanceUntilIdle()
+
+        assertEquals(2, deleted)
+        assertFalse(first.exists())
+        assertFalse(second.exists())
+        coVerify { favoriteRepository.removeFavorite(first.absolutePath) }
+        coVerify { recentRepository.removeRecent(second.absolutePath) }
+    }
+
+    @Test
+    fun `a file that will not delete is counted separately, not reported as gone`() = runTest {
+        val (real) = documents("real.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        vm.enterSelectionMode(real.absolutePath)
+        vm.toggleSelection(File(folder.root, "already-gone.pdf").absolutePath)
+        var succeeded = -1
+        var failed = -1
+
+        vm.deleteSelectedFiles { s, f -> succeeded = s; failed = f }
+        advanceUntilIdle()
+
+        assertEquals(1, succeeded)
+        assertEquals(1, failed)
+    }
+
+    @Test
+    fun `deleting leaves selection mode and refreshes the list`() = runTest {
+        val (only) = documents("only.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        vm.enterSelectionMode(only.absolutePath)
+
+        vm.deleteSelectedFiles { _, _ -> }
+        advanceUntilIdle()
+
+        assertTrue(vm.selectedPaths.value.isEmpty())
+        assertFalse(vm.isSelectionMode.value)
+        coVerify { pdfFileRepository.refreshPdfs() }
+    }
+
+    @Test
+    fun `the entries the app keeps are only cleared for files that were deleted`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+        val missing = File(folder.root, "never-existed.pdf").absolutePath
+        vm.enterSelectionMode(missing)
+
+        vm.deleteSelectedFiles { _, _ -> }
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { favoriteRepository.removeFavorite(missing) }
+        coVerify(exactly = 0) { recentRepository.removeRecent(missing) }
+    }
+    // endregion
+
+    // region Renaming
+    @Test
+    fun `renaming moves the file and follows it in favourites and recents`() = runTest {
+        val (document) = documents("before.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = false
+
+        vm.renameFile(document.absolutePath, "after") { succeeded = it }
+        advanceUntilIdle()
+
+        assertTrue(succeeded)
+        assertFalse(document.exists())
+        assertTrue(File(folder.root, "after.pdf").exists())
+        coVerify {
+            favoriteRepository.updatePath(document.absolutePath, any(), "after.pdf")
+        }
+        coVerify {
+            recentRepository.updatePath(document.absolutePath, any(), "after.pdf")
+        }
+    }
+
+    @Test
+    fun `renaming onto a name already taken fails and changes nothing`() = runTest {
+        val (document, taken) = documents("before.pdf", "taken.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = true
+
+        vm.renameFile(document.absolutePath, "taken") { succeeded = it }
+        advanceUntilIdle()
+
+        assertFalse(succeeded)
+        assertTrue(document.exists())
+        assertEquals("%PDF-1.4 taken.pdf", taken.readText())
+        coVerify(exactly = 0) { favoriteRepository.updatePath(any(), any(), any()) }
+    }
+
+    @Test
+    fun `renaming a file that is not there fails rather than creating one`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = true
+
+        vm.renameFile(File(folder.root, "gone.pdf").absolutePath, "new") { succeeded = it }
+        advanceUntilIdle()
+
+        assertFalse(succeeded)
+        assertFalse(File(folder.root, "new.pdf").exists())
     }
     // endregion
 }
