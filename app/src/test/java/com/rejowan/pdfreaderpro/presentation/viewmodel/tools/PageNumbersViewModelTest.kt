@@ -8,7 +8,12 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.NumberFor
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.NumberPosition
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageNumbersViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers.PageSelection
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
 import android.os.Environment
+import io.mockk.mockkConstructor
+import io.mockk.unmockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.coEvery
@@ -67,6 +72,22 @@ class PageNumbersViewModelTest {
         // The tool writes into the public Documents directory, which does not exist
         // off-device. Unmocked it throws inside the coroutine, so the repository is
         // never reached and the failure surfaces in whichever test runs next.
+
+        // The tool shows the first page next to its settings, drawn by the
+        // platform renderer, which has no JVM implementation.
+        mockkStatic(ParcelFileDescriptor::class)
+        every { ParcelFileDescriptor.open(any(), any()) } returns mockk(relaxed = true)
+        mockkConstructor(PdfRenderer::class)
+        val previewPage = mockk<PdfRenderer.Page>(relaxed = true)
+        every { previewPage.width } returns 600
+        every { previewPage.height } returns 800
+        every { anyConstructed<PdfRenderer>().pageCount } returns 5
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns previewPage
+        mockkStatic(Bitmap::class)
+        every {
+            Bitmap.createBitmap(any<Int>(), any<Int>(), any())
+        } returns mockk(relaxed = true)
+
         mockkStatic(Environment::class)
         every {
             Environment.getExternalStoragePublicDirectory(any())
@@ -78,6 +99,9 @@ class PageNumbersViewModelTest {
     @After
     fun teardown() {
         unmockkStatic(Environment::class)
+        unmockkStatic(ParcelFileDescriptor::class)
+        unmockkStatic(Bitmap::class)
+        unmockkConstructor(PdfRenderer::class)
         Dispatchers.resetMain()
     }
 
@@ -1110,6 +1134,65 @@ class PageNumbersViewModelTest {
         advanceUntilIdle()
 
         coVerify { pdfToolsRepository.addPageNumbers(path!!, any(), any(), any(), any()) }
+    }
+    // endregion
+
+    // region Where the finished document goes
+    @Test
+    fun `an existing file is not written over, a numbered one is used instead`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOutputFileName("numbered")
+        val documents = Environment.getExternalStoragePublicDirectory(null)
+        java.io.File(documents, "PdfReaderPro").mkdirs()
+        java.io.File(documents, "PdfReaderPro/numbered.pdf").writeText("someone else's work")
+        coEvery { pdfToolsRepository.addPageNumbers(any(), any(), any(), any(), any()) } returns Result.success(Unit)
+
+        vm.applyPageNumbers()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.result!!.outputPath.endsWith("numbered_1.pdf"))
+    }
+
+    @Test
+    fun `overwriting writes through a temporary file, then replaces the original`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOverwriteOriginal(true)
+        val sourcePath = vm.state.value.sourceFile!!.path
+        val target = slot<String>()
+        coEvery {
+            pdfToolsRepository.addPageNumbers(any(), capture(target), any(), any(), any())
+        } answers {
+            java.io.File(target.captured).writeText("finished bytes")
+            Result.success(Unit)
+        }
+
+        vm.applyPageNumbers()
+        advanceUntilIdle()
+
+        assertNotEquals(sourcePath, target.captured)
+        assertFalse(java.io.File(target.captured).exists())
+        assertEquals("finished bytes", java.io.File(sourcePath).readText())
+    }
+
+    @Test
+    fun `progress from the repository reaches the screen`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        val seen = mutableListOf<Float>()
+        coEvery { pdfToolsRepository.addPageNumbers(any(), any(), any(), any(), any()) } answers {
+            val onProgress = arg<(Float) -> Unit>(4)
+            onProgress(0.4f)
+            seen += vm.state.value.progress
+            Result.success(Unit)
+        }
+
+        vm.applyPageNumbers()
+        advanceUntilIdle()
+
+        assertEquals(listOf(0.4f), seen)
+        assertEquals(1f, vm.state.value.progress, 0.001f)
     }
     // endregion
 }

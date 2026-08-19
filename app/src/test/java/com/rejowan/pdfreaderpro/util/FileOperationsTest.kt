@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
+import androidx.core.content.FileProvider
+import io.mockk.verify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -563,6 +565,93 @@ class FileOperationsTest {
 
         assertFalse(old.exists())
         assertTrue(new.exists())
+    }
+    // endregion
+
+    // region Sharing
+    // The share sheet is handed a content uri from the app's provider, never a
+    // file path, since another app cannot read the app's own storage.
+
+    private fun expectProviderUris() {
+        mockkStatic(FileProvider::class)
+        every { FileProvider.getUriForFile(any(), any(), any()) } returns mockk(relaxed = true)
+        every { context.packageName } returns "com.rejowan.pdfreaderpro"
+    }
+
+    @Test
+    fun `sharing a document opens the share sheet`() {
+        expectProviderUris()
+        val document = File(tempDir, "share-me.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.sharePdf(context, document.absolutePath)
+
+        verify { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `sharing a document that is not there opens nothing`() {
+        expectProviderUris()
+
+        FileOperations.sharePdf(context, File(tempDir, "gone.pdf").absolutePath)
+
+        verify(exactly = 0) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `sharing several documents opens the share sheet once`() {
+        expectProviderUris()
+        val first = File(tempDir, "one.pdf").apply { writeText("%PDF-1.4") }
+        val second = File(tempDir, "two.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.shareMultiplePdfs(context, listOf(first.absolutePath, second.absolutePath))
+
+        verify(exactly = 1) { context.startActivity(any()) }
+        verify(exactly = 2) { FileProvider.getUriForFile(any(), any(), any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `documents that are not there are left out of a multiple share`() {
+        expectProviderUris()
+        val real = File(tempDir, "real.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.shareMultiplePdfs(
+            context,
+            listOf(real.absolutePath, File(tempDir, "gone.pdf").absolutePath)
+        )
+
+        verify(exactly = 1) { FileProvider.getUriForFile(any(), any(), any()) }
+        verify(exactly = 1) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `sharing nothing that exists opens nothing`() {
+        expectProviderUris()
+
+        FileOperations.shareMultiplePdfs(context, listOf(File(tempDir, "gone.pdf").absolutePath))
+
+        verify(exactly = 0) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `a provider that refuses a file does not take the app down`() {
+        // Sharing something outside the paths the provider is configured for
+        // throws, and the user should get nothing rather than a crash.
+        mockkStatic(FileProvider::class)
+        every { context.packageName } returns "com.rejowan.pdfreaderpro"
+        every {
+            FileProvider.getUriForFile(any(), any(), any())
+        } throws IllegalArgumentException("not a configured path")
+        val document = File(tempDir, "outside.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.sharePdf(context, document.absolutePath)
+
+        verify(exactly = 0) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
     }
     // endregion
 }

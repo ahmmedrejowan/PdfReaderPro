@@ -6,10 +6,15 @@ import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressionLevel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressResult
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressViewModel
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
 import android.os.Environment
 import io.mockk.every
 import io.mockk.coVerify
 import io.mockk.slot
+import io.mockk.mockkConstructor
+import io.mockk.unmockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import java.io.ByteArrayInputStream
@@ -64,6 +69,22 @@ class CompressViewModelTest {
             pdfToolsRepository.analyzeCompressionPotential(any())
         } returns Result.failure(RuntimeException("no analysis in tests"))
 
+
+        // The tool shows the first page next to its settings, drawn by the
+        // platform renderer, which has no JVM implementation.
+        mockkStatic(ParcelFileDescriptor::class)
+        every { ParcelFileDescriptor.open(any(), any()) } returns mockk(relaxed = true)
+        mockkConstructor(PdfRenderer::class)
+        val previewPage = mockk<PdfRenderer.Page>(relaxed = true)
+        every { previewPage.width } returns 600
+        every { previewPage.height } returns 800
+        every { anyConstructed<PdfRenderer>().pageCount } returns 5
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns previewPage
+        mockkStatic(Bitmap::class)
+        every {
+            Bitmap.createBitmap(any<Int>(), any<Int>(), any())
+        } returns mockk(relaxed = true)
+
         mockkStatic(Environment::class)
         every {
             Environment.getExternalStoragePublicDirectory(any())
@@ -75,6 +96,9 @@ class CompressViewModelTest {
     @After
     fun teardown() {
         unmockkStatic(Environment::class)
+        unmockkStatic(ParcelFileDescriptor::class)
+        unmockkStatic(Bitmap::class)
+        unmockkConstructor(PdfRenderer::class)
         Dispatchers.resetMain()
     }
 
@@ -530,6 +554,65 @@ class CompressViewModelTest {
         val vm = createViewModel()
         loadDocument(vm)
         assertEquals(10, vm.state.value.sourceFile?.pageCount)
+    }
+    // endregion
+
+    // region Where the finished document goes
+    @Test
+    fun `an existing file is not written over, a numbered one is used instead`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOutputFileName("compressed")
+        val documents = Environment.getExternalStoragePublicDirectory(null)
+        java.io.File(documents, "PdfReaderPro").mkdirs()
+        java.io.File(documents, "PdfReaderPro/compressed.pdf").writeText("someone else's work")
+        coEvery { pdfToolsRepository.compressPdf(any(), any(), any(), any()) } returns Result.success(1024L)
+
+        vm.compress()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.result!!.outputPath.endsWith("compressed_1.pdf"))
+    }
+
+    @Test
+    fun `overwriting writes through a temporary file, then replaces the original`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOverwriteOriginal(true)
+        val sourcePath = vm.state.value.sourceFile!!.path
+        val target = slot<String>()
+        coEvery {
+            pdfToolsRepository.compressPdf(any(), capture(target), any(), any())
+        } answers {
+            java.io.File(target.captured).writeText("finished bytes")
+            Result.success(1024L)
+        }
+
+        vm.compress()
+        advanceUntilIdle()
+
+        assertNotEquals(sourcePath, target.captured)
+        assertFalse(java.io.File(target.captured).exists())
+        assertEquals("finished bytes", java.io.File(sourcePath).readText())
+    }
+
+    @Test
+    fun `progress from the repository reaches the screen`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        val seen = mutableListOf<Float>()
+        coEvery { pdfToolsRepository.compressPdf(any(), any(), any(), any()) } answers {
+            val onProgress = arg<(Float) -> Unit>(3)
+            onProgress(0.4f)
+            seen += vm.state.value.progress
+            Result.success(1024L)
+        }
+
+        vm.compress()
+        advanceUntilIdle()
+
+        assertEquals(listOf(0.4f), seen)
+        assertEquals(1f, vm.state.value.progress, 0.001f)
     }
     // endregion
 }
