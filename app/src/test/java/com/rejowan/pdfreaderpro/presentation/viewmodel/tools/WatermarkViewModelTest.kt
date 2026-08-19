@@ -8,7 +8,14 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.PageSelecti
 import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.WatermarkPosition
 import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.WatermarkType
 import com.rejowan.pdfreaderpro.presentation.screens.tools.watermark.WatermarkViewModel
+import android.os.Environment
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.slot
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import java.io.ByteArrayInputStream
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,6 +27,9 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import kotlinx.coroutines.test.TestScope
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,6 +41,9 @@ class WatermarkViewModelTest {
     private lateinit var context: Application
     private lateinit var viewModel: WatermarkViewModel
 
+    @get:Rule
+    val folder = TemporaryFolder()
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -38,11 +51,27 @@ class WatermarkViewModelTest {
         pdfToolsRepository = mockk(relaxed = true)
         context = mockk(relaxed = true)
 
+        // Loading a document is what supplies the page count every page selection
+        // rule is written against, and the copy behind it fails silently against a
+        // relaxed mock. Environment is mocked because the output directory is the
+        // public Documents folder, which off-device throws inside the coroutine and
+        // surfaces in whichever test runs next.
+        every { context.cacheDir } returns folder.newFolder("cache")
+        every { context.contentResolver.openInputStream(any()) } answers {
+            ByteArrayInputStream("%PDF-1.4 pretend document".toByteArray())
+        }
+        every { context.contentResolver.query(any(), any(), any(), any(), any()) } returns null
+        mockkStatic(Environment::class)
+        every {
+            Environment.getExternalStoragePublicDirectory(any())
+        } returns folder.newFolder("documents")
+
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
     }
 
     @After
     fun teardown() {
+        unmockkStatic(Environment::class)
         Dispatchers.resetMain()
     }
 
@@ -819,6 +848,213 @@ class WatermarkViewModelTest {
     @Test
     fun `PageSelection has 4 values`() {
         assertEquals(4, PageSelection.entries.size)
+    }
+    // endregion
+
+    // region Which pages get the watermark
+    // None of this was covered: the rules need a loaded document and no test had
+    // one, so every selection behaved as though the document were empty.
+
+    private fun TestScope.loadDocument(vm: WatermarkViewModel) {
+        vm.setSourceFile(mockk(relaxed = true))
+        // Loading starts on the main dispatcher, which needs the scheduler advanced,
+        // then renders a preview on Dispatchers.IO, which the scheduler does not
+        // control. Both waits are needed.
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.sourceFile != null) return
+            Thread.sleep(10)
+        }
+        error("document never loaded")
+    }
+
+    /** Watermarks a document and reports the page list handed to the repository. */
+    private fun TestScope.watermarkedPages(
+        configure: (WatermarkViewModel) -> Unit
+    ): List<Int>? {
+        val captured = slot<List<Int>?>()
+        coEvery {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), captureNullable(captured), any())
+        } returns Result.success(Unit)
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("CONFIDENTIAL")
+        configure(vm)
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        return captured.captured
+    }
+
+    @Test
+    fun `watermarking everything passes no page list, meaning all of them`() = runTest {
+        assertNull(watermarkedPages { it.setPageSelection(PageSelection.ALL) })
+    }
+
+    @Test
+    fun `odd only watermarks the odd pages`() = runTest {
+        assertEquals(listOf(1, 3, 5, 7, 9), watermarkedPages { it.setPageSelection(PageSelection.ODD) })
+    }
+
+    @Test
+    fun `even only watermarks the even pages`() = runTest {
+        assertEquals(listOf(2, 4, 6, 8, 10), watermarkedPages { it.setPageSelection(PageSelection.EVEN) })
+    }
+
+    @Test
+    fun `a custom list is honoured`() = runTest {
+        val pages = watermarkedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("2, 4, 8")
+        }
+        assertEquals(listOf(2, 4, 8), pages)
+    }
+
+    @Test
+    fun `a custom range is expanded`() = runTest {
+        val pages = watermarkedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("4-7")
+        }
+        assertEquals(listOf(4, 5, 6, 7), pages)
+    }
+
+    @Test
+    fun `custom pages past the end of the document are dropped`() = runTest {
+        val pages = watermarkedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("3, 88")
+        }
+        assertEquals(listOf(3), pages)
+    }
+
+    @Test
+    fun `custom pages are ordered and deduplicated`() = runTest {
+        val pages = watermarkedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("7, 2, 7, 2-3")
+        }
+        assertEquals(listOf(2, 3, 7), pages)
+    }
+
+    @Test
+    fun `text among custom pages is skipped, the rest still count`() = runTest {
+        val pages = watermarkedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("5, nonsense, 6")
+        }
+        assertEquals(listOf(5, 6), pages)
+    }
+
+    @Test
+    fun `page zero is dropped, pages are counted from one`() = runTest {
+        val pages = watermarkedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("0, 1")
+        }
+        assertEquals(listOf(1), pages)
+    }
+    // endregion
+
+    // region Refusing to run
+    // Each of these returns before touching the repository, which is what stops a
+    // half specified watermark being written over someone's document.
+
+    @Test
+    fun `without a document it asks for one and does nothing`() = runTest {
+        val vm = createViewModel()
+        vm.setWatermarkText("DRAFT")
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun `without watermark text it asks for some and does nothing`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("   ")
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun `without an output name it asks for one and does nothing`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("DRAFT")
+        vm.setOutputFileName("")
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun `an image watermark without an image does nothing`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkType(WatermarkType.IMAGE)
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) {
+            pdfToolsRepository.addImageWatermark(any(), any(), any(), any(), any())
+        }
+    }
+    // endregion
+
+    // region Reporting what happened
+    @Test
+    fun `a failure from the repository is surfaced rather than swallowed`() = runTest {
+        coEvery {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), any(), any())
+        } returns Result.failure(RuntimeException("disk full"))
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("DRAFT")
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        assertFalse(vm.state.value.isProcessing)
+    }
+
+    @Test
+    fun `the document is no longer marked as processing once it finishes`() = runTest {
+        coEvery {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), any(), any())
+        } returns Result.success(Unit)
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("DRAFT")
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.isProcessing)
+    }
+
+    @Test
+    fun `loading a document records its page count`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        assertEquals(10, vm.state.value.sourceFile?.pageCount)
     }
     // endregion
 }
