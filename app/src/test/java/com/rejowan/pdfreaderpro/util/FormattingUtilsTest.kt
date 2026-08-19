@@ -1,12 +1,62 @@
 package com.rejowan.pdfreaderpro.util
 
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
+import io.mockk.unmockkConstructor
+import io.mockk.unmockkStatic
+import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class FormattingUtilsTest {
+
+    @get:Rule
+    val folder = TemporaryFolder()
+
+    @Before
+    fun standUpRenderer() {
+        // Reading a page is a platform call with no JVM implementation, so it is
+        // stood up rather than left as the untested half of this file.
+        mockkStatic(ParcelFileDescriptor::class)
+        every { ParcelFileDescriptor.open(any(), any()) } returns mockk(relaxed = true)
+        mockkConstructor(PdfRenderer::class)
+        val page = mockk<PdfRenderer.Page>(relaxed = true)
+        every { page.width } returns 800
+        every { page.height } returns 1200
+        every { anyConstructed<PdfRenderer>().pageCount } returns 4
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns page
+        mockkStatic(Bitmap::class)
+        every { Bitmap.createBitmap(any<Int>(), any<Int>(), any()) } answers {
+            mockk<Bitmap>(relaxed = true).also {
+                every { it.width } returns firstArg()
+                every { it.height } returns secondArg()
+            }
+        }
+    }
+
+    @After
+    fun tearDownRenderer() {
+        unmockkStatic(ParcelFileDescriptor::class)
+        unmockkStatic(Bitmap::class)
+        unmockkConstructor(PdfRenderer::class)
+    }
+
+    private fun realPdf(name: String = "document.pdf") =
+        folder.newFile(name).apply { writeText("%PDF-1.4 pretend document") }
+
 
     // region formattedFileSize Tests
     @Test
@@ -341,6 +391,51 @@ class FormattingUtilsTest {
     fun `extractParentFolders handles path without leading slash`() {
         val result = FormattingUtils.extractParentFolders("storage/emulated/0/Documents/file.pdf")
         assertEquals("Documents", result)
+    }
+    // endregion
+
+    // region Reading a document
+    @Test
+    fun `the page count comes from the document`() {
+        assertEquals(4, FormattingUtils.getPdfPageCount(realPdf().absolutePath))
+    }
+
+    @Test
+    fun `a document that is not there counts as no pages`() {
+        assertEquals(0, FormattingUtils.getPdfPageCount(File(folder.root, "gone.pdf").absolutePath))
+    }
+
+    @Test
+    fun `a thumbnail is made from the first page`() = runTest {
+        assertNotNull(FormattingUtils.generateThumbnail(realPdf().absolutePath))
+    }
+
+    @Test
+    fun `a document that is not there has no thumbnail`() = runTest {
+        assertNull(FormattingUtils.generateThumbnail(File(folder.root, "gone.pdf").absolutePath))
+    }
+
+    @Test
+    fun `the thumbnail is a quarter of the page, to keep lists cheap`() = runTest {
+        val thumbnail = FormattingUtils.generateThumbnail(realPdf().absolutePath)!!
+
+        assertEquals(200, thumbnail.width)
+        assertEquals(300, thumbnail.height)
+    }
+
+    @Test
+    fun `a document that cannot be read gives no thumbnail rather than throwing`() = runTest {
+        every { anyConstructed<PdfRenderer>().openPage(any()) } throws
+            IllegalStateException("damaged document")
+
+        assertNull(FormattingUtils.generateThumbnail(realPdf("damaged.pdf").absolutePath))
+    }
+
+    @Test
+    fun `running out of memory gives no thumbnail rather than taking the app down`() = runTest {
+        every { Bitmap.createBitmap(any<Int>(), any<Int>(), any()) } throws OutOfMemoryError()
+
+        assertNull(FormattingUtils.generateThumbnail(realPdf("huge.pdf").absolutePath))
     }
     // endregion
 }
