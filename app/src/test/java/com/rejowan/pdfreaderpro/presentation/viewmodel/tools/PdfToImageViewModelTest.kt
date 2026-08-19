@@ -6,6 +6,13 @@ import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage.ImageFormat
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage.PageSelection
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage.PdfToImageViewModel
+import android.os.Environment
+import io.mockk.every
+import io.mockk.coVerify
+import io.mockk.slot
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import java.io.ByteArrayInputStream
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +24,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import kotlinx.coroutines.test.TestScope
 import org.junit.Before
 import org.junit.Test
 
@@ -29,6 +39,9 @@ class PdfToImageViewModelTest {
     private lateinit var context: Application
     private lateinit var viewModel: PdfToImageViewModel
 
+    @get:Rule
+    val folder = TemporaryFolder()
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -36,11 +49,26 @@ class PdfToImageViewModelTest {
         pdfToolsRepository = mockk(relaxed = true)
         context = mockk(relaxed = true)
 
+        // Exporting is written against a loaded document, and the copy behind
+        // loading fails silently on a relaxed mock. Environment is mocked because
+        // images are written into the public Documents folder, which off-device
+        // throws inside the coroutine and surfaces in whichever test runs next.
+        every { context.cacheDir } returns folder.newFolder("cache")
+        every { context.contentResolver.openInputStream(any()) } answers {
+            ByteArrayInputStream("%PDF-1.4 pretend document".toByteArray())
+        }
+        every { context.contentResolver.query(any(), any(), any(), any(), any()) } returns null
+        mockkStatic(Environment::class)
+        every {
+            Environment.getExternalStoragePublicDirectory(any())
+        } returns folder.newFolder("documents")
+
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
     }
 
     @After
     fun teardown() {
+        unmockkStatic(Environment::class)
         Dispatchers.resetMain()
     }
 
@@ -341,6 +369,128 @@ class PdfToImageViewModelTest {
     @Test
     fun `PageSelection has 2 values`() {
         assertEquals(2, PageSelection.entries.size)
+    }
+    // endregion
+
+    private fun TestScope.loadDocument(vm: PdfToImageViewModel) {
+        vm.setSourceFile(mockk(relaxed = true))
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.sourceFile != null) return
+            Thread.sleep(10)
+        }
+        error("document never loaded")
+    }
+
+    /** Exports and reports the page list handed to the repository. */
+    private fun TestScope.exportedPages(configure: (PdfToImageViewModel) -> Unit): List<Int>? {
+        val captured = slot<List<Int>?>()
+        coEvery {
+            pdfToolsRepository.pdfToImages(any(), any(), any(), captureNullable(captured), any())
+        } returns Result.success(emptyList())
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        configure(vm)
+        vm.exportImages()
+        advanceUntilIdle()
+        return captured.captured
+    }
+
+    // region Which pages get exported
+    @Test
+    fun `exporting everything passes no page list, meaning all of them`() = runTest {
+        assertNull(exportedPages { it.setPageSelection(PageSelection.ALL) })
+    }
+
+    @Test
+    fun `a custom list is honoured`() = runTest {
+        val pages = exportedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("2, 6, 9")
+        }
+        assertEquals(listOf(2, 6, 9), pages)
+    }
+
+    @Test
+    fun `a custom range is expanded`() = runTest {
+        val pages = exportedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("3-5")
+        }
+        assertEquals(listOf(3, 4, 5), pages)
+    }
+
+    @Test
+    fun `custom pages past the end of the document are dropped`() = runTest {
+        val pages = exportedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("4, 400")
+        }
+        assertEquals(listOf(4), pages)
+    }
+
+    @Test
+    fun `custom pages are ordered and deduplicated`() = runTest {
+        val pages = exportedPages {
+            it.setPageSelection(PageSelection.CUSTOM)
+            it.setCustomPages("6, 1, 6")
+        }
+        assertEquals(listOf(1, 6), pages)
+    }
+    // endregion
+
+    // region Refusing to export
+    @Test
+    fun `without a document it asks for one and exports nothing`() = runTest {
+        val vm = createViewModel()
+        vm.exportImages()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) {
+            pdfToolsRepository.pdfToImages(any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun `a failure is surfaced and processing stops`() = runTest {
+        coEvery {
+            pdfToolsRepository.pdfToImages(any(), any(), any(), any(), any())
+        } returns Result.failure(RuntimeException("out of space"))
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.exportImages()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        assertFalse(vm.state.value.isProcessing)
+    }
+
+    @Test
+    fun `the chosen image format is the one exported`() = runTest {
+        // The repository takes the file extension, not the enum, so this also
+        // pins that the mapping between them stays right.
+        val format = slot<String>()
+        coEvery {
+            pdfToolsRepository.pdfToImages(any(), any(), capture(format), any(), any())
+        } returns Result.success(emptyList())
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setImageFormat(ImageFormat.PNG)
+        vm.exportImages()
+        advanceUntilIdle()
+
+        assertEquals(ImageFormat.PNG.extension, format.captured)
+    }
+
+    @Test
+    fun `loading a document records its page count`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        assertEquals(10, vm.state.value.sourceFile?.pageCount)
     }
     // endregion
 }
