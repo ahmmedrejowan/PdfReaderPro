@@ -111,6 +111,9 @@ class ReaderViewModelTest {
         coEvery { filePreferenceDao.get(any()) } returns null
         coEvery { favoriteRepository.isFavorite(any()) } returns false
         coEvery { recentRepository.getLastPage(any()) } returns null
+        // A relaxed mock would hand back an empty string, which reads as a stored
+        // password and silently changes which branch the reader takes.
+        coEvery { passwordStorage.getPassword(any()) } returns null
     }
 
     @After
@@ -1701,4 +1704,474 @@ class ReaderViewModelTest {
             assertEquals("test-highlighted.pdf", vm.getHighlightedFileName())
         }
     // endregion
+
+    // ===========================================
+    // Tapping the page
+    // ===========================================
+
+    /** A reader with tap-to-turn on and a document of ten pages open. */
+    private fun TestScope.readerOnPage(page: Int, horizontal: Boolean = false): ReaderViewModel {
+        val vm = createViewModel()
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.SetTapToTurnPage(true))
+        if (horizontal) vm.onAction(ReaderAction.SetScrollMode(ScrollMode.HORIZONTAL))
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.GoToPage(page))
+        advanceUntilIdle()
+        return vm
+    }
+
+    @Test
+    fun `a tap near the top goes back a page when scrolling vertically`() = runTest {
+        val vm = readerOnPage(5)
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 500f, y = 50f, width = 1000f, height = 1000f))
+        advanceUntilIdle()
+
+        verify { viewer.goToPreviousPage() }
+    }
+
+    @Test
+    fun `a tap near the bottom goes on a page`() = runTest {
+        val vm = readerOnPage(5)
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 500f, y = 950f, width = 1000f, height = 1000f))
+        advanceUntilIdle()
+
+        verify { viewer.goToNextPage() }
+    }
+
+    @Test
+    fun `a tap in the middle leaves the page and works the toolbar instead`() = runTest {
+        val vm = readerOnPage(5)
+        val toolbarBefore = vm.state.value.isToolbarVisible
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 500f, y = 500f, width = 1000f, height = 1000f))
+        advanceUntilIdle()
+
+        verify(exactly = 0) { viewer.goToNextPage() }
+        verify(exactly = 0) { viewer.goToPreviousPage() }
+        assertNotEquals(toolbarBefore, vm.state.value.isToolbarVisible)
+    }
+
+    @Test
+    fun `the turn zones follow the scroll direction`() = runTest {
+        // Scrolling sideways, the edges that turn pages are the left and right ones,
+        // so a tap near the top must not turn anything.
+        val vm = readerOnPage(5, horizontal = true)
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 500f, y = 50f, width = 1000f, height = 1000f))
+        advanceUntilIdle()
+        verify(exactly = 0) { viewer.goToPreviousPage() }
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 50f, y = 500f, width = 1000f, height = 1000f))
+        advanceUntilIdle()
+        verify { viewer.goToPreviousPage() }
+    }
+
+    @Test
+    fun `with tap to turn off, a tap at the edge only works the toolbar`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.SetTapToTurnPage(false))
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        vm.onAction(ReaderAction.GoToPage(5))
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 500f, y = 950f, width = 1000f, height = 1000f))
+        advanceUntilIdle()
+
+        verify(exactly = 0) { viewer.goToNextPage() }
+    }
+
+    @Test
+    fun `a tap with no dimensions cannot be placed, so it works the toolbar`() = runTest {
+        // Guards a divide by zero as much as anything.
+        val vm = readerOnPage(5)
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 0f, y = 0f, width = 0f, height = 0f))
+        advanceUntilIdle()
+
+        verify(exactly = 0) { viewer.goToPreviousPage() }
+    }
+
+    @Test
+    fun `while auto scrolling, a tap does not turn the page`() = runTest {
+        val vm = readerOnPage(5)
+        vm.onAction(ReaderAction.StartAutoScroll(1f))
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.TapToTurnOrToggle(x = 500f, y = 950f, width = 1000f, height = 1000f))
+        advanceUntilIdle()
+
+        verify(exactly = 0) { viewer.goToNextPage() }
+    }
+
+    // ===========================================
+    // What the viewer reports back
+    // ===========================================
+
+    @Test
+    fun `the page the viewer moved to becomes the current page`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        advanceUntilIdle()
+
+        // The viewer counts from one, the state from zero.
+        listener.onPageChange(4)
+        advanceUntilIdle()
+
+        assertEquals(3, vm.state.value.currentPage)
+    }
+
+    @Test
+    fun `a document that will not open leaves an error rather than a spinner`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onPageLoadFailed(Exception("this file is damaged"))
+        advanceUntilIdle()
+
+        assertEquals("this file is damaged", vm.state.value.error)
+        assertFalse(vm.state.value.isLoading)
+    }
+
+    @Test
+    fun `the outline is flattened with each level marked, so it can be indented`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        val child = com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem(
+            id = "1.1", title = "Background", page = 3, children = emptyList(), dest = null
+        )
+        val parent = com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem(
+            id = "1", title = "Introduction", page = 1, children = listOf(child), dest = null
+        )
+
+        listener.onLoadOutline(listOf(parent))
+        advanceUntilIdle()
+
+        val outline = vm.state.value.outline
+        assertEquals(listOf("Introduction", "Background"), outline.map { it.title })
+        assertEquals(listOf(0, 1), outline.map { it.level })
+    }
+
+    @Test
+    fun `going to an outline entry turns to its page`() = runTest {
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.navigateToOutlineItem(
+            com.rejowan.pdfreaderpro.presentation.screens.reader.components.OutlineItem(
+                title = "Chapter 2", page = 11, level = 0, id = "2", dest = null
+            )
+        )
+        advanceUntilIdle()
+
+        assertEquals(11, vm.state.value.currentPage)
+        verify { viewer.goToPage(12) }
+    }
+
+    @Test
+    fun `printing hands the document title to the viewer`() = runTest {
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.printDocument()
+        advanceUntilIdle()
+
+        verify { viewer.printFile("test") }
+    }
+
+    @Test
+    fun `print progress is shown while the pages are being prepared`() = runTest {
+        // Preparing a long document takes tens of seconds, and without this the
+        // reader looked frozen.
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onPrintProcessStart()
+        advanceUntilIdle()
+        assertEquals(0f, vm.state.value.printProgress)
+
+        listener.onPrintProcessProgress(0.5f)
+        advanceUntilIdle()
+        assertEquals(0.5f, vm.state.value.printProgress)
+
+        listener.onPrintProcessEnd()
+        advanceUntilIdle()
+        assertNull(vm.state.value.printProgress)
+    }
+
+    @Test
+    fun `a cancelled print stops showing progress`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPrintProcessProgress(0.5f)
+        advanceUntilIdle()
+
+        listener.onPrintCancelled()
+        advanceUntilIdle()
+
+        assertNull(vm.state.value.printProgress)
+    }
+
+    // ===========================================
+    // Passwords
+    // ===========================================
+
+    @Test
+    fun `the viewer asking for a password is surfaced to the user`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onPasswordDialogChange(true)
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.isPasswordRequired)
+    }
+
+    @Test
+    fun `a submitted password is handed to the viewer`() = runTest {
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.onAction(ReaderAction.SubmitPassword("hunter2", remember = false))
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.passwordSubmitted)
+        assertFalse(vm.state.value.isPasswordRequired)
+        verify { viewer.ui.passwordDialog.submitPassword("hunter2") }
+    }
+
+    @Test
+    fun `a password is only kept when the user asked and the setting allows it`() = runTest {
+        every { preferencesRepository.preferences } returns
+            flowOf(AppPreferences(rememberPasswords = true))
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.onAction(ReaderAction.SubmitPassword("hunter2", remember = true))
+        advanceUntilIdle()
+
+        coVerify { passwordStorage.savePassword(testPdfPath, "hunter2") }
+    }
+
+    @Test
+    fun `a password is not kept when the user did not ask`() = runTest {
+        every { preferencesRepository.preferences } returns
+            flowOf(AppPreferences(rememberPasswords = true))
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.onAction(ReaderAction.SubmitPassword("hunter2", remember = false))
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { passwordStorage.savePassword(any(), any()) }
+    }
+
+    @Test
+    fun `a password is not kept when the setting is off, whatever the user ticked`() = runTest {
+        every { preferencesRepository.preferences } returns
+            flowOf(AppPreferences(rememberPasswords = false))
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.onAction(ReaderAction.SubmitPassword("hunter2", remember = true))
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { passwordStorage.savePassword(any(), any()) }
+    }
+
+    // ===========================================
+    // Acting on the file itself
+    // ===========================================
+
+    /** A reader open on a document that really exists. */
+    private fun readerFor(file: File) = ReaderViewModel(
+        recentRepository = recentRepository,
+        favoriteRepository = favoriteRepository,
+        preferencesRepository = preferencesRepository,
+        bookmarkDao = bookmarkDao,
+        annotationDao = annotationDao,
+        filePreferenceDao = filePreferenceDao,
+        pdfToolsRepository = pdfToolsRepository,
+        signatureStore = signatureStore,
+        signatureDao = signatureDao,
+        applicationContext = applicationContext,
+        savedStateHandle = SavedStateHandle(
+            mapOf("path" to file.absolutePath, "initialPage" to 0)
+        ),
+        passwordStorage = passwordStorage
+    )
+
+    @Test
+    fun `deleting the document removes it and everything the app remembers about it`() = runTest {
+        val file = folder.newFile("doomed.pdf").apply { writeText("%PDF-1.4") }
+        val vm = readerFor(file)
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.onAction(ReaderAction.ConfirmDelete)
+            advanceUntilIdle()
+
+            assertTrue(awaitItem() is ReaderEvent.DocumentDeleted)
+        }
+        assertFalse(file.exists())
+        coVerify { recentRepository.removeRecent(file.absolutePath) }
+        coVerify { favoriteRepository.removeFavorite(file.absolutePath) }
+        coVerify { passwordStorage.removePassword(file.absolutePath) }
+    }
+
+    @Test
+    fun `deleting a document that is already gone is reported, not treated as done`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.onAction(ReaderAction.ConfirmDelete)
+            advanceUntilIdle()
+
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+    }
+
+    @Test
+    fun `saving a copy writes the document to where the user chose`() = runTest {
+        val source = folder.newFile("original.pdf").apply { writeText("%PDF-1.4 the contents") }
+        val destination = folder.newFile("copy.pdf")
+        every {
+            applicationContext.contentResolver.openOutputStream(any())
+        } returns destination.outputStream()
+        val vm = readerFor(source)
+        advanceUntilIdle()
+
+        vm.saveToUri(mockUri)
+        advanceUntilIdle()
+
+        assertEquals("%PDF-1.4 the contents", destination.readText())
+    }
+
+    @Test
+    fun `a copy that cannot be written is reported`() = runTest {
+        every {
+            applicationContext.contentResolver.openOutputStream(any())
+        } throws java.io.IOException("no room")
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.saveToUri(mockUri)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+    }
+
+    // ===========================================
+    // Document details
+    // ===========================================
+
+    @Test
+    fun `the details fall back to the file when the document says nothing`() = runTest {
+        val file = folder.newFile("details.pdf").apply { writeText("%PDF-1.4 the contents") }
+        val vm = readerFor(file)
+        advanceUntilIdle()
+
+        val info = vm.getPdfInfo()
+
+        assertEquals(file.absolutePath, info.path)
+        assertEquals("details", info.title)
+        assertEquals(file.length(), info.fileSize)
+        assertFalse(info.isEncrypted)
+    }
+
+    @Test
+    fun `blank values in the document are treated as absent`() = runTest {
+        // pdf.js reports empty strings for fields that were never filled in, and
+        // showing an empty row is worse than showing none.
+        val vm = createViewModel()
+        attachViewer(vm)
+        every { viewer.properties } returns mockk(relaxed = true) {
+            every { author } returns ""
+            every { subject } returns "  "
+            every { creationDate } returns "null"
+            every { title } returns "The Real Title"
+        }
+
+        val info = vm.getPdfInfo()
+
+        assertNull(info.author)
+        assertNull(info.subject)
+        assertNull(info.creationDate)
+        assertEquals("The Real Title", info.title)
+    }
+
+    @Test
+    fun `a stored password is tried without troubling the user`() = runTest {
+        every { preferencesRepository.preferences } returns
+            flowOf(AppPreferences(rememberPasswords = true))
+        coEvery { passwordStorage.getPassword(testPdfPath) } returns "remembered"
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onPasswordDialogChange(true)
+        advanceUntilIdle()
+
+        verify { viewer.ui.passwordDialog.submitPassword("remembered") }
+        assertFalse(vm.state.value.isPasswordRequired)
+    }
+
+    @Test
+    fun `a stored password that no longer works is forgotten and the user is asked`() = runTest {
+        // The viewer asking a second time is the only signal that the silent
+        // submission failed, and keeping a stale password would repeat it forever.
+        every { preferencesRepository.preferences } returns
+            flowOf(AppPreferences(rememberPasswords = true))
+        coEvery { passwordStorage.getPassword(testPdfPath) } returns "stale"
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPasswordDialogChange(true)
+        advanceUntilIdle()
+
+        listener.onPasswordDialogChange(true)
+        advanceUntilIdle()
+
+        coVerify { passwordStorage.removePassword(testPdfPath) }
+        assertTrue(vm.state.value.isPasswordRequired)
+        assertTrue(vm.state.value.isPasswordError)
+    }
+
+    @Test
+    fun `a password the user typed that does not work is reported as wrong`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPasswordDialogChange(true)
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.SubmitPassword("wrong", remember = false))
+        advanceUntilIdle()
+
+        // The viewer asking again is how a wrong password makes itself known.
+        listener.onPasswordDialogChange(true)
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.isPasswordError)
+        assertTrue(vm.state.value.isPasswordRequired)
+    }
+
+    @Test
+    fun `the document opening clears the password prompt`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPasswordDialogChange(true)
+        advanceUntilIdle()
+
+        listener.onPasswordDialogChange(false)
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.isPasswordRequired)
+        assertFalse(vm.state.value.isPasswordError)
+    }
 }
