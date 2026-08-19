@@ -713,4 +713,72 @@ class HomeViewModelTest {
         assertFalse(File(folder.root, "new.pdf").exists())
     }
     // endregion
+
+    // region Housekeeping
+    @Test
+    fun `deleting a single file clears its entries and refreshes the list`() = runTest {
+        val (target) = documents("single.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = false
+
+        vm.deleteFile(target.absolutePath) { succeeded = it }
+        advanceUntilIdle()
+
+        assertTrue(succeeded)
+        assertFalse(target.exists())
+        coVerify { favoriteRepository.removeFavorite(target.absolutePath) }
+        coVerify { recentRepository.removeRecent(target.absolutePath) }
+        coVerify { pdfFileRepository.refreshPdfs() }
+    }
+
+    @Test
+    fun `deleting a file that is not there reports failure`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = true
+
+        vm.deleteFile(File(folder.root, "gone.pdf").absolutePath) { succeeded = it }
+        advanceUntilIdle()
+
+        assertFalse(succeeded)
+    }
+
+    @Test
+    fun `a quiet refresh drops entries pointing at files that are gone`() = runTest {
+        // Favourites and recents outlive the files they point at, and a list full
+        // of entries that open nothing is worse than a short one.
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.silentRefresh()
+        advanceUntilIdle()
+
+        coVerify { favoriteRepository.cleanupMissingFiles() }
+        coVerify { recentRepository.cleanupMissingFiles() }
+        coVerify { pdfFileRepository.refreshPdfs() }
+    }
+
+    @Test
+    fun `a quiet refresh that fails does not take the screen down`() = runTest {
+        coEvery { pdfFileRepository.refreshPdfs() } throws RuntimeException("storage unavailable")
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.silentRefresh()
+        advanceUntilIdle()
+    }
+
+    @Test
+    fun `cleaning up asks both stores to drop what is missing`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.cleanupMissingFiles()
+        advanceUntilIdle()
+
+        coVerify { favoriteRepository.cleanupMissingFiles() }
+        coVerify { recentRepository.cleanupMissingFiles() }
+    }
+    // endregion
 }

@@ -4,7 +4,11 @@ import com.rejowan.pdfreaderpro.data.local.database.entity.AnnotationEntity
 import com.rejowan.pdfreaderpro.domain.model.Highlight
 import com.rejowan.pdfreaderpro.domain.model.HighlightQuad
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import com.rejowan.pdfreaderpro.domain.model.HighlightSource
+import com.rejowan.pdfreaderpro.presentation.components.pdf.model.DocumentHighlight
+import com.rejowan.pdfreaderpro.presentation.components.pdf.model.PdfQuad
 import org.junit.Test
 
 /**
@@ -221,6 +225,91 @@ class HighlightMapperTest {
         assertEquals(2, result.quads.size)
         assertEquals(0.60f, result.quads[0].x)
         assertEquals(0.23f, result.quads[1].y)
+    }
+    // endregion
+
+    // region Highlights the document itself carries
+    // These come out of the PDF rather than the app's own store, so they are read
+    // only: the panel lists them without edit controls and nothing writes them back.
+
+    private fun documentHighlight(
+        id: Long = 1L,
+        page: Int = 1,
+        color: Int = 0xFF00FF00.toInt(),
+        text: String = "the text",
+        note: String = "",
+        label: String = "",
+        quads: List<PdfQuad> = listOf(PdfQuad(0.1f, 0.2f, 0.3f, 0.02f))
+    ) = DocumentHighlight(
+        id = id, pageNumber = page, color = color,
+        text = text, note = note, label = label, quads = quads
+    )
+
+    @Test
+    fun `a document highlight is marked as coming from the document`() {
+        val highlight = documentHighlight().toHighlight("/storage/doc.pdf")
+
+        assertEquals(HighlightSource.DOCUMENT, highlight.source)
+        assertEquals("/storage/doc.pdf", highlight.pdfPath)
+    }
+
+    @Test
+    fun `the page number is brought back to zero based`() {
+        // The viewer counts from one and the app from zero. Getting this wrong
+        // lists every document highlight one page late.
+        assertEquals(0, documentHighlight(page = 1).toHighlight("/doc.pdf").pageNumber)
+        assertEquals(6, documentHighlight(page = 7).toHighlight("/doc.pdf").pageNumber)
+    }
+
+    @Test
+    fun `a highlight with no colour of its own gets the default`() {
+        val highlight = documentHighlight(color = -1).toHighlight("/doc.pdf")
+
+        assertEquals(0xFFFFFF98.toInt(), highlight.color)
+    }
+
+    @Test
+    fun `a colour the document set is kept`() {
+        val highlight = documentHighlight(color = 0xFF00FF00.toInt()).toHighlight("/doc.pdf")
+
+        assertEquals(0xFF00FF00.toInt(), highlight.color)
+    }
+
+    @Test
+    fun `an empty label or note is treated as absent, not as blank text`() {
+        val highlight = documentHighlight(label = "", note = "  ").toHighlight("/doc.pdf")
+
+        assertNull(highlight.label)
+        assertNull(highlight.note)
+    }
+
+    @Test
+    fun `a label and note the document carries are kept`() {
+        val highlight = documentHighlight(label = "Important", note = "check this")
+            .toHighlight("/doc.pdf")
+
+        assertEquals("Important", highlight.label)
+        assertEquals("check this", highlight.note)
+    }
+
+    @Test
+    fun `every quad comes across unchanged, so the shape is the same`() {
+        val highlight = documentHighlight(
+            quads = listOf(PdfQuad(0.1f, 0.2f, 0.3f, 0.02f), PdfQuad(0.4f, 0.5f, 0.2f, 0.02f))
+        ).toHighlight("/doc.pdf")
+
+        assertEquals(2, highlight.quads.size)
+        assertEquals(0.4f, highlight.quads[1].x)
+        assertEquals(0.02f, highlight.quads[1].h)
+    }
+
+    @Test
+    fun `a highlight with no quads still carries its text`() {
+        val highlight = documentHighlight(quads = emptyList(), text = "still here")
+            .toHighlight("/doc.pdf")
+
+        assertTrue(highlight.quads.isEmpty())
+        assertEquals("still here", highlight.text)
     }
     // endregion
 }
