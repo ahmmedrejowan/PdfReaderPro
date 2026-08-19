@@ -2439,4 +2439,272 @@ class ReaderViewModelTest {
         assertFalse(vm.state.value.isFavorite)
     }
     // endregion
+
+    // ===========================================
+    // Handing the document to another app
+    // ===========================================
+
+    /** Intents are built by the framework, which does nothing off device. */
+    private fun expectIntents() {
+        mockkStatic(android.content.Intent::class)
+        every { android.content.Intent.createChooser(any(), any()) } returns
+            mockk(relaxed = true)
+        mockkStatic(androidx.core.content.FileProvider::class)
+        every {
+            androidx.core.content.FileProvider.getUriForFile(any(), any(), any())
+        } returns mockk(relaxed = true)
+        every { applicationContext.packageName } returns "com.rejowan.pdfreaderpro"
+    }
+
+    private fun releaseIntents() {
+        unmockkStatic(android.content.Intent::class)
+        unmockkStatic(androidx.core.content.FileProvider::class)
+    }
+
+    @Test
+    fun `opening in another app offers a choice of apps`() = runTest {
+        expectIntents()
+        val document = folder.newFile("openable.pdf").apply { writeText("%PDF-1.4") }
+        val vm = readerFor(document)
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.OpenWithExternal)
+        advanceUntilIdle()
+
+        verify { applicationContext.startActivity(any()) }
+        releaseIntents()
+    }
+
+    @Test
+    fun `a document no app will take is reported rather than failing silently`() = runTest {
+        expectIntents()
+        every { applicationContext.startActivity(any()) } throws
+            android.content.ActivityNotFoundException("nothing installed")
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.onAction(ReaderAction.OpenWithExternal)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        releaseIntents()
+    }
+
+    @Test
+    fun `a link in the document is handed to the browser`() = runTest {
+        expectIntents()
+        every { Uri.parse(any()) } returns mockUri
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onLinkClick("https://example.invalid/page")
+        advanceUntilIdle()
+
+        verify { applicationContext.startActivity(any()) }
+        releaseIntents()
+    }
+
+    @Test
+    fun `a link nothing can open is reported`() = runTest {
+        expectIntents()
+        every { Uri.parse(any()) } returns mockUri
+        every { applicationContext.startActivity(any()) } throws
+            android.content.ActivityNotFoundException("no browser")
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.onAction(ReaderAction.OpenLink("https://example.invalid/page"))
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        releaseIntents()
+    }
+
+    // ===========================================
+    // Attachments
+    // ===========================================
+
+    private fun attachment(id: String = "1", title: String = "notes.txt") =
+        com.rejowan.pdfreaderpro.presentation.screens.reader.components.AttachmentItem(
+            title = title, id = id, dest = null
+        )
+
+    @Test
+    fun `opening an attachment asks the viewer for its bytes`() = runTest {
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.onAction(ReaderAction.OpenAttachment(attachment()))
+        advanceUntilIdle()
+
+        coVerify { viewer.ui.performSidebarTreeItemClick("1") }
+    }
+
+    @Test
+    fun `an attachment saved from the viewer lands in Downloads`() = runTest {
+        mockkStatic(android.os.Environment::class)
+        val downloads = folder.newFolder("downloads")
+        every {
+            android.os.Environment.getExternalStoragePublicDirectory(any())
+        } returns downloads
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        vm.onAction(ReaderAction.DownloadAttachment(attachment()))
+        advanceUntilIdle()
+
+        listener.onDownload("attachment bytes".toByteArray(), "notes.txt", "text/plain")
+        advanceUntilIdle()
+
+        assertEquals("attachment bytes", File(downloads, "notes.txt").readText())
+        unmockkStatic(android.os.Environment::class)
+    }
+
+    @Test
+    fun `an attachment with no name is still saved, under one of ours`() = runTest {
+        mockkStatic(android.os.Environment::class)
+        val downloads = folder.newFolder("downloads2")
+        every {
+            android.os.Environment.getExternalStoragePublicDirectory(any())
+        } returns downloads
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        vm.onAction(ReaderAction.DownloadAttachment(attachment()))
+        advanceUntilIdle()
+
+        listener.onDownload("attachment bytes".toByteArray(), null, null)
+        advanceUntilIdle()
+
+        assertEquals(1, downloads.listFiles()!!.size)
+        unmockkStatic(android.os.Environment::class)
+    }
+
+    // ===========================================
+    // Keeping a copy in Downloads
+    // ===========================================
+
+    @Test
+    fun `saving to Downloads copies the document there`() = runTest {
+        mockkStatic(android.os.Environment::class)
+        val downloads = folder.newFolder("downloads3")
+        every {
+            android.os.Environment.getExternalStoragePublicDirectory(any())
+        } returns downloads
+        val document = folder.newFile("keepme.pdf").apply { writeText("%PDF-1.4 contents") }
+        val vm = readerFor(document)
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.SaveDocument)
+        advanceUntilIdle()
+
+        assertEquals("%PDF-1.4 contents", File(downloads, "keepme.pdf").readText())
+        unmockkStatic(android.os.Environment::class)
+    }
+
+    @Test
+    fun `a copy already in Downloads is not written over`() = runTest {
+        mockkStatic(android.os.Environment::class)
+        val downloads = folder.newFolder("downloads4")
+        every {
+            android.os.Environment.getExternalStoragePublicDirectory(any())
+        } returns downloads
+        File(downloads, "keepme.pdf").writeText("an older copy")
+        val document = folder.newFile("keepme.pdf").apply { writeText("%PDF-1.4 contents") }
+        val vm = readerFor(document)
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.SaveDocument)
+        advanceUntilIdle()
+
+        assertEquals("an older copy", File(downloads, "keepme.pdf").readText())
+        assertEquals("%PDF-1.4 contents", File(downloads, "keepme_1.pdf").readText())
+        unmockkStatic(android.os.Environment::class)
+    }
+
+    @Test
+    fun `a document that cannot be copied is reported`() = runTest {
+        mockkStatic(android.os.Environment::class)
+        every {
+            android.os.Environment.getExternalStoragePublicDirectory(any())
+        } returns File(folder.root, "not-a-real-place")
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.onAction(ReaderAction.SaveDocument)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        unmockkStatic(android.os.Environment::class)
+    }
+
+    // ===========================================
+    // Favourites
+    // ===========================================
+
+    @Test
+    fun `the favourite toggle follows what the repository reports`() = runTest {
+        coEvery { favoriteRepository.isFavorite(any()) } returns false
+        val vm = createViewModel()
+        advanceUntilIdle()
+        coEvery { favoriteRepository.isFavorite(any()) } returns true
+
+        vm.onAction(ReaderAction.ToggleFavorite)
+        advanceUntilIdle()
+
+        coVerify { favoriteRepository.toggleFavorite(any()) }
+        assertTrue(vm.state.value.isFavorite)
+    }
+
+    @Test
+    fun `the document handed to favourites carries its own details`() = runTest {
+        val document = folder.newFile("favourite.pdf").apply { writeText("%PDF-1.4 contents") }
+        val vm = readerFor(document)
+        advanceUntilIdle()
+        val saved = slot<PdfFile>()
+        coEvery { favoriteRepository.toggleFavorite(capture(saved)) } returns Unit
+
+        vm.onAction(ReaderAction.ToggleFavorite)
+        advanceUntilIdle()
+
+        assertEquals(document.absolutePath, saved.captured.path)
+        // The title shown in the reader, which is the name without the extension.
+        assertEquals(vm.state.value.documentTitle, saved.captured.name)
+        assertEquals(document.length(), saved.captured.size)
+        assertEquals(document.parent, saved.captured.parentFolder)
+    }
+
+    // ===========================================
+    // Moving between highlights
+    // ===========================================
+
+    @Test
+    fun `going to a highlight from the list closes it and shows the strip`() = runTest {
+        withHighlights(highlightEntity(1, 0), highlightEntity(2, 3))
+        val vm = createViewModel()
+        attachViewer(vm)
+        vm.onAction(ReaderAction.ShowHighlightsSheet())
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.GoToHighlight(2L))
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.isHighlightsSheetVisible)
+        assertTrue(vm.state.value.isHighlightNavVisible)
+        assertEquals("2 / 2", vm.state.value.highlightPositionLabel)
+    }
+
+    @Test
+    fun `going to a highlight that is no longer there does nothing`() = runTest {
+        withHighlights(highlightEntity(1, 0))
+        val vm = createViewModel()
+        attachViewer(vm)
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.GoToHighlight(99L))
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.isHighlightNavVisible)
+    }
 }
