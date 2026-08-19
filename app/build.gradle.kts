@@ -240,7 +240,16 @@ val coverageExclusions = listOf(
     "**/*ItemKt*.*", "**/*CardKt*.*", "**/*OverlayKt*.*",
     "**/*PanelKt*.*", "**/*TabKt*.*", "**/*ViewKt*.*",
     "**/*StateKt*.*", "**/*CaptureKt*.*", "**/*IndicatorKt*.*",
-    "**/screens/**/components/**"
+    "**/screens/**/components/**",
+    // Declarations that only exist to describe a screen: the tool catalogue, the
+    // onboarding pages, the bottom bar entries. They live inside the screen files
+    // above but compile to classes of their own, so the patterns there miss them.
+    "**/screens/tools/PdfTool*.*", "**/screens/tools/ToolCategory*.*",
+    "**/screens/onboarding/OnboardingPage*.*", "**/screens/onboarding/ShapeConfig*.*",
+    "**/screens/home/BottomNavItem*.*", "**/screens/home/HomeSubTab*.*",
+    // Activities are Compose hosts with no logic of their own, and the crash
+    // screen is a composable like any other.
+    "**/presentation/MainActivity*.*", "**/presentation/ErrorActivity*.*"
 )
 
 tasks.register<JacocoReport>("coverageReport") {
