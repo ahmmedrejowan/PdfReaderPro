@@ -98,6 +98,10 @@ class ReaderViewModelTest {
 
         savedStateHandle = SavedStateHandle(mapOf("path" to testPdfPath, "initialPage" to 0))
         every { applicationContext.filesDir } returns folder.root
+        // Saving into the open document is refused for a document the app copied
+        // into its own cache, and a relaxed mock's empty path matches everything.
+        every { applicationContext.cacheDir } returns folder.newFolder("app-cache")
+        every { applicationContext.codeCacheDir } returns folder.newFolder("app-code-cache")
 
         // Mock Uri.fromFile static method
         mockkStatic(Uri::class)
@@ -2174,4 +2178,265 @@ class ReaderViewModelTest {
         assertFalse(vm.state.value.isPasswordRequired)
         assertFalse(vm.state.value.isPasswordError)
     }
+
+    // ===========================================
+    // Writing copies of the document
+    // ===========================================
+
+    @Test
+    fun `the signed document is written to where the user chose`() = runTest {
+        val destination = folder.newFile("signed.pdf")
+        every {
+            applicationContext.contentResolver.openOutputStream(any())
+        } returns destination.outputStream()
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        vm.requestSignedCopy(mockUri)
+        advanceUntilIdle()
+
+        // The viewer hands the serialised document back on the download callback.
+        listener.onDownload("signed bytes".toByteArray(), "test.pdf", "application/pdf")
+        waitFor("the copy being written") { destination.readText().isNotEmpty() }
+
+        assertEquals("signed bytes", destination.readText())
+        assertFalse(vm.state.value.isSavingSignedCopy)
+    }
+
+    @Test
+    fun `a signed copy that cannot be written is reported`() = runTest {
+        every { applicationContext.contentResolver.openOutputStream(any()) } returns null
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        vm.requestSignedCopy(mockUri)
+        advanceUntilIdle()
+
+        vm.events.test {
+            listener.onDownload("signed bytes".toByteArray(), null, null)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        assertFalse(vm.state.value.isSavingSignedCopy)
+    }
+
+    @Test
+    fun `saving into the file itself replaces it and reloads the viewer`() = runTest {
+        val document = folder.newFile("in-place.pdf").apply { writeText("%PDF-1.4 original") }
+        val vm = readerFor(document)
+        val listener = attachViewer(vm)
+        vm.onAction(ReaderAction.ConfirmSaveSignedInPlace)
+        vm.onAction(ReaderAction.SaveSignedInPlace)
+        advanceUntilIdle()
+
+        listener.onDownload("%PDF-1.4 signed".toByteArray(), null, null)
+        waitFor("the document being replaced") { document.readText().contains("signed") }
+
+        assertEquals("%PDF-1.4 signed", document.readText())
+        // Nothing is left half written next to the original.
+        assertFalse(File(document.parentFile, "${document.name}.signing").exists())
+        verify { viewer.loadFromFile(document.absolutePath) }
+    }
+
+    @Test
+    fun `saving into the file clears the pending placements, they belong to it now`() = runTest {
+        val document = folder.newFile("in-place2.pdf").apply { writeText("%PDF-1.4 original") }
+        val vm = readerFor(document)
+        val listener = attachViewer(vm)
+        vm.onAction(ReaderAction.SaveSignedInPlace)
+        advanceUntilIdle()
+
+        listener.onDownload("%PDF-1.4 signed".toByteArray(), null, null)
+        waitFor("the document being replaced") { document.readText().contains("signed") }
+
+        coVerify { signatureDao.deleteAllFor(document.absolutePath) }
+    }
+
+    @Test
+    fun `a document that cannot be written to is not offered as a place to save`() = runTest {
+        val document = folder.newFile("read-only.pdf").apply {
+            writeText("%PDF-1.4 original")
+            setWritable(false, false)
+        }
+        // Skipped where the filesystem or user cannot make a file read only.
+        if (document.canWrite()) return@runTest
+        val vm = readerFor(document)
+        attachViewer(vm)
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.canSaveInPlace)
+        vm.events.test {
+            vm.onAction(ReaderAction.SaveSignedInPlace)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        // Nothing was even asked of the viewer, so the document is untouched.
+        verify(exactly = 0) { viewer.downloadFile() }
+        assertEquals("%PDF-1.4 original", document.readText())
+    }
+
+    @Test
+    fun `a document opened from the app's own cache cannot be saved into`() = runTest {
+        // It is a copy, so writing to it would look like it worked and change
+        // nothing the user can see.
+        val cache = folder.newFolder("copy-cache")
+        every { applicationContext.cacheDir } returns cache
+        val copy = File(cache, "shared.pdf").apply { writeText("%PDF-1.4 copy") }
+        val vm = readerFor(copy)
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.canSaveInPlace)
+    }
+
+    // region Highlights baked into a copy
+    @Test
+    fun `with nothing highlighted there is nothing to bake`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.bakeHighlightsToUri(mockUri)
+        advanceUntilIdle()
+
+        verify(exactly = 0) { applicationContext.contentResolver.openOutputStream(any()) }
+    }
+
+    @Test
+    fun `baking a copy that cannot be written is reported`() = runTest {
+        every { applicationContext.contentResolver.openOutputStream(any()) } returns null
+        withHighlights(highlightEntity(1, 0))
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.bakeHighlightsToUri(mockUri)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        assertFalse(vm.state.value.isBakingHighlights)
+    }
+    // endregion
+
+    // region A copy without the password
+    @Test
+    fun `a decrypted copy needs the password the document was opened with`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.saveDecryptedCopyToUri(mockUri)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        coVerify(exactly = 0) { pdfToolsRepository.unlockPdf(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `a decrypted copy is written with the password already given`() = runTest {
+        val destination = folder.newFile("decrypted.pdf")
+        every { applicationContext.cacheDir } returns folder.newFolder("cache")
+        every {
+            applicationContext.contentResolver.openOutputStream(any())
+        } returns destination.outputStream()
+        coEvery { pdfToolsRepository.unlockPdf(any(), any(), any(), any()) } answers {
+            File(secondArg<String>()).writeText("%PDF-1.4 no longer locked")
+            Result.success(Unit)
+        }
+        val vm = createViewModel()
+        attachViewer(vm)
+        vm.onAction(ReaderAction.SubmitPassword("hunter2", remember = false))
+        advanceUntilIdle()
+
+        vm.saveDecryptedCopyToUri(mockUri)
+        waitFor("the copy being written") { destination.readText().isNotEmpty() }
+
+        coVerify { pdfToolsRepository.unlockPdf(testPdfPath, any(), "hunter2", any()) }
+        assertEquals("%PDF-1.4 no longer locked", destination.readText())
+        assertFalse(vm.state.value.isSavingDecryptedCopy)
+    }
+
+    @Test
+    fun `a decryption that fails is reported and leaves nothing staged`() = runTest {
+        val cache = folder.newFolder("cache2")
+        every { applicationContext.cacheDir } returns cache
+        coEvery {
+            pdfToolsRepository.unlockPdf(any(), any(), any(), any())
+        } returns Result.failure(RuntimeException("wrong password"))
+        val vm = createViewModel()
+        attachViewer(vm)
+        vm.onAction(ReaderAction.SubmitPassword("hunter2", remember = false))
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.saveDecryptedCopyToUri(mockUri)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.Error)
+        }
+        assertTrue(cache.listFiles()!!.isEmpty())
+        assertFalse(vm.state.value.isSavingDecryptedCopy)
+    }
+    // endregion
+
+    // region Attachments
+    @Test
+    fun `the attachments in a document are listed`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onLoadAttachments(
+            listOf(
+                com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem(
+                    id = "1", title = "spreadsheet.xlsx", page = 0,
+                    children = emptyList(), dest = null
+                )
+            )
+        )
+        advanceUntilIdle()
+
+        assertEquals(listOf("spreadsheet.xlsx"), vm.state.value.attachments.map { it.title })
+    }
+
+    @Test
+    fun `an attachment with no name is still listed`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onLoadAttachments(
+            listOf(
+                com.rejowan.pdfreaderpro.presentation.components.pdf.model.SideBarTreeItem(
+                    id = "1", title = null, page = 0, children = emptyList(), dest = null
+                )
+            )
+        )
+        advanceUntilIdle()
+
+        assertEquals(1, vm.state.value.attachments.size)
+    }
+    // endregion
+
+    // region Favourites
+    @Test
+    fun `favouriting a document records it and says so`() = runTest {
+        coEvery { favoriteRepository.isFavorite(any()) } returns false
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.events.test {
+            vm.onAction(ReaderAction.AddToFavorite)
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.FavoriteAdded)
+        }
+        assertTrue(vm.state.value.isFavorite)
+    }
+
+    @Test
+    fun `removing a favourite clears it`() = runTest {
+        coEvery { favoriteRepository.isFavorite(any()) } returns true
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.ConfirmRemoveFavorite)
+        advanceUntilIdle()
+
+        coVerify { favoriteRepository.removeFavorite(testPdfPath) }
+        assertFalse(vm.state.value.isFavorite)
+    }
+    // endregion
 }
