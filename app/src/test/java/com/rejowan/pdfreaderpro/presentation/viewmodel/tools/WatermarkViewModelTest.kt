@@ -1057,4 +1057,151 @@ class WatermarkViewModelTest {
         assertEquals(10, vm.state.value.sourceFile?.pageCount)
     }
     // endregion
+
+    // region An image watermark
+    /** An image the user picked, as the chooser hands it over. */
+    private fun pickedImage(content: String = "png-bytes"): android.net.Uri {
+        val uri = mockk<android.net.Uri>(relaxed = true)
+        every { context.contentResolver.openInputStream(uri) } answers {
+            java.io.ByteArrayInputStream(content.toByteArray())
+        }
+        return uri
+    }
+
+    private fun TestScope.chooseImage(vm: WatermarkViewModel): String {
+        vm.setWatermarkImage(pickedImage())
+        repeat(200) {
+            advanceUntilIdle()
+            vm.state.value.imagePath?.let { return it }
+            Thread.sleep(10)
+        }
+        error("image never loaded")
+    }
+
+    @Test
+    fun `a chosen image is copied in, so a later pick cannot change it`() = runTest {
+        val vm = createViewModel()
+
+        val path = chooseImage(vm)
+
+        assertTrue(java.io.File(path).exists())
+        assertEquals("png-bytes", java.io.File(path).readText())
+    }
+
+    @Test
+    fun `an image that cannot be read is reported`() = runTest {
+        val unreadable = mockk<android.net.Uri>(relaxed = true)
+        every { context.contentResolver.openInputStream(unreadable) } returns null
+        val vm = createViewModel()
+
+        vm.setWatermarkImage(unreadable)
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.error != null) return@repeat
+            Thread.sleep(10)
+        }
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        assertNull(vm.state.value.imagePath)
+    }
+
+    @Test
+    fun `the image and its settings are what get sent`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        val path = chooseImage(vm)
+        vm.setWatermarkType(WatermarkType.IMAGE)
+        vm.setImageScale(40f)
+        vm.setImageOpacity(70f)
+        val config = slot<PdfToolsRepository.ImageWatermarkConfig>()
+        coEvery {
+            pdfToolsRepository.addImageWatermark(any(), any(), capture(config), any(), any())
+        } returns Result.success(Unit)
+
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertEquals(path, config.captured.imagePath)
+        assertEquals(40f, config.captured.scale)
+        assertEquals(70f, config.captured.opacity)
+    }
+
+    @Test
+    fun `image scale and opacity stay within what the tool can draw`() = runTest {
+        val vm = createViewModel()
+
+        vm.setImageScale(500f)
+        vm.setImageOpacity(-20f)
+
+        assertEquals(100f, vm.state.value.imageScale)
+        assertEquals(1f, vm.state.value.imageOpacity)
+    }
+    // endregion
+
+    // region Where the watermarked document goes
+    @Test
+    fun `an existing file is not written over, a numbered one is used instead`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("DRAFT")
+        vm.setOutputFileName("stamped")
+        val documents = android.os.Environment.getExternalStoragePublicDirectory(null)
+        java.io.File(documents, "PdfReaderPro").mkdirs()
+        java.io.File(documents, "PdfReaderPro/stamped.pdf").writeText("someone else's work")
+        coEvery {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), any(), any())
+        } returns Result.success(Unit)
+
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.result!!.outputPath.endsWith("stamped_1.pdf"))
+    }
+
+    @Test
+    fun `overwriting writes through a temporary file, then replaces the original`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("DRAFT")
+        vm.setOverwriteOriginal(true)
+        val sourcePath = vm.state.value.sourceFile!!.path
+        val target = slot<String>()
+        coEvery {
+            pdfToolsRepository.addTextWatermark(any(), capture(target), any(), any(), any())
+        } answers {
+            java.io.File(target.captured).writeText("stamped bytes")
+            Result.success(Unit)
+        }
+
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertNotEquals(sourcePath, target.captured)
+        assertFalse(java.io.File(target.captured).exists())
+        assertEquals("stamped bytes", java.io.File(sourcePath).readText())
+    }
+
+    @Test
+    fun `progress from the repository reaches the screen`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setWatermarkText("DRAFT")
+        val seen = mutableListOf<Float>()
+        coEvery {
+            pdfToolsRepository.addTextWatermark(any(), any(), any(), any(), any())
+        } answers {
+            val onProgress = arg<(Float) -> Unit>(4)
+            onProgress(0.4f)
+            seen += vm.state.value.progress
+            Result.success(Unit)
+        }
+
+        vm.applyWatermark()
+        advanceUntilIdle()
+
+        assertEquals(listOf(0.4f), seen)
+        assertEquals(1f, vm.state.value.progress, 0.001f)
+    }
+    // endregion
 }

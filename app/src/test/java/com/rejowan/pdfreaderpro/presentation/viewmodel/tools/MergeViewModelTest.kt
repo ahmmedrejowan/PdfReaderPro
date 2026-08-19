@@ -1,7 +1,10 @@
 package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
 import android.app.Application
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeFile
@@ -10,7 +13,9 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.PageSelection
 import android.os.Environment
 import io.mockk.slot
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import java.io.File
 import io.mockk.coEvery
@@ -63,6 +68,21 @@ class MergeViewModelTest {
         } returns folder.newFolder("documents")
         coEvery { pdfToolsRepository.isPasswordProtected(any()) } returns Result.success(false)
 
+        // Each document in the list carries a thumbnail of its first page, which
+        // the platform renderer draws.
+        mockkStatic(ParcelFileDescriptor::class)
+        every { ParcelFileDescriptor.open(any(), any()) } returns mockk(relaxed = true)
+        mockkConstructor(PdfRenderer::class)
+        val page = mockk<PdfRenderer.Page>(relaxed = true)
+        every { page.width } returns 600
+        every { page.height } returns 800
+        every { anyConstructed<PdfRenderer>().pageCount } returns 3
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns page
+        mockkStatic(Bitmap::class)
+        every {
+            Bitmap.createBitmap(any<Int>(), any<Int>(), any())
+        } returns mockk(relaxed = true)
+
         // Default mocks
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
     }
@@ -71,6 +91,9 @@ class MergeViewModelTest {
     fun teardown() {
         unmockkStatic(Uri::class)
         unmockkStatic(Environment::class)
+        unmockkStatic(ParcelFileDescriptor::class)
+        unmockkStatic(Bitmap::class)
+        unmockkConstructor(PdfRenderer::class)
         Dispatchers.resetMain()
     }
 
@@ -726,6 +749,100 @@ class MergeViewModelTest {
 
         assertTrue(vm.state.value.selectedFiles.isEmpty())
         assertTrue(vm.state.value.outputFileName.isNotBlank())
+    }
+    // endregion
+
+    // region Adding documents the user picked
+    /**
+     * A picked document, as the file chooser hands it over.
+     *
+     * The tool cannot read a content uri directly, so it copies what it is given
+     * into the cache first. Everything after that works on the copy.
+     */
+    private fun pickedDocument(name: String, content: String = "%PDF-1.4 picked"): Uri {
+        val uri = mockk<Uri>(relaxed = true)
+        every { uri.scheme } returns "content"
+        every { context.contentResolver.openInputStream(uri) } answers {
+            java.io.ByteArrayInputStream(content.toByteArray())
+        }
+        val cursor = mockk<android.database.Cursor>(relaxed = true)
+        every { cursor.moveToFirst() } returns true
+        every { cursor.getColumnIndex(any()) } returns 0
+        every { cursor.getString(0) } returns name
+        every { context.contentResolver.query(uri, any(), any(), any(), any()) } returns cursor
+        return uri
+    }
+
+    private fun TestScope.addPicked(vm: MergeViewModel, vararg uris: Uri): MergeViewModel {
+        vm.addFiles(uris.toList())
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.selectedFiles.size == uris.size) return vm
+            Thread.sleep(10)
+        }
+        return vm
+    }
+
+    @Test
+    fun `a picked document is copied in and listed under its own name`() = runTest {
+        val vm = createViewModel()
+
+        addPicked(vm, pickedDocument("report.pdf"))
+
+        val added = vm.state.value.selectedFiles.single()
+        assertEquals("report.pdf", added.name)
+        assertTrue(java.io.File(added.path).exists())
+    }
+
+    @Test
+    fun `a picked document carries its page count and a thumbnail`() = runTest {
+        coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(12)
+        val vm = createViewModel()
+
+        addPicked(vm, pickedDocument("report.pdf"))
+
+        val added = vm.state.value.selectedFiles.single()
+        assertEquals(12, added.pageCount)
+        assertNotNull(added.thumbnail)
+    }
+
+    @Test
+    fun `several picked documents keep the order they were picked in`() = runTest {
+        val vm = createViewModel()
+
+        addPicked(vm, pickedDocument("first.pdf"), pickedDocument("second.pdf"))
+
+        assertEquals(listOf("first.pdf", "second.pdf"), vm.state.value.selectedFiles.map { it.name })
+    }
+
+    @Test
+    fun `a password protected document is named in the message and not added`() = runTest {
+        coEvery { pdfToolsRepository.isPasswordProtected(any()) } returns Result.success(true)
+        val vm = createViewModel()
+
+        vm.addFiles(listOf(pickedDocument("locked.pdf")))
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.error != null) return@repeat
+            Thread.sleep(10)
+        }
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.selectedFiles.isEmpty())
+        assertTrue(vm.state.value.error!!.contains("locked.pdf"))
+    }
+
+    @Test
+    fun `a document that cannot be read is skipped rather than added empty`() = runTest {
+        val unreadable = mockk<Uri>(relaxed = true)
+        every { unreadable.scheme } returns "content"
+        every { context.contentResolver.openInputStream(unreadable) } returns null
+        val vm = createViewModel()
+
+        vm.addFiles(listOf(unreadable))
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.selectedFiles.isEmpty())
     }
     // endregion
 }
