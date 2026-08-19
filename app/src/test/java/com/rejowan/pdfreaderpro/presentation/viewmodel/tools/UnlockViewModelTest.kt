@@ -7,6 +7,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.unlock.UnlockViewMode
 import android.os.Environment
 import io.mockk.every
 import io.mockk.coVerify
+import io.mockk.slot
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import java.io.ByteArrayInputStream
@@ -435,6 +436,88 @@ class UnlockViewModelTest {
         loadDocument(vm)
 
         assertTrue(vm.state.value.sourceFile?.isPasswordProtected == true)
+    }
+    // endregion
+
+    // region Where the unlocked document goes
+    @Test
+    fun `an existing file is not written over, a numbered one is used instead`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setPassword("hunter2")
+        vm.setOutputFileName("unlocked")
+        val documents = Environment.getExternalStoragePublicDirectory(null)
+        java.io.File(documents, "PdfReaderPro").mkdirs()
+        java.io.File(documents, "PdfReaderPro/unlocked.pdf").writeText("someone else's work")
+        coEvery {
+            pdfToolsRepository.unlockPdf(any(), any(), any(), any())
+        } returns Result.success(Unit)
+
+        vm.unlock()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.result!!.outputPath.endsWith("unlocked_1.pdf"))
+    }
+
+    @Test
+    fun `overwriting writes through a temporary file, then replaces the original`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setPassword("hunter2")
+        vm.setOverwriteOriginal(true)
+        val sourcePath = vm.state.value.sourceFile!!.path
+        val target = slot<String>()
+        coEvery {
+            pdfToolsRepository.unlockPdf(any(), capture(target), any(), any())
+        } answers {
+            java.io.File(target.captured).writeText("unlocked bytes")
+            Result.success(Unit)
+        }
+
+        vm.unlock()
+        advanceUntilIdle()
+
+        assertNotEquals(sourcePath, target.captured)
+        assertFalse(java.io.File(target.captured).exists())
+        assertEquals("unlocked bytes", java.io.File(sourcePath).readText())
+    }
+
+    @Test
+    fun `the password typed is the one tried`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setPassword("hunter2")
+        val password = slot<String>()
+        coEvery {
+            pdfToolsRepository.unlockPdf(any(), any(), capture(password), any())
+        } returns Result.success(Unit)
+
+        vm.unlock()
+        advanceUntilIdle()
+
+        assertEquals("hunter2", password.captured)
+    }
+
+    @Test
+    fun `progress from the repository reaches the screen`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setPassword("hunter2")
+        val seen = mutableListOf<Float>()
+        coEvery {
+            pdfToolsRepository.unlockPdf(any(), any(), any(), any())
+        } answers {
+            val onProgress = arg<(Float) -> Unit>(3)
+            onProgress(0.4f)
+            seen += vm.state.value.progress
+            Result.success(Unit)
+        }
+
+        vm.unlock()
+        advanceUntilIdle()
+
+        assertEquals(listOf(0.4f), seen)
+        assertEquals(1f, vm.state.value.progress, 0.001f)
     }
     // endregion
 }

@@ -615,4 +615,82 @@ class CompressViewModelTest {
         assertEquals(1f, vm.state.value.progress, 0.001f)
     }
     // endregion
+
+    // region What the tool estimates before compressing
+    @Test
+    fun `the estimate is turned into sizes the user can compare`() = runTest {
+        // The repository reports ratios; the screen shows sizes, so the file size
+        // is applied here and a mix-up would advertise the wrong saving.
+        coEvery { pdfToolsRepository.analyzeCompressionPotential(any()) } returns Result.success(
+            PdfToolsRepository.CompressionAnalysis(
+                bytesPerPage = 50_000,
+                hasImages = true,
+                isAlreadyOptimized = false,
+                estimatedRatioLow = 0.9f,
+                estimatedRatioMedium = 0.6f,
+                estimatedRatioHigh = 0.3f
+            )
+        )
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        val estimate = vm.state.value.sourceFile!!.compressionEstimate!!
+        val size = vm.state.value.sourceFile!!.size
+        assertEquals(50_000L, estimate.bytesPerPage)
+        assertTrue(estimate.hasImages)
+        assertEquals((size * 0.9f).toLong(), estimate.estimatedSizeLow)
+        assertEquals((size * 0.3f).toLong(), estimate.estimatedSizeHigh)
+    }
+
+    @Test
+    fun `the harder settings promise a smaller file than the gentler ones`() = runTest {
+        coEvery { pdfToolsRepository.analyzeCompressionPotential(any()) } returns Result.success(
+            PdfToolsRepository.CompressionAnalysis(
+                bytesPerPage = 50_000,
+                hasImages = true,
+                isAlreadyOptimized = false,
+                estimatedRatioLow = 0.9f,
+                estimatedRatioMedium = 0.6f,
+                estimatedRatioHigh = 0.3f
+            )
+        )
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        val estimate = vm.state.value.sourceFile!!.compressionEstimate!!
+        assertTrue(estimate.estimatedSizeHigh <= estimate.estimatedSizeMedium)
+        assertTrue(estimate.estimatedSizeMedium <= estimate.estimatedSizeLow)
+    }
+
+    @Test
+    fun `a document that cannot be analysed still opens, just without an estimate`() = runTest {
+        coEvery { pdfToolsRepository.analyzeCompressionPotential(any()) } returns
+            Result.failure(RuntimeException("damaged document"))
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        assertNotNull(vm.state.value.sourceFile)
+        assertNull(vm.state.value.sourceFile!!.compressionEstimate)
+    }
+
+    @Test
+    fun `the suggested name marks the file as compressed`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        assertTrue(vm.state.value.outputFileName.endsWith("_compressed"))
+    }
+
+    @Test
+    fun `a document that cannot be read is reported rather than left blank`() = runTest {
+        every { context.contentResolver.openInputStream(any()) } returns null
+        val vm = createViewModel()
+
+        vm.setSourceFile(mockk(relaxed = true))
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        assertNull(vm.state.value.sourceFile)
+    }
+    // endregion
 }

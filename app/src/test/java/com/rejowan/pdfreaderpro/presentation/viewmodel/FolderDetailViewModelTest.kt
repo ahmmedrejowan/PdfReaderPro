@@ -512,4 +512,32 @@ class FolderDetailViewModelTest {
         assertTrue(document.exists())
     }
     // endregion
+
+    // region Refreshing
+    @Test
+    fun `refreshing re-reads the folder and sorts what comes back`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.refreshFolder()
+        advanceUntilIdle()
+
+        assertFalse(vm.isRefreshing.value)
+        assertEquals(testPdfFiles.size, vm.files.value.size)
+    }
+
+    @Test
+    fun `a refresh that fails stops showing the spinner`() = runTest {
+        // Otherwise the screen sits there pulling forever.
+        every { pdfFileRepository.getPdfsByFolder(any()) } throws
+            RuntimeException("storage unavailable")
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.refreshFolder()
+        advanceUntilIdle()
+
+        assertFalse(vm.isRefreshing.value)
+    }
+    // endregion
 }

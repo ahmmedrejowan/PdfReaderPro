@@ -17,6 +17,7 @@ import com.rejowan.pdfreaderpro.util.ApkDownloadManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.verify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,6 +31,7 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
@@ -613,6 +615,83 @@ class SettingsViewModelTest {
         val vm = createViewModel()
 
         assertFalse(vm.installDownloadedApk())
+    }
+    // endregion
+
+    // region Installing an update that is already downloaded
+    @Test
+    fun `a pending update is noticed when settings opens`() = runTest {
+        coEvery { apkDownloadManager.hasPendingApk(any()) } returns true
+        coEvery { apkDownloadManager.getPendingApkVersion() } returns "9.9.9"
+
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        assertTrue(vm.hasPendingApk.value)
+        assertEquals("9.9.9", vm.pendingApkVersion.value)
+    }
+
+    @Test
+    fun `with nothing downloaded, no install is offered`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        assertFalse(vm.hasPendingApk.value)
+        assertFalse(vm.installPendingApk())
+    }
+
+    @Test
+    fun `installing a pending update hands the file over`() = runTest {
+        val apk = File("/downloads/app-9.9.9.apk")
+        every { apkDownloadManager.getPendingApk() } returns apk
+        every { apkDownloadManager.installApk(apk) } returns true
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        assertTrue(vm.installPendingApk())
+    }
+
+    @Test
+    fun `clearing a pending update removes it and stops offering it`() = runTest {
+        coEvery { apkDownloadManager.hasPendingApk(any()) } returns true
+        val vm = createViewModel()
+        advanceUntilIdle()
+        coEvery { apkDownloadManager.hasPendingApk(any()) } returns false
+
+        vm.clearPendingApk()
+        advanceUntilIdle()
+
+        verify { apkDownloadManager.cleanupOldDownloads() }
+        assertFalse(vm.hasPendingApk.value)
+    }
+
+    @Test
+    fun `the pending state is checked again when settings is returned to`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+        coEvery { apkDownloadManager.hasPendingApk(any()) } returns true
+
+        vm.refreshPendingApkState()
+        advanceUntilIdle()
+
+        assertTrue(vm.hasPendingApk.value)
+    }
+
+    @Test
+    fun `installing follows whatever permission the system reports`() = runTest {
+        every { apkDownloadManager.canInstallApks() } returns false
+        val vm = createViewModel()
+
+        assertFalse(vm.canInstallApks())
+    }
+
+    @Test
+    fun `installing a specific file is passed straight through`() = runTest {
+        val apk = File("/downloads/app-9.9.9.apk")
+        every { apkDownloadManager.installApk(apk) } returns true
+        val vm = createViewModel()
+
+        assertTrue(vm.installApk(apk))
     }
     // endregion
 }
