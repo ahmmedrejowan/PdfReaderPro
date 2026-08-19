@@ -570,4 +570,162 @@ class MergeViewModelTest {
         assertTrue(vm.state.value.selectedFiles.isEmpty())
     }
     // endregion
+
+    // region What each document contributes
+    // toPageList is what actually reaches the repository, and null there means
+    // the whole document, so it is not interchangeable with an empty list.
+
+    @Test
+    fun `all contributes no page list, meaning every page`() {
+        assertNull(PageSelection.All.toPageList(10))
+    }
+
+    @Test
+    fun `a range contributes its pages, clamped to the document`() {
+        assertEquals(listOf(8, 9, 10), PageSelection.Range(8, 40).toPageList(10))
+    }
+
+    @Test
+    fun `custom pages contribute only the ones the document has`() {
+        assertEquals(listOf(1, 5), PageSelection.Custom(listOf(1, 5, 99, 0)).toPageList(10))
+    }
+    // endregion
+
+    // region Merging
+    @Test
+    fun `each document is sent with the pages chosen for it`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+        val files = vm.state.value.selectedFiles
+        vm.updatePageSelection(files[0], PageSelection.Range(2, 4))
+        vm.updatePageSelection(files[1], PageSelection.Custom(listOf(1, 3)))
+        val selections = slot<List<PdfToolsRepository.PdfPageSelection>>()
+        coEvery {
+            pdfToolsRepository.mergePdfsWithSelection(capture(selections), any(), any())
+        } returns Result.success(Unit)
+
+        vm.merge()
+        advanceUntilIdle()
+
+        assertEquals(listOf(2, 3, 4), selections.captured[0].pages)
+        assertEquals(listOf(1, 3), selections.captured[1].pages)
+    }
+
+    @Test
+    fun `the order sent is the order on screen`() = runTest {
+        val vm = createViewModel()
+        val paths = addFiles(vm, 3)
+        vm.moveFile(2, 0)
+        val selections = slot<List<PdfToolsRepository.PdfPageSelection>>()
+        coEvery {
+            pdfToolsRepository.mergePdfsWithSelection(capture(selections), any(), any())
+        } returns Result.success(Unit)
+
+        vm.merge()
+        advanceUntilIdle()
+
+        assertEquals(listOf(paths[2], paths[0], paths[1]), selections.captured.map { it.path })
+    }
+
+    @Test
+    fun `an existing file is not written over, a numbered one is used instead`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+        vm.setOutputFileName("combined")
+        val documents = Environment.getExternalStoragePublicDirectory(null)
+        File(documents, "PdfReaderPro").mkdirs()
+        File(documents, "PdfReaderPro/combined.pdf").writeText("someone else's work")
+        coEvery {
+            pdfToolsRepository.mergePdfsWithSelection(any(), any(), any())
+        } returns Result.success(Unit)
+
+        vm.merge()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.result!!.outputPath.endsWith("combined_1.pdf"))
+    }
+
+    @Test
+    fun `progress from the repository reaches the screen`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+        val seen = mutableListOf<Float>()
+        coEvery {
+            pdfToolsRepository.mergePdfsWithSelection(any(), any(), any())
+        } answers {
+            val onProgress = arg<(Float) -> Unit>(2)
+            onProgress(0.3f)
+            seen += vm.state.value.progress
+            Result.success(Unit)
+        }
+
+        vm.merge()
+        advanceUntilIdle()
+
+        assertEquals(listOf(0.3f), seen)
+        assertEquals(1f, vm.state.value.progress, 0.001f)
+        assertFalse(vm.state.value.isProcessing)
+    }
+
+    @Test
+    fun `a failure is reported and does not leave the tool processing`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+        coEvery {
+            pdfToolsRepository.mergePdfsWithSelection(any(), any(), any())
+        } returns Result.failure(RuntimeException("the second document is damaged"))
+
+        vm.merge()
+        advanceUntilIdle()
+
+        assertEquals("the second document is damaged", vm.state.value.error)
+        assertFalse(vm.state.value.isProcessing)
+        assertNull(vm.state.value.result)
+    }
+
+    @Test
+    fun `a finished merge reports the combined document`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+        vm.setOutputFileName("combined")
+        coEvery {
+            pdfToolsRepository.mergePdfsWithSelection(any(), any(), any())
+        } returns Result.success(Unit)
+        coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(20)
+
+        vm.merge()
+        advanceUntilIdle()
+
+        val result = vm.state.value.result!!
+        assertTrue(result.outputPath.endsWith("combined.pdf"))
+        assertEquals(20, result.pageCount)
+    }
+    // endregion
+
+    // region Clearing
+    @Test
+    fun `clearing the error keeps the documents that were added`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 1)
+        vm.merge()
+        advanceUntilIdle()
+
+        vm.clearError()
+
+        assertNull(vm.state.value.error)
+        assertEquals(1, vm.state.value.selectedFiles.size)
+    }
+
+    @Test
+    fun `resetting empties the list and suggests a fresh name`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+
+        vm.reset()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.selectedFiles.isEmpty())
+        assertTrue(vm.state.value.outputFileName.isNotBlank())
+    }
+    // endregion
 }

@@ -1,12 +1,17 @@
 package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
 import android.app.Application
+import android.os.Environment
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitMode
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitViewModel
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.slot
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -22,6 +27,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import io.mockk.every
 import java.io.ByteArrayInputStream
+import java.io.File
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -54,6 +60,13 @@ class SplitViewModelTest {
         every { context.contentResolver.query(any(), any(), any(), any(), any()) } returns null
 
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
+
+        // Splitting writes into a folder under the public Documents directory,
+        // which off device throws from inside the coroutine.
+        mockkStatic(Environment::class)
+        every {
+            Environment.getExternalStoragePublicDirectory(any())
+        } returns folder.newFolder("documents")
     }
 
     /**
@@ -72,6 +85,7 @@ class SplitViewModelTest {
 
     @After
     fun teardown() {
+        unmockkStatic(Environment::class)
         Dispatchers.resetMain()
     }
 
@@ -677,6 +691,285 @@ class SplitViewModelTest {
 
         vm.setEveryNPages(0)
         assertEquals(1, vm.state.value.everyNPages)
+    }
+    // endregion
+
+    // region Refusing to split
+    @Test
+    fun `splitting without a document asks for one`() = runTest {
+        val vm = createViewModel()
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.splitPdf(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `splitting without a prefix asks for one`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setOutputPrefix("")
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.splitPdf(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `ranges mode with nothing typed asks for ranges`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.BY_RANGES)
+        vm.setRangesInput("")
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.splitPdf(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `ranges mode surfaces the validation message rather than a generic one`() = runTest {
+        // The message under the field is the one that says what is wrong, so it is
+        // the one that has to be shown when the button is pressed anyway.
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.BY_RANGES)
+        vm.setRangesInput("1-99")
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(vm.state.value.rangesError, vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.splitPdf(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `extract mode with nothing typed asks for pages`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.SPECIFIC_PAGES)
+        vm.setSpecificPagesInput("")
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.extractPages(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `extract mode surfaces the validation message`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.SPECIFIC_PAGES)
+        vm.setSpecificPagesInput("4, nonsense")
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(vm.state.value.specificPagesError, vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.extractPages(any(), any(), any(), any()) }
+    }
+    // endregion
+
+    // region Splitting by ranges
+    @Test
+    fun `the ranges typed are the ranges split on`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.BY_RANGES)
+        vm.setRangesInput("1-3, 4-6, 9")
+        val ranges = slot<List<String>>()
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), any(), capture(ranges), any())
+        } returns Result.success(listOf("a.pdf"))
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(listOf("1-3", "4-6", "9"), ranges.captured)
+    }
+
+    @Test
+    fun `the output folder is named after the prefix`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.BY_RANGES)
+        vm.setRangesInput("1-3")
+        vm.setOutputPrefix("chapter")
+        val outputDir = slot<String>()
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), capture(outputDir), any(), any())
+        } returns Result.success(listOf("a.pdf"))
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertTrue(outputDir.captured.endsWith("split_chapter"))
+        assertTrue(File(outputDir.captured).isDirectory)
+    }
+    // endregion
+
+    // region Splitting every n pages
+    @Test
+    fun `every n pages covers the document once, with no gaps`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.EVERY_N_PAGES)
+        vm.setEveryNPages(3)
+        val ranges = slot<List<String>>()
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), any(), capture(ranges), any())
+        } returns Result.success(listOf("a.pdf"))
+
+        vm.split()
+        advanceUntilIdle()
+
+        // Ten pages in threes: the last chunk is short rather than running past
+        // the end of the document.
+        assertEquals(listOf("1-3", "4-6", "7-9", "10-10"), ranges.captured)
+    }
+
+    @Test
+    fun `a chunk size the document divides evenly leaves no short chunk`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.EVERY_N_PAGES)
+        vm.setEveryNPages(5)
+        val ranges = slot<List<String>>()
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), any(), capture(ranges), any())
+        } returns Result.success(listOf("a.pdf"))
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(listOf("1-5", "6-10"), ranges.captured)
+    }
+
+    @Test
+    fun `a chunk size of one gives a range per page`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.EVERY_N_PAGES)
+        vm.setEveryNPages(1)
+        val ranges = slot<List<String>>()
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), any(), capture(ranges), any())
+        } returns Result.success(listOf("a.pdf"))
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(10, ranges.captured.size)
+        assertEquals("1-1", ranges.captured.first())
+        assertEquals("10-10", ranges.captured.last())
+    }
+    // endregion
+
+    // region Splitting into single pages
+    @Test
+    fun `into pages hands the whole document to the repository`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.INTO_PAGES)
+        coEvery {
+            pdfToolsRepository.splitIntoPages(any(), any(), any())
+        } returns Result.success((1..10).map { "page$it.pdf" })
+
+        vm.split()
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { pdfToolsRepository.splitIntoPages(any(), any(), any()) }
+        assertEquals(10, vm.state.value.result!!.createdFiles.size)
+    }
+    // endregion
+
+    // region Extracting pages
+    @Test
+    fun `extracting collects the pages typed, in order and without repeats`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.SPECIFIC_PAGES)
+        vm.setSpecificPagesInput("7, 2-4, 2")
+        val pages = slot<List<Int>>()
+        coEvery {
+            pdfToolsRepository.extractPages(any(), any(), capture(pages), any())
+        } returns Result.success(Unit)
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(listOf(2, 3, 4, 7), pages.captured)
+    }
+
+    @Test
+    fun `extracting writes one file, named for the prefix`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.SPECIFIC_PAGES)
+        vm.setSpecificPagesInput("1-2")
+        vm.setOutputPrefix("pickings")
+        coEvery {
+            pdfToolsRepository.extractPages(any(), any(), any(), any())
+        } returns Result.success(Unit)
+
+        vm.split()
+        advanceUntilIdle()
+
+        val created = vm.state.value.result!!.createdFiles
+        assertEquals(1, created.size)
+        assertTrue(created.single().endsWith("pickings_extracted.pdf"))
+    }
+    // endregion
+
+    // region Reporting
+    @Test
+    fun `progress from the repository reaches the screen`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.BY_RANGES)
+        vm.setRangesInput("1-5")
+        val seen = mutableListOf<Float>()
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), any(), any(), any())
+        } answers {
+            val onProgress = arg<(Float) -> Unit>(3)
+            onProgress(0.5f)
+            seen += vm.state.value.progress
+            Result.success(listOf("a.pdf"))
+        }
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(listOf(0.5f), seen)
+        assertEquals(1f, vm.state.value.progress, 0.001f)
+        assertFalse(vm.state.value.isProcessing)
+    }
+
+    @Test
+    fun `a failure is reported and does not leave the tool processing`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.BY_RANGES)
+        vm.setRangesInput("1-5")
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), any(), any(), any())
+        } returns Result.failure(RuntimeException("the document is damaged"))
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals("the document is damaged", vm.state.value.error)
+        assertFalse(vm.state.value.isProcessing)
+        assertNull(vm.state.value.result)
+    }
+
+    @Test
+    fun `the result lists every file that was written`() = runTest {
+        val vm = viewModelWithSource()
+        vm.setSplitMode(SplitMode.BY_RANGES)
+        vm.setRangesInput("1-3, 4-6")
+        coEvery {
+            pdfToolsRepository.splitPdf(any(), any(), any(), any())
+        } returns Result.success(listOf("part1.pdf", "part2.pdf"))
+
+        vm.split()
+        advanceUntilIdle()
+
+        assertEquals(listOf("part1.pdf", "part2.pdf"), vm.state.value.result!!.createdFiles)
     }
     // endregion
 }
