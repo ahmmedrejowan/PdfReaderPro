@@ -72,6 +72,12 @@ android {
         }
     }
 
+    testOptions {
+        // Android framework stubs return defaults instead of throwing, so the PDF
+        // rendering paths can be driven from JVM tests with the classes mocked.
+        unitTests.isReturnDefaultValues = true
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
