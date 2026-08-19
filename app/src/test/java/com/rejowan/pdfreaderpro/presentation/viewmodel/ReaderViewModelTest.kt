@@ -2707,4 +2707,251 @@ class ReaderViewModelTest {
 
         assertFalse(vm.state.value.isHighlightNavVisible)
     }
+
+    // ===========================================
+    // Following the viewer as the user moves around
+    // ===========================================
+
+    @Test
+    fun `the page the reader lands on is remembered for next time`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onPageChange(8)
+        advanceUntilIdle()
+
+        coVerify { recentRepository.updateLastPage(testPdfPath, 7) }
+    }
+
+    @Test
+    fun `landing on a bookmarked page shows it as bookmarked`() = runTest {
+        every { bookmarkDao.getBookmarksForPdf(any()) } returns
+            flowOf(listOf(createBookmark(pageNumber = 4)))
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        advanceUntilIdle()
+
+        listener.onPageChange(5)
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.isCurrentPageBookmarked)
+    }
+
+    @Test
+    fun `zooming in the viewer is reflected in the reader`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onScaleChange(2.5f)
+        advanceUntilIdle()
+
+        assertEquals(2.5f, vm.state.value.zoom)
+    }
+
+    @Test
+    fun `zooming closes a colour picker anchored to a highlight`() = runTest {
+        // The picker is pinned to a spot in the page, so once the page moves under
+        // it, it is pointing at nothing.
+        withHighlights(highlightEntity(1, 0))
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.HighlightTapped(tapped(1L)))
+        advanceUntilIdle()
+        assertTrue(vm.state.value.isHighlightPickerVisible)
+
+        listener.onScaleChange(2f)
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.isHighlightPickerVisible)
+        assertNull(vm.state.value.editingHighlightId)
+    }
+
+    @Test
+    fun `scrolling closes a colour picker anchored to a highlight`() = runTest {
+        withHighlights(highlightEntity(1, 0))
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.HighlightTapped(tapped(1L)))
+        advanceUntilIdle()
+
+        listener.onScrollChange(100, 2000, false)
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.isHighlightPickerVisible)
+    }
+
+    @Test
+    fun `a picker opened for a new highlight survives scrolling`() = runTest {
+        // Only the one anchored to an existing highlight is dismissed; the picker
+        // for a fresh selection is not tied to a place on the page.
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        vm.onAction(ReaderAction.TextSelectionChanged(selection()))
+        vm.onAction(ReaderAction.StartHighlight)
+        advanceUntilIdle()
+
+        listener.onScrollChange(100, 2000, false)
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.isHighlightPickerVisible)
+    }
+
+    @Test
+    fun `the scroll mode the viewer reports is reflected in the reader`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onScrollModeChange(PdfViewer.PageScrollMode.HORIZONTAL)
+        advanceUntilIdle()
+
+        assertEquals(ScrollMode.HORIZONTAL, vm.state.value.scrollMode)
+    }
+
+    @Test
+    fun `a scroll mode the reader has no setting for falls back to vertical`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onScrollModeChange(PdfViewer.PageScrollMode.WRAPPED)
+        advanceUntilIdle()
+
+        assertEquals(ScrollMode.VERTICAL, vm.state.value.scrollMode)
+    }
+
+    @Test
+    fun `reaching the end stops auto scroll and says so`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        vm.onAction(ReaderAction.StartAutoScroll(1f))
+        advanceUntilIdle()
+
+        vm.events.test {
+            listener.onAutoScrollEnd()
+            advanceUntilIdle()
+            assertTrue(awaitItem() is ReaderEvent.ShowMessage)
+        }
+        assertFalse(vm.state.value.isAutoScrollActive)
+        assertFalse(vm.state.value.isAutoScrollPaused)
+    }
+
+    // region Searching within the document
+    @Test
+    fun `a search in progress is shown as searching`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onFindMatchStart()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.isSearching)
+    }
+
+    @Test
+    fun `the match count and position come from the viewer`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onFindMatchChange(3, 17)
+        advanceUntilIdle()
+
+        assertEquals(17, vm.state.value.searchResultCount)
+        assertEquals(3, vm.state.value.currentSearchIndex)
+    }
+
+    @Test
+    fun `a finished search stops showing as searching, found or not`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onFindMatchStart()
+        advanceUntilIdle()
+
+        listener.onFindMatchComplete(false)
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.isSearching)
+    }
+    // endregion
+
+    // region Highlights the document carries
+    @Test
+    fun `highlights the file carries are listed alongside the app's own`() = runTest {
+        withHighlights(highlightEntity(1, 0))
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        advanceUntilIdle()
+
+        listener.onDocumentHighlightsLoaded(
+            listOf(
+                com.rejowan.pdfreaderpro.presentation.components.pdf.model.DocumentHighlight(
+                    id = 99L, pageNumber = 2, color = -1, text = "from the file"
+                )
+            )
+        )
+        advanceUntilIdle()
+
+        assertEquals(1, vm.state.value.documentHighlights.size)
+        assertEquals(2, vm.state.value.allHighlights.size)
+    }
+
+    @Test
+    fun `a document with none of its own leaves the app's list alone`() = runTest {
+        withHighlights(highlightEntity(1, 0))
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        advanceUntilIdle()
+
+        listener.onDocumentHighlightsLoaded(emptyList())
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.documentHighlights.isEmpty())
+        assertEquals(1, vm.state.value.allHighlights.size)
+    }
+    // endregion
+
+    // region Double tap to zoom
+    @Test
+    fun `a double tap zooms in when the page is at its normal size`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        every { viewer.currentPageScale } returns 1f
+
+        listener.onDoubleClick(100f, 200f)
+        advanceUntilIdle()
+
+        verify { viewer.scalePageToAt(vm.state.value.doubleTapZoom, 100f, 200f) }
+    }
+
+    @Test
+    fun `a double tap when already zoomed in fits the page again`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        every { viewer.currentPageScale } returns 5f
+        every { viewer.getActualScaleFor(any(), any()) } answers {
+            secondArg<(Float?) -> Unit>().invoke(1.2f)
+        }
+
+        listener.onDoubleClick(100f, 200f)
+        advanceUntilIdle()
+
+        verify { viewer.scalePageToAt(1.2f, 100f, 200f) }
+    }
+
+    @Test
+    fun `a double tap still fits the page when the viewer cannot say what that is`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        every { viewer.currentPageScale } returns 5f
+        every { viewer.getActualScaleFor(any(), any()) } answers {
+            secondArg<(Float?) -> Unit>().invoke(null)
+        }
+
+        listener.onDoubleClick(100f, 200f)
+        advanceUntilIdle()
+
+        verify { viewer.zoomTo(PdfViewer.Zoom.PAGE_FIT) }
+        assertNotNull(vm)
+    }
+    // endregion
 }
