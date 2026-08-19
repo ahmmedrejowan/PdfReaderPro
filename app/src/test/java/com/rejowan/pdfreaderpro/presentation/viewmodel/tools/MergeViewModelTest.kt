@@ -8,6 +8,11 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeFile
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeState
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.MergeViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.merge.PageSelection
+import android.os.Environment
+import io.mockk.slot
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import java.io.File
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -21,6 +26,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import kotlinx.coroutines.test.TestScope
 import org.junit.Before
 import org.junit.Test
 
@@ -33,6 +41,9 @@ class MergeViewModelTest {
     private lateinit var context: Application
     private lateinit var viewModel: MergeViewModel
 
+    @get:Rule
+    val folder = TemporaryFolder()
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -40,12 +51,26 @@ class MergeViewModelTest {
         pdfToolsRepository = mockk(relaxed = true)
         context = mockk(relaxed = true)
 
+        // Files are added from real paths, so Uri.fromFile is the only Android call
+        // in the way. Environment is mocked because the merged file is written into
+        // the public Documents folder, which off-device throws inside the coroutine.
+        every { context.cacheDir } returns folder.newFolder("cache")
+        mockkStatic(Uri::class)
+        every { Uri.fromFile(any()) } returns mockk(relaxed = true)
+        mockkStatic(Environment::class)
+        every {
+            Environment.getExternalStoragePublicDirectory(any())
+        } returns folder.newFolder("documents")
+        coEvery { pdfToolsRepository.isPasswordProtected(any()) } returns Result.success(false)
+
         // Default mocks
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
     }
 
     @After
     fun teardown() {
+        unmockkStatic(Uri::class)
+        unmockkStatic(Environment::class)
         Dispatchers.resetMain()
     }
 
@@ -390,6 +415,159 @@ class MergeViewModelTest {
     fun `PageSelection Range getSelectedCount handles out of bounds`() {
         val selection = PageSelection.Range(8, 15)
         assertEquals(3, selection.getSelectedCount(10))
+    }
+    // endregion
+
+    /** Real files on disk, since the tool adds by path and checks they exist. */
+    private fun TestScope.addFiles(vm: MergeViewModel, count: Int): List<String> {
+        val paths = (1..count).map { index ->
+            folder.newFile("document-$index.pdf").apply {
+                writeText("%PDF-1.4 pretend document $index")
+            }.absolutePath
+        }
+        vm.addFilesFromPaths(paths)
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.selectedFiles.size == count) return paths
+            Thread.sleep(10)
+        }
+        error("files never arrived")
+    }
+
+    // region Counting the pages a selection covers
+    // Pure logic, and what the emptiness guard is decided on.
+
+    @Test
+    fun `all means every page in the document`() {
+        assertEquals(12, PageSelection.All.getSelectedCount(12))
+    }
+
+    @Test
+    fun `a range counts inclusively at both ends`() {
+        assertEquals(4, PageSelection.Range(2, 5).getSelectedCount(10))
+    }
+
+    @Test
+    fun `a range running past the end stops at the end`() {
+        assertEquals(3, PageSelection.Range(8, 40).getSelectedCount(10))
+    }
+
+    @Test
+    fun `a range entirely past the end covers nothing`() {
+        assertEquals(0, PageSelection.Range(30, 40).getSelectedCount(10))
+    }
+
+    @Test
+    fun `a single page range counts one`() {
+        assertEquals(1, PageSelection.Range(3, 3).getSelectedCount(10))
+    }
+
+    @Test
+    fun `custom pages outside the document are not counted`() {
+        assertEquals(2, PageSelection.Custom(listOf(1, 5, 99, 0)).getSelectedCount(10))
+    }
+
+    @Test
+    fun `an empty custom selection covers nothing`() {
+        assertEquals(0, PageSelection.Custom(emptyList()).getSelectedCount(10))
+    }
+    // endregion
+
+    // region Refusing to merge
+    @Test
+    fun `merging needs at least two documents`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 1)
+        vm.merge()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.mergePdfsWithSelection(any(), any(), any()) }
+    }
+
+    @Test
+    fun `merging needs an output name`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+        vm.setOutputFileName("")
+        vm.merge()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.mergePdfsWithSelection(any(), any(), any()) }
+    }
+
+    @Test
+    fun `a document with no pages selected stops the merge and is named`() = runTest {
+        val vm = createViewModel()
+        addFiles(vm, 2)
+        val first = vm.state.value.selectedFiles.first()
+        vm.updatePageSelection(first, PageSelection.Custom(emptyList()))
+        vm.merge()
+        advanceUntilIdle()
+
+        val error = vm.state.value.error
+        assertNotNull(error)
+        // Naming it matters: with several documents the user needs to know which.
+        assertTrue(error!!.contains(first.name))
+        coVerify(exactly = 0) { pdfToolsRepository.mergePdfsWithSelection(any(), any(), any()) }
+    }
+    // endregion
+
+    // region The order documents are joined in
+    @Test
+    fun `added documents appear in the order given`() = runTest {
+        val vm = createViewModel()
+        val paths = addFiles(vm, 3)
+        assertEquals(paths, vm.state.value.selectedFiles.map { it.path })
+    }
+
+    @Test
+    fun `moving a document changes the order it is merged in`() = runTest {
+        val vm = createViewModel()
+        val paths = addFiles(vm, 3)
+
+        vm.moveFile(0, 2)
+
+        assertEquals(listOf(paths[1], paths[2], paths[0]), vm.state.value.selectedFiles.map { it.path })
+    }
+
+    @Test
+    fun `removing a document leaves the others in order`() = runTest {
+        val vm = createViewModel()
+        val paths = addFiles(vm, 3)
+        val second = vm.state.value.selectedFiles[1]
+
+        vm.removeFile(second)
+
+        assertEquals(listOf(paths[0], paths[2]), vm.state.value.selectedFiles.map { it.path })
+    }
+
+    @Test
+    fun `a password protected document is skipped rather than failing the merge`() = runTest {
+        val vm = createViewModel()
+        val open = folder.newFile("open.pdf").apply { writeText("%PDF") }
+        val locked = folder.newFile("locked.pdf").apply { writeText("%PDF") }
+        coEvery { pdfToolsRepository.isPasswordProtected(locked.absolutePath) } returns Result.success(true)
+
+        vm.addFilesFromPaths(listOf(open.absolutePath, locked.absolutePath))
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.selectedFiles.isNotEmpty()) return@repeat
+            Thread.sleep(10)
+        }
+        advanceUntilIdle()
+
+        assertEquals(listOf(open.absolutePath), vm.state.value.selectedFiles.map { it.path })
+    }
+
+    @Test
+    fun `a path that does not exist is ignored`() = runTest {
+        val vm = createViewModel()
+        vm.addFilesFromPaths(listOf("/nowhere/missing.pdf"))
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.selectedFiles.isEmpty())
     }
     // endregion
 }
