@@ -29,7 +29,7 @@ koinCompose = "4.2.2"
 kotlinxSerialization = "1.11.0"
 
 # Ktor HTTP Client
-ktor = "3.5.1"
+ktor = "3.5.2"
 
 
 # Image Loading
