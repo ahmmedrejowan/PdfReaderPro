@@ -7,13 +7,13 @@ minSdk = "24"
 # Core Android
 agp = "9.2.1"
 kotlin = "2.4.10"
-coreKtx = "1.19.0"
+coreKtx = "1.19.1"
 
 # Compose
 composeBom = "2026.06.01"
 activityCompose = "1.13.0"
 lifecycleRuntimeCompose = "2.11.0"
-navigationCompose = "2.9.8"
+navigationCompose = "2.10.2"
 
 # Room
 room = "2.8.4"
