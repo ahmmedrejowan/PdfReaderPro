@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.annotation.StringRes
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,24 +19,28 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.rejowan.pdfreaderpro.R
 import timber.log.Timber
 import java.io.File
 
-enum class NumberPosition(val label: String) {
-    TOP_LEFT("Top Left"),
-    TOP_CENTER("Top Center"),
-    TOP_RIGHT("Top Right"),
-    BOTTOM_LEFT("Bottom Left"),
-    BOTTOM_CENTER("Bottom Center"),
-    BOTTOM_RIGHT("Bottom Right")
+enum class NumberPosition(@StringRes val labelRes: Int) {
+    TOP_LEFT(R.string.position_top_left),
+    TOP_CENTER(R.string.position_top_center),
+    TOP_RIGHT(R.string.position_top_right),
+    BOTTOM_LEFT(R.string.position_bottom_left),
+    BOTTOM_CENTER(R.string.position_bottom_center),
+    BOTTOM_RIGHT(R.string.position_bottom_right)
 }
 
-enum class NumberFormat(val label: String, val example: String) {
-    NUMBER_ONLY("Number Only", "1, 2, 3..."),
-    PAGE_X("Page X", "Page 1, Page 2..."),
-    X_OF_Y("X of Y", "1 of 10, 2 of 10..."),
-    DASH_X_DASH("- X -", "- 1 -, - 2 -..."),
-    CUSTOM("Custom", "Custom prefix/suffix")
+enum class NumberFormat(
+    @StringRes val labelRes: Int,
+    @StringRes val exampleRes: Int
+) {
+    NUMBER_ONLY(R.string.format_number_only, R.string.format_number_only_example),
+    PAGE_X(R.string.format_page_x, R.string.format_page_x_example),
+    X_OF_Y(R.string.format_x_of_y, R.string.format_x_of_y_example),
+    DASH_X_DASH(R.string.format_dash_x, R.string.format_dash_x_example),
+    CUSTOM(R.string.format_custom, R.string.format_custom_example)
 }
 
 enum class PageSelection {
@@ -132,11 +137,11 @@ class PageNumbersViewModel(
                     val baseName = file.nameWithoutExtension
                     _state.update { it.copy(outputFileName = "${baseName}_numbered") }
                 } else {
-                    _state.update { it.copy(isLoading = false, error = "Failed to load PDF file") }
+                    _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf)) }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Failed to set source file")
-                _state.update { it.copy(isLoading = false, error = "Failed to load PDF: ${e.message}") }
+                _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf_with_message, e.message ?: "")) }
             }
         }
     }
@@ -229,12 +234,12 @@ class PageNumbersViewModel(
         val sourceFile = currentState.sourceFile
 
         if (sourceFile == null) {
-            _state.update { it.copy(error = "Please select a PDF file first") }
+            _state.update { it.copy(error = context.getString(R.string.error_select_pdf_first)) }
             return
         }
 
         if (currentState.outputFileName.isBlank()) {
-            _state.update { it.copy(error = "Please enter an output file name") }
+            _state.update { it.copy(error = context.getString(R.string.error_enter_output_name)) }
             return
         }
 
@@ -302,7 +307,7 @@ class PageNumbersViewModel(
                             tempFile.delete()
                         } catch (e: Exception) {
                             Timber.e(e, "Failed to replace original file")
-                            _state.update { it.copy(isProcessing = false, error = "Failed to replace original file") }
+                            _state.update { it.copy(isProcessing = false, error = context.getString(R.string.error_failed_replace_original)) }
                             return@launch
                         }
                     }
@@ -328,7 +333,7 @@ class PageNumbersViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: "Failed to add page numbers"
+                            error = error.message ?: context.getString(R.string.error_add_page_numbers_failed)
                         )
                     }
                 }

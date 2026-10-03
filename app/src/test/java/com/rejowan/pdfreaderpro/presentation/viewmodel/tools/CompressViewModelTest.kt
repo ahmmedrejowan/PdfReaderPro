@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import com.rejowan.pdfreaderpro.R
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -299,22 +300,22 @@ class CompressViewModelTest {
     // region CompressionLevel enum Tests
     @Test
     fun `CompressionLevel LOW has correct properties`() {
-        assertEquals("Low", CompressionLevel.LOW.label)
-        assertEquals("Minimal compression, best quality", CompressionLevel.LOW.description)
+        assertEquals(R.string.compress_low_label, CompressionLevel.LOW.labelRes)
+        assertEquals(R.string.compress_low_desc, CompressionLevel.LOW.descriptionRes)
         assertEquals(0.8f, CompressionLevel.LOW.quality)
     }
 
     @Test
     fun `CompressionLevel MEDIUM has correct properties`() {
-        assertEquals("Medium", CompressionLevel.MEDIUM.label)
-        assertEquals("Balanced compression and quality", CompressionLevel.MEDIUM.description)
+        assertEquals(R.string.compress_medium_label, CompressionLevel.MEDIUM.labelRes)
+        assertEquals(R.string.compress_medium_desc, CompressionLevel.MEDIUM.descriptionRes)
         assertEquals(0.5f, CompressionLevel.MEDIUM.quality)
     }
 
     @Test
     fun `CompressionLevel HIGH has correct properties`() {
-        assertEquals("High", CompressionLevel.HIGH.label)
-        assertEquals("Maximum compression, smaller file", CompressionLevel.HIGH.description)
+        assertEquals(R.string.compress_high_label, CompressionLevel.HIGH.labelRes)
+        assertEquals(R.string.compress_high_desc, CompressionLevel.HIGH.descriptionRes)
         assertEquals(0.2f, CompressionLevel.HIGH.quality)
     }
 

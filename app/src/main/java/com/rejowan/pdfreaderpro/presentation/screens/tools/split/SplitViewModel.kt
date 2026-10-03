@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -94,11 +95,11 @@ class SplitViewModel(
                     // Auto-generate ranges based on page count
                     generateDefaultRanges(pageCount)
                 } else {
-                    _state.update { it.copy(error = "Failed to load file") }
+                    _state.update { it.copy(error = context.getString(R.string.error_failed_load_file)) }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Failed to set source file")
-                _state.update { it.copy(error = e.message ?: "Failed to load file") }
+                _state.update { it.copy(error = e.message ?: context.getString(R.string.error_failed_load_file)) }
             }
         }
     }
@@ -148,21 +149,21 @@ class SplitViewModel(
             when (rangeParts.size) {
                 1 -> {
                     val page = rangeParts[0].toIntOrNull()
-                    if (page == null) return "Invalid format: $part"
-                    if (page < 1) return "Page must be at least 1"
-                    if (page > maxPages) return "Page $page exceeds max ($maxPages)"
+                    if (page == null) return context.getString(R.string.error_invalid_format, part)
+                    if (page < 1) return context.getString(R.string.error_page_at_least_one)
+                    if (page > maxPages) return context.getString(R.string.error_page_exceeds_max, page, maxPages)
                 }
                 2 -> {
                     val start = rangeParts[0].toIntOrNull()
                     val end = rangeParts[1].toIntOrNull()
-                    if (start == null || end == null) return "Invalid range: $part"
-                    if (start < 1) return "Start page must be at least 1"
-                    if (end < 1) return "End page must be at least 1"
-                    if (start > maxPages) return "Start page $start exceeds max ($maxPages)"
-                    if (end > maxPages) return "End page $end exceeds max ($maxPages)"
-                    if (start > end) return "Invalid range: start > end in $part"
+                    if (start == null || end == null) return context.getString(R.string.error_invalid_range, part)
+                    if (start < 1) return context.getString(R.string.error_start_page_at_least_one)
+                    if (end < 1) return context.getString(R.string.error_end_page_at_least_one)
+                    if (start > maxPages) return context.getString(R.string.error_start_page_exceeds_max, start, maxPages)
+                    if (end > maxPages) return context.getString(R.string.error_end_page_exceeds_max, end, maxPages)
+                    if (start > end) return context.getString(R.string.error_start_greater_than_end, part)
                 }
-                else -> return "Invalid format: $part"
+                else -> return context.getString(R.string.error_invalid_format, part)
             }
         }
         return null
@@ -177,24 +178,25 @@ class SplitViewModel(
         for (part in parts) {
             if (part.contains("-")) {
                 val rangeParts = part.split("-").map { it.trim() }
-                if (rangeParts.size != 2) return "Invalid range: $part"
+                if (rangeParts.size != 2) return context.getString(R.string.error_invalid_range, part)
                 val start = rangeParts[0].toIntOrNull()
                 val end = rangeParts[1].toIntOrNull()
-                if (start == null || end == null) return "Invalid range: $part"
-                if (start < 1) return "Start page must be at least 1"
-                if (end < 1) return "End page must be at least 1"
-                if (start > maxPages) return "Page $start exceeds max ($maxPages)"
-                if (end > maxPages) return "Page $end exceeds max ($maxPages)"
-                if (start > end) return "Invalid range: start > end in $part"
+                if (start == null || end == null) return context.getString(R.string.error_invalid_range, part)
+                if (start < 1) return context.getString(R.string.error_start_page_at_least_one)
+                if (end < 1) return context.getString(R.string.error_end_page_at_least_one)
+                if (start > maxPages) return context.getString(R.string.error_page_exceeds_max, start, maxPages)
+                if (end > maxPages) return context.getString(R.string.error_page_exceeds_max, end, maxPages)
+                if (start > end) return context.getString(R.string.error_start_greater_than_end, part)
             } else {
                 val page = part.toIntOrNull()
-                if (page == null) return "Invalid page: $part"
-                if (page < 1) return "Page must be at least 1"
-                if (page > maxPages) return "Page $page exceeds max ($maxPages)"
+                if (page == null) return context.getString(R.string.error_invalid_page, part)
+                if (page < 1) return context.getString(R.string.error_page_at_least_one)
+                if (page > maxPages) return context.getString(R.string.error_page_exceeds_max, page, maxPages)
             }
         }
         return null
     }
+
 
     fun setOutputPrefix(prefix: String) {
         _state.update { it.copy(outputPrefix = prefix) }
@@ -205,20 +207,19 @@ class SplitViewModel(
         val sourceFile = currentState.sourceFile
 
         if (sourceFile == null) {
-            _state.update { it.copy(error = "No PDF file selected") }
+            _state.update { it.copy(error = context.getString(R.string.error_no_pdf_selected)) }
             return
         }
 
         if (currentState.outputPrefix.isBlank()) {
-            _state.update { it.copy(error = "Enter an output prefix") }
+            _state.update { it.copy(error = context.getString(R.string.error_enter_output_prefix)) }
             return
         }
 
-        // Check for validation errors based on mode
         when (currentState.splitMode) {
             SplitMode.BY_RANGES -> {
                 if (currentState.rangesInput.isBlank()) {
-                    _state.update { it.copy(error = "Enter page ranges") }
+                    _state.update { it.copy(error = context.getString(R.string.error_enter_page_ranges)) }
                     return
                 }
                 if (currentState.rangesError != null) {
@@ -228,7 +229,7 @@ class SplitViewModel(
             }
             SplitMode.SPECIFIC_PAGES -> {
                 if (currentState.specificPagesInput.isBlank()) {
-                    _state.update { it.copy(error = "Enter pages to extract") }
+                    _state.update { it.copy(error = context.getString(R.string.error_enter_pages_to_extract)) }
                     return
                 }
                 if (currentState.specificPagesError != null) {
@@ -270,7 +271,7 @@ class SplitViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: "Split failed"
+                            error = error.message ?: context.getString(R.string.error_split_failed)
                         )
                     }
                 }
@@ -285,7 +286,7 @@ class SplitViewModel(
     ): Result<List<String>> {
         val ranges = parseRangesInput(rangesInput)
         if (ranges.isEmpty()) {
-            return Result.failure(IllegalArgumentException("Invalid page ranges"))
+            return Result.failure(IllegalArgumentException(context.getString(R.string.error_invalid_page_ranges)))
         }
 
         return pdfToolsRepository.splitPdf(
@@ -343,7 +344,7 @@ class SplitViewModel(
     ): Result<List<String>> {
         val pages = parseSpecificPagesInput(pagesInput, sourceFile.pageCount)
         if (pages.isEmpty()) {
-            return Result.failure(IllegalArgumentException("Invalid page selection"))
+            return Result.failure(IllegalArgumentException(context.getString(R.string.error_invalid_page_selection)))
         }
 
         val outputPath = "$outputDir/${_state.value.outputPrefix}_extracted.pdf"

@@ -7,6 +7,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.PageSelectionM
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.QuickSelection
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotateViewModel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.rotate.RotationAngle
+import com.rejowan.pdfreaderpro.R
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -345,19 +346,19 @@ class RotateViewModelTest {
     @Test
     fun `RotationAngle ROTATE_90 has correct properties`() {
         assertEquals(90, RotationAngle.ROTATE_90.degrees)
-        assertEquals("90° Right", RotationAngle.ROTATE_90.label)
+        assertEquals(R.string.rotate_90_right, RotationAngle.ROTATE_90.labelRes)
     }
 
     @Test
     fun `RotationAngle ROTATE_180 has correct properties`() {
         assertEquals(180, RotationAngle.ROTATE_180.degrees)
-        assertEquals("180°", RotationAngle.ROTATE_180.label)
+        assertEquals(R.string.rotate_180, RotationAngle.ROTATE_180.labelRes)
     }
 
     @Test
     fun `RotationAngle ROTATE_270 has correct properties`() {
         assertEquals(270, RotationAngle.ROTATE_270.degrees)
-        assertEquals("90° Left", RotationAngle.ROTATE_270.label)
+        assertEquals(R.string.rotate_90_left, RotationAngle.ROTATE_270.labelRes)
     }
 
     @Test

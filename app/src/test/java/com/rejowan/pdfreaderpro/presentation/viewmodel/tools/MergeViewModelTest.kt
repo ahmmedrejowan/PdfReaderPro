@@ -19,6 +19,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import com.rejowan.pdfreaderpro.R
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -174,6 +175,37 @@ class MergeViewModelTest {
     }
     // endregion
 
+    // region PageSelection Tests
+    @Test
+    fun `PageSelection All toDisplayString returns correct string`() {
+        every { context.getString(R.string.page_selection_all, 10) } returns "All pages (1-10)"
+        val selection = PageSelection.All
+        assertEquals("All pages (1-10)", selection.toDisplayString(context, 10))
+    }
+
+    @Test
+    fun `PageSelection Range toDisplayString returns correct string`() {
+        every { context.getString(R.string.page_selection_range, 1, 5) } returns "Pages 1-5"
+        val selection = PageSelection.Range(1, 5)
+        assertEquals("Pages 1-5", selection.toDisplayString(context, 10))
+    }
+
+    @Test
+    fun `PageSelection Custom toDisplayString returns correct string for few pages`() {
+        every { context.getString(R.string.page_selection_custom, "1, 3, 5") } returns "Pages 1, 3, 5"
+        val selection = PageSelection.Custom(listOf(1, 3, 5))
+        assertEquals("Pages 1, 3, 5", selection.toDisplayString(context, 10))
+    }
+
+    @Test
+    fun `PageSelection Custom toDisplayString truncates for many pages`() {
+        every { context.getString(R.string.page_selection_custom_long, "1, 2, 3, 4", 7) } returns "Pages 1, 2, 3, 4… (7 pages)"
+        val selection = PageSelection.Custom(listOf(1, 2, 3, 4, 5, 6, 7))
+        val display = selection.toDisplayString(context, 10)
+        assertTrue(display.contains("…"))
+        assertTrue(display.contains("7 pages"))
+    }
+
     // region updatePageSelection Tests
     @Test
     fun `updatePageSelection updates selection for specific file`() = runTest {
@@ -316,33 +348,6 @@ class MergeViewModelTest {
         }
     }
     // endregion
-
-    // region PageSelection Tests
-    @Test
-    fun `PageSelection All toDisplayString returns correct string`() {
-        val selection = PageSelection.All
-        assertEquals("All pages (1-10)", selection.toDisplayString(10))
-    }
-
-    @Test
-    fun `PageSelection Range toDisplayString returns correct string`() {
-        val selection = PageSelection.Range(1, 5)
-        assertEquals("Pages 1-5", selection.toDisplayString(10))
-    }
-
-    @Test
-    fun `PageSelection Custom toDisplayString returns correct string for few pages`() {
-        val selection = PageSelection.Custom(listOf(1, 3, 5))
-        assertEquals("Pages 1, 3, 5", selection.toDisplayString(10))
-    }
-
-    @Test
-    fun `PageSelection Custom toDisplayString truncates for many pages`() {
-        val selection = PageSelection.Custom(listOf(1, 2, 3, 4, 5, 6, 7))
-        val display = selection.toDisplayString(10)
-        assertTrue(display.contains("..."))
-        assertTrue(display.contains("7 pages"))
-    }
 
     @Test
     fun `PageSelection All toPageList returns null`() {

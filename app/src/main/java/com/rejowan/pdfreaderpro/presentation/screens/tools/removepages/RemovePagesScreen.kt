@@ -116,6 +116,9 @@ fun RemovePagesScreen(
         uri?.let { viewModel.setSourceFile(it) }
     }
 
+    val openWithLabel = stringResource(R.string.open_with)
+    val sharePdfLabel = stringResource(R.string.share_pdf)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -126,13 +129,13 @@ fun RemovePagesScreen(
                             val selectedCount = file.pages.count { it.isSelected }
                             if (selectedCount > 0) {
                                 Text(
-                                    "$selectedCount of ${file.pageCount} selected for removal",
+                                    stringResource(R.string.selected_for_removal_format, selectedCount, file.pageCount),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = AccentRed
                                 )
                             } else {
                                 Text(
-                                    "${file.pageCount} pages",
+                                    stringResource(R.string.pages_count_format, file.pageCount),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -184,7 +187,7 @@ fun RemovePagesScreen(
                                 setDataAndType(uri, "application/pdf")
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(intent, "Open with"))
+                            context.startActivity(Intent.createChooser(intent, openWithLabel))
                         },
                         onShare = {
                             val file = File(result.outputPath)
@@ -198,7 +201,7 @@ fun RemovePagesScreen(
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+                            context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onRemoveMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }
@@ -325,7 +328,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Remove Pages",
+            stringResource(R.string.tool_remove_pages),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -333,7 +336,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Select and delete unwanted pages from your PDF",
+            stringResource(R.string.tool_remove_pages_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -381,7 +384,7 @@ private fun SelectionHeader(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "TAP TO SELECT",
+                    stringResource(R.string.tap_to_select),
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
@@ -407,7 +410,7 @@ private fun SelectionHeader(
                     color = MaterialTheme.colorScheme.surfaceContainerLow
                 ) {
                     Text(
-                        "Clear",
+                        stringResource(R.string.clear),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
@@ -419,7 +422,7 @@ private fun SelectionHeader(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            "Selected pages will be removed from the PDF",
+            stringResource(R.string.selected_pages_will_be_removed),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
@@ -836,7 +839,7 @@ private fun RemoveBottomSection(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        "Cannot remove all pages",
+                        stringResource(R.string.cannot_remove_all_pages),
                         style = MaterialTheme.typography.bodySmall,
                         color = AccentRed
                     )
@@ -896,7 +899,7 @@ private fun RemoveBottomSection(
                 colors = CheckboxDefaults.colors(checkedColor = AccentBlue)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Overwrite original file", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.overwrite_original_file), style = MaterialTheme.typography.bodyMedium)
         }
 
         // Output filename
@@ -919,6 +922,11 @@ private fun RemoveBottomSection(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Remove button
+        val removeButtonText = when {
+            isProcessing -> stringResource(R.string.removing)
+            selectedCount == 1 -> stringResource(R.string.remove_one_page)
+            else -> stringResource(R.string.remove_pages_count, selectedCount)
+        }
         Button(
             onClick = onRemove,
             modifier = Modifier.fillMaxWidth(),
@@ -935,9 +943,7 @@ private fun RemoveBottomSection(
                 Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.cd_delete))
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text(
-                if (isProcessing) "Removing..." else "Remove $selectedCount Page${if (selectedCount != 1) "s" else ""}"
-            )
+            Text(removeButtonText)
         }
     }
 }
@@ -978,7 +984,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Pages Removed!",
+            stringResource(R.string.pages_removed),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -986,7 +992,8 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "${result.removedPages} page${if (result.removedPages > 1) "s" else ""} removed",
+            if (result.removedPages == 1) stringResource(R.string.one_page_removed)
+            else stringResource(R.string.pages_removed_count, result.removedPages),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -1024,7 +1031,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${result.newPageCount} pages • ${formatFileSize(result.fileSize)}",
+                        stringResource(R.string.pages_size_format, result.newPageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1050,7 +1057,7 @@ private fun SuccessState(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "${result.originalPageCount} pages",
+                    stringResource(R.string.pages_count_format, result.originalPageCount),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1062,7 +1069,7 @@ private fun SuccessState(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    "${result.newPageCount} pages",
+                    stringResource(R.string.pages_count_format, result.newPageCount),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -1088,7 +1095,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open", maxLines = 1)
+                Text(stringResource(R.string.open), maxLines = 1)
             }
             OutlinedButton(
                 onClick = onShare,
@@ -1100,7 +1107,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Share", maxLines = 1)
+                Text(stringResource(R.string.share), maxLines = 1)
             }
         }
 
@@ -1115,13 +1122,13 @@ private fun SuccessState(
                 onClick = onRemoveMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("New File", maxLines = 1)
+                Text(stringResource(R.string.new_file), maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done", maxLines = 1)
+                Text(stringResource(R.string.done), maxLines = 1)
             }
         }
     }
@@ -1157,7 +1164,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Removing...",
+                    stringResource(R.string.removing),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     )

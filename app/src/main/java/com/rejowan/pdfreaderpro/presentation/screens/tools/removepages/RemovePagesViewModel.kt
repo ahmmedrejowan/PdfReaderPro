@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.rejowan.pdfreaderpro.R
 import timber.log.Timber
 import java.io.File
 
@@ -92,11 +93,11 @@ class RemovePagesViewModel(
                     val baseName = file.nameWithoutExtension
                     _state.update { it.copy(outputFileName = "${baseName}_modified") }
                 } else {
-                    _state.update { it.copy(isLoading = false, error = "Failed to load PDF file") }
+                    _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf)) }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Failed to set source file")
-                _state.update { it.copy(isLoading = false, error = "Failed to load PDF: ${e.message}") }
+                _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf_with_message, e.message ?: "")) }
             }
         }
     }
@@ -284,24 +285,24 @@ class RemovePagesViewModel(
         val sourceFile = currentState.sourceFile
 
         if (sourceFile == null) {
-            _state.update { it.copy(error = "Please select a PDF file first") }
+            _state.update { it.copy(error = context.getString(R.string.error_select_pdf_first)) }
             return
         }
 
         if (currentState.outputFileName.isBlank()) {
-            _state.update { it.copy(error = "Please enter an output file name") }
+            _state.update { it.copy(error = context.getString(R.string.error_enter_output_name)) }
             return
         }
 
         val pagesToRemove = sourceFile.pages.filter { it.isSelected }.map { it.pageNumber }
 
         if (pagesToRemove.isEmpty()) {
-            _state.update { it.copy(error = "Please select at least one page to remove") }
+            _state.update { it.copy(error = context.getString(R.string.error_select_at_least_one_page)) }
             return
         }
 
         if (pagesToRemove.size >= sourceFile.pageCount) {
-            _state.update { it.copy(error = "Cannot remove all pages from PDF") }
+            _state.update { it.copy(error = context.getString(R.string.error_cannot_remove_all_pages)) }
             return
         }
 
@@ -348,7 +349,7 @@ class RemovePagesViewModel(
                             tempFile.delete()
                         } catch (e: Exception) {
                             Timber.e(e, "Failed to replace original file")
-                            _state.update { it.copy(isProcessing = false, error = "Failed to replace original file") }
+                            _state.update { it.copy(isProcessing = false, error = context.getString(R.string.error_failed_replace_original)) }
                             return@launch
                         }
                     }
@@ -375,7 +376,7 @@ class RemovePagesViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: "Failed to remove pages"
+                            error = error.message ?: context.getString(R.string.error_remove_pages_failed)
                         )
                     }
                 }

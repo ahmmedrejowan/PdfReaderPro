@@ -635,7 +635,7 @@ fun OnboardingScreen(
                             modifier = Modifier.align(Alignment.CenterEnd)
                         ) {
                             Text(
-                                "Skip",
+                                stringResource(R.string.skip),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontWeight = FontWeight.Medium
                             )
@@ -737,7 +737,7 @@ fun OnboardingScreen(
                         )
                     ) {
                         Text(
-                            text = if (isLastPage) "Grant Access" else "Continue",
+                            text = if (isLastPage) stringResource(R.string.onboarding_grant_access) else stringResource(R.string.onboarding_continue),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold
                         )

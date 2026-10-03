@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
+import com.rejowan.pdfreaderpro.R
 import java.util.Date
 import java.util.Locale
 
@@ -30,13 +31,13 @@ sealed class PageSelection {
     data class Range(val start: Int, val end: Int) : PageSelection()
     data class Custom(val pages: List<Int>) : PageSelection()
 
-    fun toDisplayString(totalPages: Int): String = when (this) {
-        is All -> "All pages (1-$totalPages)"
-        is Range -> "Pages $start-$end"
+    fun toDisplayString(context: Context, totalPages: Int): String = when (this) {
+        is All -> context.getString(R.string.page_selection_all, totalPages)
+        is Range -> context.getString(R.string.page_selection_range, start, end)
         is Custom -> if (pages.size <= 5) {
-            "Pages ${pages.joinToString(", ")}"
+            context.getString(R.string.page_selection_custom, pages.joinToString(", "))
         } else {
-            "Pages ${pages.take(4).joinToString(", ")}... (${pages.size} pages)"
+            context.getString(R.string.page_selection_custom_long, pages.take(4).joinToString(", "), pages.size)
         }
     }
 
@@ -158,7 +159,7 @@ class MergeViewModel(
                 val existingPaths = current.selectedFiles.map { it.path }.toSet()
                 val filteredNew = newFiles.filter { it.path !in existingPaths }
                 val errorMessage = if (skippedPasswordProtected.isNotEmpty()) {
-                    "Skipped password-protected: ${skippedPasswordProtected.joinToString(", ")}"
+                    context.getString(R.string.error_skipped_password_protected, skippedPasswordProtected.joinToString(", "))
                 } else null
                 current.copy(
                     selectedFiles = current.selectedFiles + filteredNew,
@@ -204,7 +205,7 @@ class MergeViewModel(
                 val existingPaths = current.selectedFiles.map { it.path }.toSet()
                 val filteredNew = newFiles.filter { it.path !in existingPaths }
                 val errorMessage = if (skippedPasswordProtected.isNotEmpty()) {
-                    "Skipped password-protected: ${skippedPasswordProtected.joinToString(", ")}"
+                    context.getString(R.string.error_skipped_password_protected, skippedPasswordProtected.joinToString(", "))
                 } else null
                 current.copy(
                     selectedFiles = current.selectedFiles + filteredNew,
@@ -287,12 +288,12 @@ class MergeViewModel(
     fun merge() {
         val currentState = _state.value
         if (currentState.selectedFiles.size < 2) {
-            _state.update { it.copy(error = "Select at least 2 PDF files") }
+            _state.update { it.copy(error = context.getString(R.string.error_select_two_files)) }
             return
         }
 
         if (currentState.outputFileName.isBlank()) {
-            _state.update { it.copy(error = "Enter an output file name") }
+            _state.update { it.copy(error = context.getString(R.string.error_enter_output_name)) }
             return
         }
 
@@ -302,7 +303,7 @@ class MergeViewModel(
         }
         if (emptySelectionFiles.isNotEmpty()) {
             val fileNames = emptySelectionFiles.joinToString(", ") { it.name }
-            _state.update { it.copy(error = "No pages selected for: $fileNames") }
+            _state.update { it.copy(error = context.getString(R.string.error_no_pages_selected, fileNames)) }
             return
         }
 
@@ -359,7 +360,7 @@ class MergeViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: "Merge failed"
+                            error = error.message ?: context.getString(R.string.error_merge_failed)
                         )
                     }
                 }

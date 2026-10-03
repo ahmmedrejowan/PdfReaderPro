@@ -102,6 +102,9 @@ fun PdfToImageScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val shareImagesLabel = stringResource(R.string.share_images)
+    val shareImageLabel = stringResource(R.string.share_image)
+    val viewImageLabel = stringResource(R.string.view_image)
     val focusManager = LocalFocusManager.current
 
     val pdfPickerLauncher = rememberLauncherForActivityResult(
@@ -173,7 +176,7 @@ fun PdfToImageScreen(
                                 putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(uris))
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share Images"))
+                            context.startActivity(Intent.createChooser(shareIntent, shareImagesLabel))
                         },
                         onShareSingle = { path ->
                             val file = File(path)
@@ -187,7 +190,7 @@ fun PdfToImageScreen(
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share Image"))
+                            context.startActivity(Intent.createChooser(shareIntent, shareImageLabel))
                         },
                         onViewSingle = { path ->
                             val file = File(path)
@@ -200,7 +203,7 @@ fun PdfToImageScreen(
                                 setDataAndType(uri, "image/*")
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(viewIntent, "View Image"))
+                            context.startActivity(Intent.createChooser(viewIntent, viewImageLabel))
                         },
                         onExportMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }
@@ -495,7 +498,7 @@ private fun SourceFileCard(sourceFile: SourceFile) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    "${sourceFile.pageCount} pages - ${formatFileSize(sourceFile.size)}",
+                    stringResource(R.string.pages_size_format, sourceFile.pageCount, formatFileSize(sourceFile.size)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
