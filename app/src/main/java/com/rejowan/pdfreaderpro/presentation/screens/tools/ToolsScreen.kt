@@ -182,8 +182,8 @@ private val pdfTools = listOf(
     ),
     PdfTool(
         "sign_pdf",
-        "Sign PDF",
-        "Add your handwritten signature",
+        R.string.tool_sign_pdf,
+        R.string.tool_sign_pdf_desc,
         Icons.Default.Draw,
         ToolCategory.SECURITY,
         isEnabled = true

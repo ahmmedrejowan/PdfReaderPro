@@ -1,6 +1,7 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.merge
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
