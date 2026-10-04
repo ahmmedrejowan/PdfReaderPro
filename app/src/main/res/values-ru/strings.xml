@@ -12,6 +12,7 @@
     <string name="intro_title_3">Настройте чтение под себя</string>
     <string name="intro_sub_title_3">Настраивайте, ищите и используйте расширенные возможности PDF.</string>
 
+    <string name="greeting_with_emoji">%1$s %2$s</string>
 
     <string name="let_s_start">Начнём</string>
 
@@ -888,6 +889,17 @@
     <string name="storage_access_message">Разрешите доступ к хранилищу, чтобы мы могли находить и отображать ваши PDF-файлы</string>
     <string name="open_settings">Открыть настройки</string>
     <string name="not_now">Не сейчас</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Главная</string>
+    <string name="nav_folders">Папки</string>
+    <string name="nav_tools">Инструменты</string>
+    <string name="nav_settings">Настройки</string>
+
+    <!-- Home sub-tabs -->
+    <string name="home_tab_recent">Недавние</string>
+    <string name="home_tab_favorites">Избранное</string>
+    <string name="home_tab_all_files">Все файлы</string>
 
     <!-- Error Activity -->
     <string name="unexpected_error">Произошла непредвиденная ошибка</string>

@@ -111,7 +111,7 @@ fun CollapsingHomeHeader(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "$greeting $emoji",
+                    text = stringResource(R.string.greeting_with_emoji, greeting, emoji),
                     style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.SemiBold
                     ),

@@ -12,6 +12,7 @@
     <string name="intro_title_3">Tailor Your PDF Experience</string>
     <string name="intro_sub_title_3">Customize, search, and explore advanced PDF features.</string>
 
+    <string name="greeting_with_emoji">%1$s %2$s</string>
 
     <string name="let_s_start">Let\'s Start</string>
 
@@ -881,6 +882,17 @@
     <string name="storage_access_message">Allow storage access so we can find and display your PDF files</string>
     <string name="open_settings">Open Settings</string>
     <string name="not_now">Not now</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_folders">Folders</string>
+    <string name="nav_tools">Tools</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Home sub-tabs -->
+    <string name="home_tab_recent">Recent</string>
+    <string name="home_tab_favorites">Favorites</string>
+    <string name="home_tab_all_files">All Files</string>
 
     <!-- Error Activity -->
     <string name="unexpected_error">An unexpected error occurred</string>
