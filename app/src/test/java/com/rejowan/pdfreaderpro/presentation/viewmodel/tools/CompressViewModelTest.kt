@@ -1,11 +1,23 @@
 package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
-import android.content.Context
+import android.app.Application
 import app.cash.turbine.test
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressionLevel
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressResult
 import com.rejowan.pdfreaderpro.presentation.screens.tools.compress.CompressViewModel
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
+import android.os.Environment
+import io.mockk.every
+import io.mockk.coVerify
+import io.mockk.slot
+import io.mockk.mockkConstructor
+import io.mockk.unmockkConstructor
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import java.io.ByteArrayInputStream
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +30,9 @@ import kotlinx.coroutines.test.setMain
 import com.rejowan.pdfreaderpro.R
 import org.junit.After
 import org.junit.Assert.*
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import kotlinx.coroutines.test.TestScope
 import org.junit.Before
 import org.junit.Test
 
@@ -27,8 +42,11 @@ class CompressViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
 
     private lateinit var pdfToolsRepository: PdfToolsRepository
-    private lateinit var context: Context
+    private lateinit var context: Application
     private lateinit var viewModel: CompressViewModel
+
+    @get:Rule
+    val folder = TemporaryFolder()
 
     @Before
     fun setup() {
@@ -37,11 +55,51 @@ class CompressViewModelTest {
         pdfToolsRepository = mockk(relaxed = true)
         context = mockk(relaxed = true)
 
+        // The guards run against a loaded document, and the copy behind loading
+        // fails silently on a relaxed mock. Environment is mocked because the
+        // output directory is the public Documents folder, which off-device throws
+        // inside the coroutine and surfaces in whichever test runs next.
+        every { context.cacheDir } returns folder.newFolder("cache")
+        every { context.contentResolver.openInputStream(any()) } answers {
+            ByteArrayInputStream("%PDF-1.4 pretend document".toByteArray())
+        }
+        every { context.contentResolver.query(any(), any(), any(), any(), any()) } returns null
+        // Result is a value class, so a relaxed mock cannot stand in for one; the
+        // call has to be stubbed or loading dies before the document is set.
+        coEvery {
+            pdfToolsRepository.analyzeCompressionPotential(any())
+        } returns Result.failure(RuntimeException("no analysis in tests"))
+
+
+        // The tool shows the first page next to its settings, drawn by the
+        // platform renderer, which has no JVM implementation.
+        mockkStatic(ParcelFileDescriptor::class)
+        every { ParcelFileDescriptor.open(any(), any()) } returns mockk(relaxed = true)
+        mockkConstructor(PdfRenderer::class)
+        val previewPage = mockk<PdfRenderer.Page>(relaxed = true)
+        every { previewPage.width } returns 600
+        every { previewPage.height } returns 800
+        every { anyConstructed<PdfRenderer>().pageCount } returns 5
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns previewPage
+        mockkStatic(Bitmap::class)
+        every {
+            Bitmap.createBitmap(any<Int>(), any<Int>(), any())
+        } returns mockk(relaxed = true)
+
+        mockkStatic(Environment::class)
+        every {
+            Environment.getExternalStoragePublicDirectory(any())
+        } returns folder.newFolder("documents")
+
         coEvery { pdfToolsRepository.getPageCount(any()) } returns Result.success(10)
     }
 
     @After
     fun teardown() {
+        unmockkStatic(Environment::class)
+        unmockkStatic(ParcelFileDescriptor::class)
+        unmockkStatic(Bitmap::class)
+        unmockkConstructor(PdfRenderer::class)
         Dispatchers.resetMain()
     }
 
@@ -393,6 +451,247 @@ class CompressViewModelTest {
         )
         assertEquals(0f, result.reductionPercentage)
         assertEquals(0L, result.savedBytes)
+    }
+    // endregion
+
+    private fun TestScope.loadDocument(vm: CompressViewModel) {
+        vm.setSourceFile(mockk(relaxed = true))
+        // Loading starts on the main dispatcher and then does file work off it, so
+        // advancing the scheduler alone does not see the result.
+        repeat(200) {
+            advanceUntilIdle()
+            if (vm.state.value.sourceFile != null) return
+            Thread.sleep(10)
+        }
+        error("document never loaded")
+    }
+
+    // region Refusing to compress
+    @Test
+    fun `without a document it asks for one and compresses nothing`() = runTest {
+        val vm = createViewModel()
+        vm.compress()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.compressPdf(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `without an output name it asks for one and compresses nothing`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOutputFileName("")
+        vm.compress()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        coVerify(exactly = 0) { pdfToolsRepository.compressPdf(any(), any(), any(), any()) }
+    }
+    // endregion
+
+    // region Compressing
+    private fun TestScope.qualityUsedFor(level: CompressionLevel): Float {
+        val quality = slot<Float>()
+        coEvery {
+            pdfToolsRepository.compressPdf(any(), any(), capture(quality), any())
+        } returns Result.success(1_000L)
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setCompressionLevel(level)
+        vm.compress()
+        advanceUntilIdle()
+        return quality.captured
+    }
+
+    @Test
+    fun `each compression level asks for its own quality`() = runTest {
+        // The levels exist to mean different things; if they all sent the same
+        // number the choice would be decorative.
+        val qualities = CompressionLevel.entries.map { qualityUsedFor(it) }
+        assertEquals(qualities.size, qualities.distinct().size)
+    }
+
+    @Test
+    fun `a higher compression level asks for lower quality`() = runTest {
+        val low = qualityUsedFor(CompressionLevel.LOW)
+        val high = qualityUsedFor(CompressionLevel.HIGH)
+        assertTrue("expected HIGH compression to use lower quality than LOW", high < low)
+    }
+
+    @Test
+    fun `the document that was loaded is the one compressed`() = runTest {
+        coEvery {
+            pdfToolsRepository.compressPdf(any(), any(), any(), any())
+        } returns Result.success(1_000L)
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        val path = vm.state.value.sourceFile?.path
+        vm.compress()
+        advanceUntilIdle()
+
+        coVerify { pdfToolsRepository.compressPdf(path!!, any(), any(), any()) }
+    }
+
+    @Test
+    fun `a failure is surfaced and processing stops`() = runTest {
+        coEvery {
+            pdfToolsRepository.compressPdf(any(), any(), any(), any())
+        } returns Result.failure(RuntimeException("corrupt"))
+
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.compress()
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        assertFalse(vm.state.value.isProcessing)
+    }
+
+    @Test
+    fun `loading a document records its page count`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        assertEquals(10, vm.state.value.sourceFile?.pageCount)
+    }
+    // endregion
+
+    // region Where the finished document goes
+    @Test
+    fun `an existing file is not written over, a numbered one is used instead`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOutputFileName("compressed")
+        val documents = Environment.getExternalStoragePublicDirectory(null)
+        java.io.File(documents, "PdfReaderPro").mkdirs()
+        java.io.File(documents, "PdfReaderPro/compressed.pdf").writeText("someone else's work")
+        coEvery { pdfToolsRepository.compressPdf(any(), any(), any(), any()) } returns Result.success(1024L)
+
+        vm.compress()
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.result!!.outputPath.endsWith("compressed_1.pdf"))
+    }
+
+    @Test
+    fun `overwriting writes through a temporary file, then replaces the original`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        vm.setOverwriteOriginal(true)
+        val sourcePath = vm.state.value.sourceFile!!.path
+        val target = slot<String>()
+        coEvery {
+            pdfToolsRepository.compressPdf(any(), capture(target), any(), any())
+        } answers {
+            java.io.File(target.captured).writeText("finished bytes")
+            Result.success(1024L)
+        }
+
+        vm.compress()
+        advanceUntilIdle()
+
+        assertNotEquals(sourcePath, target.captured)
+        assertFalse(java.io.File(target.captured).exists())
+        assertEquals("finished bytes", java.io.File(sourcePath).readText())
+    }
+
+    @Test
+    fun `progress from the repository reaches the screen`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+        val seen = mutableListOf<Float>()
+        coEvery { pdfToolsRepository.compressPdf(any(), any(), any(), any()) } answers {
+            val onProgress = arg<(Float) -> Unit>(3)
+            onProgress(0.4f)
+            seen += vm.state.value.progress
+            Result.success(1024L)
+        }
+
+        vm.compress()
+        advanceUntilIdle()
+
+        assertEquals(listOf(0.4f), seen)
+        assertEquals(1f, vm.state.value.progress, 0.001f)
+    }
+    // endregion
+
+    // region What the tool estimates before compressing
+    @Test
+    fun `the estimate is turned into sizes the user can compare`() = runTest {
+        // The repository reports ratios; the screen shows sizes, so the file size
+        // is applied here and a mix-up would advertise the wrong saving.
+        coEvery { pdfToolsRepository.analyzeCompressionPotential(any()) } returns Result.success(
+            PdfToolsRepository.CompressionAnalysis(
+                bytesPerPage = 50_000,
+                hasImages = true,
+                isAlreadyOptimized = false,
+                estimatedRatioLow = 0.9f,
+                estimatedRatioMedium = 0.6f,
+                estimatedRatioHigh = 0.3f
+            )
+        )
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        val estimate = vm.state.value.sourceFile!!.compressionEstimate!!
+        val size = vm.state.value.sourceFile!!.size
+        assertEquals(50_000L, estimate.bytesPerPage)
+        assertTrue(estimate.hasImages)
+        assertEquals((size * 0.9f).toLong(), estimate.estimatedSizeLow)
+        assertEquals((size * 0.3f).toLong(), estimate.estimatedSizeHigh)
+    }
+
+    @Test
+    fun `the harder settings promise a smaller file than the gentler ones`() = runTest {
+        coEvery { pdfToolsRepository.analyzeCompressionPotential(any()) } returns Result.success(
+            PdfToolsRepository.CompressionAnalysis(
+                bytesPerPage = 50_000,
+                hasImages = true,
+                isAlreadyOptimized = false,
+                estimatedRatioLow = 0.9f,
+                estimatedRatioMedium = 0.6f,
+                estimatedRatioHigh = 0.3f
+            )
+        )
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        val estimate = vm.state.value.sourceFile!!.compressionEstimate!!
+        assertTrue(estimate.estimatedSizeHigh <= estimate.estimatedSizeMedium)
+        assertTrue(estimate.estimatedSizeMedium <= estimate.estimatedSizeLow)
+    }
+
+    @Test
+    fun `a document that cannot be analysed still opens, just without an estimate`() = runTest {
+        coEvery { pdfToolsRepository.analyzeCompressionPotential(any()) } returns
+            Result.failure(RuntimeException("damaged document"))
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        assertNotNull(vm.state.value.sourceFile)
+        assertNull(vm.state.value.sourceFile!!.compressionEstimate)
+    }
+
+    @Test
+    fun `the suggested name marks the file as compressed`() = runTest {
+        val vm = createViewModel()
+        loadDocument(vm)
+
+        assertTrue(vm.state.value.outputFileName.endsWith("_compressed"))
+    }
+
+    @Test
+    fun `a document that cannot be read is reported rather than left blank`() = runTest {
+        every { context.contentResolver.openInputStream(any()) } returns null
+        val vm = createViewModel()
+
+        vm.setSourceFile(mockk(relaxed = true))
+        advanceUntilIdle()
+
+        assertNotNull(vm.state.value.error)
+        assertNull(vm.state.value.sourceFile)
     }
     // endregion
 }

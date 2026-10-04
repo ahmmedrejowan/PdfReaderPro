@@ -8,6 +8,7 @@ import androidx.annotation.IntRange
 import com.rejowan.pdfreaderpro.presentation.components.pdf.PdfViewer.Companion.defaultHighlightEditorColors
 import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
 import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
+import com.rejowan.pdfreaderpro.presentation.components.pdf.js.toJsString
 
 /**
  * Provides functionality to edit a PDF document.
@@ -52,6 +53,85 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
             field = value
             pdfViewer.webView callDirectly if (value) "openEditorStamp"() else "closeEditorStamp"()
         }
+
+    /**
+     * Enables or disables the signature tool.
+     *
+     * The viewer carries a full signature editor already: draw, type or pick an
+     * image, optionally remembered for reuse. This only turns it on.
+     */
+    var signatureOn = false
+        set(value) {
+            pdfViewer.checkViewer()
+            field = value
+            pdfViewer.webView callDirectly if (value) "openEditorSignature"() else "closeEditorSignature"()
+        }
+
+    /**
+     * Places a signature captured in the app's own UI onto the current page.
+     *
+     * The viewer's own signature dialog is never shown; it is driven behind the
+     * scenes so the placed signature still gets the viewer's drag, resize and
+     * delete handles and is serialised with the document. The result arrives on
+     * [PdfListener.onSignaturePlaced].
+     *
+     * @param pngDataUrl a PNG data URL, transparent background
+     * @param description alt text stored with the annotation
+     */
+    fun placeSignatureImage(pngDataUrl: String, description: String) {
+        pdfViewer.checkViewer()
+        field_signatureOn(true)
+        pdfViewer.webView callDirectly "placeSignatureImage"(
+            pngDataUrl.toJsString(), description.toJsString()
+        )
+    }
+
+    /** Keeps [signatureOn] in step without re-issuing the viewer toggle. */
+    private fun field_signatureOn(value: Boolean) {
+        if (signatureOn != value) signatureOn = value
+    }
+
+    /** How many signatures are placed but not yet written to a copy. */
+    fun countPlacedSignatures(onResult: (Int) -> Unit) {
+        pdfViewer.checkViewer()
+        pdfViewer.webView.evaluateJavascript("countPlacedSignatures();") { result ->
+            onResult(result?.trim('"')?.toIntOrNull() ?: 0)
+        }
+    }
+
+    /**
+     * Where each placed signature currently sits, as the viewer reports it.
+     *
+     * Hands back the raw JSON, `[{key, pageIndex, rect}]`, with rect in PDF user
+     * space as [left, bottom, right, top].
+     */
+    fun getPlacedSignatures(onResult: (String) -> Unit) {
+        pdfViewer.checkViewer()
+        pdfViewer.webView.evaluateJavascript("getPlacedSignatures();") { result ->
+            // evaluateJavascript hands back a JSON-encoded return value, so the
+            // payload arrives wrapped in quotes and escaped.
+            val unwrapped = try {
+                if (result.isNullOrBlank() || result == "null") "[]"
+                else kotlinx.serialization.json.Json.decodeFromString<String>(result)
+            } catch (e: Exception) {
+                "[]"
+            }
+            onResult(unwrapped)
+        }
+    }
+
+    /**
+     * Puts a placed signature's top left corner on a point in PDF user space.
+     *
+     * Used to restore a stored placement. Goes through a synthesised drag rather
+     * than moving the element, which is what keeps the viewer's own model in step.
+     */
+    fun moveSignatureTo(key: String, left: Float, top: Float) {
+        pdfViewer.checkViewer()
+        pdfViewer.webView.evaluateJavascript(
+            "moveSignatureTo(${key.toJsString()}, $left, $top);", null
+        )
+    }
 
     /**
      * The current color used for highlighting text.
@@ -154,7 +234,7 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
     /**
      * Returns true if any of the editor modes (text highlight, free text, ink, stamp) are active.
      */
-    val isEditing: Boolean get() = textHighlighterOn || freeTextOn || inkOn || stampOn
+    val isEditing: Boolean get() = textHighlighterOn || freeTextOn || inkOn || stampOn || signatureOn
 
     /**
      * Undoes the last editing action.

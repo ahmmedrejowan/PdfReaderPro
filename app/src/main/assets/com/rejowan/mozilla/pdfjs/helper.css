@@ -131,3 +131,13 @@
     height: 1px;
     overflow: hidden;
 }
+
+/*
+ * Used while the app drives the signature dialog from its own UI. The dialog has
+ * to be open for its file input to accept an image, so it is moved out of sight
+ * rather than hidden: display:none on an open <dialog> stops it working.
+ */
+#addSignatureDialog.jwiOffscreen {
+    opacity: 0;
+    pointer-events: none;
+}

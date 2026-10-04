@@ -5,6 +5,7 @@ package com.rejowan.pdfreaderpro.presentation.components.pdf
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.net.Uri
+import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.URLUtil
@@ -17,6 +18,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.rejowan.pdfreaderpro.presentation.components.pdf.js.callDirectly
 import com.rejowan.pdfreaderpro.presentation.components.pdf.js.invoke
+import timber.log.Timber
 
 @SuppressLint("SetJavaScriptEnabled")
 @Suppress("FunctionName")
@@ -41,12 +43,11 @@ internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
         allowUniversalAccessFromFileURLs = false
 
         // Performance and memory optimization for large PDFs
+        // The viewer only needs localStorage; the Web SQL setting it used to sit
+        // beside was removed from WebView, and setRenderPriority has been a no-op
+        // since rendering moved to Chromium.
         domStorageEnabled = true
-        databaseEnabled = true
         cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
-
-        // Enable hardware acceleration for better performance
-        setRenderPriority(android.webkit.WebSettings.RenderPriority.HIGH)
 
         // Reduce memory usage by disabling unnecessary features
         setSupportMultipleWindows(false)
@@ -165,7 +166,19 @@ internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
             listeners.forEach {
                 handled = it.onRenderProcessGone(detail) || handled
             }
-            return handled
+            if (handled) return true
+
+            // Nothing claimed it. Returning false here hands the dead renderer back
+            // to the system, which kills the whole app, and a renderer running out
+            // of memory on a large document is a realistic way to get here. Detach
+            // and destroy the dead WebView and report it as handled so the process
+            // survives; the viewer is unusable either way, but the app is not gone.
+            Timber.e("WebView render process gone, destroying the dead view")
+            view?.let { dead ->
+                (dead.parent as? ViewGroup)?.removeView(dead)
+                dead.destroy()
+            }
+            return true
         }
     }
 

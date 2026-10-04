@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers
 
-import android.content.Context
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
@@ -100,7 +100,7 @@ data class PageNumbersResult(
 
 class PageNumbersViewModel(
     private val pdfToolsRepository: PdfToolsRepository,
-    private val context: Context
+    private val context: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PageNumbersState())

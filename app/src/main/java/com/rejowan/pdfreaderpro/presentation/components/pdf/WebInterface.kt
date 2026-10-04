@@ -165,6 +165,11 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
+    fun onSignaturePlaced(success: Boolean) = post {
+        pdfViewer.listeners.forEach { it.onSignaturePlaced(success) }
+    }
+
+    @JavascriptInterface
     fun onShowEditorMessage(message: String) = post {
         pdfViewer.listeners.forEach { it.onShowEditorMessage(message) }
     }

@@ -273,7 +273,7 @@
     <string name="retry">Retry</string>
 
     <!-- Reader Screen -->
-    <string name="page_of">Page %d of %d</string>
+    <string name="page_of">Page %1$d of %2$d</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="no_bookmarks">No bookmarks</string>
     <string name="add_bookmark">Add Bookmark</string>
@@ -307,6 +307,54 @@
     <string name="bake_highlights_action">Save copy</string>
     <string name="bake_highlights_done">Saved %d highlights into the copy</string>
     <string name="bake_highlights_failed">Could not save the copy: %s</string>
+    <string name="save_decrypted_copy">Save a copy without the password</string>
+    <string name="save_decrypted_copy_desc">Write an unprotected copy of this document</string>
+    <string name="save_decrypted_done">Saved a copy with the password removed</string>
+    <string name="save_decrypted_failed">Could not save the copy: %s</string>
+    <string name="save_decrypted_no_password">Open the document with its password first</string>
+    <string name="sign_tab_draw">Draw</string>
+    <string name="sign_tab_type">Type</string>
+    <string name="sign_tab_image">Image</string>
+    <string name="sign_type_placeholder">Your name</string>
+    <string name="sign_type_label">Type your signature</string>
+    <string name="sign_pick_image">Choose an image</string>
+    <string name="sign_clear">Clear</string>
+    <string name="sign_place">Place</string>
+    <string name="sign_new">New signature</string>
+    <string name="sign_saved_title">Signature</string>
+    <string name="sign_section_placed">On this document</string>
+    <string name="sign_section_saved">Your signatures</string>
+    <string name="sign_placed_on_page">Page %d</string>
+    <string name="sign_remove_placed">Remove</string>
+    <string name="sign_save_into_file">Save into this file</string>
+    <string name="sign_cannot_save_into_file">This document was opened as a copy, so it can only be saved as a new file.</string>
+    <string name="sign_save_as_copy">Save as a copy</string>
+    <string name="sign_discard_all">Remove all</string>
+    <string name="sign_nothing_placed">Nothing placed yet. Pick a signature below, or make a new one.</string>
+    <string name="sign_saved_empty">Draw, type or add an image of your signature</string>
+    <string name="sign_remember">Remember this signature</string>
+    <string name="sign_delete">Delete</string>
+    <string name="sign_placed">Signature placed. Drag to move, or place another.</string>
+    <string name="sign_place_failed">Could not place the signature</string>
+    <string name="sign_document">Signature</string>
+    <string name="sign_document_desc">Add, manage and save signatures</string>
+    <string name="sign_done">Saved a signed copy</string>
+    <string name="sign_failed">Could not save the signed copy: %s</string>
+    <string name="sign_saving">Saving the signed copy…</string>
+    <string name="sign_save">Save copy</string>
+    <string name="sign_discard">Discard</string>
+    <string name="sign_save_here">Save</string>
+    <string name="sign_save_confirm_title">Save into this document?</string>
+    <string name="sign_save_confirm_body">The signatures will be written into %s. This cannot be undone.</string>
+    <string name="sign_save_confirm_action">Save</string>
+    <string name="sign_save_confirm_cancel">Cancel</string>
+    <string name="sign_cannot_save_here">This document was opened as a copy, so it can only be saved as a new file</string>
+    <string name="sign_saved_in_place">Signatures written into this file</string>
+    <string name="sign_cancel">Cancel</string>
+    <string name="tool_sign_pdf">Sign PDF</string>
+    <string name="tool_sign_pdf_desc">Add your handwritten signature</string>
+    <string name="print_preparing">Preparing pages for printing…</string>
+    <string name="print_preparing_percent">Preparing pages for printing… %1$d%%</string>
     <string name="bake_highlights_none">There are no highlights to save</string>
     <string name="next_highlight">Next highlight</string>
     <string name="previous_highlight">Previous highlight</string>
@@ -335,7 +383,7 @@
     <string name="find_in_document">Find in Document</string>
     <string name="search_text">Search text…</string>
     <string name="no_matches">No matches</string>
-    <string name="match_count">%d of %d</string>
+    <string name="match_count">%1$d of %2$d</string>
 
     <!-- Remove Favorite -->
     <string name="remove_favorite">Remove Favorite</string>
@@ -870,7 +918,7 @@
     <!-- Recent Items -->
     <string name="item_selected">Selected</string>
     <string name="item_not_selected">Not selected</string>
-    <string name="page_progress">Page %d/%d</string>
+    <string name="page_progress">Page %1$d/%2$d</string>
     <string name="page_progress_time">Page %1$d of %2$d • %3$s</string>
     <string name="just_now">Just now</string>
     <string name="minutes_ago">%dm ago</string>
@@ -1368,7 +1416,7 @@
     <string name="pdf_saved_new_order">Your PDF has been saved with the new page order</string>
     <string name="pdf_password_protected">Your PDF is now password protected</string>
     <string name="password_protection_removed">Password protection has been removed</string>
-    <string name="images_created_count">%d %s image(s) created</string>
+    <string name="images_created_count">%1$d %2$s image(s) created</string>
     <string name="images_converted_count">%d image(s) converted</string>
     <string name="pages_removed_count">%d page(s) removed</string>
 
@@ -1404,7 +1452,7 @@
 
     <!-- Page Selection -->
     <string name="all_pages_count">All %d pages</string>
-    <string name="selected_of_count">%d of %d selected</string>
+    <string name="selected_of_count">%1$d of %2$d selected</string>
     <string name="pages_modified">%d pages • Modified</string>
     <string name="page_numbers_label">Page numbers</string>
     <string name="page_numbers_hint">e.g., 1-5, 8, 10-12</string>
@@ -1428,7 +1476,7 @@
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Lossless quality</string>
     <string name="format_smaller_size">Smaller file size</string>
-    <string name="will_create_images">Will create %d %s image(s)</string>
+    <string name="will_create_images">Will create %1$d %2$s image(s)</string>
 
     <!-- Compression Levels -->
     <string name="compression_low">Low</string>
@@ -1484,7 +1532,7 @@
     <string name="select_pages_to_remove_hint">Tap pages to select them for removal</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%d pages • %s</string>
+    <string name="pages_size_format">%1$d pages • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1620,4 +1668,8 @@
     <string name="validation_color_range">Color value must be 0-255</string>
     <string name="password_min_hint">Minimum 4 characters required</string>
 
+    <plurals name="sign_unsaved_count">
+        <item quantity="one">%d signature not saved</item>
+        <item quantity="other">%d signatures not saved</item>
+    </plurals>
 </resources>

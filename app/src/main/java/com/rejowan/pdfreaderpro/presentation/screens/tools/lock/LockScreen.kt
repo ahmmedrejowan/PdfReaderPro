@@ -461,11 +461,12 @@ private fun LockContent(
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                val filenameValidation = remember(state.outputFileName) {
-                    com.rejowan.pdfreaderpro.util.InputValidation.validateFileName(state.outputFileName)
+                val filenameError = remember(state.outputFileName) {
+                    if (state.outputFileName.isEmpty()) null
+                    else com.rejowan.pdfreaderpro.util.InputValidation
+                        .validateFileName(state.outputFileName)
+                            as? com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid
                 }
-                val isFilenameError = state.outputFileName.isNotEmpty() &&
-                        filenameValidation is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid
 
                 val focusManager = LocalFocusManager.current
                 OutlinedTextField(
@@ -474,13 +475,13 @@ private fun LockContent(
                     label = { Text(stringResource(R.string.output_file_name)) },
                     suffix = { Text(stringResource(R.string.pdf_extension)) },
                     singleLine = true,
-                    isError = isFilenameError,
-                    supportingText = if (isFilenameError && filenameValidation is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid) {
+                    isError = filenameError != null,
+                    supportingText = if (filenameError != null) {
                         {
                             Text(
                                 text = stringResource(
-                                    filenameValidation.errorMessageResId,
-                                    *filenameValidation.formatArgs
+                                    filenameError.errorMessageResId,
+                                    *filenameError.formatArgs
                                 ),
                                 color = MaterialTheme.colorScheme.error
                             )
@@ -622,10 +623,12 @@ private fun PasswordField(
     val focusManager = LocalFocusManager.current
 
     // Validate password
-    val validationResult = remember(value) {
-        com.rejowan.pdfreaderpro.util.InputValidation.validatePassword(value, isRequired)
+    val validationError = remember(value, isRequired) {
+        if (value.isEmpty()) null
+        else com.rejowan.pdfreaderpro.util.InputValidation
+            .validatePassword(value, isRequired)
+                as? com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid
     }
-    val isError = value.isNotEmpty() && validationResult is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid
 
     OutlinedTextField(
         value = value,
@@ -633,14 +636,14 @@ private fun PasswordField(
         label = { Text(label) },
         singleLine = true,
         enabled = enabled,
-        isError = isError,
+        isError = validationError != null,
         supportingText = {
             when {
-                isError && validationResult is com.rejowan.pdfreaderpro.util.InputValidation.ValidationResult.Invalid -> {
+                validationError != null -> {
                     Text(
                         text = stringResource(
-                            validationResult.errorMessageResId,
-                            *validationResult.formatArgs
+                            validationError.errorMessageResId,
+                            *validationError.formatArgs
                         ),
                         color = MaterialTheme.colorScheme.error
                     )

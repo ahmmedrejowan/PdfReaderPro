@@ -1,15 +1,25 @@
 package com.rejowan.pdfreaderpro.util
 
+import android.content.Context
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 
 class ErrorUtilsTest {
+
+    @get:Rule
+    val folder = TemporaryFolder()
+
 
     // ===========================================
     // Error Classification Tests
@@ -308,4 +318,122 @@ class ErrorUtilsTest {
         val result = ErrorUtils.preflightCheck(1L)
         assertNull(result)
     }
+
+    // region Checking a document before working on it
+    // Every tool runs this first, so what it lets through is what the iText layer
+    // is then handed. Saying "corrupted" about a file that is merely missing sends
+    // the user looking for the wrong problem.
+
+    @Test
+    fun `a real pdf passes`() {
+        val file = folder.newFile("real.pdf").apply { writeText("%PDF-1.4 and the rest") }
+        assertNull(ErrorUtils.validatePdfFile(file.absolutePath))
+    }
+
+    @Test
+    fun `a file that is not there is reported as missing, not as damaged`() {
+        assertEquals(
+            AppError.FileNotFound,
+            ErrorUtils.validatePdfFile(File(folder.root, "gone.pdf").absolutePath)
+        )
+    }
+
+    @Test
+    fun `an empty file is damaged`() {
+        val file = folder.newFile("empty.pdf")
+        assertEquals(AppError.CorruptedPdf, ErrorUtils.validatePdfFile(file.absolutePath))
+    }
+
+    @Test
+    fun `a file too short to hold a header is damaged`() {
+        val file = folder.newFile("stub.pdf").apply { writeText("%PD") }
+        assertEquals(AppError.CorruptedPdf, ErrorUtils.validatePdfFile(file.absolutePath))
+    }
+
+    @Test
+    fun `a file that is not a pdf at all is invalid`() {
+        val file = folder.newFile("notes.pdf").apply { writeText("Dear diary, today I") }
+        assertEquals(AppError.InvalidPdf, ErrorUtils.validatePdfFile(file.absolutePath))
+    }
+
+    @Test
+    fun `a file that cannot be read is a permission problem`() {
+        val file = folder.newFile("locked.pdf").apply {
+            writeText("%PDF-1.4 and the rest")
+            setReadable(false, false)
+        }
+        // Skipped where the filesystem or user cannot make a file unreadable, which
+        // is the case for root and for some CI images.
+        if (file.canRead()) return
+
+        assertEquals(AppError.PermissionDenied, ErrorUtils.validatePdfFile(file.absolutePath))
+    }
+    // endregion
+
+    // region Telling the user what went wrong
+    @Test
+    fun `the message shown is the one belonging to the classified error`() {
+        val context = mockk<Context>()
+        every { context.getString(AppError.FileNotFound.messageResId) } returns "That file is gone"
+
+        assertEquals(
+            "That file is gone",
+            ErrorUtils.getUserFriendlyMessage(context, FileNotFoundException("boom"))
+        )
+    }
+
+    @Test
+    fun `an error with a hint gives one`() {
+        val context = mockk<Context>()
+        every { context.getString(any()) } returns "Free up some space"
+
+        assertNotNull(ErrorUtils.getRecoveryHint(context, AppError.StorageFull))
+    }
+
+    @Test
+    fun `an error with nothing useful to suggest gives no hint`() {
+        val context = mockk<Context>()
+        every { context.getString(any()) } returns "anything"
+
+        val hintless = AppError.Unknown("something odd")
+        if (hintless.recoveryHintResId == null) {
+            assertNull(ErrorUtils.getRecoveryHint(context, hintless))
+        }
+    }
+    // endregion
+
+    // region Storage
+    @Test
+    fun `a storage check off device does not throw and does not block work`() {
+        // StatFs is not available here, and the util treats not knowing as having
+        // room, so that a failed check never stops the user working.
+        assertTrue(ErrorUtils.hasEnoughStorage(1L))
+        assertNull(ErrorUtils.preflightCheck(1L))
+    }
+
+    @Test
+    fun `unknown available storage is reported as unknown rather than as zero`() {
+        val context = mockk<Context>()
+        every { context.getString(any()) } returns "Unknown"
+
+        assertNotNull(ErrorUtils.formatAvailableStorage(context))
+    }
+    // endregion
+
+    // region Recoverability
+    @Test
+    fun `a missing file is not worth retrying`() {
+        assertFalse(ErrorUtils.isRecoverable(FileNotFoundException("gone")))
+    }
+
+    @Test
+    fun `running out of memory is worth retrying`() {
+        assertTrue(ErrorUtils.isRecoverable(OutOfMemoryError("no room")))
+    }
+
+    @Test
+    fun `a permission problem is worth retrying once granted`() {
+        assertTrue(ErrorUtils.isRecoverable(SecurityException("denied")))
+    }
+    // endregion
 }

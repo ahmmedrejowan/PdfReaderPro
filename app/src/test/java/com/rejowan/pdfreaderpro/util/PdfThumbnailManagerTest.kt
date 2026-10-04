@@ -1,12 +1,17 @@
 package com.rejowan.pdfreaderpro.util
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
 import android.util.LruCache
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +49,24 @@ class PdfThumbnailManagerTest {
         // Mock BitmapFactory to avoid Android graphics API issues
         mockkStatic(BitmapFactory::class)
         every { BitmapFactory.decodeFile(any()) } returns null
+
+        // Rendering a page is the whole job here, and the platform renderer has no
+        // JVM implementation, so it is stood up rather than worked around.
+        mockkStatic(ParcelFileDescriptor::class)
+        every { ParcelFileDescriptor.open(any(), any()) } returns mockk(relaxed = true)
+        mockkConstructor(PdfRenderer::class)
+        val page = mockk<PdfRenderer.Page>(relaxed = true)
+        every { page.width } returns 600
+        every { page.height } returns 800
+        every { anyConstructed<PdfRenderer>().pageCount } returns 3
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns page
+        mockkStatic(Bitmap::class)
+        every { Bitmap.createBitmap(any<Int>(), any<Int>(), any()) } answers {
+            mockk<Bitmap>(relaxed = true).also {
+                every { it.width } returns firstArg()
+                every { it.height } returns secondArg()
+            }
+        }
     }
 
     @After
@@ -52,6 +75,9 @@ class PdfThumbnailManagerTest {
         // Clean up test cache directory
         cacheDir.deleteRecursively()
         unmockkStatic(BitmapFactory::class)
+        unmockkStatic(ParcelFileDescriptor::class)
+        unmockkStatic(Bitmap::class)
+        unmockkConstructor(PdfRenderer::class)
     }
 
     // Note: PdfThumbnailManager uses LruCache which is an Android class that doesn't
@@ -227,6 +253,126 @@ class PdfThumbnailManagerTest {
         val hash2 = emptyPath.hashCode()
 
         assertEquals(hash1, hash2)
+    }
+    // endregion
+
+    private fun realPdf(name: String = "document.pdf"): File =
+        File(cacheDir, name).apply { writeText("%PDF-1.4 pretend document") }
+
+    private fun thumbnailFileFor(path: String) =
+        File(File(cacheDir, "pdf_thumbnails"), "${path.hashCode()}.jpg")
+
+    // region Counting pages
+    @Test
+    fun `the page count comes from the document`() {
+        assertEquals(3, PdfThumbnailManager.getPageCount(realPdf().absolutePath))
+    }
+
+    @Test
+    fun `a document that is not there counts as no pages`() {
+        assertEquals(0, PdfThumbnailManager.getPageCount("/nowhere/missing.pdf"))
+    }
+    // endregion
+
+    // region Making a thumbnail
+    @Test
+    fun `a thumbnail is made for a document that exists`() = runTest {
+        val thumbnail = PdfThumbnailManager.getThumbnail(context, realPdf().absolutePath)
+        assertNotNull(thumbnail)
+    }
+
+    @Test
+    fun `a document that is not there has no thumbnail`() = runTest {
+        assertNull(PdfThumbnailManager.getThumbnail(context, "/nowhere/missing.pdf"))
+    }
+
+    @Test
+    fun `a document with no pages has no thumbnail`() = runTest {
+        every { anyConstructed<PdfRenderer>().pageCount } returns 0
+
+        assertNull(PdfThumbnailManager.getThumbnail(context, realPdf("empty.pdf").absolutePath))
+    }
+
+    @Test
+    fun `the thumbnail fits inside the space the list gives it`() = runTest {
+        val thumbnail = PdfThumbnailManager.getThumbnail(context, realPdf().absolutePath)!!
+
+        assertTrue(thumbnail.width <= 200)
+        assertTrue(thumbnail.height <= 280)
+    }
+
+    @Test
+    fun `a page wider than it is tall is sized by its width`() = runTest {
+        // Aspect ratio decides which side is pinned, and getting it the wrong way
+        // round is what makes a landscape page overflow its row.
+        val page = mockk<PdfRenderer.Page>(relaxed = true)
+        every { page.width } returns 1000
+        every { page.height } returns 500
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns page
+
+        val thumbnail = PdfThumbnailManager.getThumbnail(context, realPdf("wide.pdf").absolutePath)!!
+
+        assertEquals(200, thumbnail.width)
+        assertEquals(100, thumbnail.height)
+    }
+
+    @Test
+    fun `a page taller than it is wide is sized by its height`() = runTest {
+        val page = mockk<PdfRenderer.Page>(relaxed = true)
+        every { page.width } returns 500
+        every { page.height } returns 1000
+        every { anyConstructed<PdfRenderer>().openPage(any()) } returns page
+
+        val thumbnail = PdfThumbnailManager.getThumbnail(context, realPdf("tall.pdf").absolutePath)!!
+
+        assertEquals(280, thumbnail.height)
+        assertEquals(140, thumbnail.width)
+    }
+
+    @Test
+    fun `making a thumbnail leaves one on disk for next time`() = runTest {
+        val pdf = realPdf()
+
+        PdfThumbnailManager.getThumbnail(context, pdf.absolutePath)
+        advanceUntilIdle()
+
+        assertTrue(thumbnailFileFor(pdf.absolutePath).exists())
+    }
+
+    @Test
+    fun `a thumbnail already on disk is read back rather than made again`() = runTest {
+        val pdf = realPdf()
+        thumbnailFileFor(pdf.absolutePath).apply {
+            parentFile?.mkdirs()
+            writeText("cached jpeg")
+        }
+        val fromDisk = mockk<Bitmap>(relaxed = true)
+        every { BitmapFactory.decodeFile(any()) } returns fromDisk
+
+        assertEquals(fromDisk, PdfThumbnailManager.getThumbnail(context, pdf.absolutePath))
+    }
+
+    @Test
+    fun `an unreadable file on disk is not fatal, a new thumbnail is made`() = runTest {
+        val pdf = realPdf()
+        thumbnailFileFor(pdf.absolutePath).apply {
+            parentFile?.mkdirs()
+            writeText("not an image")
+        }
+        every { BitmapFactory.decodeFile(any()) } returns null
+
+        assertNotNull(PdfThumbnailManager.getThumbnail(context, pdf.absolutePath))
+    }
+
+    @Test
+    fun `dropping a thumbnail removes the one on disk`() = runTest {
+        val pdf = realPdf()
+        PdfThumbnailManager.getThumbnail(context, pdf.absolutePath)
+        advanceUntilIdle()
+
+        PdfThumbnailManager.removeThumbnail(context, pdf.absolutePath)
+
+        assertFalse(thumbnailFileFor(pdf.absolutePath).exists())
     }
     // endregion
 }

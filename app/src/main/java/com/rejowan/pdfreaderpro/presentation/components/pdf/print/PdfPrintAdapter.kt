@@ -13,8 +13,8 @@ import android.print.PrintAttributes
 import android.print.PrintDocumentInfo
 import android.print.pdf.PrintedPdfDocument
 import android.util.Base64
-import android.util.Log
 import java.io.FileOutputStream
+import timber.log.Timber
 
 /**
  * An abstract implementation of [PdfPrintBridge] that handles the common logic for printing a PDF document.
@@ -79,7 +79,7 @@ abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge(
                 evaluateJavascript("extractPrintImages()", null)
             }
         } catch (e: Exception) {
-            Log.e("AbstractPdfPrintAdapter", "onWrite $e")
+            Timber.e(e, "onWrite failed")
             cancellationSignal.cancel()
         }
     }
@@ -113,7 +113,7 @@ abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge(
                 }
             }
         } catch (e: Exception) {
-            Log.e("AbstractPdfPrintAdapter", "onPage$pageNum $e")
+            Timber.e(e, "onPage %d failed", pageNum)
             callback?.onWriteFailed(e.message ?: "Failed to write PDF data")
             cancellationSignal?.cancel()
         }
@@ -178,7 +178,7 @@ abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge(
 
                 callback?.onLayoutFinished(builder.build(), true)
             } catch (e: Exception) {
-                Log.e("AbstractPdfPrintAdapter", "onLayout $e")
+                Timber.e(e, "onLayout failed")
                 callback?.onLayoutFailed("Failed to retrieve layout information")
             }
         }

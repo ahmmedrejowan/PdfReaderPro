@@ -5,10 +5,10 @@ import android.print.PageRange
 import android.print.PrintAttributes
 import android.print.PrintDocumentInfo
 import android.util.Base64
-import android.util.Log
 import com.rejowan.pdfreaderpro.presentation.components.pdf.print.PdfPrintBridge
 import org.json.JSONArray
 import java.io.FileOutputStream
+import timber.log.Timber
 
 // TODO: Remove in future version
 @PdfUnstablePrintApi
@@ -43,7 +43,7 @@ class SimplePdfPrintAdapter : PdfPrintBridge() {
 
                 callback?.onLayoutFinished(builder.build(), true)
             } catch (e: Exception) {
-                Log.e("error", "${e.message}, $e")
+                Timber.e(e, "Failed to build the print document")
                 callback?.onLayoutFailed("Failed to retrieve layout information")
             }
         }
@@ -71,7 +71,7 @@ class SimplePdfPrintAdapter : PdfPrintBridge() {
                 null
             )
         } catch (e: Exception) {
-            Log.e("PrintError - PrintAdapter", "${e.message}, $e")
+            Timber.e(e, "Print adapter failed")
         }
     }
 
@@ -96,7 +96,7 @@ class SimplePdfPrintAdapter : PdfPrintBridge() {
 
             callback?.onWriteFinished(arrayOf(PageRange.ALL_PAGES))
         } catch (e: Exception) {
-            Log.e("PrintError - PrintAdapter", "${e.message}, $e")
+            Timber.e(e, "Print adapter failed")
             callback?.onWriteFailed(e.message ?: "Failed to write PDF data")
         }
     }

@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.rotate
 
-import android.content.Context
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.pdf.PdfRenderer
@@ -93,7 +93,7 @@ data class RotateResult(
 
 class RotateViewModel(
     private val pdfToolsRepository: PdfToolsRepository,
-    private val context: Context
+    private val context: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RotateState())

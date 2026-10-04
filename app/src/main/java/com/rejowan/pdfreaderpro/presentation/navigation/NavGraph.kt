@@ -96,7 +96,8 @@ fun PdfReaderNavHost(
             ReaderScreen(
                 navController = navController,
                 path = reader.path,
-                initialPage = reader.page
+                initialPage = reader.page,
+                startSigning = reader.startSigning
             )
         }
 
@@ -226,6 +227,15 @@ fun PdfReaderNavHost(
  */
 fun NavController.navigateToReader(path: String, page: Int = 0, fromIntent: Boolean = false) {
     navigate(Reader(path = path, page = page, fromIntent = fromIntent))
+}
+
+/**
+ * Open the reader with the signature tool already active. Placing a handwritten
+ * signature needs the page in front of you, so the Sign PDF tool routes here
+ * rather than duplicating the viewer in a tool screen.
+ */
+fun NavController.navigateToSignTool(path: String) {
+    navigate(Reader(path = path, startSigning = true))
 }
 
 /**
