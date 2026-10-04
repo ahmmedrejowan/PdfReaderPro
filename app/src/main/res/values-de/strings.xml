@@ -1618,4 +1618,57 @@
     <string name="validation_color_range">Farbwert muss 0-255 sein</string>
     <string name="password_min_hint">Mindestens 4 Zeichen erforderlich</string>
 
+    <!-- Not yet translated: English fallback -->
+    <string name="save_decrypted_copy">Save a copy without the password</string>
+    <string name="save_decrypted_copy_desc">Write an unprotected copy of this document</string>
+    <string name="save_decrypted_done">Saved a copy with the password removed</string>
+    <string name="save_decrypted_failed">Could not save the copy: %s</string>
+    <string name="save_decrypted_no_password">Open the document with its password first</string>
+    <string name="sign_tab_draw">Draw</string>
+    <string name="sign_tab_type">Type</string>
+    <string name="sign_tab_image">Image</string>
+    <string name="sign_type_placeholder">Your name</string>
+    <string name="sign_type_label">Type your signature</string>
+    <string name="sign_pick_image">Choose an image</string>
+    <string name="sign_clear">Clear</string>
+    <string name="sign_place">Place</string>
+    <string name="sign_new">New signature</string>
+    <string name="sign_saved_title">Signature</string>
+    <string name="sign_section_placed">On this document</string>
+    <string name="sign_section_saved">Your signatures</string>
+    <string name="sign_placed_on_page">Page %d</string>
+    <string name="sign_remove_placed">Remove</string>
+    <string name="sign_save_into_file">Save into this file</string>
+    <string name="sign_cannot_save_into_file">This document was opened as a copy, so it can only be saved as a new file.</string>
+    <string name="sign_save_as_copy">Save as a copy</string>
+    <string name="sign_discard_all">Remove all</string>
+    <string name="sign_nothing_placed">Nothing placed yet. Pick a signature below, or make a new one.</string>
+    <string name="sign_saved_empty">Draw, type or add an image of your signature</string>
+    <string name="sign_remember">Remember this signature</string>
+    <string name="sign_delete">Delete</string>
+    <string name="sign_placed">Signature placed. Drag to move, or place another.</string>
+    <string name="sign_place_failed">Could not place the signature</string>
+    <string name="sign_document">Signature</string>
+    <string name="sign_document_desc">Add, manage and save signatures</string>
+    <string name="sign_done">Saved a signed copy</string>
+    <string name="sign_failed">Could not save the signed copy: %s</string>
+    <string name="sign_saving">Saving the signed copy…</string>
+    <string name="sign_save">Save copy</string>
+    <string name="sign_discard">Discard</string>
+    <string name="sign_save_here">Save</string>
+    <string name="sign_save_confirm_title">Save into this document?</string>
+    <string name="sign_save_confirm_body">The signatures will be written into %s. This cannot be undone.</string>
+    <string name="sign_save_confirm_action">Save</string>
+    <string name="sign_save_confirm_cancel">Cancel</string>
+    <string name="sign_cannot_save_here">This document was opened as a copy, so it can only be saved as a new file</string>
+    <string name="sign_saved_in_place">Signatures written into this file</string>
+    <string name="sign_cancel">Cancel</string>
+    <string name="tool_sign_pdf">Sign PDF</string>
+    <string name="tool_sign_pdf_desc">Add your handwritten signature</string>
+    <string name="print_preparing">Preparing pages for printing…</string>
+    <string name="print_preparing_percent">Preparing pages for printing… %1$d%%</string>
+    <plurals name="sign_unsaved_count">
+        <item quantity="one">%d signature not saved</item>
+        <item quantity="other">%d signatures not saved</item>
+    </plurals>
 </resources>
