@@ -98,6 +98,14 @@ class SplitViewModelTest {
     }
 
     // region Initial State Tests
+    /** Answers [id] with [format] filled in, so a message can be checked for what it names. */
+    private fun stubString(id: Int, format: String) {
+        every { context.getString(id, *anyVararg()) } answers {
+            val formatArgs = args.drop(1).flatMap { if (it is Array<*>) it.toList() else listOf(it) }
+            format.format(*formatArgs.toTypedArray())
+        }
+    }
+
     @Test
     fun `initial state has no source file`() = runTest {
         viewModel = createViewModel()
@@ -569,6 +577,7 @@ class SplitViewModelTest {
 
     @Test
     fun `a page beyond the document is rejected`() = runTest {
+        stubString(R.string.error_page_exceeds_max, "Page %1\$d exceeds max (%2\$d)")
         val error = rangesErrorFor("11")
         assertNotNull(error)
         assertTrue(error!!.contains("11"))
@@ -586,6 +595,7 @@ class SplitViewModelTest {
 
     @Test
     fun `a backwards range is rejected`() = runTest {
+        stubString(R.string.error_start_greater_than_end, "Invalid range: start > end in %1\$s")
         val error = rangesErrorFor("8-3")
         assertNotNull(error)
         assertTrue(error!!.contains("start > end"))

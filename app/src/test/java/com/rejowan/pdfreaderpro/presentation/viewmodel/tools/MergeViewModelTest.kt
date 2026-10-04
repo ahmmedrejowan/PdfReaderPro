@@ -121,6 +121,14 @@ class MergeViewModelTest {
     )
 
     // region Initial State Tests
+    /** Answers [id] with [format] filled in, so a message can be checked for what it names. */
+    private fun stubString(id: Int, format: String) {
+        every { context.getString(id, *anyVararg()) } answers {
+            val formatArgs = args.drop(1).flatMap { if (it is Array<*>) it.toList() else listOf(it) }
+            format.format(*formatArgs.toTypedArray())
+        }
+    }
+
     @Test
     fun `initial state has empty selected files`() = runTest {
         viewModel = createViewModel()
@@ -528,6 +536,7 @@ class MergeViewModelTest {
 
     @Test
     fun `a document with no pages selected stops the merge and is named`() = runTest {
+        stubString(R.string.error_no_pages_selected, "No pages selected for: %1\$s")
         val vm = createViewModel()
         addFiles(vm, 2)
         val first = vm.state.value.selectedFiles.first()
@@ -823,6 +832,7 @@ class MergeViewModelTest {
 
     @Test
     fun `a password protected document is named in the message and not added`() = runTest {
+        stubString(R.string.error_skipped_password_protected, "Skipped password-protected: %1\$s")
         coEvery { pdfToolsRepository.isPasswordProtected(any()) } returns Result.success(true)
         val vm = createViewModel()
 

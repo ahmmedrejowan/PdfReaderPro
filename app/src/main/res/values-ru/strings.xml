@@ -1368,7 +1368,7 @@
     <string name="pdf_saved_new_order">Ваш PDF сохранён с новым порядком страниц</string>
     <string name="pdf_password_protected">Ваш PDF теперь защищён паролем</string>
     <string name="password_protection_removed">Защита паролем снята</string>
-    <string name="images_created_count">Создано изображений (%s): %d</string>
+    <string name="images_created_count">Создано изображений (%2$s): %1$d</string>
     <string name="images_converted_count">Преобразовано изображений: %d</string>
     <string name="pages_removed_count">Удалено %1$d страниц</string>
 
@@ -1428,7 +1428,7 @@
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Качество без потерь</string>
     <string name="format_smaller_size">Меньший размер файла</string>
-    <string name="will_create_images">Будет создано изображений (%s): %d</string>
+    <string name="will_create_images">Будет создано изображений (%2$s): %1$d</string>
 
     <!-- Compression Levels -->
     <string name="compression_low">Низкий</string>
@@ -1671,6 +1671,8 @@
     <string name="print_preparing_percent">Preparing pages for printing… %1$d%%</string>
     <plurals name="sign_unsaved_count">
         <item quantity="one">%d signature not saved</item>
+        <item quantity="few">%d signatures not saved</item>
+        <item quantity="many">%d signatures not saved</item>
         <item quantity="other">%d signatures not saved</item>
     </plurals>
 </resources>
