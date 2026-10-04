@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
 import android.app.Application
 import app.cash.turbine.test
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.lock.LockViewModel
 import android.graphics.Bitmap
@@ -319,6 +320,7 @@ class LockViewModelTest {
     // region lock Validation Tests
     @Test
     fun `lock without source file sets error`() = runTest {
+        every { context.getString(R.string.error_select_pdf_first) } returns "Please select a PDF file first"
         viewModel = createViewModel()
         advanceUntilIdle()
 

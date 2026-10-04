@@ -310,6 +310,7 @@ class MergeViewModelTest {
     // region merge Validation Tests
     @Test
     fun `merge with less than 2 files sets error`() = runTest {
+        every { context.getString(R.string.error_select_two_files) } returns "Select at least 2 PDF files"
         viewModel = createViewModel()
         advanceUntilIdle()
 

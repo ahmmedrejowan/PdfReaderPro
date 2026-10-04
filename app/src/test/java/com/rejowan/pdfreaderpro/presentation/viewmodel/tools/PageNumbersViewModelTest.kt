@@ -750,6 +750,7 @@ class PageNumbersViewModelTest {
     // region applyPageNumbers Validation Tests
     @Test
     fun `applyPageNumbers without source file sets error`() = runTest {
+        every { context.getString(R.string.error_select_pdf_first) } returns "Please select a PDF file first"
         viewModel = createViewModel()
         advanceUntilIdle()
 

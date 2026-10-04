@@ -409,7 +409,7 @@
     <string name="compress">Сжать</string>
     <string name="compress_more">Сжать ещё</string>
     <string name="compressed_successfully">PDF успешно сжат</string>
-    <string name="size_reduced">Размер уменьшен на %s</string>
+    <string name="size_reduced">Размер уменьшен</string>
     <string name="compress_low_label">Низкое</string>
     <string name="compress_low_desc">Минимальное сжатие, лучшее качество</string>
     <string name="compress_medium_label">Среднее</string>

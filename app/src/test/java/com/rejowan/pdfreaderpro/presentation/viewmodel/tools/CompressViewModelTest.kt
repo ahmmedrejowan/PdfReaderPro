@@ -267,6 +267,7 @@ class CompressViewModelTest {
     // region compress Validation Tests
     @Test
     fun `compress without source file sets error`() = runTest {
+        every { context.getString(R.string.error_select_pdf_first) } returns "Please select a PDF file first"
         viewModel = createViewModel()
         advanceUntilIdle()
 

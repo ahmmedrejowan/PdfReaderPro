@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
 import android.app.Application
 import app.cash.turbine.test
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage.ImageFormat
 import com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage.PageSelection
@@ -277,6 +278,7 @@ class PdfToImageViewModelTest {
     // region exportImages Validation Tests
     @Test
     fun `exportImages without source file sets error`() = runTest {
+        every { context.getString(R.string.error_select_pdf_first) } returns "Please select a PDF file first"
         viewModel = createViewModel()
         advanceUntilIdle()
 

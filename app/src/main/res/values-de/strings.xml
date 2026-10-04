@@ -400,7 +400,7 @@
     <string name="compress">Komprimieren</string>
     <string name="compress_more">Weitere komprimieren</string>
     <string name="compressed_successfully">PDF erfolgreich komprimiert</string>
-    <string name="size_reduced">Größe um %s reduziert</string>
+    <string name="size_reduced">Größe reduziert</string>
     <string name="compress_low_label">Niedrig</string>
     <string name="compress_low_desc">Minimale Komprimierung, beste Qualität</string>
     <string name="compress_medium_label">Mittel</string>

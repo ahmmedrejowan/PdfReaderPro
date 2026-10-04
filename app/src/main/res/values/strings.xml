@@ -450,7 +450,7 @@
     <string name="compress">Compress</string>
     <string name="compress_more">Compress More</string>
     <string name="compressed_successfully">PDF compressed successfully</string>
-    <string name="size_reduced">Size reduced by %s</string>
+    <string name="size_reduced">Size Reduced</string>
     <string name="compress_low_label">Low</string>
     <string name="compress_low_desc">Minimal compression, best quality</string>
     <string name="compress_medium_label">Medium</string>

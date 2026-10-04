@@ -3,6 +3,7 @@ package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 import android.app.Application
 import android.os.Environment
 import app.cash.turbine.test
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitMode
 import com.rejowan.pdfreaderpro.presentation.screens.tools.split.SplitViewModel
@@ -433,6 +434,7 @@ class SplitViewModelTest {
     // region split Validation Tests
     @Test
     fun `split without source file sets error`() = runTest {
+        every { context.getString(R.string.error_no_pdf_selected) } returns "No PDF file selected"
         viewModel = createViewModel()
         advanceUntilIdle()
 

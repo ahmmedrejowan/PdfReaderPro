@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.presentation.viewmodel.tools
 
 import android.app.Application
 import app.cash.turbine.test
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.imagetopdf.ImageItem
 import com.rejowan.pdfreaderpro.presentation.screens.tools.imagetopdf.ImageToPdfViewModel
@@ -221,6 +222,7 @@ class ImageToPdfViewModelTest {
     // region convertToPdf Validation Tests
     @Test
     fun `convertToPdf with no images sets error`() = runTest {
+        every { context.getString(R.string.error_add_one_image) } returns "Please add at least one image"
         viewModel = createViewModel()
         advanceUntilIdle()
 
