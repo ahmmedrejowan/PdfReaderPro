@@ -29,6 +29,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import com.rejowan.pdfreaderpro.R
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -749,6 +750,7 @@ class PageNumbersViewModelTest {
     // region applyPageNumbers Validation Tests
     @Test
     fun `applyPageNumbers without source file sets error`() = runTest {
+        every { context.getString(R.string.error_select_pdf_first) } returns "Please select a PDF file first"
         viewModel = createViewModel()
         advanceUntilIdle()
 
@@ -838,32 +840,32 @@ class PageNumbersViewModelTest {
     // region NumberPosition enum Tests
     @Test
     fun `NumberPosition TOP_LEFT has correct label`() {
-        assertEquals("Top Left", NumberPosition.TOP_LEFT.label)
+        assertEquals(R.string.position_top_left, NumberPosition.TOP_LEFT.labelRes)
     }
 
     @Test
     fun `NumberPosition TOP_CENTER has correct label`() {
-        assertEquals("Top Center", NumberPosition.TOP_CENTER.label)
+        assertEquals(R.string.position_top_center, NumberPosition.TOP_CENTER.labelRes)
     }
 
     @Test
     fun `NumberPosition TOP_RIGHT has correct label`() {
-        assertEquals("Top Right", NumberPosition.TOP_RIGHT.label)
+        assertEquals(R.string.position_top_right, NumberPosition.TOP_RIGHT.labelRes)
     }
 
     @Test
     fun `NumberPosition BOTTOM_LEFT has correct label`() {
-        assertEquals("Bottom Left", NumberPosition.BOTTOM_LEFT.label)
+        assertEquals(R.string.position_bottom_left, NumberPosition.BOTTOM_LEFT.labelRes)
     }
 
     @Test
     fun `NumberPosition BOTTOM_CENTER has correct label`() {
-        assertEquals("Bottom Center", NumberPosition.BOTTOM_CENTER.label)
+        assertEquals(R.string.position_bottom_center, NumberPosition.BOTTOM_CENTER.labelRes)
     }
 
     @Test
     fun `NumberPosition BOTTOM_RIGHT has correct label`() {
-        assertEquals("Bottom Right", NumberPosition.BOTTOM_RIGHT.label)
+        assertEquals(R.string.position_bottom_right, NumberPosition.BOTTOM_RIGHT.labelRes)
     }
 
     @Test
@@ -875,32 +877,32 @@ class PageNumbersViewModelTest {
     // region NumberFormat enum Tests
     @Test
     fun `NumberFormat NUMBER_ONLY has correct properties`() {
-        assertEquals("Number Only", NumberFormat.NUMBER_ONLY.label)
-        assertEquals("1, 2, 3...", NumberFormat.NUMBER_ONLY.example)
+        assertEquals(R.string.format_number_only, NumberFormat.NUMBER_ONLY.labelRes)
+        assertEquals(R.string.format_number_only_example, NumberFormat.NUMBER_ONLY.exampleRes)
     }
 
     @Test
     fun `NumberFormat PAGE_X has correct properties`() {
-        assertEquals("Page X", NumberFormat.PAGE_X.label)
-        assertEquals("Page 1, Page 2...", NumberFormat.PAGE_X.example)
+        assertEquals(R.string.format_page_x, NumberFormat.PAGE_X.labelRes)
+        assertEquals(R.string.format_page_x_example, NumberFormat.PAGE_X.exampleRes)
     }
 
     @Test
     fun `NumberFormat X_OF_Y has correct properties`() {
-        assertEquals("X of Y", NumberFormat.X_OF_Y.label)
-        assertEquals("1 of 10, 2 of 10...", NumberFormat.X_OF_Y.example)
+        assertEquals(R.string.format_x_of_y, NumberFormat.X_OF_Y.labelRes)
+        assertEquals(R.string.format_x_of_y_example, NumberFormat.X_OF_Y.exampleRes)
     }
 
     @Test
     fun `NumberFormat DASH_X_DASH has correct properties`() {
-        assertEquals("- X -", NumberFormat.DASH_X_DASH.label)
-        assertEquals("- 1 -, - 2 -...", NumberFormat.DASH_X_DASH.example)
+        assertEquals(R.string.format_dash_x, NumberFormat.DASH_X_DASH.labelRes)
+        assertEquals(R.string.format_dash_x_example, NumberFormat.DASH_X_DASH.exampleRes)
     }
 
     @Test
     fun `NumberFormat CUSTOM has correct properties`() {
-        assertEquals("Custom", NumberFormat.CUSTOM.label)
-        assertEquals("Custom prefix/suffix", NumberFormat.CUSTOM.example)
+        assertEquals(R.string.format_custom, NumberFormat.CUSTOM.labelRes)
+        assertEquals(R.string.format_custom_example, NumberFormat.CUSTOM.exampleRes)
     }
 
     @Test

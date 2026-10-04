@@ -62,16 +62,19 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.compose.ui.res.stringResource
+import androidx.annotation.StringRes
+import com.rejowan.pdfreaderpro.R
 
 enum class NavItem(
-    val label: String,
+    @StringRes val labelRes: Int,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
 ) {
-    HOME("Home", Icons.Filled.Home, Icons.Outlined.Home),
-    FOLDERS("Folders", Icons.Filled.Folder, Icons.Outlined.Folder),
-    TOOLS("Tools", Icons.Outlined.Build, Icons.Outlined.Build),
-    SETTINGS("Settings", Icons.Filled.Settings, Icons.Outlined.Settings)
+    HOME(R.string.nav_home, Icons.Filled.Home, Icons.Outlined.Home),
+    FOLDERS(R.string.nav_folders, Icons.Filled.Folder, Icons.Outlined.Folder),
+    TOOLS(R.string.nav_tools, Icons.Outlined.Build, Icons.Outlined.Build),
+    SETTINGS(R.string.nav_settings, Icons.Filled.Settings, Icons.Outlined.Settings)
 }
 
 @Composable
@@ -175,14 +178,14 @@ fun AnimatedBottomNav(
                             )
                             Icon(
                                 imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
-                                contentDescription = item.label,
+                                contentDescription = stringResource(item.labelRes),
                                 modifier = Modifier
                                     .size(18.dp)
                                     .alpha(iconAlpha)
                             )
                         },
                         label = {
-                            Text(text = item.label)
+                            Text(text = stringResource(item.labelRes))
                         },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = selectedIconColor,
@@ -227,7 +230,7 @@ private fun FloatingCircle(
         ) { targetIcon ->
             Icon(
                 imageVector = targetIcon,
-                contentDescription = item.label,
+                contentDescription = stringResource(item.labelRes),
                 tint = iconColor,
                 modifier = Modifier.size(18.dp)
             )

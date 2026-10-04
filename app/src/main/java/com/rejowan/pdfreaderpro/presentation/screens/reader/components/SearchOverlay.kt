@@ -49,7 +49,7 @@ fun SearchOverlay(
         OutlinedTextField(
             value = query,
             onValueChange = onQueryChange,
-            placeholder = { Text("Search in document...", color = Color.White.copy(alpha = 0.6f)) },
+            placeholder = { Text(stringResource(R.string.search_in_document), color = Color.White.copy(alpha = 0.6f)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = { /* Already searching on change */ }),

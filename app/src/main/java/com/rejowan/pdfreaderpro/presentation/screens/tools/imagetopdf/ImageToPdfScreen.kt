@@ -151,6 +151,7 @@ fun ImageToPdfScreen(
             when {
                 state.result != null -> {
                     val result = requireNotNull(state.result)
+                    val sharePdfLabel = stringResource(R.string.share_pdf)
                     SuccessState(
                         result = result,
                         onOpenInApp = { navController.navigateToReader(result.outputPath) },
@@ -166,7 +167,7 @@ fun ImageToPdfScreen(
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+                            context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onConvertMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }

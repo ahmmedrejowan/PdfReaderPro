@@ -60,14 +60,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
+import androidx.annotation.StringRes
 
 private val AccentBlue = Color(0xFF64B5F6)
 
-enum class SpeedPreset(val label: String, val speed: Float) {
-    SLOW("Slow", 30f),
-    MEDIUM("Medium", 60f),
-    FAST("Fast", 100f),
-    VERY_FAST("Very Fast", 150f)
+enum class SpeedPreset(@StringRes val labelRes: Int, val speed: Float) {
+    SLOW(R.string.speed_slow, 30f),
+    MEDIUM(R.string.speed_medium, 60f),
+    FAST(R.string.speed_fast, 100f),
+    VERY_FAST(R.string.speed_very_fast, 150f)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -264,7 +265,7 @@ private fun AutoScrollSheetContent(
                     onClick = { onSpeedChange(preset.speed) },
                     label = {
                         Text(
-                            text = preset.label,
+                            text = stringResource(preset.labelRes),
                             style = MaterialTheme.typography.labelSmall
                         )
                     },

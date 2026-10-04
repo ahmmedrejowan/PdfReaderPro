@@ -20,6 +20,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.rejowan.pdfreaderpro.R
 
 data class ImageItem(
     val id: String,
@@ -147,12 +148,12 @@ class ImageToPdfViewModel(
         val currentState = _state.value
 
         if (currentState.images.isEmpty()) {
-            _state.update { it.copy(error = "Please add at least one image") }
+            _state.update { it.copy(error = context.getString(R.string.error_add_one_image)) }
             return
         }
 
         if (currentState.outputFileName.isBlank()) {
-            _state.update { it.copy(error = "Please enter an output file name") }
+            _state.update { it.copy(error = context.getString(R.string.error_enter_output_name)) }
             return
         }
 
@@ -199,7 +200,7 @@ class ImageToPdfViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: "Failed to convert images to PDF"
+                            error = error.message ?: context.getString(R.string.error_convert_images_failed)
                         )
                     }
                 }

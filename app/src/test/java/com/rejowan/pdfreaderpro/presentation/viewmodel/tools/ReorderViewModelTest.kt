@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import app.cash.turbine.test
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.reorder.PageItem
 import com.rejowan.pdfreaderpro.presentation.screens.tools.reorder.ReorderViewModel
@@ -234,6 +235,7 @@ class ReorderViewModelTest {
     // region reorder Validation Tests
     @Test
     fun `reorder without source file sets error`() = runTest {
+        every { context.getString(R.string.error_select_pdf_first) } returns "Please select a PDF file first"
         viewModel = createViewModel()
         advanceUntilIdle()
 

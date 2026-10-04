@@ -279,7 +279,7 @@ private fun DeleteConfirmContent(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Cancel", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.cancel), style = MaterialTheme.typography.labelMedium)
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -295,7 +295,7 @@ private fun DeleteConfirmContent(
                     containerColor = AccentRed
                 )
             ) {
-                Text("Delete", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.delete), style = MaterialTheme.typography.labelMedium)
             }
         }
     }

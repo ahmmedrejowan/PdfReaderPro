@@ -111,6 +111,8 @@ fun ReorderScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val openWithLabel = stringResource(R.string.open_with)
+    val sharePdfLabel = stringResource(R.string.share_pdf)
     val focusManager = LocalFocusManager.current
 
     val pdfPickerLauncher = rememberLauncherForActivityResult(
@@ -189,7 +191,7 @@ fun ReorderScreen(
                                 setDataAndType(uri, "application/pdf")
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(intent, "Open with"))
+                            context.startActivity(Intent.createChooser(intent, openWithLabel))
                         },
                         onShare = {
                             val file = File(result.outputPath)
@@ -203,7 +205,7 @@ fun ReorderScreen(
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+                            context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onReorderMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }

@@ -12,6 +12,7 @@
     <string name="intro_title_3">Tailor Your PDF Experience</string>
     <string name="intro_sub_title_3">Customize, search, and explore advanced PDF features.</string>
 
+    <string name="greeting_with_emoji">%1$s %2$s</string>
 
     <string name="let_s_start">Let\'s Start</string>
 
@@ -36,7 +37,6 @@
 
     <string name="app_settings">App Settings</string>
     <string name="how_to_allow_access">How To Allow Access</string>
-
 
     <string name="settings">Settings</string>
     <string name="search_pdf">Search PDF</string>
@@ -233,6 +233,30 @@
     <string name="creator_description">PDF Reader Pro was created to provide a free, open-source, and privacy-focused PDF reading experience. With features like bookmarks, favorites, reading themes, and customizable settings, it aims to be a complete PDF solution for Android users.</string>
     <string name="gnu_license">GNU General Public License v3.0</string>
 
+    <!-- Tool categories -->
+    <string name="tool_category_organize">Organize</string>
+    <string name="tool_category_edit">Edit</string>
+    <string name="tool_category_security">Security</string>
+    <string name="tool_category_convert">Convert</string>
+
+    <!-- Tools -->
+    <string name="tool_split_pdf">Split PDF</string>
+    <string name="tool_split_desc">Split a PDF into multiple files</string>
+    <string name="tool_compress_desc">Reduce file size while maintaining quality</string>
+    <string name="tool_rotate_pages">Rotate Pages</string>
+    <string name="tool_rotate_desc">Rotate individual or all pages</string>
+    <string name="tool_reorder_pages">Reorder Pages</string>
+    <string name="tool_reorder_desc">Rearrange page order in PDF</string>
+    <string name="tool_remove_pages">Remove Pages</string>
+    <string name="tool_watermark">Add Watermark</string>
+    <string name="tool_watermark_desc">Add text or image watermark</string>
+    <string name="tool_page_numbers">Add Page Numbers</string>
+    <string name="tool_page_numbers_desc">Insert page numbers to PDF</string>
+    <string name="tool_unlock_pdf">Unlock PDF</string>
+    <string name="tool_unlock_desc">Remove password from PDF</string>
+    <string name="tool_pdf_to_image">PDF to Images</string>
+    <string name="tool_pdf_to_image_desc">Export PDF pages as image files</string>
+
     <!-- Update Sheet -->
     <string name="update_available">Update Available</string>
     <string name="current">Current</string>
@@ -426,13 +450,39 @@
     <string name="compress">Compress</string>
     <string name="compress_more">Compress More</string>
     <string name="compressed_successfully">PDF compressed successfully</string>
-    <string name="size_reduced">Size reduced by %s</string>
+    <string name="size_reduced">Size Reduced</string>
+    <string name="compress_low_label">Low</string>
+    <string name="compress_low_desc">Minimal compression, best quality</string>
+    <string name="compress_medium_label">Medium</string>
+    <string name="compress_medium_desc">Balanced compression and quality</string>
+    <string name="compress_high_label">High</string>
+    <string name="compress_high_desc">Maximum compression, smaller file</string>
+
+    <!-- Compress Screen -->
+    <string name="compress_page_info">%1$d pages • %2$s</string>
+    <string name="compress_share_pdf">Share PDF</string>
+    <string name="compress_empty_title">Compress PDF File</string>
+    <string name="compress_empty_desc">Select a PDF file to reduce its file size while maintaining quality</string>
+    <string name="already_optimized">Already optimized</string>
+    <string name="limited_potential">Limited potential</string>
+    <string name="size_save_format">(save %1$s • %2$d%%)</string>
+    <string name="contains_images_hint">Contains images • Good compression potential</string>
+    <string name="mostly_text_hint">Mostly text content</string>
+    <string name="compress_pdf_btn">Compress PDF</string>
+    <string name="compression_complete">Compression Complete!</string>
+    <string name="original_size">Original Size</string>
+    <string name="compressed_size">Compressed Size</string>
+    <string name="compressed_size_reduced">Size Reduced</string>
+    <string name="saved_format">(%1$s saved)</string>
+    <string name="pages_count_format">%1$d pages</string>
 
     <!-- Rotate -->
     <string name="rotation">Rotation</string>
     <string name="rotate_left">Rotate Left</string>
     <string name="rotate_right">Rotate Right</string>
     <string name="rotate_180">Rotate 180°</string>
+    <string name="rotate_90_right">90° Right</string>
+    <string name="rotate_90_left">90° Left</string>
     <string name="apply_to_all">Apply to All Pages</string>
     <string name="rotate_more">Rotate More</string>
     <string name="rotated_successfully">PDF rotated successfully</string>
@@ -469,12 +519,20 @@
     <string name="color">Color</string>
     <string name="add">Add</string>
     <string name="watermark_more">Add More</string>
-    <string name="watermark_added">Watermark added successfully</string>
+    <string name="watermark_empty_title">Add Watermark</string>
+    <string name="watermark_empty_desc">Add text or image watermark to your PDF pages</string>
+    <string name="watermark_sample">Sample</string>
+    <string name="tap_to_select_image">Tap to select image</string>
+    <string name="custom_watermark_color">Custom watermark color</string>
+    <string name="position_center">Center</string>
+    <string name="position_tiled">Tiled</string>
+    <string name="watermark_added">Watermark Added!</string>
+    <string name="applied_to_pages">Applied to %1$d pages</string>
+    <string name="pages_size_dash_format">%1$d pages - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Select pages to remove</string>
     <string name="remove_selected">Remove Selected</string>
-    <string name="pages_removed">Pages removed successfully</string>
     <string name="remove_more">Remove More</string>
 
     <!-- Reorder -->
@@ -490,6 +548,42 @@
     <string name="add_numbers">Add Numbers</string>
     <string name="numbers_added">Page numbers added successfully</string>
     <string name="number_more">Number More</string>
+    <string name="tool_add_page_numbers_desc">Insert page numbers to your PDF document</string>
+    <string name="section_format">FORMAT</string>
+    <string name="section_margins">MARGINS</string>
+    <string name="section_apply_to_pages">APPLY TO PAGES</string>
+    <string name="horizontal_margin">Horizontal Margin</string>
+    <string name="vertical_margin">Vertical Margin</string>
+
+    <!-- Formats -->
+    <string name="format_number_only">Number only</string>
+    <string name="format_number_only_example">1</string>
+    <string name="format_page_x">Page X</string>
+    <string name="format_page_x_example">Page 1</string>
+    <string name="format_x_of_y">X of Y</string>
+    <string name="format_x_of_y_example">1 of 10</string>
+    <string name="format_dash_x">- X -</string>
+    <string name="format_dash_x_example">- 1 -</string>
+    <string name="format_custom">Custom</string>
+    <string name="format_custom_example">P.1</string>
+
+    <!-- Preview -->
+    <string name="preview_info_format">%1$s • %2$dpt • %3$s</string>
+
+    <!-- Color picker -->
+    <string name="pick_color">Pick Color</string>
+    <string name="page_number_color">Page number color</string>
+
+    <!-- Page selection -->
+    <string name="page_numbers_selection_all">All (%1$d)</string>
+    <string name="page_selection_odd">Odd</string>
+    <string name="page_selection_even">Even</string>
+    <string name="page_selection_skip_first">Skip First</string>
+    <string name="title_page_selection_custom">Custom</string>
+
+    <!-- Success -->
+    <string name="numbered_pages_format">Numbered %1$d of %2$d pages</string>
+    <string name="adding_numbers">Adding Numbers…</string>
 
     <!-- Images to PDF -->
     <string name="add_images">Add images to convert</string>
@@ -509,6 +603,9 @@
     <string name="share_all">Share All</string>
     <string name="view_images">View Images</string>
     <string name="images_saved_to">Images saved to: %s</string>
+    <string name="share_images">Share Images</string>
+    <string name="share_image">Share Image</string>
+    <string name="view_image">View Image</string>
 
     <!-- Error Messages -->
     <string name="error_loading_pdf">Error loading PDF</string>
@@ -523,6 +620,56 @@
     <string name="error_network">Network error</string>
     <string name="error_timeout">Operation timed out</string>
     <string name="error_out_of_memory">Not enough memory</string>
+    <string name="error_failed_load_pdf">Failed to load PDF file</string>
+    <string name="error_failed_load_pdf_with_message">Failed to load PDF: %1$s</string>
+    <string name="error_select_pdf_first">Please select a PDF file first</string>
+    <string name="error_enter_output_name">Please enter an output file name</string>
+    <string name="error_failed_replace_original">Failed to replace original file</string>
+    <string name="error_compression_failed">Compression failed</string>
+    <string name="error_add_one_image">Please add at least one image</string>
+    <string name="error_convert_images_failed">Failed to convert images to PDF</string>
+    <string name="error_owner_password_required">Owner password is required</string>
+    <string name="error_owner_password_min_length">Owner password must be at least 4 characters</string>
+    <string name="error_user_password_min_length">User password must be at least 4 characters</string>
+    <string name="error_lock_failed">Failed to lock PDF</string>
+    <string name="error_skipped_password_protected">Skipped password-protected: %1$s</string>
+    <string name="error_select_two_files">Select at least 2 PDF files</string>
+    <string name="error_no_pages_selected">No pages selected for: %1$s</string>
+    <string name="error_merge_failed">Merge failed</string>
+    <string name="error_add_page_numbers_failed">Failed to add page numbers</string>
+    <string name="error_export_images_failed">Failed to export images</string>
+    <string name="error_select_at_least_one_page">Please select at least one page to remove</string>
+    <string name="error_cannot_remove_all_pages">Cannot remove all pages from PDF</string>
+    <string name="error_remove_pages_failed">Failed to remove pages</string>
+    <string name="error_no_changes_made">No changes made to page order</string>
+    <string name="error_reorder_failed">Reorder failed</string>
+    <string name="error_select_at_least_one_page_rotate">Please select at least one page to rotate</string>
+    <string name="error_rotation_failed">Rotation failed</string>
+    <string name="error_failed_load_file">Failed to load file</string>
+    <string name="error_invalid_format">Invalid format: %1$s</string>
+    <string name="error_invalid_range">Invalid range: %1$s</string>
+    <string name="error_invalid_page">Invalid page: %1$s</string>
+    <string name="error_page_at_least_one">Page must be at least 1</string>
+    <string name="error_start_page_at_least_one">Start page must be at least 1</string>
+    <string name="error_end_page_at_least_one">End page must be at least 1</string>
+    <string name="error_page_exceeds_max">Page %1$d exceeds max (%2$d)</string>
+    <string name="error_start_page_exceeds_max">Start page %1$d exceeds max (%2$d)</string>
+    <string name="error_end_page_exceeds_max">End page %1$d exceeds max (%2$d)</string>
+    <string name="error_start_greater_than_end">Invalid range: start &gt; end in %1$s</string>
+    <string name="error_no_pdf_selected">No PDF file selected</string>
+    <string name="error_enter_output_prefix">Enter an output prefix</string>
+    <string name="error_enter_page_ranges">Enter page ranges</string>
+    <string name="error_enter_pages_to_extract">Enter pages to extract</string>
+    <string name="error_split_failed">Split failed</string>
+    <string name="error_invalid_page_ranges">Invalid page ranges</string>
+    <string name="error_invalid_page_selection">Invalid page selection</string>
+    <string name="error_not_password_protected">This PDF is not password protected</string>
+    <string name="error_enter_password">Please enter the password</string>
+    <string name="error_unlock_failed">Failed to unlock PDF</string>
+    <string name="error_failed_load_image">Failed to load image</string>
+    <string name="error_enter_watermark_text">Please enter watermark text</string>
+    <string name="error_select_watermark_image">Please select a watermark image</string>
+    <string name="error_add_watermark_failed">Failed to add watermark</string>
 
     <!-- Error Recovery Hints -->
     <string name="error_hint_corrupted_pdf">The file may be damaged. Try downloading it again.</string>
@@ -592,6 +739,8 @@
     <string name="cd_open">Open</string>
     <string name="cd_open_with">Open with</string>
     <string name="cd_retry">Retry</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_more_options">More options</string>
 
     <!-- Content Descriptions - PDF Reader -->
     <string name="cd_zoom_in">Zoom in</string>
@@ -731,6 +880,8 @@
     <string name="delete_action">Delete</string>
     <string name="delete_desc">Permanently remove this file</string>
     <string name="pages_count">%d pages</string>
+    <string name="cd_toggle_scroll_direction">Toggle scroll direction</string>
+    <string name="cd_fit_to_screen">Fit to screen</string>
 
     <!-- Folder Options -->
     <string name="folder_options">Folder Options</string>
@@ -779,6 +930,17 @@
     <string name="storage_access_message">Allow storage access so we can find and display your PDF files</string>
     <string name="open_settings">Open Settings</string>
     <string name="not_now">Not now</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_folders">Folders</string>
+    <string name="nav_tools">Tools</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Home sub-tabs -->
+    <string name="home_tab_recent">Recent</string>
+    <string name="home_tab_favorites">Favorites</string>
+    <string name="home_tab_all_files">All Files</string>
 
     <!-- Error Activity -->
     <string name="unexpected_error">An unexpected error occurred</string>
@@ -979,9 +1141,17 @@
     <string name="open_pdf">Open</string>
     <string name="error_loading">Error loading PDF</string>
     <string name="try_again_message">Something went wrong while loading this PDF. Please try again.</string>
+    <string name="cd_page_thumbnails">Page Thumbnails</string>
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Search in document…</string>
+    <string name="cd_matching_highlights">%1$d matching highlights</string>
+
+    <!-- Floating Control Bar -->
+    <string name="cd_view_options">View Options</string>
+    <string name="cd_zoom">Zoom</string>
+    <string name="cd_display_settings">Display Settings</string>
+    <string name="cd_control_more_options">More Options</string>
 
     <!-- Reader Sidebar -->
     <string name="reading">Reading</string>
@@ -1003,6 +1173,15 @@
     <string name="no_contents_available">No Contents Available</string>
     <string name="no_toc_message">This PDF doesn\'t have a table of contents</string>
     <string name="no_attachments_message">This PDF doesn\'t have any embedded files</string>
+    <string name="toc_section_count">%1$d section</string>
+    <string name="toc_sections_count">%1$d sections</string>
+    <string name="toc_file_count">%1$d file</string>
+    <string name="toc_files_count">%1$d files</string>
+    <string name="toc_browse_structure">Browse document structure</string>
+    <string name="toc_tab_contents">Contents</string>
+    <string name="toc_tab_attachments">Attachments</string>
+    <string name="attachment_type_hint">%1$s file · Tap to open</string>
+    <string name="attachment_tap_hint">Tap to open</string>
 
     <!-- Settings Panel (Reader) -->
     <string name="reading_settings">Reading Settings</string>
@@ -1134,6 +1313,8 @@
     <string name="onboarding_powerful_desc">Search text, customize themes, and adjust display settings. Plus built-in tools to merge, split, compress, and organize your PDFs.</string>
     <string name="onboarding_storage">Storage Access\nRequired</string>
     <string name="onboarding_storage_desc">Grant access to scan and display your PDF files. Your documents stay private and are never uploaded.</string>
+    <string name="onboarding_grant_access">Grant Access</string>
+    <string name="onboarding_continue">Continue</string>
 
     <!-- Folder -->
     <string name="folder_empty">This folder is empty</string>
@@ -1142,8 +1323,19 @@
     <!-- Settings - Update Interval (renamed) -->
     <string name="auto_check_interval">Auto-check Interval</string>
 
+    <!-- Install pending -->
+    <string name="pending_update_ready">v%1$s is ready to install</string>
+
+    <!-- Creator links -->
+    <string name="link_website">Website</string>
+    <string name="link_email">Email</string>
+    <string name="link_github">GitHub</string>
+    <string name="link_linkedin">LinkedIn</string>
+
+    <!-- Selected -->
+    <string name="selected">Selected</string>
+
     <!-- Additional accessibility strings (unique) -->
-    <string name="cd_back">Back</string>
     <string name="cd_preview">Preview</string>
     <string name="cd_view">View</string>
     <string name="cd_sort">Sort</string>
@@ -1162,34 +1354,21 @@
     <string name="cd_favorite">Favorite</string>
 
     <!-- Tool Screen Titles -->
-    <string name="tool_rotate_pages">Rotate Pages</string>
-    <string name="tool_reorder_pages">Reorder Pages</string>
     <string name="tool_lock_pdf">Lock PDF</string>
-    <string name="tool_unlock_pdf">Unlock PDF</string>
-    <string name="tool_split_pdf">Split PDF</string>
     <string name="tool_compress_pdf">Compress PDF</string>
     <string name="tool_merge_pdfs">Merge PDFs</string>
     <string name="tool_pdf_to_images">PDF to Images</string>
     <string name="tool_image_to_pdf">Image to PDF</string>
-    <string name="tool_remove_pages">Remove Pages</string>
     <string name="tool_add_page_numbers">Add Page Numbers</string>
     <string name="tool_add_watermark">Add Watermark</string>
     <string name="tool_rotate_pdf_pages">Rotate PDF Pages</string>
     <string name="tool_reorder_pdf_pages">Reorder PDF Pages</string>
 
     <!-- Tool Screen Subtitles/Descriptions -->
-    <string name="tool_rotate_desc">Select a PDF file to rotate its pages by 90°, 180°, or 270°</string>
-    <string name="tool_reorder_desc">Drag and drop pages to rearrange their order in the PDF</string>
     <string name="tool_lock_desc">Add password protection to prevent unauthorized access</string>
-    <string name="tool_unlock_desc">Remove password protection from a PDF file</string>
-    <string name="tool_split_desc">Split a PDF into multiple smaller files</string>
-    <string name="tool_compress_desc">Reduce PDF file size while maintaining quality</string>
     <string name="tool_merge_desc">Combine multiple PDF files into one</string>
     <string name="tool_pdf_to_images_desc">Export PDF pages as image files</string>
     <string name="tool_image_to_pdf_desc">Convert your images into a single PDF document</string>
-    <string name="tool_remove_pages_desc">Remove unwanted pages from your PDF</string>
-    <string name="tool_page_numbers_desc">Add page numbers to your PDF</string>
-    <string name="tool_watermark_desc">Add text or image watermark to your PDF</string>
 
     <!-- Common Tool Actions -->
     <string name="new_file">New File</string>
@@ -1284,6 +1463,10 @@
     <string name="quick_select_first_half">1st ½</string>
     <string name="quick_select_second_half">2nd ½</string>
     <string name="was_page">was %d</string>
+    <string name="page_selection_all">All pages (1-%1$d)</string>
+    <string name="page_selection_range">Pages %1$d-%2$d</string>
+    <string name="page_selection_custom">Pages %1$s</string>
+    <string name="page_selection_custom_long">Pages %1$s… (%2$d pages)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Long press and drag pages to reorder</string>
@@ -1360,6 +1543,22 @@
     <string name="to_page">To</string>
     <string name="page_numbers_example">e.g., 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Enter page numbers or ranges separated by commas</string>
+    <string name="files_selected_count">%1$d files selected</string>
+    <string name="merge_empty_title">Merge PDF Files</string>
+    <string name="merge_empty_desc">Select multiple PDF files to combine them into a single document</string>
+    <string name="file_size_pages">%1$s • %2$d pages</string>
+    <string name="pages_partial_format">%1$d/%2$d pages</string>
+    <string name="pages_all_format">All %1$d pages</string>
+    <string name="add_more_files">Add more files</string>
+    <string name="saved_to_path">Saved to: %1$s</string>
+    <string name="merging_pdfs">Merging PDFs…</string>
+    <string name="merge_complete">Merge Complete!</string>
+    <string name="merge_more_files">Merge More Files</string>
+    <string name="select_pages">Select Pages</string>
+    <string name="total_pages_format">Total: %1$d pages</string>
+    <string name="selection_mode">Selection Mode</string>
+    <string name="all_pages_included">All %1$d pages will be included</string>
+    <string name="pages_range_info">Pages %1$s to %2$s will be included</string>
 
     <!-- Split Screen -->
     <string name="change">Change</string>
@@ -1370,10 +1569,67 @@
     <string name="extract_pages_help">Creates a single PDF with selected pages. Pages: 1-%d</string>
     <string name="output_prefix_label">Output prefix</string>
     <string name="split_another_pdf">Split Another PDF</string>
+    <string name="pages_count_with_mode">%1$d pages • %2$s</string>
+    <string name="split_empty_title">Split PDF File</string>
+    <string name="split_empty_desc">Select a PDF file to split into multiple parts or extract specific pages</string>
+    <string name="split_mode_title">Split Mode</string>
+    <string name="split_mode_by_ranges_label">By Ranges</string>
+    <string name="split_mode_by_ranges_desc">Multiple PDFs</string>
+    <string name="split_mode_every_n_label">Every N Pages</string>
+    <string name="split_mode_every_n_desc">Auto split</string>
+    <string name="split_mode_single_pages_label">Single Pages</string>
+    <string name="split_mode_single_pages_desc">1 page = 1 PDF</string>
+    <string name="split_mode_extract_label">Extract Pages</string>
+    <string name="split_mode_extract_desc">Single PDF</string>
+    <string name="split_options_title">Options</string>
+    <string name="split_will_create_one_pdf">Will create 1 PDF file</string>
+    <string name="split_will_create_pdfs">Will create %1$d PDF files</string>
+    <string name="split_every_one_page">Split every 1 page</string>
+    <string name="split_every_n_pages">Split every %1$d pages</string>
+    <string name="split_will_create_one_file_max">Will create 1 file (max: %1$d pages)</string>
+    <string name="split_will_create_files_max">Will create %1$d files (max: %2$d pages)</string>
+    <string name="split_into_individual_pages">Split into individual pages</string>
+    <string name="split_will_create_separate_pdfs">Will create %1$d separate PDF files</string>
+    <string name="split_will_create_one_page_pdf">Will create 1 PDF with 1 page</string>
+    <string name="split_will_create_one_pdf_pages">Will create 1 PDF with %1$d pages</string>
+    <string name="splitting_pdf">Splitting PDF…</string>
+    <string name="split_complete">Split Complete!</string>
+    <string name="one_file_created">1 file created</string>
+    <string name="files_created_count">%1$d files created</string>
 
     <!-- Remove Pages Screen -->
     <string name="select_page_range">Select Page Range</string>
     <string name="select_action">Select</string>
+    <string name="selected_for_removal_format">%1$d of %2$d selected for removal</string>
+    <string name="tool_remove_pages_desc">Select and delete unwanted pages from your PDF</string>
+    <string name="tap_to_select">TAP TO SELECT</string>
+    <string name="selected_pages_will_be_removed">Selected pages will be removed from the PDF</string>
+    <string name="quick_select_range">Range</string>
+    <string name="quick_select_first_n">First N</string>
+    <string name="quick_select_last_n">Last N</string>
+    <string name="quick_select_before">Before</string>
+    <string name="quick_select_after">After</string>
+    <string name="select_pages_range_hint">Select pages from start to end (inclusive)</string>
+    <string name="error_start_page_range">Start page must be 1-%1$d</string>
+    <string name="error_end_page_range">End page must be 1-%1$d</string>
+    <string name="error_start_less_than_end">Start must be less than end</string>
+    <string name="dialog_select_before_page">Select Before Page</string>
+    <string name="dialog_select_after_page">Select After Page</string>
+    <string name="dialog_hint_before_page">Pages before this will be selected</string>
+    <string name="dialog_hint_after_page">Pages after this will be selected</string>
+    <string name="dialog_select_first_n">Select First N Pages</string>
+    <string name="dialog_select_last_n">Select Last N Pages</string>
+    <string name="dialog_hint_first_n">First N pages will be selected</string>
+    <string name="dialog_hint_last_n">Last N pages will be selected</string>
+    <string name="number_of_pages">Number of pages</string>
+    <string name="page_number_label">Page number</string>
+    <string name="error_value_range">Value must be 1-%1$d</string>
+    <string name="cannot_remove_all_pages">Cannot remove all pages</string>
+    <string name="remove_one_page">Remove 1 Page</string>
+    <string name="remove_pages_count">Remove %1$d Pages</string>
+    <string name="removing">Removing…</string>
+    <string name="pages_removed">Pages Removed!</string>
+    <string name="one_page_removed">1 page removed</string>
 
     <!-- Page Numbers Screen -->
     <string name="prefix_label">Prefix</string>

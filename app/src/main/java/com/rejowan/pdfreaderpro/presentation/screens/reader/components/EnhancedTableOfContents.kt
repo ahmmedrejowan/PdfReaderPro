@@ -283,9 +283,13 @@ private fun TocSheetContent(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 val subtitle = when {
-                    selectedTab == 0 && items.isNotEmpty() -> "${items.size} ${if (items.size == 1) "section" else "sections"}"
-                    selectedTab == 1 && attachments.isNotEmpty() -> "${attachments.size} ${if (attachments.size == 1) "file" else "files"}"
-                    else -> "Browse document structure"
+                    selectedTab == 0 && items.isNotEmpty() ->
+                        if (items.size == 1) stringResource(R.string.toc_section_count, items.size)
+                        else stringResource(R.string.toc_sections_count, items.size)
+                    selectedTab == 1 && attachments.isNotEmpty() ->
+                        if (attachments.size == 1) stringResource(R.string.toc_file_count, attachments.size)
+                        else stringResource(R.string.toc_files_count, attachments.size)
+                    else -> stringResource(R.string.toc_browse_structure)
                 }
                 Text(
                     text = subtitle,
@@ -313,7 +317,7 @@ private fun TocSheetContent(
                         activeContentColor = AccentPurple
                     )
                 ) {
-                    Text("Contents", style = MaterialTheme.typography.labelSmall)
+                    Text(stringResource(R.string.toc_tab_contents), style = MaterialTheme.typography.labelSmall)
                 }
                 SegmentedButton(
                     selected = selectedTab == 1,
@@ -331,7 +335,7 @@ private fun TocSheetContent(
                             modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Attachments", style = MaterialTheme.typography.labelSmall)
+                        Text(stringResource(R.string.toc_tab_attachments), style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }
@@ -644,7 +648,10 @@ private fun AttachmentListItem(
                 // Show file extension as subtitle with tap hint
                 val extension = attachment.title.substringAfterLast('.', "").uppercase()
                 Text(
-                    text = if (extension.isNotEmpty() && extension.length <= 4) "$extension file · Tap to open" else "Tap to open",
+                    text = if (extension.isNotEmpty() && extension.length <= 4)
+                        stringResource(R.string.attachment_type_hint, extension)
+                    else
+                        stringResource(R.string.attachment_tap_hint),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

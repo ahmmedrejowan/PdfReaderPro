@@ -27,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -65,7 +67,7 @@ fun ReaderBottomBar(
             IconButton(onClick = onThumbnailsClick) {
                 Icon(
                     imageVector = Icons.Default.GridView,
-                    contentDescription = "Page Thumbnails",
+                    contentDescription = stringResource(R.string.cd_page_thumbnails),
                     tint = Color.White,
                     modifier = Modifier.size(24.dp)
                 )

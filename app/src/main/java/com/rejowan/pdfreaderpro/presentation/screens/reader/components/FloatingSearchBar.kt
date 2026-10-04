@@ -79,6 +79,11 @@ fun FloatingSearchBar(
     val contentColor = if (isDarkMode) Color.White else Color.Black
     val subtleColor = if (isDarkMode) Color.White.copy(alpha = 0.5f) else Color.Black.copy(alpha = 0.5f)
 
+    val matchingHighlightsText = stringResource(
+        R.string.cd_matching_highlights,
+        highlightMatchCount
+    )
+
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -210,7 +215,7 @@ fun FloatingSearchBar(
                                 color = contentColor,
                                 modifier = Modifier
                                     .semantics {
-                                        contentDescription = highlightMatchesLabel(highlightMatchCount)
+                                        contentDescription = matchingHighlightsText
                                     }
                                     .padding(horizontal = 8.dp, vertical = 4.dp)
                             )
@@ -305,9 +310,3 @@ private fun SearchNavButton(
         )
     }
 }
-
-/**
- * Spoken label for the highlighted-match chip, which shows only a bare number.
- */
-private fun highlightMatchesLabel(count: Int): String =
-    "$count matching highlights"

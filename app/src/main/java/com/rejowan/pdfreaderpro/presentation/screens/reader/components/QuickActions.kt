@@ -151,7 +151,7 @@ fun ScrollDirectionToggle(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = "Toggle scroll direction",
+                contentDescription = stringResource(R.string.cd_toggle_scroll_direction),
                 tint = AccentBlue,
                 modifier = Modifier.size(22.dp)
             )
@@ -187,7 +187,7 @@ fun FitScreenButton(
         ) {
             Icon(
                 imageVector = Icons.Rounded.FitScreen,
-                contentDescription = "Fit to screen",
+                contentDescription = stringResource(R.string.cd_fit_to_screen),
                 tint = AccentPurple,
                 modifier = Modifier.size(22.dp)
             )

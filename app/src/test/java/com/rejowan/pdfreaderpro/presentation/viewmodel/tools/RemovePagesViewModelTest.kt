@@ -6,6 +6,7 @@ import android.graphics.pdf.PdfRenderer
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import app.cash.turbine.test
+import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import com.rejowan.pdfreaderpro.presentation.screens.tools.removepages.RemovePagesViewModel
 import io.mockk.coEvery
@@ -207,6 +208,7 @@ class RemovePagesViewModelTest {
     // region removePages Validation Tests
     @Test
     fun `removePages without source file sets error`() = runTest {
+        every { context.getString(R.string.error_select_pdf_first) } returns "Please select a PDF file first"
         viewModel = createViewModel()
         advanceUntilIdle()
 

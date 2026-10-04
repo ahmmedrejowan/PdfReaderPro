@@ -104,6 +104,7 @@ fun UnlockScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val sharePdfLabel = stringResource(R.string.share_pdf)
     val focusManager = LocalFocusManager.current
 
     val pdfPickerLauncher = rememberLauncherForActivityResult(
@@ -172,7 +173,7 @@ fun UnlockScreen(
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+                            context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onUnlockMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }

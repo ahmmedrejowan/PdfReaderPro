@@ -130,6 +130,8 @@ fun MergeScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val openWithLabel = stringResource(R.string.open_with)
+    val sharePdfLabel = stringResource(R.string.share_pdf)
 
     // Load initial files if provided
     LaunchedEffect(initialFiles) {
@@ -167,7 +169,7 @@ fun MergeScreen(
                         Text(stringResource(R.string.tool_merge_pdfs))
                         if (state.selectedFiles.isNotEmpty()) {
                             Text(
-                                "${state.selectedFiles.size} files selected",
+                                stringResource(R.string.files_selected_count, state.selectedFiles.size),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -230,7 +232,7 @@ fun MergeScreen(
                             setDataAndType(uri, "application/pdf")
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
-                        context.startActivity(Intent.createChooser(intent, "Open with"))
+                        context.startActivity(Intent.createChooser(intent, openWithLabel))
                     },
                     onShare = {
                         // Share the merged PDF
@@ -245,7 +247,7 @@ fun MergeScreen(
                             putExtra(Intent.EXTRA_STREAM, uri)
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
-                        context.startActivity(Intent.createChooser(intent, "Share PDF"))
+                        context.startActivity(Intent.createChooser(intent, sharePdfLabel))
                     },
                     onMergeMore = {
                         viewModel.reset()
@@ -366,7 +368,7 @@ private fun EmptyState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Merge PDF Files",
+            stringResource(R.string.merge_empty_title),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -374,7 +376,7 @@ private fun EmptyState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Select multiple PDF files to combine them into a single document",
+            stringResource(R.string.merge_empty_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -517,7 +519,7 @@ private fun MergeFileItem(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${formatFileSize(file.size)} • ${file.pageCount} pages",
+                        stringResource(R.string.file_size_pages, formatFileSize(file.size), file.pageCount),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -551,7 +553,7 @@ private fun MergeFileItem(
                 // Preview chip
                 ActionChip(
                     icon = Icons.Outlined.Visibility,
-                    label = "Preview",
+                    label = stringResource(R.string.preview),
                     color = AccentTeal,
                     onClick = onPreview,
                     modifier = Modifier.weight(1f)
@@ -561,9 +563,9 @@ private fun MergeFileItem(
                 ActionChip(
                     icon = Icons.Default.Pages,
                     label = if (isPartialSelection) {
-                        "$selectedPageCount/${file.pageCount} pages"
+                        stringResource(R.string.pages_partial_format, selectedPageCount, file.pageCount)
                     } else {
-                        "All ${file.pageCount} pages"
+                        stringResource(R.string.pages_all_format, file.pageCount)
                     },
                     color = AccentAmber,
                     isHighlighted = isPartialSelection,
@@ -650,7 +652,7 @@ private fun AddMoreFilesCard(
             }
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                "Add more files",
+                stringResource(R.string.add_more_files),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -678,7 +680,11 @@ private fun MergeBottomSection(
         error.contains("space", ignoreCase = true) ||
         error.contains("network", ignoreCase = true) ||
         error.contains("timeout", ignoreCase = true) ||
-        error.contains("try again", ignoreCase = true)
+        error.contains("try again", ignoreCase = true) ||
+        error.contains("памят", ignoreCase = true) ||
+        error.contains("мест", ignoreCase = true) ||
+        error.contains("сет", ignoreCase = true) ||
+        error.contains("повтор", ignoreCase = true)
     )
 
     Column(
@@ -770,7 +776,7 @@ private fun MergeBottomSection(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                "Saved to: Documents/PdfReaderPro/",
+                stringResource(R.string.saved_to_path, "Documents/PdfReaderPro/"),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -827,7 +833,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Merging PDFs...",
+                    stringResource(R.string.merging_pdfs),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -892,7 +898,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Merge Complete!",
+            stringResource(R.string.merge_complete),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -932,7 +938,7 @@ private fun SuccessState(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "${result.pageCount} pages • ${formatFileSize(result.fileSize)}",
+                    stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -963,7 +969,7 @@ private fun SuccessState(
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Open in App", style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(R.string.open_in_app), style = MaterialTheme.typography.labelMedium)
         }
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -984,7 +990,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Open With", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.open_with), style = MaterialTheme.typography.labelMedium)
             }
 
             OutlinedButton(
@@ -998,7 +1004,7 @@ private fun SuccessState(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Share", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.share), style = MaterialTheme.typography.labelMedium)
             }
         }
 
@@ -1010,7 +1016,7 @@ private fun SuccessState(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Merge More Files", style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(R.string.merge_more_files), style = MaterialTheme.typography.labelMedium)
         }
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -1021,7 +1027,7 @@ private fun SuccessState(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Done", style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(R.string.done), style = MaterialTheme.typography.labelMedium)
         }
     }
 }
@@ -1235,7 +1241,7 @@ private fun PageSelectionContent(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    "Select Pages",
+                    stringResource(R.string.select_pages),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -1273,7 +1279,7 @@ private fun PageSelectionContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "Total: ${file.pageCount} pages",
+                    stringResource(R.string.total_pages_format, file.pageCount),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -1286,7 +1292,7 @@ private fun PageSelectionContent(
 
         // Selection mode chips
         Text(
-            "Selection Mode",
+            stringResource(R.string.selection_mode),
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -1356,7 +1362,7 @@ private fun PageSelectionContent(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            "All ${file.pageCount} pages will be included",
+                            stringResource(R.string.all_pages_included, file.pageCount),
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Medium
                             ),
@@ -1394,7 +1400,7 @@ private fun PageSelectionContent(
                 }
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    "Pages $rangeStart to $rangeEnd will be included",
+                    stringResource(R.string.pages_range_info, rangeStart, rangeEnd),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                     modifier = Modifier.padding(start = 4.dp)
@@ -1427,7 +1433,7 @@ private fun PageSelectionContent(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Cancel", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.cancel), style = MaterialTheme.typography.labelMedium)
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -1451,7 +1457,7 @@ private fun PageSelectionContent(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Apply", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.apply), style = MaterialTheme.typography.labelMedium)
             }
         }
     }

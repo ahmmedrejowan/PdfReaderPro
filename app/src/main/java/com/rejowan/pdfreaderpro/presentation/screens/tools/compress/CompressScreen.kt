@@ -113,6 +113,8 @@ fun CompressScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val openWithLabel = stringResource(R.string.open_with)
+    val sharePdfLabel = stringResource(R.string.share_pdf)
     val focusManager = LocalFocusManager.current
 
     val pdfPickerLauncher = rememberLauncherForActivityResult(
@@ -129,7 +131,7 @@ fun CompressScreen(
                         Text(stringResource(R.string.tool_compress_pdf))
                         state.sourceFile?.let { file ->
                             Text(
-                                "${file.pageCount} pages • ${formatFileSize(file.size)}",
+                                stringResource(R.string.compress_page_info, file.pageCount, formatFileSize(file.size)),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -182,7 +184,7 @@ fun CompressScreen(
                                 setDataAndType(uri, "application/pdf")
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(intent, "Open with"))
+                            context.startActivity(Intent.createChooser(intent, openWithLabel))
                         },
                         onShare = {
                             val file = File(result.outputPath)
@@ -196,7 +198,7 @@ fun CompressScreen(
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+                            context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onCompressMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }
@@ -353,7 +355,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Compress PDF File",
+            stringResource(R.string.compress_empty_title),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -361,7 +363,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Select a PDF file to reduce its file size while maintaining quality",
+            stringResource(R.string.compress_empty_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -442,7 +444,7 @@ private fun SourceFileCard(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        "${sourceFile.pageCount} pages • ${formatFileSize(sourceFile.size)}",
+                        stringResource(R.string.compress_page_info, sourceFile.pageCount, formatFileSize(sourceFile.size)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -499,7 +501,7 @@ private fun CompressionLevelSection(
 ) {
     Column {
         Text(
-            "COMPRESSION LEVEL",
+            stringResource(R.string.compression_level),
             style = MaterialTheme.typography.labelMedium.copy(
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
@@ -581,14 +583,14 @@ private fun CompressionLevelItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    level.label,
+                    stringResource(level.labelRes),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    level.description,
+                    stringResource(level.descriptionRes),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -636,10 +638,10 @@ private fun SizeEstimatePill(
 
     // Determine color based on potential
     val (pillColor, contentInfo) = when {
-        estimate?.isAlreadyOptimized == true -> AccentAmber to "Already optimized"
+        estimate?.isAlreadyOptimized == true -> AccentAmber to stringResource(R.string.already_optimized)
         reductionPercent >= 30 -> AccentGreen to null
         reductionPercent >= 15 -> AccentBlue to null
-        else -> AccentAmber to "Limited potential"
+        else -> AccentAmber to stringResource(R.string.limited_potential)
     }
 
     Surface(
@@ -674,7 +676,7 @@ private fun SizeEstimatePill(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "(save ${formatFileSize(savedSize)} • $reductionPercent%)",
+                    stringResource(R.string.size_save_format, formatFileSize(savedSize), reductionPercent),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -684,8 +686,8 @@ private fun SizeEstimatePill(
             if (contentInfo != null || estimate != null) {
                 Spacer(modifier = Modifier.height(6.dp))
                 val infoText = contentInfo ?: when {
-                    estimate?.hasImages == true -> "Contains images • Good compression potential"
-                    else -> "Mostly text content"
+                    estimate?.hasImages == true -> stringResource(R.string.contains_images_hint)
+                    else -> stringResource(R.string.mostly_text_hint)
                 }
                 Text(
                     infoText,
@@ -770,7 +772,7 @@ private fun CompressBottomSection(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                "Overwrite original file",
+                stringResource(R.string.overwrite_original),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -811,7 +813,7 @@ private fun CompressBottomSection(
                 Icon(Icons.Default.Compress, contentDescription = stringResource(R.string.cd_compress_pdf))
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text(if (isProcessing) "Compressing..." else "Compress PDF")
+            Text(if (isProcessing) stringResource(R.string.compressing) else stringResource(R.string.compress_pdf_btn))
         }
     }
 }
@@ -852,7 +854,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            "Compression Complete!",
+            stringResource(R.string.compression_complete),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -878,7 +880,7 @@ private fun SuccessState(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "Original Size",
+                        stringResource(R.string.original_size),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -898,7 +900,7 @@ private fun SuccessState(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "Compressed Size",
+                        stringResource(R.string.compressed_size),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -930,7 +932,7 @@ private fun SuccessState(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "Size Reduced",
+                        stringResource(R.string.size_reduced),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -945,7 +947,7 @@ private fun SuccessState(
                         if (result.savedBytes > 0) {
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                "(${formatFileSize(result.savedBytes)} saved)",
+                                stringResource(R.string.saved_format, formatFileSize(result.savedBytes)),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -988,7 +990,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${result.pageCount} pages",
+                        stringResource(R.string.pages_count_format, result.pageCount),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1056,13 +1058,13 @@ private fun SuccessState(
                 onClick = onCompressMore,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("New File", maxLines = 1)
+                Text(stringResource(R.string.new_file), maxLines = 1)
             }
             Button(
                 onClick = onDone,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Done", maxLines = 1)
+                Text(stringResource(R.string.done), maxLines = 1)
             }
         }
     }
@@ -1098,7 +1100,7 @@ private fun ProcessingOverlay(progress: Float) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    "Compressing...",
+                    stringResource(R.string.compressing),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
                     )
