@@ -1007,6 +1007,218 @@ function closeEditorStamp() {
     editorStampButton.click();
 }
 
+function openEditorSignature() {
+    if (editorSignatureButton.classList.contains("toggled")) return;
+    editorSignatureButton.click();
+}
+
+function closeEditorSignature() {
+    if (!editorSignatureButton.classList.contains("toggled")) return;
+    editorSignatureButton.click();
+}
+
+// Opens the "add a signature" dialog straight away, so the first tap lands on
+// something useful rather than an empty editor toolbar.
+function addSignature() {
+    openEditorSignature();
+    editorSignatureAddSignature.click();
+}
+
+/**
+ * Places a signature that was drawn, typed or picked in the app's own UI.
+ *
+ * The viewer's signature dialog is never shown. It is driven headlessly: the
+ * image is handed to its file input, which is the one path that accepts a
+ * picture without a user gesture, and the dialog is kept hidden throughout. The
+ * viewer still owns placement, so the result keeps its drag, resize and delete
+ * handles and is serialised with the document like any other annotation.
+ *
+ * @param dataUrl a PNG data URL of the signature, transparent background
+ * @param description alt text stored with the annotation
+ */
+function placeSignatureImage(dataUrl, description) {
+    const dialog = $("#addSignatureDialog");
+    const picker = $("#addSignatureFilePicker");
+    const imageTab = $("#addSignatureImageButton");
+    const addButton = $("#addSignatureAddButton");
+    const descInput = $("#addSignatureDescInput");
+    const saveCheckbox = $("#addSignatureSaveCheckbox");
+
+    if (!dialog || !picker || !addButton) {
+        JWI.onSignaturePlaced(false);
+        return;
+    }
+
+    dialog.classList.add("jwiOffscreen");
+
+    const finish = (ok) => {
+        dialog.classList.remove("jwiOffscreen");
+        JWI.onSignaturePlaced(ok);
+    };
+
+    try {
+        // The first attempt after a document loads used to do nothing. Toggling the
+        // editor and clicking straight through assumed both had taken effect, and
+        // neither has while the editor layer is still being built, so the click
+        // landed on a button that was not listening yet. Each step now waits for
+        // the state it needs.
+        waitFor(() => isSignatureEditorReady(), 6000, () => {
+            openEditorSignature();
+
+            waitFor(() => editorSignatureButton.classList.contains("toggled"), 3000, () => {
+                editorSignatureAddSignature.click();
+
+                waitFor(() => dialog.open, 3000, () => {
+                    imageTab?.click();
+
+            const base64 = dataUrl.substring(dataUrl.indexOf(",") + 1);
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+                    const transfer = new DataTransfer();
+                    transfer.items.add(new File([bytes], "signature.png", { type: "image/png" }));
+                    picker.files = transfer.files;
+                    picker.dispatchEvent(new Event("change", { bubbles: true }));
+
+                    // The app keeps its own list of signatures, so there is no
+                    // reason to duplicate them in the viewer's storage as well.
+                    if (saveCheckbox && saveCheckbox.checked) saveCheckbox.click();
+
+                    waitFor(() => !addButton.disabled, 4000, () => {
+                        if (descInput && description) descInput.value = description;
+                        addButton.click();
+                        finish(true);
+                    }, () => finish(false));
+                }, () => finish(false));
+            }, () => finish(false));
+        }, () => finish(false));
+    } catch (e) {
+        finish(false);
+    }
+}
+
+/**
+ * Whether the signature editor can actually be driven yet.
+ *
+ * The buttons exist in the markup from the start, so their presence proves
+ * nothing. What matters is that the document is loaded and the editor layer for
+ * the current page has been built, which is when the viewer starts listening.
+ */
+function isSignatureEditorReady() {
+    if (!editorSignatureButton || editorSignatureButton.disabled) return false;
+    const app = PDFViewerApplication;
+    if (!app?.pdfDocument) return false;
+    const page = app.pdfViewer?.getPageView(app.pdfViewer.currentPageNumber - 1);
+    return !!page?.annotationEditorLayer;
+}
+
+/** Polls until `test` passes, then runs `onReady`, or `onTimeout` if it never does. */
+function waitFor(test, timeoutMs, onReady, onTimeout) {
+    const started = Date.now();
+    const tick = () => {
+        if (test()) {
+            onReady();
+        } else if (Date.now() - started > timeoutMs) {
+            if (onTimeout) onTimeout();
+        } else {
+            setTimeout(tick, 40);
+        }
+    };
+    tick();
+}
+
+/** How many signatures are currently placed but not yet written to a copy. */
+function countPlacedSignatures() {
+    return document.querySelectorAll(".signatureEditor").length;
+}
+
+/**
+ * Every placed signature, as `[{key, pageIndex, rect}]`.
+ *
+ * `rect` is [left, bottom, right, top] in PDF user space, which is the form the
+ * viewer both reports and accepts, so the app stores it unconverted.
+ */
+function getPlacedSignatures() {
+    const storage = PDFViewerApplication.pdfDocument?.annotationStorage;
+    if (!storage) return "[]";
+    const out = [];
+    for (const [key, value] of storage.serializable?.map ?? []) {
+        if (value?.isSignature) {
+            out.push({ key: key, pageIndex: value.pageIndex, rect: value.rect });
+        }
+    }
+    return JSON.stringify(out);
+}
+
+/**
+ * Moves a placed signature so its top left corner lands on a target point.
+ *
+ * Done by synthesising the same pointer sequence a drag produces, because that is
+ * the only route that updates the viewer's own model as well as the element.
+ * Setting the element's position directly moves it on screen but leaves the
+ * stored rectangle behind, which would look right and save wrong.
+ */
+function moveSignatureTo(key, targetLeft, targetTop) {
+    const storage = PDFViewerApplication.pdfDocument?.annotationStorage;
+    if (!storage) return false;
+
+    const entry = storage.serializable?.map?.get(key);
+    if (!entry) return false;
+
+    const pageView = PDFViewerApplication.pdfViewer.getPageView(entry.pageIndex);
+    if (!pageView) return false;
+
+    // Which element carries this annotation. There is no key on the node, so the
+    // one whose position matches the entry is the one to move.
+    const candidates = Array.from(document.querySelectorAll(".signatureEditor"));
+    if (candidates.length === 0) return false;
+
+    const scale = pageView.viewport.scale;
+    const dxCss = (targetLeft - entry.rect[0]) * scale;
+    // PDF space counts upwards from the bottom, the screen counts downwards.
+    const dyCss = (entry.rect[3] - targetTop) * scale;
+
+    const div = candidates.length === 1 ? candidates[0] : nearestEditorTo(candidates, entry, pageView);
+    if (!div) return false;
+
+    const box = div.getBoundingClientRect();
+    const from = { x: box.left + box.width / 2, y: box.top + box.height / 2 };
+    const to = { x: from.x + dxCss, y: from.y + dyCss };
+    const opts = (p) => ({
+        bubbles: true, cancelable: true, composed: true,
+        pointerId: 1, pointerType: "mouse", isPrimary: true, buttons: 1,
+        clientX: p.x, clientY: p.y
+    });
+
+    div.dispatchEvent(new PointerEvent("pointerdown", opts(from)));
+    window.dispatchEvent(new PointerEvent("pointermove", opts({
+        x: (from.x + to.x) / 2, y: (from.y + to.y) / 2
+    })));
+    window.dispatchEvent(new PointerEvent("pointermove", opts(to)));
+    window.dispatchEvent(new PointerEvent("pointerup", opts(to)));
+    return true;
+}
+
+/** Picks whichever editor element currently sits where `entry` says it does. */
+function nearestEditorTo(candidates, entry, pageView) {
+    const [x, y] = pageView.viewport.convertToViewportPoint(entry.rect[0], entry.rect[3]);
+    const pageBox = pageView.div.getBoundingClientRect();
+    const wantX = pageBox.left + x;
+    const wantY = pageBox.top + y;
+    let best = null;
+    let bestDistance = Infinity;
+    for (const div of candidates) {
+        const box = div.getBoundingClientRect();
+        const distance = Math.hypot(box.left - wantX, box.top - wantY);
+        if (distance < bestDistance) {
+            bestDistance = distance;
+            best = div;
+        }
+    }
+    return best;
+}
+
 function setHighlighterThickness(thickness) {
     editorFreeHighlightThickness.value = thickness;
     editorFreeHighlightThickness.dispatchEvent(new Event("input"));

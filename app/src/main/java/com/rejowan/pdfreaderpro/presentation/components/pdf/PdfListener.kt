@@ -258,6 +258,13 @@ interface PdfListener {
     fun onPrintProcessEnd() {}
 
     /**
+     * Called after the app asks the viewer to place a signature image.
+     *
+     * @param success false if the viewer could not take the image.
+     */
+    fun onSignaturePlaced(success: Boolean) {}
+
+    /**
      * Called when the print process is cancelled.
      */
     fun onPrintCancelled() {}

@@ -26,6 +26,9 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import java.io.File
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -73,6 +76,9 @@ class FolderDetailViewModelTest {
             parentFolder = "/storage/docs"
         )
     )
+
+    @get:Rule
+    val folder = TemporaryFolder()
 
     @Before
     fun setup() {
@@ -418,6 +424,120 @@ class FolderDetailViewModelTest {
             assertEquals(SortOption.DATE_DESC, option)
             cancelAndIgnoreRemainingEvents()
         }
+    }
+    // endregion
+
+    // region Acting on the files in a folder
+    private fun document(name: String) =
+        folder.newFile(name).apply { writeText("%PDF-1.4 $name") }
+
+    @Test
+    fun `deleting the picked files removes them and what the app remembers`() = runTest {
+        val first = document("one.pdf")
+        val second = document("two.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        vm.enterSelectionMode(first.absolutePath)
+        vm.toggleSelection(second.absolutePath)
+        var succeeded = -1
+
+        vm.deleteSelectedFiles { s, _ -> succeeded = s }
+        advanceUntilIdle()
+
+        assertEquals(2, succeeded)
+        assertFalse(first.exists())
+        coVerify { favoriteRepository.removeFavorite(first.absolutePath) }
+        coVerify { recentRepository.removeRecent(second.absolutePath) }
+        assertFalse(vm.isSelectionMode.value)
+    }
+
+    @Test
+    fun `a file that will not delete is counted as a failure`() = runTest {
+        val real = document("real.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        vm.enterSelectionMode(real.absolutePath)
+        vm.toggleSelection(File(folder.root, "gone.pdf").absolutePath)
+        var failed = -1
+
+        vm.deleteSelectedFiles { _, f -> failed = f }
+        advanceUntilIdle()
+
+        assertEquals(1, failed)
+    }
+
+    @Test
+    fun `deleting a single file clears its entries too`() = runTest {
+        val document = document("single.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = false
+
+        vm.deleteFile(document.absolutePath) { succeeded = it }
+        advanceUntilIdle()
+
+        assertTrue(succeeded)
+        assertFalse(document.exists())
+        coVerify { favoriteRepository.removeFavorite(document.absolutePath) }
+    }
+
+    @Test
+    fun `renaming moves the file and follows it in favourites and recents`() = runTest {
+        val document = document("before.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = false
+
+        vm.renameFile(document.absolutePath, "after") { succeeded = it }
+        advanceUntilIdle()
+
+        assertTrue(succeeded)
+        assertTrue(File(folder.root, "after.pdf").exists())
+        coVerify { favoriteRepository.updatePath(document.absolutePath, any(), "after.pdf") }
+        coVerify { recentRepository.updatePath(document.absolutePath, any(), "after.pdf") }
+    }
+
+    @Test
+    fun `renaming onto a name already taken fails and changes nothing`() = runTest {
+        val document = document("before.pdf")
+        document("taken.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = true
+
+        vm.renameFile(document.absolutePath, "taken") { succeeded = it }
+        advanceUntilIdle()
+
+        assertFalse(succeeded)
+        assertTrue(document.exists())
+    }
+    // endregion
+
+    // region Refreshing
+    @Test
+    fun `refreshing re-reads the folder and sorts what comes back`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.refreshFolder()
+        advanceUntilIdle()
+
+        assertFalse(vm.isRefreshing.value)
+        assertEquals(testPdfFiles.size, vm.files.value.size)
+    }
+
+    @Test
+    fun `a refresh that fails stops showing the spinner`() = runTest {
+        // Otherwise the screen sits there pulling forever.
+        every { pdfFileRepository.getPdfsByFolder(any()) } throws
+            RuntimeException("storage unavailable")
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.refreshFolder()
+        advanceUntilIdle()
+
+        assertFalse(vm.isRefreshing.value)
     }
     // endregion
 }

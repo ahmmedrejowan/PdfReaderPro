@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
+import androidx.core.content.FileProvider
+import io.mockk.verify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -13,6 +15,7 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.io.ByteArrayInputStream
 import java.io.File
 
 class FileOperationsTest {
@@ -403,6 +406,252 @@ class FileOperationsTest {
         val result = FileOperations.copyContentUriToCache(context, uri)
 
         assertNull(result)
+    }
+    // endregion
+
+    /** A content uri whose stream yields [content] and whose display name is [name]. */
+    private fun contentUri(name: String, content: String): Uri {
+        val uri = mockk<Uri>()
+        every { uri.scheme } returns "content"
+        every { contentResolver.openInputStream(uri) } answers {
+            ByteArrayInputStream(content.toByteArray())
+        }
+        val cursor = mockk<Cursor>(relaxed = true)
+        every { cursor.moveToFirst() } returns true
+        every { cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME) } returns 0
+        every { cursor.getString(0) } returns name
+        every { contentResolver.query(uri, null, null, null, null) } returns cursor
+        return uri
+    }
+
+    private fun cachedPdfs() =
+        File(tempDir, "shared_pdfs").listFiles()?.filter { it.name.endsWith(".pdf") }.orEmpty()
+
+    @Test
+    fun `copying a shared document keeps its name and its contents`() {
+        val uri = contentUri("report.pdf", "%PDF-1.4 report")
+
+        val path = FileOperations.copyContentUriToCache(context, uri)!!
+
+        assertTrue(path.endsWith("shared_pdfs/report.pdf"))
+        assertEquals("%PDF-1.4 report", File(path).readText())
+    }
+
+    @Test
+    fun `opening the same document twice reuses the copy already made`() {
+        // The check is on content, not name, so reopening from a chat app does not
+        // pile up identical copies in the cache.
+        val uri = contentUri("report.pdf", "%PDF-1.4 report")
+
+        val first = FileOperations.copyContentUriToCache(context, uri)
+        val second = FileOperations.copyContentUriToCache(context, uri)
+
+        assertEquals(first, second)
+        assertEquals(1, cachedPdfs().size)
+    }
+
+    @Test
+    fun `a changed document under the same name replaces the old copy`() {
+        val stale = contentUri("report.pdf", "%PDF-1.4 old version")
+        FileOperations.copyContentUriToCache(context, stale)
+        val fresh = contentUri("report.pdf", "%PDF-1.4 new version")
+
+        val path = FileOperations.copyContentUriToCache(context, fresh)!!
+
+        assertEquals("%PDF-1.4 new version", File(path).readText())
+        assertEquals(1, cachedPdfs().size)
+    }
+
+    @Test
+    fun `a document with no name still gets copied`() {
+        val uri = mockk<Uri>()
+        every { uri.scheme } returns "content"
+        every { contentResolver.query(uri, null, null, null, null) } returns null
+        every { contentResolver.openInputStream(uri) } answers {
+            ByteArrayInputStream("%PDF-1.4 nameless".toByteArray())
+        }
+
+        val path = FileOperations.copyContentUriToCache(context, uri)!!
+
+        assertEquals("%PDF-1.4 nameless", File(path).readText())
+    }
+
+    // region Resolving a document to a path
+    // Which branch this takes decides whether the user can save changes back into
+    // their own file or only into a copy, so both are pinned down.
+
+    /** Makes MediaStore report [path] as the file behind the uri. */
+    private fun uriBackedBy(path: String?): Uri {
+        val uri = contentUri("report.pdf", "%PDF-1.4 report")
+        val cursor = mockk<Cursor>(relaxed = true)
+        every { cursor.moveToFirst() } returns true
+        every { cursor.getColumnIndex(android.provider.MediaStore.MediaColumns.DATA) } returns 0
+        every { cursor.getString(0) } returns path
+        every {
+            contentResolver.query(uri, any<Array<String>>(), null, null, null)
+        } returns cursor
+        return uri
+    }
+
+    @Test
+    fun `a document with a readable path of its own is used in place`() {
+        val real = File(tempDir, "on-disk.pdf").apply { writeText("%PDF-1.4 real") }
+        val uri = uriBackedBy(real.absolutePath)
+
+        assertEquals(real.absolutePath, FileOperations.resolveUriToPath(context, uri))
+    }
+
+    @Test
+    fun `a document with no path of its own is copied instead`() {
+        val uri = uriBackedBy(null)
+
+        val path = FileOperations.resolveUriToPath(context, uri)!!
+
+        assertTrue(path.contains("shared_pdfs"))
+    }
+
+    @Test
+    fun `a path that is not there is not trusted, and a copy is made`() {
+        val uri = uriBackedBy("/storage/emulated/0/gone.pdf")
+
+        val path = FileOperations.resolveUriToPath(context, uri)!!
+
+        assertTrue(path.contains("shared_pdfs"))
+    }
+
+    @Test
+    fun `a provider that rejects the path column falls back to a copy`() {
+        val uri = contentUri("report.pdf", "%PDF-1.4 report")
+        every {
+            contentResolver.query(uri, any<Array<String>>(), null, null, null)
+        } throws IllegalArgumentException("column not supported")
+
+        val path = FileOperations.resolveUriToPath(context, uri)!!
+
+        assertTrue(path.contains("shared_pdfs"))
+    }
+    // endregion
+
+    // region Clearing out old copies
+    @Test
+    fun `a copy older than the cutoff is cleared out`() {
+        val uri = contentUri("ancient.pdf", "%PDF-1.4 ancient")
+        val cached = File(FileOperations.copyContentUriToCache(context, uri)!!)
+        val twoMonths = System.currentTimeMillis() - 60L * 24 * 60 * 60 * 1000
+        cached.setLastModified(twoMonths)
+
+        FileOperations.cleanupOldCachedPdfs(context)
+
+        assertFalse(cached.exists())
+    }
+
+    @Test
+    fun `a copy from today is left alone`() {
+        val uri = contentUri("recent.pdf", "%PDF-1.4 recent")
+        val cached = File(FileOperations.copyContentUriToCache(context, uri)!!)
+
+        FileOperations.cleanupOldCachedPdfs(context)
+
+        assertTrue(cached.exists())
+    }
+
+    @Test
+    fun `clearing out only touches copies past the cutoff`() {
+        val old = File(FileOperations.copyContentUriToCache(context, contentUri("old.pdf", "old"))!!)
+        val new = File(FileOperations.copyContentUriToCache(context, contentUri("new.pdf", "new"))!!)
+        old.setLastModified(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000)
+
+        FileOperations.cleanupOldCachedPdfs(context)
+
+        assertFalse(old.exists())
+        assertTrue(new.exists())
+    }
+    // endregion
+
+    // region Sharing
+    // The share sheet is handed a content uri from the app's provider, never a
+    // file path, since another app cannot read the app's own storage.
+
+    private fun expectProviderUris() {
+        mockkStatic(FileProvider::class)
+        every { FileProvider.getUriForFile(any(), any(), any()) } returns mockk(relaxed = true)
+        every { context.packageName } returns "com.rejowan.pdfreaderpro"
+    }
+
+    @Test
+    fun `sharing a document opens the share sheet`() {
+        expectProviderUris()
+        val document = File(tempDir, "share-me.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.sharePdf(context, document.absolutePath)
+
+        verify { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `sharing a document that is not there opens nothing`() {
+        expectProviderUris()
+
+        FileOperations.sharePdf(context, File(tempDir, "gone.pdf").absolutePath)
+
+        verify(exactly = 0) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `sharing several documents opens the share sheet once`() {
+        expectProviderUris()
+        val first = File(tempDir, "one.pdf").apply { writeText("%PDF-1.4") }
+        val second = File(tempDir, "two.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.shareMultiplePdfs(context, listOf(first.absolutePath, second.absolutePath))
+
+        verify(exactly = 1) { context.startActivity(any()) }
+        verify(exactly = 2) { FileProvider.getUriForFile(any(), any(), any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `documents that are not there are left out of a multiple share`() {
+        expectProviderUris()
+        val real = File(tempDir, "real.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.shareMultiplePdfs(
+            context,
+            listOf(real.absolutePath, File(tempDir, "gone.pdf").absolutePath)
+        )
+
+        verify(exactly = 1) { FileProvider.getUriForFile(any(), any(), any()) }
+        verify(exactly = 1) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `sharing nothing that exists opens nothing`() {
+        expectProviderUris()
+
+        FileOperations.shareMultiplePdfs(context, listOf(File(tempDir, "gone.pdf").absolutePath))
+
+        verify(exactly = 0) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
+    }
+
+    @Test
+    fun `a provider that refuses a file does not take the app down`() {
+        // Sharing something outside the paths the provider is configured for
+        // throws, and the user should get nothing rather than a crash.
+        mockkStatic(FileProvider::class)
+        every { context.packageName } returns "com.rejowan.pdfreaderpro"
+        every {
+            FileProvider.getUriForFile(any(), any(), any())
+        } throws IllegalArgumentException("not a configured path")
+        val document = File(tempDir, "outside.pdf").apply { writeText("%PDF-1.4") }
+
+        FileOperations.sharePdf(context, document.absolutePath)
+
+        verify(exactly = 0) { context.startActivity(any()) }
+        unmockkStatic(FileProvider::class)
     }
     // endregion
 }

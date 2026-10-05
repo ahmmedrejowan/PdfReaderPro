@@ -118,6 +118,8 @@ fun RotateScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val openWithLabel = stringResource(R.string.open_with)
+    val sharePdfLabel = stringResource(R.string.share_pdf)
     val focusManager = LocalFocusManager.current
 
     val pdfPickerLauncher = rememberLauncherForActivityResult(
@@ -190,7 +192,7 @@ fun RotateScreen(
                                 setDataAndType(uri, "application/pdf")
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(intent, "Open with"))
+                            context.startActivity(Intent.createChooser(intent, openWithLabel))
                         },
                         onShare = {
                             val file = File(result.outputPath)
@@ -204,7 +206,7 @@ fun RotateScreen(
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+                            context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onRotateMore = { viewModel.reset() },
                         onDone = { navController.popBackStack() }
@@ -490,7 +492,7 @@ private fun RotationChip(
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-                angle.label,
+                stringResource(angle.labelRes),
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
                 ),

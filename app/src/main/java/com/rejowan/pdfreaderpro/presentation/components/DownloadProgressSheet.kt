@@ -74,6 +74,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.util.ApkDownloadManager
+import java.util.Locale
 
 /**
  * A sheet that shows download progress for APK updates.
@@ -634,8 +635,8 @@ private fun formatBytes(bytes: Long): String {
     val kb = bytes / 1024.0
     val mb = kb / 1024.0
     return when {
-        mb >= 1.0 -> String.format("%.1f MB", mb)
-        kb >= 1.0 -> String.format("%.1f KB", kb)
+        mb >= 1.0 -> String.format(Locale.getDefault(), "%.1f MB", mb)
+        kb >= 1.0 -> String.format(Locale.getDefault(), "%.1f KB", kb)
         else -> "$bytes B"
     }
 }

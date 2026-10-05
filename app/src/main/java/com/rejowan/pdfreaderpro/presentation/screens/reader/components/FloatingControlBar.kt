@@ -31,6 +31,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.unit.dp
 
 // Design system colors
@@ -74,7 +76,7 @@ fun FloatingControlBar(
             // Table of Contents
             ControlBarButton(
                 icon = Icons.AutoMirrored.Rounded.MenuBook,
-                contentDescription = "Table of Contents",
+                contentDescription = stringResource(R.string.cd_table_of_contents),
                 onClick = onTocClick,
                 tint = AccentPurple,
                 isDarkMode = isDarkMode
@@ -83,7 +85,7 @@ fun FloatingControlBar(
             // View Mode
             ControlBarButton(
                 icon = Icons.Rounded.ViewDay,
-                contentDescription = "View Options",
+                contentDescription = stringResource(R.string.cd_view_options),
                 onClick = onViewClick,
                 tint = AccentBlue,
                 isDarkMode = isDarkMode
@@ -92,7 +94,7 @@ fun FloatingControlBar(
             // Zoom
             ControlBarButton(
                 icon = Icons.Rounded.ZoomIn,
-                contentDescription = "Zoom",
+                contentDescription = stringResource(R.string.cd_zoom),
                 onClick = onZoomClick,
                 tint = AccentTeal,
                 isDarkMode = isDarkMode
@@ -101,7 +103,7 @@ fun FloatingControlBar(
             // Display Settings (Theme, Brightness)
             ControlBarButton(
                 icon = Icons.Rounded.Palette,
-                contentDescription = "Display Settings",
+                contentDescription = stringResource(R.string.cd_display_settings),
                 onClick = onDisplayClick,
                 tint = AccentAmber,
                 isDarkMode = isDarkMode
@@ -117,7 +119,7 @@ fun FloatingControlBar(
             // More Options
             ControlBarButton(
                 icon = Icons.Rounded.MoreHoriz,
-                contentDescription = "More Options",
+                contentDescription = stringResource(R.string.cd_more_options),
                 onClick = onMoreClick,
                 tint = barContentColor.copy(alpha = 0.7f),
                 isDarkMode = isDarkMode
@@ -183,7 +185,7 @@ private fun BookmarkButton(
     ) {
         Icon(
             imageVector = if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
-            contentDescription = if (isBookmarked) "Remove Bookmark" else "Add Bookmark",
+            contentDescription = if (isBookmarked) stringResource(R.string.cd_remove_bookmark) else stringResource(R.string.cd_add_bookmark),
             tint = tint,
             modifier = Modifier.size(22.dp)
         )

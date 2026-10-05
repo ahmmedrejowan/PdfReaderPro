@@ -502,13 +502,19 @@ private fun formatFileSize(bytes: Long): String {
     return when {
         bytes < 1024 -> "$bytes B"
         bytes < 1024 * 1024 -> "${bytes / 1024} KB"
-        bytes < 1024 * 1024 * 1024 -> String.format("%.1f MB", bytes / (1024.0 * 1024.0))
-        else -> String.format("%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0))
+        bytes < 1024 * 1024 * 1024 -> String.format(Locale.getDefault(), "%.1f MB", bytes / (1024.0 * 1024.0))
+        else -> String.format(Locale.getDefault(), "%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0))
     }
 }
 
 private fun formatDate(timestamp: Long): String {
-    val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
+    val locale = Locale.getDefault()
+    val pattern = if (locale.language == "ru") {
+        "dd.MM.yyyy HH:mm"
+    } else {
+        "MMM dd, yyyy HH:mm"
+    }
+    val sdf = SimpleDateFormat(pattern, locale)
     return sdf.format(Date(timestamp))
 }
 
@@ -523,7 +529,8 @@ private fun formatPdfDate(pdfDate: String): String {
             val minute = if (cleaned.length >= 12) cleaned.substring(10, 12) else "00"
 
             val inputFormat = SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
+            val outputPattern = if (Locale.getDefault().language == "ru") "dd.MM.yyyy HH:mm" else "MMM dd, yyyy HH:mm"
+            val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
             val date = inputFormat.parse("$year$month$day$hour$minute")
             date?.let { outputFormat.format(it) } ?: pdfDate
         } else {

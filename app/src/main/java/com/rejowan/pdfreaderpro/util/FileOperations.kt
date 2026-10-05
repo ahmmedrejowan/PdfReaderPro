@@ -130,8 +130,41 @@ object FileOperations {
     fun resolveUriToPath(context: Context, uri: Uri): String? {
         return when (uri.scheme) {
             "file" -> uri.path
-            "content" -> copyContentUriToCache(context, uri)
+            // Prefer the file itself. Copying is only needed when the document
+            // lives somewhere we cannot reach directly, and a copy costs the user
+            // the ability to save changes back into their own file.
+            "content" -> realFilePathFor(context, uri) ?: copyContentUriToCache(context, uri)
             else -> null
+        }
+    }
+
+    /**
+     * The on-disk path behind a content uri, when there is one we can read.
+     *
+     * MediaStore still reports it for anything in shared storage, and this app holds
+     * all-files access, so documents opened from its own list can be used in place
+     * rather than duplicated into the cache. Returns null for providers that only
+     * offer a stream, which is when a copy is genuinely required.
+     */
+    private fun realFilePathFor(context: Context, uri: Uri): String? {
+        return try {
+            context.contentResolver.query(
+                uri,
+                arrayOf(android.provider.MediaStore.MediaColumns.DATA),
+                null, null, null
+            )?.use { cursor ->
+                if (!cursor.moveToFirst()) return null
+                val index = cursor.getColumnIndex(android.provider.MediaStore.MediaColumns.DATA)
+                if (index < 0) return null
+                val path = cursor.getString(index)
+                if (path.isNullOrBlank()) return null
+                File(path).takeIf { it.isFile && it.canRead() }?.absolutePath
+            }
+        } catch (e: Exception) {
+            // Providers are free to reject this column; falling back to a copy is
+            // always correct, just less capable.
+            Timber.d(e, "No direct path for %s, will cache instead", uri)
+            null
         }
     }
 

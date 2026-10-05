@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
+    jacoco
 }
 
 // Load signing config from keystore.properties or environment variables
@@ -53,6 +54,8 @@ android {
         debug {
             // Debug builds enable logging
             buildConfigField("boolean", "ENABLE_LOGGING", "true")
+            // Coverage is measured from the debug unit tests.
+            enableUnitTestCoverage = true
         }
         release {
             isMinifyEnabled = true
@@ -67,6 +70,12 @@ android {
                 signingConfig = signingConfigs.getByName("release")
             }
         }
+    }
+
+    testOptions {
+        // Android framework stubs return defaults instead of throwing, so the PDF
+        // rendering paths can be driven from JVM tests with the classes mocked.
+        unitTests.isReturnDefaultValues = true
     }
 
     buildFeatures {
@@ -172,6 +181,7 @@ dependencies {
 
 
     // Testing
+    testImplementation(libs.ktor.client.mock)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
@@ -185,4 +195,94 @@ dependencies {
     androidTestImplementation(libs.room.testing)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.turbine)
+}
+
+// ============================================================================
+// Test coverage
+// ============================================================================
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+/**
+ * Coverage for the debug unit tests: `./gradlew coverageReport`.
+ *
+ * Wired by hand rather than through a coverage plugin because the ones available
+ * do not yet understand this AGP version's variants, and a report that silently
+ * measures nothing is worse than none.
+ *
+ * The exclusions below are things a unit test cannot speak to, and leaving them in
+ * would make the figure a measure of how much UI exists rather than how well the
+ * logic is tested:
+ *  - generated code
+ *  - dependency injection wiring
+ *  - the vendored PDF.js bridge, which needs a live WebView and is checked by hand
+ *  - Compose UI, which needs an instrumented or Robolectric harness
+ */
+val coverageExclusions = listOf(
+    "**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*",
+    "**/*_Factory*.*", "**/*_Impl*.*", "**/*Companion*.*",
+    "**/*\$\$serializer*.*", "**/ComposableSingletons*.*", "**/*ComposableKt*.*",
+    "**/di/**",
+    "**/appClasses/**",
+    "**/presentation/components/pdf/**",
+    "**/presentation/components/pdfcompose/**",
+    "**/presentation/theme/**",
+    "**/presentation/navigation/**",
+    // Compose UI. These are top level composable functions, compiled into *Kt
+    // classes, and a unit test cannot enter them at all. Counting them would make
+    // the figure a measure of how much screen code exists rather than how well the
+    // logic behind it is tested.
+    "**/presentation/components/**",
+    "**/*ScreenKt*.*", "**/*ScreenContentKt*.*",
+    "**/*SheetKt*.*", "**/*DialogKt*.*", "**/*BarKt*.*",
+    "**/*ItemKt*.*", "**/*CardKt*.*", "**/*OverlayKt*.*",
+    "**/*PanelKt*.*", "**/*TabKt*.*", "**/*ViewKt*.*",
+    "**/*StateKt*.*", "**/*CaptureKt*.*", "**/*IndicatorKt*.*",
+    "**/screens/**/components/**",
+    // Declarations that only exist to describe a screen: the tool catalogue, the
+    // onboarding pages, the bottom bar entries. They live inside the screen files
+    // above but compile to classes of their own, so the patterns there miss them.
+    "**/screens/tools/PdfTool*.*", "**/screens/tools/ToolCategory*.*",
+    "**/screens/onboarding/OnboardingPage*.*", "**/screens/onboarding/ShapeConfig*.*",
+    "**/screens/home/BottomNavItem*.*", "**/screens/home/HomeSubTab*.*",
+    // Activities are Compose hosts with no logic of their own, and the crash
+    // screen is a composable like any other.
+    "**/presentation/MainActivity*.*", "**/presentation/ErrorActivity*.*"
+)
+
+tasks.register<JacocoReport>("coverageReport") {
+    group = "verification"
+    description = "Line and branch coverage for the debug unit tests."
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        csv.required.set(false)
+    }
+
+    // AGP 9 puts compiled Kotlin under intermediates/built_in_kotlinc rather than
+    // the tmp/kotlin-classes path older setups use. Both are listed so this keeps
+    // working if that moves again, and Java is included for completeness.
+    classDirectories.setFrom(
+        files(
+            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes")) {
+                exclude(coverageExclusions)
+            },
+            fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+                exclude(coverageExclusions)
+            },
+            fileTree(layout.buildDirectory.dir("intermediates/javac/debug/compileDebugJavaWithJavac/classes")) {
+                exclude(coverageExclusions)
+            }
+        )
+    )
+    sourceDirectories.setFrom(files("src/main/java"))
+    executionData.setFrom(
+        fileTree(layout.buildDirectory) {
+            include("outputs/unit_test_code_coverage/debugUnitTest/*.exec")
+        }
+    )
 }

@@ -15,21 +15,35 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -78,6 +92,7 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.AutoScrol
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.TopBarMenuPanel
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.RemoveFavoriteSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SelectionActionBar
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.SignatureSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -85,6 +100,7 @@ fun ReaderScreen(
     navController: NavController,
     path: String,
     initialPage: Int = 0,
+    startSigning: Boolean = false,
     viewModel: ReaderViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -107,7 +123,29 @@ fun ReaderScreen(
         uri?.let { viewModel.bakeHighlightsToUri(it) }
     }
 
+    val decryptedCopyLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri ->
+        uri?.let { viewModel.saveDecryptedCopyToUri(it) }
+    }
+
+    val signedCopyLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri ->
+        uri?.let { viewModel.requestSignedCopy(it) }
+    }
+
     val state by viewModel.state.collectAsState()
+
+    // Arriving from the Sign PDF tool. The signature editor needs a loaded
+    // document, so wait for the first render rather than firing on entry.
+    var signingStarted by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(startSigning, state.isLoading) {
+        if (startSigning && !state.isLoading && !signingStarted) {
+            signingStarted = true
+            viewModel.onAction(ReaderAction.StartSigning)
+        }
+    }
 
     val activity = context as? Activity
 
@@ -276,6 +314,12 @@ fun ReaderScreen(
                 is ReaderEvent.BakeHighlightsPicker -> {
                     bakeHighlightsLauncher.launch(viewModel.getHighlightedFileName())
                 }
+                is ReaderEvent.SaveDecryptedCopyPicker -> {
+                    decryptedCopyLauncher.launch(viewModel.getDecryptedFileName())
+                }
+                is ReaderEvent.SaveSignedCopyPicker -> {
+                    signedCopyLauncher.launch(viewModel.getSignedFileName())
+                }
                 is ReaderEvent.FavoriteAdded -> {
                     snackbarHostState.showSnackbar("Added to favourites")
                 }
@@ -356,7 +400,8 @@ fun ReaderScreen(
                 if (pdfViewer.isInitialized && pdfViewer.pageScrollMode != targetScrollMode) {
                     pdfViewer.pageScrollMode = targetScrollMode
                 }
-            }
+            },
+            onRelease = { viewModel.clearPdfViewer() }
         )
 
         // Loading overlay
@@ -374,6 +419,50 @@ fun ReaderScreen(
                 CircularProgressIndicator(
                     color = Color(0xFF9575CD)
                 )
+            }
+        }
+
+
+        // Print preparation overlay. Rasterising every page takes tens of seconds
+        // on a longer document, and until this existed the reader simply sat there.
+        AnimatedVisibility(
+            visible = state.printProgress != null || state.isSavingDecryptedCopy ||
+                state.isSavingSignedCopy,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            val progress = state.printProgress
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor.copy(alpha = 0.85f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (progress != null) {
+                        CircularProgressIndicator(
+                            progress = { progress },
+                            color = Color(0xFF9575CD)
+                        )
+                    } else {
+                        CircularProgressIndicator(color = Color(0xFF9575CD))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = when {
+                            state.isSavingSignedCopy -> stringResource(R.string.sign_saving)
+                            state.isSavingDecryptedCopy ->
+                                stringResource(R.string.save_decrypted_copy)
+                            progress != null && progress > 0f -> stringResource(
+                                R.string.print_preparing_percent,
+                                (progress * 100).toInt()
+                            )
+                            else -> stringResource(R.string.print_preparing)
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
 
@@ -700,6 +789,49 @@ fun ReaderScreen(
         )
     }
 
+    if (state.isSignSaveConfirmVisible) {
+        AlertDialog(
+            onDismissRequest = { viewModel.onAction(ReaderAction.DismissSignSaveConfirm) },
+            title = { Text(stringResource(R.string.sign_save_confirm_title)) },
+            text = {
+                Text(
+                    stringResource(
+                        R.string.sign_save_confirm_body,
+                        viewModel.getDocumentFileName()
+                    )
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = { viewModel.onAction(ReaderAction.SaveSignedInPlace) },
+                    shape = RoundedCornerShape(8.dp)
+                ) { Text(stringResource(R.string.sign_save_confirm_action)) }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { viewModel.onAction(ReaderAction.DismissSignSaveConfirm) }
+                ) { Text(stringResource(R.string.sign_save_confirm_cancel)) }
+            }
+        )
+    }
+
+    if (state.isSignatureSheetVisible) {
+        SignatureSheet(
+            placed = state.placedSignatureList,
+            saved = state.savedSignatures,
+            canSaveInPlace = state.canSaveInPlace,
+            onPlaceSaved = { viewModel.onAction(ReaderAction.PlaceSavedSignature(it)) },
+            onDeleteSaved = { viewModel.onAction(ReaderAction.DeleteSavedSignature(it)) },
+            onRemovePlaced = { viewModel.onAction(ReaderAction.RemovePlacedSignature(it)) },
+            onGoToPlaced = { viewModel.onAction(ReaderAction.GoToPlacedSignature(it.pageIndex)) },
+            onCaptured = { bitmap, remember -> viewModel.onSignatureCaptured(bitmap, remember) },
+            onSaveIntoFile = { viewModel.onAction(ReaderAction.ConfirmSaveSignedInPlace) },
+            onSaveAsCopy = { viewModel.onAction(ReaderAction.SaveSignedCopy) },
+            onRemoveAll = { viewModel.onAction(ReaderAction.DiscardSignatures) },
+            onDismiss = { viewModel.onAction(ReaderAction.HideSignatureSheet) }
+        )
+    }
+
     // More Options Sheet
     if (state.isMoreOptionsSheetVisible) {
         MoreOptionsSheet(
@@ -709,6 +841,14 @@ fun ReaderScreen(
             onSaveWithHighlightsClick = {
                 viewModel.onAction(ReaderAction.ShowBakeHighlightsDialog)
             },
+            onSaveDecryptedCopyClick = {
+                viewModel.onAction(ReaderAction.SaveDecryptedCopy)
+            },
+            onSignClick = {
+                viewModel.onAction(ReaderAction.StartSigning)
+            },
+            isPasswordProtected = state.isPasswordProtected,
+            hasHighlights = state.highlights.isNotEmpty(),
             onBookmarksClick = {
                 viewModel.onAction(ReaderAction.ShowBookmarksSheet)
             },

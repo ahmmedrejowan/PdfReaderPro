@@ -20,6 +20,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSignTool
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CallMerge
 import androidx.compose.material.icons.automirrored.filled.CallSplit
@@ -29,6 +33,7 @@ import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.Draw
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
@@ -55,6 +60,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.annotation.StringRes
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
@@ -77,17 +83,17 @@ private val AccentTeal = Color(0xFF4DB6AC)
 private val AccentAmber = Color(0xFFFFB74D)
 private val AccentGreen = Color(0xFF81C784)
 
-enum class ToolCategory(val title: String, val accentColor: Color) {
-    ORGANIZE("Organize", AccentPurple),
-    EDIT("Edit", AccentBlue),
-    SECURITY("Security", AccentAmber),
-    CONVERT("Convert", AccentTeal)
+enum class ToolCategory(@StringRes val titleRes: Int, val accentColor: Color) {
+    ORGANIZE(R.string.tool_category_organize, AccentPurple),
+    EDIT(R.string.tool_category_edit, AccentBlue),
+    SECURITY(R.string.tool_category_security, AccentAmber),
+    CONVERT(R.string.tool_category_convert, AccentTeal)
 }
 
 data class PdfTool(
     val id: String,
-    val name: String,
-    val description: String,
+    @StringRes val nameRes: Int,
+    @StringRes val descriptionRes: Int,
     val icon: ImageVector,
     val category: ToolCategory,
     val isEnabled: Boolean = false
@@ -96,96 +102,104 @@ data class PdfTool(
 private val pdfTools = listOf(
     PdfTool(
         "merge",
-        "Merge PDFs",
-        "Combine multiple PDF files into one",
+        R.string.tool_merge_pdfs,
+        R.string.tool_merge_desc,
         Icons.AutoMirrored.Filled.CallMerge,
         ToolCategory.ORGANIZE,
         isEnabled = true
     ),
     PdfTool(
         "split",
-        "Split PDF",
-        "Split a PDF into multiple files",
+        R.string.tool_split_pdf,
+        R.string.tool_split_desc,
         Icons.AutoMirrored.Filled.CallSplit,
         ToolCategory.ORGANIZE,
         isEnabled = true
     ),
     PdfTool(
         "compress",
-        "Compress PDF",
-        "Reduce file size while maintaining quality",
+        R.string.tool_compress_pdf,
+        R.string.tool_compress_desc,
         Icons.Default.Compress,
         ToolCategory.ORGANIZE,
         isEnabled = true
     ),
     PdfTool(
         "rotate",
-        "Rotate Pages",
-        "Rotate individual or all pages",
+        R.string.tool_rotate_pages,
+        R.string.tool_rotate_desc,
         Icons.AutoMirrored.Filled.RotateRight,
         ToolCategory.ORGANIZE,
         isEnabled = true
     ),
     PdfTool(
         "reorder",
-        "Reorder Pages",
-        "Rearrange page order in PDF",
+        R.string.tool_reorder_pages,
+        R.string.tool_reorder_desc,
         Icons.Default.Reorder,
         ToolCategory.ORGANIZE,
         isEnabled = true
     ),
     PdfTool(
         "remove_pages",
-        "Remove Pages",
-        "Delete specific pages from PDF",
+        R.string.tool_remove_pages,
+        R.string.tool_remove_pages_desc,
         Icons.Default.DeleteSweep,
         ToolCategory.EDIT,
         isEnabled = true
     ),
     PdfTool(
         "watermark",
-        "Add Watermark",
-        "Add text or image watermark",
+        R.string.tool_watermark,
+        R.string.tool_watermark_desc,
         Icons.Default.WaterDrop,
         ToolCategory.EDIT,
         isEnabled = true
     ),
     PdfTool(
         "page_numbers",
-        "Add Page Numbers",
-        "Insert page numbers to PDF",
+        R.string.tool_page_numbers,
+        R.string.tool_page_numbers_desc,
         Icons.Default.FormatListNumbered,
         ToolCategory.EDIT,
         isEnabled = true
     ),
     PdfTool(
         "lock_pdf",
-        "Lock PDF",
-        "Add password protection",
+        R.string.tool_lock_pdf,
+        R.string.tool_lock_desc,
         Icons.Default.Lock,
         ToolCategory.SECURITY,
         isEnabled = true
     ),
     PdfTool(
         "unlock_pdf",
-        "Unlock PDF",
-        "Remove password from PDF",
+        R.string.tool_unlock_pdf,
+        R.string.tool_unlock_desc,
         Icons.Default.LockOpen,
         ToolCategory.SECURITY,
         isEnabled = true
     ),
     PdfTool(
+        "sign_pdf",
+        R.string.tool_sign_pdf,
+        R.string.tool_sign_pdf_desc,
+        Icons.Default.Draw,
+        ToolCategory.SECURITY,
+        isEnabled = true
+    ),
+    PdfTool(
         "img_to_pdf",
-        "Image to PDF",
-        "Convert images to PDF document",
+        R.string.tool_image_to_pdf,
+        R.string.tool_image_to_pdf_desc,
         Icons.Default.Image,
         ToolCategory.CONVERT,
         isEnabled = true
     ),
     PdfTool(
         "pdf_to_img",
-        "PDF to Images",
-        "Export PDF pages as image files",
+        R.string.tool_pdf_to_image,
+        R.string.tool_pdf_to_image_desc,
         Icons.Default.Photo,
         ToolCategory.CONVERT,
         isEnabled = true
@@ -197,6 +211,19 @@ fun ToolsScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
+    // Signing needs the page in view, so this tool picks a file and hands it to
+    // the reader with the signature editor already on.
+    val signPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri ?: return@rememberLauncherForActivityResult
+        val path = com.rejowan.pdfreaderpro.util.FileOperations.copyContentUriToCache(context, uri)
+        if (path != null) navController.navigateToSignTool(path)
+    }
+    val pickPdfToSign = { signPickerLauncher.launch(arrayOf("application/pdf")) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -212,7 +239,7 @@ fun ToolsScreen(
             if (toolsInCategory.isNotEmpty()) {
                 // Section label
                 SectionLabel(
-                    text = category.title,
+                    text = stringResource(category.titleRes),
                     delay = animationIndex * 50
                 )
                 animationIndex++
@@ -234,6 +261,7 @@ fun ToolsScreen(
                                 "reorder" -> navController.navigateToReorderTool("")
                                 "lock_pdf" -> navController.navigateToLockTool("")
                                 "unlock_pdf" -> navController.navigateToUnlockTool("")
+                                "sign_pdf" -> pickPdfToSign()
                                 "remove_pages" -> navController.navigateToRemovePagesTool("")
                                 "watermark" -> navController.navigateToWatermarkTool("")
                                 "page_numbers" -> navController.navigateToPageNumbersTool("")
@@ -356,7 +384,7 @@ private fun ToolItem(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = tool.name,
+                        text = stringResource(tool.nameRes),
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -376,7 +404,7 @@ private fun ToolItem(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = tool.description,
+                    text = stringResource(tool.descriptionRes),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (tool.isEnabled) {
                         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)

@@ -405,7 +405,7 @@ fun SettingsScreenContent(
             SettingsOptionItem(
                 icon = Icons.Rounded.InstallMobile,
                 title = stringResource(R.string.install_pending_update),
-                subtitle = "v${pendingApkVersion ?: "?"} is ready to install",
+                subtitle = stringResource(R.string.pending_update_ready, pendingApkVersion ?: "?"),
                 accentColor = Color(0xFF4CAF50),
                 onClick = {
                     if (viewModel.canInstallApks()) {
@@ -1374,7 +1374,7 @@ private fun PickerOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = "Selected",
+                        contentDescription = stringResource(R.string.selected),
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -1602,7 +1602,7 @@ private fun BrightnessContent(
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.BrightnessLow,
-                            contentDescription = "Low",
+                            contentDescription = stringResource(R.string.cd_low),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(18.dp)
                         )
@@ -1626,7 +1626,7 @@ private fun BrightnessContent(
 
                         Icon(
                             imageVector = Icons.Rounded.BrightnessHigh,
-                            contentDescription = "High",
+                            contentDescription = stringResource(R.string.cd_high),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(18.dp)
                         )
@@ -1745,7 +1745,7 @@ private fun BrightnessOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = "Selected",
+                        contentDescription = stringResource(R.string.selected),
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -1837,7 +1837,7 @@ private fun AboutSheet(
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Close,
-                                contentDescription = "Close",
+                                contentDescription = stringResource(R.string.close),
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .size(20.dp),
@@ -2396,7 +2396,7 @@ private fun CreatorContent() {
             Column(modifier = Modifier.padding(16.dp)) {
                 CreatorLinkItem(
                     icon = Icons.Rounded.Language,
-                    label = "Website",
+                    label = stringResource(R.string.link_website),
                     value = "rejowan.com",
                     accentColor = AccentBlue,
                     onClick = {
@@ -2409,7 +2409,7 @@ private fun CreatorContent() {
 
                 CreatorLinkItem(
                     icon = Icons.Rounded.Email,
-                    label = "Email",
+                    label = stringResource(R.string.link_email),
                     value = "kmrejowan@gmail.com",
                     accentColor = AccentAmber,
                     onClick = {
@@ -2424,7 +2424,7 @@ private fun CreatorContent() {
 
                 CreatorLinkItem(
                     icon = Icons.Rounded.Code,
-                    label = "GitHub",
+                    label = stringResource(R.string.link_github),
                     value = "github.com/ahmmedrejowan",
                     accentColor = AccentPurple,
                     onClick = {
@@ -2437,7 +2437,7 @@ private fun CreatorContent() {
 
                 CreatorLinkItem(
                     icon = Icons.Rounded.Work,
-                    label = "LinkedIn",
+                    label = stringResource(R.string.link_linkedin),
                     value = "linkedin.com/in/ahmmedrejowan",
                     accentColor = AccentTeal,
                     onClick = {

@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage
 
-import android.content.Context
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
@@ -16,11 +16,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.rejowan.pdfreaderpro.R
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 enum class ImageFormat(val extension: String, val label: String) {
     PNG("png", "PNG"),
@@ -62,7 +64,7 @@ data class PdfToImageResult(
 
 class PdfToImageViewModel(
     private val pdfToolsRepository: PdfToolsRepository,
-    private val context: Context
+    private val context: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PdfToImageState())
@@ -95,11 +97,11 @@ class PdfToImageViewModel(
                         )
                     }
                 } else {
-                    _state.update { it.copy(isLoading = false, error = "Failed to load PDF file") }
+                    _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf)) }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Failed to set source file")
-                _state.update { it.copy(isLoading = false, error = "Failed to load PDF: ${e.message}") }
+                _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf_with_message, e.message ?: "")) }
             }
         }
     }
@@ -148,7 +150,7 @@ class PdfToImageViewModel(
         val sourceFile = currentState.sourceFile
 
         if (sourceFile == null) {
-            _state.update { it.copy(error = "Please select a PDF file first") }
+            _state.update { it.copy(error = context.getString(R.string.error_select_pdf_first)) }
             return
         }
 
@@ -203,7 +205,7 @@ class PdfToImageViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: "Failed to export images"
+                            error = error.message ?: context.getString(R.string.error_export_images_failed)
                         )
                     }
                 }

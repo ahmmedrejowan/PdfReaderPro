@@ -63,6 +63,49 @@ data class ReaderState(
     val isPasswordError: Boolean = false,
     val passwordSubmitted: Boolean = false,
 
+    /** True once this document has been opened with a password. */
+    val isPasswordProtected: Boolean = false,
+
+    /** Set while a decrypted copy is being written. */
+    val isSavingDecryptedCopy: Boolean = false,
+
+    /** The app's own signature sheet is showing. */
+    val isSignatureSheetVisible: Boolean = false,
+
+    /** Signatures the user has kept for reuse. */
+    val savedSignatures: List<SavedSignatureUi> = emptyList(),
+
+    /**
+     * Signatures placed on this document and not yet written into the file. Held
+     * like highlights, so nothing has to be decided the moment one is placed.
+     */
+    val placedSignatureList: List<PlacedSignatureUi> = emptyList(),
+
+    /** How many are placed but not written into the file yet. */
+    val placedSignatures: Int = 0,
+
+    /** Set while the signed copy is being written out. */
+    val isSavingSignedCopy: Boolean = false,
+
+    /**
+     * Whether the signatures can be written back into the document itself.
+     *
+     * False when the reader is showing a cache copy, which happens for anything
+     * opened through a content uri. Writing there would succeed and change
+     * nothing the user can see, so the option is not offered.
+     */
+    val canSaveInPlace: Boolean = false,
+
+    /** Confirmation before signatures are written into the document itself. */
+    val isSignSaveConfirmVisible: Boolean = false,
+
+    /**
+     * Progress of the print render, 0..1, or null when no print job is running.
+     * Preparing a print job rasterises every page and can take the better part of
+     * a minute, so it needs to be visible rather than silent.
+     */
+    val printProgress: Float? = null,
+
     // Page jump dialog
     val isPageJumpDialogVisible: Boolean = false,
 
@@ -254,6 +297,19 @@ enum class ReadingTheme {
 /**
  * Reader events for one-time actions.
  */
+/** A stored signature, as the reader needs it. */
+data class SavedSignatureUi(
+    val id: String,
+    val filePath: String
+)
+
+/** A signature placed on the open document but not yet written into the file. */
+data class PlacedSignatureUi(
+    val id: Long,
+    val pageIndex: Int,
+    val imagePath: String
+)
+
 sealed class ReaderEvent {
     data class ShowMessage(val message: String) : ReaderEvent()
     data class NavigateToPage(val page: Int) : ReaderEvent()
@@ -262,6 +318,8 @@ sealed class ReaderEvent {
     data object ShareDocument : ReaderEvent()
     data object SaveDocumentPicker : ReaderEvent()
     data object BakeHighlightsPicker : ReaderEvent()
+    data object SaveDecryptedCopyPicker : ReaderEvent()
+    data object SaveSignedCopyPicker : ReaderEvent()
     data object FavoriteAdded : ReaderEvent()
     data class Error(val message: String) : ReaderEvent()
 }
@@ -414,4 +472,38 @@ sealed class ReaderAction {
     data object ShowBakeHighlightsDialog : ReaderAction()
     data object HideBakeHighlightsDialog : ReaderAction()
     data object ConfirmBakeHighlights : ReaderAction()
+
+    /** Write a copy of a password protected document with the encryption removed. */
+    data object SaveDecryptedCopy : ReaderAction()
+
+    // Signing
+    /** Open the app's signature sheet. */
+    data object StartSigning : ReaderAction()
+
+    data object HideSignatureSheet : ReaderAction()
+
+    /** Place a signature the user kept earlier. */
+    data class PlaceSavedSignature(val id: String) : ReaderAction()
+
+    data class DeleteSavedSignature(val id: String) : ReaderAction()
+
+    /** Throw away placements that have not been written into the file. */
+    data object DiscardSignatures : ReaderAction()
+
+    /** Remove a single placement. */
+    data class RemovePlacedSignature(val id: Long) : ReaderAction()
+
+    /** Jump to the page a placement sits on. */
+    data class GoToPlacedSignature(val pageIndex: Int) : ReaderAction()
+
+    /** Write a copy carrying the placed signatures. */
+    data object SaveSignedCopy : ReaderAction()
+
+    /** Ask before writing the placed signatures into the document itself. */
+    data object ConfirmSaveSignedInPlace : ReaderAction()
+
+    data object DismissSignSaveConfirm : ReaderAction()
+
+    /** Write the placed signatures back into the document itself. */
+    data object SaveSignedInPlace : ReaderAction()
 }

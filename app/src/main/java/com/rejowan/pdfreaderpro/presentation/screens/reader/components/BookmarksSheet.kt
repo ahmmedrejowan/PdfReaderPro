@@ -478,6 +478,12 @@ private fun EmptyBookmarksState(
 }
 
 private fun formatDate(timestamp: Long): String {
-    val sdf = SimpleDateFormat("MMM d, yyyy • h:mm a", Locale.getDefault())
+    val locale = Locale.getDefault()
+    val pattern = if (locale.language == "ru") {
+        "d MMM yyyy 'г.' • HH:mm"
+    } else {
+        "MMM d, yyyy • h:mm a"
+    }
+    val sdf = SimpleDateFormat(pattern, locale)
     return sdf.format(Date(timestamp))
 }

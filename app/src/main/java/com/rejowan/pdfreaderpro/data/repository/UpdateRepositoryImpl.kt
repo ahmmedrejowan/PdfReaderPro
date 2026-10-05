@@ -12,6 +12,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.HttpStatusCode
+import com.rejowan.pdfreaderpro.util.VersionUtils
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 
@@ -86,7 +87,7 @@ class UpdateRepositoryImpl(
                 val latestVersion = release.version
                 Timber.tag(TAG).d("Latest GitHub version: $latestVersion")
 
-                val isNewer = isNewerVersion(latestVersion, currentVersion)
+                val isNewer = VersionUtils.isNewerVersion(latestVersion, currentVersion)
                 Timber.tag(TAG).d("Is newer: $isNewer")
 
                 if (isNewer) {
@@ -135,39 +136,4 @@ class UpdateRepositoryImpl(
      * Compares two semantic version strings.
      * @return true if [newVersion] is greater than [currentVersion]
      */
-    private fun isNewerVersion(newVersion: String, currentVersion: String): Boolean {
-        try {
-            val newParts = parseVersion(newVersion)
-            val currentParts = parseVersion(currentVersion)
-
-            Timber.tag(TAG).d("Parsed versions: new=$newParts, current=$currentParts")
-
-            for (i in 0 until maxOf(newParts.size, currentParts.size)) {
-                val newPart = newParts.getOrElse(i) { 0 }
-                val currentPart = currentParts.getOrElse(i) { 0 }
-
-                when {
-                    newPart > currentPart -> return true
-                    newPart < currentPart -> return false
-                }
-            }
-            return false
-        } catch (e: Exception) {
-            Timber.tag(TAG).e(e, "Error comparing versions: $newVersion vs $currentVersion")
-            return false
-        }
-    }
-
-    /**
-     * Parses a version string into a list of integers.
-     * Handles formats like "2.0.0", "v2.0.0", "2.0.0-beta1"
-     */
-    private fun parseVersion(version: String): List<Int> {
-        return version
-            .removePrefix("v")
-            .removePrefix("V")
-            .split("-")[0] // Remove pre-release suffix
-            .split(".")
-            .mapNotNull { it.toIntOrNull() }
-    }
 }

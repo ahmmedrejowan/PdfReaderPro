@@ -23,6 +23,9 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import java.io.File
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,6 +37,9 @@ class SearchViewModelTest {
     private lateinit var favoriteRepository: FavoriteRepository
     private lateinit var recentRepository: RecentRepository
     private lateinit var viewModel: SearchViewModel
+
+    @get:Rule
+    val folder = TemporaryFolder()
 
     @Before
     fun setup() {
@@ -410,6 +416,87 @@ class SearchViewModelTest {
         advanceUntilIdle()
 
         assertEquals(longQuery, viewModel.searchQuery.value)
+    }
+    // endregion
+
+    // region Acting on a result
+    private fun document(name: String) =
+        folder.newFile(name).apply { writeText("%PDF-1.4 $name") }
+
+    @Test
+    fun `deleting a result removes the file and what the app remembers`() = runTest {
+        val target = document("result.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = false
+
+        vm.deleteFile(target.absolutePath) { succeeded = it }
+        advanceUntilIdle()
+
+        assertTrue(succeeded)
+        assertFalse(target.exists())
+        coVerify { favoriteRepository.removeFavorite(target.absolutePath) }
+        coVerify { recentRepository.removeRecent(target.absolutePath) }
+    }
+
+    @Test
+    fun `deleting a file that is not there reports failure and clears nothing`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+        val missing = File(folder.root, "gone.pdf").absolutePath
+        var succeeded = true
+
+        vm.deleteFile(missing) { succeeded = it }
+        advanceUntilIdle()
+
+        assertFalse(succeeded)
+        coVerify(exactly = 0) { favoriteRepository.removeFavorite(missing) }
+    }
+
+    @Test
+    fun `renaming a result moves the file and follows it`() = runTest {
+        val target = document("before.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = false
+
+        vm.renameFile(target.absolutePath, "after") { succeeded = it }
+        advanceUntilIdle()
+
+        assertTrue(succeeded)
+        assertTrue(File(folder.root, "after.pdf").exists())
+        coVerify { favoriteRepository.updatePath(target.absolutePath, any(), "after.pdf") }
+        coVerify { recentRepository.updatePath(target.absolutePath, any(), "after.pdf") }
+    }
+
+    @Test
+    fun `the results are refreshed after a rename, so the old name goes`() = runTest {
+        // The query is re-run rather than the list being edited, since the file may
+        // no longer match what was searched for.
+        val target = document("before.pdf")
+        val vm = createViewModel()
+        vm.setSearchQuery("before")
+        advanceUntilIdle()
+
+        vm.renameFile(target.absolutePath, "after") { }
+        advanceUntilIdle()
+
+        assertEquals("before", vm.searchQuery.value)
+    }
+
+    @Test
+    fun `renaming onto a name already taken fails and changes nothing`() = runTest {
+        val target = document("before.pdf")
+        document("taken.pdf")
+        val vm = createViewModel()
+        advanceUntilIdle()
+        var succeeded = true
+
+        vm.renameFile(target.absolutePath, "taken") { succeeded = it }
+        advanceUntilIdle()
+
+        assertFalse(succeeded)
+        assertTrue(target.exists())
     }
     // endregion
 }

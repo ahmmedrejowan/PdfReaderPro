@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.lock
 
-import android.content.Context
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.rejowan.pdfreaderpro.R
 import timber.log.Timber
 import java.io.File
 
@@ -53,7 +54,7 @@ data class LockResult(
 
 class LockViewModel(
     private val pdfToolsRepository: PdfToolsRepository,
-    private val context: Context
+    private val context: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LockState())
@@ -90,11 +91,11 @@ class LockViewModel(
                     val baseName = file.nameWithoutExtension
                     _state.update { it.copy(outputFileName = "${baseName}_locked") }
                 } else {
-                    _state.update { it.copy(isLoading = false, error = "Failed to load PDF file") }
+                    _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf)) }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Failed to set source file")
-                _state.update { it.copy(isLoading = false, error = "Failed to load PDF: ${e.message}") }
+                _state.update { it.copy(isLoading = false, error = context.getString(R.string.error_failed_load_pdf_with_message, e.message ?: "")) }
             }
         }
     }
@@ -168,29 +169,29 @@ class LockViewModel(
         val sourceFile = currentState.sourceFile
 
         if (sourceFile == null) {
-            _state.update { it.copy(error = "Please select a PDF file first") }
+            _state.update { it.copy(error = context.getString(R.string.error_select_pdf_first)) }
             return
         }
 
         if (currentState.outputFileName.isBlank()) {
-            _state.update { it.copy(error = "Please enter an output file name") }
+            _state.update { it.copy(error = context.getString(R.string.error_enter_output_name)) }
             return
         }
 
         // Validate owner password
         if (currentState.ownerPassword.isBlank()) {
-            _state.update { it.copy(error = "Owner password is required") }
+            _state.update { it.copy(error = context.getString(R.string.error_owner_password_required)) }
             return
         }
 
         if (currentState.ownerPassword.length < 4) {
-            _state.update { it.copy(error = "Owner password must be at least 4 characters") }
+            _state.update { it.copy(error = context.getString(R.string.error_owner_password_min_length)) }
             return
         }
 
         // Validate user password if provided
         if (currentState.userPassword.isNotEmpty() && currentState.userPassword.length < 4) {
-            _state.update { it.copy(error = "User password must be at least 4 characters") }
+            _state.update { it.copy(error = context.getString(R.string.error_user_password_min_length)) }
             return
         }
 
@@ -244,7 +245,7 @@ class LockViewModel(
                             tempFile.delete()
                         } catch (e: Exception) {
                             Timber.e(e, "Failed to replace original file")
-                            _state.update { it.copy(isProcessing = false, error = "Failed to replace original file") }
+                            _state.update { it.copy(isProcessing = false, error = context.getString(R.string.error_failed_replace_original)) }
                             return@launch
                         }
                     }
@@ -269,7 +270,7 @@ class LockViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: "Failed to lock PDF"
+                            error = error.message ?: context.getString(R.string.error_lock_failed)
                         )
                     }
                 }

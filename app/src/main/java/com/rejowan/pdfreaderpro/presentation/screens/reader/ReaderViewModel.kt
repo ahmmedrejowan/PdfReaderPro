@@ -1,6 +1,6 @@
 package com.rejowan.pdfreaderpro.presentation.screens.reader
 
-import android.content.Context
+import android.app.Application
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +10,7 @@ import com.rejowan.pdfreaderpro.data.local.database.dao.AnnotationDao
 import com.rejowan.pdfreaderpro.data.local.database.dao.BookmarkDao
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import com.rejowan.pdfreaderpro.data.local.database.dao.FilePreferenceDao
+import com.rejowan.pdfreaderpro.data.local.database.entity.SignatureEntity
 import com.rejowan.pdfreaderpro.data.local.database.entity.FilePreferenceEntity
 import com.rejowan.pdfreaderpro.data.mapper.toEntity
 import com.rejowan.pdfreaderpro.data.mapper.toRendered
@@ -56,7 +57,10 @@ class ReaderViewModel(
     private val bookmarkDao: BookmarkDao,
     private val annotationDao: AnnotationDao,
     private val filePreferenceDao: FilePreferenceDao,
-    private val applicationContext: Context,
+    private val pdfToolsRepository: com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository,
+    private val signatureStore: com.rejowan.pdfreaderpro.data.local.SignatureStore,
+    private val signatureDao: com.rejowan.pdfreaderpro.data.local.database.dao.SignatureDao,
+    private val applicationContext: Application,
     savedStateHandle: SavedStateHandle,
     private val passwordStorage: PasswordStorage = PasswordStorage(applicationContext)
 ) : ViewModel() {
@@ -64,7 +68,21 @@ class ReaderViewModel(
     val pdfPath: String = savedStateHandle.get<String>("path") ?: ""
     private val initialPage: Int = savedStateHandle.get<Int>("initialPage") ?: 0
 
-    private val _state = MutableStateFlow(ReaderState(documentPath = pdfPath))
+    /**
+     * True when [pdfPath] is the user's own file rather than a copy the app made
+     * in its cache. Anything opened through a content uri is staged in
+     * cacheDir first, and writing there changes nothing the user can see.
+     */
+    private val isOwnCacheCopy: Boolean
+        get() = pdfPath.startsWith(applicationContext.cacheDir.absolutePath) ||
+                pdfPath.startsWith(applicationContext.codeCacheDir.absolutePath)
+
+    private val _state = MutableStateFlow(
+        ReaderState(
+            documentPath = pdfPath,
+            canSaveInPlace = !isOwnCacheCopy && File(pdfPath).canWrite()
+        )
+    )
     val state: StateFlow<ReaderState> = _state.asStateFlow()
 
     private val _events = Channel<ReaderEvent>(Channel.BUFFERED)
@@ -76,6 +94,42 @@ class ReaderViewModel(
     private var pendingAttachmentAction: AttachmentAction? = null
     private var triedStoredPassword: Boolean = false
     private var awaitingStoredPasswordResult: Boolean = false
+
+    /**
+     * The password this document was opened with, kept only for the lifetime of the
+     * reader so a decrypted copy can be written without asking for it again. Never
+     * persisted from here; [passwordStorage] owns that decision.
+     */
+    private var documentPassword: String? = null
+
+    /**
+     * Where to write the signed copy once the viewer hands back the serialised
+     * document. The viewer's save is asynchronous and arrives on the download
+     * listener, so the chosen destination has to wait here in between.
+     */
+    private var pendingSignedCopyUri: android.net.Uri? = null
+
+    /** Set when the signed document should replace the file it came from. */
+    private var signedOverwriteRequested: Boolean = false
+
+    /**
+     * Page to return to once the document has been rebuilt.
+     *
+     * The viewer offers no way to drop one placed signature, so removing one means
+     * reloading and replaying the rest. Losing the reader's position on the way
+     * would be worse than the reload itself.
+     */
+    private var pageToRestoreAfterReload: Int? = null
+
+    /** The stored placements still waiting to be replayed into the viewer. */
+    private var signaturesToRestore: MutableList<SignatureEntity> = mutableListOf()
+
+    /** True while stored placements are being replayed, so they are not re-saved. */
+    private var isRestoringSignatures: Boolean = false
+
+    /** The captured image the next placement came from, so it can be recorded. */
+    private var pendingPlacementImage: File? = null
+    private var pendingPlacementSavedId: String? = null
 
     private enum class AttachmentAction { OPEN, DOWNLOAD }
 
@@ -350,6 +404,20 @@ class ReaderViewModel(
         applyHorizontalScrollLock(_state.value.lockHorizontalScroll)
     }
 
+    /**
+     * Drop the viewer reference when the view leaves. This ViewModel outlives the
+     * Activity across configuration changes, and [pdfViewer] is a WebView-backed
+     * View, so holding it past that point keeps the old Activity alive.
+     */
+    fun clearPdfViewer() {
+        pdfViewer = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        pdfViewer = null
+    }
+
     private fun applyInitialSettings(viewer: PdfViewer) {
         viewModelScope.launch {
             try {
@@ -401,10 +469,18 @@ class ReaderViewModel(
                 applyHorizontalScrollLock(_state.value.lockHorizontalScroll)
                 // The file's own highlights only become readable once it is open.
                 viewer.loadDocumentHighlights()
+                // Signatures placed but never written into the file, replayed for the
+                // same reason highlights are pushed again here.
+                restoreStoredSignatures()
 
                 // Determine which page to start on
                 val lastPage = storedLastPage // Capture for smart cast
+                val afterReload = pageToRestoreAfterReload
+                pageToRestoreAfterReload = null
                 val targetPage = when {
+                    // Removing a placement rebuilds the page, so put the reader back
+                    // where it was rather than sending it to the top.
+                    afterReload != null && afterReload < pagesCount -> afterReload
                     // If explicitly passed a page (e.g., from recent list), use it
                     initialPage > 0 && initialPage < pagesCount -> initialPage
                     // If we have a stored last page from history, use it
@@ -442,6 +518,41 @@ class ReaderViewModel(
                         isLoading = false,
                         error = exception.message ?: "Failed to load PDF"
                     )
+                }
+            },
+            // Preparing a print job rasterises every page, which takes tens of
+            // seconds on a longer document. Without this the reader looked frozen
+            // and people assumed printing was unsupported.
+            onPrintProcessStart = {
+                _state.update { it.copy(printProgress = 0f) }
+            },
+            onPrintProcessProgress = { progress ->
+                _state.update { it.copy(printProgress = progress.coerceIn(0f, 1f)) }
+            },
+            onPrintProcessEnd = {
+                _state.update { it.copy(printProgress = null) }
+            },
+            onPrintCancelled = {
+                _state.update { it.copy(printProgress = null) }
+            },
+            onSignaturePlaced = { success ->
+                if (success) {
+                    // Record where it landed so it survives leaving the document,
+                    // the same way a highlight does. Restores skip this: they are
+                    // replaying rows that already exist.
+                    if (isRestoringSignatures) {
+                        onRestoredSignaturePlaced()
+                    } else {
+                        persistNewestPlacement()
+                    }
+                } else {
+                    viewModelScope.launch {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_place_failed)
+                            )
+                        )
+                    }
                 }
             },
             onPageChange = { pageNumber ->
@@ -491,20 +602,27 @@ class ReaderViewModel(
                             val stored = if (rememberEnabled) passwordStorage.getPassword(pdfPath) else null
                             if (stored != null) {
                                 awaitingStoredPasswordResult = true
-                                _state.update { it.copy(passwordSubmitted = true) }
+                                documentPassword = stored
+                                _state.update {
+                                    it.copy(passwordSubmitted = true, isPasswordProtected = true)
+                                }
                                 pdfViewer?.ui?.passwordDialog?.submitPassword(stored)
                             } else {
-                                _state.update { it.copy(isPasswordRequired = true) }
+                                _state.update {
+                                    it.copy(isPasswordRequired = true, isPasswordProtected = true)
+                                }
                             }
                         }
                     }
                     isOpen && awaitingStoredPasswordResult -> {
                         // Silent auto-submit failed — stored password is stale.
                         awaitingStoredPasswordResult = false
+                        documentPassword = null
                         viewModelScope.launch { passwordStorage.removePassword(pdfPath) }
                         _state.update { it.copy(isPasswordRequired = true, isPasswordError = true, passwordSubmitted = false) }
                     }
                     isOpen && _state.value.passwordSubmitted -> {
+                        documentPassword = null
                         _state.update { it.copy(isPasswordRequired = true, isPasswordError = true) }
                     }
                     isOpen -> {
@@ -580,13 +698,26 @@ class ReaderViewModel(
                 _state.update { it.copy(attachments = attachmentItems) }
             },
             onDownload = { fileBytes, fileName, mimeType ->
-                viewModelScope.launch {
-                    when (pendingAttachmentAction) {
-                        AttachmentAction.OPEN -> openAttachmentFile(fileBytes, fileName, mimeType)
-                        AttachmentAction.DOWNLOAD -> saveAttachmentFile(fileBytes, fileName)
-                        null -> saveAttachmentFile(fileBytes, fileName) // Default to save
+                // The viewer serialises the whole document, annotation edits
+                // included, through this same callback. When we asked for it in
+                // order to save a signature, these bytes are the signed document
+                // rather than an attachment.
+                val signedTarget = pendingSignedCopyUri
+                if (signedTarget != null) {
+                    pendingSignedCopyUri = null
+                    writeSignedCopy(signedTarget, fileBytes)
+                } else if (signedOverwriteRequested) {
+                    signedOverwriteRequested = false
+                    overwriteWithSigned(fileBytes)
+                } else {
+                    viewModelScope.launch {
+                        when (pendingAttachmentAction) {
+                            AttachmentAction.OPEN -> openAttachmentFile(fileBytes, fileName, mimeType)
+                            AttachmentAction.DOWNLOAD -> saveAttachmentFile(fileBytes, fileName)
+                            null -> saveAttachmentFile(fileBytes, fileName) // Default to save
+                        }
+                        pendingAttachmentAction = null
                     }
-                    pendingAttachmentAction = null
                 }
             },
             onLinkClick = { link ->
@@ -1055,6 +1186,138 @@ class ReaderViewModel(
                 _state.update { it.copy(isBakeHighlightsDialogVisible = false) }
             }
 
+            is ReaderAction.StartSigning -> {
+                refreshPlacedSignatures()
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(
+                            isSignatureSheetVisible = true,
+                            savedSignatures = signatureStore.list().map { saved ->
+                                SavedSignatureUi(saved.id, saved.file.absolutePath)
+                            }
+                        )
+                    }
+                }
+            }
+
+            is ReaderAction.HideSignatureSheet -> {
+                _state.update { it.copy(isSignatureSheetVisible = false) }
+            }
+
+            is ReaderAction.PlaceSavedSignature -> {
+                viewModelScope.launch {
+                    pendingPlacementSavedId = action.id
+                    val bitmap = signatureStore.load(action.id)
+                    if (bitmap == null) {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_place_failed)
+                            )
+                        )
+                    } else {
+                        placeSignature(bitmap)
+                    }
+                }
+            }
+
+            is ReaderAction.DeleteSavedSignature -> {
+                viewModelScope.launch {
+                    signatureStore.delete(action.id)
+                    _state.update {
+                        it.copy(
+                            savedSignatures = signatureStore.list().map { saved ->
+                                SavedSignatureUi(saved.id, saved.file.absolutePath)
+                            }
+                        )
+                    }
+                }
+            }
+
+            is ReaderAction.RemovePlacedSignature -> {
+                viewModelScope.launch {
+                    signatureDao.deleteById(action.id)
+                    refreshPlacedSignatures()
+                    // The viewer has no handle on a single placement, so the document
+                    // is rebuilt from what remains. Hold the current page so the
+                    // reader comes back to where the user was.
+                    pageToRestoreAfterReload = _state.value.currentPage
+                    pdfViewer?.editor?.signatureOn = false
+                    pdfViewer?.loadFromFile(pdfPath)
+                }
+            }
+
+            is ReaderAction.GoToPlacedSignature -> {
+                _state.update { it.copy(isSignatureSheetVisible = false) }
+                pdfViewer?.goToPage(action.pageIndex + 1)
+            }
+
+            is ReaderAction.DiscardSignatures -> {
+                // Only ever the pending ones. Anything already written into the PDF
+                // belongs to the file now, exactly as with baked highlights.
+                pdfViewer?.editor?.signatureOn = false
+                viewModelScope.launch {
+                    signatureDao.deleteAllFor(pdfPath)
+                    refreshPlacedSignatures()
+                    pageToRestoreAfterReload = _state.value.currentPage
+                    pdfViewer?.loadFromFile(pdfPath)
+                }
+            }
+
+            is ReaderAction.SaveSignedCopy -> {
+                pdfViewer?.editor?.signatureOn = false
+                viewModelScope.launch { _events.send(ReaderEvent.SaveSignedCopyPicker) }
+            }
+
+            is ReaderAction.ConfirmSaveSignedInPlace -> {
+                _state.update { it.copy(isSignSaveConfirmVisible = true) }
+            }
+
+            is ReaderAction.DismissSignSaveConfirm -> {
+                _state.update { it.copy(isSignSaveConfirmVisible = false) }
+            }
+
+            is ReaderAction.SaveSignedInPlace -> {
+                _state.update { it.copy(isSignSaveConfirmVisible = false) }
+                val viewer = pdfViewer
+                if (viewer == null) {
+                    viewModelScope.launch {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_failed, "viewer not ready")
+                            )
+                        )
+                    }
+                } else if (!_state.value.canSaveInPlace) {
+                    // Reached only if the button is shown when it should not be.
+                    viewModelScope.launch {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.sign_cannot_save_here)
+                            )
+                        )
+                    }
+                } else {
+                    viewer.editor.signatureOn = false
+                    signedOverwriteRequested = true
+                    _state.update { it.copy(isSavingSignedCopy = true) }
+                    viewer.downloadFile()
+                }
+            }
+
+            is ReaderAction.SaveDecryptedCopy -> {
+                viewModelScope.launch {
+                    if (documentPassword == null) {
+                        _events.send(
+                            ReaderEvent.Error(
+                                applicationContext.getString(R.string.save_decrypted_no_password)
+                            )
+                        )
+                    } else {
+                        _events.send(ReaderEvent.SaveDecryptedCopyPicker)
+                    }
+                }
+            }
+
             is ReaderAction.ConfirmBakeHighlights -> {
                 _state.update { it.copy(isBakeHighlightsDialogVisible = false) }
                 viewModelScope.launch { _events.send(ReaderEvent.BakeHighlightsPicker) }
@@ -1175,7 +1438,17 @@ class ReaderViewModel(
                 passwordStorage.savePassword(pdfPath, password)
             }
             awaitingStoredPasswordResult = false
-            _state.update { it.copy(passwordSubmitted = true, isPasswordRequired = false) }
+            // Held so a decrypted copy can be written without asking again. Cleared
+            // below if the viewer comes back asking for the password, which means
+            // this one was wrong.
+            documentPassword = password
+            _state.update {
+                it.copy(
+                    passwordSubmitted = true,
+                    isPasswordRequired = false,
+                    isPasswordProtected = true
+                )
+            }
             pdfViewer?.ui?.passwordDialog?.submitPassword(password)
         }
     }
@@ -1465,6 +1738,349 @@ class ReaderViewModel(
         }
     }
 
+    /**
+     * Write a copy of this document with the encryption stripped, reusing the
+     * password it was already opened with.
+     *
+     * This exists because the print menu's "Save as PDF" was the only route people
+     * found, and that rasterises every page: slow, much larger, and the text stops
+     * being selectable. Going through iText keeps the document intact.
+     */
+    fun saveDecryptedCopyToUri(uri: android.net.Uri) {
+        val password = documentPassword
+        if (password == null) {
+            viewModelScope.launch {
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.save_decrypted_no_password)
+                    )
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(isSavingDecryptedCopy = true) }
+            try {
+                withContext(Dispatchers.IO) {
+                    // unlockPdf writes to a path, the picker hands back a document
+                    // uri, so stage it in the cache and stream it across.
+                    val staged = File.createTempFile("decrypted", ".pdf", applicationContext.cacheDir)
+                    try {
+                        pdfToolsRepository
+                            .unlockPdf(pdfPath, staged.absolutePath, password)
+                            .getOrThrow()
+
+                        applicationContext.contentResolver.openOutputStream(uri)?.use { output ->
+                            staged.inputStream().use { it.copyTo(output) }
+                        } ?: throw IOException("Could not open the destination file")
+                    } finally {
+                        staged.delete()
+                    }
+                }
+                _events.send(
+                    ReaderEvent.ShowMessage(
+                        applicationContext.getString(R.string.save_decrypted_done)
+                    )
+                )
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to write a decrypted copy")
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(
+                            R.string.save_decrypted_failed,
+                            e.message ?: ""
+                        )
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isSavingDecryptedCopy = false) }
+            }
+        }
+    }
+
+    /** Suggested filename for the decrypted copy. */
+    fun getDecryptedFileName(): String {
+        return "${File(pdfPath).nameWithoutExtension}-unlocked.pdf"
+    }
+
+    /** Suggested filename for the signed copy. */
+    fun getSignedFileName(): String {
+        return "${File(pdfPath).nameWithoutExtension}-signed.pdf"
+    }
+
+    /** Captured in the app's own UI, optionally kept for next time. */
+    fun onSignatureCaptured(bitmap: android.graphics.Bitmap, remember: Boolean) {
+        viewModelScope.launch {
+            if (remember) {
+                signatureStore.save(bitmap)
+                _state.update {
+                    it.copy(
+                        savedSignatures = signatureStore.list().map { saved ->
+                            SavedSignatureUi(saved.id, saved.file.absolutePath)
+                        }
+                    )
+                }
+            }
+            placeSignature(bitmap)
+        }
+    }
+
+    /**
+     * Records the placement the viewer has just made.
+     *
+     * The viewer assigns the position, so this reads it back rather than assuming
+     * it, and stores the row that lets the placement be replayed later.
+     */
+    private fun persistNewestPlacement() {
+        val viewer = pdfViewer ?: return
+        val image = pendingPlacementImage
+        val savedId = pendingPlacementSavedId
+        pendingPlacementImage = null
+        pendingPlacementSavedId = null
+
+        viewer.editor.getPlacedSignatures { json ->
+            viewModelScope.launch {
+                val placed = decodePlaced(json)
+                // The newest is the one the viewer just created; earlier entries are
+                // already stored.
+                val newest = placed.lastOrNull()
+                if (newest != null && image != null) {
+                    signatureDao.insert(
+                        SignatureEntity(
+                            pdfPath = pdfPath,
+                            pageIndex = newest.pageIndex,
+                            rectLeft = newest.left,
+                            rectBottom = newest.bottom,
+                            rectRight = newest.right,
+                            rectTop = newest.top,
+                            savedSignatureId = savedId,
+                            imagePath = image.absolutePath
+                        )
+                    )
+                }
+                refreshPlacedSignatures()
+                _events.send(
+                    ReaderEvent.ShowMessage(applicationContext.getString(R.string.sign_placed))
+                )
+            }
+        }
+    }
+
+    private fun decodePlaced(json: String): List<PlacedSignatureJson> = try {
+        placedJson.decodeFromString<List<PlacedSignatureJson>>(json)
+    } catch (e: Exception) {
+        Timber.w(e, "Could not read the placed signatures back")
+        emptyList()
+    }
+
+    /**
+     * Replays the stored placements into the viewer, one at a time.
+     *
+     * Serialised deliberately: each placement has to be created and then moved to
+     * its stored position before the next one starts, otherwise there is no way to
+     * tell the new element apart from the ones already there.
+     */
+    /** Mirrors the stored placements into state so the sheet can list them. */
+    private fun refreshPlacedSignatures() {
+        viewModelScope.launch {
+            val rows = signatureDao.get(pdfPath)
+            _state.update { current ->
+                current.copy(
+                    placedSignatureList = rows.map {
+                        PlacedSignatureUi(it.id, it.pageIndex, it.imagePath)
+                    },
+                    placedSignatures = rows.size
+                )
+            }
+        }
+    }
+
+    private fun restoreStoredSignatures() {
+        viewModelScope.launch {
+            val stored = signatureDao.get(pdfPath)
+            if (stored.isEmpty()) return@launch
+            signaturesToRestore = stored.toMutableList()
+            isRestoringSignatures = true
+            _state.update { it.copy(placedSignatures = 0) }
+            restoreNextSignature()
+        }
+    }
+
+    private fun restoreNextSignature() {
+        val next = signaturesToRestore.removeFirstOrNull()
+        if (next == null) {
+            isRestoringSignatures = false
+            return
+        }
+        val viewer = pdfViewer ?: run { isRestoringSignatures = false; return }
+        val file = File(next.imagePath)
+        if (!file.exists()) {
+            // The image is gone, so the row cannot be replayed. Drop it rather than
+            // leaving a placement the user can never see.
+            viewModelScope.launch {
+                signatureDao.deleteById(next.id)
+                restoreNextSignature()
+            }
+            return
+        }
+        restoringInto = next
+        viewModelScope.launch {
+            val dataUrl = withContext(Dispatchers.IO) {
+                "data:image/png;base64," + android.util.Base64.encodeToString(
+                    file.readBytes(), android.util.Base64.NO_WRAP
+                )
+            }
+            viewer.editor.placeSignatureImage(dataUrl, "Signature")
+        }
+    }
+
+    /** The row currently being replayed, so its position can be applied. */
+    private var restoringInto: SignatureEntity? = null
+
+    private fun onRestoredSignaturePlaced() {
+        val target = restoringInto
+        restoringInto = null
+        val viewer = pdfViewer
+        if (target == null || viewer == null) {
+            isRestoringSignatures = false
+            return
+        }
+        viewer.editor.getPlacedSignatures { json ->
+            val newest = decodePlaced(json).lastOrNull()
+            if (newest != null) {
+                viewer.editor.moveSignatureTo(newest.key, target.rectLeft, target.rectTop)
+            }
+            _state.update { it.copy(placedSignatures = it.placedSignatures + 1) }
+            restoreNextSignature()
+        }
+    }
+
+    private suspend fun placeSignature(bitmap: android.graphics.Bitmap) {
+        val viewer = pdfViewer
+        if (viewer == null) {
+            _events.send(
+                ReaderEvent.Error(applicationContext.getString(R.string.sign_place_failed))
+            )
+            return
+        }
+        val (dataUrl, copy) = withContext(Dispatchers.IO) {
+            val bytes = java.io.ByteArrayOutputStream().use { out ->
+                bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
+                out.toByteArray()
+            }
+            // A placement keeps its own copy of the image, so deleting the saved
+            // signature it came from does not empty a document that used it.
+            val directory = File(applicationContext.filesDir, PLACEMENT_IMAGES).apply {
+                if (!exists()) mkdirs()
+            }
+            val file = File(directory, "${java.util.UUID.randomUUID()}.png")
+            file.writeBytes(bytes)
+
+            val url = "data:image/png;base64," + android.util.Base64.encodeToString(
+                bytes, android.util.Base64.NO_WRAP
+            )
+            url to file
+        }
+        pendingPlacementImage = copy
+        _state.update { it.copy(isSignatureSheetVisible = false) }
+        viewer.editor.placeSignatureImage(dataUrl, "Signature")
+    }
+
+    /**
+     * Ask the viewer to serialise the document with the signature in it. The bytes
+     * come back on the download listener, which writes them to [uri].
+     */
+    fun requestSignedCopy(uri: android.net.Uri) {
+        val viewer = pdfViewer
+        if (viewer == null) {
+            viewModelScope.launch {
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.sign_failed, "viewer not ready")
+                    )
+                )
+            }
+            return
+        }
+        pendingSignedCopyUri = uri
+        _state.update { it.copy(isSavingSignedCopy = true) }
+        viewer.downloadFile()
+    }
+
+    /**
+     * Replaces the open document with the signed version.
+     *
+     * Written to a neighbouring temporary file and renamed over the original, so a
+     * failure part way through cannot leave the user with a truncated PDF. The
+     * viewer is reloaded afterwards: it is still showing the pre-save render, and
+     * the placements are now part of the file rather than pending edits.
+     */
+    private fun overwriteWithSigned(bytes: ByteArray) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val target = File(pdfPath)
+                    if (!target.canWrite()) throw IOException("This file is read only")
+
+                    val staging = File(target.parentFile, "${target.name}.signing")
+                    try {
+                        staging.outputStream().use { it.write(bytes) }
+                        if (!staging.renameTo(target)) {
+                            // Different filesystem, or a provider that will not
+                            // rename: fall back to copying the bytes across.
+                            staging.inputStream().use { input ->
+                                target.outputStream().use { output -> input.copyTo(output) }
+                            }
+                        }
+                    } finally {
+                        if (staging.exists()) staging.delete()
+                    }
+                }
+                // They are part of the document now, so they stop being pending.
+                signatureDao.deleteAllFor(pdfPath)
+                refreshPlacedSignatures()
+                _events.send(
+                    ReaderEvent.ShowMessage(applicationContext.getString(R.string.sign_saved_in_place))
+                )
+                pdfViewer?.loadFromFile(pdfPath)
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to write the signatures into the document")
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.sign_failed, e.message ?: "")
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isSavingSignedCopy = false) }
+            }
+        }
+    }
+
+    private fun writeSignedCopy(uri: android.net.Uri, bytes: ByteArray) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    applicationContext.contentResolver.openOutputStream(uri)?.use { output ->
+                        output.write(bytes)
+                    } ?: throw IOException("Could not open the destination file")
+                }
+                _events.send(
+                    ReaderEvent.ShowMessage(applicationContext.getString(R.string.sign_done))
+                )
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to write the signed copy")
+                _events.send(
+                    ReaderEvent.Error(
+                        applicationContext.getString(R.string.sign_failed, e.message ?: "")
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isSavingSignedCopy = false) }
+            }
+        }
+    }
+
     fun getDocumentFileName(): String {
         return File(pdfPath).name
     }
@@ -1483,5 +2099,11 @@ class ReaderViewModel(
         // Time allowed for a page to render after goToPage before trying to pulse a
         // highlight on it. scrollToHighlight only finds elements on rendered pages.
         const val HIGHLIGHT_SCROLL_DELAY_MS = 350L
+
+        /** Where a placement's own copy of its image lives. */
+        const val PLACEMENT_IMAGES = "signature_placements"
+
+        /** Shared, since the viewer may report placements many times a session. */
+        val placedJson = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
     }
 }

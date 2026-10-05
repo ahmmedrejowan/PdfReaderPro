@@ -14,8 +14,12 @@ object GlobalErrorHandler {
 
     private var applicationContext: Context? = null
 
+    /** Whatever handler was installed before us, usually the platform's. */
+    private var previousHandler: Thread.UncaughtExceptionHandler? = null
+
     fun setup(context: Context) {
         applicationContext = context.applicationContext
+        previousHandler = Thread.getDefaultUncaughtExceptionHandler()
 
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             Timber.e(throwable, "Uncaught exception in thread: ${thread.name}")
@@ -28,8 +32,10 @@ object GlobalErrorHandler {
                 showErrorActivity(throwable)
             } catch (e: Exception) {
                 Timber.e(e, "Failed to show error activity")
-                // If we can't show error activity, exit gracefully
-                exitProcess(1)
+                // Hand back to the handler we replaced so the platform still gets
+                // to report and tear down the crash, rather than exiting silently.
+                val handler = previousHandler
+                if (handler != null) handler.uncaughtException(thread, throwable) else exitProcess(1)
             }
         }
 
