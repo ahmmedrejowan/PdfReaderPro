@@ -33,6 +33,8 @@ class GlobalErrorHandlerTest {
     private lateinit var context: Context
     private var originalHandler: Thread.UncaughtExceptionHandler? = null
     private lateinit var previous: Thread.UncaughtExceptionHandler
+    private var terminated = false
+    private lateinit var originalTerminate: () -> Unit
 
     @Before
     fun setUp() {
@@ -43,6 +45,10 @@ class GlobalErrorHandlerTest {
         context = mockk(relaxed = true)
         every { context.applicationContext } returns context
 
+        terminated = false
+        originalTerminate = GlobalErrorHandler.terminateProcess
+        GlobalErrorHandler.terminateProcess = { terminated = true }
+
         mockkObject(ErrorActivity)
         every { ErrorActivity.createIntent(any(), any(), any()) } returns mockk<Intent>(relaxed = true)
     }
@@ -50,6 +56,8 @@ class GlobalErrorHandlerTest {
     @After
     fun tearDown() {
         Thread.setDefaultUncaughtExceptionHandler(originalHandler)
+        GlobalErrorHandler.terminateProcess = originalTerminate
+        GlobalErrorHandler.isCrashScreenProcess = false
         unmockkObject(ErrorActivity)
     }
 
@@ -109,17 +117,68 @@ class GlobalErrorHandlerTest {
     }
 
     @Test
-    fun `the details carry the top of the stack, not the whole of it`() {
+    fun `the details carry the whole stack, causes included`() {
+        // The cause is often the real failure, so a report that stops at the top
+        // frames leaves out the part a bug report needs.
         val details = slot<String?>()
         every { ErrorActivity.createIntent(any(), any(), captureNullable(details)) } returns
             mockk<Intent>(relaxed = true)
+        val cause = IllegalArgumentException("bad page index")
+        val throwable = RuntimeException("deep failure", cause)
 
-        crash(RuntimeException("deep failure"))
+        crash(throwable)
 
         val captured = details.captured
         assertNotNull(captured)
-        assertTrue(captured!!.contains("RuntimeException"))
-        assertTrue(captured.lines().count { it.trim().startsWith("at ") } <= 5)
+        assertTrue(captured!!.contains("RuntimeException: deep failure"))
+        assertTrue(captured.contains("Caused by: java.lang.IllegalArgumentException: bad page index"))
+        val frames = captured.lines().count { it.trim().startsWith("at ") }
+        assertTrue(frames >= throwable.stackTrace.size)
+    }
+
+    @Test
+    fun `the report says which app version and thread crashed`() {
+        val report = GlobalErrorHandler.buildCrashReport(
+            Thread.currentThread(),
+            IllegalStateException("boom")
+        )
+
+        assertTrue(report.contains("PDF Reader Pro ${com.rejowan.pdfreaderpro.BuildConfig.VERSION_NAME}"))
+        assertTrue(report.contains("Thread: ${Thread.currentThread().name}"))
+        assertTrue(report.contains("IllegalStateException: boom"))
+    }
+
+    @Test
+    fun `a very deep stack is cut short so it still reaches the error screen`() {
+        // The report travels in an intent, which has a size limit.
+        val deep = RuntimeException("deep")
+        deep.stackTrace = Array(20_000) { StackTraceElement("com.example.Deep", "call$it", "Deep.kt", it) }
+
+        val report = GlobalErrorHandler.buildCrashReport(Thread.currentThread(), deep)
+
+        assertTrue(report.length <= 100_000 + 20)
+        assertTrue(report.endsWith("(truncated)"))
+    }
+
+    @Test
+    fun `the crashed process ends once the error screen is on its way`() {
+        // The error screen runs in its own process; this one has lost its main
+        // thread, and left alive it freezes into an "app not responding" dialog.
+        crash(IllegalStateException("main thread failure"))
+
+        verify { context.startActivity(any()) }
+        assertTrue(terminated)
+    }
+
+    @Test
+    fun `a crash on the error screen itself goes to the platform instead of looping`() {
+        GlobalErrorHandler.isCrashScreenProcess = true
+        val throwable = IllegalStateException("error screen failure")
+
+        crash(throwable)
+
+        verify(exactly = 0) { context.startActivity(any()) }
+        verify { previous.uncaughtException(any(), throwable) }
     }
 
     @Test

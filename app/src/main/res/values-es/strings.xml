@@ -1677,4 +1677,8 @@
     <string name="sort_date_modified">Fecha de modificación</string>
     <string name="cd_close_selection">Cerrar selección</string>
     <string name="folder_label">Carpeta</string>
+    <string name="crash_details">Detalles del fallo</string>
+    <string name="copy_details">Copiar detalles</string>
+    <string name="crash_details_copied">Detalles del fallo copiados</string>
+    <string name="crash_report_subject">Informe de fallo de PDF Reader Pro</string>
 </resources>

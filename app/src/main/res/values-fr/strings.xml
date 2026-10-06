@@ -1677,4 +1677,8 @@
     <string name="sort_date_modified">Date de modification</string>
     <string name="cd_close_selection">Fermer la sélection</string>
     <string name="folder_label">Dossier</string>
+    <string name="crash_details">Détails du plantage</string>
+    <string name="copy_details">Copier les détails</string>
+    <string name="crash_details_copied">Détails du plantage copiés</string>
+    <string name="crash_report_subject">Rapport de plantage de PDF Reader Pro</string>
 </resources>

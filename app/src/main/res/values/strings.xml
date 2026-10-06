@@ -1676,4 +1676,8 @@
     <string name="sort_date_modified">Date Modified</string>
     <string name="cd_close_selection">Close selection</string>
     <string name="folder_label">Folder</string>
+    <string name="crash_details">Crash details</string>
+    <string name="copy_details">Copy details</string>
+    <string name="crash_details_copied">Crash details copied</string>
+    <string name="crash_report_subject">PDF Reader Pro crash report</string>
 </resources>

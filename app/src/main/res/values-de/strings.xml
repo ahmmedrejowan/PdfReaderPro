@@ -1676,4 +1676,8 @@
     <string name="sort_date_modified">Änderungsdatum</string>
     <string name="cd_close_selection">Auswahl schließen</string>
     <string name="folder_label">Ordner</string>
+    <string name="crash_details">Absturzdetails</string>
+    <string name="copy_details">Details kopieren</string>
+    <string name="crash_details_copied">Absturzdetails kopiert</string>
+    <string name="crash_report_subject">Absturzbericht von PDF Reader Pro</string>
 </resources>

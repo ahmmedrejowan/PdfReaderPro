@@ -1678,4 +1678,8 @@
     <string name="sort_date_modified">Дата изменения</string>
     <string name="cd_close_selection">Закрыть выделение</string>
     <string name="folder_label">Папка</string>
+    <string name="crash_details">Подробности сбоя</string>
+    <string name="copy_details">Копировать</string>
+    <string name="crash_details_copied">Подробности сбоя скопированы</string>
+    <string name="crash_report_subject">Отчёт о сбое PDF Reader Pro</string>
 </resources>
