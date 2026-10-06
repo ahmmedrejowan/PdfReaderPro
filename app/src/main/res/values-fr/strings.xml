@@ -1209,8 +1209,8 @@
     <string name="dark">Sombre</string>
     <string name="system_default">Par défaut du système</string>
     <string name="default_zoom">Zoom par défaut</string>
-    <string name="double_tap_zoom">Zoom au double tap</string>
-    <string name="double_tap_zoom_subtitle">Niveau de zoom lors d\'un double tap</string>
+    <string name="double_tap_zoom">Zoom par double appui</string>
+    <string name="double_tap_zoom_subtitle">Niveau de zoom lors d\'un double appui</string>
     <string name="show_tools_tab">Afficher l\'onglet Outils</string>
     <string name="show_tools_tab_subtitle">Masquer pour utiliser l\'application uniquement comme lecteur PDF</string>
     <string name="tap_to_check">Appuyez pour vérifier les mises à jour</string>
@@ -1670,6 +1670,11 @@
 
     <plurals name="sign_unsaved_count">
         <item quantity="one">%d signature non enregistrée</item>
+        <item quantity="many">%d signatures non enregistrées</item>
         <item quantity="other">%d signatures non enregistrées</item>
     </plurals>
+    <string name="sort_alphabetical">Alphabétique</string>
+    <string name="sort_date_modified">Date de modification</string>
+    <string name="cd_close_selection">Fermer la sélection</string>
+    <string name="folder_label">Dossier</string>
 </resources>

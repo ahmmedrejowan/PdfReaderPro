@@ -1672,4 +1672,8 @@
         <item quantity="one">%d signature not saved</item>
         <item quantity="other">%d signatures not saved</item>
     </plurals>
+    <string name="sort_alphabetical">Alphabetical</string>
+    <string name="sort_date_modified">Date Modified</string>
+    <string name="cd_close_selection">Close selection</string>
+    <string name="folder_label">Folder</string>
 </resources>

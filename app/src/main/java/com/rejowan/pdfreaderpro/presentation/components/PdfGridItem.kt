@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.util.FormattingUtils
 import kotlinx.coroutines.delay
+import androidx.compose.ui.res.stringResource
+import com.rejowan.pdfreaderpro.R
 
 private val SelectionBlue = Color(0xFF2196F3)
 
@@ -156,7 +158,7 @@ fun PdfGridItem(
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.MoreVert,
-                            contentDescription = "Options",
+                            contentDescription = stringResource(R.string.cd_options),
                             modifier = Modifier.size(18.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                         )

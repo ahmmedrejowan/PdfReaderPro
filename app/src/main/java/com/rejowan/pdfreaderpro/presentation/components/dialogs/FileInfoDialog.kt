@@ -60,9 +60,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.util.FormattingUtils
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 // Accent colors matching UI guide
 private val AccentPurple = Color(0xFF9575CD)
@@ -246,22 +243,22 @@ private fun FileInfoContent(
         // Date Section
         Spacer(modifier = Modifier.height(12.dp))
         InfoSection(
-            title = "Dates",
+            title = stringResource(R.string.dates_section),
             icon = Icons.Rounded.Schedule,
             accentColor = AccentTeal
         ) {
-            InfoItem("Modified", formatDate(pdfFile.dateModified))
+            InfoItem(stringResource(R.string.modified_label), formatDate(pdfFile.dateModified))
         }
 
         // Location Section
         Spacer(modifier = Modifier.height(12.dp))
         InfoSection(
-            title = "Location",
+            title = stringResource(R.string.location_section),
             icon = Icons.Rounded.Folder,
             accentColor = Color(0xFF78909C)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                InfoItem("Folder", pdfFile.parentFolder)
+                InfoItem(stringResource(R.string.folder_label), pdfFile.parentFolder)
                 Text(
                     text = pdfFile.path,
                     style = MaterialTheme.typography.labelSmall,
@@ -370,7 +367,4 @@ private fun InfoItem(
     }
 }
 
-private fun formatDate(timestamp: Long): String {
-    val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
-    return sdf.format(Date(timestamp))
-}
+private fun formatDate(timestamp: Long): String = FormattingUtils.localizedDateTime(timestamp)

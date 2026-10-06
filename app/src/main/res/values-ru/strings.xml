@@ -128,7 +128,7 @@
     <string name="no_recent">Нет недавних файлов</string>
     <string name="add_favorites_hint">Добавьте PDF в избранное, чтобы видеть их здесь</string>
     <string name="open_pdf_hint">Откройте несколько PDF, чтобы видеть их здесь</string>
-    <string name="delete_count_files">Удалить %d файлов?</string>
+    <string name="delete_count_files">Удалить файлы (%d)?</string>
     <string name="delete_warning">Это действие нельзя отменить. Файлы будут безвозвратно удалены с вашего устройства.</string>
 
     <!-- Folders Screen -->
@@ -137,8 +137,8 @@
     <string name="search_folders_hint">Поиск папок...</string>
     <string name="no_folders_found">Папки не найдены</string>
     <string name="try_different_search">Попробуйте другой поисковый запрос</string>
-    <string name="folder_count">%d папок</string>
-    <string name="file_count">%d файлов</string>
+    <string name="folder_count">Папок: %d</string>
+    <string name="file_count">Файлов: %d</string>
     <string name="pdfs">PDF</string>
     <string name="search_folders_desc">Поиск папок</string>
     <string name="sort_folders_desc">Сортировать папки</string>
@@ -155,7 +155,7 @@
     <string name="clear">Очистить</string>
     <string name="show_all_count">Показать все (%d)</string>
     <string name="file_found">Найден %d файл</string>
-    <string name="files_found">Найдено %d файлов</string>
+    <string name="files_found">Найдено файлов: %d</string>
     <string name="options">Опции</string>
     <string name="tip_search_filename_title">Поиск по имени файла</string>
     <string name="tip_search_filename_desc">Введите часть имени PDF, чтобы быстро его найти</string>
@@ -281,10 +281,10 @@
     <string name="bookmark_added">Закладка добавлена</string>
     <string name="bookmark_removed">Закладка удалена</string>
     <!-- Highlights -->
-    <string name="highlight">Выделение</string>
+    <string name="highlight">Выделить цветом</string>
     <string name="highlights">Выделения</string>
     <string name="no_highlights">Нет выделений</string>
-    <string name="no_highlights_hint">Выделите любой текст и нажмите «Выделить», чтобы отметить его</string>
+    <string name="no_highlights_hint">Выделите любой текст и нажмите «Выделить цветом», чтобы отметить его</string>
     <string name="highlight_color">Цвет выделения</string>
     <string name="highlight_color_yellow">Жёлтый</string>
     <string name="highlight_color_green">Зелёный</string>
@@ -294,18 +294,18 @@
     <string name="delete_highlight">Удалить выделение</string>
     <string name="highlight_page">Страница %d</string>
     <string name="highlight_count">%d выделение</string>
-    <string name="highlights_count">%d выделений</string>
+    <string name="highlights_count">Выделений: %d</string>
     <string name="view_manage_highlights">Просмотр и управление выделениями</string>
     <string name="highlight_in_file">Сохранено в файле</string>
     <string name="search_highlights">Поиск выделений</string>
     <string name="save_with_highlights">Сохранить копию с выделениями</string>
     <string name="save_with_highlights_desc">Записать выделения в новый PDF-файл</string>
     <string name="bake_highlights_title">Сохранить копию с выделениями</string>
-    <string name="bake_highlights_body">Это запишет ваши %d выделений в новый PDF-файл, чтобы они отображались и в других программах для чтения PDF. Ваши выделения в этом приложении сохранятся в любом случае.</string>
-    <string name="bake_highlights_caveat">После того как PDF-файл содержит выделения, текстовые или рукописные аннотации, некоторые функции редактирования перестают работать. Вы выберете, куда сохранить копию.</string>
+    <string name="bake_highlights_body">Выделения (%d) будут записаны в новый PDF-файл, чтобы они отображались и в других программах для чтения PDF. Ваши выделения в этом приложении сохранятся в любом случае.</string>
+    <string name="bake_highlights_caveat">Если PDF содержит выделения, текстовые или рукописные аннотации, некоторые функции редактирования для него перестают работать. Вы сможете выбрать, куда сохранить копию.</string>
     <string name="bake_highlights_confirm_check">Я понимаю, что создаётся отдельная копия</string>
     <string name="bake_highlights_action">Сохранить копию</string>
-    <string name="bake_highlights_done">Сохранено %d выделений в копию</string>
+    <string name="bake_highlights_done">Выделений сохранено в копию: %d</string>
     <string name="bake_highlights_failed">Не удалось сохранить копию: %s</string>
     <string name="save_decrypted_copy">Сохранить копию без пароля</string>
     <string name="save_decrypted_copy_desc">Записать незащищённую копию этого документа</string>
@@ -375,7 +375,7 @@
     <string name="auto_scroll_speed">Скорость</string>
     <string name="print">Печать</string>
     <string name="pdf_info">Информация о PDF</string>
-    <string name="more_options">Больше опций</string>
+    <string name="more_options">Ещё</string>
     <string name="view_mode">Режим просмотра</string>
     <string name="display">Отображение</string>
     <string name="reading_tools">Инструменты чтения</string>
@@ -459,7 +459,7 @@
     <string name="compress_high_desc">Максимальное сжатие, меньший файл</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$d страниц • %2$s</string>
+    <string name="compress_page_info">Страниц: %1$d • %2$s</string>
     <string name="compress_share_pdf">Поделиться PDF</string>
     <string name="compress_empty_title">Сжать PDF-файл</string>
     <string name="compress_empty_desc">Выберите PDF-файл, чтобы уменьшить его размер, сохраняя качество</string>
@@ -474,7 +474,7 @@
     <string name="compressed_size">Сжатый размер</string>
     <string name="compressed_size_reduced">Размер уменьшен</string>
     <string name="saved_format">(сохранено %1$s)</string>
-    <string name="pages_count_format">%1$d страниц</string>
+    <string name="pages_count_format">Страниц: %1$d</string>
 
     <!-- Rotate -->
     <string name="rotation">Поворот</string>
@@ -514,7 +514,7 @@
     <string name="watermark_text">Текст водяного знака</string>
     <string name="select_image">Выбрать изображение</string>
     <string name="position">Положение</string>
-    <string name="opacity">Прозрачность</string>
+    <string name="opacity">Непрозрачность</string>
     <string name="font_size">Размер шрифта</string>
     <string name="color">Цвет</string>
     <string name="add">Добавить</string>
@@ -527,8 +527,8 @@
     <string name="position_center">По центру</string>
     <string name="position_tiled">Мозаикой</string>
     <string name="watermark_added">Водяной знак добавлен!</string>
-    <string name="applied_to_pages">Применено к %1$d страницам</string>
-    <string name="pages_size_dash_format">%1$d страниц - %2$s</string>
+    <string name="applied_to_pages">Применено к страницам: %1$d</string>
+    <string name="pages_size_dash_format">Страниц: %1$d - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Выберите страницы для удаления</string>
@@ -582,7 +582,7 @@
     <string name="title_page_selection_custom">Выборочно</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">Пронумеровано %1$d из %2$d страниц</string>
+    <string name="numbered_pages_format">Пронумеровано страниц: %1$d из %2$d</string>
     <string name="adding_numbers">Добавление номеров…</string>
 
     <!-- Images to PDF -->
@@ -625,26 +625,26 @@
     <string name="error_select_pdf_first">Пожалуйста, сначала выберите PDF-файл</string>
     <string name="error_enter_output_name">Пожалуйста, введите имя выходного файла</string>
     <string name="error_failed_replace_original">Не удалось заменить исходный файл</string>
-    <string name="error_compression_failed">Сжатие не удалось</string>
+    <string name="error_compression_failed">Не удалось сжать PDF</string>
     <string name="error_add_one_image">Пожалуйста, добавьте хотя бы одно изображение</string>
     <string name="error_convert_images_failed">Не удалось конвертировать изображения в PDF</string>
     <string name="error_owner_password_required">Требуется пароль владельца</string>
     <string name="error_owner_password_min_length">Пароль владельца должен содержать минимум 4 символа</string>
     <string name="error_user_password_min_length">Пользовательский пароль должен содержать минимум 4 символа</string>
     <string name="error_lock_failed">Не удалось заблокировать PDF</string>
-    <string name="error_skipped_password_protected">Пропущено защищённое паролем: %1$s</string>
+    <string name="error_skipped_password_protected">Пропущен файл с паролем: %1$s</string>
     <string name="error_select_two_files">Выберите как минимум 2 PDF-файла</string>
     <string name="error_no_pages_selected">Страницы не выбраны для: %1$s</string>
-    <string name="error_merge_failed">Объединение не удалось</string>
+    <string name="error_merge_failed">Не удалось объединить PDF</string>
     <string name="error_add_page_numbers_failed">Не удалось добавить номера страниц</string>
     <string name="error_export_images_failed">Не удалось экспортировать изображения</string>
     <string name="error_select_at_least_one_page">Пожалуйста, выберите хотя бы одну страницу для удаления</string>
     <string name="error_cannot_remove_all_pages">Невозможно удалить все страницы из PDF</string>
     <string name="error_remove_pages_failed">Не удалось удалить страницы</string>
     <string name="error_no_changes_made">Порядок страниц не изменён</string>
-    <string name="error_reorder_failed">Изменение порядка не удалось</string>
+    <string name="error_reorder_failed">Не удалось изменить порядок страниц</string>
     <string name="error_select_at_least_one_page_rotate">Пожалуйста, выберите хотя бы одну страницу для поворота</string>
-    <string name="error_rotation_failed">Поворот не удался</string>
+    <string name="error_rotation_failed">Не удалось повернуть страницы</string>
     <string name="error_failed_load_file">Не удалось загрузить файл</string>
     <string name="error_invalid_format">Неверный формат: %1$s</string>
     <string name="error_invalid_range">Неверный диапазон: %1$s</string>
@@ -660,7 +660,7 @@
     <string name="error_enter_output_prefix">Введите префикс выходного файла</string>
     <string name="error_enter_page_ranges">Введите диапазоны страниц</string>
     <string name="error_enter_pages_to_extract">Введите страницы для извлечения</string>
-    <string name="error_split_failed">Разделение не удалось</string>
+    <string name="error_split_failed">Не удалось разделить PDF</string>
     <string name="error_invalid_page_ranges">Неверные диапазоны страниц</string>
     <string name="error_invalid_page_selection">Неверный выбор страниц</string>
     <string name="error_not_password_protected">Этот PDF не защищён паролем</string>
@@ -740,7 +740,7 @@
     <string name="cd_open_with">Открыть с помощью</string>
     <string name="cd_retry">Повторить</string>
     <string name="cd_back">Назад</string>
-    <string name="cd_more_options">Больше опций</string>
+    <string name="cd_more_options">Ещё</string>
 
     <!-- Content Descriptions - PDF Reader -->
     <string name="cd_zoom_in">Увеличить</string>
@@ -762,7 +762,7 @@
     <string name="cd_auto_scroll">Автопрокрутка</string>
     <string name="cd_increase_speed">Увеличить скорость</string>
     <string name="cd_decrease_speed">Уменьшить скорость</string>
-    <string name="cd_play">Воспроизвести</string>
+    <string name="cd_play">Запустить</string>
     <string name="cd_pause">Пауза</string>
     <string name="cd_stop">Стоп</string>
 
@@ -845,10 +845,10 @@
 
     <!-- Stats Sheet -->
     <string name="library_stats">Статистика библиотеки</string>
-    <string name="library_stats_subtitle">Ваша коллекция PDF одним взглядом</string>
+    <string name="library_stats_subtitle">Краткий обзор вашей коллекции PDF</string>
     <string name="total_pdfs">Всего PDF</string>
-    <string name="files_in_library">файлов в вашей библиотеке</string>
-    <string name="storage_used">Использовано хранилище</string>
+    <string name="files_in_library">в вашей библиотеке</string>
+    <string name="storage_used">Занято места</string>
     <string name="total_file_size">общий размер файлов</string>
     <string name="percent_of_library">%d%% вашей библиотеки</string>
     <string name="no_files_yet">пока нет файлов</string>
@@ -870,7 +870,7 @@
     <string name="add_favorites_desc">Сохранить в избранное для быстрого доступа</string>
     <string name="remove_favorites_desc">Удалить из избранного</string>
     <string name="remove_from_recents">Удалить из недавних</string>
-    <string name="remove_recents_desc">Очистить из истории недавних</string>
+    <string name="remove_recents_desc">Убрать из истории недавних</string>
     <string name="share_pdf">Поделиться</string>
     <string name="share_pdf_desc">Отправить этот PDF в другие приложения</string>
     <string name="rename_action">Переименовать</string>
@@ -879,7 +879,7 @@
     <string name="file_info_desc">Просмотреть детали и свойства файла</string>
     <string name="delete_action">Удалить</string>
     <string name="delete_desc">Безвозвратно удалить этот файл</string>
-    <string name="pages_count">%d страниц</string>
+    <string name="pages_count">Страниц: %d</string>
     <string name="cd_toggle_scroll_direction">Переключить направление прокрутки</string>
     <string name="cd_fit_to_screen">По размеру экрана</string>
 
@@ -887,7 +887,7 @@
     <string name="folder_options">Опции папки</string>
     <string name="pdf_files">PDF-файлы</string>
     <string name="file_singular">%d файл</string>
-    <string name="files_plural">%d файлов</string>
+    <string name="files_plural">Файлов: %d</string>
     <string name="location">Расположение</string>
     <string name="actions">Действия</string>
     <string name="open_folder">Открыть папку</string>
@@ -1025,7 +1025,7 @@
     <string name="slower">Медленнее</string>
     <string name="faster">Быстрее</string>
     <string name="start_auto_scroll">Начать автопрокрутку</string>
-    <string name="auto_scroll_hint">Нажмите на экран для паузы/возобновления. Используйте оверлей для остановки.</string>
+    <string name="auto_scroll_hint">Нажмите на экран, чтобы приостановить или продолжить. Для остановки используйте панель управления.</string>
 
     <!-- Zoom Sheet -->
     <string name="zoom_display">Масштаб и отображение</string>
@@ -1040,7 +1040,7 @@
 
     <!-- Bookmarks Sheet -->
     <string name="bookmark_count">%d закладка</string>
-    <string name="bookmarks_count">%d закладок</string>
+    <string name="bookmarks_count">Закладок: %d</string>
     <string name="delete_bookmark">Удалить закладку</string>
     <string name="bookmark_hint">Нажмите значок закладки, чтобы сохранить страницы</string>
     <string name="page_number_title">Страница %d</string>
@@ -1070,7 +1070,7 @@
 
     <!-- Top Bar Menu Panel -->
     <string name="document_options">Опции документа</string>
-    <string name="share_print_manage">Поделиться, печать и управление</string>
+    <string name="share_print_manage">Отправка, печать и управление</string>
     <string name="document_actions">Действия с документом</string>
     <string name="document_info_title">Информация о документе</string>
     <string name="view_details_metadata">Просмотреть детали и метаданные файла</string>
@@ -1120,7 +1120,7 @@
     <string name="no_toc">Оглавление недоступно</string>
     <string name="attachments_title">Вложения</string>
     <string name="no_attachments_available">Вложения отсутствуют</string>
-    <string name="more_options_title">Больше опций</string>
+    <string name="more_options_title">Ещё</string>
     <string name="view_mode_title">Режим просмотра</string>
     <string name="continuous">Непрерывный</string>
     <string name="page_by_page">Постраничный</string>
@@ -1145,13 +1145,13 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Поиск в документе…</string>
-    <string name="cd_matching_highlights">%1$d совпадающих выделений</string>
+    <string name="cd_matching_highlights">Совпадающих выделений: %1$d</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Опции просмотра</string>
     <string name="cd_zoom">Масштаб</string>
     <string name="cd_display_settings">Настройки отображения</string>
-    <string name="cd_control_more_options">Больше опций</string>
+    <string name="cd_control_more_options">Ещё</string>
 
     <!-- Reader Sidebar -->
     <string name="reading">Чтение</string>
@@ -1174,9 +1174,9 @@
     <string name="no_toc_message">В этом PDF нет оглавления</string>
     <string name="no_attachments_message">В этом PDF нет встроенных файлов</string>
     <string name="toc_section_count">%1$d раздел</string>
-    <string name="toc_sections_count">%1$d разделов</string>
+    <string name="toc_sections_count">Разделов: %1$d</string>
     <string name="toc_file_count">%1$d файл</string>
-    <string name="toc_files_count">%1$d файлов</string>
+    <string name="toc_files_count">Файлов: %1$d</string>
     <string name="toc_browse_structure">Просмотреть структуру документа</string>
     <string name="toc_tab_contents">Содержание</string>
     <string name="toc_tab_attachments">Вложения</string>
@@ -1190,7 +1190,7 @@
     <string name="delete_pdf">Удалить PDF</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">Удалить %d файлов?</string>
+    <string name="delete_files_count">Удалить файлы (%d)?</string>
     <string name="delete_files_warning">Это действие нельзя отменить. Файлы будут безвозвратно удалены с вашего устройства.</string>
 
     <!-- Settings Screen -->
@@ -1412,13 +1412,13 @@
     <string name="page_numbers_added">Номера страниц добавлены!</string>
 
     <!-- Success Descriptions -->
-    <string name="pages_rotated_count">Повернуто %d страниц(ы)</string>
+    <string name="pages_rotated_count">Повёрнуто страниц: %d</string>
     <string name="pdf_saved_new_order">Ваш PDF сохранён с новым порядком страниц</string>
     <string name="pdf_password_protected">Ваш PDF теперь защищён паролем</string>
     <string name="password_protection_removed">Защита паролем удалена</string>
-    <string name="images_created_count">Создано %1$d %2$s изображений</string>
-    <string name="images_converted_count">Сконвертировано %d изображений</string>
-    <string name="pages_removed_count">Удалено %d страниц(ы)</string>
+    <string name="images_created_count">Создано изображений %2$s: %1$d</string>
+    <string name="images_converted_count">Сконвертировано изображений: %d</string>
+    <string name="pages_removed_count">Удалено страниц: %d</string>
 
     <!-- Section Labels -->
     <string name="section_rotation">ПОВОРОТ</string>
@@ -1451,9 +1451,9 @@
     <string name="no_password_protection">Без защиты паролем</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">Все %d страниц</string>
+    <string name="all_pages_count">Все страницы (%d)</string>
     <string name="selected_of_count">Выбрано %1$d из %2$d</string>
-    <string name="pages_modified">%d страниц • Изменено</string>
+    <string name="pages_modified">Страниц: %d • Изменено</string>
     <string name="page_numbers_label">Номера страниц</string>
     <string name="page_numbers_hint">например, 1-5, 8, 10-12</string>
     <string name="all_pages_label">Все страницы (%d)</string>
@@ -1466,7 +1466,7 @@
     <string name="page_selection_all">Все страницы (1-%1$d)</string>
     <string name="page_selection_range">Страницы %1$d-%2$d</string>
     <string name="page_selection_custom">Страницы %1$s</string>
-    <string name="page_selection_custom_long">Страницы %1$s… (%2$d страниц)</string>
+    <string name="page_selection_custom_long">Страницы %1$s… (всего: %2$d)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Долгое нажатие и перетаскивание страниц для изменения порядка</string>
@@ -1476,7 +1476,7 @@
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Качество без потерь</string>
     <string name="format_smaller_size">Меньший размер файла</string>
-    <string name="will_create_images">Будет создано %1$d %2$s изображений</string>
+    <string name="will_create_images">Будет создано изображений %2$s: %1$d</string>
 
     <!-- Compression Levels -->
     <string name="compression_low">Низкий</string>
@@ -1498,12 +1498,12 @@
     <!-- Merge -->
     <string name="no_pdfs_selected">PDF не выбраны</string>
     <string name="add_pdfs_to_merge">Добавьте два или более PDF-файла, чтобы объединить их в один документ</string>
-    <string name="files_selected">%d файлов выбрано</string>
-    <string name="files_merged">%d файлов объединено</string>
+    <string name="files_selected">Выбрано файлов: %d</string>
+    <string name="files_merged">Объединено файлов: %d</string>
 
     <!-- Image to PDF -->
-    <string name="images_selected">%d изображений выбрано</string>
-    <string name="create_pdf_pages">Создать PDF (%d страниц)</string>
+    <string name="images_selected">Выбрано изображений: %d</string>
+    <string name="create_pdf_pages">Создать PDF (страниц: %d)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">Снизу слева</string>
@@ -1526,13 +1526,13 @@
     <string name="no_image_selected">Изображение не выбрано</string>
 
     <!-- Remove Pages -->
-    <string name="pages_to_remove">%d страниц для удаления</string>
-    <string name="remove_selected_pages">Удалить %d страниц</string>
+    <string name="pages_to_remove">Страниц для удаления: %d</string>
+    <string name="remove_selected_pages">Удалить страницы (%d)</string>
     <string name="remove_pages_btn">Удалить страницы</string>
     <string name="select_pages_to_remove_hint">Нажмите на страницы, чтобы выбрать их для удаления</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$d страниц • %2$s</string>
+    <string name="pages_size_format">Страниц: %1$d • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1543,21 @@
     <string name="to_page">По</string>
     <string name="page_numbers_example">например, 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Введите номера страниц или диапазоны через запятую</string>
-    <string name="files_selected_count">%1$d файлов выбрано</string>
+    <string name="files_selected_count">Выбрано файлов: %1$d</string>
     <string name="merge_empty_title">Объединить PDF-файлы</string>
     <string name="merge_empty_desc">Выберите несколько PDF-файлов, чтобы объединить их в один документ</string>
-    <string name="file_size_pages">%1$s • %2$d страниц</string>
-    <string name="pages_partial_format">%1$d/%2$d страниц</string>
-    <string name="pages_all_format">Все %1$d страниц</string>
+    <string name="file_size_pages">%1$s • страниц: %2$d</string>
+    <string name="pages_partial_format">Страниц: %1$d/%2$d</string>
+    <string name="pages_all_format">Все страницы (%1$d)</string>
     <string name="add_more_files">Добавить ещё файлы</string>
     <string name="saved_to_path">Сохранено в: %1$s</string>
     <string name="merging_pdfs">Объединение PDF…</string>
     <string name="merge_complete">Объединение завершено!</string>
     <string name="merge_more_files">Объединить ещё файлы</string>
     <string name="select_pages">Выбрать страницы</string>
-    <string name="total_pages_format">Всего: %1$d страниц</string>
+    <string name="total_pages_format">Всего страниц: %1$d</string>
     <string name="selection_mode">Режим выбора</string>
-    <string name="all_pages_included">Будут включены все %1$d страниц</string>
+    <string name="all_pages_included">Будут включены все страницы (%1$d)</string>
     <string name="pages_range_info">Будут включены страницы с %1$s по %2$s</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1569,7 @@
     <string name="extract_pages_help">Создаёт один PDF с выбранными страницами. Страницы: 1-%d</string>
     <string name="output_prefix_label">Префикс выходного файла</string>
     <string name="split_another_pdf">Разделить другой PDF</string>
-    <string name="pages_count_with_mode">%1$d страниц • %2$s</string>
+    <string name="pages_count_with_mode">Страниц: %1$d • %2$s</string>
     <string name="split_empty_title">Разделить PDF-файл</string>
     <string name="split_empty_desc">Выберите PDF-файл, чтобы разделить его на несколько частей или извлечь определённые страницы</string>
     <string name="split_mode_title">Режим разделения</string>
@@ -1583,19 +1583,19 @@
     <string name="split_mode_extract_desc">Один PDF</string>
     <string name="split_options_title">Опции</string>
     <string name="split_will_create_one_pdf">Будет создан 1 PDF-файл</string>
-    <string name="split_will_create_pdfs">Будет создано %1$d PDF-файлов</string>
-    <string name="split_every_one_page">Разделять каждую 1 страницу</string>
-    <string name="split_every_n_pages">Разделять каждые %1$d страниц</string>
-    <string name="split_will_create_one_file_max">Будет создан 1 файл (макс: %1$d страниц)</string>
-    <string name="split_will_create_files_max">Будет создано %1$d файлов (макс: %2$d страниц)</string>
+    <string name="split_will_create_pdfs">Будет создано PDF-файлов: %1$d</string>
+    <string name="split_every_one_page">Разделять по 1 странице</string>
+    <string name="split_every_n_pages">Разделять по %1$d стр.</string>
+    <string name="split_will_create_one_file_max">Будет создан 1 файл (макс. страниц: %1$d)</string>
+    <string name="split_will_create_files_max">Будет создано файлов: %1$d (макс. страниц: %2$d)</string>
     <string name="split_into_individual_pages">Разделить на отдельные страницы</string>
-    <string name="split_will_create_separate_pdfs">Будет создано %1$d отдельных PDF-файлов</string>
+    <string name="split_will_create_separate_pdfs">Будет создано отдельных PDF-файлов: %1$d</string>
     <string name="split_will_create_one_page_pdf">Будет создан 1 PDF с 1 страницей</string>
-    <string name="split_will_create_one_pdf_pages">Будет создан 1 PDF с %1$d страницами</string>
+    <string name="split_will_create_one_pdf_pages">Будет создан 1 PDF (страниц: %1$d)</string>
     <string name="splitting_pdf">Разделение PDF…</string>
     <string name="split_complete">Разделение завершено!</string>
     <string name="one_file_created">Создан 1 файл</string>
-    <string name="files_created_count">Создано %1$d файлов</string>
+    <string name="files_created_count">Создано файлов: %1$d</string>
 
     <!-- Remove Pages Screen -->
     <string name="select_page_range">Выбрать диапазон страниц</string>
@@ -1626,7 +1626,7 @@
     <string name="error_value_range">Значение должно быть 1-%1$d</string>
     <string name="cannot_remove_all_pages">Невозможно удалить все страницы</string>
     <string name="remove_one_page">Удалить 1 страницу</string>
-    <string name="remove_pages_count">Удалить %1$d страниц</string>
+    <string name="remove_pages_count">Удалить страницы (%1$d)</string>
     <string name="removing">Удаление…</string>
     <string name="pages_removed">Страницы удалены!</string>
     <string name="one_page_removed">1 страница удалена</string>
@@ -1674,4 +1674,8 @@
         <item quantity="many">%d подписей не сохранено</item>
         <item quantity="other">%d подписей не сохранено</item>
     </plurals>
+    <string name="sort_alphabetical">По алфавиту</string>
+    <string name="sort_date_modified">Дата изменения</string>
+    <string name="cd_close_selection">Закрыть выделение</string>
+    <string name="folder_label">Папка</string>
 </resources>

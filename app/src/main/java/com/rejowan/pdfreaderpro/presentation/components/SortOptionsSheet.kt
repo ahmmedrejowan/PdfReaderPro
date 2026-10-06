@@ -217,7 +217,7 @@ private fun SortOptionsContent(
 
         // Sort Categories
         SortCategoryCard(
-            title = "Alphabetical",
+            title = stringResource(R.string.sort_alphabetical),
             description = "Sort by file name",
             icon = Icons.Outlined.SortByAlpha,
             accentColor = AccentPurple,
@@ -233,7 +233,7 @@ private fun SortOptionsContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         SortCategoryCard(
-            title = "Date Modified",
+            title = stringResource(R.string.sort_date_modified),
             description = "Sort by last modified time",
             icon = Icons.Outlined.AccessTime,
             accentColor = AccentBlue,
@@ -249,7 +249,7 @@ private fun SortOptionsContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         SortCategoryCard(
-            title = "File Size",
+            title = stringResource(R.string.file_size),
             description = "Sort by storage size",
             icon = Icons.Outlined.DataUsage,
             accentColor = AccentTeal,
@@ -391,7 +391,7 @@ private fun SortCategoryCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
-                            contentDescription = "Selected",
+                            contentDescription = stringResource(R.string.cd_selected),
                             modifier = Modifier
                                 .padding(4.dp)
                                 .size(14.dp),
@@ -522,7 +522,7 @@ private fun SortOptionChip(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
-                            contentDescription = "Selected",
+                            contentDescription = stringResource(R.string.cd_selected),
                             modifier = Modifier.size(9.dp),
                             tint = Color.White
                         )
