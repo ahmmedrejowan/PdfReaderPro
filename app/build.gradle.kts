@@ -78,6 +78,12 @@ android {
         unitTests.isReturnDefaultValues = true
     }
 
+    androidResources {
+        // Lists the translated locales so Android 13+ offers them in the per-app
+        // language setting. The default locale is set in res/resources.properties.
+        generateLocaleConfig = true
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
