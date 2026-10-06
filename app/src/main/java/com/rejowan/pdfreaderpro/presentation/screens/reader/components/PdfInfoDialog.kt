@@ -63,9 +63,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
+import com.rejowan.pdfreaderpro.util.FormattingUtils
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 private val AccentPurple = Color(0xFF9575CD)
@@ -507,16 +507,7 @@ private fun formatFileSize(bytes: Long): String {
     }
 }
 
-private fun formatDate(timestamp: Long): String {
-    val locale = Locale.getDefault()
-    val pattern = if (locale.language == "ru") {
-        "dd.MM.yyyy HH:mm"
-    } else {
-        "MMM dd, yyyy HH:mm"
-    }
-    val sdf = SimpleDateFormat(pattern, locale)
-    return sdf.format(Date(timestamp))
-}
+private fun formatDate(timestamp: Long): String = FormattingUtils.localizedDateTime(timestamp)
 
 private fun formatPdfDate(pdfDate: String): String {
     return try {
@@ -528,11 +519,10 @@ private fun formatPdfDate(pdfDate: String): String {
             val hour = if (cleaned.length >= 10) cleaned.substring(8, 10) else "00"
             val minute = if (cleaned.length >= 12) cleaned.substring(10, 12) else "00"
 
-            val inputFormat = SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault())
-            val outputPattern = if (Locale.getDefault().language == "ru") "dd.MM.yyyy HH:mm" else "MMM dd, yyyy HH:mm"
-            val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
+            // The PDF date is fixed-format ASCII, so it is parsed without the user's locale.
+            val inputFormat = SimpleDateFormat("yyyyMMddHHmm", Locale.US)
             val date = inputFormat.parse("$year$month$day$hour$minute")
-            date?.let { outputFormat.format(it) } ?: pdfDate
+            date?.let { FormattingUtils.localizedDateTime(it.time) } ?: pdfDate
         } else {
             pdfDate
         }

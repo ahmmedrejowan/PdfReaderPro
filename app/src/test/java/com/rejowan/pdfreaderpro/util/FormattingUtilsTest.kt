@@ -290,6 +290,31 @@ class FormattingUtilsTest {
     }
     // endregion
 
+    // region localizedDateTime Tests
+    private fun june15At1430(): Long = java.util.Calendar.getInstance().apply {
+        set(2024, 5, 15, 14, 30, 0)
+        set(java.util.Calendar.MILLISECOND, 0)
+    }.timeInMillis
+
+    @Test
+    fun `localizedDateTime follows the German day-first order and 24-hour clock`() {
+        assertEquals("15.06.2024, 14:30", FormattingUtils.localizedDateTime(june15At1430(), Locale.GERMAN))
+    }
+
+    @Test
+    fun `localizedDateTime uses the language's own month names`() {
+        val french = FormattingUtils.localizedDateTime(june15At1430(), Locale.FRENCH)
+        assertTrue(french, french.contains("juin"))
+        assertTrue(french, french.contains("14:30"))
+    }
+
+    @Test
+    fun `localizedDateTime puts the month first in English`() {
+        val english = FormattingUtils.localizedDateTime(june15At1430(), Locale.US)
+        assertTrue(english, english.startsWith("Jun 15, 2024"))
+    }
+    // endregion
+
     // region extractParentFolders Tests
     @Test
     fun `extractParentFolders extracts folder path`() {
