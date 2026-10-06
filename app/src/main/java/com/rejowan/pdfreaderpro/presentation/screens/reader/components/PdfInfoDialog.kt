@@ -191,7 +191,8 @@ private fun PdfInfoSideSheet(
                             top = systemBarsPadding.calculateTopPadding(),
                             bottom = systemBarsPadding.calculateBottomPadding()
                         )
-                        .verticalScroll(rememberScrollState())
+                    // PdfInfoContent scrolls itself; a second vertical scroll here
+                    // measures it with infinite height and crashes (#80).
                 )
             }
         }

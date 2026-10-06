@@ -164,7 +164,8 @@ private fun FileInfoSideSheet(
                             top = systemBarsPadding.calculateTopPadding(),
                             bottom = systemBarsPadding.calculateBottomPadding()
                         )
-                        .verticalScroll(rememberScrollState())
+                    // FileInfoContent scrolls itself; a second vertical scroll here
+                    // measures it with infinite height and crashes (#80).
                 )
             }
         }
