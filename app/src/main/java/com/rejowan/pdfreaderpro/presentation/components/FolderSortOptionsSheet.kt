@@ -215,7 +215,7 @@ private fun FolderSortOptionsContent(
 
         // Sort Categories
         FolderSortCategoryCard(
-            title = "Alphabetical",
+            title = stringResource(R.string.sort_alphabetical),
             description = "Sort by folder name",
             icon = Icons.Outlined.SortByAlpha,
             accentColor = AccentAmber,
@@ -373,7 +373,7 @@ private fun FolderSortCategoryCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
-                            contentDescription = "Selected",
+                            contentDescription = stringResource(R.string.cd_selected),
                             modifier = Modifier
                                 .padding(4.dp)
                                 .size(14.dp),
@@ -504,7 +504,7 @@ private fun FolderSortOptionChip(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
-                            contentDescription = "Selected",
+                            contentDescription = stringResource(R.string.cd_selected),
                             modifier = Modifier.size(9.dp),
                             tint = Color.White
                         )

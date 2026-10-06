@@ -103,7 +103,7 @@ fun WelcomeHeader(
                     IconButton(onClick = onSortClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.Sort,
-                            contentDescription = "Sort files",
+                            contentDescription = stringResource(R.string.sort_files),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -120,7 +120,7 @@ fun WelcomeHeader(
                     IconButton(onClick = onStatsClick) {
                         Icon(
                             imageVector = Icons.Outlined.Analytics,
-                            contentDescription = "Library statistics",
+                            contentDescription = stringResource(R.string.library_statistics),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

@@ -10,6 +10,15 @@
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
+    <!-- Lets the text selection menu list apps that act on selected text,
+         such as a translator. Android 11+ hides them without this. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <data android:mimeType="text/plain" />
+        </intent>
+    </queries>
+
     <application
         android:name=".appClasses.MyApplication"
         android:allowBackup="false"

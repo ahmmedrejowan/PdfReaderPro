@@ -73,7 +73,7 @@ fun SelectionActionBar(
                 IconButton(onClick = onClose) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "Close selection",
+                        contentDescription = stringResource(R.string.cd_close_selection),
                         tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -138,7 +138,7 @@ fun SelectionActionBar(
                 // Merge button (only enabled with 2+ files)
                 ActionButton(
                     icon = Icons.AutoMirrored.Filled.CallMerge,
-                    label = "Merge",
+                    label = stringResource(R.string.merge),
                     color = AccentPurple,
                     enabled = selectedCount >= 2,
                     onClick = onMerge,
@@ -148,7 +148,7 @@ fun SelectionActionBar(
                 // Share button
                 ActionButton(
                     icon = Icons.Default.Share,
-                    label = "Share",
+                    label = stringResource(R.string.share),
                     color = AccentTeal,
                     enabled = selectedCount > 0,
                     onClick = onShare,
@@ -158,7 +158,7 @@ fun SelectionActionBar(
                 // Delete button
                 ActionButton(
                     icon = Icons.Default.Delete,
-                    label = "Delete",
+                    label = stringResource(R.string.delete),
                     color = AccentRed,
                     enabled = selectedCount > 0,
                     onClick = onDelete,

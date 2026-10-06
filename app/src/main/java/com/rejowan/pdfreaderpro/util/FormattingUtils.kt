@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,6 +44,14 @@ object FormattingUtils {
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US)
         return sdf.format(date)
     }
+
+    /**
+     * Date and time in the order, month names and clock the [locale] uses,
+     * e.g. "Oct 6, 2026, 2:30 PM" in English and "06.10.2026, 14:30" in German.
+     */
+    fun localizedDateTime(timestamp: Long, locale: Locale = Locale.getDefault()): String =
+        DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale)
+            .format(Date(timestamp))
 
     fun extractParentFolders(fullPath: String): String {
         val path = fullPath.removePrefix("/")

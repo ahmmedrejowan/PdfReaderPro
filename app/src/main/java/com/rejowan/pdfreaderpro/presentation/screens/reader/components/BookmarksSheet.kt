@@ -66,11 +66,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
+import com.rejowan.pdfreaderpro.util.FormattingUtils
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 private val AccentRed = Color(0xFFEF5350)
 private val AccentPurple = Color(0xFF9575CD)
@@ -477,13 +475,4 @@ private fun EmptyBookmarksState(
     }
 }
 
-private fun formatDate(timestamp: Long): String {
-    val locale = Locale.getDefault()
-    val pattern = if (locale.language == "ru") {
-        "d MMM yyyy 'г.' • HH:mm"
-    } else {
-        "MMM d, yyyy • h:mm a"
-    }
-    val sdf = SimpleDateFormat(pattern, locale)
-    return sdf.format(Date(timestamp))
-}
+private fun formatDate(timestamp: Long): String = FormattingUtils.localizedDateTime(timestamp)

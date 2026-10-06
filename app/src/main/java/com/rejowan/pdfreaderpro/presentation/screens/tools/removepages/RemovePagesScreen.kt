@@ -435,22 +435,22 @@ private fun SelectionHeader(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             QuickSelectChip(
-                label = "All",
+                label = stringResource(R.string.quick_select_all),
                 onClick = onSelectAll,
                 modifier = Modifier.weight(1f)
             )
             QuickSelectChip(
-                label = "Odd",
+                label = stringResource(R.string.quick_select_odd),
                 onClick = onSelectOdd,
                 modifier = Modifier.weight(1f)
             )
             QuickSelectChip(
-                label = "Even",
+                label = stringResource(R.string.quick_select_even),
                 onClick = onSelectEven,
                 modifier = Modifier.weight(1f)
             )
             QuickSelectChip(
-                label = "Range",
+                label = stringResource(R.string.quick_select_range),
                 onClick = { showRangeDialog = true },
                 modifier = Modifier.weight(1f)
             )
@@ -464,7 +464,7 @@ private fun SelectionHeader(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             QuickSelectChip(
-                label = "First N",
+                label = stringResource(R.string.quick_select_first_n),
                 onClick = {
                     dialogMode = "first"
                     showFirstLastDialog = true
@@ -472,7 +472,7 @@ private fun SelectionHeader(
                 modifier = Modifier.weight(1f)
             )
             QuickSelectChip(
-                label = "Last N",
+                label = stringResource(R.string.quick_select_last_n),
                 onClick = {
                     dialogMode = "last"
                     showFirstLastDialog = true
@@ -480,7 +480,7 @@ private fun SelectionHeader(
                 modifier = Modifier.weight(1f)
             )
             QuickSelectChip(
-                label = "Before",
+                label = stringResource(R.string.quick_select_before),
                 onClick = {
                     dialogMode = "before"
                     showBeforeAfterDialog = true
@@ -488,7 +488,7 @@ private fun SelectionHeader(
                 modifier = Modifier.weight(1f)
             )
             QuickSelectChip(
-                label = "After",
+                label = stringResource(R.string.quick_select_after),
                 onClick = {
                     dialogMode = "after"
                     showBeforeAfterDialog = true
@@ -530,7 +530,7 @@ private fun SelectionHeader(
             title = if (dialogMode == "first") "Select First N Pages" else "Select Last N Pages",
             hint = if (dialogMode == "first") "First N pages will be selected" else "Last N pages will be selected",
             totalPages = totalCount,
-            label = "Number of pages",
+            label = stringResource(R.string.number_of_pages),
             onDismiss = { showFirstLastDialog = false },
             onConfirm = { n ->
                 if (dialogMode == "first") onSelectFirstN(n) else onSelectLastN(n)

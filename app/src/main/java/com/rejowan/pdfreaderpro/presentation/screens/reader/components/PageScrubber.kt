@@ -16,6 +16,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,7 +24,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -134,7 +137,10 @@ private fun VerticalPageScrubber(
     ) {
         Column(
             modifier = Modifier
-                .padding(end = 6.dp, top = 86.dp, bottom = 80.dp),
+                // Start the track below the status bar and the top bar (8dp gap +
+                // 48dp bar + 8dp), so it never sits over the bar's buttons (#79).
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(end = 6.dp, top = 72.dp, bottom = 80.dp),
             horizontalAlignment = Alignment.End
         ) {
             // Track area with droplet
