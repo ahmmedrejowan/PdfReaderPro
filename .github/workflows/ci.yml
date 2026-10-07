@@ -37,17 +37,19 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      # Each step runs Gradle in a fresh JVM. A daemon shared by lint, tests and
+      # the APK build carries their memory into packaging, where builds hung.
       - name: Run Lint
         timeout-minutes: 20
-        run: chmod +x gradlew && ./gradlew :app:lint
+        run: chmod +x gradlew && ./gradlew :app:lint --no-daemon
 
       - name: Run Unit Tests
         timeout-minutes: 20
-        run: ./gradlew :app:testDebugUnitTest
+        run: ./gradlew :app:testDebugUnitTest --no-daemon
 
       - name: Build Debug APK
         timeout-minutes: 15
-        run: ./gradlew :app:assembleDebug
+        run: ./gradlew :app:assembleDebug --no-daemon
 
       # A step that times out counts as failed, so this runs and records where a
       # hung build was stuck: every thread of the Gradle processes and their heap.
