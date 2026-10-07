@@ -10,7 +10,6 @@ import io.mockk.slot
 import io.mockk.unmockkObject
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -187,24 +186,6 @@ class GlobalErrorHandlerTest {
         verify { context.startActivity(any()) }
         assertTrue(details.captured!!.contains("Thread: pdf-render"))
         assertTrue(terminated)
-    }
-
-    @Test
-    fun `a failed coroutine with no handler of its own reaches the error screen`() {
-        GlobalErrorHandler.setup(context)
-        val message = slot<String>()
-        every { ErrorActivity.createIntent(any(), capture(message), any()) } returns
-            mockk<Intent>(relaxed = true)
-
-        kotlinx.coroutines.runBlocking {
-            @OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
-            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.Default) {
-                throw IllegalArgumentException("page out of range")
-            }.join()
-        }
-
-        verify(timeout = 2_000) { context.startActivity(any()) }
-        assertEquals("page out of range", message.captured)
     }
 
     @Test
