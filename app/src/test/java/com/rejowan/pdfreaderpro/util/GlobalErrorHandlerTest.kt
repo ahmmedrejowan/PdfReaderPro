@@ -156,7 +156,7 @@ class GlobalErrorHandlerTest {
 
         val report = GlobalErrorHandler.buildCrashReport(Thread.currentThread(), deep)
 
-        assertTrue(report.length <= 100_000 + 20)
+        assertTrue(report.length <= GlobalErrorHandler.MAX_REPORT_CHARS + 20)
         assertTrue(report.endsWith("(truncated)"))
     }
 

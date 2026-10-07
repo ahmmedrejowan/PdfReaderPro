@@ -105,7 +105,11 @@ object GlobalErrorHandler {
         }
     }
 
-    private const val MAX_REPORT_CHARS = 100_000
+    /**
+     * Intent extras travel as UTF-16 through a binder buffer of about 1 MB that
+     * the whole process shares, so the report stays near 80 KB.
+     */
+    internal const val MAX_REPORT_CHARS = 40_000
 
     private fun logCrashDetails(throwable: Throwable) {
         Timber.e("=== CRASH REPORT ===")
