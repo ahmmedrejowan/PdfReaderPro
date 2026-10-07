@@ -22,6 +22,9 @@ jobs:
   ci:
     name: Lint, Test & Build
     runs-on: ubuntu-latest
+    # A normal run takes 12-15 minutes. Without a limit a hung build runs for
+    # GitHub's 6 hours; the step limits below fail it sooner.
+    timeout-minutes: 45
 
     steps:
       - name: Checkout code
@@ -35,13 +38,28 @@ jobs:
           cache: gradle
 
       - name: Run Lint
+        timeout-minutes: 20
         run: chmod +x gradlew && ./gradlew :app:lint
 
       - name: Run Unit Tests
+        timeout-minutes: 20
         run: ./gradlew :app:testDebugUnitTest
 
       - name: Build Debug APK
+        timeout-minutes: 15
         run: ./gradlew :app:assembleDebug
+
+      # A step that times out counts as failed, so this runs and records where a
+      # hung build was stuck: every thread of the Gradle processes and their heap.
+      - name: Dump Gradle state
+        if: failure()
+        run: |
+          jps -lv || true
+          for pid in $(jps -q); do
+            echo "===== $pid ====="
+            jcmd "$pid" GC.heap_info || true
+            jcmd "$pid" Thread.print || true
+          done
 
       - name: Upload Reports
         if: failure()

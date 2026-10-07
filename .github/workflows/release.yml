@@ -28,6 +28,7 @@ jobs:
   validate:
     name: Validate
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       version: ${{ steps.version.outputs.version }}
       apk_name: ${{ steps.version.outputs.apk_name }}
@@ -72,6 +73,8 @@ jobs:
     name: Unit Tests
     needs: validate
     runs-on: ubuntu-latest
+    # A hung Gradle build fails here instead of running to GitHub's 6-hour limit.
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code
@@ -91,6 +94,8 @@ jobs:
     name: Lint
     needs: validate
     runs-on: ubuntu-latest
+    # A hung Gradle build fails here instead of running to GitHub's 6-hour limit.
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code
@@ -110,6 +115,8 @@ jobs:
     name: Build APK
     needs: validate
     runs-on: ubuntu-latest
+    # A hung Gradle build fails here instead of running to GitHub's 6-hour limit.
+    timeout-minutes: 30
     env:
       VERSION: ${{ needs.validate.outputs.version }}
       APK_NAME: ${{ needs.validate.outputs.apk_name }}
@@ -168,6 +175,7 @@ jobs:
     name: Create Release
     needs: [validate, unit-test, lint, build]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       VERSION: ${{ needs.validate.outputs.version }}
       APK_NAME: ${{ needs.validate.outputs.apk_name }}
