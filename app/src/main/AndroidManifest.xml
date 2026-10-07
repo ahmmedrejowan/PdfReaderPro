@@ -76,6 +76,8 @@
         <activity
             android:name=".presentation.ErrorActivity"
             android:exported="false"
+            android:process=":crash"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.PDFReaderPro"
             android:configChanges="orientation|screenSize" />
 
