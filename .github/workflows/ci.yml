@@ -39,29 +39,19 @@ jobs:
 
       # Each step runs Gradle in a fresh JVM. A daemon shared by lint, tests and
       # the APK build carries their memory into packaging, where builds hung.
+      # The watchdog prints Gradle's threads 3 minutes before a step's limit, the
+      # last moment a hung build can still be inspected.
       - name: Run Lint
         timeout-minutes: 20
-        run: chmod +x gradlew && ./gradlew :app:lint --no-daemon
+        run: chmod +x gradlew && .github/scripts/gradle-watchdog.sh 17 :app:lint --no-daemon
 
       - name: Run Unit Tests
         timeout-minutes: 20
-        run: ./gradlew :app:testDebugUnitTest --no-daemon
+        run: .github/scripts/gradle-watchdog.sh 17 :app:testDebugUnitTest --no-daemon
 
       - name: Build Debug APK
         timeout-minutes: 15
-        run: ./gradlew :app:assembleDebug --no-daemon
-
-      # A step that times out counts as failed, so this runs and records where a
-      # hung build was stuck: every thread of the Gradle processes and their heap.
-      - name: Dump Gradle state
-        if: failure()
-        run: |
-          jps -lv || true
-          for pid in $(jps -q); do
-            echo "===== $pid ====="
-            jcmd "$pid" GC.heap_info || true
-            jcmd "$pid" Thread.print || true
-          done
+        run: .github/scripts/gradle-watchdog.sh 12 :app:assembleDebug --no-daemon
 
       - name: Upload Reports
         if: failure()
