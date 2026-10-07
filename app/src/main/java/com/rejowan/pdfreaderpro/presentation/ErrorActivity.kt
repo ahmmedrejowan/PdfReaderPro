@@ -1,9 +1,11 @@
 package com.rejowan.pdfreaderpro.presentation
 
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
@@ -32,6 +34,7 @@ import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -50,8 +53,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rejowan.pdfreaderpro.BuildConfig
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.theme.PdfReaderProTheme
+import com.rejowan.pdfreaderpro.util.CrashIssueLink
 import com.rejowan.pdfreaderpro.util.GlobalErrorHandler
 
 class ErrorActivity : ComponentActivity() {
@@ -84,7 +89,8 @@ class ErrorActivity : ComponentActivity() {
                             finishAffinity()
                         },
                         onCopyClick = { report -> copyReport(report) },
-                        onShareClick = { report -> shareReport(report) }
+                        onShareClick = { report -> shareReport(report) },
+                        onReportClick = { report -> reportOnGitHub(errorMessage, report) }
                     )
                 }
             }
@@ -104,6 +110,22 @@ class ErrorActivity : ComponentActivity() {
         // Android 13+ confirms clipboard writes itself.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             Toast.makeText(this, R.string.crash_details_copied, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /** Opens a new GitHub issue with the bug form filled in from this crash. */
+    private fun reportOnGitHub(errorMessage: String, report: String) {
+        val url = CrashIssueLink.build(
+            errorMessage = errorMessage,
+            report = report,
+            appVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+            androidVersion = "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})",
+            device = "${Build.MANUFACTURER} ${Build.MODEL}"
+        )
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -137,7 +159,8 @@ private fun ErrorScreen(
     onRestartClick: () -> Unit,
     onCloseClick: () -> Unit,
     onCopyClick: (String) -> Unit,
-    onShareClick: (String) -> Unit
+    onShareClick: (String) -> Unit,
+    onReportClick: (String) -> Unit
 ) {
     var showDetails by rememberSaveable { mutableStateOf(false) }
 
@@ -248,6 +271,23 @@ private fun ErrorScreen(
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            FilledTonalButton(
+                onClick = { onReportClick(errorDetails) },
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.BugReport,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Text(
+                    text = stringResource(R.string.report_on_github),
+                    modifier = Modifier.padding(start = 8.dp)
+                )
             }
         }
 

@@ -1681,4 +1681,6 @@
     <string name="copy_details">Copier les détails</string>
     <string name="crash_details_copied">Détails du plantage copiés</string>
     <string name="crash_report_subject">Rapport de plantage de PDF Reader Pro</string>
+    <string name="report_on_github">Signaler sur GitHub</string>
+    <string name="no_browser_found">Aucun navigateur trouvé pour ouvrir le lien</string>
 </resources>

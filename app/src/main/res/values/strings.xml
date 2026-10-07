@@ -1680,4 +1680,6 @@
     <string name="copy_details">Copy details</string>
     <string name="crash_details_copied">Crash details copied</string>
     <string name="crash_report_subject">PDF Reader Pro crash report</string>
+    <string name="report_on_github">Report on GitHub</string>
+    <string name="no_browser_found">No browser found to open the link</string>
 </resources>

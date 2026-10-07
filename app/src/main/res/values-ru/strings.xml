@@ -1682,4 +1682,6 @@
     <string name="copy_details">Копировать</string>
     <string name="crash_details_copied">Подробности сбоя скопированы</string>
     <string name="crash_report_subject">Отчёт о сбое PDF Reader Pro</string>
+    <string name="report_on_github">Сообщить на GitHub</string>
+    <string name="no_browser_found">Не найден браузер для открытия ссылки</string>
 </resources>
