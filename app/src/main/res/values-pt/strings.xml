@@ -1670,10 +1670,17 @@
 
     <plurals name="sign_unsaved_count">
         <item quantity="one">%d assinatura não guardada</item>
+        <item quantity="many">%d assinaturas não guardadas</item>
         <item quantity="other">%d assinaturas não guardadas</item>
     </plurals>
     <string name="sort_alphabetical">Alfabética</string>
     <string name="sort_date_modified">Data de modificação</string>
     <string name="cd_close_selection">Fechar seleção</string>
     <string name="folder_label">Pasta</string>
+    <string name="crash_details">Detalhes da falha</string>
+    <string name="copy_details">Copiar detalhes</string>
+    <string name="crash_details_copied">Detalhes da falha copiados</string>
+    <string name="crash_report_subject">Relatório de falha do PDF Reader Pro</string>
+    <string name="report_on_github">Reportar no GitHub</string>
+    <string name="no_browser_found">Nenhum navegador encontrado para abrir o link</string>
 </resources>
