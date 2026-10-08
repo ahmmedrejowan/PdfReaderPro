@@ -67,6 +67,15 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.GithubRelease
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
+import com.rejowan.pdfreaderpro.util.ReleaseNotes
 
 /**
  * A sheet/panel that shows update information when a new version is available.
@@ -343,11 +352,16 @@ private fun UpdateContent(
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                Text(
-                    text = release.body.ifBlank { stringResource(R.string.no_release_notes) },
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                val notes = remember(release.body) { ReleaseNotes.whatsNew(release.body) }
+                if (notes.isBlank()) {
+                    Text(
+                        text = stringResource(R.string.no_release_notes),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                } else {
+                    ReleaseNotesText(notes)
+                }
             }
         }
 
@@ -443,5 +457,73 @@ private fun UpdateContent(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+/** Release notes drawn from their Markdown: headings, bullet lists, bold, code and links. */
+@Composable
+private fun ReleaseNotesText(markdown: String) {
+    val blocks = remember(markdown) { ReleaseNotes.parse(markdown) }
+    val linkColor = MaterialTheme.colorScheme.primary
+    val codeBackground = MaterialTheme.colorScheme.surfaceContainerHighest
+
+    fun styled(spans: List<ReleaseNotes.Span>) = buildAnnotatedString {
+        spans.forEach { span ->
+            when (span) {
+                is ReleaseNotes.Span.Plain -> append(span.text)
+                is ReleaseNotes.Span.Bold -> withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                    append(span.text)
+                }
+                is ReleaseNotes.Span.Code -> withStyle(
+                    SpanStyle(fontFamily = FontFamily.Monospace, background = codeBackground)
+                ) {
+                    append(span.text)
+                }
+                is ReleaseNotes.Span.Link -> withLink(
+                    LinkAnnotation.Url(
+                        span.url,
+                        TextLinkStyles(SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline))
+                    )
+                ) {
+                    append(span.text)
+                }
+            }
+        }
+    }
+
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        blocks.forEachIndexed { index, block ->
+            when (block) {
+                is ReleaseNotes.Block.Heading -> Text(
+                    text = styled(block.text),
+                    style = if (block.level <= 2) {
+                        MaterialTheme.typography.titleMedium
+                    } else {
+                        MaterialTheme.typography.titleSmall
+                    },
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(top = if (index == 0) 0.dp else 8.dp)
+                )
+                is ReleaseNotes.Block.Bullet -> Row(modifier = Modifier.padding(start = (block.depth * 16).dp)) {
+                    Text(
+                        text = if (block.depth == 0) "•" else "◦",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.width(16.dp)
+                    )
+                    Text(
+                        text = styled(block.text),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                is ReleaseNotes.Block.Paragraph -> Text(
+                    text = styled(block.text),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
     }
 }
