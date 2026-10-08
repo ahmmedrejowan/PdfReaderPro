@@ -56,7 +56,12 @@ internal class AssetsPathHandler(
                 "java.io.FileNotFoundException: com/rejowan/mozilla/web/wasm/qcms_bg.wasm"
                     -> onError(PdfException("Color profile not found. Please include icc module!"))
 
-                else -> onError(error)
+                else -> if (path.startsWith("com/rejowan/mozilla/web/cmaps/")) {
+                    // Character maps for CJK and other non-embedded fonts (#89).
+                    onError(PdfException("Character map not found. Please include cmaps module!"))
+                } else {
+                    onError(error)
+                }
             }
             return null
         }

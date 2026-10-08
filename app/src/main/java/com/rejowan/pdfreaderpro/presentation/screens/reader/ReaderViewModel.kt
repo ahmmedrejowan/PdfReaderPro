@@ -802,6 +802,12 @@ class ReaderViewModel(
 
     fun onAction(action: ReaderAction) {
         when (action) {
+            is ReaderAction.RetryLoad -> {
+                // The error screen replaced the viewer; clearing the error brings a
+                // new viewer back, and it opens the file as it is created.
+                _state.update { it.copy(error = null, isLoading = true) }
+            }
+
             is ReaderAction.GoToPage -> {
                 // Our state uses 0-based, library uses 1-based
                 _state.update { it.copy(currentPage = action.page) }

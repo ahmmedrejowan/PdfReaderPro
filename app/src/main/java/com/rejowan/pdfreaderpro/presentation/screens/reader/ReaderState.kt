@@ -328,6 +328,9 @@ sealed class ReaderEvent {
  * Actions that can be performed on the reader.
  */
 sealed class ReaderAction {
+    // Load the document again after it failed to open
+    data object RetryLoad : ReaderAction()
+
     // Navigation
     data class GoToPage(val page: Int) : ReaderAction()
     data object NextPage : ReaderAction()
