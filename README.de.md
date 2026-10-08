@@ -224,6 +224,19 @@ GNU General Public License for more details.
 
 ## Änderungsprotokoll
 
+### v2.5.0 (09.10.2026)
+
+- Dokumente unterschreiben: Unterschrift zeichnen, tippen oder als Bild wählen, im Reader oder unter Werkzeuge
+- Unterschriften werden pro Dokument gespeichert, in einem Bereich verwaltet und in die Datei oder eine Kopie geschrieben
+- Übersetzungen ins Russische, Deutsche, Spanische, Französische, Italienische und Portugiesische (#91, #93, #95)
+- Die App-Sprache lässt sich in der Android-Einstellung für App-Sprachen wählen
+- Übersetzer wie Google Übersetzer erscheinen im Menü für markierten Text (#78)
+- Fortschrittsanzeige beim Drucken und Speichern einer Kopie ohne Passwort
+- Absturzbildschirm mit allen Details zum Kopieren, Teilen oder Melden auf GitHub
+- Japanische, chinesische und koreanische PDFs, die einen Fehler zeigten, öffnen sich jetzt (#89)
+- Absturz der Dokumentinfo im Querformat und vom Seitenregler verdeckte Menütaste behoben (#80, #79)
+- Kernbibliotheken aktualisiert (Kotlin 2.4.20, AGP 9.4.1, Gradle 9.8.0)
+
 ### v2.4.0 (15.08.2026)
 
 - Text in fünf Farben hervorheben, pro Dokument gespeichert (#41)

@@ -224,6 +224,19 @@ GNU General Public License for more details.
 
 ## Journal des modifications
 
+### v2.5.0 (09/10/2026)
+
+- Signez vos documents en dessinant, en tapant ou en choisissant une image de votre signature, depuis le lecteur ou les Outils
+- Les signatures sont conservées par document, gérées depuis un seul panneau et écrites dans le fichier ou dans une copie
+- Traductions en russe, allemand, espagnol, français, italien et portugais (#91, #93, #95)
+- Choisissez la langue de l'application dans le réglage de langue par application d'Android
+- Les traducteurs comme Google Traduction apparaissent dans le menu de sélection de texte (#78)
+- Progression de l'impression et enregistrement d'une copie sans mot de passe
+- Écran de plantage avec tous les détails à copier, partager ou signaler sur GitHub
+- Correction des PDF en japonais, chinois et coréen qui affichaient une erreur au lieu de s'ouvrir (#89)
+- Correction du plantage des Infos du document en paysage et du curseur de pages qui masquait le bouton de menu (#80, #79)
+- Bibliothèques principales mises à jour (Kotlin 2.4.20, AGP 9.4.1, Gradle 9.8.0)
+
 ### v2.4.0 (15/08/2026)
 
 - Surligner du texte en cinq couleurs, enregistré par document (#41)
