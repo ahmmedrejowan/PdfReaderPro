@@ -348,7 +348,7 @@ fun ReaderScreen(
         if (!state.isLoading) {
             ErrorState(
                 message = error,
-                onRetry = { },
+                onRetry = { viewModel.onAction(ReaderAction.RetryLoad) },
                 onBack = { navController.popBackStack() }
             )
             return
