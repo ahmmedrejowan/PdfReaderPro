@@ -1676,4 +1676,10 @@
     <string name="sort_date_modified">変更日</string>
     <string name="cd_close_selection">選択を閉じる</string>
     <string name="folder_label">フォルダ</string>
+    <string name="crash_details">クラッシュの詳細</string>
+    <string name="copy_details">詳細をコピー</string>
+    <string name="crash_details_copied">クラッシュの詳細をコピーしました</string>
+    <string name="crash_report_subject">PDF Reader Pro クラッシュレポート</string>
+    <string name="report_on_github">GitHubで報告する</string>
+    <string name="no_browser_found">リンクを開くためのブラウザが見つかりませんでした。</string>
 </resources>
