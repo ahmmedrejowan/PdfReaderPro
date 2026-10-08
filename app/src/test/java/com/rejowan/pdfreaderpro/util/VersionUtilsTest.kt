@@ -48,11 +48,10 @@ class VersionUtilsTest {
 
     @Test
     fun `parseVersion handles build metadata suffix`() {
-        // Build metadata with + is not stripped by current implementation
-        // "2.0.0+build.123" -> split(".") = ["2", "0", "0+build", "123"]
-        // "0+build" fails toIntOrNull, so we get [2, 0, 123]
+        // Build metadata after "+" is not part of the version; reading it as one
+        // made 2.0.0+build.123 look like 2.0.123.
         val result = VersionUtils.parseVersion("2.0.0+build.123")
-        assertEquals(listOf(2, 0, 123), result)
+        assertEquals(listOf(2, 0, 0), result)
     }
 
     @Test
@@ -339,6 +338,44 @@ class VersionUtilsTest {
         // "-1.0.0" -> split("-")[0] = "" -> split(".") = [""] -> mapNotNull = []
         val result = VersionUtils.parseVersion("-1.0.0")
         assertEquals(emptyList<Int>(), result)
+    }
+    // endregion
+
+    // region Pre-releases
+    @Test
+    fun `a full release is newer than its own pre-release`() {
+        // Otherwise someone on the beta is never offered the release it led to.
+        assertTrue(VersionUtils.isNewerVersion("2.5.0", "2.5.0-beta.1"))
+        assertFalse(VersionUtils.isNewerVersion("2.5.0-beta.1", "2.5.0"))
+        assertTrue(VersionUtils.isNewerVersion("v2.5.0", "2.5.0-rc.1"))
+    }
+
+    @Test
+    fun `later pre-releases of the same version are newer`() {
+        assertTrue(VersionUtils.isNewerVersion("2.5.0-beta.2", "2.5.0-beta.1"))
+        assertTrue(VersionUtils.isNewerVersion("2.5.0-beta.10", "2.5.0-beta.2"))
+        assertTrue(VersionUtils.isNewerVersion("2.5.0-rc.1", "2.5.0-beta.3"))
+        assertFalse(VersionUtils.isNewerVersion("2.5.0-beta.1", "2.5.0-beta.1"))
+    }
+
+    @Test
+    fun `the version numbers still decide before any pre-release part`() {
+        assertTrue(VersionUtils.isNewerVersion("2.6.0-beta.1", "2.5.0"))
+        assertFalse(VersionUtils.isNewerVersion("2.4.0", "2.5.0-beta.1"))
+    }
+
+    @Test
+    fun `compareVersions orders pre-releases below the release`() {
+        assertTrue(VersionUtils.compareVersions("2.5.0-beta.1", "2.5.0") < 0)
+        assertTrue(VersionUtils.compareVersions("2.5.0", "2.5.0-beta.1") > 0)
+        assertEquals(0, VersionUtils.compareVersions("2.5.0-beta.1", "v2.5.0-beta.1"))
+        assertEquals(0, VersionUtils.compareVersions("2.5.0+build.7", "2.5.0"))
+    }
+
+    @Test
+    fun `a pre-release APK name keeps its full version`() {
+        assertEquals("v2.5.0-beta.1", VersionUtils.extractVersionFromFileName("PdfReaderPro-v2.5.0-beta.1.apk"))
+        assertEquals("v2.5.0", VersionUtils.extractVersionFromFileName("PdfReaderPro-v2.5.0.apk"))
     }
     // endregion
 }

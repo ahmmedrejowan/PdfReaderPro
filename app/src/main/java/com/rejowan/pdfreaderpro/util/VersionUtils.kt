@@ -11,19 +11,7 @@ object VersionUtils {
      */
     fun isNewerVersion(newVersion: String, currentVersion: String): Boolean {
         return try {
-            val newParts = parseVersion(newVersion)
-            val currentParts = parseVersion(currentVersion)
-
-            for (i in 0 until maxOf(newParts.size, currentParts.size)) {
-                val newPart = newParts.getOrElse(i) { 0 }
-                val currentPart = currentParts.getOrElse(i) { 0 }
-
-                when {
-                    newPart > currentPart -> return true
-                    newPart < currentPart -> return false
-                }
-            }
-            false
+            compareVersions(newVersion, currentVersion) > 0
         } catch (e: Exception) {
             false
         }
@@ -37,6 +25,7 @@ object VersionUtils {
         return version
             .removePrefix("v")
             .removePrefix("V")
+            .substringBefore("+")
             .split("-")[0]
             .split(".")
             .mapNotNull { it.toIntOrNull() }
@@ -47,11 +36,13 @@ object VersionUtils {
      * Example: "app-release-2.0.0.apk" -> "2.0.0"
      */
     fun extractVersionFromFileName(fileName: String): String {
-        return fileName
-            .removeSuffix(".apk")
-            .substringAfterLast("-")
-            .ifEmpty { "unknown" }
+        val name = fileName.removeSuffix(".apk")
+        // "PdfReaderPro-v2.5.0-beta.1" keeps its pre-release part.
+        FILE_VERSION.find(name)?.let { return it.groupValues[1] }
+        return name.substringAfterLast("-").ifEmpty { "unknown" }
     }
+
+    private val FILE_VERSION = Regex("""(v?\d+(?:\.\d+)+(?:-[0-9A-Za-z.]+)?)$""")
 
     /**
      * Compares two versions and returns:
@@ -72,6 +63,44 @@ object VersionUtils {
                 p1 < p2 -> return -1
             }
         }
-        return 0
+        // Only real versions have a pre-release part; "also-invalid" is not one.
+        if (parts1.isEmpty() || parts2.isEmpty()) return 0
+        return comparePreRelease(preReleaseOf(v1), preReleaseOf(v2))
+    }
+
+    /** The part after "-" in "2.5.0-beta.1", without any "+build" metadata; null for a full release. */
+    private fun preReleaseOf(version: String): String? =
+        version.substringBefore('+').substringAfter('-', missingDelimiterValue = "").ifEmpty { null }
+
+    /**
+     * Semantic versioning's order for the same numbers: a pre-release comes before
+     * the full release, so someone on 2.5.0-beta.1 is offered 2.5.0. Two
+     * pre-releases compare part by part, numbers numerically: beta.2 > beta.1,
+     * rc > beta.
+     */
+    private fun comparePreRelease(a: String?, b: String?): Int {
+        if (a == null || b == null) {
+            return when {
+                a == null && b == null -> 0
+                a == null -> 1
+                else -> -1
+            }
+        }
+        val partsA = a.split('.')
+        val partsB = b.split('.')
+        for (i in 0 until minOf(partsA.size, partsB.size)) {
+            val x = partsA[i]
+            val y = partsB[i]
+            val nx = x.toIntOrNull()
+            val ny = y.toIntOrNull()
+            val result = when {
+                nx != null && ny != null -> nx.compareTo(ny)
+                nx != null -> -1
+                ny != null -> 1
+                else -> x.compareTo(y)
+            }
+            if (result != 0) return result.coerceIn(-1, 1)
+        }
+        return partsA.size.compareTo(partsB.size).coerceIn(-1, 1)
     }
 }
