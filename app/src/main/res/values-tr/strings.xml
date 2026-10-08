@@ -1,0 +1,1679 @@
+<resources>
+    <string name="app_name">PDF Reader Pro</string>
+    <string name="hello_blank_fragment">Merhaba boş parça</string>
+
+
+    <string name="intro_title_1">PDF\'leri Sorunsuz Keşfedin</string>
+    <string name="intro_sub_title_1">Zahmetsiz okuma ile PDF dünyasına dalın</string>
+
+    <string name="intro_title_2">PDF Koleksiyonunuz</string>
+    <string name="intro_sub_title_2">İstediğiniz herhangi bir PDF\'i verimli bir şekilde bulun ve erişin</string>
+
+    <string name="intro_title_3">PDF Deneyiminizi Özelleştirin</string>
+    <string name="intro_sub_title_3">Özelleştirin, arayın ve gelişmiş PDF özelliklerini keşfedin.</string>
+
+    <string name="greeting_with_emoji">%1$s %2$s</string>
+
+    <string name="let_s_start">Başlayalım</string>
+
+    <string name="permission_normal_title">PDF\'leri alalım</string>
+    <string name="permission_allowed_title">Her şey hazır</string>
+    <string name="permission_error_title">Bir hata oluştu</string>
+
+    <string name="permission_normal_sub_title">Depolama erişimine izin verin, biz de istediğiniz gibi erişmenize, aramanıza ve filtrelemenize ve daha fazlasına izin verelim.</string>
+    <string name="permission_allowed_sub_title">Uygulamaya geçelim</string>
+    <string name="permission_error_sub_title">İzni düzgün bir şekilde alamadık. Belki bir şeyler ters gitti.</string>
+
+
+    <string name="permission_below_11_normal_description">Lütfen bir sonraki iletişim kutusunda İzin Ver düğmesine tıklayın.</string>
+    <string name="permission_above_11_normal_description">Lütfen bir sonraki sayfada anahtarı açın</string>
+
+    <string name="permission_error_description">Lütfen bir sonraki sayfada anahtarı açın</string>
+
+
+    <string name="allow_access">Erişime İzin Ver</string>
+    <string name="lets_go">Hadi Gidelim</string>
+    <string name="try_again">Tekrar Dene</string>
+
+    <string name="app_settings">Uygulama Ayarları</string>
+    <string name="how_to_allow_access">Erişime Nasıl İzin Verilir</string>
+
+    <string name="settings">Ayarlar</string>
+    <string name="search_pdf">PDF Ara</string>
+    <string name="overview">PDF Genel Bakış</string>
+    <string name="no_file_image">Dosya Görseli Yok</string>
+    <string name="sorry_no_file">Üzgünüz! Cihazınızda hiç PDF bulamadık.</string>
+    <string name="option_menu">Seçenek Menüsü</string>
+    <string name="files">Dosyalar</string>
+    <string name="folders">Klasörler</string>
+    <string name="sort_by">Sıralama Ölçütü</string>
+    <string name="date">Tarih</string>
+    <string name="name">Ad</string>
+    <string name="size">Boyut</string>
+    <string name="info">Bilgi</string>
+    <string name="share">Paylaş</string>
+    <string name="rename">Yeniden Adlandır</string>
+    <string name="add_to_favorite">Favorilere Ekle</string>
+    <string name="remove_from_recent">Son Kullanılanlardan Kaldır</string>
+    <string name="delete">Sil</string>
+    <string name="do_you_want_to_delete_this_file">Bu dosyayı silmek istiyor musunuz?</string>
+    <string name="cancel">İptal</string>
+    <string name="dismiss">Kapat</string>
+    <string name="size_t">Boyut:</string>
+    <string name="last_modified_t">Son Değiştirilme:</string>
+    <string name="pages_t">Sayfalar:</string>
+    <string name="path_t">Yol:</string>
+    <string name="enter_file_name">Dosya Adını Girin</string>
+    <string name="total_size">Toplam Boyut</string>
+    <string name="no_pdf_found_by_that_name">Bu adla PDF bulunamadı</string>
+    <string name="back_press">Geri Bas</string>
+    <string name="rotate">Döndür</string>
+    <string name="dark_mode">Koyu Mod</string>
+    <string name="brightness">Parlaklık</string>
+    <string name="jump_to_page">Sayfaya Git</string>
+    <string name="scroll_orient">Kaydırma Yönü</string>
+    <string name="jump">Git</string>
+    <string name="enter_page_number">Sayfa Numarasını Girin</string>
+    <string name="remove">Kaldır</string>
+
+    <!-- Common Actions -->
+    <string name="done">Bitti</string>
+    <string name="save">Kaydet</string>
+    <string name="close">Kapat</string>
+    <string name="back">Geri</string>
+    <string name="open">Aç</string>
+    <string name="open_with">Şununla Aç</string>
+    <string name="open_in_app">Uygulamada Aç</string>
+    <string name="clear_all">Tümünü Temizle</string>
+    <string name="show_all">Tümünü Göster</string>
+    <string name="show_less">Daha Az Göster</string>
+    <string name="select_all">Tümünü Seç</string>
+    <string name="deselect_all">Tümünün Seçimini Kaldır</string>
+    <string name="merge">Birleştir</string>
+    <string name="download">İndir</string>
+    <string name="update">Güncelle</string>
+    <string name="skip">Atla</string>
+    <string name="continue_text">Devam Et</string>
+    <string name="confirm">Onayla</string>
+    <string name="apply">Uygula</string>
+    <string name="reset">Sıfırla</string>
+    <string name="preview">Önizleme</string>
+    <string name="change_file">Dosyayı Değiştir</string>
+    <string name="add_files">Dosya Ekle</string>
+    <string name="select_file">Dosya Seç</string>
+    <string name="select_pdf">PDF Seç</string>
+    <string name="select_images">Görsel Seç</string>
+
+    <!-- Sort Options -->
+    <string name="sort_files">Dosyaları Sırala</string>
+    <string name="sort_folders">Klasörleri Sırala</string>
+    <string name="choose_sort_pdfs">PDF\'lerinizi nasıl düzenleyeceğinizi seçin</string>
+    <string name="choose_sort_folders">Klasörlerinizi nasıl düzenleyeceğinizi seçin</string>
+    <string name="sort_by_name">Ada Göre</string>
+    <string name="sort_by_date">Tarihe Göre</string>
+    <string name="sort_by_size">Boyuta Göre</string>
+    <string name="sort_ascending">Artan</string>
+    <string name="sort_descending">Azalan</string>
+
+    <!-- Home Screen -->
+    <string name="good_morning">Günaydın</string>
+    <string name="good_afternoon">İyi öğleden sonralar</string>
+    <string name="good_evening">İyi akşamlar</string>
+    <string name="welcome_to_library">PDF kitaplığınıza hoş geldiniz</string>
+    <string name="all_files">Tüm Dosyalar</string>
+    <string name="favorites">Favoriler</string>
+    <string name="recent">Son Kullanılanlar</string>
+    <string name="no_files">Dosya yok</string>
+    <string name="no_favorites">Henüz favori yok</string>
+    <string name="no_recent">Son kullanılan dosya yok</string>
+    <string name="add_favorites_hint">Burada görmek için PDF\'leri favorilere ekleyin</string>
+    <string name="open_pdf_hint">Burada görmek için bazı PDF\'leri açın</string>
+    <string name="delete_count_files">%d dosya silinsin mi?</string>
+    <string name="delete_warning">Bu işlem geri alınamaz. Dosyalar cihazınızdan kalıcı olarak silinecek.</string>
+
+    <!-- Folders Screen -->
+    <string name="all_folders">Tüm Klasörler</string>
+    <string name="search_folders">Klasörleri ara…</string>
+    <string name="search_folders_hint">Klasörleri ara...</string>
+    <string name="no_folders_found">Klasör bulunamadı</string>
+    <string name="try_different_search">Farklı bir arama terimi deneyin</string>
+    <string name="folder_count">%d klasör</string>
+    <string name="file_count">%d dosya</string>
+    <string name="pdfs">PDF\'ler</string>
+    <string name="search_folders_desc">Klasörleri ara</string>
+    <string name="sort_folders_desc">Klasörleri sırala</string>
+    <string name="clear_search">Aramayı temizle</string>
+    <string name="close_search">Aramayı kapat</string>
+
+    <!-- Search Screen -->
+    <string name="search_your_pdfs">PDF\'lerinizde arayın…</string>
+    <string name="search_your_pdfs_hint">PDF\'lerinizde arayın...</string>
+    <string name="recent_searches">Son Aramalar</string>
+    <string name="search_tips">Arama İpuçları</string>
+    <string name="results_for">\"%s\" için sonuçlar</string>
+    <string name="no_results">Sonuç bulunamadı</string>
+    <string name="clear">Temizle</string>
+    <string name="show_all_count">Tümünü Göster (%d)</string>
+    <string name="file_found">%d dosya bulundu</string>
+    <string name="files_found">%d dosya bulundu</string>
+    <string name="options">Seçenekler</string>
+    <string name="tip_search_filename_title">Dosya adına göre ara</string>
+    <string name="tip_search_filename_desc">Hızlıca bulmak için PDF adının bir kısmını yazın</string>
+    <string name="tip_search_folder_title">Klasöre göre ara</string>
+    <string name="tip_search_folder_desc">İçindeki tüm PDF\'leri bulmak için bir klasör adı girin</string>
+    <string name="tip_partial_matches_title">Kısmi eşleşmeler çalışır</string>
+    <string name="tip_partial_matches_desc">Tam adı bilmenize gerek yok - daha kısa kelimeler deneyin</string>
+
+    <!-- File Info -->
+    <string name="file_information">Dosya Bilgileri</string>
+    <string name="file_name">Dosya Adı</string>
+    <string name="file_path">Dosya Yolu</string>
+    <string name="file_size">Dosya Boyutu</string>
+    <string name="page_count">Sayfa Sayısı</string>
+    <string name="last_modified">Son Değiştirilme</string>
+    <string name="created">Oluşturulma</string>
+
+    <!-- Delete Confirmation -->
+    <string name="delete_file">Dosyayı Sil</string>
+    <string name="delete_files">Dosyaları Sil</string>
+    <string name="action_cannot_be_undone">Bu işlem geri alınamaz</string>
+    <string name="confirm_delete_file">Bu dosyayı kalıcı olarak silmek istediğinizden emin misiniz?</string>
+    <string name="confirm_delete_files">Bu dosyaları kalıcı olarak silmek istediğinizden emin misiniz?</string>
+
+    <!-- Rename -->
+    <string name="rename_file">Dosyayı Yeniden Adlandır</string>
+    <string name="new_name">Yeni Ad</string>
+
+    <!-- Stats -->
+    <string name="library_statistics">Kitaplık İstatistikleri</string>
+    <string name="total_files">Toplam Dosya</string>
+    <string name="favorite_files">Favori Dosyalar</string>
+    <string name="recent_files">Son Kullanılan Dosyalar</string>
+
+    <!-- Settings Screen -->
+    <string name="appearance">Görünüm</string>
+    <string name="reader">Okuyucu</string>
+    <string name="updates">Güncellemeler</string>
+    <string name="about">Hakkında</string>
+    <string name="theme">Tema</string>
+    <string name="theme_light">Açık</string>
+    <string name="theme_dark">Koyu</string>
+    <string name="theme_system">Sistem</string>
+    <string name="dynamic_colors">Dinamik Renkler</string>
+    <string name="scroll_direction">Kaydırma Yönü</string>
+    <string name="vertical">Dikey</string>
+    <string name="horizontal">Yatay</string>
+    <string name="page_layout">Sayfa Düzeni</string>
+    <string name="single_page">Tek Sayfa</string>
+    <string name="two_pages">İki Sayfa</string>
+    <string name="page_alignment">Sayfa Hizalaması</string>
+    <string name="align_left">Sol</string>
+    <string name="align_center">Orta</string>
+    <string name="align_right">Sağ</string>
+    <string name="quick_zoom">Hızlı Yakınlaştırma</string>
+    <string name="fit_width">Genişliğe Sığdır</string>
+    <string name="fit_page">Sayfaya Sığdır</string>
+    <string name="actual_size">Gerçek Boyut</string>
+    <string name="reading_theme">Okuma Teması</string>
+    <string name="keep_screen_on">Ekranı Açık Tut</string>
+    <string name="check_for_updates">Güncellemeleri Kontrol Et</string>
+    <string name="auto_check_updates">Otomatik Güncelleme Kontrolü</string>
+    <string name="version">Sürüm %s</string>
+    <string name="gpl_license">GPL 3.0</string>
+    <string name="adjust_brightness">Ekran parlaklığını ayarla</string>
+    <string name="changelog">Değişiklik Günlüğü</string>
+    <string name="latest">EN SON</string>
+    <string name="privacy_policy">Gizlilik Politikası</string>
+    <string name="your_privacy_protected">Gizliliğiniz Korumalı</string>
+    <string name="last_updated">Son güncelleme: %s</string>
+    <string name="open_source_licenses">Açık Kaynak Lisansları</string>
+    <string name="about_creator">Geliştirici Hakkında</string>
+    <string name="creator_name">K M Rejowan Ahmmed</string>
+    <string name="creator_title">Kıdemli Android Geliştiricisi</string>
+    <string name="creator_description">PDF Reader Pro, ücretsiz, açık kaynaklı ve gizlilik odaklı bir PDF okuma deneyimi sunmak için oluşturuldu. Yer imleri, favoriler, okuma temaları ve özelleştirilebilir ayarlar gibi özelliklerle Android kullanıcıları için eksiksiz bir PDF çözümü olmayı hedefler.</string>
+    <string name="gnu_license">GNU General Public License v3.0</string>
+
+    <!-- Tool categories -->
+    <string name="tool_category_organize">Düzenle</string>
+    <string name="tool_category_edit">Düzenle</string>
+    <string name="tool_category_security">Güvenlik</string>
+    <string name="tool_category_convert">Dönüştür</string>
+
+    <!-- Tools -->
+    <string name="tool_split_pdf">PDF Böl</string>
+    <string name="tool_split_desc">Bir PDF\'i birden fazla dosyaya bölün</string>
+    <string name="tool_compress_desc">Kaliteyi korurken dosya boyutunu azaltın</string>
+    <string name="tool_rotate_pages">Sayfaları Döndür</string>
+    <string name="tool_rotate_desc">Tek tek veya tüm sayfaları döndürün</string>
+    <string name="tool_reorder_pages">Sayfaları Yeniden Sırala</string>
+    <string name="tool_reorder_desc">PDF\'deki sayfa sırasını yeniden düzenleyin</string>
+    <string name="tool_remove_pages">Sayfaları Kaldır</string>
+    <string name="tool_watermark">Filigran Ekle</string>
+    <string name="tool_watermark_desc">Metin veya resim filigranı ekleyin</string>
+    <string name="tool_page_numbers">Sayfa Numaraları Ekle</string>
+    <string name="tool_page_numbers_desc">PDF\'e sayfa numaraları ekleyin</string>
+    <string name="tool_unlock_pdf">PDF Kilidini Aç</string>
+    <string name="tool_unlock_desc">PDF\'ten parolayı kaldırın</string>
+    <string name="tool_pdf_to_image">PDF\'ten Görsele</string>
+    <string name="tool_pdf_to_image_desc">PDF sayfalarını resim dosyaları olarak dışa aktarın</string>
+
+    <!-- Update Sheet -->
+    <string name="update_available">Güncelleme Mevcut</string>
+    <string name="current">Mevcut</string>
+    <string name="new_version">Yeni</string>
+    <string name="whats_new">Yenilikler</string>
+    <string name="skip_version">Bu sürümü atla</string>
+    <string name="download_update">Güncellemeyi İndir</string>
+
+    <!-- Download Progress -->
+    <string name="downloading">İndiriliyor…</string>
+    <string name="download_complete">İndirme Tamamlandı</string>
+    <string name="download_failed">İndirme Başarısız</string>
+    <string name="install">Yükle</string>
+    <string name="retry">Tekrar Dene</string>
+
+    <!-- Reader Screen -->
+    <string name="page_of">Sayfa %1$d / %2$d</string>
+    <string name="bookmarks">Yer İmleri</string>
+    <string name="no_bookmarks">Yer imi yok</string>
+    <string name="add_bookmark">Yer İmi Ekle</string>
+    <string name="remove_bookmark">Yer İmini Kaldır</string>
+    <string name="bookmark_added">Yer imi eklendi</string>
+    <string name="bookmark_removed">Yer imi kaldırıldı</string>
+    <!-- Highlights -->
+    <string name="highlight">Vurgula</string>
+    <string name="highlights">Vurgular</string>
+    <string name="no_highlights">Vurgu yok</string>
+    <string name="no_highlights_hint">Herhangi bir metni seçin ve işaretlemek için Vurgula\'ya dokunun</string>
+    <string name="highlight_color">Vurgu rengi</string>
+    <string name="highlight_color_yellow">Sarı</string>
+    <string name="highlight_color_green">Yeşil</string>
+    <string name="highlight_color_blue">Mavi</string>
+    <string name="highlight_color_pink">Pembe</string>
+    <string name="highlight_color_red">Kırmızı</string>
+    <string name="delete_highlight">Vurguyu sil</string>
+    <string name="highlight_page">Sayfa %d</string>
+    <string name="highlight_count">%d vurgu</string>
+    <string name="highlights_count">%d vurgu</string>
+    <string name="view_manage_highlights">Vurguları görüntüle ve yönet</string>
+    <string name="highlight_in_file">Dosyada kayıtlı</string>
+    <string name="search_highlights">Vurgularda ara</string>
+    <string name="save_with_highlights">Vurgularla birlikte bir kopya kaydet</string>
+    <string name="save_with_highlights_desc">Vurguları yeni bir PDF dosyasına yaz</string>
+    <string name="bake_highlights_title">Vurgularla birlikte bir kopya kaydet</string>
+    <string name="bake_highlights_body">Bu, %d vurgunuzu yeni bir PDF dosyasına yazar, böylece diğer PDF okuyucularda da görünürler. Bu uygulamadaki vurgularınız her iki durumda da korunur.</string>
+    <string name="bake_highlights_caveat">Bir PDF vurgu, metin veya mürekkep ek açıklamaları içerdiğinde, bazı düzenleme özellikleri çalışmayı durdurur. Kopyayı nereye kaydedeceğinizi siz seçeceksiniz.</string>
+    <string name="bake_highlights_confirm_check">Bunun ayrı bir kopya oluşturduğunu anlıyorum</string>
+    <string name="bake_highlights_action">Kopyayı kaydet</string>
+    <string name="bake_highlights_done">%d vurgu kopyaya kaydedildi</string>
+    <string name="bake_highlights_failed">Kopya kaydedilemedi: %s</string>
+    <string name="save_decrypted_copy">Parolasız bir kopya kaydet</string>
+    <string name="save_decrypted_copy_desc">Bu belgenin korumasız bir kopyasını yaz</string>
+    <string name="save_decrypted_done">Parola kaldırılmış bir kopya kaydedildi</string>
+    <string name="save_decrypted_failed">Kopya kaydedilemedi: %s</string>
+    <string name="save_decrypted_no_password">Önce belgeyi parolasıyla açın</string>
+    <string name="sign_tab_draw">Çiz</string>
+    <string name="sign_tab_type">Yaz</string>
+    <string name="sign_tab_image">Görsel</string>
+    <string name="sign_type_placeholder">Adınız</string>
+    <string name="sign_type_label">İmzanızı yazın</string>
+    <string name="sign_pick_image">Bir görsel seçin</string>
+    <string name="sign_clear">Temizle</string>
+    <string name="sign_place">Yerleştir</string>
+    <string name="sign_new">Yeni imza</string>
+    <string name="sign_saved_title">İmza</string>
+    <string name="sign_section_placed">Bu belgede</string>
+    <string name="sign_section_saved">İmzalarınız</string>
+    <string name="sign_placed_on_page">Sayfa %d</string>
+    <string name="sign_remove_placed">Kaldır</string>
+    <string name="sign_save_into_file">Bu dosyaya kaydet</string>
+    <string name="sign_cannot_save_into_file">Bu belge kopya olarak açıldı, bu nedenle yalnızca yeni bir dosya olarak kaydedilebilir.</string>
+    <string name="sign_save_as_copy">Kopya olarak kaydet</string>
+    <string name="sign_discard_all">Tümünü kaldır</string>
+    <string name="sign_nothing_placed">Henüz hiçbir şey yerleştirilmedi. Aşağıdan bir imza seçin veya yeni bir tane oluşturun.</string>
+    <string name="sign_saved_empty">İmzanızı çizin, yazın veya bir görselini ekleyin</string>
+    <string name="sign_remember">Bu imzayı hatırla</string>
+    <string name="sign_delete">Sil</string>
+    <string name="sign_placed">İmza yerleştirildi. Taşımak için sürükleyin veya başka bir tane yerleştirin.</string>
+    <string name="sign_place_failed">İmza yerleştirilemedi</string>
+    <string name="sign_document">İmza</string>
+    <string name="sign_document_desc">İmzaları ekle, yönet ve kaydet</string>
+    <string name="sign_done">İmzalı bir kopya kaydedildi</string>
+    <string name="sign_failed">İmzalı kopya kaydedilemedi: %s</string>
+    <string name="sign_saving">İmzalı kopya kaydediliyor…</string>
+    <string name="sign_save">Kopyayı kaydet</string>
+    <string name="sign_discard">Vazgeç</string>
+    <string name="sign_save_here">Kaydet</string>
+    <string name="sign_save_confirm_title">Bu belgeye kaydedilsin mi?</string>
+    <string name="sign_save_confirm_body">İmzalar %s dosyasına yazılacak. Bu geri alınamaz.</string>
+    <string name="sign_save_confirm_action">Kaydet</string>
+    <string name="sign_save_confirm_cancel">İptal</string>
+    <string name="sign_cannot_save_here">Bu belge kopya olarak açıldı, bu nedenle yalnızca yeni bir dosya olarak kaydedilebilir</string>
+    <string name="sign_saved_in_place">İmzalar bu dosyaya yazıldı</string>
+    <string name="sign_cancel">İptal</string>
+    <string name="tool_sign_pdf">PDF İmzala</string>
+    <string name="tool_sign_pdf_desc">El yazısı imzanızı ekleyin</string>
+    <string name="print_preparing">Sayfalar yazdırmaya hazırlanıyor…</string>
+    <string name="print_preparing_percent">Sayfalar yazdırmaya hazırlanıyor… %1$d%%</string>
+    <string name="bake_highlights_none">Kaydedilecek vurgu yok</string>
+    <string name="next_highlight">Sonraki vurgu</string>
+    <string name="previous_highlight">Önceki vurgu</string>
+    <string name="close_highlight_nav">Vurgular arasında geçiş yapmayı durdur</string>
+    <string name="no_matching_highlights">Eşleşme yok</string>
+    <string name="no_matching_highlights_hint">Farklı bir arama veya renk deneyin</string>
+
+    <string name="lock_horizontal_scroll">Yatay kaydırmayı kilitle</string>
+    <string name="lock_horizontal_scroll_desc">Yakınlaştırıldığında sayfayı olduğu yerde tut</string>
+    <string name="lock_horizontal_scroll_unavailable">Yalnızca dikey kaydırma ile kullanılabilir</string>
+
+    <string name="table_of_contents">İçindekiler</string>
+    <string name="no_table_of_contents">İçindekiler yok</string>
+    <string name="attachments">Ekler</string>
+    <string name="no_attachments">Ek yok</string>
+    <string name="zoom">Yakınlaştır</string>
+    <string name="auto_scroll">Otomatik Kaydırma</string>
+    <string name="auto_scroll_speed">Hız</string>
+    <string name="print">Yazdır</string>
+    <string name="pdf_info">PDF Bilgisi</string>
+    <string name="more_options">Daha Fazla Seçenek</string>
+    <string name="view_mode">Görünüm Modu</string>
+    <string name="display">Ekran</string>
+    <string name="reading_tools">Okuma Araçları</string>
+    <string name="document">Belge</string>
+    <string name="find_in_document">Belgede Bul</string>
+    <string name="search_text">Metin ara…</string>
+    <string name="no_matches">Eşleşme yok</string>
+    <string name="match_count">%1$d / %2$d</string>
+
+    <!-- Remove Favorite -->
+    <string name="remove_favorite">Favoriyi Kaldır</string>
+    <string name="remove_from_favorites">Favorilerden Kaldır</string>
+    <string name="confirm_remove_favorite">Bu dosyayı favorilerden kaldırmak istediğinizden emin misiniz?</string>
+
+    <!-- Exit Confirmation -->
+    <string name="exit_app">Uygulamadan Çık</string>
+    <string name="confirm_exit">Çıkmak istediğinizden emin misiniz?</string>
+    <string name="exit">Çık</string>
+
+    <!-- Tools Screen -->
+    <string name="pdf_tools">PDF Araçları</string>
+    <string name="merge_pdfs">PDF\'leri Birleştir</string>
+    <string name="split_pdf">PDF Böl</string>
+    <string name="compress_pdf">PDF Sıkıştır</string>
+    <string name="rotate_pdf">PDF Döndür</string>
+    <string name="lock_pdf">PDF Kilitle</string>
+    <string name="unlock_pdf">PDF Kilidini Aç</string>
+    <string name="add_watermark">Filigran Ekle</string>
+    <string name="remove_pages">Sayfaları Kaldır</string>
+    <string name="reorder_pages">Sayfaları Yeniden Sırala</string>
+    <string name="add_page_numbers">Sayfa Numaraları Ekle</string>
+    <string name="images_to_pdf">Görsellerden PDF\'e</string>
+    <string name="pdf_to_images">PDF\'ten Görsellere</string>
+
+    <!-- Tool Common -->
+    <string name="select_source_file">Başlamak için bir PDF dosyası seçin</string>
+    <string name="processing">İşleniyor…</string>
+    <string name="success">Başarılı!</string>
+    <string name="error_occurred">Bir hata oluştu</string>
+    <string name="output_file_name">Çıktı Dosya Adı</string>
+    <string name="overwrite_original">Orijinalin Üzerine Yaz</string>
+    <string name="pages">Sayfalar</string>
+    <string name="all_pages">Tüm Sayfalar</string>
+    <string name="custom_pages">Özel Sayfalar</string>
+    <string name="page_range">Sayfa Aralığı</string>
+    <string name="page_range_hint">örn., 1-3, 5, 7-10</string>
+    <string name="invalid_page_range">Geçersiz sayfa aralığı</string>
+
+    <!-- Merge -->
+    <string name="add_pdfs">Birleştirmek için PDF ekle</string>
+    <string name="drag_to_reorder">Yeniden sıralamak için sürükleyin</string>
+    <string name="merge_files">Dosyaları Birleştir</string>
+    <string name="merge_more">Daha Fazla Birleştir</string>
+    <string name="merged_successfully">PDF\'ler başarıyla birleştirildi</string>
+
+    <!-- Split -->
+    <string name="split_mode">Bölme Modu</string>
+    <string name="split_by_pages">Sayfalara Göre Böl</string>
+    <string name="split_by_range">Aralığa Göre Böl</string>
+    <string name="extract_pages">Sayfaları Çıkar</string>
+    <string name="pages_per_file">Dosya Başına Sayfa</string>
+    <string name="split">Böl</string>
+    <string name="split_more">Daha Fazla Böl</string>
+    <string name="split_successfully">PDF başarıyla bölündü</string>
+
+    <!-- Compress -->
+    <string name="compression_level">Sıkıştırma Seviyesi</string>
+    <string name="low">Düşük</string>
+    <string name="medium">Orta</string>
+    <string name="high">Yüksek</string>
+    <string name="estimated_size">Tahmini boyut: %s</string>
+    <string name="compress">Sıkıştır</string>
+    <string name="compress_more">Daha Fazla Sıkıştır</string>
+    <string name="compressed_successfully">PDF başarıyla sıkıştırıldı</string>
+    <string name="size_reduced">Boyut Azaltıldı</string>
+    <string name="compress_low_label">Düşük</string>
+    <string name="compress_low_desc">Minimal sıkıştırma, en iyi kalite</string>
+    <string name="compress_medium_label">Orta</string>
+    <string name="compress_medium_desc">Dengeli sıkıştırma ve kalite</string>
+    <string name="compress_high_label">Yüksek</string>
+    <string name="compress_high_desc">Maksimum sıkıştırma, daha küçük dosya</string>
+
+    <!-- Compress Screen -->
+    <string name="compress_page_info">%1$d sayfa • %2$s</string>
+    <string name="compress_share_pdf">PDF Paylaş</string>
+    <string name="compress_empty_title">PDF Dosyasını Sıkıştır</string>
+    <string name="compress_empty_desc">Kaliteyi korurken dosya boyutunu azaltmak için bir PDF dosyası seçin</string>
+    <string name="already_optimized">Zaten optimize edilmiş</string>
+    <string name="limited_potential">Sınırlı potansiyel</string>
+    <string name="size_save_format">(%1$s tasarruf • %2$d%%)</string>
+    <string name="contains_images_hint">Görseller içeriyor • İyi sıkıştırma potansiyeli</string>
+    <string name="mostly_text_hint">Çoğunlukla metin içeriği</string>
+    <string name="compress_pdf_btn">PDF Sıkıştır</string>
+    <string name="compression_complete">Sıkıştırma Tamamlandı!</string>
+    <string name="original_size">Orijinal Boyut</string>
+    <string name="compressed_size">Sıkıştırılmış Boyut</string>
+    <string name="compressed_size_reduced">Boyut Azaltıldı</string>
+    <string name="saved_format">(%1$s tasarruf edildi)</string>
+    <string name="pages_count_format">%1$d sayfa</string>
+
+    <!-- Rotate -->
+    <string name="rotation">Döndürme</string>
+    <string name="rotate_left">Sola Döndür</string>
+    <string name="rotate_right">Sağa Döndür</string>
+    <string name="rotate_180">180° Döndür</string>
+    <string name="rotate_90_right">90° Sağa</string>
+    <string name="rotate_90_left">90° Sola</string>
+    <string name="apply_to_all">Tüm Sayfalara Uygula</string>
+    <string name="rotate_more">Daha Fazla Döndür</string>
+    <string name="rotated_successfully">PDF başarıyla döndürüldü</string>
+
+    <!-- Lock/Unlock -->
+    <string name="password">Parola</string>
+    <string name="enter_password">Parolayı Girin</string>
+    <string name="user_password">Kullanıcı Parolası</string>
+    <string name="owner_password">Sahip Parolası</string>
+    <string name="permissions">İzinler</string>
+    <string name="allow_printing">Yazdırmaya İzin Ver</string>
+    <string name="allow_copying">Kopyalamaya İzin Ver</string>
+    <string name="allow_modifying">Değiştirmeye İzin Ver</string>
+    <string name="allow_annotations">Ek Açıklamalara İzin Ver</string>
+    <string name="lock">Kilitle</string>
+    <string name="unlock">Kilidi Aç</string>
+    <string name="lock_more">Daha Fazla Kilitle</string>
+    <string name="unlock_more">Daha Fazla Kilidini Aç</string>
+    <string name="locked_successfully">PDF başarıyla kilitlendi</string>
+    <string name="unlocked_successfully">PDF kilidi başarıyla açıldı</string>
+    <string name="incorrect_password">Yanlış parola</string>
+    <string name="pdf_not_protected">Bu PDF parola ile korunmuyor</string>
+    <string name="pdf_protected">Bu PDF parola ile korunuyor</string>
+
+    <!-- Watermark -->
+    <string name="watermark">Filigran</string>
+    <string name="text_watermark">Metin Filigranı</string>
+    <string name="image_watermark">Görsel Filigranı</string>
+    <string name="watermark_text">Filigran Metni</string>
+    <string name="select_image">Görsel Seç</string>
+    <string name="position">Konum</string>
+    <string name="opacity">Opaklık</string>
+    <string name="font_size">Yazı Tipi Boyutu</string>
+    <string name="color">Renk</string>
+    <string name="add">Ekle</string>
+    <string name="watermark_more">Daha Fazla Ekle</string>
+    <string name="watermark_empty_title">Filigran Ekle</string>
+    <string name="watermark_empty_desc">PDF sayfalarınıza metin veya görsel filigranı ekleyin</string>
+    <string name="watermark_sample">Örnek</string>
+    <string name="tap_to_select_image">Görsel seçmek için dokunun</string>
+    <string name="custom_watermark_color">Özel filigran rengi</string>
+    <string name="position_center">Orta</string>
+    <string name="position_tiled">Döşemeli</string>
+    <string name="watermark_added">Filigran Eklendi!</string>
+    <string name="applied_to_pages">%1$d sayfaya uygulandı</string>
+    <string name="pages_size_dash_format">%1$d sayfa - %2$s</string>
+
+    <!-- Remove Pages -->
+    <string name="select_pages_to_remove">Kaldırılacak sayfaları seçin</string>
+    <string name="remove_selected">Seçilenleri Kaldır</string>
+    <string name="remove_more">Daha Fazla Kaldır</string>
+
+    <!-- Reorder -->
+    <string name="drag_to_reorder_pages">Yeniden sıralamak için sayfaları sürükleyin</string>
+    <string name="reorder">Yeniden Sırala</string>
+    <string name="reorder_more">Daha Fazla Yeniden Sırala</string>
+    <string name="reordered_successfully">Sayfalar başarıyla yeniden sıralandı</string>
+
+    <!-- Page Numbers -->
+    <string name="number_format">Numara Formatı</string>
+    <string name="start_number">Başlangıç Numarası</string>
+    <string name="number_position">Konum</string>
+    <string name="add_numbers">Numara Ekle</string>
+    <string name="numbers_added">Sayfa numaraları başarıyla eklendi</string>
+    <string name="number_more">Daha Fazla Numaralandır</string>
+    <string name="tool_add_page_numbers_desc">PDF belgenize sayfa numaraları ekleyin</string>
+    <string name="section_format">FORMAT</string>
+    <string name="section_margins">KENAR BOŞLUKLARI</string>
+    <string name="section_apply_to_pages">SAYFALARA UYGULA</string>
+    <string name="horizontal_margin">Yatay Kenar Boşluğu</string>
+    <string name="vertical_margin">Dikey Kenar Boşluğu</string>
+
+    <!-- Formats -->
+    <string name="format_number_only">Yalnızca numara</string>
+    <string name="format_number_only_example">1</string>
+    <string name="format_page_x">Sayfa X</string>
+    <string name="format_page_x_example">Sayfa 1</string>
+    <string name="format_x_of_y">X / Y</string>
+    <string name="format_x_of_y_example">1 / 10</string>
+    <string name="format_dash_x">- X -</string>
+    <string name="format_dash_x_example">- 1 -</string>
+    <string name="format_custom">Özel</string>
+    <string name="format_custom_example">S.1</string>
+
+    <!-- Preview -->
+    <string name="preview_info_format">%1$s • %2$dpt • %3$s</string>
+
+    <!-- Color picker -->
+    <string name="pick_color">Renk Seç</string>
+    <string name="page_number_color">Sayfa numarası rengi</string>
+
+    <!-- Page selection -->
+    <string name="page_numbers_selection_all">Tümü (%1$d)</string>
+    <string name="page_selection_odd">Tek</string>
+    <string name="page_selection_even">Çift</string>
+    <string name="page_selection_skip_first">İlkini Atla</string>
+    <string name="title_page_selection_custom">Özel</string>
+
+    <!-- Success -->
+    <string name="numbered_pages_format">%1$d / %2$d sayfa numaralandırıldı</string>
+    <string name="adding_numbers">Numaralar ekleniyor…</string>
+
+    <!-- Images to PDF -->
+    <string name="add_images">Dönüştürmek için görsel ekleyin</string>
+    <string name="image_quality">Görsel Kalitesi</string>
+    <string name="convert">Dönüştür</string>
+    <string name="convert_more">Daha Fazla Dönüştür</string>
+    <string name="converted_successfully">Görseller PDF\'e dönüştürüldü</string>
+
+    <!-- PDF to Images -->
+    <string name="output_format">Çıktı Formatı</string>
+    <string name="png">PNG</string>
+    <string name="jpg">JPG</string>
+    <string name="image_resolution">Çözünürlük</string>
+    <string name="export">Dışa Aktar</string>
+    <string name="export_more">Daha Fazla Dışa Aktar</string>
+    <string name="exported_successfully">PDF görsel olarak dışa aktarıldı</string>
+    <string name="share_all">Tümünü Paylaş</string>
+    <string name="view_images">Görselleri Görüntüle</string>
+    <string name="images_saved_to">Görseller şuraya kaydedildi: %s</string>
+    <string name="share_images">Görselleri Paylaş</string>
+    <string name="share_image">Görseli Paylaş</string>
+    <string name="view_image">Görseli Görüntüle</string>
+
+    <!-- Error Messages -->
+    <string name="error_loading_pdf">PDF yüklenirken hata oluştu</string>
+    <string name="error_file_not_found">Dosya bulunamadı</string>
+    <string name="error_permission_denied">İzin reddedildi</string>
+    <string name="error_invalid_pdf">Geçersiz PDF dosyası</string>
+    <string name="error_corrupted_pdf">PDF dosyası bozuk</string>
+    <string name="error_password_required">Parola gerekli</string>
+    <string name="error_generic">Bir şeyler ters gitti</string>
+    <string name="error_wrong_password">Yanlış parola</string>
+    <string name="error_storage_full">Depolama dolu</string>
+    <string name="error_network">Ağ hatası</string>
+    <string name="error_timeout">İşlem zaman aşımına uğradı</string>
+    <string name="error_out_of_memory">Yeterli bellek yok</string>
+    <string name="error_failed_load_pdf">PDF dosyası yüklenemedi</string>
+    <string name="error_failed_load_pdf_with_message">PDF yüklenemedi: %1$s</string>
+    <string name="error_select_pdf_first">Lütfen önce bir PDF dosyası seçin</string>
+    <string name="error_enter_output_name">Lütfen bir çıktı dosyası adı girin</string>
+    <string name="error_failed_replace_original">Orijinal dosya değiştirilemedi</string>
+    <string name="error_compression_failed">Sıkıştırma başarısız oldu</string>
+    <string name="error_add_one_image">Lütfen en az bir görsel ekleyin</string>
+    <string name="error_convert_images_failed">Görseller PDF\'e dönüştürülemedi</string>
+    <string name="error_owner_password_required">Sahip parolası gerekli</string>
+    <string name="error_owner_password_min_length">Sahip parolası en az 4 karakter olmalıdır</string>
+    <string name="error_user_password_min_length">Kullanıcı parolası en az 4 karakter olmalıdır</string>
+    <string name="error_lock_failed">PDF kilitlenemedi</string>
+    <string name="error_skipped_password_protected">Parola korumalı atlandı: %1$s</string>
+    <string name="error_select_two_files">En az 2 PDF dosyası seçin</string>
+    <string name="error_no_pages_selected">Şunun için sayfa seçilmedi: %1$s</string>
+    <string name="error_merge_failed">Birleştirme başarısız oldu</string>
+    <string name="error_add_page_numbers_failed">Sayfa numaraları eklenemedi</string>
+    <string name="error_export_images_failed">Görseller dışa aktarılamadı</string>
+    <string name="error_select_at_least_one_page">Lütfen kaldırmak için en az bir sayfa seçin</string>
+    <string name="error_cannot_remove_all_pages">PDF\'ten tüm sayfalar kaldırılamaz</string>
+    <string name="error_remove_pages_failed">Sayfalar kaldırılamadı</string>
+    <string name="error_no_changes_made">Sayfa sırasında değişiklik yapılmadı</string>
+    <string name="error_reorder_failed">Yeniden sıralama başarısız oldu</string>
+    <string name="error_select_at_least_one_page_rotate">Lütfen döndürmek için en az bir sayfa seçin</string>
+    <string name="error_rotation_failed">Döndürme başarısız oldu</string>
+    <string name="error_failed_load_file">Dosya yüklenemedi</string>
+    <string name="error_invalid_format">Geçersiz format: %1$s</string>
+    <string name="error_invalid_range">Geçersiz aralık: %1$s</string>
+    <string name="error_invalid_page">Geçersiz sayfa: %1$s</string>
+    <string name="error_page_at_least_one">Sayfa en az 1 olmalıdır</string>
+    <string name="error_start_page_at_least_one">Başlangıç sayfası en az 1 olmalıdır</string>
+    <string name="error_end_page_at_least_one">Bitiş sayfası en az 1 olmalıdır</string>
+    <string name="error_page_exceeds_max">Sayfa %1$d maksimumu (%2$d) aşıyor</string>
+    <string name="error_start_page_exceeds_max">Başlangıç sayfası %1$d maksimumu (%2$d) aşıyor</string>
+    <string name="error_end_page_exceeds_max">Bitiş sayfası %1$d maksimumu (%2$d) aşıyor</string>
+    <string name="error_start_greater_than_end">Geçersiz aralık: başlangıç &gt; bitiş, %1$s içinde</string>
+    <string name="error_no_pdf_selected">PDF dosyası seçilmedi</string>
+    <string name="error_enter_output_prefix">Bir çıktı öneki girin</string>
+    <string name="error_enter_page_ranges">Sayfa aralıklarını girin</string>
+    <string name="error_enter_pages_to_extract">Çıkarılacak sayfaları girin</string>
+    <string name="error_split_failed">Bölme başarısız oldu</string>
+    <string name="error_invalid_page_ranges">Geçersiz sayfa aralıkları</string>
+    <string name="error_invalid_page_selection">Geçersiz sayfa seçimi</string>
+    <string name="error_not_password_protected">Bu PDF parola ile korunmuyor</string>
+    <string name="error_enter_password">Lütfen parolayı girin</string>
+    <string name="error_unlock_failed">PDF kilidi açılamadı</string>
+    <string name="error_failed_load_image">Görsel yüklenemedi</string>
+    <string name="error_enter_watermark_text">Lütfen filigran metnini girin</string>
+    <string name="error_select_watermark_image">Lütfen bir filigran görseli seçin</string>
+    <string name="error_add_watermark_failed">Filigran eklenemedi</string>
+
+    <!-- Error Recovery Hints -->
+    <string name="error_hint_corrupted_pdf">Dosya hasarlı olabilir. Tekrar indirmeyi deneyin.</string>
+    <string name="error_hint_invalid_pdf">Bu dosya geçerli bir PDF belgesi değil.</string>
+    <string name="error_hint_password_required">Bu PDF\'i açmak için parolayı girin.</string>
+    <string name="error_hint_wrong_password">Lütfen parolanızı kontrol edin ve tekrar deneyin.</string>
+    <string name="error_hint_storage_full">Kullanılmayan dosya veya uygulamaları silerek yer açın.</string>
+    <string name="error_hint_permission_denied">Ayarlardan depolama iznini verin.</string>
+    <string name="error_hint_network">İnternet bağlantınızı kontrol edin ve tekrar deneyin.</string>
+    <string name="error_hint_timeout">İşlem çok uzun sürdü. Tekrar deneyin.</string>
+    <string name="error_hint_out_of_memory">Diğer uygulamaları kapatın ve daha küçük bir dosyayla tekrar deneyin.</string>
+    <string name="error_hint_generic">Lütfen tekrar deneyin. Sorun devam ederse uygulamayı yeniden başlatın.</string>
+
+    <!-- PDF Thumbnail -->
+    <string name="pdf">PDF</string>
+    <string name="pdf_thumbnail">PDF küçük resmi</string>
+    <string name="loading">Yükleniyor…</string>
+
+    <!-- Misc -->
+    <string name="pdf_reader_pro">PDF Reader Pro</string>
+    <string name="no_pdf_data">PDF verisi alınmadı</string>
+
+    <!-- Content Descriptions - Accessibility -->
+    <string name="sort_files_desc">Dosyaları sırala</string>
+    <string name="library_stats_desc">Kitaplık istatistikleri</string>
+    <string name="grid_view">Izgara görünümü</string>
+    <string name="list_view">Liste görünümü</string>
+    <string name="more">Daha fazla</string>
+    <string name="favorite">Favori</string>
+
+    <!-- Content Descriptions - Navigation -->
+    <string name="cd_navigate_back">Geri git</string>
+    <string name="cd_close">Kapat</string>
+    <string name="cd_dismiss">Kapat</string>
+    <string name="cd_menu">Menü</string>
+    <string name="cd_options">Seçenekler</string>
+    <string name="cd_expand">Genişlet</string>
+    <string name="cd_collapse">Daralt</string>
+
+    <!-- Content Descriptions - Actions -->
+    <string name="cd_add">Ekle</string>
+    <string name="cd_remove">Kaldır</string>
+    <string name="cd_delete">Sil</string>
+    <string name="cd_edit">Düzenle</string>
+    <string name="cd_save">Kaydet</string>
+    <string name="cd_share">Paylaş</string>
+    <string name="cd_download">İndir</string>
+    <string name="cd_upload">Yükle</string>
+    <string name="cd_refresh">Yenile</string>
+    <string name="cd_search">Ara</string>
+    <string name="cd_clear_search">Aramayı temizle</string>
+    <string name="cd_close_search">Aramayı kapat</string>
+    <string name="cd_previous_result">Önceki sonuç</string>
+    <string name="cd_next_result">Sonraki sonuç</string>
+    <string name="cd_select">Seç</string>
+    <string name="cd_deselect">Seçimi kaldır</string>
+    <string name="cd_select_all">Tümünü seç</string>
+    <string name="cd_deselect_all">Tümünün seçimini kaldır</string>
+    <string name="cd_reorder">Yeniden sırala</string>
+    <string name="cd_drag_handle">Yeniden sıralamak için sürükleyin</string>
+    <string name="cd_copy">Kopyala</string>
+    <string name="cd_move">Taşı</string>
+    <string name="cd_rename">Yeniden adlandır</string>
+    <string name="cd_info">Bilgi</string>
+    <string name="cd_settings">Ayarlar</string>
+    <string name="cd_print">Yazdır</string>
+    <string name="cd_open">Aç</string>
+    <string name="cd_open_with">Şununla aç</string>
+    <string name="cd_retry">Tekrar dene</string>
+    <string name="cd_back">Geri</string>
+    <string name="cd_more_options">Daha fazla seçenek</string>
+
+    <!-- Content Descriptions - PDF Reader -->
+    <string name="cd_zoom_in">Yakınlaştır</string>
+    <string name="cd_zoom_out">Uzaklaştır</string>
+    <string name="cd_fit_width">Genişliğe sığdır</string>
+    <string name="cd_fit_page">Sayfaya sığdır</string>
+    <string name="cd_next_page">Sonraki sayfa</string>
+    <string name="cd_previous_page">Önceki sayfa</string>
+    <string name="cd_first_page">İlk sayfaya git</string>
+    <string name="cd_last_page">Son sayfaya git</string>
+    <string name="cd_go_to_page">Sayfaya git</string>
+    <string name="cd_bookmark">Yer imi</string>
+    <string name="cd_add_bookmark">Yer imi ekle</string>
+    <string name="cd_remove_bookmark">Yer imini kaldır</string>
+    <string name="cd_table_of_contents">İçindekiler</string>
+    <string name="cd_rotate_left">Sola döndür</string>
+    <string name="cd_rotate_right">Sağa döndür</string>
+    <string name="cd_toggle_night_mode">Gece modunu değiştir</string>
+    <string name="cd_auto_scroll">Otomatik kaydırma</string>
+    <string name="cd_increase_speed">Hızı artır</string>
+    <string name="cd_decrease_speed">Hızı azalt</string>
+    <string name="cd_play">Oynat</string>
+    <string name="cd_pause">Duraklat</string>
+    <string name="cd_stop">Durdur</string>
+
+    <!-- Content Descriptions - Files -->
+    <string name="cd_pdf_file">PDF dosyası</string>
+    <string name="cd_folder">Klasör</string>
+    <string name="cd_image">Görsel</string>
+    <string name="cd_file_thumbnail">Dosya küçük resmi</string>
+    <string name="cd_add_files">Dosya ekle</string>
+    <string name="cd_select_files">Dosya seç</string>
+    <string name="cd_file_options">Dosya seçenekleri</string>
+    <string name="cd_folder_options">Klasör seçenekleri</string>
+    <string name="cd_selected">Seçildi</string>
+    <string name="cd_not_selected">Seçilmedi</string>
+
+    <!-- Content Descriptions - Status -->
+    <string name="cd_loading">Yükleniyor</string>
+    <string name="cd_success">Başarılı</string>
+    <string name="cd_error">Hata</string>
+    <string name="cd_warning">Uyarı</string>
+    <string name="cd_processing">İşleniyor</string>
+    <string name="cd_completed">Tamamlandı</string>
+    <string name="cd_progress">İlerleme göstergesi</string>
+    <string name="cd_checkbox">Onay kutusu</string>
+    <string name="cd_checked">İşaretli</string>
+    <string name="cd_unchecked">İşaretsiz</string>
+    <string name="cd_toggle">Değiştir</string>
+    <string name="cd_enabled">Etkin</string>
+    <string name="cd_disabled">Devre dışı</string>
+
+    <!-- Content Descriptions - PDF Tools -->
+    <string name="cd_merge_pdfs">PDF\'leri birleştir</string>
+    <string name="cd_split_pdf">PDF böl</string>
+    <string name="cd_compress_pdf">PDF sıkıştır</string>
+    <string name="cd_rotate_pdf">PDF döndür</string>
+    <string name="cd_reorder_pages">Sayfaları yeniden sırala</string>
+    <string name="cd_remove_pages">Sayfaları kaldır</string>
+    <string name="cd_add_watermark">Filigran ekle</string>
+    <string name="cd_add_page_numbers">Sayfa numaraları ekle</string>
+    <string name="cd_lock_pdf">PDF kilitle</string>
+    <string name="cd_unlock_pdf">PDF kilidini aç</string>
+    <string name="cd_pdf_to_image">PDF\'i görsele dönüştür</string>
+    <string name="cd_image_to_pdf">Görseli PDF\'e dönüştür</string>
+    <string name="cd_page_preview">Sayfa önizlemesi</string>
+    <string name="cd_page_number">Sayfa %1$d</string>
+    <string name="cd_page_selected">Sayfa %1$d seçildi</string>
+    <string name="cd_page_not_selected">Sayfa %1$d seçilmedi</string>
+
+    <!-- Content Descriptions - UI Elements -->
+    <string name="cd_app_logo">PDF Reader Pro logosu</string>
+    <string name="cd_decorative">Dekoratif görsel</string>
+    <string name="cd_illustration">İllüstrasyon</string>
+    <string name="cd_sort_ascending">Artan sırala</string>
+    <string name="cd_sort_descending">Azalan sırala</string>
+    <string name="cd_current_page">Geçerli sayfa</string>
+    <string name="cd_password_visibility">Parola görünürlüğünü değiştir</string>
+    <string name="cd_color_picker">Renk seçici</string>
+    <string name="cd_slider">Kaydırıcı</string>
+    <string name="cd_dropdown">Açılır menü</string>
+
+    <!-- Navigation -->
+    <string name="home">Ana Sayfa</string>
+    <string name="tools">Araçlar</string>
+
+    <!-- Empty States -->
+    <string name="no_pdfs_title">Burada henüz PDF yok</string>
+    <string name="no_pdfs_message">Cihazınızda hiç PDF dosyası bulamadık. Tekrar taramayı deneyin veya başlamak için bazı PDF\'ler ekleyin!</string>
+    <string name="scan_for_pdfs">PDF\'leri Tara</string>
+    <string name="recent_journey_title">Okuma yolculuğunuz burada başlıyor</string>
+    <string name="recent_journey_message">Açtığınız PDF\'ler hızlı erişim için burada görünecek. Dosyalarınızı keşfetmeye başlayın!</string>
+    <string name="browse_files">Dosyalara Göz At</string>
+    <string name="no_favorites_title">Henüz favori yok</string>
+    <string name="no_favorites_message">Daha sonra kolayca erişmek için buraya kaydetmek üzere herhangi bir PDF\'teki kalp simgesine dokunun.</string>
+    <string name="no_matches_title">Eşleşme bulunamadı</string>
+    <string name="no_matches_message">\"%s\" için hiçbir şey bulamadık. Farklı bir arama terimi deneyin.</string>
+    <string name="no_folders_title">Henüz klasör yok</string>
+    <string name="no_folders_message">Dosyalarınız tarandığında PDF klasörleri burada görünecek. Onları bulalım!</string>
+    <string name="permission_title">İzninize ihtiyacımız var</string>
+    <string name="permission_message">PDF dosyalarınızı burada göstermek için lütfen depolama alanınıza erişime izin verin</string>
+
+    <!-- Stats Sheet -->
+    <string name="library_stats">Kitaplık İstatistikleri</string>
+    <string name="library_stats_subtitle">PDF koleksiyonunuz bir bakışta</string>
+    <string name="total_pdfs">Toplam PDF</string>
+    <string name="files_in_library">kitaplığınızdaki dosyalar</string>
+    <string name="storage_used">Kullanılan Depolama</string>
+    <string name="total_file_size">toplam dosya boyutu</string>
+    <string name="percent_of_library">kitaplığınızın %d%%\'i</string>
+    <string name="no_files_yet">henüz dosya yok</string>
+    <string name="recently_opened">son açılan</string>
+
+    <!-- Exit Confirmation -->
+    <string name="stay">Kal</string>
+    <string name="exit_confirm_message">Uygulamayı kapatmak istediğinizden emin misiniz?</string>
+
+    <!-- Rename Sheet -->
+    <string name="file_name_label">Dosya adı</string>
+    <string name="invalid_file_name">Geçersiz dosya adı</string>
+    <string name="pdf_extension_hint">.pdf uzantısı otomatik olarak eklenecek</string>
+
+    <!-- File Options -->
+    <string name="quick_actions">Hızlı İşlemler</string>
+    <string name="add_to_favorites">Favorilere Ekle</string>
+    <string name="remove_from_favorites_action">Favorilerden Kaldır</string>
+    <string name="add_favorites_desc">Hızlı erişim için favorilerinize kaydedin</string>
+    <string name="remove_favorites_desc">Yıldızlı koleksiyonunuzdan kaldırın</string>
+    <string name="remove_from_recents">Son Kullanılanlardan Kaldır</string>
+    <string name="remove_recents_desc">Son geçmişten temizle</string>
+    <string name="share_pdf">Paylaş</string>
+    <string name="share_pdf_desc">Bu PDF\'i diğer uygulamalara gönder</string>
+    <string name="rename_action">Yeniden Adlandır</string>
+    <string name="rename_desc">Dosya adını değiştir</string>
+    <string name="file_info">Dosya Bilgisi</string>
+    <string name="file_info_desc">Dosya ayrıntılarını ve özelliklerini görüntüle</string>
+    <string name="delete_action">Sil</string>
+    <string name="delete_desc">Bu dosyayı kalıcı olarak kaldır</string>
+    <string name="pages_count">%d sayfa</string>
+    <string name="cd_toggle_scroll_direction">Kaydırma yönünü değiştir</string>
+    <string name="cd_fit_to_screen">Ekrana sığdır</string>
+
+    <!-- Folder Options -->
+    <string name="folder_options">Klasör Seçenekleri</string>
+    <string name="pdf_files">PDF Dosyaları</string>
+    <string name="file_singular">%d dosya</string>
+    <string name="files_plural">%d dosya</string>
+    <string name="location">Konum</string>
+    <string name="actions">İşlemler</string>
+    <string name="open_folder">Klasörü Aç</string>
+    <string name="open_folder_desc">İçindeki PDF dosyalarını görüntüle</string>
+    <string name="copy_path">Yolu Kopyala</string>
+    <string name="copy_path_desc">Klasör konumunu panoya kopyala</string>
+    <string name="path_copied">Yol panoya kopyalandı</string>
+
+    <!-- Download Progress -->
+    <string name="download_progress">İndirme İlerlemesi</string>
+    <string name="starting_download">İndirme başlatılıyor…</string>
+    <string name="downloading_update">Güncelleme İndiriliyor</string>
+    <string name="version_label">Sürüm %s</string>
+    <string name="download_background_hint">Bu paneli kapatabilirsiniz. İndirme, bir bildirimle arka planda devam edecek.</string>
+    <string name="cancel_download">İndirmeyi İptal Et</string>
+    <string name="version_ready_to_install">%s sürümü yüklemeye hazır</string>
+    <string name="install_update">Güncellemeyi Yükle</string>
+    <string name="permission_required">İzin Gerekli</string>
+    <string name="allow_install_apps">Bu kaynaktan uygulama yüklemeye izin ver</string>
+    <string name="grant_permission">İzin Ver</string>
+    <string name="later">Daha Sonra</string>
+    <string name="download_cancelled">İndirme İptal Edildi</string>
+    <string name="try_again_settings">Ayarlardan daha sonra tekrar deneyebilirsiniz</string>
+
+    <!-- Update Sheet -->
+    <string name="no_release_notes">Sürüm notu yok.</string>
+
+    <!-- Recent Items -->
+    <string name="item_selected">Seçildi</string>
+    <string name="item_not_selected">Seçilmedi</string>
+    <string name="page_progress">Sayfa %1$d/%2$d</string>
+    <string name="page_progress_time">Sayfa %1$d / %2$d • %3$s</string>
+    <string name="just_now">Az önce</string>
+    <string name="minutes_ago">%d dk önce</string>
+    <string name="hours_ago">%d sa önce</string>
+    <string name="days_ago">%d gün önce</string>
+
+    <!-- Permission Bottom Sheet -->
+    <string name="quick_access_needed">Hızlı erişim gerekli</string>
+    <string name="storage_access_message">PDF dosyalarınızı bulup görüntüleyebilmemiz için depolama erişimine izin verin</string>
+    <string name="open_settings">Ayarları Aç</string>
+    <string name="not_now">Şimdi Değil</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_folders">Klasörler</string>
+    <string name="nav_tools">Araçlar</string>
+    <string name="nav_settings">Ayarlar</string>
+
+    <!-- Home sub-tabs -->
+    <string name="home_tab_recent">Son Kullanılanlar</string>
+    <string name="home_tab_favorites">Favoriler</string>
+    <string name="home_tab_all_files">Tüm Dosyalar</string>
+
+    <!-- Error Activity -->
+    <string name="unexpected_error">Beklenmeyen bir hata oluştu</string>
+    <string name="something_went_wrong">Ups! Bir şeyler ters gitti</string>
+    <string name="go_back">Geri Dön</string>
+    <string name="restart_app">Uygulamayı Yeniden Başlat</string>
+    <string name="close_app">Uygulamayı Kapat</string>
+
+    <!-- Password Dialog -->
+    <string name="password_required">Parola Gerekli</string>
+    <string name="password_protected_message">Bu PDF parola ile korunuyor. Açmak için parolayı girin.</string>
+    <string name="incorrect_password_error">Yanlış parola</string>
+    <string name="hide_password">Parolayı gizle</string>
+    <string name="show_password">Parolayı göster</string>
+    <string name="remember_password">Bu dosya için parolayı hatırla</string>
+
+    <!-- More Options Sheet -->
+    <string name="additional_tools">Ek araçlar ve işlemler</string>
+    <string name="view_manage_bookmarks">Kaydedilen sayfaları görüntüle ve yönet</string>
+    <string name="auto_scroll_desc">Eller serbest okuma modu</string>
+    <string name="go_to_page_desc">Belirli bir sayfaya atla</string>
+    <string name="share_document">Bu belgeyi paylaş</string>
+    <string name="print_document">Bu belgeyi yazdır</string>
+    <string name="document_info">Belge Bilgisi</string>
+    <string name="view_file_details">Dosya ayrıntılarını ve meta verilerini görüntüle</string>
+
+    <!-- View Mode Sheet -->
+    <string name="view_options">Görünüm Seçenekleri</string>
+    <string name="customize_reading_layout">Okuma düzeninizi özelleştirin</string>
+    <string name="scroll_mode">Kaydırma Modu</string>
+    <string name="wrapped">Sarmalı</string>
+    <string name="single_page_mode">Tek Sayfa</string>
+    <string name="spread_mode">Çift Sayfa</string>
+    <string name="single_layout">Tek</string>
+    <string name="two_page_layout">İki Sayfa</string>
+    <string name="spread_odd">Tek</string>
+    <string name="spread_even">Çift</string>
+    <string name="left_align">Sol</string>
+    <string name="center_align">Orta</string>
+    <string name="right_align">Sağ</string>
+    <string name="option_selected">Seçildi</string>
+    <string name="snap_to_page">Sayfaya Yapıştır</string>
+    <string name="snap_to_page_desc">Sayfa sınırlarına otomatik olarak hizala</string>
+    <string name="single_page_arrangement">Tek Sayfa Düzenlemesi</string>
+    <string name="single_page_arrangement_desc">Sayfalar arasındaki kenar boşluklarını kaldır</string>
+    <string name="scroll_speed_limit">Kaydırma Hızı Limiti</string>
+    <string name="scroll_speed_limit_desc">Yanlışlıkla sayfa atlamayı önle</string>
+    <string name="auto_hide_toolbar">Araç Çubuğunu Otomatik Gizle</string>
+    <string name="auto_hide_toolbar_desc">5 saniye sonra araç çubuğunu gizle</string>
+    <string name="scrubber_on_scroll">Kaydırmada Sayfa Kaydırıcısı</string>
+    <string name="scrubber_on_scroll_desc">Araç çubuğu gizliyken kaydırma sırasında sayfa kaydırıcısını göster</string>
+    <string name="tap_to_turn_page">Sayfayı Çevirmek İçin Dokun</string>
+    <string name="tap_to_turn_page_desc">Sayfalar arasında geçiş yapmak için sayfanın kenarlarına dokunun</string>
+
+    <!-- Display Sheet -->
+    <string name="display_settings">Ekran Ayarları</string>
+    <string name="theme_brightness_options">Tema, parlaklık ve ekran seçenekleri</string>
+    <string name="light_theme">Açık</string>
+    <string name="dark_theme">Koyu</string>
+    <string name="sepia_theme">Sepya</string>
+    <string name="black_theme">Siyah</string>
+    <string name="low_brightness">Düşük parlaklık</string>
+    <string name="high_brightness">Yüksek parlaklık</string>
+    <string name="prevent_screen_off">Ekranın kapanmasını önle</string>
+
+    <!-- Page Jump Sheet -->
+    <string name="jump_to_page_title">Sayfaya Git</string>
+    <string name="enter_page_range">Bir sayfa numarası girin (1 - %d)</string>
+    <string name="page_number_placeholder">Sayfa numarası</string>
+    <string name="enter_valid_page">Lütfen 1 ile %d arasında bir sayı girin</string>
+
+    <!-- Auto Scroll Sheet -->
+    <string name="auto_scroll_title">Otomatik Kaydırma</string>
+    <string name="hands_free_reading">Eller serbest okuma modu</string>
+    <string name="speed_presets">Hız Ön Ayarları</string>
+    <string name="speed_slow">Yavaş</string>
+    <string name="speed_medium">Orta</string>
+    <string name="speed_fast">Hızlı</string>
+    <string name="speed_very_fast">Çok Hızlı</string>
+    <string name="custom_speed">Özel Hız</string>
+    <string name="speed_pixels">%d px/s</string>
+    <string name="slower">Daha Yavaş</string>
+    <string name="faster">Daha Hızlı</string>
+    <string name="start_auto_scroll">Otomatik Kaydırmayı Başlat</string>
+    <string name="auto_scroll_hint">Duraklatmak/devam etmek için ekrana dokunun. Durdurmak için kaplamayı kullanın.</string>
+
+    <!-- Zoom Sheet -->
+    <string name="zoom_display">Yakınlaştırma ve Ekran</string>
+    <string name="adjust_view_orientation">Görünüm boyutunu ve yönünü ayarla</string>
+    <string name="screen_orientation">Ekran Yönü</string>
+    <string name="orientation_auto">Otomatik</string>
+    <string name="orientation_portrait">Dikey</string>
+    <string name="orientation_landscape">Yatay</string>
+    <string name="lock_portrait">Dikey moda kilitle</string>
+    <string name="lock_landscape">Yatay moda kilitle</string>
+    <string name="current_zoom_label">Geçerli Yakınlaştırma</string>
+
+    <!-- Bookmarks Sheet -->
+    <string name="bookmark_count">%d yer imi</string>
+    <string name="bookmarks_count">%d yer imi</string>
+    <string name="delete_bookmark">Yer imini sil</string>
+    <string name="bookmark_hint">Sayfaları kaydetmek için yer imi simgesine dokunun</string>
+    <string name="page_number_title">Sayfa %d</string>
+
+    <!-- PDF Info Dialog -->
+    <string name="document_information">Belge Bilgileri</string>
+    <string name="pdf_version_label">PDF %s</string>
+    <string name="document_section">Belge</string>
+    <string name="subject_label">Konu</string>
+    <string name="keywords_label">Anahtar Kelimeler</string>
+    <string name="language_label">Dil</string>
+    <string name="author_creator">Yazar ve Oluşturucu</string>
+    <string name="author_label">Yazar</string>
+    <string name="creator_label">Oluşturucu</string>
+    <string name="producer_label">Üretici</string>
+    <string name="dates_section">Tarihler</string>
+    <string name="created_label">Oluşturulma</string>
+    <string name="modified_label">Değiştirilme</string>
+    <string name="security_features">Güvenlik ve Özellikler</string>
+    <string name="encrypted_label">Şifreli</string>
+    <string name="encrypted_type">Şifreli (%s)</string>
+    <string name="forms_label">Formlar</string>
+    <string name="signatures_label">İmzalar</string>
+    <string name="xfa_label">XFA</string>
+    <string name="web_optimized">Web İçin Optimize Edilmiş</string>
+    <string name="location_section">Konum</string>
+
+    <!-- Top Bar Menu Panel -->
+    <string name="document_options">Belge Seçenekleri</string>
+    <string name="share_print_manage">Paylaş, yazdır ve yönet</string>
+    <string name="document_actions">Belge İşlemleri</string>
+    <string name="document_info_title">Belge Bilgisi</string>
+    <string name="view_details_metadata">Dosya ayrıntılarını ve meta verilerini görüntüle</string>
+    <string name="share_this_document">Bu belgeyi paylaş</string>
+    <string name="print_this_document">Bu belgeyi yazdır</string>
+    <string name="open_in_another_app">Başka bir uygulamada aç</string>
+    <string name="save_as">Farklı Kaydet</string>
+    <string name="save_copy_location">Seçtiğiniz konuma bir kopya kaydet</string>
+    <string name="file_management">Dosya Yönetimi</string>
+    <string name="remove_from_favourites">Favorilerden Kaldır</string>
+    <string name="add_to_favourites">Favorilere Ekle</string>
+    <string name="remove_from_favourites_desc">Favori listinizden kaldır</string>
+    <string name="add_to_favourites_desc">Favori listinize ekle</string>
+    <string name="delete_file_permanently">Bu dosyayı kalıcı olarak sil</string>
+
+    <!-- Delete Confirm Dialog -->
+    <string name="delete_pdf_question">PDF silinsin mi?</string>
+    <string name="action_cannot_undo">Bu işlem geri alınamaz</string>
+
+    <!-- Remove Favorite Sheet -->
+    <string name="remove_from_favourites_question">Favorilerden kaldırılsın mı?</string>
+    <string name="remove_from_list_message">Bu, listenizden kaldırılacak</string>
+
+    <!-- Reader Components -->
+    <string name="go_to_page">Sayfaya git</string>
+    <string name="enter_page">Sayfa numarasını girin (1-%d)</string>
+    <string name="invalid_page">Lütfen geçerli bir sayfa numarası girin</string>
+    <string name="go">Git</string>
+    <string name="current_zoom">Geçerli: %d%%</string>
+    <string name="zoom_level">Yakınlaştırma Seviyesi</string>
+    <string name="scroll_direction_label">Kaydırma Yönü</string>
+    <string name="page_layout_label">Sayfa Düzeni</string>
+    <string name="fit_mode">Sığdırma Modu</string>
+    <string name="reading_mode">Okuma Modu</string>
+    <string name="auto_scroll_settings">Otomatik Kaydırma Ayarları</string>
+    <string name="scroll_speed">Kaydırma Hızı</string>
+    <string name="slow">Yavaş</string>
+    <string name="fast">Hızlı</string>
+    <string name="tap_to_start">Otomatik kaydırmayı başlatmak için dokunun</string>
+    <string name="start_scroll">Başlat</string>
+    <string name="stop_scroll">Durdur</string>
+    <string name="bookmarks_title">Yer İmleri</string>
+    <string name="no_bookmarks_yet">Henüz yer imi yok</string>
+    <string name="add_bookmark_hint">Önemli sayfalara hızlıca dönmek için okurken yer imleri ekleyin</string>
+    <string name="page_label">Sayfa %d</string>
+    <string name="toc_title">İçindekiler</string>
+    <string name="no_toc">İçindekiler mevcut değil</string>
+    <string name="attachments_title">Ekler</string>
+    <string name="no_attachments_available">Ek mevcut değil</string>
+    <string name="more_options_title">Daha Fazla Seçenek</string>
+    <string name="view_mode_title">Görünüm Modu</string>
+    <string name="continuous">Sürekli</string>
+    <string name="page_by_page">Sayfa Sayfa</string>
+    <string name="remove_favorite_title">Favorilerden kaldırılsın mı?</string>
+    <string name="remove_favorite_message">Bu dosya favori listinizden kaldırılacak</string>
+    <string name="pdf_information">PDF Bilgileri</string>
+    <string name="document_title">Başlık</string>
+    <string name="author">Yazar</string>
+    <string name="subject">Konu</string>
+    <string name="creator">Oluşturucu</string>
+    <string name="producer">Üretici</string>
+    <string name="creation_date">Oluşturma Tarihi</string>
+    <string name="modification_date">Değiştirme Tarihi</string>
+    <string name="unknown">Bilinmiyor</string>
+    <string name="enter_password_to_open">Bu PDF\'i açmak için parolayı girin</string>
+    <string name="password_hint">Parola</string>
+    <string name="wrong_password">Yanlış parola. Lütfen tekrar deneyin.</string>
+    <string name="open_pdf">Aç</string>
+    <string name="error_loading">PDF yüklenirken hata oluştu</string>
+    <string name="try_again_message">Bu PDF yüklenirken bir şeyler ters gitti. Lütfen tekrar deneyin.</string>
+    <string name="cd_page_thumbnails">Sayfa Küçük Resimleri</string>
+
+    <!-- Floating Search Bar -->
+    <string name="search_in_document">Belgede ara…</string>
+    <string name="cd_matching_highlights">%1$d eşleşen vurgu</string>
+
+    <!-- Floating Control Bar -->
+    <string name="cd_view_options">Görünüm Seçenekleri</string>
+    <string name="cd_zoom">Yakınlaştır</string>
+    <string name="cd_display_settings">Ekran Ayarları</string>
+    <string name="cd_control_more_options">Daha Fazla Seçenek</string>
+
+    <!-- Reader Sidebar -->
+    <string name="reading">Okuma</string>
+    <string name="settings_label">Ayarlar</string>
+    <string name="progress">İlerleme</string>
+    <string name="page_current">Sayfa %d</string>
+    <string name="of_total">/ %d</string>
+    <string name="prevent_screen_timeout">Ekran zaman aşımını önle</string>
+    <string name="lock_rotation">Döndürmeyi Kilitle</string>
+    <string name="rotation_locked">Döndürme kilitli</string>
+    <string name="auto_rotate">Otomatik döndür</string>
+    <string name="swipe_to_close">Kapatmak için sağa kaydırın</string>
+
+    <!-- Tools Screen -->
+    <string name="coming_soon">Yakında</string>
+
+    <!-- Enhanced Table of Contents -->
+    <string name="document_navigation">Belge Navigasyonu</string>
+    <string name="no_contents_available">İçerik Mevcut Değil</string>
+    <string name="no_toc_message">Bu PDF\'in içindekiler tablosu yok</string>
+    <string name="no_attachments_message">Bu PDF\'in gömülü dosyası yok</string>
+    <string name="toc_section_count">%1$d bölüm</string>
+    <string name="toc_sections_count">%1$d bölüm</string>
+    <string name="toc_file_count">%1$d dosya</string>
+    <string name="toc_files_count">%1$d dosya</string>
+    <string name="toc_browse_structure">Belge yapısına göz at</string>
+    <string name="toc_tab_contents">İçerik</string>
+    <string name="toc_tab_attachments">Ekler</string>
+    <string name="attachment_type_hint">%1$s dosyası · Açmak için dokunun</string>
+    <string name="attachment_tap_hint">Açmak için dokunun</string>
+
+    <!-- Settings Panel (Reader) -->
+    <string name="reading_settings">Okuma Ayarları</string>
+    <string name="full_screen_mode">Tam Ekran Modu</string>
+    <string name="auto_rotate_enabled">Otomatik döndürme etkin</string>
+    <string name="delete_pdf">PDF\'i Sil</string>
+
+    <!-- Folder Detail Screen -->
+    <string name="delete_files_count">%d dosya silinsin mi?</string>
+    <string name="delete_files_warning">Bu işlem geri alınamaz. Dosyalar cihazınızdan kalıcı olarak silinecek.</string>
+
+    <!-- Settings Screen -->
+    <string name="reader_section">Okuyucu</string>
+    <string name="about_section">Hakkında</string>
+    <string name="app_name_full">PDF Reader Pro</string>
+    <string name="version_format">Sürüm %s</string>
+    <string name="license_gpl">GPL 3.0</string>
+    <string name="latest_badge">EN SON</string>
+    <string name="privacy_protected">Gizliliğiniz Korumalı</string>
+    <string name="about_app_description">PDF Reader Pro, ücretsiz, açık kaynaklı ve gizlilik odaklı bir PDF okuma deneyimi sunmak için oluşturuldu. Yer imleri, favoriler, okuma temaları ve özelleştirilebilir ayarlar gibi özelliklerle Android kullanıcıları için eksiksiz bir PDF çözümü olmayı hedefler.</string>
+    <string name="gpl_full_name">GNU General Public License v3.0</string>
+    <string name="key_terms">Ana Koşullar</string>
+    <string name="view_gpl_license">Tam GPL v3.0 Lisansını Görüntüle</string>
+    <string name="light">Açık</string>
+    <string name="dark">Koyu</string>
+    <string name="system_default">Sistem Varsayılanı</string>
+    <string name="default_zoom">Varsayılan Yakınlaştırma</string>
+    <string name="double_tap_zoom">Çift Dokunma Yakınlaştırması</string>
+    <string name="double_tap_zoom_subtitle">Çift dokunurken yakınlaştırma seviyesi</string>
+    <string name="show_tools_tab">Araçlar Sekmesini Göster</string>
+    <string name="show_tools_tab_subtitle">Uygulamayı yalnızca PDF okuyucu olarak kullanmak için gizle</string>
+    <string name="tap_to_check">Güncellemeleri kontrol etmek için dokunun</string>
+    <string name="checking">Kontrol ediliyor…</string>
+    <string name="update_available_version">Güncelleme mevcut: v%s</string>
+    <string name="up_to_date">Güncelsiniz</string>
+    <string name="error_message">Hata: %s</string>
+    <string name="view_changelog">Değişiklik günlüğünü görüntüle</string>
+    <string name="view_privacy_policy">Gizlilik politikamızı görüntüle</string>
+    <string name="view_third_party">Üçüncü taraf kütüphanelerini görüntüle</string>
+    <string name="about_developer">Geliştirici hakkında</string>
+    <string name="app_license">Uygulama Lisansı</string>
+    <string name="follow_system_brightness">Sistem parlaklığını takip et</string>
+
+    <!-- Settings Screen - Remaining strings -->
+    <string name="install_pending_update">Bekleyen Güncellemeyi Yükle</string>
+    <string name="install_downloaded_version">İndirilen v%s sürümünü yükle</string>
+    <string name="contact_developer">Geliştiriciyle İletişime Geç</string>
+    <string name="get_in_touch">Geliştiriciyle iletişime geçin</string>
+    <string name="github_repository">GitHub Deposu</string>
+    <string name="view_source_code">Kaynak kodunu görüntüle</string>
+    <string name="choose_appearance">Uygulama görünümünü seçin</string>
+    <string name="always_light">Her zaman açık tema kullan</string>
+    <string name="always_dark">Her zaman koyu tema kullan</string>
+    <string name="follow_system">Sistem ayarını takip et</string>
+    <string name="system_theme">Sistem</string>
+    <string name="choose_scroll">Sayfaların nasıl kaydırılacağını seçin</string>
+    <string name="scroll_up_down">Yukarı ve aşağı kaydır</string>
+    <string name="scroll_left_right">Sola ve sağa kaydır</string>
+    <string name="choose_spread">Sayfa yayılma modunu seçin</string>
+    <string name="spread_single_desc">Bir seferde bir sayfa göster</string>
+    <string name="spread_odd_desc">İlk sayfa tek, sonra çiftler</string>
+    <string name="spread_even_desc">Sayfa çiftleriyle başla</string>
+    <string name="position_pages">Sayfaları ekranda konumlandır</string>
+    <string name="left">Sol</string>
+    <string name="center">Orta</string>
+    <string name="right">Sağ</string>
+    <string name="align_pages_left">Sayfaları sola hizala</string>
+    <string name="center_pages">Sayfaları ortala</string>
+    <string name="align_pages_right">Sayfaları sağa hizala</string>
+    <string name="initial_zoom">PDF açarken başlangıç yakınlaştırması</string>
+    <string name="show_entire_page">Tüm sayfayı göster</string>
+    <string name="match_width">Sayfa genişliğini ekrana uydur</string>
+    <string name="actual_size_desc">Gerçek boyut</string>
+    <string name="background_color">Okurken arka plan rengi</string>
+    <string name="sepia">Sepya</string>
+    <string name="black">Siyah</string>
+    <string name="white_background">Beyaz arka plan</string>
+    <string name="warm_paper">Sıcak kağıt tonu</string>
+    <string name="dark_gray">Koyu gri arka plan</string>
+    <string name="pure_black">Saf siyah (AMOLED)</string>
+    <string name="update_interval">Güncelleme Kontrol Aralığı</string>
+    <string name="update_interval_desc">Güncellemelerin ne sıklıkla kontrol edileceği</string>
+    <string name="never">Asla</string>
+    <string name="daily">Günlük</string>
+    <string name="every_3_days">Her 3 günde bir</string>
+    <string name="weekly">Haftalık</string>
+    <string name="every_2_weeks">Her 2 haftada bir</string>
+    <string name="monthly">Aylık</string>
+    <string name="manual_check_only">Yalnızca manuel kontrol</string>
+    <string name="check_every_day">Her gün kontrol et</string>
+    <string name="check_every_3_days">Her 3 günde bir kontrol et</string>
+    <string name="check_once_week">Haftada bir kontrol et</string>
+    <string name="check_every_2_weeks">Her 2 haftada bir kontrol et</string>
+    <string name="check_once_month">Ayda bir kontrol et</string>
+    <string name="set_custom_level">Özel seviye ayarla</string>
+    <string name="custom">Özel</string>
+    <string name="app_logo">Uygulama Logosu</string>
+
+    <!-- Privacy Policy -->
+    <string name="no_data_collection">Veri toplama veya paylaşma yok</string>
+    <string name="no_analytics">Analiz veya izleme yok</string>
+    <string name="optional_updates">Yalnızca isteğe bağlı güncelleme kontrolleri</string>
+    <string name="local_storage">Tüm veriler yerel olarak saklanır</string>
+    <string name="privacy_no_collection_title">Veri Toplama Yok</string>
+    <string name="privacy_no_collection_content">PDF Reader Pro hiçbir kişisel veriyi toplamaz, saklamaz, iletmez veya paylaşmaz. Uygulama tamamen çevrimdışı çalışır ve internet bağlantısı gerektirmez. Hiçbir türde analiz, izleme veya telemetri yoktur.</string>
+    <string name="privacy_local_storage_title">Yerel Veri Depolama</string>
+    <string name="privacy_local_storage_content">Tüm yer imleri, favoriler ve uygulama tercihleri yalnızca cihazınızda saklanır. Bu veriler cihazınızdan asla ayrılmaz ve sizden başka kimse erişemez. Tam kontrole sahipsiniz ve bu verileri istediğiniz zaman silebilirsiniz.</string>
+    <string name="privacy_file_access_title">Dosya Erişimi</string>
+    <string name="privacy_file_access_content">PDF Reader Pro, cihazınızdan PDF dosyalarını okumak için depolama izni gerektirir. Bu erişim yalnızca belgelerinizi görüntülemek için kullanılır ve hiçbir zaman bilgi toplamak veya iletmek için kullanılmaz.</string>
+    <string name="privacy_password_title">Parola Depolama</string>
+    <string name="privacy_password_content">Korumalı PDF\'ler için parolaları kaydetmeyi seçerseniz, şifreli depolama kullanılarak yerel olarak saklanır. Parolalar cihazınızdan asla ayrılmaz.</string>
+    <string name="privacy_update_title">Güncelleme Kontrolü</string>
+    <string name="privacy_update_content">Uygulama isteğe bağlı olarak GitHub\'ın genel API\'si aracılığıyla güncellemeleri kontrol edebilir. Bu özellik yalnızca sürüm bilgilerini alır ve hiçbir kişisel veri, cihaz tanımlayıcısı veya kullanım istatistiği göndermez. Ayarlardan otomatik güncelleme kontrolünü devre dışı bırakabilir veya istediğiniz zaman manuel olarak kontrol edebilirsiniz.</string>
+
+    <!-- GPL License Terms -->
+    <string name="gpl_freedom_use">Yazılımı herhangi bir amaçla kullanma özgürlüğü</string>
+    <string name="gpl_freedom_study">Kaynak kodunu inceleme ve değiştirme özgürlüğü</string>
+    <string name="gpl_freedom_distribute">Kopyaları dağıtma özgürlüğü</string>
+    <string name="gpl_freedom_modify">Değiştirilmiş sürümleri dağıtma özgürlüğü</string>
+    <string name="gpl_derivative">Türev çalışmalar GPL v3.0 altında açık kaynak olmalıdır</string>
+    <string name="gpl_notice">PDF Reader Pro - Açık Kaynak PDF Görüntüleyici\nTelif Hakkı (C) %d K M Rejowan Ahmmed\n\nBu program özgür bir yazılımdır: Free Software Foundation tarafından yayımlanan GNU Genel Kamu Lisansı\'nın koşulları altında, lisansın 3. sürümü veya (isteğinize bağlı olarak) daha sonraki bir sürümü altında yeniden dağıtabilir ve/veya değiştirebilirsiniz.\n\nBu program faydalı olacağı umuduyla dağıtılmaktadır, ancak HİÇBİR GARANTİ VERİLMEZ; hatta TİCARİ ELVERİŞLİLİK veya BELİRLİ BİR AMACA UYGUNLUK konusunda örtük garanti bile verilmez. Ayrıntılar için GNU Genel Kamu Lisansı\'na bakın.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome">PDF Reader Pro\'ya\nHoş Geldiniz</string>
+    <string name="onboarding_welcome_desc">Basitlik için tasarlanmış temiz, hafif bir PDF okuyucu. Açık kaynak, reklamsız ve gizliliğinize saygılı.</string>
+    <string name="onboarding_all_pdfs">Tüm PDF\'leriniz\nTek Bir Yerde</string>
+    <string name="onboarding_all_pdfs_desc">Cihazınızdaki PDF\'leri otomatik olarak keşfeder. Klasörlere göre göz atın, ad, tarih veya boyuta göre sıralayın ve arama ile herhangi bir belgeyi anında bulun.</string>
+    <string name="onboarding_powerful">Güçlü Okuyucu\n&amp; PDF Araçları</string>
+    <string name="onboarding_powerful_desc">Metin arayın, temaları özelleştirin ve ekran ayarlarını düzenleyin. Ayrıca PDF\'lerinizi birleştirmek, bölmek, sıkıştırmak ve düzenlemek için yerleşik araçlar.</string>
+    <string name="onboarding_storage">Depolama Erişimi\nGerekli</string>
+    <string name="onboarding_storage_desc">PDF dosyalarınızı taramak ve görüntülemek için erişim verin. Belgeleriniz gizli kalır ve asla yüklenmez.</string>
+    <string name="onboarding_grant_access">Erişim Ver</string>
+    <string name="onboarding_continue">Devam Et</string>
+
+    <!-- Folder -->
+    <string name="folder_empty">Bu klasör boş</string>
+    <string name="no_pdf_in_folder">Bu klasörde PDF dosyası bulunamadı.</string>
+
+    <!-- Settings - Update Interval (renamed) -->
+    <string name="auto_check_interval">Otomatik Kontrol Aralığı</string>
+
+    <!-- Install pending -->
+    <string name="pending_update_ready">v%1$s yüklemeye hazır</string>
+
+    <!-- Creator links -->
+    <string name="link_website">Web Sitesi</string>
+    <string name="link_email">E-posta</string>
+    <string name="link_github">GitHub</string>
+    <string name="link_linkedin">LinkedIn</string>
+
+    <!-- Selected -->
+    <string name="selected">Seçildi</string>
+
+    <!-- Additional accessibility strings (unique) -->
+    <string name="cd_preview">Önizleme</string>
+    <string name="cd_view">Görüntüle</string>
+    <string name="cd_sort">Sırala</string>
+    <string name="cd_low">Düşük</string>
+    <string name="cd_high">Yüksek</string>
+    <string name="cd_list_view">Liste görünümü</string>
+    <string name="cd_grid_view">Izgara görünümü</string>
+    <string name="cd_drag_to_reorder">Yeniden sıralamak için sürükleyin</string>
+    <string name="cd_watermark_image">Filigran görseli</string>
+    <string name="cd_watermark_preview">Filigran önizlemesi</string>
+    <string name="cd_reset_order">Sırayı sıfırla</string>
+    <string name="cd_add_more_pdfs">Daha fazla PDF ekle</string>
+    <string name="cd_pdf_preview">PDF önizlemesi</string>
+    <string name="cd_show_password">Parolayı göster</string>
+    <string name="cd_hide_password">Parolayı gizle</string>
+    <string name="cd_favorite">Favori</string>
+
+    <!-- Tool Screen Titles -->
+    <string name="tool_lock_pdf">PDF Kilitle</string>
+    <string name="tool_compress_pdf">PDF Sıkıştır</string>
+    <string name="tool_merge_pdfs">PDF\'leri Birleştir</string>
+    <string name="tool_pdf_to_images">PDF\'ten Görsellere</string>
+    <string name="tool_image_to_pdf">Görselden PDF\'e</string>
+    <string name="tool_add_page_numbers">Sayfa Numaraları Ekle</string>
+    <string name="tool_add_watermark">Filigran Ekle</string>
+    <string name="tool_rotate_pdf_pages">PDF Sayfalarını Döndür</string>
+    <string name="tool_reorder_pdf_pages">PDF Sayfalarını Yeniden Sırala</string>
+
+    <!-- Tool Screen Subtitles/Descriptions -->
+    <string name="tool_lock_desc">Yetkisiz erişimi önlemek için parola koruması ekleyin</string>
+    <string name="tool_merge_desc">Birden fazla PDF dosyasını tek bir dosyada birleştirin</string>
+    <string name="tool_pdf_to_images_desc">PDF sayfalarını resim dosyaları olarak dışa aktarın</string>
+    <string name="tool_image_to_pdf_desc">Görsellerinizi tek bir PDF belgesine dönüştürün</string>
+
+    <!-- Common Tool Actions -->
+    <string name="new_file">Yeni Dosya</string>
+    <string name="new_export">Yeni Dışa Aktarma</string>
+    <string name="new_conversion">Yeni Dönüştürme</string>
+    <string name="add_more">Daha Fazla Ekle</string>
+    <string name="share_all_images">Tüm Görselleri Paylaş</string>
+    <string name="export_images">Görselleri Dışa Aktar</string>
+    <string name="rotate_pages">Sayfaları Döndür</string>
+    <string name="save_reordered_pdf">Yeniden Sıralanmış PDF\'i Kaydet</string>
+    <string name="create_pdf">PDF Oluştur</string>
+    <string name="overwrite_original_file">Orijinal dosyanın üzerine yaz</string>
+
+    <!-- Loading/Processing Messages -->
+    <string name="loading_pages">Sayfalar yükleniyor…</string>
+    <string name="loading_pdf">PDF yükleniyor…</string>
+    <string name="checking_pdf">PDF kontrol ediliyor…</string>
+    <string name="rotating">Döndürülüyor…</string>
+    <string name="saving">Kaydediliyor…</string>
+    <string name="locking">Kilitleniyor…</string>
+    <string name="unlocking">Kilidi açılıyor…</string>
+    <string name="splitting">Bölünüyor…</string>
+    <string name="compressing">Sıkıştırılıyor…</string>
+    <string name="merging">Birleştiriliyor…</string>
+    <string name="exporting">Dışa aktarılıyor…</string>
+    <string name="creating_pdf">PDF oluşturuluyor…</string>
+    <string name="removing_pages">Kaldırılıyor…</string>
+    <string name="adding_page_numbers">Sayfa numaraları ekleniyor…</string>
+    <string name="adding_watermark">Filigran ekleniyor…</string>
+
+    <!-- Success Messages -->
+    <string name="rotation_complete">Döndürme Tamamlandı!</string>
+    <string name="pages_reordered">Sayfalar Yeniden Sıralandı!</string>
+    <string name="pdf_locked">PDF Kilitlendi!</string>
+    <string name="pdf_unlocked">PDF Kilidi Açıldı!</string>
+    <string name="pdf_split">PDF Bölündü!</string>
+    <string name="pdf_compressed">PDF Sıkıştırıldı!</string>
+    <string name="pdfs_merged">PDF\'ler Birleştirildi!</string>
+    <string name="images_exported">Görseller Dışa Aktarıldı!</string>
+    <string name="pdf_created">PDF Oluşturuldu!</string>
+    <string name="page_numbers_added">Sayfa Numaraları Eklendi!</string>
+
+    <!-- Success Descriptions -->
+    <string name="pages_rotated_count">%d sayfa döndürüldü</string>
+    <string name="pdf_saved_new_order">PDF\'iniz yeni sayfa sırasıyla kaydedildi</string>
+    <string name="pdf_password_protected">PDF\'iniz artık parola ile korunuyor</string>
+    <string name="password_protection_removed">Parola koruması kaldırıldı</string>
+    <string name="images_created_count">%1$d %2$s görsel oluşturuldu</string>
+    <string name="images_converted_count">%d görsel dönüştürüldü</string>
+    <string name="pages_removed_count">%d sayfa kaldırıldı</string>
+
+    <!-- Section Labels -->
+    <string name="section_rotation">DÖNDÜRME</string>
+    <string name="section_select_pages">SAYFALARI SEÇ</string>
+    <string name="section_owner_password">SAHİP PAROLASI (GEREKLİ)</string>
+    <string name="section_user_password">KULLANICI PAROLASI (İSTEĞE BAĞLI)</string>
+    <string name="section_permissions">İZİNLER</string>
+    <string name="section_enter_password">PAROLAYI GİRİN</string>
+    <string name="section_output_format">ÇIKTI FORMATI</string>
+    <string name="section_pages_to_export">DIŞA AKTARILACAK SAYFALAR</string>
+    <string name="section_images">GÖRSELLER</string>
+    <string name="section_split_mode">BÖLME MODU</string>
+    <string name="section_compression_level">SIKIŞTIRMA SEVİYESİ</string>
+    <string name="section_position">KONUM</string>
+    <string name="section_appearance">GÖRÜNÜM</string>
+    <string name="section_watermark_type">FİLİGRAN TÜRÜ</string>
+    <string name="section_text_settings">METİN AYARLARI</string>
+    <string name="section_start_page">BAŞLANGIÇ SAYFASI</string>
+
+    <!-- Password Descriptions -->
+    <string name="owner_password_desc">Düzenleme izinleri için tam erişim parolası</string>
+    <string name="user_password_desc">PDF\'i açmak için gerekli. Açma parolası olmaması için boş bırakın.</string>
+    <string name="enter_password_desc">Bu PDF\'in kilidini açmak için parolayı girin</string>
+    <string name="permissions_desc">Kullanıcı parolası ile açarken kullanıcıların neler yapabileceği</string>
+    <string name="allow_copying_content">İçeriği Kopyalamaya İzin Ver</string>
+
+    <!-- Protection Status -->
+    <string name="password_protected">Parola korumalı</string>
+    <string name="not_protected">Korumalı değil</string>
+    <string name="no_password_protection">Parola Koruması Yok</string>
+
+    <!-- Page Selection -->
+    <string name="all_pages_count">Tüm %d sayfa</string>
+    <string name="selected_of_count">%1$d / %2$d seçildi</string>
+    <string name="pages_modified">%d sayfa • Değiştirildi</string>
+    <string name="page_numbers_label">Sayfa numaraları</string>
+    <string name="page_numbers_hint">örn., 1-5, 8, 10-12</string>
+    <string name="all_pages_label">Tüm Sayfalar (%d)</string>
+    <string name="quick_select_all">Tümü</string>
+    <string name="quick_select_odd">Tek</string>
+    <string name="quick_select_even">Çift</string>
+    <string name="quick_select_first_half">1. ½</string>
+    <string name="quick_select_second_half">2. ½</string>
+    <string name="was_page">%d idi</string>
+    <string name="page_selection_all">Tüm sayfalar (1-%1$d)</string>
+    <string name="page_selection_range">Sayfalar %1$d-%2$d</string>
+    <string name="page_selection_custom">Sayfalar %1$s</string>
+    <string name="page_selection_custom_long">Sayfalar %1$s… (%2$d sayfa)</string>
+
+    <!-- Reorder -->
+    <string name="drag_hint">Yeniden sıralamak için sayfalara uzun basın ve sürükleyin</string>
+
+    <!-- Format Options -->
+    <string name="format_png">PNG</string>
+    <string name="format_jpg">JPG</string>
+    <string name="format_lossless">Kayıpsız kalite</string>
+    <string name="format_smaller_size">Daha küçük dosya boyutu</string>
+    <string name="will_create_images">%1$d %2$s görsel oluşturulacak</string>
+
+    <!-- Compression Levels -->
+    <string name="compression_low">Düşük</string>
+    <string name="compression_medium">Orta</string>
+    <string name="compression_high">Yüksek</string>
+    <string name="compression_extreme">Aşırı</string>
+    <string name="compression_low_desc">En iyi kalite, daha büyük dosya</string>
+    <string name="compression_medium_desc">Dengeli kalite ve boyut</string>
+    <string name="compression_high_desc">Daha küçük dosya, azaltılmış kalite</string>
+    <string name="compression_extreme_desc">En küçük dosya, en düşük kalite</string>
+
+    <!-- Split Modes -->
+    <string name="split_extract_pages">Sayfaları Çıkar</string>
+    <string name="split_single_pages">Tek Sayfalar</string>
+    <string name="split_range_desc">Sayfa aralığından tek bir PDF\'e böl</string>
+    <string name="split_extract_desc">Belirli sayfaları yeni bir PDF olarak çıkar</string>
+    <string name="split_single_desc">Her sayfa ayrı bir PDF dosyası olarak</string>
+
+    <!-- Merge -->
+    <string name="no_pdfs_selected">PDF Seçilmedi</string>
+    <string name="add_pdfs_to_merge">Tek bir belgede birleştirmek için iki veya daha fazla PDF dosyası ekleyin</string>
+    <string name="files_selected">%d dosya seçildi</string>
+    <string name="files_merged">%d dosya birleştirildi</string>
+
+    <!-- Image to PDF -->
+    <string name="images_selected">%d görsel seçildi</string>
+    <string name="create_pdf_pages">PDF Oluştur (%d sayfa)</string>
+
+    <!-- Page Numbers -->
+    <string name="position_bottom_left">Sol Alt</string>
+    <string name="position_bottom_center">Alt Orta</string>
+    <string name="position_bottom_right">Sağ Alt</string>
+    <string name="position_top_left">Sol Üst</string>
+    <string name="position_top_center">Üst Orta</string>
+    <string name="position_top_right">Sağ Üst</string>
+    <string name="format_simple">1, 2, 3</string>
+    <string name="format_dash">- 1 -</string>
+    <string name="format_page_of">Sayfa 1 / N</string>
+
+    <!-- Watermark -->
+    <string name="watermark_text_label">Filigran Metni</string>
+    <string name="watermark_text_hint">Filigran metnini girin</string>
+    <string name="watermark_type_text">Metin</string>
+    <string name="watermark_type_image">Görsel</string>
+    <string name="scale">Ölçek</string>
+    <string name="watermark_preview_area">Filigran önizleme alanı</string>
+    <string name="no_image_selected">Görsel seçilmedi</string>
+
+    <!-- Remove Pages -->
+    <string name="pages_to_remove">Kaldırılacak %d sayfa</string>
+    <string name="remove_selected_pages">%d Sayfayı Kaldır</string>
+    <string name="remove_pages_btn">Sayfaları Kaldır</string>
+    <string name="select_pages_to_remove_hint">Kaldırmak için sayfaları seçmek üzere dokunun</string>
+
+    <!-- File Info in Results -->
+    <string name="pages_size_format">%1$d sayfa • %2$s</string>
+
+    <!-- Merge Screen -->
+    <string name="pdf_extension">.pdf</string>
+    <string name="select_pdfs">PDF\'leri Seç</string>
+    <string name="output_filename_label">Çıktı dosya adı</string>
+    <string name="range_option">Aralık</string>
+    <string name="from_page">Başlangıç</string>
+    <string name="to_page">Bitiş</string>
+    <string name="page_numbers_example">örn., 1, 3, 5-8, 12</string>
+    <string name="page_numbers_help">Virgülle ayrılmış sayfa numaraları veya aralıkları girin</string>
+    <string name="files_selected_count">%1$d dosya seçildi</string>
+    <string name="merge_empty_title">PDF Dosyalarını Birleştir</string>
+    <string name="merge_empty_desc">Tek bir belgede birleştirmek için birden fazla PDF dosyası seçin</string>
+    <string name="file_size_pages">%1$s • %2$d sayfa</string>
+    <string name="pages_partial_format">%1$d/%2$d sayfa</string>
+    <string name="pages_all_format">Tüm %1$d sayfa</string>
+    <string name="add_more_files">Daha fazla dosya ekle</string>
+    <string name="saved_to_path">Kaydedildi: %1$s</string>
+    <string name="merging_pdfs">PDF\'ler birleştiriliyor…</string>
+    <string name="merge_complete">Birleştirme Tamamlandı!</string>
+    <string name="merge_more_files">Daha Fazla Dosya Birleştir</string>
+    <string name="select_pages">Sayfaları Seç</string>
+    <string name="total_pages_format">Toplam: %1$d sayfa</string>
+    <string name="selection_mode">Seçim Modu</string>
+    <string name="all_pages_included">Tüm %1$d sayfa dahil edilecek</string>
+    <string name="pages_range_info">%1$s ile %2$s arasındaki sayfalar dahil edilecek</string>
+
+    <!-- Split Screen -->
+    <string name="change">Değiştir</string>
+    <string name="page_ranges_label">Sayfa Aralıkları</string>
+    <string name="page_ranges_example">örn., 1-5, 6-10, 11-15</string>
+    <string name="pages_to_extract_label">Çıkarılacak Sayfalar</string>
+    <string name="split_range_help">Her aralık ayrı bir PDF oluşturur. Sayfalar: 1-%d</string>
+    <string name="extract_pages_help">Seçilen sayfalarla tek bir PDF oluşturur. Sayfalar: 1-%d</string>
+    <string name="output_prefix_label">Çıktı öneki</string>
+    <string name="split_another_pdf">Başka Bir PDF Böl</string>
+    <string name="pages_count_with_mode">%1$d sayfa • %2$s</string>
+    <string name="split_empty_title">PDF Dosyasını Böl</string>
+    <string name="split_empty_desc">Birden fazla parçaya bölmek veya belirli sayfaları çıkarmak için bir PDF dosyası seçin</string>
+    <string name="split_mode_title">Bölme Modu</string>
+    <string name="split_mode_by_ranges_label">Aralıklara Göre</string>
+    <string name="split_mode_by_ranges_desc">Birden fazla PDF</string>
+    <string name="split_mode_every_n_label">Her N Sayfa</string>
+    <string name="split_mode_every_n_desc">Otomatik böl</string>
+    <string name="split_mode_single_pages_label">Tek Sayfalar</string>
+    <string name="split_mode_single_pages_desc">1 sayfa = 1 PDF</string>
+    <string name="split_mode_extract_label">Sayfaları Çıkar</string>
+    <string name="split_mode_extract_desc">Tek PDF</string>
+    <string name="split_options_title">Seçenekler</string>
+    <string name="split_will_create_one_pdf">1 PDF dosyası oluşturulacak</string>
+    <string name="split_will_create_pdfs">%1$d PDF dosyası oluşturulacak</string>
+    <string name="split_every_one_page">Her 1 sayfada böl</string>
+    <string name="split_every_n_pages">Her %1$d sayfada böl</string>
+    <string name="split_will_create_one_file_max">1 dosya oluşturulacak (maks: %1$d sayfa)</string>
+    <string name="split_will_create_files_max">%1$d dosya oluşturulacak (maks: %2$d sayfa)</string>
+    <string name="split_into_individual_pages">Tek tek sayfalara böl</string>
+    <string name="split_will_create_separate_pdfs">%1$d ayrı PDF dosyası oluşturulacak</string>
+    <string name="split_will_create_one_page_pdf">1 sayfalı 1 PDF oluşturulacak</string>
+    <string name="split_will_create_one_pdf_pages">%1$d sayfalı 1 PDF oluşturulacak</string>
+    <string name="splitting_pdf">PDF bölünüyor…</string>
+    <string name="split_complete">Bölme Tamamlandı!</string>
+    <string name="one_file_created">1 dosya oluşturuldu</string>
+    <string name="files_created_count">%1$d dosya oluşturuldu</string>
+
+    <!-- Remove Pages Screen -->
+    <string name="select_page_range">Sayfa Aralığını Seç</string>
+    <string name="select_action">Seç</string>
+    <string name="selected_for_removal_format">%1$d / %2$d kaldırılmak üzere seçildi</string>
+    <string name="tool_remove_pages_desc">PDF\'inizden istenmeyen sayfaları seçin ve silin</string>
+    <string name="tap_to_select">SEÇMEK İÇİN DOKUNUN</string>
+    <string name="selected_pages_will_be_removed">Seçilen sayfalar PDF\'ten kaldırılacak</string>
+    <string name="quick_select_range">Aralık</string>
+    <string name="quick_select_first_n">İlk N</string>
+    <string name="quick_select_last_n">Son N</string>
+    <string name="quick_select_before">Öncesi</string>
+    <string name="quick_select_after">Sonrası</string>
+    <string name="select_pages_range_hint">Başlangıçtan bitişe kadar sayfaları seçin (dahil)</string>
+    <string name="error_start_page_range">Başlangıç sayfası 1-%1$d olmalıdır</string>
+    <string name="error_end_page_range">Bitiş sayfası 1-%1$d olmalıdır</string>
+    <string name="error_start_less_than_end">Başlangıç bitişten küçük olmalıdır</string>
+    <string name="dialog_select_before_page">Öncesindeki Sayfaları Seç</string>
+    <string name="dialog_select_after_page">Sonrasındaki Sayfaları Seç</string>
+    <string name="dialog_hint_before_page">Bundan önceki sayfalar seçilecek</string>
+    <string name="dialog_hint_after_page">Bundan sonraki sayfalar seçilecek</string>
+    <string name="dialog_select_first_n">İlk N Sayfayı Seç</string>
+    <string name="dialog_select_last_n">Son N Sayfayı Seç</string>
+    <string name="dialog_hint_first_n">İlk N sayfa seçilecek</string>
+    <string name="dialog_hint_last_n">Son N sayfa seçilecek</string>
+    <string name="number_of_pages">Sayfa sayısı</string>
+    <string name="page_number_label">Sayfa numarası</string>
+    <string name="error_value_range">Değer 1-%1$d olmalıdır</string>
+    <string name="cannot_remove_all_pages">Tüm sayfalar kaldırılamaz</string>
+    <string name="remove_one_page">1 Sayfayı Kaldır</string>
+    <string name="remove_pages_count">%1$d Sayfayı Kaldır</string>
+    <string name="removing">Kaldırılıyor…</string>
+    <string name="pages_removed">Sayfalar Kaldırıldı!</string>
+    <string name="one_page_removed">1 sayfa kaldırıldı</string>
+
+    <!-- Page Numbers Screen -->
+    <string name="prefix_label">Önek</string>
+    <string name="prefix_hint">örn., Sayfa</string>
+    <string name="suffix_label">Sonek</string>
+    <string name="suffix_hint">örn., .</string>
+    <string name="hex_label">Hex</string>
+    <string name="hex_prefix">#</string>
+    <string name="hex_help">6 hex karakteri girin (0-9, A-F)</string>
+    <string name="color_r">R</string>
+    <string name="color_g">G</string>
+    <string name="color_b">B</string>
+    <string name="skip_first_pages">İlk N sayfayı atla</string>
+
+    <!-- Input Validation Messages -->
+    <string name="validation_password_required">Parola gerekli</string>
+    <string name="validation_password_too_short">Parola en az %1$d karakter olmalıdır</string>
+    <string name="validation_password_too_long">Parola %1$d karakteri aşamaz</string>
+    <string name="validation_filename_required">Dosya adı gerekli</string>
+    <string name="validation_filename_too_long">Dosya adı %1$d karakteri aşamaz</string>
+    <string name="validation_filename_invalid_chars">Dosya adı geçersiz karakterler içeriyor</string>
+    <string name="validation_filename_starts_with_dot">Dosya adı nokta ile başlayamaz</string>
+    <string name="validation_filename_ends_with_dot">Dosya adı nokta ile bitemez</string>
+    <string name="validation_page_required">Sayfa numarası gerekli</string>
+    <string name="validation_page_invalid">Geçersiz sayfa numarası</string>
+    <string name="validation_page_too_low">Sayfa numarası en az 1 olmalıdır</string>
+    <string name="validation_page_too_high">Sayfa numarası %1$d\'i aşamaz</string>
+    <string name="validation_page_range_required">Sayfa aralığı gerekli</string>
+    <string name="validation_page_range_format">Geçersiz format. Kullanın: 1-5, 7, 10-12</string>
+    <string name="validation_page_range_invalid">Başlangıç sayfası bitiş sayfasından küçük olmalıdır</string>
+    <string name="validation_value_required">Değer gerekli</string>
+    <string name="validation_value_invalid">Geçersiz değer</string>
+    <string name="validation_value_too_low">Değer en az %1$d olmalıdır</string>
+    <string name="validation_value_too_high">Değer %1$d\'i aşamaz</string>
+    <string name="validation_color_invalid">Geçersiz renk değeri</string>
+    <string name="validation_color_range">Renk değeri 0-255 olmalıdır</string>
+    <string name="password_min_hint">Minimum 4 karakter gerekli</string>
+
+    <plurals name="sign_unsaved_count">
+        <item quantity="one">%d imza kaydedilmedi</item>
+        <item quantity="other">%d imza kaydedilmedi</item>
+    </plurals>
+    <string name="sort_alphabetical">Alfabetik</string>
+    <string name="sort_date_modified">Değiştirilme Tarihi</string>
+    <string name="cd_close_selection">Seçimi kapat</string>
+    <string name="folder_label">Klasör</string>
+</resources>
