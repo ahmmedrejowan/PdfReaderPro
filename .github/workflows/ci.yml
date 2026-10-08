@@ -22,6 +22,9 @@ jobs:
   ci:
     name: Lint, Test & Build
     runs-on: ubuntu-latest
+    # A normal run takes 12-15 minutes. Without a limit a hung build runs for
+    # GitHub's 6 hours; the step limits below fail it sooner.
+    timeout-minutes: 45
 
     steps:
       - name: Checkout code
@@ -34,14 +37,21 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      # Each step runs Gradle in a fresh JVM. A daemon shared by lint, tests and
+      # the APK build carries their memory into packaging, where builds hung.
+      # The watchdog prints Gradle's threads 3 minutes before a step's limit, the
+      # last moment a hung build can still be inspected.
       - name: Run Lint
-        run: chmod +x gradlew && ./gradlew :app:lint
+        timeout-minutes: 20
+        run: chmod +x gradlew && .github/scripts/gradle-watchdog.sh 17 :app:lint --no-daemon
 
       - name: Run Unit Tests
-        run: ./gradlew :app:testDebugUnitTest
+        timeout-minutes: 20
+        run: .github/scripts/gradle-watchdog.sh 17 :app:testDebugUnitTest --no-daemon
 
       - name: Build Debug APK
-        run: ./gradlew :app:assembleDebug
+        timeout-minutes: 15
+        run: .github/scripts/gradle-watchdog.sh 12 :app:assembleDebug --no-daemon
 
       - name: Upload Reports
         if: failure()

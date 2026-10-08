@@ -1670,10 +1670,17 @@
 
     <plurals name="sign_unsaved_count">
         <item quantity="one">%d firma non salvata</item>
+        <item quantity="many">%d firme non salvate</item>
         <item quantity="other">%d firme non salvate</item>
     </plurals>
     <string name="sort_alphabetical">Alfabetico</string>
     <string name="sort_date_modified">Data di modifica</string>
     <string name="cd_close_selection">Chiudi selezione</string>
     <string name="folder_label">Cartella</string>
+    <string name="crash_details">Dettagli dell\'arresto anomalo</string>
+    <string name="copy_details">Copia dettagli</string>
+    <string name="crash_details_copied">Dettagli dell\'arresto anomalo copiati</string>
+    <string name="crash_report_subject">Segnalazione di arresto anomalo di PDF Reader Pro</string>
+    <string name="report_on_github">Segnala su GitHub</string>
+    <string name="no_browser_found">Nessun browser trovato per aprire il link</string>
 </resources>

@@ -2954,4 +2954,33 @@ class ReaderViewModelTest {
         assertNotNull(vm)
     }
     // endregion
+
+    // region Trying again after a document failed to open
+    @Test
+    fun `a document that fails to open shows why`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+
+        listener.onPageLoadFailed(Exception("Character map not found. Please include cmaps module!"))
+        waitFor("the error") { vm.state.value.error != null }
+
+        assertEquals("Character map not found. Please include cmaps module!", vm.state.value.error)
+        assertFalse(vm.state.value.isLoading)
+    }
+
+    @Test
+    fun `try again clears the error so the document opens again`() = runTest {
+        // The error screen replaces the viewer, and a new viewer opens the file as
+        // it is created, so clearing the error is what makes Try Again work.
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPageLoadFailed(Exception("could not open"))
+        waitFor("the error") { vm.state.value.error != null }
+
+        vm.onAction(ReaderAction.RetryLoad)
+
+        assertNull(vm.state.value.error)
+        assertTrue(vm.state.value.isLoading)
+    }
+    // endregion
 }
