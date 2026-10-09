@@ -241,7 +241,7 @@
 
     <!-- Tools -->
     <string name="tool_split_pdf">Scoilt PDF</string>
-    <string name="tool_split_desc">Roinn PDF ina iliomad comhad</string>
+    <string name="tool_split_desc">Scoilt PDF ina iliomad comhad</string>
     <string name="tool_compress_desc">Laghdaigh méid an chomhaid agus cáilíocht á coinneáil</string>
     <string name="tool_rotate_pages">Rothlaigh Leathanaigh</string>
     <string name="tool_rotate_desc">Rothlaigh leathanaigh aonair nó iad go léir</string>
@@ -438,7 +438,7 @@
     <string name="extract_pages">Bain Leathanaigh amach</string>
     <string name="pages_per_file">Leathanaigh in aghaidh an Chomhaid</string>
     <string name="split">Scoilt</string>
-    <string name="split_more">Roinn Tuilleadh</string>
+    <string name="split_more">Scoilt Tuilleadh</string>
     <string name="split_successfully">Scoilteadh an PDF go rathúil</string>
 
     <!-- Compress -->
@@ -1492,7 +1492,7 @@
     <!-- Split Modes -->
     <string name="split_extract_pages">Bain Leathanaigh amach</string>
     <string name="split_single_pages">Leathanaigh Aonair</string>
-    <string name="split_range_desc">Roinn ina aon PDF amháin ó raon leathanach</string>
+    <string name="split_range_desc">Scoilt ina aon PDF amháin ó raon leathanach</string>
     <string name="split_extract_desc">Bain leathanaigh ar leith amach mar PDF nua</string>
     <string name="split_single_desc">Gach leathanach mar chomhad PDF ar leith</string>
 
@@ -1577,7 +1577,7 @@
     <string name="split_mode_by_ranges_label">De réir Raonta</string>
     <string name="split_mode_by_ranges_desc">Iliomad PDF</string>
     <string name="split_mode_every_n_label">Gach N Leathanach</string>
-    <string name="split_mode_every_n_desc">Roinn go huathoibríoch</string>
+    <string name="split_mode_every_n_desc">Scoilt go huathoibríoch</string>
     <string name="split_mode_single_pages_label">Leathanaigh Aonair</string>
     <string name="split_mode_single_pages_desc">1 leathanach = 1 PDF</string>
     <string name="split_mode_extract_label">Bain Leathanaigh amach</string>
@@ -1585,11 +1585,11 @@
     <string name="split_options_title">Roghanna</string>
     <string name="split_will_create_one_pdf">Cruthófar 1 chomhad PDF</string>
     <string name="split_will_create_pdfs">Comhaid PDF le cruthú: %1$d</string>
-    <string name="split_every_one_page">Roinn gach 1 leathanach</string>
-    <string name="split_every_n_pages">Roinn gach %1$d leathanach</string>
+    <string name="split_every_one_page">Scoilt gach 1 leathanach</string>
+    <string name="split_every_n_pages">Scoilt gach %1$d leathanach</string>
     <string name="split_will_create_one_file_max">Cruthófar 1 chomhad (uasmhéid: %1$d leathanach)</string>
     <string name="split_will_create_files_max">Comhaid le cruthú: %1$d (uasmhéid: %2$d leathanach)</string>
-    <string name="split_into_individual_pages">Roinn ina leathanaigh aonair</string>
+    <string name="split_into_individual_pages">Scoilt ina leathanaigh aonair</string>
     <string name="split_will_create_separate_pdfs">Comhaid PDF ar leith le cruthú: %1$d</string>
     <string name="split_will_create_one_page_pdf">Cruthófar 1 PDF le 1 leathanach</string>
     <string name="split_will_create_one_pdf_pages">Cruthófar 1 PDF le %1$d leathanach</string>
