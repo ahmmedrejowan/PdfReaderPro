@@ -42,6 +42,9 @@ Vous pouvez télécharger le dernier APK ici
 <a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest">
 <img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
 </a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro">
+<img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" width="224px" align="center"/>
+</a>
 
 Consultez la section [releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases) pour plus de détails.
 
