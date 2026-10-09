@@ -28,7 +28,7 @@ Don't worry about getting everything perfect - we can work through it together i
 
 ### Want to Translate?
 
-1. Copy `app/src/main/res/values/strings.xml` to `values-<code>/strings.xml` (for example `values-it`), or edit an existing language
+1. Copy `app/src/main/res/values/strings.xml` to `app/src/main/res/values-<code>/strings.xml` (for example `values-it`), or edit an existing language
 2. Translate the text only; keep every placeholder (`%s`, `%1$d`) and write apostrophes as `\'`
 3. Add the language code to `AppLanguage.supported` so it appears in the app's language setting
 4. Open the Pull Request against the `feature` branch

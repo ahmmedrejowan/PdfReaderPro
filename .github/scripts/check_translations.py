@@ -84,11 +84,9 @@ def load(path):
 
 def unescaped_apostrophes(raw):
     """Lines whose string or plural item text has an apostrophe without a backslash."""
-    for number, line in enumerate(raw.splitlines(), 1):
-        match = re.search(r"<(string|item)\b[^>]*>(.*?)</\1>", line)
-        if not match:
-            continue
-        text = match.group(2)
+    for match in re.finditer(r"<(string|item)\b[^>]*>(.*?)</\1>", raw, re.DOTALL):
+        number = raw.count("\n", 0, match.start()) + 1
+        text = match.group(2).strip()
         if text.startswith('"') and text.endswith('"'):
             continue  # a double-quoted string may hold plain apostrophes
         if re.search(r"(?<!\\)'", text):
