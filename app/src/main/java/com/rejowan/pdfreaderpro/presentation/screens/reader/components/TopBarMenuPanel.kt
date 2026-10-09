@@ -88,10 +88,11 @@ fun TopBarMenuPanel(
     onDeleteClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    // Back closes the panel the same way tapping outside it does.
-    BackHandler { onDismiss() }
-
     if (!isVisible) return
+
+    // Back closes the panel the same way tapping outside it does. Registered
+    // only while visible, since the panel stays composed when hidden.
+    BackHandler { onDismiss() }
 
     var isAnimatedVisible by remember { mutableStateOf(false) }
 
