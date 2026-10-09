@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Menu Button** - The page slider no longer covers the reader's ⋮ button (closes #79)
 - **Crash Screen** - The crash screen now appears after any crash instead of the app freezing
 - **Try Again** - Try Again on the reader's error screen opens the document again
+- **Settings in Your Language** - Scroll mode, reading theme and the update interval in Settings are shown in the app's language instead of English
 
 ---
 
