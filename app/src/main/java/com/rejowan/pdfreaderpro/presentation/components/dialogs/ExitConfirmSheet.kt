@@ -69,6 +69,7 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.activity.compose.BackHandler
 
 // Accent colors
 private val AccentOrange = Color(0xFFFF7043)
@@ -130,6 +131,9 @@ private fun ExitConfirmSideSheet(
     onDismiss: () -> Unit,
     onConfirmExit: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

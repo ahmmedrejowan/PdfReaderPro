@@ -72,6 +72,7 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.util.FormattingUtils
 import kotlinx.coroutines.delay
+import androidx.activity.compose.BackHandler
 
 // Accent colors matching UI guide
 private val AccentAmber = Color(0xFFFFB74D)
@@ -173,6 +174,9 @@ private fun FileOptionsSideSheet(
     onDeleteClick: () -> Unit,
     onRemoveFromRecentsClick: (() -> Unit)?
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

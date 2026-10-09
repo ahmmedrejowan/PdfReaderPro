@@ -67,6 +67,7 @@ import com.rejowan.pdfreaderpro.util.FormattingUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.activity.compose.BackHandler
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
@@ -138,6 +139,9 @@ private fun PdfInfoSideSheet(
     info: PdfInfo,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

@@ -68,6 +68,7 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.data.mapper.asOpaqueSwatch
 import com.rejowan.pdfreaderpro.domain.model.Highlight
 import com.rejowan.pdfreaderpro.presentation.screens.reader.HighlightColors
+import androidx.activity.compose.BackHandler
 
 private val PANEL_WIDTH = 320.dp
 private val OUTER_CORNER = 20.dp
@@ -150,6 +151,9 @@ private fun HighlightsSidePanel(
     onDismiss: () -> Unit,
     initialQuery: String = ""
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) { isVisible = true }

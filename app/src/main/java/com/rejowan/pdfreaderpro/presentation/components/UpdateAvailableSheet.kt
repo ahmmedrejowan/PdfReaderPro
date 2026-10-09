@@ -76,6 +76,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import com.rejowan.pdfreaderpro.util.ReleaseNotes
+import androidx.activity.compose.BackHandler
 
 /**
  * A sheet/panel that shows update information when a new version is available.
@@ -91,6 +92,9 @@ fun UpdateAvailableSheet(
     onSkipVersion: () -> Unit,
     onDownload: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     val context = LocalContext.current

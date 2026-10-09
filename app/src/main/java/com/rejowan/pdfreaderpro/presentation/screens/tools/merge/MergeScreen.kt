@@ -112,6 +112,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.activity.compose.BackHandler
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)    // Primary actions (merge)
@@ -1103,6 +1104,9 @@ private fun PageSelectionSidePanel(
     onDismiss: () -> Unit,
     onSelectionChanged: (PageSelection) -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
