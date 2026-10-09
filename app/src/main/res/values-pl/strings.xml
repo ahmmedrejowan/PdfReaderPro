@@ -1684,4 +1684,6 @@
     <string name="crash_report_subject">Raport o awarii PDF Reader Pro</string>
     <string name="report_on_github">Zgłoś na GitHubie</string>
     <string name="no_browser_found">Nie znaleziono przeglądarki do otwarcia linku</string>
+    <string name="choose_language">Wybierz język aplikacji</string>
+    <string name="language_follow_system">Użyj języka telefonu</string>
 </resources>

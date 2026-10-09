@@ -1685,4 +1685,6 @@
     <string name="crash_report_subject">Tuarascáil tuairte PDF Reader Pro</string>
     <string name="report_on_github">Tuairiscigh ar GitHub</string>
     <string name="no_browser_found">Níor aimsíodh aon bhrabhsálaí chun an nasc a oscailt</string>
+    <string name="choose_language">Roghnaigh teanga na haipe</string>
+    <string name="language_follow_system">Úsáid teanga an fhóin</string>
 </resources>

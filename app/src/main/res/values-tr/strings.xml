@@ -1682,4 +1682,6 @@
     <string name="crash_report_subject">PDF Reader Pro çökme raporu</string>
     <string name="report_on_github">GitHub\'da bildir</string>
     <string name="no_browser_found">Bağlantıyı açmak için tarayıcı bulunamadı</string>
+    <string name="choose_language">Uygulama dilini seçin</string>
+    <string name="language_follow_system">Telefonun dilini kullan</string>
 </resources>

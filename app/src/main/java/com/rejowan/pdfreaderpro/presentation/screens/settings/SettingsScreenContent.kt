@@ -136,6 +136,8 @@ import com.rejowan.licensy.Licenses
 import com.rejowan.licensy.compose.LicensyList
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.material.icons.rounded.Translate
+import com.rejowan.pdfreaderpro.util.AppLanguage
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -193,6 +195,7 @@ fun SettingsScreenContent(
 
     // Other sheet visibility states
     var showThemeModeSheet by remember { mutableStateOf(false) }
+    var showLanguageSheet by remember { mutableStateOf(false) }
     var showScrollModeSheet by remember { mutableStateOf(false) }
     var showQuickZoomSheet by remember { mutableStateOf(false) }
     var showDoubleTapZoomSheet by remember { mutableStateOf(false) }
@@ -237,6 +240,18 @@ fun SettingsScreenContent(
             accentColor = AccentPurple,
             onClick = { showThemeModeSheet = true },
             animationDelay = 50
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Language,
+            title = stringResource(R.string.language_label),
+            subtitle = AppLanguage.current()?.let { AppLanguage.nativeName(it) }
+                ?: stringResource(R.string.system_default),
+            accentColor = AccentPurple,
+            onClick = { showLanguageSheet = true },
+            animationDelay = 60
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -542,6 +557,28 @@ fun SettingsScreenContent(
     }
 
     // Theme Mode picker
+    if (showLanguageSheet) {
+        val current = AppLanguage.current()
+        SettingsPickerSheet(
+            title = stringResource(R.string.language_label),
+            subtitle = stringResource(R.string.choose_language),
+            icon = Icons.Rounded.Language,
+            accentColor = AccentPurple,
+            options = listOf(
+                PickerOption(Icons.Rounded.Language, stringResource(R.string.system_default), stringResource(R.string.language_follow_system))
+            ) + AppLanguage.supported.map { tag ->
+                // Each language in its own name, with its name in the current language below.
+                PickerOption(Icons.Rounded.Translate, AppLanguage.nativeName(tag), AppLanguage.localizedName(tag))
+            },
+            selectedIndex = current?.let { AppLanguage.supported.indexOf(it) + 1 } ?: 0,
+            onSelect = { index ->
+                showLanguageSheet = false
+                AppLanguage.set(if (index == 0) null else AppLanguage.supported[index - 1])
+            },
+            onDismiss = { showLanguageSheet = false }
+        )
+    }
+
     if (showThemeModeSheet) {
         SettingsPickerSheet(
             title = stringResource(R.string.theme),
@@ -1199,13 +1236,14 @@ private fun PickerSideSheet(
                     options = options,
                     selectedIndex = selectedIndex,
                     onSelect = onSelect,
+                    // PickerContent scrolls its own options; a second vertical scroll
+                    // here would measure it with infinite height and crash.
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
                             top = systemBarsPadding.calculateTopPadding(),
                             bottom = systemBarsPadding.calculateBottomPadding()
                         )
-                        .verticalScroll(rememberScrollState())
                 )
             }
         }
@@ -1267,17 +1305,24 @@ private fun PickerContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Options
-        options.forEachIndexed { index, option ->
-            PickerOptionItem(
-                option = option,
-                isSelected = index == selectedIndex,
-                accentColor = accentColor,
-                onClick = { onSelect(index) },
-                animationDelay = 50 * (index + 1)
-            )
-            if (index < options.lastIndex) {
-                Spacer(modifier = Modifier.height(8.dp))
+        // Options scroll under the header, so a long list (the 13 languages) stays
+        // reachable on short screens; a short list still takes only its own height.
+        Column(
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .verticalScroll(rememberScrollState())
+        ) {
+            options.forEachIndexed { index, option ->
+                PickerOptionItem(
+                    option = option,
+                    isSelected = index == selectedIndex,
+                    accentColor = accentColor,
+                    onClick = { onSelect(index) },
+                    animationDelay = 50 * (index + 1)
+                )
+                if (index < options.lastIndex) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
@@ -1909,8 +1954,8 @@ private fun ChangelogContent() {
                 changes = listOf(
                     "Sign documents by drawing, typing or picking an image of your signature",
                     "Signatures are kept per document and can be written into the file or a copy",
-                    "Translations in Russian, German, Spanish, French, Italian, Portuguese, Turkish, Polish, Irish and Japanese",
-                    "Choose the app's language in Android's per-app language setting",
+                    "Translations in Bangla, Russian, German, Spanish, French, Italian, Portuguese, Turkish, Polish, Irish and Japanese",
+                    "Choose the app's language in Settings",
                     "Translators like Google Translate appear in the text selection menu",
                     "Print progress, and saving a copy without the password",
                     "Crash screen with full details to copy, share or report on GitHub",

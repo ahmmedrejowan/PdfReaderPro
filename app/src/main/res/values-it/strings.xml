@@ -1683,4 +1683,6 @@
     <string name="crash_report_subject">Segnalazione di arresto anomalo di PDF Reader Pro</string>
     <string name="report_on_github">Segnala su GitHub</string>
     <string name="no_browser_found">Nessun browser trovato per aprire il link</string>
+    <string name="choose_language">Scegli la lingua dell\'app</string>
+    <string name="language_follow_system">Usa la lingua del telefono</string>
 </resources>

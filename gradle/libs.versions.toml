@@ -8,6 +8,7 @@ minSdk = "24"
 agp = "9.4.1"
 kotlin = "2.4.20"
 coreKtx = "1.19.1"
+appcompat = "1.8.0"
 
 # Compose
 composeBom = "2026.09.00"
@@ -70,6 +71,7 @@ archCoreTesting = "2.2.0"
 [libraries]
 # Core Android
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 
 # Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }

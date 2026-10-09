@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base app theme - minimal for Compose app (night) -->
-    <style name="Theme.PDFReaderPro" parent="android:Theme.Material.NoActionBar">
+    <!-- Base app theme - minimal for Compose app. AppCompat, because the activities
+         extend AppCompatActivity for per-app language before Android 13. (night) -->
+    <style name="Theme.PDFReaderPro" parent="Theme.AppCompat.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>

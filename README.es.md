@@ -228,8 +228,8 @@ GNU General Public License for more details.
 
 - Firma documentos dibujando, escribiendo o eligiendo una imagen de tu firma, desde el lector o desde Herramientas
 - Las firmas se guardan por documento, se gestionan desde un solo panel y se escriben en el archivo o en una copia
-- Traducciones al ruso, alemán, español, francés, italiano, portugués, turco, polaco, irlandés y japonés (#91, #93, #95, #98)
-- Elige el idioma de la app en el ajuste de idioma por aplicación de Android
+- Traducciones al bengalí, ruso, alemán, español, francés, italiano, portugués, turco, polaco, irlandés y japonés (#91, #93, #95, #98)
+- Elige el idioma de la app en Ajustes, en cualquier versión de Android
 - Traductores como Google Traductor aparecen en el menú de selección de texto (#78)
 - Progreso de impresión y guardado de una copia sin contraseña
 - Pantalla de fallo con todos los detalles para copiar, compartir o informar en GitHub
