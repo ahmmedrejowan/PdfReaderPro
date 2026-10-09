@@ -32,7 +32,7 @@
 
 
     <string name="allow_access">Zezwól na dostęp</string>
-    <string name="lets_go">Chodźmy</string>
+    <string name="lets_go">Zaczynamy</string>
     <string name="try_again">Spróbuj ponownie</string>
 
     <string name="app_settings">Ustawienia aplikacji</string>
@@ -58,7 +58,7 @@
     <string name="delete">Usuń</string>
     <string name="do_you_want_to_delete_this_file">Czy chcesz usunąć ten plik?</string>
     <string name="cancel">Anuluj</string>
-    <string name="dismiss">Odrzuć</string>
+    <string name="dismiss">Zamknij</string>
     <string name="size_t">Rozmiar:</string>
     <string name="last_modified_t">Ostatnia modyfikacja:</string>
     <string name="pages_t">Strony:</string>
@@ -117,7 +117,7 @@
 
     <!-- Home Screen -->
     <string name="good_morning">Dzień dobry</string>
-    <string name="good_afternoon">Dobry wieczór</string>
+    <string name="good_afternoon">Dzień dobry</string>
     <string name="good_evening">Dobry wieczór</string>
     <string name="welcome_to_library">Witaj w swojej bibliotece PDF</string>
     <string name="all_files">Wszystkie pliki</string>
@@ -128,7 +128,7 @@
     <string name="no_recent">Brak ostatnich plików</string>
     <string name="add_favorites_hint">Dodaj pliki PDF do ulubionych, aby zobaczyć je tutaj</string>
     <string name="open_pdf_hint">Otwórz kilka plików PDF, aby zobaczyć je tutaj</string>
-    <string name="delete_count_files">Usunąć %d plików?</string>
+    <string name="delete_count_files">Usunąć pliki (%d)?</string>
     <string name="delete_warning">Ta operacja jest nieodwracalna. Pliki zostaną trwale usunięte z urządzenia.</string>
 
     <!-- Folders Screen -->
@@ -137,8 +137,8 @@
     <string name="search_folders_hint">Szukaj folderów...</string>
     <string name="no_folders_found">Nie znaleziono folderów</string>
     <string name="try_different_search">Spróbuj innego terminu wyszukiwania</string>
-    <string name="folder_count">%d folderów</string>
-    <string name="file_count">%d plików</string>
+    <string name="folder_count">Foldery: %d</string>
+    <string name="file_count">Pliki: %d</string>
     <string name="pdfs">Pliki PDF</string>
     <string name="search_folders_desc">Szukaj folderów</string>
     <string name="sort_folders_desc">Sortuj foldery</string>
@@ -155,7 +155,7 @@
     <string name="clear">Wyczyść</string>
     <string name="show_all_count">Pokaż wszystko (%d)</string>
     <string name="file_found">Znaleziono %d plik</string>
-    <string name="files_found">Znaleziono %d plików</string>
+    <string name="files_found">Znalezione pliki: %d</string>
     <string name="options">Opcje</string>
     <string name="tip_search_filename_title">Szukaj według nazwy pliku</string>
     <string name="tip_search_filename_desc">Wpisz część nazwy pliku PDF, aby szybko go znaleźć</string>
@@ -294,8 +294,8 @@
     <string name="delete_highlight">Usuń wyróżnienie</string>
     <string name="highlight_page">Strona %d</string>
     <string name="highlight_count">%d wyróżnienie</string>
-    <string name="highlights_count">%d wyróżnień</string>
-    <string name="view_manage_highlights">Wyświetlaj i zarządzaj wyróżnieniami</string>
+    <string name="highlights_count">Wyróżnienia: %d</string>
+    <string name="view_manage_highlights">Przeglądaj wyróżnienia i zarządzaj nimi</string>
     <string name="highlight_in_file">Zapisane w pliku</string>
     <string name="search_highlights">Szukaj w wyróżnieniach</string>
     <string name="save_with_highlights">Zapisz kopię z wyróżnieniami</string>
@@ -305,7 +305,7 @@
     <string name="bake_highlights_caveat">Gdy plik PDF zawiera wyróżnienia, adnotacje tekstowe lub odręczne, niektóre funkcje edycji przestają działać. Wybierzesz miejsce zapisania kopii.</string>
     <string name="bake_highlights_confirm_check">Rozumiem, że tworzy to osobną kopię</string>
     <string name="bake_highlights_action">Zapisz kopię</string>
-    <string name="bake_highlights_done">Zapisano %d wyróżnień w kopii</string>
+    <string name="bake_highlights_done">Zapisano wyróżnienia w kopii: %d</string>
     <string name="bake_highlights_failed">Nie udało się zapisać kopii: %s</string>
     <string name="save_decrypted_copy">Zapisz kopię bez hasła</string>
     <string name="save_decrypted_copy_desc">Zapisz niezabezpieczoną kopię tego dokumentu</string>
@@ -337,7 +337,7 @@
     <string name="sign_placed">Podpis umieszczony. Przeciągnij, aby przenieść, lub umieść kolejny.</string>
     <string name="sign_place_failed">Nie udało się umieścić podpisu</string>
     <string name="sign_document">Podpis</string>
-    <string name="sign_document_desc">Dodawaj, zarządzaj i zapisuj podpisy</string>
+    <string name="sign_document_desc">Dodawaj i zapisuj podpisy oraz zarządzaj nimi</string>
     <string name="sign_done">Zapisano podpisaną kopię</string>
     <string name="sign_failed">Nie udało się zapisać podpisanej kopii: %s</string>
     <string name="sign_saving">Zapisywanie podpisanej kopii…</string>
@@ -428,7 +428,7 @@
     <string name="add_pdfs">Dodaj pliki PDF do scalenia</string>
     <string name="drag_to_reorder">Przeciągnij, aby zmienić kolejność</string>
     <string name="merge_files">Scal pliki</string>
-    <string name="merge_more">Scal więcej</string>
+    <string name="merge_more">Scal inne pliki</string>
     <string name="merged_successfully">Pliki PDF zostały pomyślnie scalone</string>
 
     <!-- Split -->
@@ -438,7 +438,7 @@
     <string name="extract_pages">Wyodrębnij strony</string>
     <string name="pages_per_file">Stron na plik</string>
     <string name="split">Podziel</string>
-    <string name="split_more">Podziel więcej</string>
+    <string name="split_more">Podziel inny plik</string>
     <string name="split_successfully">Plik PDF został pomyślnie podzielony</string>
 
     <!-- Compress -->
@@ -448,7 +448,7 @@
     <string name="high">Wysoki</string>
     <string name="estimated_size">Szacowany rozmiar: %s</string>
     <string name="compress">Skompresuj</string>
-    <string name="compress_more">Skompresuj więcej</string>
+    <string name="compress_more">Skompresuj inny plik</string>
     <string name="compressed_successfully">Plik PDF został pomyślnie skompresowany</string>
     <string name="size_reduced">Rozmiar zmniejszony</string>
     <string name="compress_low_label">Niski</string>
@@ -459,13 +459,13 @@
     <string name="compress_high_desc">Maksymalna kompresja, mniejszy plik</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$d stron • %2$s</string>
+    <string name="compress_page_info">%1$d str. • %2$s</string>
     <string name="compress_share_pdf">Udostępnij PDF</string>
     <string name="compress_empty_title">Skompresuj plik PDF</string>
     <string name="compress_empty_desc">Wybierz plik PDF, aby zmniejszyć jego rozmiar zachowując jakość</string>
     <string name="already_optimized">Już zoptymalizowany</string>
     <string name="limited_potential">Ograniczony potencjał</string>
-    <string name="size_save_format">(oszczędź %1$s • %2$d%%)</string>
+    <string name="size_save_format">(oszczędność %1$s • %2$d%%)</string>
     <string name="contains_images_hint">Zawiera obrazy • Dobry potencjał kompresji</string>
     <string name="mostly_text_hint">Głównie treść tekstowa</string>
     <string name="compress_pdf_btn">Skompresuj PDF</string>
@@ -474,7 +474,7 @@
     <string name="compressed_size">Rozmiar po kompresji</string>
     <string name="compressed_size_reduced">Rozmiar zmniejszony</string>
     <string name="saved_format">(zaoszczędzono %1$s)</string>
-    <string name="pages_count_format">%1$d stron</string>
+    <string name="pages_count_format">%1$d str.</string>
 
     <!-- Rotate -->
     <string name="rotation">Obrót</string>
@@ -484,7 +484,7 @@
     <string name="rotate_90_right">90° w prawo</string>
     <string name="rotate_90_left">90° w lewo</string>
     <string name="apply_to_all">Zastosuj do wszystkich stron</string>
-    <string name="rotate_more">Obróć więcej</string>
+    <string name="rotate_more">Obróć inny plik</string>
     <string name="rotated_successfully">Plik PDF został pomyślnie obrócony</string>
 
     <!-- Lock/Unlock -->
@@ -499,8 +499,8 @@
     <string name="allow_annotations">Zezwól na adnotacje</string>
     <string name="lock">Zablokuj</string>
     <string name="unlock">Odblokuj</string>
-    <string name="lock_more">Zablokuj więcej</string>
-    <string name="unlock_more">Odblokuj więcej</string>
+    <string name="lock_more">Zablokuj inny plik</string>
+    <string name="unlock_more">Odblokuj inny plik</string>
     <string name="locked_successfully">Plik PDF został pomyślnie zablokowany</string>
     <string name="unlocked_successfully">Plik PDF został pomyślnie odblokowany</string>
     <string name="incorrect_password">Nieprawidłowe hasło</string>
@@ -527,18 +527,18 @@
     <string name="position_center">Środek</string>
     <string name="position_tiled">Kafelkowy</string>
     <string name="watermark_added">Znak wodny dodany!</string>
-    <string name="applied_to_pages">Zastosowano do %1$d stron</string>
-    <string name="pages_size_dash_format">%1$d stron - %2$s</string>
+    <string name="applied_to_pages">Zastosowano do stron: %1$d</string>
+    <string name="pages_size_dash_format">%1$d str. - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Wybierz strony do usunięcia</string>
     <string name="remove_selected">Usuń zaznaczone</string>
-    <string name="remove_more">Usuń więcej</string>
+    <string name="remove_more">Usuń strony z innego pliku</string>
 
     <!-- Reorder -->
     <string name="drag_to_reorder_pages">Przeciągnij strony, aby zmienić kolejność</string>
     <string name="reorder">Zmień kolejność</string>
-    <string name="reorder_more">Zmień kolejność więcej</string>
+    <string name="reorder_more">Zmień kolejność w innym pliku</string>
     <string name="reordered_successfully">Kolejność stron została pomyślnie zmieniona</string>
 
     <!-- Page Numbers -->
@@ -547,7 +547,7 @@
     <string name="number_position">Pozycja</string>
     <string name="add_numbers">Dodaj numery</string>
     <string name="numbers_added">Numery stron zostały pomyślnie dodane</string>
-    <string name="number_more">Numeruj więcej</string>
+    <string name="number_more">Numeruj inny plik</string>
     <string name="tool_add_page_numbers_desc">Wstaw numery stron do dokumentu PDF</string>
     <string name="section_format">FORMAT</string>
     <string name="section_margins">MARGINESY</string>
@@ -589,7 +589,7 @@
     <string name="add_images">Dodaj obrazy do konwersji</string>
     <string name="image_quality">Jakość obrazu</string>
     <string name="convert">Konwertuj</string>
-    <string name="convert_more">Konwertuj więcej</string>
+    <string name="convert_more">Konwertuj inne pliki</string>
     <string name="converted_successfully">Obrazy zostały przekonwertowane na PDF</string>
 
     <!-- PDF to Images -->
@@ -598,7 +598,7 @@
     <string name="jpg">JPG</string>
     <string name="image_resolution">Rozdzielczość</string>
     <string name="export">Eksportuj</string>
-    <string name="export_more">Eksportuj więcej</string>
+    <string name="export_more">Eksportuj z innego pliku</string>
     <string name="exported_successfully">Plik PDF został wyeksportowany jako obrazy</string>
     <string name="share_all">Udostępnij wszystko</string>
     <string name="view_images">Wyświetl obrazy</string>
@@ -649,9 +649,9 @@
     <string name="error_invalid_format">Nieprawidłowy format: %1$s</string>
     <string name="error_invalid_range">Nieprawidłowy zakres: %1$s</string>
     <string name="error_invalid_page">Nieprawidłowa strona: %1$s</string>
-    <string name="error_page_at_least_one">Strona musi mieć co najmniej 1</string>
-    <string name="error_start_page_at_least_one">Strona początkowa musi mieć co najmniej 1</string>
-    <string name="error_end_page_at_least_one">Strona końcowa musi mieć co najmniej 1</string>
+    <string name="error_page_at_least_one">Numer strony musi wynosić co najmniej 1</string>
+    <string name="error_start_page_at_least_one">Numer strony początkowej musi wynosić co najmniej 1</string>
+    <string name="error_end_page_at_least_one">Numer strony końcowej musi wynosić co najmniej 1</string>
     <string name="error_page_exceeds_max">Strona %1$d przekracza maksimum (%2$d)</string>
     <string name="error_start_page_exceeds_max">Strona początkowa %1$d przekracza maksimum (%2$d)</string>
     <string name="error_end_page_exceeds_max">Strona końcowa %1$d przekracza maksimum (%2$d)</string>
@@ -703,7 +703,7 @@
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Wróć</string>
     <string name="cd_close">Zamknij</string>
-    <string name="cd_dismiss">Odrzuć</string>
+    <string name="cd_dismiss">Zamknij</string>
     <string name="cd_menu">Menu</string>
     <string name="cd_options">Opcje</string>
     <string name="cd_expand">Rozwiń</string>
@@ -776,7 +776,7 @@
     <string name="cd_file_options">Opcje pliku</string>
     <string name="cd_folder_options">Opcje folderu</string>
     <string name="cd_selected">Zaznaczone</string>
-    <string name="cd_not_selected">Nie zaznaczone</string>
+    <string name="cd_not_selected">Niezaznaczone</string>
 
     <!-- Content Descriptions - Status -->
     <string name="cd_loading">Ładowanie</string>
@@ -879,7 +879,7 @@
     <string name="file_info_desc">Wyświetl szczegóły i właściwości pliku</string>
     <string name="delete_action">Usuń</string>
     <string name="delete_desc">Trwale usuń ten plik</string>
-    <string name="pages_count">%d stron</string>
+    <string name="pages_count">%d str.</string>
     <string name="cd_toggle_scroll_direction">Przełącz kierunek przewijania</string>
     <string name="cd_fit_to_screen">Dopasuj do ekranu</string>
 
@@ -887,7 +887,7 @@
     <string name="folder_options">Opcje folderu</string>
     <string name="pdf_files">Pliki PDF</string>
     <string name="file_singular">%d plik</string>
-    <string name="files_plural">%d plików</string>
+    <string name="files_plural">Pliki: %d</string>
     <string name="location">Lokalizacja</string>
     <string name="actions">Akcje</string>
     <string name="open_folder">Otwórz folder</string>
@@ -917,13 +917,13 @@
 
     <!-- Recent Items -->
     <string name="item_selected">Zaznaczone</string>
-    <string name="item_not_selected">Nie zaznaczone</string>
+    <string name="item_not_selected">Niezaznaczone</string>
     <string name="page_progress">Strona %1$d/%2$d</string>
     <string name="page_progress_time">Strona %1$d z %2$d • %3$s</string>
     <string name="just_now">Przed chwilą</string>
     <string name="minutes_ago">%d min temu</string>
     <string name="hours_ago">%d godz. temu</string>
-    <string name="days_ago">%d dni temu</string>
+    <string name="days_ago">%d d temu</string>
 
     <!-- Permission Bottom Sheet -->
     <string name="quick_access_needed">Wymagany szybki dostęp</string>
@@ -959,7 +959,7 @@
 
     <!-- More Options Sheet -->
     <string name="additional_tools">Dodatkowe narzędzia i akcje</string>
-    <string name="view_manage_bookmarks">Wyświetlaj i zarządzaj zapisanymi stronami</string>
+    <string name="view_manage_bookmarks">Przeglądaj zapisane strony i zarządzaj nimi</string>
     <string name="auto_scroll_desc">Tryb czytania bez użycia rąk</string>
     <string name="go_to_page_desc">Przejdź do konkretnej strony</string>
     <string name="share_document">Udostępnij ten dokument</string>
@@ -1040,7 +1040,7 @@
 
     <!-- Bookmarks Sheet -->
     <string name="bookmark_count">%d zakładka</string>
-    <string name="bookmarks_count">%d zakładek</string>
+    <string name="bookmarks_count">Zakładki: %d</string>
     <string name="delete_bookmark">Usuń zakładkę</string>
     <string name="bookmark_hint">Dotknij ikony zakładki, aby zapisać strony</string>
     <string name="page_number_title">Strona %d</string>
@@ -1110,8 +1110,8 @@
     <string name="slow">Wolno</string>
     <string name="fast">Szybko</string>
     <string name="tap_to_start">Dotknij, aby rozpocząć automatyczne przewijanie</string>
-    <string name="start_scroll">Start</string>
-    <string name="stop_scroll">Stop</string>
+    <string name="start_scroll">Rozpocznij</string>
+    <string name="stop_scroll">Zatrzymaj</string>
     <string name="bookmarks_title">Zakładki</string>
     <string name="no_bookmarks_yet">Jeszcze brak zakładek</string>
     <string name="add_bookmark_hint">Dodawaj zakładki podczas czytania, aby szybko wracać do ważnych stron</string>
@@ -1145,7 +1145,7 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Szukaj w dokumencie…</string>
-    <string name="cd_matching_highlights">%1$d pasujących wyróżnień</string>
+    <string name="cd_matching_highlights">Pasujące wyróżnienia: %1$d</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Opcje widoku</string>
@@ -1174,9 +1174,9 @@
     <string name="no_toc_message">Ten plik PDF nie ma spisu treści</string>
     <string name="no_attachments_message">Ten plik PDF nie ma osadzonych plików</string>
     <string name="toc_section_count">%1$d sekcja</string>
-    <string name="toc_sections_count">%1$d sekcji</string>
+    <string name="toc_sections_count">Sekcje: %1$d</string>
     <string name="toc_file_count">%1$d plik</string>
-    <string name="toc_files_count">%1$d plików</string>
+    <string name="toc_files_count">Pliki: %1$d</string>
     <string name="toc_browse_structure">Przeglądaj strukturę dokumentu</string>
     <string name="toc_tab_contents">Zawartość</string>
     <string name="toc_tab_attachments">Załączniki</string>
@@ -1190,7 +1190,7 @@
     <string name="delete_pdf">Usuń PDF</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">Usunąć %d plików?</string>
+    <string name="delete_files_count">Usunąć pliki (%d)?</string>
     <string name="delete_files_warning">Ta operacja jest nieodwracalna. Pliki zostaną trwale usunięte z urządzenia.</string>
 
     <!-- Settings Screen -->
@@ -1241,7 +1241,7 @@
     <string name="scroll_up_down">Przewijaj w górę i w dół</string>
     <string name="scroll_left_right">Przewijaj w lewo i w prawo</string>
     <string name="choose_spread">Wybierz tryb rozkładówki stron</string>
-    <string name="spread_single_desc">Pokazuj jedną stronę na raz</string>
+    <string name="spread_single_desc">Pokazuj jedną stronę naraz</string>
     <string name="spread_odd_desc">Pierwsza strona osobno, potem pary</string>
     <string name="spread_even_desc">Zacznij od par stron</string>
     <string name="position_pages">Pozycja stron na ekranie</string>
@@ -1412,13 +1412,13 @@
     <string name="page_numbers_added">Numery stron dodane!</string>
 
     <!-- Success Descriptions -->
-    <string name="pages_rotated_count">Obrócono %d stron</string>
+    <string name="pages_rotated_count">Obrócone strony: %d</string>
     <string name="pdf_saved_new_order">Twój plik PDF został zapisany z nową kolejnością stron</string>
     <string name="pdf_password_protected">Twój plik PDF jest teraz chroniony hasłem</string>
     <string name="password_protection_removed">Ochrona hasłem została usunięta</string>
-    <string name="images_created_count">Utworzono %1$d obrazów %2$s</string>
-    <string name="images_converted_count">Przekonwertowano %d obrazów</string>
-    <string name="pages_removed_count">Usunięto %d stron</string>
+    <string name="images_created_count">Utworzone obrazy %2$s: %1$d</string>
+    <string name="images_converted_count">Przekonwertowane obrazy: %d</string>
+    <string name="pages_removed_count">Usunięte strony: %d</string>
 
     <!-- Section Labels -->
     <string name="section_rotation">OBRÓT</string>
@@ -1451,9 +1451,9 @@
     <string name="no_password_protection">Brak ochrony hasłem</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">Wszystkie %d stron</string>
+    <string name="all_pages_count">Wszystkie strony (%d)</string>
     <string name="selected_of_count">Wybrano %1$d z %2$d</string>
-    <string name="pages_modified">%d stron • Zmodyfikowano</string>
+    <string name="pages_modified">%d str. • Zmodyfikowano</string>
     <string name="page_numbers_label">Numery stron</string>
     <string name="page_numbers_hint">np. 1-5, 8, 10-12</string>
     <string name="all_pages_label">Wszystkie strony (%d)</string>
@@ -1466,7 +1466,7 @@
     <string name="page_selection_all">Wszystkie strony (1-%1$d)</string>
     <string name="page_selection_range">Strony %1$d-%2$d</string>
     <string name="page_selection_custom">Strony %1$s</string>
-    <string name="page_selection_custom_long">Strony %1$s… (%2$d stron)</string>
+    <string name="page_selection_custom_long">Strony %1$s… (%2$d str.)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Przytrzymaj i przeciągnij strony, aby zmienić kolejność</string>
@@ -1476,7 +1476,7 @@
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Jakość bezstratna</string>
     <string name="format_smaller_size">Mniejszy rozmiar pliku</string>
-    <string name="will_create_images">Utworzy %1$d obrazów %2$s</string>
+    <string name="will_create_images">Obrazy %2$s do utworzenia: %1$d</string>
 
     <!-- Compression Levels -->
     <string name="compression_low">Niski</string>
@@ -1498,12 +1498,12 @@
     <!-- Merge -->
     <string name="no_pdfs_selected">Nie wybrano plików PDF</string>
     <string name="add_pdfs_to_merge">Dodaj dwa lub więcej plików PDF, aby scalić je w jeden dokument</string>
-    <string name="files_selected">Wybrano %d plików</string>
-    <string name="files_merged">Scalono %d plików</string>
+    <string name="files_selected">Wybrane pliki: %d</string>
+    <string name="files_merged">Scalone pliki: %d</string>
 
     <!-- Image to PDF -->
-    <string name="images_selected">Wybrano %d obrazów</string>
-    <string name="create_pdf_pages">Utwórz PDF (%d stron)</string>
+    <string name="images_selected">Wybrane obrazy: %d</string>
+    <string name="create_pdf_pages">Utwórz PDF (%d str.)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">Lewy dolny</string>
@@ -1526,13 +1526,13 @@
     <string name="no_image_selected">Nie wybrano obrazu</string>
 
     <!-- Remove Pages -->
-    <string name="pages_to_remove">%d stron do usunięcia</string>
-    <string name="remove_selected_pages">Usuń %d stron</string>
+    <string name="pages_to_remove">Strony do usunięcia: %d</string>
+    <string name="remove_selected_pages">Usuń strony (%d)</string>
     <string name="remove_pages_btn">Usuń strony</string>
     <string name="select_pages_to_remove_hint">Dotknij stron, aby wybrać je do usunięcia</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$d stron • %2$s</string>
+    <string name="pages_size_format">%1$d str. • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1543,21 @@
     <string name="to_page">Do</string>
     <string name="page_numbers_example">np. 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Wprowadź numery stron lub zakresy oddzielone przecinkami</string>
-    <string name="files_selected_count">Wybrano %1$d plików</string>
+    <string name="files_selected_count">Wybrane pliki: %1$d</string>
     <string name="merge_empty_title">Scal pliki PDF</string>
     <string name="merge_empty_desc">Wybierz wiele plików PDF, aby połączyć je w jeden dokument</string>
-    <string name="file_size_pages">%1$s • %2$d stron</string>
-    <string name="pages_partial_format">%1$d/%2$d stron</string>
-    <string name="pages_all_format">Wszystkie %1$d stron</string>
+    <string name="file_size_pages">%1$s • %2$d str.</string>
+    <string name="pages_partial_format">%1$d/%2$d str.</string>
+    <string name="pages_all_format">Wszystkie strony (%1$d)</string>
     <string name="add_more_files">Dodaj więcej plików</string>
     <string name="saved_to_path">Zapisano w: %1$s</string>
     <string name="merging_pdfs">Scalanie plików PDF…</string>
     <string name="merge_complete">Scalanie zakończone!</string>
     <string name="merge_more_files">Scal więcej plików</string>
     <string name="select_pages">Wybierz strony</string>
-    <string name="total_pages_format">Razem: %1$d stron</string>
+    <string name="total_pages_format">Liczba stron: %1$d</string>
     <string name="selection_mode">Tryb wyboru</string>
-    <string name="all_pages_included">Zostaną uwzględnione wszystkie %1$d stron</string>
+    <string name="all_pages_included">Zostaną uwzględnione wszystkie strony (%1$d)</string>
     <string name="pages_range_info">Zostaną uwzględnione strony od %1$s do %2$s</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1569,7 @@
     <string name="extract_pages_help">Tworzy pojedynczy plik PDF z wybranymi stronami. Strony: 1-%d</string>
     <string name="output_prefix_label">Prefiks wyjściowy</string>
     <string name="split_another_pdf">Podziel inny plik PDF</string>
-    <string name="pages_count_with_mode">%1$d stron • %2$s</string>
+    <string name="pages_count_with_mode">%1$d str. • %2$s</string>
     <string name="split_empty_title">Podziel plik PDF</string>
     <string name="split_empty_desc">Wybierz plik PDF, aby podzielić go na wiele części lub wyodrębnić konkretne strony</string>
     <string name="split_mode_title">Tryb dzielenia</string>
@@ -1583,19 +1583,19 @@
     <string name="split_mode_extract_desc">Pojedynczy PDF</string>
     <string name="split_options_title">Opcje</string>
     <string name="split_will_create_one_pdf">Utworzy 1 plik PDF</string>
-    <string name="split_will_create_pdfs">Utworzy %1$d plików PDF</string>
+    <string name="split_will_create_pdfs">Pliki PDF do utworzenia: %1$d</string>
     <string name="split_every_one_page">Podziel co 1 stronę</string>
-    <string name="split_every_n_pages">Podziel co %1$d stron</string>
-    <string name="split_will_create_one_file_max">Utworzy 1 plik (maks.: %1$d stron)</string>
-    <string name="split_will_create_files_max">Utworzy %1$d plików (maks.: %2$d stron)</string>
+    <string name="split_every_n_pages">Podziel co %1$d str.</string>
+    <string name="split_will_create_one_file_max">Utworzy 1 plik (maks.: %1$d str.)</string>
+    <string name="split_will_create_files_max">Pliki do utworzenia: %1$d (maks.: %2$d str.)</string>
     <string name="split_into_individual_pages">Podziel na pojedyncze strony</string>
-    <string name="split_will_create_separate_pdfs">Utworzy %1$d oddzielnych plików PDF</string>
+    <string name="split_will_create_separate_pdfs">Pliki PDF do utworzenia: %1$d</string>
     <string name="split_will_create_one_page_pdf">Utworzy 1 PDF z 1 stroną</string>
     <string name="split_will_create_one_pdf_pages">Utworzy 1 PDF z %1$d stronami</string>
     <string name="splitting_pdf">Dzielenie pliku PDF…</string>
     <string name="split_complete">Dzielenie zakończone!</string>
     <string name="one_file_created">Utworzono 1 plik</string>
-    <string name="files_created_count">Utworzono %1$d plików</string>
+    <string name="files_created_count">Utworzone pliki: %1$d</string>
 
     <!-- Remove Pages Screen -->
     <string name="select_page_range">Wybierz zakres stron</string>
@@ -1626,7 +1626,7 @@
     <string name="error_value_range">Wartość musi być z zakresu 1-%1$d</string>
     <string name="cannot_remove_all_pages">Nie można usunąć wszystkich stron</string>
     <string name="remove_one_page">Usuń 1 stronę</string>
-    <string name="remove_pages_count">Usuń %1$d stron</string>
+    <string name="remove_pages_count">Usuń strony (%1$d)</string>
     <string name="removing">Usuwanie…</string>
     <string name="pages_removed">Strony usunięte!</string>
     <string name="one_page_removed">Usunięto 1 stronę</string>
@@ -1646,10 +1646,10 @@
 
     <!-- Input Validation Messages -->
     <string name="validation_password_required">Hasło jest wymagane</string>
-    <string name="validation_password_too_short">Hasło musi mieć co najmniej %1$d znaków</string>
-    <string name="validation_password_too_long">Hasło nie może przekraczać %1$d znaków</string>
+    <string name="validation_password_too_short">Minimalna liczba znaków hasła: %1$d</string>
+    <string name="validation_password_too_long">Maksymalna liczba znaków hasła: %1$d</string>
     <string name="validation_filename_required">Nazwa pliku jest wymagana</string>
-    <string name="validation_filename_too_long">Nazwa pliku nie może przekraczać %1$d znaków</string>
+    <string name="validation_filename_too_long">Maksymalna liczba znaków nazwy pliku: %1$d</string>
     <string name="validation_filename_invalid_chars">Nazwa pliku zawiera nieprawidłowe znaki</string>
     <string name="validation_filename_starts_with_dot">Nazwa pliku nie może zaczynać się od kropki</string>
     <string name="validation_filename_ends_with_dot">Nazwa pliku nie może kończyć się kropką</string>

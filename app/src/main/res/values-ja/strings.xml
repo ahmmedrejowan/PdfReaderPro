@@ -4,7 +4,7 @@
 
 
     <string name="intro_title_1">PDFをシームレスに探索</string>
-    <string name="intro_sub_title_1"> effortless な読書体験でPDFの世界へ飛び込みましょう</string>
+    <string name="intro_sub_title_1">快適な読書体験でPDFの世界へ飛び込みましょう</string>
 
     <string name="intro_title_2">あなたのPDFコレクション</string>
     <string name="intro_sub_title_2">欲しいPDFを効率的に見つけてアクセス</string>
@@ -54,7 +54,7 @@
     <string name="share">共有</string>
     <string name="rename">名前を変更</string>
     <string name="add_to_favorite">お気に入りに追加</string>
-    <string name="remove_from_recent">最近から削除</string>
+    <string name="remove_from_recent">最近の項目から削除</string>
     <string name="delete">削除</string>
     <string name="do_you_want_to_delete_this_file">このファイルを削除しますか？</string>
     <string name="cancel">キャンセル</string>
@@ -217,7 +217,7 @@
     <string name="reading_theme">読書テーマ</string>
     <string name="keep_screen_on">画面をオンのままにする</string>
     <string name="check_for_updates">アップデートを確認</string>
-    <string name="auto_check_updates">自動更新確認</string>
+    <string name="auto_check_updates">アップデートを自動確認</string>
     <string name="version">バージョン %s</string>
     <string name="gpl_license">GPL 3.0</string>
     <string name="adjust_brightness">画面の明るさを調整</string>
@@ -260,7 +260,7 @@
     <!-- Update Sheet -->
     <string name="update_available">アップデートがあります</string>
     <string name="current">現在</string>
-    <string name="new_version">新規</string>
+    <string name="new_version">新バージョン</string>
     <string name="whats_new">新機能</string>
     <string name="skip_version">このバージョンをスキップ</string>
     <string name="download_update">アップデートをダウンロード</string>
@@ -312,10 +312,10 @@
     <string name="save_decrypted_done">パスワードを削除したコピーを保存しました</string>
     <string name="save_decrypted_failed">コピーを保存できませんでした：%s</string>
     <string name="save_decrypted_no_password">まずドキュメントをパスワードで開いてください</string>
-    <string name="sign_tab_draw">描く</string>
+    <string name="sign_tab_draw">手書き</string>
     <string name="sign_tab_type">入力</string>
     <string name="sign_tab_image">画像</string>
-    <string name="sign_type_placeholder">あなたの名前</string>
+    <string name="sign_type_placeholder">名前</string>
     <string name="sign_type_label">署名を入力</string>
     <string name="sign_pick_image">画像を選択</string>
     <string name="sign_clear">クリア</string>
@@ -464,9 +464,9 @@
     <string name="compress_empty_title">PDFファイルを圧縮</string>
     <string name="compress_empty_desc">品質を維持しながらファイルサイズを削減するPDFファイルを選択してください</string>
     <string name="already_optimized">すでに最適化済み</string>
-    <string name="limited_potential">限られた可能性</string>
+    <string name="limited_potential">圧縮効果は限定的</string>
     <string name="size_save_format">（%1$s節約 • %2$d%%）</string>
-    <string name="contains_images_hint">画像を含む • 良好な圧縮の可能性</string>
+    <string name="contains_images_hint">画像を含む • 高い圧縮効果が見込めます</string>
     <string name="mostly_text_hint">主にテキストコンテンツ</string>
     <string name="compress_pdf_btn">PDFを圧縮</string>
     <string name="compression_complete">圧縮完了！</string>
@@ -855,7 +855,7 @@
     <string name="recently_opened">最近開いた</string>
 
     <!-- Exit Confirmation -->
-    <string name="stay">滞在する</string>
+    <string name="stay">キャンセル</string>
     <string name="exit_confirm_message">アプリを閉じてもよろしいですか？</string>
 
     <!-- Rename Sheet -->
@@ -869,7 +869,7 @@
     <string name="remove_from_favorites_action">お気に入りから削除</string>
     <string name="add_favorites_desc">すぐにアクセスできるようにお気に入りに保存</string>
     <string name="remove_favorites_desc">お気に入りコレクションから削除</string>
-    <string name="remove_from_recents">最近から削除</string>
+    <string name="remove_from_recents">最近の項目から削除</string>
     <string name="remove_recents_desc">最近の履歴から削除</string>
     <string name="share_pdf">共有</string>
     <string name="share_pdf_desc">このPDFを他のアプリに送信</string>
@@ -886,8 +886,8 @@
     <!-- Folder Options -->
     <string name="folder_options">フォルダオプション</string>
     <string name="pdf_files">PDFファイル</string>
-    <string name="file_singular">%dファイル</string>
-    <string name="files_plural">%dファイル</string>
+    <string name="file_singular">%d個のファイル</string>
+    <string name="files_plural">%d個のファイル</string>
     <string name="location">場所</string>
     <string name="actions">アクション</string>
     <string name="open_folder">フォルダを開く</string>
@@ -926,7 +926,7 @@
     <string name="days_ago">%d日前</string>
 
     <!-- Permission Bottom Sheet -->
-    <string name="quick_access_needed">クイックアクセスが必要です</string>
+    <string name="quick_access_needed">ストレージへのアクセスが必要です</string>
     <string name="storage_access_message">PDFファイルを見つけて表示するために、ストレージへのアクセスを許可してください</string>
     <string name="open_settings">設定を開く</string>
     <string name="not_now">今はしない</string>
@@ -987,7 +987,7 @@
     <string name="single_page_arrangement">単一ページ配置</string>
     <string name="single_page_arrangement_desc">ページ間の余白を削除</string>
     <string name="scroll_speed_limit">スクロール速度制限</string>
-    <string name="scroll_speed_limit_desc">誤ったページスキップを防止</string>
+    <string name="scroll_speed_limit_desc">誤ってページを飛ばすのを防止</string>
     <string name="auto_hide_toolbar">ツールバーを自動非表示</string>
     <string name="auto_hide_toolbar_desc">5秒後にツールバーを非表示</string>
     <string name="scrubber_on_scroll">スクロール時のページスライダー</string>
@@ -1054,8 +1054,8 @@
     <string name="language_label">言語</string>
     <string name="author_creator">著者と作成者</string>
     <string name="author_label">著者</string>
-    <string name="creator_label">作成者</string>
-    <string name="producer_label">プロデューサー</string>
+    <string name="creator_label">作成アプリケーション</string>
+    <string name="producer_label">PDF変換</string>
     <string name="dates_section">日付</string>
     <string name="created_label">作成日</string>
     <string name="modified_label">変更日</string>
@@ -1130,8 +1130,8 @@
     <string name="document_title">タイトル</string>
     <string name="author">著者</string>
     <string name="subject">件名</string>
-    <string name="creator">作成者</string>
-    <string name="producer">プロデューサー</string>
+    <string name="creator">作成アプリケーション</string>
+    <string name="producer">PDF変換</string>
     <string name="creation_date">作成日</string>
     <string name="modification_date">変更日</string>
     <string name="unknown">不明</string>
@@ -1175,7 +1175,7 @@
     <string name="no_attachments_message">このPDFには埋め込みファイルがありません</string>
     <string name="toc_section_count">%1$dセクション</string>
     <string name="toc_sections_count">%1$dセクション</string>
-    <string name="toc_file_count">%1$dファイル</string>
+    <string name="toc_file_count">%1$d個のファイル</string>
     <string name="toc_files_count">%1$dファイル</string>
     <string name="toc_browse_structure">ドキュメント構造を閲覧</string>
     <string name="toc_tab_contents">内容</string>
@@ -1374,7 +1374,7 @@
     <string name="new_file">新規ファイル</string>
     <string name="new_export">新規エクスポート</string>
     <string name="new_conversion">新規変換</string>
-    <string name="add_more">もっと追加</string>
+    <string name="add_more">さらに追加</string>
     <string name="share_all_images">すべての画像を共有</string>
     <string name="export_images">画像をエクスポート</string>
     <string name="rotate_pages">ページを回転</string>
@@ -1424,7 +1424,7 @@
     <string name="section_rotation">回転</string>
     <string name="section_select_pages">ページを選択</string>
     <string name="section_owner_password">オーナーパスワード（必須）</string>
-    <string name="section_user_password">ユーザーパスワード（オプション）</string>
+    <string name="section_user_password">ユーザーパスワード（任意）</string>
     <string name="section_permissions">権限</string>
     <string name="section_enter_password">パスワードを入力</string>
     <string name="section_output_format">出力形式</string>
@@ -1460,8 +1460,8 @@
     <string name="quick_select_all">すべて</string>
     <string name="quick_select_odd">奇数</string>
     <string name="quick_select_even">偶数</string>
-    <string name="quick_select_first_half">前半½</string>
-    <string name="quick_select_second_half">後半½</string>
+    <string name="quick_select_first_half">前半</string>
+    <string name="quick_select_second_half">後半</string>
     <string name="was_page">以前は%d</string>
     <string name="page_selection_all">すべてのページ（1-%1$d）</string>
     <string name="page_selection_range">%1$d-%2$dページ</string>
@@ -1482,7 +1482,7 @@
     <string name="compression_low">低</string>
     <string name="compression_medium">中</string>
     <string name="compression_high">高</string>
-    <string name="compression_extreme">極限</string>
+    <string name="compression_extreme">最大</string>
     <string name="compression_low_desc">最高品質、より大きいファイル</string>
     <string name="compression_medium_desc">バランスの取れた品質とサイズ</string>
     <string name="compression_high_desc">より小さいファイル、品質低下</string>
@@ -1607,14 +1607,14 @@
     <string name="quick_select_range">範囲</string>
     <string name="quick_select_first_n">最初のN</string>
     <string name="quick_select_last_n">最後のN</string>
-    <string name="quick_select_before">以前</string>
-    <string name="quick_select_after">以後</string>
+    <string name="quick_select_before">より前</string>
+    <string name="quick_select_after">より後</string>
     <string name="select_pages_range_hint">開始から終了までのページを選択（両端を含む）</string>
     <string name="error_start_page_range">開始ページは1-%1$dである必要があります</string>
     <string name="error_end_page_range">終了ページは1-%1$dである必要があります</string>
     <string name="error_start_less_than_end">開始は終了より小さい必要があります</string>
-    <string name="dialog_select_before_page">以前のページを選択</string>
-    <string name="dialog_select_after_page">以後のページを選択</string>
+    <string name="dialog_select_before_page">指定ページより前を選択</string>
+    <string name="dialog_select_after_page">指定ページより後を選択</string>
     <string name="dialog_hint_before_page">このページより前のページが選択されます</string>
     <string name="dialog_hint_after_page">このページより後のページが選択されます</string>
     <string name="dialog_select_first_n">最初のNページを選択</string>
@@ -1672,7 +1672,7 @@
         <item quantity="one">%d件の署名が保存されていません</item>
         <item quantity="other">%d件の署名が保存されていません</item>
     </plurals>
-    <string name="sort_alphabetical">アルファベット順</string>
+    <string name="sort_alphabetical">名前順</string>
     <string name="sort_date_modified">変更日</string>
     <string name="cd_close_selection">選択を閉じる</string>
     <string name="folder_label">フォルダ</string>
@@ -1681,5 +1681,5 @@
     <string name="crash_details_copied">クラッシュの詳細をコピーしました</string>
     <string name="crash_report_subject">PDF Reader Pro クラッシュレポート</string>
     <string name="report_on_github">GitHubで報告する</string>
-    <string name="no_browser_found">リンクを開くためのブラウザが見つかりませんでした。</string>
+    <string name="no_browser_found">リンクを開くためのブラウザが見つかりませんでした</string>
 </resources>

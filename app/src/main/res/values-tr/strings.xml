@@ -20,7 +20,7 @@
     <string name="permission_allowed_title">Her şey hazır</string>
     <string name="permission_error_title">Bir hata oluştu</string>
 
-    <string name="permission_normal_sub_title">Depolama erişimine izin verin, biz de istediğiniz gibi erişmenize, aramanıza ve filtrelemenize ve daha fazlasına izin verelim.</string>
+    <string name="permission_normal_sub_title">Depolama erişimine izin verin; böylece PDF\'lerinize istediğiniz gibi erişebilir, arama ve filtreleme yapabilirsiniz.</string>
     <string name="permission_allowed_sub_title">Uygulamaya geçelim</string>
     <string name="permission_error_sub_title">İzni düzgün bir şekilde alamadık. Belki bir şeyler ters gitti.</string>
 
@@ -234,7 +234,7 @@
     <string name="gnu_license">GNU General Public License v3.0</string>
 
     <!-- Tool categories -->
-    <string name="tool_category_organize">Düzenle</string>
+    <string name="tool_category_organize">Organize Et</string>
     <string name="tool_category_edit">Düzenle</string>
     <string name="tool_category_security">Güvenlik</string>
     <string name="tool_category_convert">Dönüştür</string>
@@ -249,13 +249,13 @@
     <string name="tool_reorder_desc">PDF\'deki sayfa sırasını yeniden düzenleyin</string>
     <string name="tool_remove_pages">Sayfaları Kaldır</string>
     <string name="tool_watermark">Filigran Ekle</string>
-    <string name="tool_watermark_desc">Metin veya resim filigranı ekleyin</string>
+    <string name="tool_watermark_desc">Metin veya görsel filigranı ekleyin</string>
     <string name="tool_page_numbers">Sayfa Numaraları Ekle</string>
     <string name="tool_page_numbers_desc">PDF\'e sayfa numaraları ekleyin</string>
     <string name="tool_unlock_pdf">PDF Kilidini Aç</string>
     <string name="tool_unlock_desc">PDF\'ten parolayı kaldırın</string>
-    <string name="tool_pdf_to_image">PDF\'ten Görsele</string>
-    <string name="tool_pdf_to_image_desc">PDF sayfalarını resim dosyaları olarak dışa aktarın</string>
+    <string name="tool_pdf_to_image">PDF\'ten Görsellere</string>
+    <string name="tool_pdf_to_image_desc">PDF sayfalarını görsel dosyaları olarak dışa aktarın</string>
 
     <!-- Update Sheet -->
     <string name="update_available">Güncelleme Mevcut</string>
@@ -428,7 +428,7 @@
     <string name="add_pdfs">Birleştirmek için PDF ekle</string>
     <string name="drag_to_reorder">Yeniden sıralamak için sürükleyin</string>
     <string name="merge_files">Dosyaları Birleştir</string>
-    <string name="merge_more">Daha Fazla Birleştir</string>
+    <string name="merge_more">Başka PDF Birleştir</string>
     <string name="merged_successfully">PDF\'ler başarıyla birleştirildi</string>
 
     <!-- Split -->
@@ -438,7 +438,7 @@
     <string name="extract_pages">Sayfaları Çıkar</string>
     <string name="pages_per_file">Dosya Başına Sayfa</string>
     <string name="split">Böl</string>
-    <string name="split_more">Daha Fazla Böl</string>
+    <string name="split_more">Başka Bir PDF Böl</string>
     <string name="split_successfully">PDF başarıyla bölündü</string>
 
     <!-- Compress -->
@@ -448,7 +448,7 @@
     <string name="high">Yüksek</string>
     <string name="estimated_size">Tahmini boyut: %s</string>
     <string name="compress">Sıkıştır</string>
-    <string name="compress_more">Daha Fazla Sıkıştır</string>
+    <string name="compress_more">Başka Bir PDF Sıkıştır</string>
     <string name="compressed_successfully">PDF başarıyla sıkıştırıldı</string>
     <string name="size_reduced">Boyut Azaltıldı</string>
     <string name="compress_low_label">Düşük</string>
@@ -484,7 +484,7 @@
     <string name="rotate_90_right">90° Sağa</string>
     <string name="rotate_90_left">90° Sola</string>
     <string name="apply_to_all">Tüm Sayfalara Uygula</string>
-    <string name="rotate_more">Daha Fazla Döndür</string>
+    <string name="rotate_more">Başka Bir PDF Döndür</string>
     <string name="rotated_successfully">PDF başarıyla döndürüldü</string>
 
     <!-- Lock/Unlock -->
@@ -499,8 +499,8 @@
     <string name="allow_annotations">Ek Açıklamalara İzin Ver</string>
     <string name="lock">Kilitle</string>
     <string name="unlock">Kilidi Aç</string>
-    <string name="lock_more">Daha Fazla Kilitle</string>
-    <string name="unlock_more">Daha Fazla Kilidini Aç</string>
+    <string name="lock_more">Başka Bir PDF Kilitle</string>
+    <string name="unlock_more">Başka Bir PDF\'in Kilidini Aç</string>
     <string name="locked_successfully">PDF başarıyla kilitlendi</string>
     <string name="unlocked_successfully">PDF kilidi başarıyla açıldı</string>
     <string name="incorrect_password">Yanlış parola</string>
@@ -533,12 +533,12 @@
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Kaldırılacak sayfaları seçin</string>
     <string name="remove_selected">Seçilenleri Kaldır</string>
-    <string name="remove_more">Daha Fazla Kaldır</string>
+    <string name="remove_more">Başka Bir PDF\'ten Sayfa Kaldır</string>
 
     <!-- Reorder -->
     <string name="drag_to_reorder_pages">Yeniden sıralamak için sayfaları sürükleyin</string>
     <string name="reorder">Yeniden Sırala</string>
-    <string name="reorder_more">Daha Fazla Yeniden Sırala</string>
+    <string name="reorder_more">Başka Bir PDF Sırala</string>
     <string name="reordered_successfully">Sayfalar başarıyla yeniden sıralandı</string>
 
     <!-- Page Numbers -->
@@ -547,7 +547,7 @@
     <string name="number_position">Konum</string>
     <string name="add_numbers">Numara Ekle</string>
     <string name="numbers_added">Sayfa numaraları başarıyla eklendi</string>
-    <string name="number_more">Daha Fazla Numaralandır</string>
+    <string name="number_more">Başka Bir PDF Numaralandır</string>
     <string name="tool_add_page_numbers_desc">PDF belgenize sayfa numaraları ekleyin</string>
     <string name="section_format">FORMAT</string>
     <string name="section_margins">KENAR BOŞLUKLARI</string>
@@ -589,7 +589,7 @@
     <string name="add_images">Dönüştürmek için görsel ekleyin</string>
     <string name="image_quality">Görsel Kalitesi</string>
     <string name="convert">Dönüştür</string>
-    <string name="convert_more">Daha Fazla Dönüştür</string>
+    <string name="convert_more">Başka Dosya Dönüştür</string>
     <string name="converted_successfully">Görseller PDF\'e dönüştürüldü</string>
 
     <!-- PDF to Images -->
@@ -598,7 +598,7 @@
     <string name="jpg">JPG</string>
     <string name="image_resolution">Çözünürlük</string>
     <string name="export">Dışa Aktar</string>
-    <string name="export_more">Daha Fazla Dışa Aktar</string>
+    <string name="export_more">Başka Bir PDF Dışa Aktar</string>
     <string name="exported_successfully">PDF görsel olarak dışa aktarıldı</string>
     <string name="share_all">Tümünü Paylaş</string>
     <string name="view_images">Görselleri Görüntüle</string>
@@ -632,7 +632,7 @@
     <string name="error_owner_password_min_length">Sahip parolası en az 4 karakter olmalıdır</string>
     <string name="error_user_password_min_length">Kullanıcı parolası en az 4 karakter olmalıdır</string>
     <string name="error_lock_failed">PDF kilitlenemedi</string>
-    <string name="error_skipped_password_protected">Parola korumalı atlandı: %1$s</string>
+    <string name="error_skipped_password_protected">Parola korumalı dosya atlandı: %1$s</string>
     <string name="error_select_two_files">En az 2 PDF dosyası seçin</string>
     <string name="error_no_pages_selected">Şunun için sayfa seçilmedi: %1$s</string>
     <string name="error_merge_failed">Birleştirme başarısız oldu</string>
@@ -655,7 +655,7 @@
     <string name="error_page_exceeds_max">Sayfa %1$d maksimumu (%2$d) aşıyor</string>
     <string name="error_start_page_exceeds_max">Başlangıç sayfası %1$d maksimumu (%2$d) aşıyor</string>
     <string name="error_end_page_exceeds_max">Bitiş sayfası %1$d maksimumu (%2$d) aşıyor</string>
-    <string name="error_start_greater_than_end">Geçersiz aralık: başlangıç &gt; bitiş, %1$s içinde</string>
+    <string name="error_start_greater_than_end">%1$s içinde geçersiz aralık: başlangıç &gt; bitiş</string>
     <string name="error_no_pdf_selected">PDF dosyası seçilmedi</string>
     <string name="error_enter_output_prefix">Bir çıktı öneki girin</string>
     <string name="error_enter_page_ranges">Sayfa aralıklarını girin</string>
@@ -835,7 +835,7 @@
     <string name="recent_journey_message">Açtığınız PDF\'ler hızlı erişim için burada görünecek. Dosyalarınızı keşfetmeye başlayın!</string>
     <string name="browse_files">Dosyalara Göz At</string>
     <string name="no_favorites_title">Henüz favori yok</string>
-    <string name="no_favorites_message">Daha sonra kolayca erişmek için buraya kaydetmek üzere herhangi bir PDF\'teki kalp simgesine dokunun.</string>
+    <string name="no_favorites_message">Bir PDF\'i buraya kaydetmek için kalp simgesine dokunun, böylece ona daha sonra kolayca erişebilirsiniz.</string>
     <string name="no_matches_title">Eşleşme bulunamadı</string>
     <string name="no_matches_message">\"%s\" için hiçbir şey bulamadık. Farklı bir arama terimi deneyin.</string>
     <string name="no_folders_title">Henüz klasör yok</string>
@@ -850,7 +850,7 @@
     <string name="files_in_library">kitaplığınızdaki dosyalar</string>
     <string name="storage_used">Kullanılan Depolama</string>
     <string name="total_file_size">toplam dosya boyutu</string>
-    <string name="percent_of_library">kitaplığınızın %d%%\'i</string>
+    <string name="percent_of_library">kitaplığınızdaki payı: %%%d</string>
     <string name="no_files_yet">henüz dosya yok</string>
     <string name="recently_opened">son açılan</string>
 
@@ -938,7 +938,7 @@
     <string name="nav_settings">Ayarlar</string>
 
     <!-- Home sub-tabs -->
-    <string name="home_tab_recent">Son Kullanılanlar</string>
+    <string name="home_tab_recent">Son Açılanlar</string>
     <string name="home_tab_favorites">Favoriler</string>
     <string name="home_tab_all_files">Tüm Dosyalar</string>
 
@@ -971,7 +971,7 @@
     <string name="view_options">Görünüm Seçenekleri</string>
     <string name="customize_reading_layout">Okuma düzeninizi özelleştirin</string>
     <string name="scroll_mode">Kaydırma Modu</string>
-    <string name="wrapped">Sarmalı</string>
+    <string name="wrapped">Izgara</string>
     <string name="single_page_mode">Tek Sayfa</string>
     <string name="spread_mode">Çift Sayfa</string>
     <string name="single_layout">Tek</string>
@@ -982,7 +982,7 @@
     <string name="center_align">Orta</string>
     <string name="right_align">Sağ</string>
     <string name="option_selected">Seçildi</string>
-    <string name="snap_to_page">Sayfaya Yapıştır</string>
+    <string name="snap_to_page">Sayfaya Hizala</string>
     <string name="snap_to_page_desc">Sayfa sınırlarına otomatik olarak hizala</string>
     <string name="single_page_arrangement">Tek Sayfa Düzenlemesi</string>
     <string name="single_page_arrangement_desc">Sayfalar arasındaki kenar boşluklarını kaldır</string>
@@ -1082,7 +1082,7 @@
     <string name="file_management">Dosya Yönetimi</string>
     <string name="remove_from_favourites">Favorilerden Kaldır</string>
     <string name="add_to_favourites">Favorilere Ekle</string>
-    <string name="remove_from_favourites_desc">Favori listinizden kaldır</string>
+    <string name="remove_from_favourites_desc">Favori listenizden kaldır</string>
     <string name="add_to_favourites_desc">Favori listinize ekle</string>
     <string name="delete_file_permanently">Bu dosyayı kalıcı olarak sil</string>
 
@@ -1125,7 +1125,7 @@
     <string name="continuous">Sürekli</string>
     <string name="page_by_page">Sayfa Sayfa</string>
     <string name="remove_favorite_title">Favorilerden kaldırılsın mı?</string>
-    <string name="remove_favorite_message">Bu dosya favori listinizden kaldırılacak</string>
+    <string name="remove_favorite_message">Bu dosya favori listenizden kaldırılacak</string>
     <string name="pdf_information">PDF Bilgileri</string>
     <string name="document_title">Başlık</string>
     <string name="author">Yazar</string>
@@ -1210,7 +1210,7 @@
     <string name="system_default">Sistem Varsayılanı</string>
     <string name="default_zoom">Varsayılan Yakınlaştırma</string>
     <string name="double_tap_zoom">Çift Dokunma Yakınlaştırması</string>
-    <string name="double_tap_zoom_subtitle">Çift dokunurken yakınlaştırma seviyesi</string>
+    <string name="double_tap_zoom_subtitle">Çift dokunulduğunda yakınlaştırma seviyesi</string>
     <string name="show_tools_tab">Araçlar Sekmesini Göster</string>
     <string name="show_tools_tab_subtitle">Uygulamayı yalnızca PDF okuyucu olarak kullanmak için gizle</string>
     <string name="tap_to_check">Güncellemeleri kontrol etmek için dokunun</string>
@@ -1240,7 +1240,7 @@
     <string name="choose_scroll">Sayfaların nasıl kaydırılacağını seçin</string>
     <string name="scroll_up_down">Yukarı ve aşağı kaydır</string>
     <string name="scroll_left_right">Sola ve sağa kaydır</string>
-    <string name="choose_spread">Sayfa yayılma modunu seçin</string>
+    <string name="choose_spread">Çift sayfa düzenini seçin</string>
     <string name="spread_single_desc">Bir seferde bir sayfa göster</string>
     <string name="spread_odd_desc">İlk sayfa tek, sonra çiftler</string>
     <string name="spread_even_desc">Sayfa çiftleriyle başla</string>
@@ -1367,7 +1367,7 @@
     <!-- Tool Screen Subtitles/Descriptions -->
     <string name="tool_lock_desc">Yetkisiz erişimi önlemek için parola koruması ekleyin</string>
     <string name="tool_merge_desc">Birden fazla PDF dosyasını tek bir dosyada birleştirin</string>
-    <string name="tool_pdf_to_images_desc">PDF sayfalarını resim dosyaları olarak dışa aktarın</string>
+    <string name="tool_pdf_to_images_desc">PDF sayfalarını görsel dosyaları olarak dışa aktarın</string>
     <string name="tool_image_to_pdf_desc">Görsellerinizi tek bir PDF belgesine dönüştürün</string>
 
     <!-- Common Tool Actions -->
@@ -1656,14 +1656,14 @@
     <string name="validation_page_required">Sayfa numarası gerekli</string>
     <string name="validation_page_invalid">Geçersiz sayfa numarası</string>
     <string name="validation_page_too_low">Sayfa numarası en az 1 olmalıdır</string>
-    <string name="validation_page_too_high">Sayfa numarası %1$d\'i aşamaz</string>
+    <string name="validation_page_too_high">Sayfa numarası en fazla %1$d olabilir</string>
     <string name="validation_page_range_required">Sayfa aralığı gerekli</string>
     <string name="validation_page_range_format">Geçersiz format. Kullanın: 1-5, 7, 10-12</string>
     <string name="validation_page_range_invalid">Başlangıç sayfası bitiş sayfasından küçük olmalıdır</string>
     <string name="validation_value_required">Değer gerekli</string>
     <string name="validation_value_invalid">Geçersiz değer</string>
     <string name="validation_value_too_low">Değer en az %1$d olmalıdır</string>
-    <string name="validation_value_too_high">Değer %1$d\'i aşamaz</string>
+    <string name="validation_value_too_high">Değer en fazla %1$d olabilir</string>
     <string name="validation_color_invalid">Geçersiz renk değeri</string>
     <string name="validation_color_range">Renk değeri 0-255 olmalıdır</string>
     <string name="password_min_hint">Minimum 4 karakter gerekli</string>
@@ -1676,7 +1676,7 @@
     <string name="sort_date_modified">Değiştirilme Tarihi</string>
     <string name="cd_close_selection">Seçimi kapat</string>
     <string name="folder_label">Klasör</string>
-    <string name="crash_details">Kaza ayrıntıları</string>
+    <string name="crash_details">Çökme ayrıntıları</string>
     <string name="copy_details">Ayrıntıları kopyala</string>
     <string name="crash_details_copied">Çökme ayrıntıları kopyalandı</string>
     <string name="crash_report_subject">PDF Reader Pro çökme raporu</string>
