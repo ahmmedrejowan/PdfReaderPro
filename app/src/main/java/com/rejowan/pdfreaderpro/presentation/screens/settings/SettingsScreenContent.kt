@@ -1946,8 +1946,8 @@ private fun ChangelogContent() {
                 changes = listOf(
                     "Sign documents by drawing, typing or picking an image of your signature",
                     "Signatures are kept per document and can be written into the file or a copy",
-                    "Translations in Russian, German, Spanish, French, Italian, Portuguese, Turkish, Polish, Irish and Japanese",
-                    "Choose the app's language in Android's per-app language setting",
+                    "Translations in Bangla, Russian, German, Spanish, French, Italian, Portuguese, Turkish, Polish, Irish and Japanese",
+                    "Choose the app's language in Settings",
                     "Translators like Google Translate appear in the text selection menu",
                     "Print progress, and saving a copy without the password",
                     "Crash screen with full details to copy, share or report on GitHub",
