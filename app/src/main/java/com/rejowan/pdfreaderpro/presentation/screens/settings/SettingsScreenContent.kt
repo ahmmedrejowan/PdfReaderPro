@@ -1236,13 +1236,14 @@ private fun PickerSideSheet(
                     options = options,
                     selectedIndex = selectedIndex,
                     onSelect = onSelect,
+                    // PickerContent scrolls its own options; a second vertical scroll
+                    // here would measure it with infinite height and crash.
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
                             top = systemBarsPadding.calculateTopPadding(),
                             bottom = systemBarsPadding.calculateBottomPadding()
                         )
-                        .verticalScroll(rememberScrollState())
                 )
             }
         }
@@ -1304,17 +1305,24 @@ private fun PickerContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Options
-        options.forEachIndexed { index, option ->
-            PickerOptionItem(
-                option = option,
-                isSelected = index == selectedIndex,
-                accentColor = accentColor,
-                onClick = { onSelect(index) },
-                animationDelay = 50 * (index + 1)
-            )
-            if (index < options.lastIndex) {
-                Spacer(modifier = Modifier.height(8.dp))
+        // Options scroll under the header, so a long list (the 13 languages) stays
+        // reachable on short screens; a short list still takes only its own height.
+        Column(
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .verticalScroll(rememberScrollState())
+        ) {
+            options.forEachIndexed { index, option ->
+                PickerOptionItem(
+                    option = option,
+                    isSelected = index == selectedIndex,
+                    accentColor = accentColor,
+                    onClick = { onSelect(index) },
+                    animationDelay = 50 * (index + 1)
+                )
+                if (index < options.lastIndex) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
