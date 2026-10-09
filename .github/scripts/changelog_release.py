@@ -12,7 +12,10 @@ import secrets
 import sys
 
 HEADING = re.compile(r"^## \[([^\]]+)\]")
-VERSION = re.compile(r"^\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?$")
+# Any second-level heading, so a mistyped one is caught instead of skipped.
+SECTION = re.compile(r"^##(?!#)")
+# Semantic version; pre-release parts are dot-separated and never empty.
+VERSION = re.compile(r"^\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$")
 
 
 def fail(message):
@@ -23,12 +26,18 @@ def fail(message):
 def newest_entry(text):
     lines = text.splitlines()
     for i, line in enumerate(lines):
-        match = HEADING.match(line)
-        if not match or match.group(1).strip().lower() == "unreleased":
+        if not SECTION.match(line):
             continue
+        match = HEADING.match(line)
+        if match and match.group(1).strip().lower() == "unreleased":
+            continue
+        if not match:
+            # The newest entry must be readable; falling back to an older one
+            # would report "already released" instead of the typo.
+            fail(f"The newest heading '{line.strip()}' isn't in the form '## [2.5.0] - 2026-10-08'.")
         notes = []
         for following in lines[i + 1:]:
-            if HEADING.match(following) or following.strip() == "---":
+            if SECTION.match(following) or following.strip() == "---":
                 break
             notes.append(following)
         return match.group(1).strip(), "\n".join(notes).strip()

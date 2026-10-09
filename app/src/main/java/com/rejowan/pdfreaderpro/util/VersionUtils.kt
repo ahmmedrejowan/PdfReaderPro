@@ -42,7 +42,7 @@ object VersionUtils {
         return name.substringAfterLast("-").ifEmpty { "unknown" }
     }
 
-    private val FILE_VERSION = Regex("""(v?\d+(?:\.\d+)+(?:-[0-9A-Za-z.]+)?)$""")
+    private val FILE_VERSION = Regex("""(v?\d+(?:\.\d+)+(?:-[0-9A-Za-z.-]+)?)$""")
 
     /**
      * Compares two versions and returns:

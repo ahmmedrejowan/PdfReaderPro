@@ -25,7 +25,7 @@ object ReleaseNotes {
     }
 
     private val WHATS_NEW = Regex("""^##\s+What['’]s New\s*$""", RegexOption.IGNORE_CASE)
-    private val SECTION = Regex("""^##\s+\S""")
+    private val SECTION = Regex("""^\s*##\s+\S""")
     private val HEADING = Regex("""^(#{1,6})\s+(.*?)\s*#*\s*$""")
     private val BULLET = Regex("""^(\s*)[-*+]\s+(.*)$""")
     private val RULE = Regex("""^\s*([-*_])(\s*\1){2,}\s*$""")
