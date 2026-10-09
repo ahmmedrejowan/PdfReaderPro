@@ -271,7 +271,10 @@ fun SettingsScreenContent(
         SettingsOptionItem(
             icon = Icons.Rounded.SwapVert,
             title = stringResource(R.string.scroll_mode),
-            subtitle = preferences.readerScrollMode.name.lowercase().replace("_", " ").replaceFirstChar { it.uppercase() },
+            subtitle = when (preferences.readerScrollMode) {
+                ScrollMode.VERTICAL -> stringResource(R.string.vertical)
+                ScrollMode.HORIZONTAL -> stringResource(R.string.horizontal)
+            },
             accentColor = AccentPurple,
             onClick = { showScrollModeSheet = true },
             animationDelay = 200
@@ -308,7 +311,12 @@ fun SettingsScreenContent(
         SettingsOptionItem(
             icon = Icons.Rounded.ColorLens,
             title = stringResource(R.string.reading_theme),
-            subtitle = preferences.readerTheme.name.lowercase().replaceFirstChar { it.uppercase() },
+            subtitle = when (preferences.readerTheme) {
+                ReadingTheme.LIGHT -> stringResource(R.string.light)
+                ReadingTheme.SEPIA -> stringResource(R.string.sepia)
+                ReadingTheme.DARK -> stringResource(R.string.dark)
+                ReadingTheme.BLACK -> stringResource(R.string.black)
+            },
             accentColor = AccentAmber,
             onClick = { showReadingThemeSheet = true },
             animationDelay = 350
@@ -424,7 +432,14 @@ fun SettingsScreenContent(
         SettingsOptionItem(
             icon = Icons.Rounded.Schedule,
             title = stringResource(R.string.auto_check_interval),
-            subtitle = preferences.updateCheckInterval.displayName,
+            subtitle = when (preferences.updateCheckInterval) {
+                UpdateCheckInterval.NEVER -> stringResource(R.string.never)
+                UpdateCheckInterval.DAILY -> stringResource(R.string.daily)
+                UpdateCheckInterval.THREE_DAYS -> stringResource(R.string.every_3_days)
+                UpdateCheckInterval.WEEKLY -> stringResource(R.string.weekly)
+                UpdateCheckInterval.BIWEEKLY -> stringResource(R.string.every_2_weeks)
+                UpdateCheckInterval.MONTHLY -> stringResource(R.string.monthly)
+            },
             accentColor = AccentBlue,
             onClick = { showUpdateIntervalSheet = true },
             animationDelay = 600
