@@ -224,6 +224,19 @@ GNU General Public License for more details.
 
 ## Registo de alterações
 
+### v2.5.0 (09/10/2026)
+
+- Assine documentos desenhando, escrevendo ou escolhendo uma imagem da sua assinatura, no leitor ou nas Ferramentas
+- As assinaturas ficam guardadas por documento, são geridas num único painel e escritas no ficheiro ou numa cópia
+- Traduções para russo, alemão, espanhol, francês, italiano e português (#91, #93, #95)
+- Escolha o idioma da app na definição de idioma por app do Android
+- Tradutores como o Google Tradutor aparecem no menu de seleção de texto (#78)
+- Progresso de impressão e guardar uma cópia sem palavra-passe
+- Ecrã de falha com todos os detalhes para copiar, partilhar ou reportar no GitHub
+- Corrigidos PDFs em japonês, chinês e coreano que mostravam um erro em vez de abrir (#89)
+- Corrigidos o fecho de Informações do documento na horizontal e o controlo de páginas que tapava o botão de menu (#80, #79)
+- Bibliotecas principais atualizadas (Kotlin 2.4.20, AGP 9.4.1, Gradle 9.8.0)
+
 ### v2.4.0 (15/08/2026)
 
 - Realçar texto em cinco cores, guardado por documento (#41)

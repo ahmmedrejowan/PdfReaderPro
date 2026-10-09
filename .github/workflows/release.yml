@@ -3,35 +3,29 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version_override:
-        description: 'Version name (leave empty to use build.gradle version)'
-        required: false
-        default: ''
       release_type:
-        description: 'Release type'
+        description: 'Release type. The version and notes come from the newest entry in CHANGELOG.md.'
         required: true
-        default: 'release'
+        default: 'Full release'
         type: choice
         options:
-          - release
-          - prerelease
-      release_notes:
-        description: 'Release notes'
-        required: false
-        default: 'Bug fixes and improvements'
+          - Full release
+          - Pre-release
 
 permissions:
   contents: write
 
 jobs:
-  # Step 1: Validate version and tag
+  # Step 1: Read the version and its notes from CHANGELOG.md
   validate:
     name: Validate
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
-      version: ${{ steps.version.outputs.version }}
-      apk_name: ${{ steps.version.outputs.apk_name }}
+      version: ${{ steps.changelog.outputs.version }}
+      apk_name: ${{ steps.changelog.outputs.apk_name }}
+      notes: ${{ steps.changelog.outputs.notes }}
+      skip: ${{ steps.tag.outputs.skip }}
 
     steps:
       - name: Checkout code
@@ -39,39 +33,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get version
-        id: version
-        run: |
-          if [ -n "${{ github.event.inputs.version_override }}" ]; then
-            VERSION="${{ github.event.inputs.version_override }}"
-          else
-            VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "apk_name=PdfReaderPro-v${VERSION}.apk" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION"
+      - name: Read version and notes from CHANGELOG.md
+        id: changelog
+        run: python3 .github/scripts/changelog_release.py CHANGELOG.md >> "$GITHUB_OUTPUT"
 
-      - name: Validate version format
+      - name: Check if this version is already released
+        id: tag
+        env:
+          VERSION: ${{ steps.changelog.outputs.version }}
+          RELEASE_TYPE: ${{ github.event.inputs.release_type }}
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Invalid version format: $VERSION (use semantic versioning)"
-            exit 1
-          fi
-
-      - name: Check if tag exists
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
           if git rev-parse "v$VERSION" >/dev/null 2>&1; then
-            echo "::error::Tag v$VERSION already exists!"
-            exit 1
+            echo "::notice::v$VERSION is already released, nothing to do. Add a new version to CHANGELOG.md to release again."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Releasing v$VERSION ($RELEASE_TYPE)"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
-          echo "Tag v$VERSION is available"
 
   # Step 2: Run unit tests, lint, and build in parallel
   unit-test:
     name: Unit Tests
     needs: validate
+    if: needs.validate.outputs.skip != 'true'
     runs-on: ubuntu-latest
     # A hung Gradle build fails here instead of running to GitHub's 6-hour limit.
     timeout-minutes: 30
@@ -93,6 +77,7 @@ jobs:
   lint:
     name: Lint
     needs: validate
+    if: needs.validate.outputs.skip != 'true'
     runs-on: ubuntu-latest
     # A hung Gradle build fails here instead of running to GitHub's 6-hour limit.
     timeout-minutes: 30
@@ -114,6 +99,7 @@ jobs:
   build:
     name: Build APK
     needs: validate
+    if: needs.validate.outputs.skip != 'true'
     runs-on: ubuntu-latest
     # A hung Gradle build fails here instead of running to GitHub's 6-hour limit.
     timeout-minutes: 30
@@ -174,6 +160,7 @@ jobs:
   release:
     name: Create Release
     needs: [validate, unit-test, lint, build]
+    if: needs.validate.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -196,7 +183,7 @@ jobs:
           body: |
             ## What's New
 
-            ${{ github.event.inputs.release_notes }}
+            ${{ needs.validate.outputs.notes }}
 
             ## Download
 
@@ -225,7 +212,8 @@ jobs:
             ./release/${{ env.APK_NAME }}.sha256
             ./release/${{ env.APK_NAME }}.md5
           draft: false
-          prerelease: ${{ github.event.inputs.release_type == 'prerelease' }}
+          prerelease: ${{ github.event.inputs.release_type == 'Pre-release' }}
+          make_latest: ${{ github.event.inputs.release_type == 'Full release' }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

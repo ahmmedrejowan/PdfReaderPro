@@ -224,6 +224,19 @@ GNU General Public License for more details.
 
 ## Registro de cambios
 
+### v2.5.0 (09/10/2026)
+
+- Firma documentos dibujando, escribiendo o eligiendo una imagen de tu firma, desde el lector o desde Herramientas
+- Las firmas se guardan por documento, se gestionan desde un solo panel y se escriben en el archivo o en una copia
+- Traducciones al ruso, alemán, español, francés, italiano y portugués (#91, #93, #95)
+- Elige el idioma de la app en el ajuste de idioma por aplicación de Android
+- Traductores como Google Traductor aparecen en el menú de selección de texto (#78)
+- Progreso de impresión y guardado de una copia sin contraseña
+- Pantalla de fallo con todos los detalles para copiar, compartir o informar en GitHub
+- Corregidos los PDF en japonés, chino y coreano que mostraban un error en lugar de abrirse (#89)
+- Corregido el cierre de Información del documento en horizontal y el control de páginas que tapaba el botón de menú (#80, #79)
+- Bibliotecas principales actualizadas (Kotlin 2.4.20, AGP 9.4.1, Gradle 9.8.0)
+
 ### v2.4.0 (15/08/2026)
 
 - Resaltar texto en cinco colores, guardado por documento (#41)
