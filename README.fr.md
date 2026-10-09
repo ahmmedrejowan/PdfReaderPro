@@ -228,7 +228,7 @@ GNU General Public License for more details.
 
 - Signez vos documents en dessinant, en tapant ou en choisissant une image de votre signature, depuis le lecteur ou les Outils
 - Les signatures sont conservées par document, gérées depuis un seul panneau et écrites dans le fichier ou dans une copie
-- Traductions en russe, allemand, espagnol, français, italien et portugais (#91, #93, #95)
+- Traductions en russe, allemand, espagnol, français, italien, portugais, turc, polonais, irlandais et japonais (#91, #93, #95, #98)
 - Choisissez la langue de l'application dans le réglage de langue par application d'Android
 - Les traducteurs comme Google Traduction apparaissent dans le menu de sélection de texte (#78)
 - Progression de l'impression et enregistrement d'une copie sans mot de passe

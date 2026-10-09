@@ -228,7 +228,7 @@ GNU General Public License for more details.
 
 - Dokumente unterschreiben: Unterschrift zeichnen, tippen oder als Bild wählen, im Reader oder unter Werkzeuge
 - Unterschriften werden pro Dokument gespeichert, in einem Bereich verwaltet und in die Datei oder eine Kopie geschrieben
-- Übersetzungen ins Russische, Deutsche, Spanische, Französische, Italienische und Portugiesische (#91, #93, #95)
+- Übersetzungen ins Russische, Deutsche, Spanische, Französische, Italienische, Portugiesische, Türkische, Polnische, Irische und Japanische (#91, #93, #95, #98)
 - Die App-Sprache lässt sich in der Android-Einstellung für App-Sprachen wählen
 - Übersetzer wie Google Übersetzer erscheinen im Menü für markierten Text (#78)
 - Fortschrittsanzeige beim Drucken und Speichern einer Kopie ohne Passwort
