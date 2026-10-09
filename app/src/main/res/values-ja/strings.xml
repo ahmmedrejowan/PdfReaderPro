@@ -1,0 +1,1685 @@
+<resources>
+    <string name="app_name">PDF Reader Pro</string>
+    <string name="hello_blank_fragment">こんにちは、空のフラグメント</string>
+
+
+    <string name="intro_title_1">PDFをシームレスに探索</string>
+    <string name="intro_sub_title_1">快適な読書体験でPDFの世界へ飛び込みましょう</string>
+
+    <string name="intro_title_2">あなたのPDFコレクション</string>
+    <string name="intro_sub_title_2">欲しいPDFを効率的に見つけてアクセス</string>
+
+    <string name="intro_title_3">PDF体験をカスタマイズ</string>
+    <string name="intro_sub_title_3">カスタマイズ、検索、そして高度なPDF機能を探索しましょう。</string>
+
+    <string name="greeting_with_emoji">%1$s %2$s</string>
+
+    <string name="let_s_start">始めましょう</string>
+
+    <string name="permission_normal_title">PDFを取得しましょう</string>
+    <string name="permission_allowed_title">準備完了です</string>
+    <string name="permission_error_title">エラーが発生しました</string>
+
+    <string name="permission_normal_sub_title">ストレージへのアクセスを許可してください。そうすれば、PDFへのアクセス、検索、フィルタリングなど、さまざまなことが可能になります。</string>
+    <string name="permission_allowed_sub_title">アプリに入りましょう</string>
+    <string name="permission_error_sub_title">権限を正しく取得できませんでした。何か問題が発生した可能性があります。</string>
+
+
+    <string name="permission_below_11_normal_description">次のダイアログで「許可」ボタンをクリックしてください。</string>
+    <string name="permission_above_11_normal_description">次のページでスイッチをオンにしてください</string>
+
+    <string name="permission_error_description">次のページでスイッチをオンにしてください</string>
+
+
+    <string name="allow_access">アクセスを許可</string>
+    <string name="lets_go">行きましょう</string>
+    <string name="try_again">再試行</string>
+
+    <string name="app_settings">アプリ設定</string>
+    <string name="how_to_allow_access">アクセスを許可する方法</string>
+
+    <string name="settings">設定</string>
+    <string name="search_pdf">PDFを検索</string>
+    <string name="overview">PDFの概要</string>
+    <string name="no_file_image">ファイル画像なし</string>
+    <string name="sorry_no_file">申し訳ありません！お使いのデバイスにPDFが見つかりませんでした。</string>
+    <string name="option_menu">オプションメニュー</string>
+    <string name="files">ファイル</string>
+    <string name="folders">フォルダ</string>
+    <string name="sort_by">並べ替え</string>
+    <string name="date">日付</string>
+    <string name="name">名前</string>
+    <string name="size">サイズ</string>
+    <string name="info">情報</string>
+    <string name="share">共有</string>
+    <string name="rename">名前を変更</string>
+    <string name="add_to_favorite">お気に入りに追加</string>
+    <string name="remove_from_recent">最近の項目から削除</string>
+    <string name="delete">削除</string>
+    <string name="do_you_want_to_delete_this_file">このファイルを削除しますか？</string>
+    <string name="cancel">キャンセル</string>
+    <string name="dismiss">閉じる</string>
+    <string name="size_t">サイズ：</string>
+    <string name="last_modified_t">最終更新：</string>
+    <string name="pages_t">ページ：</string>
+    <string name="path_t">パス：</string>
+    <string name="enter_file_name">ファイル名を入力</string>
+    <string name="total_size">合計サイズ</string>
+    <string name="no_pdf_found_by_that_name">その名前のPDFは見つかりませんでした</string>
+    <string name="back_press">戻るを押す</string>
+    <string name="rotate">回転</string>
+    <string name="dark_mode">ダークモード</string>
+    <string name="brightness">明るさ</string>
+    <string name="jump_to_page">ページへ移動</string>
+    <string name="scroll_orient">スクロールの向き</string>
+    <string name="jump">移動</string>
+    <string name="enter_page_number">ページ番号を入力</string>
+    <string name="remove">削除</string>
+
+    <!-- Common Actions -->
+    <string name="done">完了</string>
+    <string name="save">保存</string>
+    <string name="close">閉じる</string>
+    <string name="back">戻る</string>
+    <string name="open">開く</string>
+    <string name="open_with">アプリで開く</string>
+    <string name="open_in_app">アプリ内で開く</string>
+    <string name="clear_all">すべてクリア</string>
+    <string name="show_all">すべて表示</string>
+    <string name="show_less">表示を減らす</string>
+    <string name="select_all">すべて選択</string>
+    <string name="deselect_all">すべて選択解除</string>
+    <string name="merge">結合</string>
+    <string name="download">ダウンロード</string>
+    <string name="update">更新</string>
+    <string name="skip">スキップ</string>
+    <string name="continue_text">続ける</string>
+    <string name="confirm">確認</string>
+    <string name="apply">適用</string>
+    <string name="reset">リセット</string>
+    <string name="preview">プレビュー</string>
+    <string name="change_file">ファイルを変更</string>
+    <string name="add_files">ファイルを追加</string>
+    <string name="select_file">ファイルを選択</string>
+    <string name="select_pdf">PDFを選択</string>
+    <string name="select_images">画像を選択</string>
+
+    <!-- Sort Options -->
+    <string name="sort_files">ファイルを並べ替え</string>
+    <string name="sort_folders">フォルダを並べ替え</string>
+    <string name="choose_sort_pdfs">PDFの整理方法を選択</string>
+    <string name="choose_sort_folders">フォルダの整理方法を選択</string>
+    <string name="sort_by_name">名前順</string>
+    <string name="sort_by_date">日付順</string>
+    <string name="sort_by_size">サイズ順</string>
+    <string name="sort_ascending">昇順</string>
+    <string name="sort_descending">降順</string>
+
+    <!-- Home Screen -->
+    <string name="good_morning">おはようございます</string>
+    <string name="good_afternoon">こんにちは</string>
+    <string name="good_evening">こんばんは</string>
+    <string name="welcome_to_library">PDFライブラリへようこそ</string>
+    <string name="all_files">すべてのファイル</string>
+    <string name="favorites">お気に入り</string>
+    <string name="recent">最近</string>
+    <string name="no_files">ファイルなし</string>
+    <string name="no_favorites">お気に入りはまだありません</string>
+    <string name="no_recent">最近のファイルはありません</string>
+    <string name="add_favorites_hint">PDFをお気に入りに追加するとここに表示されます</string>
+    <string name="open_pdf_hint">いくつかのPDFを開くとここに表示されます</string>
+    <string name="delete_count_files">%d個のファイルを削除しますか？</string>
+    <string name="delete_warning">この操作は元に戻せません。ファイルはデバイスから完全に削除されます。</string>
+
+    <!-- Folders Screen -->
+    <string name="all_folders">すべてのフォルダ</string>
+    <string name="search_folders">フォルダを検索…</string>
+    <string name="search_folders_hint">フォルダを検索...</string>
+    <string name="no_folders_found">フォルダが見つかりません</string>
+    <string name="try_different_search">別の検索語を試してください</string>
+    <string name="folder_count">%d個のフォルダ</string>
+    <string name="file_count">%d個のファイル</string>
+    <string name="pdfs">PDF</string>
+    <string name="search_folders_desc">フォルダを検索</string>
+    <string name="sort_folders_desc">フォルダを並べ替え</string>
+    <string name="clear_search">検索をクリア</string>
+    <string name="close_search">検索を閉じる</string>
+
+    <!-- Search Screen -->
+    <string name="search_your_pdfs">PDFを検索…</string>
+    <string name="search_your_pdfs_hint">PDFを検索...</string>
+    <string name="recent_searches">最近の検索</string>
+    <string name="search_tips">検索のヒント</string>
+    <string name="results_for">「%s」の結果</string>
+    <string name="no_results">結果が見つかりません</string>
+    <string name="clear">クリア</string>
+    <string name="show_all_count">すべて表示（%d）</string>
+    <string name="file_found">%d個のファイルが見つかりました</string>
+    <string name="files_found">%d個のファイルが見つかりました</string>
+    <string name="options">オプション</string>
+    <string name="tip_search_filename_title">ファイル名で検索</string>
+    <string name="tip_search_filename_desc">PDF名の一部を入力するとすぐに見つかります</string>
+    <string name="tip_search_folder_title">フォルダで検索</string>
+    <string name="tip_search_folder_desc">フォルダ名を入力すると、その中のすべてのPDFが見つかります</string>
+    <string name="tip_partial_matches_title">部分一致も機能します</string>
+    <string name="tip_partial_matches_desc">正確な名前は必要ありません - 短い単語を試してください</string>
+
+    <!-- File Info -->
+    <string name="file_information">ファイル情報</string>
+    <string name="file_name">ファイル名</string>
+    <string name="file_path">ファイルパス</string>
+    <string name="file_size">ファイルサイズ</string>
+    <string name="page_count">ページ数</string>
+    <string name="last_modified">最終更新</string>
+    <string name="created">作成日</string>
+
+    <!-- Delete Confirmation -->
+    <string name="delete_file">ファイルを削除</string>
+    <string name="delete_files">ファイルを削除</string>
+    <string name="action_cannot_be_undone">この操作は元に戻せません</string>
+    <string name="confirm_delete_file">このファイルを完全に削除してもよろしいですか？</string>
+    <string name="confirm_delete_files">これらのファイルを完全に削除してもよろしいですか？</string>
+
+    <!-- Rename -->
+    <string name="rename_file">ファイル名を変更</string>
+    <string name="new_name">新しい名前</string>
+
+    <!-- Stats -->
+    <string name="library_statistics">ライブラリ統計</string>
+    <string name="total_files">合計ファイル数</string>
+    <string name="favorite_files">お気に入りファイル</string>
+    <string name="recent_files">最近のファイル</string>
+
+    <!-- Settings Screen -->
+    <string name="appearance">外観</string>
+    <string name="reader">リーダー</string>
+    <string name="updates">アップデート</string>
+    <string name="about">アプリについて</string>
+    <string name="theme">テーマ</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="theme_system">システム</string>
+    <string name="dynamic_colors">ダイナミックカラー</string>
+    <string name="scroll_direction">スクロール方向</string>
+    <string name="vertical">垂直</string>
+    <string name="horizontal">水平</string>
+    <string name="page_layout">ページレイアウト</string>
+    <string name="single_page">単一ページ</string>
+    <string name="two_pages">2ページ</string>
+    <string name="page_alignment">ページの配置</string>
+    <string name="align_left">左</string>
+    <string name="align_center">中央</string>
+    <string name="align_right">右</string>
+    <string name="quick_zoom">クイックズーム</string>
+    <string name="fit_width">幅に合わせる</string>
+    <string name="fit_page">ページに合わせる</string>
+    <string name="actual_size">実際のサイズ</string>
+    <string name="reading_theme">読書テーマ</string>
+    <string name="keep_screen_on">画面をオンのままにする</string>
+    <string name="check_for_updates">アップデートを確認</string>
+    <string name="auto_check_updates">アップデートを自動確認</string>
+    <string name="version">バージョン %s</string>
+    <string name="gpl_license">GPL 3.0</string>
+    <string name="adjust_brightness">画面の明るさを調整</string>
+    <string name="changelog">変更履歴</string>
+    <string name="latest">最新</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="your_privacy_protected">あなたのプライバシーは保護されています</string>
+    <string name="last_updated">最終更新：%s</string>
+    <string name="open_source_licenses">オープンソースライセンス</string>
+    <string name="about_creator">作成者について</string>
+    <string name="creator_name">K M Rejowan Ahmmed</string>
+    <string name="creator_title">シニアAndroidデベロッパー</string>
+    <string name="creator_description">PDF Reader Proは、無料でオープンソース、プライバシー重視のPDF閲覧体験を提供するために作られました。ブックマーク、お気に入り、読書テーマ、カスタマイズ可能な設定などの機能を備え、Androidユーザー向けの完全なPDFソリューションを目指しています。</string>
+    <string name="gnu_license">GNU General Public License v3.0</string>
+
+    <!-- Tool categories -->
+    <string name="tool_category_organize">整理</string>
+    <string name="tool_category_edit">編集</string>
+    <string name="tool_category_security">セキュリティ</string>
+    <string name="tool_category_convert">変換</string>
+
+    <!-- Tools -->
+    <string name="tool_split_pdf">PDFを分割</string>
+    <string name="tool_split_desc">PDFを複数のファイルに分割</string>
+    <string name="tool_compress_desc">品質を維持しながらファイルサイズを削減</string>
+    <string name="tool_rotate_pages">ページを回転</string>
+    <string name="tool_rotate_desc">個別またはすべてのページを回転</string>
+    <string name="tool_reorder_pages">ページを並べ替え</string>
+    <string name="tool_reorder_desc">PDF内のページ順を変更</string>
+    <string name="tool_remove_pages">ページを削除</string>
+    <string name="tool_watermark">透かしを追加</string>
+    <string name="tool_watermark_desc">テキストまたは画像の透かしを追加</string>
+    <string name="tool_page_numbers">ページ番号を追加</string>
+    <string name="tool_page_numbers_desc">PDFにページ番号を挿入</string>
+    <string name="tool_unlock_pdf">PDFのロックを解除</string>
+    <string name="tool_unlock_desc">PDFからパスワードを削除</string>
+    <string name="tool_pdf_to_image">PDFを画像に</string>
+    <string name="tool_pdf_to_image_desc">PDFページを画像ファイルとしてエクスポート</string>
+
+    <!-- Update Sheet -->
+    <string name="update_available">アップデートがあります</string>
+    <string name="current">現在</string>
+    <string name="new_version">新バージョン</string>
+    <string name="whats_new">新機能</string>
+    <string name="skip_version">このバージョンをスキップ</string>
+    <string name="download_update">アップデートをダウンロード</string>
+
+    <!-- Download Progress -->
+    <string name="downloading">ダウンロード中…</string>
+    <string name="download_complete">ダウンロード完了</string>
+    <string name="download_failed">ダウンロード失敗</string>
+    <string name="install">インストール</string>
+    <string name="retry">再試行</string>
+
+    <!-- Reader Screen -->
+    <string name="page_of">%2$dページ中%1$dページ</string>
+    <string name="bookmarks">ブックマーク</string>
+    <string name="no_bookmarks">ブックマークなし</string>
+    <string name="add_bookmark">ブックマークを追加</string>
+    <string name="remove_bookmark">ブックマークを削除</string>
+    <string name="bookmark_added">ブックマークを追加しました</string>
+    <string name="bookmark_removed">ブックマークを削除しました</string>
+    <!-- Highlights -->
+    <string name="highlight">ハイライト</string>
+    <string name="highlights">ハイライト</string>
+    <string name="no_highlights">ハイライトなし</string>
+    <string name="no_highlights_hint">テキストを選択して「ハイライト」をタップしてマークします</string>
+    <string name="highlight_color">ハイライトの色</string>
+    <string name="highlight_color_yellow">黄色</string>
+    <string name="highlight_color_green">緑</string>
+    <string name="highlight_color_blue">青</string>
+    <string name="highlight_color_pink">ピンク</string>
+    <string name="highlight_color_red">赤</string>
+    <string name="delete_highlight">ハイライトを削除</string>
+    <string name="highlight_page">%dページ</string>
+    <string name="highlight_count">%d件のハイライト</string>
+    <string name="highlights_count">%d件のハイライト</string>
+    <string name="view_manage_highlights">ハイライトの表示と管理</string>
+    <string name="highlight_in_file">ファイルに保存済み</string>
+    <string name="search_highlights">ハイライトを検索</string>
+    <string name="save_with_highlights">ハイライト付きのコピーを保存</string>
+    <string name="save_with_highlights_desc">ハイライトを新しいPDFファイルに書き込む</string>
+    <string name="bake_highlights_title">ハイライト付きのコピーを保存</string>
+    <string name="bake_highlights_body">これにより、%d件のハイライトが新しいPDFファイルに書き込まれ、他のPDFリーダーでも表示されるようになります。このアプリ内のハイライトはそのまま保持されます。</string>
+    <string name="bake_highlights_caveat">PDFにハイライト、テキスト、またはインク注釈が含まれると、一部の編集機能が動作しなくなります。コピーの保存先を選択します。</string>
+    <string name="bake_highlights_confirm_check">別のコピーが作成されることを理解しています</string>
+    <string name="bake_highlights_action">コピーを保存</string>
+    <string name="bake_highlights_done">%d件のハイライトをコピーに保存しました</string>
+    <string name="bake_highlights_failed">コピーを保存できませんでした：%s</string>
+    <string name="save_decrypted_copy">パスワードなしのコピーを保存</string>
+    <string name="save_decrypted_copy_desc">このドキュメントの保護されていないコピーを書き込む</string>
+    <string name="save_decrypted_done">パスワードを削除したコピーを保存しました</string>
+    <string name="save_decrypted_failed">コピーを保存できませんでした：%s</string>
+    <string name="save_decrypted_no_password">まずドキュメントをパスワードで開いてください</string>
+    <string name="sign_tab_draw">手書き</string>
+    <string name="sign_tab_type">入力</string>
+    <string name="sign_tab_image">画像</string>
+    <string name="sign_type_placeholder">名前</string>
+    <string name="sign_type_label">署名を入力</string>
+    <string name="sign_pick_image">画像を選択</string>
+    <string name="sign_clear">クリア</string>
+    <string name="sign_place">配置</string>
+    <string name="sign_new">新しい署名</string>
+    <string name="sign_saved_title">署名</string>
+    <string name="sign_section_placed">このドキュメント上</string>
+    <string name="sign_section_saved">あなたの署名</string>
+    <string name="sign_placed_on_page">%dページ</string>
+    <string name="sign_remove_placed">削除</string>
+    <string name="sign_save_into_file">このファイルに保存</string>
+    <string name="sign_cannot_save_into_file">このドキュメントはコピーとして開かれたため、新しいファイルとしてのみ保存できます。</string>
+    <string name="sign_save_as_copy">コピーとして保存</string>
+    <string name="sign_discard_all">すべて削除</string>
+    <string name="sign_nothing_placed">まだ何も配置されていません。下から署名を選ぶか、新しく作成してください。</string>
+    <string name="sign_saved_empty">署名を描く、入力する、または画像を追加してください</string>
+    <string name="sign_remember">この署名を記憶する</string>
+    <string name="sign_delete">削除</string>
+    <string name="sign_placed">署名を配置しました。ドラッグして移動するか、別の署名を配置してください。</string>
+    <string name="sign_place_failed">署名を配置できませんでした</string>
+    <string name="sign_document">署名</string>
+    <string name="sign_document_desc">署名の追加、管理、保存</string>
+    <string name="sign_done">署名済みのコピーを保存しました</string>
+    <string name="sign_failed">署名済みのコピーを保存できませんでした：%s</string>
+    <string name="sign_saving">署名済みのコピーを保存中…</string>
+    <string name="sign_save">コピーを保存</string>
+    <string name="sign_discard">破棄</string>
+    <string name="sign_save_here">保存</string>
+    <string name="sign_save_confirm_title">このドキュメントに保存しますか？</string>
+    <string name="sign_save_confirm_body">署名は%sに書き込まれます。これは元に戻せません。</string>
+    <string name="sign_save_confirm_action">保存</string>
+    <string name="sign_save_confirm_cancel">キャンセル</string>
+    <string name="sign_cannot_save_here">このドキュメントはコピーとして開かれたため、新しいファイルとしてのみ保存できます</string>
+    <string name="sign_saved_in_place">署名をこのファイルに書き込みました</string>
+    <string name="sign_cancel">キャンセル</string>
+    <string name="tool_sign_pdf">PDFに署名</string>
+    <string name="tool_sign_pdf_desc">手書き署名を追加</string>
+    <string name="print_preparing">印刷用にページを準備中…</string>
+    <string name="print_preparing_percent">印刷用にページを準備中… %1$d%%</string>
+    <string name="bake_highlights_none">保存するハイライトがありません</string>
+    <string name="next_highlight">次のハイライト</string>
+    <string name="previous_highlight">前のハイライト</string>
+    <string name="close_highlight_nav">ハイライトのステップ移動を停止</string>
+    <string name="no_matching_highlights">一致なし</string>
+    <string name="no_matching_highlights_hint">別の検索語または色を試してください</string>
+
+    <string name="lock_horizontal_scroll">水平スクロールをロック</string>
+    <string name="lock_horizontal_scroll_desc">ズーム時にページをその位置に保持</string>
+    <string name="lock_horizontal_scroll_unavailable">垂直スクロールでのみ利用可能</string>
+
+    <string name="table_of_contents">目次</string>
+    <string name="no_table_of_contents">目次なし</string>
+    <string name="attachments">添付ファイル</string>
+    <string name="no_attachments">添付ファイルなし</string>
+    <string name="zoom">ズーム</string>
+    <string name="auto_scroll">自動スクロール</string>
+    <string name="auto_scroll_speed">速度</string>
+    <string name="print">印刷</string>
+    <string name="pdf_info">PDF情報</string>
+    <string name="more_options">その他のオプション</string>
+    <string name="view_mode">表示モード</string>
+    <string name="display">画面表示</string>
+    <string name="reading_tools">読書ツール</string>
+    <string name="document">ドキュメント</string>
+    <string name="find_in_document">ドキュメント内を検索</string>
+    <string name="search_text">テキストを検索…</string>
+    <string name="no_matches">一致なし</string>
+    <string name="match_count">%1$d / %2$d</string>
+
+    <!-- Remove Favorite -->
+    <string name="remove_favorite">お気に入りを削除</string>
+    <string name="remove_from_favorites">お気に入りから削除</string>
+    <string name="confirm_remove_favorite">このファイルをお気に入りから削除してもよろしいですか？</string>
+
+    <!-- Exit Confirmation -->
+    <string name="exit_app">アプリを終了</string>
+    <string name="confirm_exit">終了してもよろしいですか？</string>
+    <string name="exit">終了</string>
+
+    <!-- Tools Screen -->
+    <string name="pdf_tools">PDFツール</string>
+    <string name="merge_pdfs">PDFを結合</string>
+    <string name="split_pdf">PDFを分割</string>
+    <string name="compress_pdf">PDFを圧縮</string>
+    <string name="rotate_pdf">PDFを回転</string>
+    <string name="lock_pdf">PDFをロック</string>
+    <string name="unlock_pdf">PDFのロックを解除</string>
+    <string name="add_watermark">透かしを追加</string>
+    <string name="remove_pages">ページを削除</string>
+    <string name="reorder_pages">ページを並べ替え</string>
+    <string name="add_page_numbers">ページ番号を追加</string>
+    <string name="images_to_pdf">画像をPDFに</string>
+    <string name="pdf_to_images">PDFを画像に</string>
+
+    <!-- Tool Common -->
+    <string name="select_source_file">開始するPDFファイルを選択してください</string>
+    <string name="processing">処理中…</string>
+    <string name="success">成功！</string>
+    <string name="error_occurred">エラーが発生しました</string>
+    <string name="output_file_name">出力ファイル名</string>
+    <string name="overwrite_original">元ファイルを上書き</string>
+    <string name="pages">ページ</string>
+    <string name="all_pages">すべてのページ</string>
+    <string name="custom_pages">カスタムページ</string>
+    <string name="page_range">ページ範囲</string>
+    <string name="page_range_hint">例：1-3、5、7-10</string>
+    <string name="invalid_page_range">無効なページ範囲</string>
+
+    <!-- Merge -->
+    <string name="add_pdfs">結合するPDFを追加</string>
+    <string name="drag_to_reorder">ドラッグして並べ替え</string>
+    <string name="merge_files">ファイルを結合</string>
+    <string name="merge_more">さらに結合</string>
+    <string name="merged_successfully">PDFの結合に成功しました</string>
+
+    <!-- Split -->
+    <string name="split_mode">分割モード</string>
+    <string name="split_by_pages">ページで分割</string>
+    <string name="split_by_range">範囲で分割</string>
+    <string name="extract_pages">ページを抽出</string>
+    <string name="pages_per_file">ファイルあたりのページ数</string>
+    <string name="split">分割</string>
+    <string name="split_more">さらに分割</string>
+    <string name="split_successfully">PDFの分割に成功しました</string>
+
+    <!-- Compress -->
+    <string name="compression_level">圧縮レベル</string>
+    <string name="low">低</string>
+    <string name="medium">中</string>
+    <string name="high">高</string>
+    <string name="estimated_size">推定サイズ：%s</string>
+    <string name="compress">圧縮</string>
+    <string name="compress_more">さらに圧縮</string>
+    <string name="compressed_successfully">PDFの圧縮に成功しました</string>
+    <string name="size_reduced">サイズ削減</string>
+    <string name="compress_low_label">低</string>
+    <string name="compress_low_desc">最小限の圧縮、最高品質</string>
+    <string name="compress_medium_label">中</string>
+    <string name="compress_medium_desc">バランスの取れた圧縮と品質</string>
+    <string name="compress_high_label">高</string>
+    <string name="compress_high_desc">最大圧縮、より小さいファイル</string>
+
+    <!-- Compress Screen -->
+    <string name="compress_page_info">%1$dページ • %2$s</string>
+    <string name="compress_share_pdf">PDFを共有</string>
+    <string name="compress_empty_title">PDFファイルを圧縮</string>
+    <string name="compress_empty_desc">品質を維持しながらファイルサイズを削減するPDFファイルを選択してください</string>
+    <string name="already_optimized">すでに最適化済み</string>
+    <string name="limited_potential">圧縮効果は限定的</string>
+    <string name="size_save_format">（%1$s節約 • %2$d%%）</string>
+    <string name="contains_images_hint">画像を含む • 高い圧縮効果が見込めます</string>
+    <string name="mostly_text_hint">主にテキストコンテンツ</string>
+    <string name="compress_pdf_btn">PDFを圧縮</string>
+    <string name="compression_complete">圧縮完了！</string>
+    <string name="original_size">元のサイズ</string>
+    <string name="compressed_size">圧縮後のサイズ</string>
+    <string name="compressed_size_reduced">サイズ削減</string>
+    <string name="saved_format">（%1$s節約）</string>
+    <string name="pages_count_format">%1$dページ</string>
+
+    <!-- Rotate -->
+    <string name="rotation">回転</string>
+    <string name="rotate_left">左に回転</string>
+    <string name="rotate_right">右に回転</string>
+    <string name="rotate_180">180°回転</string>
+    <string name="rotate_90_right">右に90°</string>
+    <string name="rotate_90_left">左に90°</string>
+    <string name="apply_to_all">すべてのページに適用</string>
+    <string name="rotate_more">さらに回転</string>
+    <string name="rotated_successfully">PDFの回転に成功しました</string>
+
+    <!-- Lock/Unlock -->
+    <string name="password">パスワード</string>
+    <string name="enter_password">パスワードを入力</string>
+    <string name="user_password">ユーザーパスワード</string>
+    <string name="owner_password">オーナーパスワード</string>
+    <string name="permissions">権限</string>
+    <string name="allow_printing">印刷を許可</string>
+    <string name="allow_copying">コピーを許可</string>
+    <string name="allow_modifying">変更を許可</string>
+    <string name="allow_annotations">注釈を許可</string>
+    <string name="lock">ロック</string>
+    <string name="unlock">ロック解除</string>
+    <string name="lock_more">さらにロック</string>
+    <string name="unlock_more">さらにロック解除</string>
+    <string name="locked_successfully">PDFのロックに成功しました</string>
+    <string name="unlocked_successfully">PDFのロック解除に成功しました</string>
+    <string name="incorrect_password">パスワードが正しくありません</string>
+    <string name="pdf_not_protected">このPDFはパスワードで保護されていません</string>
+    <string name="pdf_protected">このPDFはパスワードで保護されています</string>
+
+    <!-- Watermark -->
+    <string name="watermark">透かし</string>
+    <string name="text_watermark">テキスト透かし</string>
+    <string name="image_watermark">画像透かし</string>
+    <string name="watermark_text">透かしテキスト</string>
+    <string name="select_image">画像を選択</string>
+    <string name="position">位置</string>
+    <string name="opacity">不透明度</string>
+    <string name="font_size">フォントサイズ</string>
+    <string name="color">色</string>
+    <string name="add">追加</string>
+    <string name="watermark_more">さらに追加</string>
+    <string name="watermark_empty_title">透かしを追加</string>
+    <string name="watermark_empty_desc">PDFページにテキストまたは画像の透かしを追加</string>
+    <string name="watermark_sample">サンプル</string>
+    <string name="tap_to_select_image">タップして画像を選択</string>
+    <string name="custom_watermark_color">カスタム透かし色</string>
+    <string name="position_center">中央</string>
+    <string name="position_tiled">タイル</string>
+    <string name="watermark_added">透かしを追加しました！</string>
+    <string name="applied_to_pages">%1$dページに適用しました</string>
+    <string name="pages_size_dash_format">%1$dページ - %2$s</string>
+
+    <!-- Remove Pages -->
+    <string name="select_pages_to_remove">削除するページを選択</string>
+    <string name="remove_selected">選択項目を削除</string>
+    <string name="remove_more">さらに削除</string>
+
+    <!-- Reorder -->
+    <string name="drag_to_reorder_pages">ページをドラッグして並べ替え</string>
+    <string name="reorder">並べ替え</string>
+    <string name="reorder_more">さらに並べ替え</string>
+    <string name="reordered_successfully">ページの並べ替えに成功しました</string>
+
+    <!-- Page Numbers -->
+    <string name="number_format">番号形式</string>
+    <string name="start_number">開始番号</string>
+    <string name="number_position">位置</string>
+    <string name="add_numbers">番号を追加</string>
+    <string name="numbers_added">ページ番号の追加に成功しました</string>
+    <string name="number_more">さらに番号を追加</string>
+    <string name="tool_add_page_numbers_desc">PDFドキュメントにページ番号を挿入</string>
+    <string name="section_format">形式</string>
+    <string name="section_margins">余白</string>
+    <string name="section_apply_to_pages">ページに適用</string>
+    <string name="horizontal_margin">水平余白</string>
+    <string name="vertical_margin">垂直余白</string>
+
+    <!-- Formats -->
+    <string name="format_number_only">番号のみ</string>
+    <string name="format_number_only_example">1</string>
+    <string name="format_page_x">ページ X</string>
+    <string name="format_page_x_example">ページ 1</string>
+    <string name="format_x_of_y">X / Y</string>
+    <string name="format_x_of_y_example">1 / 10</string>
+    <string name="format_dash_x">- X -</string>
+    <string name="format_dash_x_example">- 1 -</string>
+    <string name="format_custom">カスタム</string>
+    <string name="format_custom_example">P.1</string>
+
+    <!-- Preview -->
+    <string name="preview_info_format">%1$s • %2$dpt • %3$s</string>
+
+    <!-- Color picker -->
+    <string name="pick_color">色を選択</string>
+    <string name="page_number_color">ページ番号の色</string>
+
+    <!-- Page selection -->
+    <string name="page_numbers_selection_all">すべて（%1$d）</string>
+    <string name="page_selection_odd">奇数</string>
+    <string name="page_selection_even">偶数</string>
+    <string name="page_selection_skip_first">最初をスキップ</string>
+    <string name="title_page_selection_custom">カスタム</string>
+
+    <!-- Success -->
+    <string name="numbered_pages_format">%1$d / %2$dページに番号を付けました</string>
+    <string name="adding_numbers">番号を追加中…</string>
+
+    <!-- Images to PDF -->
+    <string name="add_images">変換する画像を追加</string>
+    <string name="image_quality">画像品質</string>
+    <string name="convert">変換</string>
+    <string name="convert_more">さらに変換</string>
+    <string name="converted_successfully">画像をPDFに変換しました</string>
+
+    <!-- PDF to Images -->
+    <string name="output_format">出力形式</string>
+    <string name="png">PNG</string>
+    <string name="jpg">JPG</string>
+    <string name="image_resolution">解像度</string>
+    <string name="export">エクスポート</string>
+    <string name="export_more">さらにエクスポート</string>
+    <string name="exported_successfully">PDFを画像としてエクスポートしました</string>
+    <string name="share_all">すべて共有</string>
+    <string name="view_images">画像を表示</string>
+    <string name="images_saved_to">画像の保存先：%s</string>
+    <string name="share_images">画像を共有</string>
+    <string name="share_image">画像を共有</string>
+    <string name="view_image">画像を表示</string>
+
+    <!-- Error Messages -->
+    <string name="error_loading_pdf">PDFの読み込みエラー</string>
+    <string name="error_file_not_found">ファイルが見つかりません</string>
+    <string name="error_permission_denied">権限が拒否されました</string>
+    <string name="error_invalid_pdf">無効なPDFファイル</string>
+    <string name="error_corrupted_pdf">PDFファイルが破損しています</string>
+    <string name="error_password_required">パスワードが必要です</string>
+    <string name="error_generic">何か問題が発生しました</string>
+    <string name="error_wrong_password">パスワードが正しくありません</string>
+    <string name="error_storage_full">ストレージがいっぱいです</string>
+    <string name="error_network">ネットワークエラー</string>
+    <string name="error_timeout">操作がタイムアウトしました</string>
+    <string name="error_out_of_memory">メモリが不足しています</string>
+    <string name="error_failed_load_pdf">PDFファイルの読み込みに失敗しました</string>
+    <string name="error_failed_load_pdf_with_message">PDFの読み込みに失敗しました：%1$s</string>
+    <string name="error_select_pdf_first">まずPDFファイルを選択してください</string>
+    <string name="error_enter_output_name">出力ファイル名を入力してください</string>
+    <string name="error_failed_replace_original">元のファイルを置き換えられませんでした</string>
+    <string name="error_compression_failed">圧縮に失敗しました</string>
+    <string name="error_add_one_image">少なくとも1つの画像を追加してください</string>
+    <string name="error_convert_images_failed">画像をPDFに変換できませんでした</string>
+    <string name="error_owner_password_required">オーナーパスワードが必要です</string>
+    <string name="error_owner_password_min_length">オーナーパスワードは4文字以上必要です</string>
+    <string name="error_user_password_min_length">ユーザーパスワードは4文字以上必要です</string>
+    <string name="error_lock_failed">PDFのロックに失敗しました</string>
+    <string name="error_skipped_password_protected">パスワード保護のためスキップ：%1$s</string>
+    <string name="error_select_two_files">少なくとも2つのPDFファイルを選択してください</string>
+    <string name="error_no_pages_selected">ページが選択されていません：%1$s</string>
+    <string name="error_merge_failed">結合に失敗しました</string>
+    <string name="error_add_page_numbers_failed">ページ番号の追加に失敗しました</string>
+    <string name="error_export_images_failed">画像のエクスポートに失敗しました</string>
+    <string name="error_select_at_least_one_page">削除するページを少なくとも1つ選択してください</string>
+    <string name="error_cannot_remove_all_pages">PDFからすべてのページを削除することはできません</string>
+    <string name="error_remove_pages_failed">ページの削除に失敗しました</string>
+    <string name="error_no_changes_made">ページ順に変更はありません</string>
+    <string name="error_reorder_failed">並べ替えに失敗しました</string>
+    <string name="error_select_at_least_one_page_rotate">回転するページを少なくとも1つ選択してください</string>
+    <string name="error_rotation_failed">回転に失敗しました</string>
+    <string name="error_failed_load_file">ファイルの読み込みに失敗しました</string>
+    <string name="error_invalid_format">無効な形式：%1$s</string>
+    <string name="error_invalid_range">無効な範囲：%1$s</string>
+    <string name="error_invalid_page">無効なページ：%1$s</string>
+    <string name="error_page_at_least_one">ページは1以上である必要があります</string>
+    <string name="error_start_page_at_least_one">開始ページは1以上である必要があります</string>
+    <string name="error_end_page_at_least_one">終了ページは1以上である必要があります</string>
+    <string name="error_page_exceeds_max">ページ%1$dが最大値（%2$d）を超えています</string>
+    <string name="error_start_page_exceeds_max">開始ページ%1$dが最大値（%2$d）を超えています</string>
+    <string name="error_end_page_exceeds_max">終了ページ%1$dが最大値（%2$d）を超えています</string>
+    <string name="error_start_greater_than_end">無効な範囲：開始 &gt; 終了（%1$s）</string>
+    <string name="error_no_pdf_selected">PDFファイルが選択されていません</string>
+    <string name="error_enter_output_prefix">出力プレフィックスを入力してください</string>
+    <string name="error_enter_page_ranges">ページ範囲を入力してください</string>
+    <string name="error_enter_pages_to_extract">抽出するページを入力してください</string>
+    <string name="error_split_failed">分割に失敗しました</string>
+    <string name="error_invalid_page_ranges">無効なページ範囲</string>
+    <string name="error_invalid_page_selection">無効なページ選択</string>
+    <string name="error_not_password_protected">このPDFはパスワードで保護されていません</string>
+    <string name="error_enter_password">パスワードを入力してください</string>
+    <string name="error_unlock_failed">PDFのロック解除に失敗しました</string>
+    <string name="error_failed_load_image">画像の読み込みに失敗しました</string>
+    <string name="error_enter_watermark_text">透かしテキストを入力してください</string>
+    <string name="error_select_watermark_image">透かし画像を選択してください</string>
+    <string name="error_add_watermark_failed">透かしの追加に失敗しました</string>
+
+    <!-- Error Recovery Hints -->
+    <string name="error_hint_corrupted_pdf">ファイルが破損している可能性があります。もう一度ダウンロードしてみてください。</string>
+    <string name="error_hint_invalid_pdf">このファイルは有効なPDFドキュメントではありません。</string>
+    <string name="error_hint_password_required">このPDFを開くにはパスワードを入力してください。</string>
+    <string name="error_hint_wrong_password">パスワードを確認して再試行してください。</string>
+    <string name="error_hint_storage_full">不要なファイルやアプリを削除して空き容量を確保してください。</string>
+    <string name="error_hint_permission_denied">設定でストレージ権限を付与してください。</string>
+    <string name="error_hint_network">インターネット接続を確認して再試行してください。</string>
+    <string name="error_hint_timeout">操作に時間がかかりすぎました。再試行してください。</string>
+    <string name="error_hint_out_of_memory">他のアプリを閉じて、より小さいファイルで再試行してください。</string>
+    <string name="error_hint_generic">もう一度お試しください。問題が解決しない場合は、アプリを再起動してください。</string>
+
+    <!-- PDF Thumbnail -->
+    <string name="pdf">PDF</string>
+    <string name="pdf_thumbnail">PDFサムネイル</string>
+    <string name="loading">読み込み中…</string>
+
+    <!-- Misc -->
+    <string name="pdf_reader_pro">PDF Reader Pro</string>
+    <string name="no_pdf_data">PDFデータを受信できませんでした</string>
+
+    <!-- Content Descriptions - Accessibility -->
+    <string name="sort_files_desc">ファイルを並べ替え</string>
+    <string name="library_stats_desc">ライブラリ統計</string>
+    <string name="grid_view">グリッド表示</string>
+    <string name="list_view">リスト表示</string>
+    <string name="more">もっと見る</string>
+    <string name="favorite">お気に入り</string>
+
+    <!-- Content Descriptions - Navigation -->
+    <string name="cd_navigate_back">戻る</string>
+    <string name="cd_close">閉じる</string>
+    <string name="cd_dismiss">閉じる</string>
+    <string name="cd_menu">メニュー</string>
+    <string name="cd_options">オプション</string>
+    <string name="cd_expand">展開</string>
+    <string name="cd_collapse">折りたたむ</string>
+
+    <!-- Content Descriptions - Actions -->
+    <string name="cd_add">追加</string>
+    <string name="cd_remove">削除</string>
+    <string name="cd_delete">削除</string>
+    <string name="cd_edit">編集</string>
+    <string name="cd_save">保存</string>
+    <string name="cd_share">共有</string>
+    <string name="cd_download">ダウンロード</string>
+    <string name="cd_upload">アップロード</string>
+    <string name="cd_refresh">更新</string>
+    <string name="cd_search">検索</string>
+    <string name="cd_clear_search">検索をクリア</string>
+    <string name="cd_close_search">検索を閉じる</string>
+    <string name="cd_previous_result">前の結果</string>
+    <string name="cd_next_result">次の結果</string>
+    <string name="cd_select">選択</string>
+    <string name="cd_deselect">選択解除</string>
+    <string name="cd_select_all">すべて選択</string>
+    <string name="cd_deselect_all">すべて選択解除</string>
+    <string name="cd_reorder">並べ替え</string>
+    <string name="cd_drag_handle">ドラッグして並べ替え</string>
+    <string name="cd_copy">コピー</string>
+    <string name="cd_move">移動</string>
+    <string name="cd_rename">名前を変更</string>
+    <string name="cd_info">情報</string>
+    <string name="cd_settings">設定</string>
+    <string name="cd_print">印刷</string>
+    <string name="cd_open">開く</string>
+    <string name="cd_open_with">アプリで開く</string>
+    <string name="cd_retry">再試行</string>
+    <string name="cd_back">戻る</string>
+    <string name="cd_more_options">その他のオプション</string>
+
+    <!-- Content Descriptions - PDF Reader -->
+    <string name="cd_zoom_in">ズームイン</string>
+    <string name="cd_zoom_out">ズームアウト</string>
+    <string name="cd_fit_width">幅に合わせる</string>
+    <string name="cd_fit_page">ページに合わせる</string>
+    <string name="cd_next_page">次のページ</string>
+    <string name="cd_previous_page">前のページ</string>
+    <string name="cd_first_page">最初のページへ</string>
+    <string name="cd_last_page">最後のページへ</string>
+    <string name="cd_go_to_page">ページへ移動</string>
+    <string name="cd_bookmark">ブックマーク</string>
+    <string name="cd_add_bookmark">ブックマークを追加</string>
+    <string name="cd_remove_bookmark">ブックマークを削除</string>
+    <string name="cd_table_of_contents">目次</string>
+    <string name="cd_rotate_left">左に回転</string>
+    <string name="cd_rotate_right">右に回転</string>
+    <string name="cd_toggle_night_mode">ナイトモードを切り替え</string>
+    <string name="cd_auto_scroll">自動スクロール</string>
+    <string name="cd_increase_speed">速度を上げる</string>
+    <string name="cd_decrease_speed">速度を下げる</string>
+    <string name="cd_play">再生</string>
+    <string name="cd_pause">一時停止</string>
+    <string name="cd_stop">停止</string>
+
+    <!-- Content Descriptions - Files -->
+    <string name="cd_pdf_file">PDFファイル</string>
+    <string name="cd_folder">フォルダ</string>
+    <string name="cd_image">画像</string>
+    <string name="cd_file_thumbnail">ファイルサムネイル</string>
+    <string name="cd_add_files">ファイルを追加</string>
+    <string name="cd_select_files">ファイルを選択</string>
+    <string name="cd_file_options">ファイルオプション</string>
+    <string name="cd_folder_options">フォルダオプション</string>
+    <string name="cd_selected">選択済み</string>
+    <string name="cd_not_selected">未選択</string>
+
+    <!-- Content Descriptions - Status -->
+    <string name="cd_loading">読み込み中</string>
+    <string name="cd_success">成功</string>
+    <string name="cd_error">エラー</string>
+    <string name="cd_warning">警告</string>
+    <string name="cd_processing">処理中</string>
+    <string name="cd_completed">完了</string>
+    <string name="cd_progress">進行状況</string>
+    <string name="cd_checkbox">チェックボックス</string>
+    <string name="cd_checked">チェック済み</string>
+    <string name="cd_unchecked">未チェック</string>
+    <string name="cd_toggle">切り替え</string>
+    <string name="cd_enabled">有効</string>
+    <string name="cd_disabled">無効</string>
+
+    <!-- Content Descriptions - PDF Tools -->
+    <string name="cd_merge_pdfs">PDFを結合</string>
+    <string name="cd_split_pdf">PDFを分割</string>
+    <string name="cd_compress_pdf">PDFを圧縮</string>
+    <string name="cd_rotate_pdf">PDFを回転</string>
+    <string name="cd_reorder_pages">ページを並べ替え</string>
+    <string name="cd_remove_pages">ページを削除</string>
+    <string name="cd_add_watermark">透かしを追加</string>
+    <string name="cd_add_page_numbers">ページ番号を追加</string>
+    <string name="cd_lock_pdf">PDFをロック</string>
+    <string name="cd_unlock_pdf">PDFのロックを解除</string>
+    <string name="cd_pdf_to_image">PDFを画像に変換</string>
+    <string name="cd_image_to_pdf">画像をPDFに変換</string>
+    <string name="cd_page_preview">ページプレビュー</string>
+    <string name="cd_page_number">%1$dページ</string>
+    <string name="cd_page_selected">%1$dページ選択済み</string>
+    <string name="cd_page_not_selected">%1$dページ未選択</string>
+
+    <!-- Content Descriptions - UI Elements -->
+    <string name="cd_app_logo">PDF Reader Proのロゴ</string>
+    <string name="cd_decorative">装飾画像</string>
+    <string name="cd_illustration">イラスト</string>
+    <string name="cd_sort_ascending">昇順に並べ替え</string>
+    <string name="cd_sort_descending">降順に並べ替え</string>
+    <string name="cd_current_page">現在のページ</string>
+    <string name="cd_password_visibility">パスワードの表示を切り替え</string>
+    <string name="cd_color_picker">カラーピッカー</string>
+    <string name="cd_slider">スライダー</string>
+    <string name="cd_dropdown">ドロップダウンメニュー</string>
+
+    <!-- Navigation -->
+    <string name="home">ホーム</string>
+    <string name="tools">ツール</string>
+
+    <!-- Empty States -->
+    <string name="no_pdfs_title">ここにはまだPDFがありません</string>
+    <string name="no_pdfs_message">デバイスにPDFファイルが見つかりませんでした。再度スキャンするか、PDFを追加して始めてください！</string>
+    <string name="scan_for_pdfs">PDFをスキャン</string>
+    <string name="recent_journey_title">読書の旅はここから始まります</string>
+    <string name="recent_journey_message">開いたPDFがここに表示され、すぐにアクセスできます。ファイルを探索してみましょう！</string>
+    <string name="browse_files">ファイルを閲覧</string>
+    <string name="no_favorites_title">お気に入りはまだありません</string>
+    <string name="no_favorites_message">任意のPDFのハートアイコンをタップすると、ここに保存され、後ですぐにアクセスできます。</string>
+    <string name="no_matches_title">一致が見つかりません</string>
+    <string name="no_matches_message">「%s」に該当するものは見つかりませんでした。別の検索語を試してください。</string>
+    <string name="no_folders_title">フォルダはまだありません</string>
+    <string name="no_folders_message">ファイルがスキャンされると、PDFフォルダがここに表示されます。見つけてみましょう！</string>
+    <string name="permission_title">権限が必要です</string>
+    <string name="permission_message">ここにPDFファイルを表示するには、ストレージへのアクセスを許可してください</string>
+
+    <!-- Stats Sheet -->
+    <string name="library_stats">ライブラリ統計</string>
+    <string name="library_stats_subtitle">PDFコレクションの概要</string>
+    <string name="total_pdfs">合計PDF数</string>
+    <string name="files_in_library">ライブラリ内のファイル</string>
+    <string name="storage_used">使用ストレージ</string>
+    <string name="total_file_size">合計ファイルサイズ</string>
+    <string name="percent_of_library">ライブラリの%d%%</string>
+    <string name="no_files_yet">まだファイルがありません</string>
+    <string name="recently_opened">最近開いた</string>
+
+    <!-- Exit Confirmation -->
+    <string name="stay">キャンセル</string>
+    <string name="exit_confirm_message">アプリを閉じてもよろしいですか？</string>
+
+    <!-- Rename Sheet -->
+    <string name="file_name_label">ファイル名</string>
+    <string name="invalid_file_name">無効なファイル名</string>
+    <string name="pdf_extension_hint">.pdf拡張子は自動的に追加されます</string>
+
+    <!-- File Options -->
+    <string name="quick_actions">クイックアクション</string>
+    <string name="add_to_favorites">お気に入りに追加</string>
+    <string name="remove_from_favorites_action">お気に入りから削除</string>
+    <string name="add_favorites_desc">すぐにアクセスできるようにお気に入りに保存</string>
+    <string name="remove_favorites_desc">お気に入りコレクションから削除</string>
+    <string name="remove_from_recents">最近の項目から削除</string>
+    <string name="remove_recents_desc">最近の履歴から削除</string>
+    <string name="share_pdf">共有</string>
+    <string name="share_pdf_desc">このPDFを他のアプリに送信</string>
+    <string name="rename_action">名前を変更</string>
+    <string name="rename_desc">ファイル名を変更</string>
+    <string name="file_info">ファイル情報</string>
+    <string name="file_info_desc">ファイルの詳細とプロパティを表示</string>
+    <string name="delete_action">削除</string>
+    <string name="delete_desc">このファイルを完全に削除</string>
+    <string name="pages_count">%dページ</string>
+    <string name="cd_toggle_scroll_direction">スクロール方向を切り替え</string>
+    <string name="cd_fit_to_screen">画面に合わせる</string>
+
+    <!-- Folder Options -->
+    <string name="folder_options">フォルダオプション</string>
+    <string name="pdf_files">PDFファイル</string>
+    <string name="file_singular">%d個のファイル</string>
+    <string name="files_plural">%d個のファイル</string>
+    <string name="location">場所</string>
+    <string name="actions">アクション</string>
+    <string name="open_folder">フォルダを開く</string>
+    <string name="open_folder_desc">中のPDFファイルを表示</string>
+    <string name="copy_path">パスをコピー</string>
+    <string name="copy_path_desc">フォルダの場所をクリップボードにコピー</string>
+    <string name="path_copied">パスをクリップボードにコピーしました</string>
+
+    <!-- Download Progress -->
+    <string name="download_progress">ダウンロードの進行状況</string>
+    <string name="starting_download">ダウンロードを開始中…</string>
+    <string name="downloading_update">アップデートをダウンロード中</string>
+    <string name="version_label">バージョン %s</string>
+    <string name="download_background_hint">このシートを閉じることができます。ダウンロードは通知とともにバックグラウンドで続行されます。</string>
+    <string name="cancel_download">ダウンロードをキャンセル</string>
+    <string name="version_ready_to_install">バージョン%sのインストール準備ができました</string>
+    <string name="install_update">アップデートをインストール</string>
+    <string name="permission_required">権限が必要です</string>
+    <string name="allow_install_apps">このソースからのアプリのインストールを許可</string>
+    <string name="grant_permission">権限を付与</string>
+    <string name="later">後で</string>
+    <string name="download_cancelled">ダウンロードをキャンセルしました</string>
+    <string name="try_again_settings">設定から後で再試行できます</string>
+
+    <!-- Update Sheet -->
+    <string name="no_release_notes">リリースノートはありません。</string>
+
+    <!-- Recent Items -->
+    <string name="item_selected">選択済み</string>
+    <string name="item_not_selected">未選択</string>
+    <string name="page_progress">%1$d/%2$dページ</string>
+    <string name="page_progress_time">%1$d / %2$dページ • %3$s</string>
+    <string name="just_now">たった今</string>
+    <string name="minutes_ago">%d分前</string>
+    <string name="hours_ago">%d時間前</string>
+    <string name="days_ago">%d日前</string>
+
+    <!-- Permission Bottom Sheet -->
+    <string name="quick_access_needed">ストレージへのアクセスが必要です</string>
+    <string name="storage_access_message">PDFファイルを見つけて表示するために、ストレージへのアクセスを許可してください</string>
+    <string name="open_settings">設定を開く</string>
+    <string name="not_now">今はしない</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">ホーム</string>
+    <string name="nav_folders">フォルダ</string>
+    <string name="nav_tools">ツール</string>
+    <string name="nav_settings">設定</string>
+
+    <!-- Home sub-tabs -->
+    <string name="home_tab_recent">最近</string>
+    <string name="home_tab_favorites">お気に入り</string>
+    <string name="home_tab_all_files">すべてのファイル</string>
+
+    <!-- Error Activity -->
+    <string name="unexpected_error">予期しないエラーが発生しました</string>
+    <string name="something_went_wrong">おっと！何か問題が発生しました</string>
+    <string name="go_back">戻る</string>
+    <string name="restart_app">アプリを再起動</string>
+    <string name="close_app">アプリを閉じる</string>
+
+    <!-- Password Dialog -->
+    <string name="password_required">パスワードが必要です</string>
+    <string name="password_protected_message">このPDFはパスワードで保護されています。開くにはパスワードを入力してください。</string>
+    <string name="incorrect_password_error">パスワードが正しくありません</string>
+    <string name="hide_password">パスワードを隠す</string>
+    <string name="show_password">パスワードを表示</string>
+    <string name="remember_password">このファイルのパスワードを記憶する</string>
+
+    <!-- More Options Sheet -->
+    <string name="additional_tools">追加のツールとアクション</string>
+    <string name="view_manage_bookmarks">保存したページの表示と管理</string>
+    <string name="auto_scroll_desc">ハンズフリー読書モード</string>
+    <string name="go_to_page_desc">特定のページへジャンプ</string>
+    <string name="share_document">このドキュメントを共有</string>
+    <string name="print_document">このドキュメントを印刷</string>
+    <string name="document_info">ドキュメント情報</string>
+    <string name="view_file_details">ファイルの詳細とメタデータを表示</string>
+
+    <!-- View Mode Sheet -->
+    <string name="view_options">表示オプション</string>
+    <string name="customize_reading_layout">読書レイアウトをカスタマイズ</string>
+    <string name="scroll_mode">スクロールモード</string>
+    <string name="wrapped">折り返し</string>
+    <string name="single_page_mode">単一ページ</string>
+    <string name="spread_mode">見開きページ</string>
+    <string name="single_layout">シングル</string>
+    <string name="two_page_layout">2ページ</string>
+    <string name="spread_odd">奇数</string>
+    <string name="spread_even">偶数</string>
+    <string name="left_align">左</string>
+    <string name="center_align">中央</string>
+    <string name="right_align">右</string>
+    <string name="option_selected">選択済み</string>
+    <string name="snap_to_page">ページにスナップ</string>
+    <string name="snap_to_page_desc">ページ境界に自動的に整列</string>
+    <string name="single_page_arrangement">単一ページ配置</string>
+    <string name="single_page_arrangement_desc">ページ間の余白を削除</string>
+    <string name="scroll_speed_limit">スクロール速度制限</string>
+    <string name="scroll_speed_limit_desc">誤ってページを飛ばすのを防止</string>
+    <string name="auto_hide_toolbar">ツールバーを自動非表示</string>
+    <string name="auto_hide_toolbar_desc">5秒後にツールバーを非表示</string>
+    <string name="scrubber_on_scroll">スクロール時のページスライダー</string>
+    <string name="scrubber_on_scroll_desc">ツールバーが非表示のときにスクロール中にページスライダーを表示</string>
+    <string name="tap_to_turn_page">タップでページをめくる</string>
+    <string name="tap_to_turn_page_desc">ページの端をタップしてページ間を移動</string>
+
+    <!-- Display Sheet -->
+    <string name="display_settings">表示設定</string>
+    <string name="theme_brightness_options">テーマ、明るさ、画面オプション</string>
+    <string name="light_theme">ライト</string>
+    <string name="dark_theme">ダーク</string>
+    <string name="sepia_theme">セピア</string>
+    <string name="black_theme">ブラック</string>
+    <string name="low_brightness">低い明るさ</string>
+    <string name="high_brightness">高い明るさ</string>
+    <string name="prevent_screen_off">画面がオフになるのを防ぐ</string>
+
+    <!-- Page Jump Sheet -->
+    <string name="jump_to_page_title">ページへ移動</string>
+    <string name="enter_page_range">ページ番号を入力（1 - %d）</string>
+    <string name="page_number_placeholder">ページ番号</string>
+    <string name="enter_valid_page">1から%dの間の数字を入力してください</string>
+
+    <!-- Auto Scroll Sheet -->
+    <string name="auto_scroll_title">自動スクロール</string>
+    <string name="hands_free_reading">ハンズフリー読書モード</string>
+    <string name="speed_presets">速度プリセット</string>
+    <string name="speed_slow">遅い</string>
+    <string name="speed_medium">中</string>
+    <string name="speed_fast">速い</string>
+    <string name="speed_very_fast">非常に速い</string>
+    <string name="custom_speed">カスタム速度</string>
+    <string name="speed_pixels">%d px/秒</string>
+    <string name="slower">もっと遅く</string>
+    <string name="faster">もっと速く</string>
+    <string name="start_auto_scroll">自動スクロールを開始</string>
+    <string name="auto_scroll_hint">画面をタップして一時停止/再開。オーバーレイを使用して停止。</string>
+
+    <!-- Zoom Sheet -->
+    <string name="zoom_display">ズームと表示</string>
+    <string name="adjust_view_orientation">表示サイズと向きを調整</string>
+    <string name="screen_orientation">画面の向き</string>
+    <string name="orientation_auto">自動</string>
+    <string name="orientation_portrait">縦</string>
+    <string name="orientation_landscape">横</string>
+    <string name="lock_portrait">縦モードにロック</string>
+    <string name="lock_landscape">横モードにロック</string>
+    <string name="current_zoom_label">現在のズーム</string>
+
+    <!-- Bookmarks Sheet -->
+    <string name="bookmark_count">%d件のブックマーク</string>
+    <string name="bookmarks_count">%d件のブックマーク</string>
+    <string name="delete_bookmark">ブックマークを削除</string>
+    <string name="bookmark_hint">ブックマークアイコンをタップしてページを保存</string>
+    <string name="page_number_title">%dページ</string>
+
+    <!-- PDF Info Dialog -->
+    <string name="document_information">ドキュメント情報</string>
+    <string name="pdf_version_label">PDF %s</string>
+    <string name="document_section">ドキュメント</string>
+    <string name="subject_label">件名</string>
+    <string name="keywords_label">キーワード</string>
+    <string name="language_label">言語</string>
+    <string name="author_creator">著者と作成者</string>
+    <string name="author_label">著者</string>
+    <string name="creator_label">作成アプリケーション</string>
+    <string name="producer_label">PDF変換</string>
+    <string name="dates_section">日付</string>
+    <string name="created_label">作成日</string>
+    <string name="modified_label">変更日</string>
+    <string name="security_features">セキュリティと機能</string>
+    <string name="encrypted_label">暗号化済み</string>
+    <string name="encrypted_type">暗号化済み（%s）</string>
+    <string name="forms_label">フォーム</string>
+    <string name="signatures_label">署名</string>
+    <string name="xfa_label">XFA</string>
+    <string name="web_optimized">Web最適化</string>
+    <string name="location_section">場所</string>
+
+    <!-- Top Bar Menu Panel -->
+    <string name="document_options">ドキュメントオプション</string>
+    <string name="share_print_manage">共有、印刷、管理</string>
+    <string name="document_actions">ドキュメントのアクション</string>
+    <string name="document_info_title">ドキュメント情報</string>
+    <string name="view_details_metadata">ファイルの詳細とメタデータを表示</string>
+    <string name="share_this_document">このドキュメントを共有</string>
+    <string name="print_this_document">このドキュメントを印刷</string>
+    <string name="open_in_another_app">別のアプリで開く</string>
+    <string name="save_as">名前を付けて保存</string>
+    <string name="save_copy_location">選択した場所にコピーを保存</string>
+    <string name="file_management">ファイル管理</string>
+    <string name="remove_from_favourites">お気に入りから削除</string>
+    <string name="add_to_favourites">お気に入りに追加</string>
+    <string name="remove_from_favourites_desc">お気に入りリストから削除</string>
+    <string name="add_to_favourites_desc">お気に入りリストに追加</string>
+    <string name="delete_file_permanently">このファイルを完全に削除</string>
+
+    <!-- Delete Confirm Dialog -->
+    <string name="delete_pdf_question">PDFを削除しますか？</string>
+    <string name="action_cannot_undo">この操作は元に戻せません</string>
+
+    <!-- Remove Favorite Sheet -->
+    <string name="remove_from_favourites_question">お気に入りから削除しますか？</string>
+    <string name="remove_from_list_message">これによりリストから削除されます</string>
+
+    <!-- Reader Components -->
+    <string name="go_to_page">ページへ移動</string>
+    <string name="enter_page">ページ番号を入力（1-%d）</string>
+    <string name="invalid_page">有効なページ番号を入力してください</string>
+    <string name="go">移動</string>
+    <string name="current_zoom">現在：%d%%</string>
+    <string name="zoom_level">ズームレベル</string>
+    <string name="scroll_direction_label">スクロール方向</string>
+    <string name="page_layout_label">ページレイアウト</string>
+    <string name="fit_mode">フィットモード</string>
+    <string name="reading_mode">読書モード</string>
+    <string name="auto_scroll_settings">自動スクロール設定</string>
+    <string name="scroll_speed">スクロール速度</string>
+    <string name="slow">遅い</string>
+    <string name="fast">速い</string>
+    <string name="tap_to_start">タップして自動スクロールを開始</string>
+    <string name="start_scroll">開始</string>
+    <string name="stop_scroll">停止</string>
+    <string name="bookmarks_title">ブックマーク</string>
+    <string name="no_bookmarks_yet">まだブックマークがありません</string>
+    <string name="add_bookmark_hint">読書中にブックマークを追加して、重要なページにすぐ戻れます</string>
+    <string name="page_label">%dページ</string>
+    <string name="toc_title">目次</string>
+    <string name="no_toc">目次がありません</string>
+    <string name="attachments_title">添付ファイル</string>
+    <string name="no_attachments_available">添付ファイルがありません</string>
+    <string name="more_options_title">その他のオプション</string>
+    <string name="view_mode_title">表示モード</string>
+    <string name="continuous">連続</string>
+    <string name="page_by_page">ページごと</string>
+    <string name="remove_favorite_title">お気に入りから削除しますか？</string>
+    <string name="remove_favorite_message">このファイルはお気に入りリストから削除されます</string>
+    <string name="pdf_information">PDF情報</string>
+    <string name="document_title">タイトル</string>
+    <string name="author">著者</string>
+    <string name="subject">件名</string>
+    <string name="creator">作成アプリケーション</string>
+    <string name="producer">PDF変換</string>
+    <string name="creation_date">作成日</string>
+    <string name="modification_date">変更日</string>
+    <string name="unknown">不明</string>
+    <string name="enter_password_to_open">このPDFを開くにはパスワードを入力してください</string>
+    <string name="password_hint">パスワード</string>
+    <string name="wrong_password">パスワードが正しくありません。もう一度お試しください。</string>
+    <string name="open_pdf">開く</string>
+    <string name="error_loading">PDFの読み込みエラー</string>
+    <string name="try_again_message">このPDFの読み込み中に問題が発生しました。もう一度お試しください。</string>
+    <string name="cd_page_thumbnails">ページサムネイル</string>
+
+    <!-- Floating Search Bar -->
+    <string name="search_in_document">ドキュメント内を検索…</string>
+    <string name="cd_matching_highlights">%1$d件の一致するハイライト</string>
+
+    <!-- Floating Control Bar -->
+    <string name="cd_view_options">表示オプション</string>
+    <string name="cd_zoom">ズーム</string>
+    <string name="cd_display_settings">表示設定</string>
+    <string name="cd_control_more_options">その他のオプション</string>
+
+    <!-- Reader Sidebar -->
+    <string name="reading">読書</string>
+    <string name="settings_label">設定</string>
+    <string name="progress">進行状況</string>
+    <string name="page_current">%dページ</string>
+    <string name="of_total">/ %d</string>
+    <string name="prevent_screen_timeout">画面のタイムアウトを防ぐ</string>
+    <string name="lock_rotation">回転をロック</string>
+    <string name="rotation_locked">回転ロック済み</string>
+    <string name="auto_rotate">自動回転</string>
+    <string name="swipe_to_close">右にスワイプして閉じる</string>
+
+    <!-- Tools Screen -->
+    <string name="coming_soon">近日公開</string>
+
+    <!-- Enhanced Table of Contents -->
+    <string name="document_navigation">ドキュメントナビゲーション</string>
+    <string name="no_contents_available">コンテンツがありません</string>
+    <string name="no_toc_message">このPDFには目次がありません</string>
+    <string name="no_attachments_message">このPDFには埋め込みファイルがありません</string>
+    <string name="toc_section_count">%1$dセクション</string>
+    <string name="toc_sections_count">%1$dセクション</string>
+    <string name="toc_file_count">%1$d個のファイル</string>
+    <string name="toc_files_count">%1$dファイル</string>
+    <string name="toc_browse_structure">ドキュメント構造を閲覧</string>
+    <string name="toc_tab_contents">内容</string>
+    <string name="toc_tab_attachments">添付ファイル</string>
+    <string name="attachment_type_hint">%1$sファイル · タップして開く</string>
+    <string name="attachment_tap_hint">タップして開く</string>
+
+    <!-- Settings Panel (Reader) -->
+    <string name="reading_settings">読書設定</string>
+    <string name="full_screen_mode">全画面モード</string>
+    <string name="auto_rotate_enabled">自動回転が有効</string>
+    <string name="delete_pdf">PDFを削除</string>
+
+    <!-- Folder Detail Screen -->
+    <string name="delete_files_count">%d個のファイルを削除しますか？</string>
+    <string name="delete_files_warning">この操作は元に戻せません。ファイルはデバイスから完全に削除されます。</string>
+
+    <!-- Settings Screen -->
+    <string name="reader_section">リーダー</string>
+    <string name="about_section">アプリについて</string>
+    <string name="app_name_full">PDF Reader Pro</string>
+    <string name="version_format">バージョン %s</string>
+    <string name="license_gpl">GPL 3.0</string>
+    <string name="latest_badge">最新</string>
+    <string name="privacy_protected">あなたのプライバシーは保護されています</string>
+    <string name="about_app_description">PDF Reader Proは、無料でオープンソース、プライバシー重視のPDF閲覧体験を提供するために作られました。ブックマーク、お気に入り、読書テーマ、カスタマイズ可能な設定などの機能を備え、Androidユーザー向けの完全なPDFソリューションを目指しています。</string>
+    <string name="gpl_full_name">GNU General Public License v3.0</string>
+    <string name="key_terms">主な条件</string>
+    <string name="view_gpl_license">完全なGPL v3.0ライセンスを表示</string>
+    <string name="light">ライト</string>
+    <string name="dark">ダーク</string>
+    <string name="system_default">システムデフォルト</string>
+    <string name="default_zoom">デフォルトズーム</string>
+    <string name="double_tap_zoom">ダブルタップズーム</string>
+    <string name="double_tap_zoom_subtitle">ダブルタップ時のズームレベル</string>
+    <string name="show_tools_tab">ツールタブを表示</string>
+    <string name="show_tools_tab_subtitle">非表示にしてPDFリーダーとしてのみアプリを使用</string>
+    <string name="tap_to_check">タップしてアップデートを確認</string>
+    <string name="checking">確認中…</string>
+    <string name="update_available_version">アップデートがあります：v%s</string>
+    <string name="up_to_date">最新バージョンです</string>
+    <string name="error_message">エラー：%s</string>
+    <string name="view_changelog">変更履歴を表示</string>
+    <string name="view_privacy_policy">プライバシーポリシーを表示</string>
+    <string name="view_third_party">サードパーティライブラリを表示</string>
+    <string name="about_developer">開発者について</string>
+    <string name="app_license">アプリライセンス</string>
+    <string name="follow_system_brightness">システムの明るさに従う</string>
+
+    <!-- Settings Screen - Remaining strings -->
+    <string name="install_pending_update">保留中のアップデートをインストール</string>
+    <string name="install_downloaded_version">ダウンロードしたv%sをインストール</string>
+    <string name="contact_developer">開発者に連絡</string>
+    <string name="get_in_touch">開発者に連絡を取る</string>
+    <string name="github_repository">GitHubリポジトリ</string>
+    <string name="view_source_code">ソースコードを表示</string>
+    <string name="choose_appearance">アプリの外観を選択</string>
+    <string name="always_light">常にライトテーマを使用</string>
+    <string name="always_dark">常にダークテーマを使用</string>
+    <string name="follow_system">システム設定に従う</string>
+    <string name="system_theme">システム</string>
+    <string name="choose_scroll">ページのスクロール方法を選択</string>
+    <string name="scroll_up_down">上下にスクロール</string>
+    <string name="scroll_left_right">左右にスクロール</string>
+    <string name="choose_spread">見開きモードを選択</string>
+    <string name="spread_single_desc">一度に1ページを表示</string>
+    <string name="spread_odd_desc">最初のページは単独、その後ペア</string>
+    <string name="spread_even_desc">ページペアから始める</string>
+    <string name="position_pages">画面上のページ位置</string>
+    <string name="left">左</string>
+    <string name="center">中央</string>
+    <string name="right">右</string>
+    <string name="align_pages_left">ページを左に整列</string>
+    <string name="center_pages">ページを中央に配置</string>
+    <string name="align_pages_right">ページを右に整列</string>
+    <string name="initial_zoom">PDFを開くときの初期ズーム</string>
+    <string name="show_entire_page">ページ全体を表示</string>
+    <string name="match_width">ページ幅を画面に合わせる</string>
+    <string name="actual_size_desc">実際のサイズ</string>
+    <string name="background_color">読書中の背景色</string>
+    <string name="sepia">セピア</string>
+    <string name="black">ブラック</string>
+    <string name="white_background">白い背景</string>
+    <string name="warm_paper">暖かい紙のトーン</string>
+    <string name="dark_gray">暗いグレーの背景</string>
+    <string name="pure_black">純黒（AMOLED）</string>
+    <string name="update_interval">更新確認間隔</string>
+    <string name="update_interval_desc">アップデートを確認する頻度</string>
+    <string name="never">しない</string>
+    <string name="daily">毎日</string>
+    <string name="every_3_days">3日ごと</string>
+    <string name="weekly">毎週</string>
+    <string name="every_2_weeks">2週間ごと</string>
+    <string name="monthly">毎月</string>
+    <string name="manual_check_only">手動確認のみ</string>
+    <string name="check_every_day">毎日確認</string>
+    <string name="check_every_3_days">3日ごとに確認</string>
+    <string name="check_once_week">週に1回確認</string>
+    <string name="check_every_2_weeks">2週間ごとに確認</string>
+    <string name="check_once_month">月に1回確認</string>
+    <string name="set_custom_level">カスタムレベルを設定</string>
+    <string name="custom">カスタム</string>
+    <string name="app_logo">アプリのロゴ</string>
+
+    <!-- Privacy Policy -->
+    <string name="no_data_collection">データの収集や共有はありません</string>
+    <string name="no_analytics">分析やトラッキングはありません</string>
+    <string name="optional_updates">オプションの更新確認のみ</string>
+    <string name="local_storage">すべてのデータはローカルに保存</string>
+    <string name="privacy_no_collection_title">データ収集なし</string>
+    <string name="privacy_no_collection_content">PDF Reader Proは、いかなる個人データも収集、保存、送信、共有しません。アプリは完全にオフラインで動作し、インターネット接続を必要としません。いかなる種類の分析、トラッキング、テレメトリもありません。</string>
+    <string name="privacy_local_storage_title">ローカルデータストレージ</string>
+    <string name="privacy_local_storage_content">すべてのブックマーク、お気に入り、アプリの設定は、お使いのデバイスにのみ保存されます。このデータがデバイスから出ることはなく、あなた以外の誰もアクセスできません。完全にコントロールでき、いつでも削除できます。</string>
+    <string name="privacy_file_access_title">ファイルアクセス</string>
+    <string name="privacy_file_access_content">PDF Reader Proは、デバイスからPDFファイルを読み取るためにストレージ権限を必要とします。このアクセスはドキュメントの表示のみに使用され、情報の収集や送信には使用されません。</string>
+    <string name="privacy_password_title">パスワードの保存</string>
+    <string name="privacy_password_content">保護されたPDFのパスワードを保存することを選択した場合、暗号化されたストレージを使用してローカルに保存されます。パスワードがデバイスから出ることはありません。</string>
+    <string name="privacy_update_title">更新の確認</string>
+    <string name="privacy_update_content">アプリはオプションで、GitHubの公開APIを通じてアップデートを確認できます。この機能はリリース情報のみを取得し、個人データ、デバイス識別子、使用統計を送信しません。設定で自動更新確認を無効にするか、いつでも手動で確認できます。</string>
+
+    <!-- GPL License Terms -->
+    <string name="gpl_freedom_use">ソフトウェアを任意の目的で使用する自由</string>
+    <string name="gpl_freedom_study">ソースコードを研究および変更する自由</string>
+    <string name="gpl_freedom_distribute">コピーを配布する自由</string>
+    <string name="gpl_freedom_modify">変更版を配布する自由</string>
+    <string name="gpl_derivative">派生作品はGPL v3.0の下でオープンソースでなければなりません</string>
+    <string name="gpl_notice">PDF Reader Pro - オープンソースPDFビューアー\nCopyright (C) %d K M Rejowan Ahmmed\n\nこのプログラムはフリーソフトウェアです：Free Software Foundationによって公開されたGNU General Public Licenseの条件の下で、ライセンスのバージョン3、または（あなたの選択により）それ以降のバージョンのいずれかに従って、再配布および/または変更できます。\n\nこのプログラムは役立つことを願って配布されていますが、いかなる保証もありません。商品性や特定目的への適合性の暗黙の保証さえもありません。詳細はGNU General Public Licenseを参照してください。</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome">PDF Reader Proへ\nようこそ</string>
+    <string name="onboarding_welcome_desc">シンプルさのために作られた、クリーンで軽量なPDFリーダー。オープンソース、広告なし、あなたのプライバシーを尊重します。</string>
+    <string name="onboarding_all_pdfs">すべてのPDFを\n一箇所に</string>
+    <string name="onboarding_all_pdfs_desc">デバイス全体のPDFを自動的に検出します。フォルダで閲覧し、名前、日付、またはサイズで並べ替え、検索で任意のドキュメントを瞬時に見つけます。</string>
+    <string name="onboarding_powerful">強力なリーダー\n&amp; PDFツール</string>
+    <string name="onboarding_powerful_desc">テキストを検索し、テーマをカスタマイズし、表示設定を調整します。さらに、PDFを結合、分割、圧縮、整理するための組み込みツール。</string>
+    <string name="onboarding_storage">ストレージへの\nアクセスが必要</string>
+    <string name="onboarding_storage_desc">PDFファイルをスキャンして表示するためのアクセスを許可してください。ドキュメントはプライベートに保たれ、アップロードされることはありません。</string>
+    <string name="onboarding_grant_access">アクセスを許可</string>
+    <string name="onboarding_continue">続ける</string>
+
+    <!-- Folder -->
+    <string name="folder_empty">このフォルダは空です</string>
+    <string name="no_pdf_in_folder">このフォルダにPDFファイルが見つかりませんでした。</string>
+
+    <!-- Settings - Update Interval (renamed) -->
+    <string name="auto_check_interval">自動確認間隔</string>
+
+    <!-- Install pending -->
+    <string name="pending_update_ready">v%1$sのインストール準備ができました</string>
+
+    <!-- Creator links -->
+    <string name="link_website">ウェブサイト</string>
+    <string name="link_email">メール</string>
+    <string name="link_github">GitHub</string>
+    <string name="link_linkedin">LinkedIn</string>
+
+    <!-- Selected -->
+    <string name="selected">選択済み</string>
+
+    <!-- Additional accessibility strings (unique) -->
+    <string name="cd_preview">プレビュー</string>
+    <string name="cd_view">表示</string>
+    <string name="cd_sort">並べ替え</string>
+    <string name="cd_low">低</string>
+    <string name="cd_high">高</string>
+    <string name="cd_list_view">リスト表示</string>
+    <string name="cd_grid_view">グリッド表示</string>
+    <string name="cd_drag_to_reorder">ドラッグして並べ替え</string>
+    <string name="cd_watermark_image">透かし画像</string>
+    <string name="cd_watermark_preview">透かしプレビュー</string>
+    <string name="cd_reset_order">順序をリセット</string>
+    <string name="cd_add_more_pdfs">さらにPDFを追加</string>
+    <string name="cd_pdf_preview">PDFプレビュー</string>
+    <string name="cd_show_password">パスワードを表示</string>
+    <string name="cd_hide_password">パスワードを隠す</string>
+    <string name="cd_favorite">お気に入り</string>
+
+    <!-- Tool Screen Titles -->
+    <string name="tool_lock_pdf">PDFをロック</string>
+    <string name="tool_compress_pdf">PDFを圧縮</string>
+    <string name="tool_merge_pdfs">PDFを結合</string>
+    <string name="tool_pdf_to_images">PDFを画像に</string>
+    <string name="tool_image_to_pdf">画像をPDFに</string>
+    <string name="tool_add_page_numbers">ページ番号を追加</string>
+    <string name="tool_add_watermark">透かしを追加</string>
+    <string name="tool_rotate_pdf_pages">PDFページを回転</string>
+    <string name="tool_reorder_pdf_pages">PDFページを並べ替え</string>
+
+    <!-- Tool Screen Subtitles/Descriptions -->
+    <string name="tool_lock_desc">不正アクセスを防ぐためにパスワード保護を追加</string>
+    <string name="tool_merge_desc">複数のPDFファイルを1つに結合</string>
+    <string name="tool_pdf_to_images_desc">PDFページを画像ファイルとしてエクスポート</string>
+    <string name="tool_image_to_pdf_desc">画像を単一のPDFドキュメントに変換</string>
+
+    <!-- Common Tool Actions -->
+    <string name="new_file">新規ファイル</string>
+    <string name="new_export">新規エクスポート</string>
+    <string name="new_conversion">新規変換</string>
+    <string name="add_more">さらに追加</string>
+    <string name="share_all_images">すべての画像を共有</string>
+    <string name="export_images">画像をエクスポート</string>
+    <string name="rotate_pages">ページを回転</string>
+    <string name="save_reordered_pdf">並べ替えたPDFを保存</string>
+    <string name="create_pdf">PDFを作成</string>
+    <string name="overwrite_original_file">元のファイルを上書き</string>
+
+    <!-- Loading/Processing Messages -->
+    <string name="loading_pages">ページを読み込み中…</string>
+    <string name="loading_pdf">PDFを読み込み中…</string>
+    <string name="checking_pdf">PDFを確認中…</string>
+    <string name="rotating">回転中…</string>
+    <string name="saving">保存中…</string>
+    <string name="locking">ロック中…</string>
+    <string name="unlocking">ロック解除中…</string>
+    <string name="splitting">分割中…</string>
+    <string name="compressing">圧縮中…</string>
+    <string name="merging">結合中…</string>
+    <string name="exporting">エクスポート中…</string>
+    <string name="creating_pdf">PDFを作成中…</string>
+    <string name="removing_pages">削除中…</string>
+    <string name="adding_page_numbers">ページ番号を追加中…</string>
+    <string name="adding_watermark">透かしを追加中…</string>
+
+    <!-- Success Messages -->
+    <string name="rotation_complete">回転完了！</string>
+    <string name="pages_reordered">ページを並べ替えました！</string>
+    <string name="pdf_locked">PDFをロックしました！</string>
+    <string name="pdf_unlocked">PDFのロックを解除しました！</string>
+    <string name="pdf_split">PDFを分割しました！</string>
+    <string name="pdf_compressed">PDFを圧縮しました！</string>
+    <string name="pdfs_merged">PDFを結合しました！</string>
+    <string name="images_exported">画像をエクスポートしました！</string>
+    <string name="pdf_created">PDFを作成しました！</string>
+    <string name="page_numbers_added">ページ番号を追加しました！</string>
+
+    <!-- Success Descriptions -->
+    <string name="pages_rotated_count">%dページを回転しました</string>
+    <string name="pdf_saved_new_order">PDFが新しいページ順で保存されました</string>
+    <string name="pdf_password_protected">PDFがパスワードで保護されました</string>
+    <string name="password_protection_removed">パスワード保護が削除されました</string>
+    <string name="images_created_count">%1$d枚の%2$s画像を作成しました</string>
+    <string name="images_converted_count">%d枚の画像を変換しました</string>
+    <string name="pages_removed_count">%dページを削除しました</string>
+
+    <!-- Section Labels -->
+    <string name="section_rotation">回転</string>
+    <string name="section_select_pages">ページを選択</string>
+    <string name="section_owner_password">オーナーパスワード（必須）</string>
+    <string name="section_user_password">ユーザーパスワード（任意）</string>
+    <string name="section_permissions">権限</string>
+    <string name="section_enter_password">パスワードを入力</string>
+    <string name="section_output_format">出力形式</string>
+    <string name="section_pages_to_export">エクスポートするページ</string>
+    <string name="section_images">画像</string>
+    <string name="section_split_mode">分割モード</string>
+    <string name="section_compression_level">圧縮レベル</string>
+    <string name="section_position">位置</string>
+    <string name="section_appearance">外観</string>
+    <string name="section_watermark_type">透かしの種類</string>
+    <string name="section_text_settings">テキスト設定</string>
+    <string name="section_start_page">開始ページ</string>
+
+    <!-- Password Descriptions -->
+    <string name="owner_password_desc">編集権限のためのフルアクセスパスワード</string>
+    <string name="user_password_desc">PDFを開くために必要です。開くときのパスワードを不要にするには空のままにしてください。</string>
+    <string name="enter_password_desc">このPDFのロックを解除するにはパスワードを入力してください</string>
+    <string name="permissions_desc">ユーザーパスワードで開いたときにユーザーができること</string>
+    <string name="allow_copying_content">コンテンツのコピーを許可</string>
+
+    <!-- Protection Status -->
+    <string name="password_protected">パスワードで保護されています</string>
+    <string name="not_protected">保護されていません</string>
+    <string name="no_password_protection">パスワード保護なし</string>
+
+    <!-- Page Selection -->
+    <string name="all_pages_count">すべての%dページ</string>
+    <string name="selected_of_count">%1$d / %2$dを選択中</string>
+    <string name="pages_modified">%dページ • 変更済み</string>
+    <string name="page_numbers_label">ページ番号</string>
+    <string name="page_numbers_hint">例：1-5、8、10-12</string>
+    <string name="all_pages_label">すべてのページ（%d）</string>
+    <string name="quick_select_all">すべて</string>
+    <string name="quick_select_odd">奇数</string>
+    <string name="quick_select_even">偶数</string>
+    <string name="quick_select_first_half">前半</string>
+    <string name="quick_select_second_half">後半</string>
+    <string name="was_page">以前は%d</string>
+    <string name="page_selection_all">すべてのページ（1-%1$d）</string>
+    <string name="page_selection_range">%1$d-%2$dページ</string>
+    <string name="page_selection_custom">%1$sページ</string>
+    <string name="page_selection_custom_long">%1$sページ…（%2$dページ）</string>
+
+    <!-- Reorder -->
+    <string name="drag_hint">長押ししてページをドラッグして並べ替え</string>
+
+    <!-- Format Options -->
+    <string name="format_png">PNG</string>
+    <string name="format_jpg">JPG</string>
+    <string name="format_lossless">ロスレス品質</string>
+    <string name="format_smaller_size">より小さいファイルサイズ</string>
+    <string name="will_create_images">%1$d枚の%2$s画像を作成します</string>
+
+    <!-- Compression Levels -->
+    <string name="compression_low">低</string>
+    <string name="compression_medium">中</string>
+    <string name="compression_high">高</string>
+    <string name="compression_extreme">最大</string>
+    <string name="compression_low_desc">最高品質、より大きいファイル</string>
+    <string name="compression_medium_desc">バランスの取れた品質とサイズ</string>
+    <string name="compression_high_desc">より小さいファイル、品質低下</string>
+    <string name="compression_extreme_desc">最小ファイル、最低品質</string>
+
+    <!-- Split Modes -->
+    <string name="split_extract_pages">ページを抽出</string>
+    <string name="split_single_pages">単一ページ</string>
+    <string name="split_range_desc">ページ範囲から単一のPDFに分割</string>
+    <string name="split_extract_desc">特定のページを新しいPDFとして抽出</string>
+    <string name="split_single_desc">各ページを別々のPDFファイルとして</string>
+
+    <!-- Merge -->
+    <string name="no_pdfs_selected">PDFが選択されていません</string>
+    <string name="add_pdfs_to_merge">2つ以上のPDFファイルを追加して1つのドキュメントに結合</string>
+    <string name="files_selected">%dファイルを選択中</string>
+    <string name="files_merged">%dファイルを結合しました</string>
+
+    <!-- Image to PDF -->
+    <string name="images_selected">%d枚の画像を選択中</string>
+    <string name="create_pdf_pages">PDFを作成（%dページ）</string>
+
+    <!-- Page Numbers -->
+    <string name="position_bottom_left">左下</string>
+    <string name="position_bottom_center">下中央</string>
+    <string name="position_bottom_right">右下</string>
+    <string name="position_top_left">左上</string>
+    <string name="position_top_center">上中央</string>
+    <string name="position_top_right">右上</string>
+    <string name="format_simple">1, 2, 3</string>
+    <string name="format_dash">- 1 -</string>
+    <string name="format_page_of">1 / Nページ</string>
+
+    <!-- Watermark -->
+    <string name="watermark_text_label">透かしテキスト</string>
+    <string name="watermark_text_hint">透かしテキストを入力</string>
+    <string name="watermark_type_text">テキスト</string>
+    <string name="watermark_type_image">画像</string>
+    <string name="scale">スケール</string>
+    <string name="watermark_preview_area">透かしプレビューエリア</string>
+    <string name="no_image_selected">画像が選択されていません</string>
+
+    <!-- Remove Pages -->
+    <string name="pages_to_remove">削除する%dページ</string>
+    <string name="remove_selected_pages">%dページを削除</string>
+    <string name="remove_pages_btn">ページを削除</string>
+    <string name="select_pages_to_remove_hint">ページをタップして削除するページを選択</string>
+
+    <!-- File Info in Results -->
+    <string name="pages_size_format">%1$dページ • %2$s</string>
+
+    <!-- Merge Screen -->
+    <string name="pdf_extension">.pdf</string>
+    <string name="select_pdfs">PDFを選択</string>
+    <string name="output_filename_label">出力ファイル名</string>
+    <string name="range_option">範囲</string>
+    <string name="from_page">から</string>
+    <string name="to_page">まで</string>
+    <string name="page_numbers_example">例：1、3、5-8、12</string>
+    <string name="page_numbers_help">ページ番号または範囲をカンマで区切って入力</string>
+    <string name="files_selected_count">%1$dファイルを選択中</string>
+    <string name="merge_empty_title">PDFファイルを結合</string>
+    <string name="merge_empty_desc">複数のPDFファイルを選択して1つのドキュメントに結合</string>
+    <string name="file_size_pages">%1$s • %2$dページ</string>
+    <string name="pages_partial_format">%1$d/%2$dページ</string>
+    <string name="pages_all_format">すべての%1$dページ</string>
+    <string name="add_more_files">さらにファイルを追加</string>
+    <string name="saved_to_path">保存先：%1$s</string>
+    <string name="merging_pdfs">PDFを結合中…</string>
+    <string name="merge_complete">結合完了！</string>
+    <string name="merge_more_files">さらにファイルを結合</string>
+    <string name="select_pages">ページを選択</string>
+    <string name="total_pages_format">合計：%1$dページ</string>
+    <string name="selection_mode">選択モード</string>
+    <string name="all_pages_included">すべての%1$dページが含まれます</string>
+    <string name="pages_range_info">%1$sから%2$sページが含まれます</string>
+
+    <!-- Split Screen -->
+    <string name="change">変更</string>
+    <string name="page_ranges_label">ページ範囲</string>
+    <string name="page_ranges_example">例：1-5、6-10、11-15</string>
+    <string name="pages_to_extract_label">抽出するページ</string>
+    <string name="split_range_help">各範囲が別々のPDFを作成します。ページ：1-%d</string>
+    <string name="extract_pages_help">選択したページで単一のPDFを作成します。ページ：1-%d</string>
+    <string name="output_prefix_label">出力プレフィックス</string>
+    <string name="split_another_pdf">別のPDFを分割</string>
+    <string name="pages_count_with_mode">%1$dページ • %2$s</string>
+    <string name="split_empty_title">PDFファイルを分割</string>
+    <string name="split_empty_desc">PDFファイルを選択して複数の部分に分割するか、特定のページを抽出</string>
+    <string name="split_mode_title">分割モード</string>
+    <string name="split_mode_by_ranges_label">範囲別</string>
+    <string name="split_mode_by_ranges_desc">複数のPDF</string>
+    <string name="split_mode_every_n_label">Nページごと</string>
+    <string name="split_mode_every_n_desc">自動分割</string>
+    <string name="split_mode_single_pages_label">単一ページ</string>
+    <string name="split_mode_single_pages_desc">1ページ = 1 PDF</string>
+    <string name="split_mode_extract_label">ページを抽出</string>
+    <string name="split_mode_extract_desc">単一のPDF</string>
+    <string name="split_options_title">オプション</string>
+    <string name="split_will_create_one_pdf">1つのPDFファイルを作成します</string>
+    <string name="split_will_create_pdfs">%1$d個のPDFファイルを作成します</string>
+    <string name="split_every_one_page">1ページごとに分割</string>
+    <string name="split_every_n_pages">%1$dページごとに分割</string>
+    <string name="split_will_create_one_file_max">1つのファイルを作成（最大：%1$dページ）</string>
+    <string name="split_will_create_files_max">%1$d個のファイルを作成（最大：%2$dページ）</string>
+    <string name="split_into_individual_pages">個別のページに分割</string>
+    <string name="split_will_create_separate_pdfs">%1$d個の別々のPDFファイルを作成します</string>
+    <string name="split_will_create_one_page_pdf">1ページのPDFを1つ作成します</string>
+    <string name="split_will_create_one_pdf_pages">%1$dページのPDFを1つ作成します</string>
+    <string name="splitting_pdf">PDFを分割中…</string>
+    <string name="split_complete">分割完了！</string>
+    <string name="one_file_created">1つのファイルを作成しました</string>
+    <string name="files_created_count">%1$d個のファイルを作成しました</string>
+
+    <!-- Remove Pages Screen -->
+    <string name="select_page_range">ページ範囲を選択</string>
+    <string name="select_action">選択</string>
+    <string name="selected_for_removal_format">%1$d / %2$dを削除対象として選択中</string>
+    <string name="tool_remove_pages_desc">PDFから不要なページを選択して削除</string>
+    <string name="tap_to_select">タップして選択</string>
+    <string name="selected_pages_will_be_removed">選択したページがPDFから削除されます</string>
+    <string name="quick_select_range">範囲</string>
+    <string name="quick_select_first_n">最初のN</string>
+    <string name="quick_select_last_n">最後のN</string>
+    <string name="quick_select_before">より前</string>
+    <string name="quick_select_after">より後</string>
+    <string name="select_pages_range_hint">開始から終了までのページを選択（両端を含む）</string>
+    <string name="error_start_page_range">開始ページは1-%1$dである必要があります</string>
+    <string name="error_end_page_range">終了ページは1-%1$dである必要があります</string>
+    <string name="error_start_less_than_end">開始は終了より小さい必要があります</string>
+    <string name="dialog_select_before_page">指定ページより前を選択</string>
+    <string name="dialog_select_after_page">指定ページより後を選択</string>
+    <string name="dialog_hint_before_page">このページより前のページが選択されます</string>
+    <string name="dialog_hint_after_page">このページより後のページが選択されます</string>
+    <string name="dialog_select_first_n">最初のNページを選択</string>
+    <string name="dialog_select_last_n">最後のNページを選択</string>
+    <string name="dialog_hint_first_n">最初のNページが選択されます</string>
+    <string name="dialog_hint_last_n">最後のNページが選択されます</string>
+    <string name="number_of_pages">ページ数</string>
+    <string name="page_number_label">ページ番号</string>
+    <string name="error_value_range">値は1-%1$dである必要があります</string>
+    <string name="cannot_remove_all_pages">すべてのページを削除することはできません</string>
+    <string name="remove_one_page">1ページを削除</string>
+    <string name="remove_pages_count">%1$dページを削除</string>
+    <string name="removing">削除中…</string>
+    <string name="pages_removed">ページを削除しました！</string>
+    <string name="one_page_removed">1ページを削除しました</string>
+
+    <!-- Page Numbers Screen -->
+    <string name="prefix_label">プレフィックス</string>
+    <string name="prefix_hint">例：ページ</string>
+    <string name="suffix_label">サフィックス</string>
+    <string name="suffix_hint">例：.</string>
+    <string name="hex_label">Hex</string>
+    <string name="hex_prefix">#</string>
+    <string name="hex_help">6桁の16進数文字を入力（0-9、A-F）</string>
+    <string name="color_r">R</string>
+    <string name="color_g">G</string>
+    <string name="color_b">B</string>
+    <string name="skip_first_pages">最初のNページをスキップ</string>
+
+    <!-- Input Validation Messages -->
+    <string name="validation_password_required">パスワードは必須です</string>
+    <string name="validation_password_too_short">パスワードは少なくとも%1$d文字必要です</string>
+    <string name="validation_password_too_long">パスワードは%1$d文字を超えることはできません</string>
+    <string name="validation_filename_required">ファイル名は必須です</string>
+    <string name="validation_filename_too_long">ファイル名は%1$d文字を超えることはできません</string>
+    <string name="validation_filename_invalid_chars">ファイル名に無効な文字が含まれています</string>
+    <string name="validation_filename_starts_with_dot">ファイル名はドットで始めることはできません</string>
+    <string name="validation_filename_ends_with_dot">ファイル名はドットで終わることはできません</string>
+    <string name="validation_page_required">ページ番号は必須です</string>
+    <string name="validation_page_invalid">無効なページ番号</string>
+    <string name="validation_page_too_low">ページ番号は1以上である必要があります</string>
+    <string name="validation_page_too_high">ページ番号は%1$dを超えることはできません</string>
+    <string name="validation_page_range_required">ページ範囲は必須です</string>
+    <string name="validation_page_range_format">無効な形式。使用：1-5、7、10-12</string>
+    <string name="validation_page_range_invalid">開始ページは終了ページより小さい必要があります</string>
+    <string name="validation_value_required">値は必須です</string>
+    <string name="validation_value_invalid">無効な値</string>
+    <string name="validation_value_too_low">値は%1$d以上である必要があります</string>
+    <string name="validation_value_too_high">値は%1$dを超えることはできません</string>
+    <string name="validation_color_invalid">無効な色の値</string>
+    <string name="validation_color_range">色の値は0-255である必要があります</string>
+    <string name="password_min_hint">最低4文字必要です</string>
+
+    <plurals name="sign_unsaved_count">
+        <item quantity="one">%d件の署名が保存されていません</item>
+        <item quantity="other">%d件の署名が保存されていません</item>
+    </plurals>
+    <string name="sort_alphabetical">名前順</string>
+    <string name="sort_date_modified">変更日</string>
+    <string name="cd_close_selection">選択を閉じる</string>
+    <string name="folder_label">フォルダ</string>
+    <string name="crash_details">クラッシュの詳細</string>
+    <string name="copy_details">詳細をコピー</string>
+    <string name="crash_details_copied">クラッシュの詳細をコピーしました</string>
+    <string name="crash_report_subject">PDF Reader Pro クラッシュレポート</string>
+    <string name="report_on_github">GitHubで報告する</string>
+    <string name="no_browser_found">リンクを開くためのブラウザが見つかりませんでした</string>
+</resources>

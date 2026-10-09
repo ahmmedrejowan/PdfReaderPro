@@ -72,7 +72,7 @@ Every release, full or pre-release, starts with a docs commit as the last commit
 - the in-app changelog (`ChangelogContent` in `SettingsScreenContent.kt`)
 - the changelog section of every README
 
-Then run **Actions > Release > Run workflow** and pick **Full release** or **Pre-release**. Nothing else is typed in: the version is the newest `CHANGELOG.md` entry and its text becomes the release's What's New. If that version is already released, the run skips without building anything.
+Then run **Actions > Release > Run workflow** and pick **Full release** or **Pre-release**. Nothing else is typed in: the version is the newest `CHANGELOG.md` entry and its text becomes the release's What's New. The run stops if that version doesn't match `versionName`, and skips without building anything if the version is already released.
 
 Full releases are marked Latest and offered by the in-app update check. Pre-releases are signed the same way but are never offered to users, since the update check only looks at the latest full release.
 

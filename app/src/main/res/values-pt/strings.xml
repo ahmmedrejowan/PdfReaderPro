@@ -58,7 +58,7 @@
     <string name="delete">Eliminar</string>
     <string name="do_you_want_to_delete_this_file">Deseja eliminar este ficheiro?</string>
     <string name="cancel">Cancelar</string>
-    <string name="dismiss">Dispensar</string>
+    <string name="dismiss">Fechar</string>
     <string name="size_t">Tamanho:</string>
     <string name="last_modified_t">Última modificação:</string>
     <string name="pages_t">Páginas:</string>
@@ -703,7 +703,7 @@
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Navegar para trás</string>
     <string name="cd_close">Fechar</string>
-    <string name="cd_dismiss">Dispensar</string>
+    <string name="cd_dismiss">Fechar</string>
     <string name="cd_menu">Menu</string>
     <string name="cd_options">Opções</string>
     <string name="cd_expand">Expandir</string>
@@ -901,7 +901,7 @@
     <string name="starting_download">A iniciar a transferência…</string>
     <string name="downloading_update">A transferir atualização</string>
     <string name="version_label">Versão %s</string>
-    <string name="download_background_hint">Pode dispensar este painel. A transferência continuará em segundo plano com uma notificação.</string>
+    <string name="download_background_hint">Pode fechar este painel. A transferência continuará em segundo plano com uma notificação.</string>
     <string name="cancel_download">Cancelar transferência</string>
     <string name="version_ready_to_install">A versão %s está pronta a instalar</string>
     <string name="install_update">Instalar atualização</string>
@@ -960,7 +960,7 @@
     <!-- More Options Sheet -->
     <string name="additional_tools">Ferramentas e ações adicionais</string>
     <string name="view_manage_bookmarks">Ver e gerir as páginas guardadas</string>
-    <string name="auto_scroll_desc">Modo de leitura sem mãos</string>
+    <string name="auto_scroll_desc">Modo de leitura mãos-livres</string>
     <string name="go_to_page_desc">Saltar para uma página específica</string>
     <string name="share_document">Partilhar este documento</string>
     <string name="print_document">Imprimir este documento</string>
@@ -971,10 +971,10 @@
     <string name="view_options">Opções de visualização</string>
     <string name="customize_reading_layout">Personalize o seu esquema de leitura</string>
     <string name="scroll_mode">Modo de deslocamento</string>
-    <string name="wrapped">Contínuo</string>
+    <string name="wrapped">Em grelha</string>
     <string name="single_page_mode">Página única</string>
     <string name="spread_mode">Página dupla</string>
-    <string name="single_layout">Simples</string>
+    <string name="single_layout">Única</string>
     <string name="two_page_layout">Duas páginas</string>
     <string name="spread_odd">Ímpar</string>
     <string name="spread_even">Par</string>
@@ -982,7 +982,7 @@
     <string name="center_align">Centro</string>
     <string name="right_align">Direita</string>
     <string name="option_selected">Selecionado</string>
-    <string name="snap_to_page">Ajustar à página</string>
+    <string name="snap_to_page">Encaixar na página</string>
     <string name="snap_to_page_desc">Alinhar automaticamente aos limites das páginas</string>
     <string name="single_page_arrangement">Disposição de página única</string>
     <string name="single_page_arrangement_desc">Remover as margens entre páginas</string>
@@ -1014,7 +1014,7 @@
 
     <!-- Auto Scroll Sheet -->
     <string name="auto_scroll_title">Deslocamento automático</string>
-    <string name="hands_free_reading">Modo de leitura sem mãos</string>
+    <string name="hands_free_reading">Modo de leitura mãos-livres</string>
     <string name="speed_presets">Predefinições de velocidade</string>
     <string name="speed_slow">Lenta</string>
     <string name="speed_medium">Média</string>
@@ -1025,7 +1025,7 @@
     <string name="slower">Mais lento</string>
     <string name="faster">Mais rápido</string>
     <string name="start_auto_scroll">Iniciar deslocamento automático</string>
-    <string name="auto_scroll_hint">Toque no ecrã para pausar/retomar. Utilize a sobreposição para parar.</string>
+    <string name="auto_scroll_hint">Toque no ecrã para pausar/retomar. Utilize os controlos sobrepostos para parar.</string>
 
     <!-- Zoom Sheet -->
     <string name="zoom_display">Zoom e ecrã</string>
@@ -1092,7 +1092,7 @@
 
     <!-- Remove Favorite Sheet -->
     <string name="remove_from_favourites_question">Remover dos favoritos?</string>
-    <string name="remove_from_list_message">Isto irá remover da sua lista</string>
+    <string name="remove_from_list_message">Isto irá removê-lo da sua lista</string>
 
     <!-- Reader Components -->
     <string name="go_to_page">Ir para a página</string>
@@ -1159,7 +1159,7 @@
     <string name="progress">Progresso</string>
     <string name="page_current">Página %d</string>
     <string name="of_total">de %d</string>
-    <string name="prevent_screen_timeout">Impedir o tempo limite do ecrã</string>
+    <string name="prevent_screen_timeout">Impedir que o ecrã se desligue</string>
     <string name="lock_rotation">Bloquear rotação</string>
     <string name="rotation_locked">Rotação bloqueada</string>
     <string name="auto_rotate">Rodar automaticamente</string>
@@ -1282,13 +1282,13 @@
 
     <!-- Privacy Policy -->
     <string name="no_data_collection">Sem recolha ou partilha de dados</string>
-    <string name="no_analytics">Sem análises ou rastreamento</string>
+    <string name="no_analytics">Sem análises ou rastreio</string>
     <string name="optional_updates">Apenas verificações de atualizações opcionais</string>
     <string name="local_storage">Todos os dados armazenados localmente</string>
     <string name="privacy_no_collection_title">Sem recolha de dados</string>
-    <string name="privacy_no_collection_content">O PDF Reader Pro não recolhe, armazena, transmite ou partilha quaisquer dados pessoais. A aplicação funciona completamente offline e não requer ligação à Internet. Não há análises, rastreamento ou telemetria de qualquer tipo.</string>
+    <string name="privacy_no_collection_content">O PDF Reader Pro não recolhe, armazena, transmite ou partilha quaisquer dados pessoais. A aplicação funciona completamente offline e não requer ligação à Internet. Não há análises, rastreio ou telemetria de qualquer tipo.</string>
     <string name="privacy_local_storage_title">Armazenamento local de dados</string>
-    <string name="privacy_local_storage_content">Todos os marcadores, favoritos e preferências da aplicação são armazenados exclusivamente no seu dispositivo. Estes dados nunca saem do seu dispositivo e não são acessíveis a ninguém exceto a você. Tem controlo total e pode eliminá-los a qualquer momento.</string>
+    <string name="privacy_local_storage_content">Todos os marcadores, favoritos e preferências da aplicação são armazenados exclusivamente no seu dispositivo. Estes dados nunca saem do seu dispositivo e não são acessíveis a ninguém exceto a si. Tem controlo total e pode eliminá-los a qualquer momento.</string>
     <string name="privacy_file_access_title">Acesso a ficheiros</string>
     <string name="privacy_file_access_content">O PDF Reader Pro requer permissão de armazenamento para ler os ficheiros PDF do seu dispositivo. Este acesso é utilizado apenas para mostrar os seus documentos e nunca é usado para recolher ou transmitir informações.</string>
     <string name="privacy_password_title">Armazenamento de palavras-passe</string>
@@ -1681,6 +1681,6 @@
     <string name="copy_details">Copiar detalhes</string>
     <string name="crash_details_copied">Detalhes da falha copiados</string>
     <string name="crash_report_subject">Relatório de falha do PDF Reader Pro</string>
-    <string name="report_on_github">Reportar no GitHub</string>
+    <string name="report_on_github">Comunicar no GitHub</string>
     <string name="no_browser_found">Nenhum navegador encontrado para abrir o link</string>
 </resources>

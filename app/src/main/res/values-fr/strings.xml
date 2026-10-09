@@ -58,7 +58,7 @@
     <string name="delete">Supprimer</string>
     <string name="do_you_want_to_delete_this_file">Voulez-vous supprimer ce fichier ?</string>
     <string name="cancel">Annuler</string>
-    <string name="dismiss">Ignorer</string>
+    <string name="dismiss">Fermer</string>
     <string name="size_t">Taille :</string>
     <string name="last_modified_t">Dernière modification :</string>
     <string name="pages_t">Pages :</string>
@@ -67,7 +67,7 @@
     <string name="total_size">Taille totale</string>
     <string name="no_pdf_found_by_that_name">Aucun PDF trouvé avec ce nom</string>
     <string name="back_press">Appuyer sur retour</string>
-    <string name="rotate">Pivoter</string>
+    <string name="rotate">Faire pivoter</string>
     <string name="dark_mode">Mode sombre</string>
     <string name="brightness">Luminosité</string>
     <string name="jump_to_page">Aller à la page</string>
@@ -243,8 +243,8 @@
     <string name="tool_split_pdf">Diviser un PDF</string>
     <string name="tool_split_desc">Diviser un PDF en plusieurs fichiers</string>
     <string name="tool_compress_desc">Réduire la taille du fichier tout en conservant la qualité</string>
-    <string name="tool_rotate_pages">Pivoter les pages</string>
-    <string name="tool_rotate_desc">Pivoter des pages individuelles ou toutes les pages</string>
+    <string name="tool_rotate_pages">Faire pivoter les pages</string>
+    <string name="tool_rotate_desc">Faire pivoter des pages individuelles ou toutes les pages</string>
     <string name="tool_reorder_pages">Réorganiser les pages</string>
     <string name="tool_reorder_desc">Réorganiser l\'ordre des pages dans le PDF</string>
     <string name="tool_remove_pages">Supprimer des pages</string>
@@ -400,7 +400,7 @@
     <string name="merge_pdfs">Fusionner des PDF</string>
     <string name="split_pdf">Diviser un PDF</string>
     <string name="compress_pdf">Compresser un PDF</string>
-    <string name="rotate_pdf">Pivoter un PDF</string>
+    <string name="rotate_pdf">Faire pivoter un PDF</string>
     <string name="lock_pdf">Verrouiller un PDF</string>
     <string name="unlock_pdf">Déverrouiller un PDF</string>
     <string name="add_watermark">Ajouter un filigrane</string>
@@ -478,13 +478,13 @@
 
     <!-- Rotate -->
     <string name="rotation">Rotation</string>
-    <string name="rotate_left">Pivoter à gauche</string>
-    <string name="rotate_right">Pivoter à droite</string>
-    <string name="rotate_180">Pivoter de 180°</string>
+    <string name="rotate_left">Faire pivoter à gauche</string>
+    <string name="rotate_right">Faire pivoter à droite</string>
+    <string name="rotate_180">Faire pivoter de 180°</string>
     <string name="rotate_90_right">90° à droite</string>
     <string name="rotate_90_left">90° à gauche</string>
     <string name="apply_to_all">Appliquer à toutes les pages</string>
-    <string name="rotate_more">Pivoter d\'autres</string>
+    <string name="rotate_more">Faire pivoter d\'autres</string>
     <string name="rotated_successfully">PDF pivoté avec succès</string>
 
     <!-- Lock/Unlock -->
@@ -703,7 +703,7 @@
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Revenir en arrière</string>
     <string name="cd_close">Fermer</string>
-    <string name="cd_dismiss">Ignorer</string>
+    <string name="cd_dismiss">Fermer</string>
     <string name="cd_menu">Menu</string>
     <string name="cd_options">Options</string>
     <string name="cd_expand">Développer</string>
@@ -756,8 +756,8 @@
     <string name="cd_add_bookmark">Ajouter un signet</string>
     <string name="cd_remove_bookmark">Supprimer le signet</string>
     <string name="cd_table_of_contents">Table des matières</string>
-    <string name="cd_rotate_left">Pivoter à gauche</string>
-    <string name="cd_rotate_right">Pivoter à droite</string>
+    <string name="cd_rotate_left">Faire pivoter à gauche</string>
+    <string name="cd_rotate_right">Faire pivoter à droite</string>
     <string name="cd_toggle_night_mode">Basculer en mode nuit</string>
     <string name="cd_auto_scroll">Défilement automatique</string>
     <string name="cd_increase_speed">Augmenter la vitesse</string>
@@ -797,7 +797,7 @@
     <string name="cd_merge_pdfs">Fusionner des PDF</string>
     <string name="cd_split_pdf">Diviser un PDF</string>
     <string name="cd_compress_pdf">Compresser un PDF</string>
-    <string name="cd_rotate_pdf">Pivoter un PDF</string>
+    <string name="cd_rotate_pdf">Faire pivoter un PDF</string>
     <string name="cd_reorder_pages">Réorganiser les pages</string>
     <string name="cd_remove_pages">Supprimer des pages</string>
     <string name="cd_add_watermark">Ajouter un filigrane</string>
@@ -852,7 +852,7 @@
     <string name="total_file_size">taille totale des fichiers</string>
     <string name="percent_of_library">%d%% de votre bibliothèque</string>
     <string name="no_files_yet">aucun fichier pour l\'instant</string>
-    <string name="recently_opened">ouvert récemment</string>
+    <string name="recently_opened">ouverts récemment</string>
 
     <!-- Exit Confirmation -->
     <string name="stay">Rester</string>
@@ -971,7 +971,7 @@
     <string name="view_options">Options d\'affichage</string>
     <string name="customize_reading_layout">Personnalisez votre mise en page de lecture</string>
     <string name="scroll_mode">Mode de défilement</string>
-    <string name="wrapped">Continu</string>
+    <string name="wrapped">Multipage</string>
     <string name="single_page_mode">Page unique</string>
     <string name="spread_mode">Double page</string>
     <string name="single_layout">Simple</string>
@@ -1049,7 +1049,7 @@
     <string name="document_information">Informations sur le document</string>
     <string name="pdf_version_label">PDF %s</string>
     <string name="document_section">Document</string>
-    <string name="subject_label">Sujet</string>
+    <string name="subject_label">Objet</string>
     <string name="keywords_label">Mots-clés</string>
     <string name="language_label">Langue</string>
     <string name="author_creator">Auteur et créateur</string>
@@ -1129,7 +1129,7 @@
     <string name="pdf_information">Informations PDF</string>
     <string name="document_title">Titre</string>
     <string name="author">Auteur</string>
-    <string name="subject">Sujet</string>
+    <string name="subject">Objet</string>
     <string name="creator">Créateur</string>
     <string name="producer">Producteur</string>
     <string name="creation_date">Date de création</string>
@@ -1306,7 +1306,7 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome">Bienvenue dans\nPDF Reader Pro</string>
-    <string name="onboarding_welcome_desc">Un lecteur PDF simple et léger, conçu pour la simplicité. Open source, sans publicité et respectueux de votre vie privée.</string>
+    <string name="onboarding_welcome_desc">Un lecteur PDF épuré et léger, conçu pour la simplicité. Open source, sans publicité et respectueux de votre vie privée.</string>
     <string name="onboarding_all_pdfs">Tous vos PDF\nau même endroit</string>
     <string name="onboarding_all_pdfs_desc">Découvre automatiquement les PDF sur votre appareil. Parcourez par dossiers, triez par nom, date ou taille, et trouvez instantanément n\'importe quel document grâce à la recherche.</string>
     <string name="onboarding_powerful">Lecteur puissant\n&amp; outils PDF</string>
@@ -1361,7 +1361,7 @@
     <string name="tool_image_to_pdf">Image en PDF</string>
     <string name="tool_add_page_numbers">Ajouter des numéros de page</string>
     <string name="tool_add_watermark">Ajouter un filigrane</string>
-    <string name="tool_rotate_pdf_pages">Pivoter les pages PDF</string>
+    <string name="tool_rotate_pdf_pages">Faire pivoter les pages PDF</string>
     <string name="tool_reorder_pdf_pages">Réorganiser les pages PDF</string>
 
     <!-- Tool Screen Subtitles/Descriptions -->
@@ -1377,7 +1377,7 @@
     <string name="add_more">Ajouter plus</string>
     <string name="share_all_images">Partager toutes les images</string>
     <string name="export_images">Exporter les images</string>
-    <string name="rotate_pages">Pivoter les pages</string>
+    <string name="rotate_pages">Faire pivoter les pages</string>
     <string name="save_reordered_pdf">Enregistrer le PDF réorganisé</string>
     <string name="create_pdf">Créer un PDF</string>
     <string name="overwrite_original_file">Écraser le fichier d\'origine</string>
@@ -1584,7 +1584,7 @@
     <string name="split_options_title">Options</string>
     <string name="split_will_create_one_pdf">Créera 1 fichier PDF</string>
     <string name="split_will_create_pdfs">Créera %1$d fichiers PDF</string>
-    <string name="split_every_one_page">Diviser toutes les 1 page</string>
+    <string name="split_every_one_page">Diviser à chaque page</string>
     <string name="split_every_n_pages">Diviser toutes les %1$d pages</string>
     <string name="split_will_create_one_file_max">Créera 1 fichier (max : %1$d pages)</string>
     <string name="split_will_create_files_max">Créera %1$d fichiers (max : %2$d pages)</string>

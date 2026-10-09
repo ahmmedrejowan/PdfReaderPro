@@ -58,7 +58,7 @@
     <string name="delete">Elimina</string>
     <string name="do_you_want_to_delete_this_file">Vuoi eliminare questo file?</string>
     <string name="cancel">Annulla</string>
-    <string name="dismiss">Ignora</string>
+    <string name="dismiss">Chiudi</string>
     <string name="size_t">Dimensione:</string>
     <string name="last_modified_t">Ultima modifica:</string>
     <string name="pages_t">Pagine:</string>
@@ -192,7 +192,7 @@
 
     <!-- Settings Screen -->
     <string name="appearance">Aspetto</string>
-    <string name="reader">Lettore</string>
+    <string name="reader">Lettura</string>
     <string name="updates">Aggiornamenti</string>
     <string name="about">Informazioni</string>
     <string name="theme">Tema</string>
@@ -301,7 +301,7 @@
     <string name="save_with_highlights">Salva una copia con le evidenziazioni</string>
     <string name="save_with_highlights_desc">Scrivi le evidenziazioni in un nuovo file PDF</string>
     <string name="bake_highlights_title">Salva una copia con le evidenziazioni</string>
-    <string name="bake_highlights_body">Questo scrive le tue %d evidenziazioni in un nuovo file PDF, così appariranno anche in altri lettori PDF. Le tue evidenziazioni in questa app vengono comunque mantenute.</string>
+    <string name="bake_highlights_body">In questo modo le tue %d evidenziazioni verranno scritte in un nuovo file PDF, così appariranno anche in altri lettori PDF. Le tue evidenziazioni in questa app vengono comunque mantenute.</string>
     <string name="bake_highlights_caveat">Una volta che un PDF contiene evidenziazioni, annotazioni di testo o inchiostro, alcune funzionalità di modifica smettono di funzionare. Sceglierai dove salvare la copia.</string>
     <string name="bake_highlights_confirm_check">Comprendo che questo crea una copia separata</string>
     <string name="bake_highlights_action">Salva copia</string>
@@ -342,7 +342,7 @@
     <string name="sign_failed">Impossibile salvare la copia firmata: %s</string>
     <string name="sign_saving">Salvataggio della copia firmata…</string>
     <string name="sign_save">Salva copia</string>
-    <string name="sign_discard">Ignora</string>
+    <string name="sign_discard">Scarta</string>
     <string name="sign_save_here">Salva</string>
     <string name="sign_save_confirm_title">Salvare in questo documento?</string>
     <string name="sign_save_confirm_body">Le firme verranno scritte in %s. Questa operazione non può essere annullata.</string>
@@ -413,7 +413,7 @@
     <!-- Tool Common -->
     <string name="select_source_file">Seleziona un file PDF per iniziare</string>
     <string name="processing">Elaborazione…</string>
-    <string name="success">Successo!</string>
+    <string name="success">Operazione completata!</string>
     <string name="error_occurred">Si è verificato un errore</string>
     <string name="output_file_name">Nome del file di output</string>
     <string name="overwrite_original">Sovrascrivi originale</string>
@@ -491,7 +491,7 @@
     <string name="password">Password</string>
     <string name="enter_password">Inserisci la password</string>
     <string name="user_password">Password utente</string>
-    <string name="owner_password">Password proprietario</string>
+    <string name="owner_password">Password del proprietario</string>
     <string name="permissions">Autorizzazioni</string>
     <string name="allow_printing">Consenti stampa</string>
     <string name="allow_copying">Consenti copia</string>
@@ -618,7 +618,7 @@
     <string name="error_wrong_password">Password errata</string>
     <string name="error_storage_full">Lo spazio di archiviazione è pieno</string>
     <string name="error_network">Errore di rete</string>
-    <string name="error_timeout">Operazione scaduta</string>
+    <string name="error_timeout">Tempo scaduto per l\'operazione</string>
     <string name="error_out_of_memory">Memoria insufficiente</string>
     <string name="error_failed_load_pdf">Impossibile caricare il file PDF</string>
     <string name="error_failed_load_pdf_with_message">Impossibile caricare il PDF: %1$s</string>
@@ -703,7 +703,7 @@
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Torna indietro</string>
     <string name="cd_close">Chiudi</string>
-    <string name="cd_dismiss">Ignora</string>
+    <string name="cd_dismiss">Chiudi</string>
     <string name="cd_menu">Menu</string>
     <string name="cd_options">Opzioni</string>
     <string name="cd_expand">Espandi</string>
@@ -780,7 +780,7 @@
 
     <!-- Content Descriptions - Status -->
     <string name="cd_loading">Caricamento</string>
-    <string name="cd_success">Successo</string>
+    <string name="cd_success">Completato</string>
     <string name="cd_error">Errore</string>
     <string name="cd_warning">Avviso</string>
     <string name="cd_processing">Elaborazione</string>
@@ -923,7 +923,7 @@
     <string name="just_now">Proprio ora</string>
     <string name="minutes_ago">%d min fa</string>
     <string name="hours_ago">%d h fa</string>
-    <string name="days_ago">%d g fa</string>
+    <string name="days_ago">%d gg fa</string>
 
     <!-- Permission Bottom Sheet -->
     <string name="quick_access_needed">Accesso rapido necessario</string>
@@ -971,7 +971,7 @@
     <string name="view_options">Opzioni di visualizzazione</string>
     <string name="customize_reading_layout">Personalizza il layout di lettura</string>
     <string name="scroll_mode">Modalità di scorrimento</string>
-    <string name="wrapped">Continuo</string>
+    <string name="wrapped">A capo</string>
     <string name="single_page_mode">Pagina singola</string>
     <string name="spread_mode">Pagina doppia</string>
     <string name="single_layout">Singola</string>
@@ -1025,7 +1025,7 @@
     <string name="slower">Più lento</string>
     <string name="faster">Più veloce</string>
     <string name="start_auto_scroll">Avvia scorrimento automatico</string>
-    <string name="auto_scroll_hint">Tocca lo schermo per mettere in pausa/riprendere. Usa la sovrapposizione per interrompere.</string>
+    <string name="auto_scroll_hint">Tocca lo schermo per mettere in pausa/riprendere. Usa i controlli in sovrimpressione per interrompere.</string>
 
     <!-- Zoom Sheet -->
     <string name="zoom_display">Zoom e schermo</string>
@@ -1036,7 +1036,7 @@
     <string name="orientation_landscape">Orizzontale</string>
     <string name="lock_portrait">Blocca in modalità verticale</string>
     <string name="lock_landscape">Blocca in modalità orizzontale</string>
-    <string name="current_zoom_label">Zoom corrente</string>
+    <string name="current_zoom_label">Zoom attuale</string>
 
     <!-- Bookmarks Sheet -->
     <string name="bookmark_count">%d segnalibro</string>
@@ -1099,7 +1099,7 @@
     <string name="enter_page">Inserisci il numero di pagina (1-%d)</string>
     <string name="invalid_page">Inserisci un numero di pagina valido</string>
     <string name="go">Vai</string>
-    <string name="current_zoom">Corrente: %d%%</string>
+    <string name="current_zoom">Attuale: %d%%</string>
     <string name="zoom_level">Livello di zoom</string>
     <string name="scroll_direction_label">Direzione di scorrimento</string>
     <string name="page_layout_label">Layout della pagina</string>
@@ -1178,7 +1178,7 @@
     <string name="toc_file_count">%1$d file</string>
     <string name="toc_files_count">%1$d file</string>
     <string name="toc_browse_structure">Sfoglia la struttura del documento</string>
-    <string name="toc_tab_contents">Contenuto</string>
+    <string name="toc_tab_contents">Indice</string>
     <string name="toc_tab_attachments">Allegati</string>
     <string name="attachment_type_hint">File %1$s · Tocca per aprire</string>
     <string name="attachment_tap_hint">Tocca per aprire</string>
@@ -1194,7 +1194,7 @@
     <string name="delete_files_warning">Questa azione non può essere annullata. I file verranno eliminati definitivamente dal tuo dispositivo.</string>
 
     <!-- Settings Screen -->
-    <string name="reader_section">Lettore</string>
+    <string name="reader_section">Lettura</string>
     <string name="about_section">Informazioni</string>
     <string name="app_name_full">PDF Reader Pro</string>
     <string name="version_format">Versione %s</string>
@@ -1216,7 +1216,7 @@
     <string name="tap_to_check">Tocca per controllare gli aggiornamenti</string>
     <string name="checking">Controllo in corso…</string>
     <string name="update_available_version">Aggiornamento disponibile: v%s</string>
-    <string name="up_to_date">Sei aggiornato</string>
+    <string name="up_to_date">L\'app è aggiornata</string>
     <string name="error_message">Errore: %s</string>
     <string name="view_changelog">Visualizza registro delle modifiche</string>
     <string name="view_privacy_policy">Visualizza la nostra informativa sulla privacy</string>
@@ -1423,7 +1423,7 @@
     <!-- Section Labels -->
     <string name="section_rotation">ROTAZIONE</string>
     <string name="section_select_pages">SELEZIONA PAGINE</string>
-    <string name="section_owner_password">PASSWORD PROPRIETARIO (OBBLIGATORIA)</string>
+    <string name="section_owner_password">PASSWORD DEL PROPRIETARIO (OBBLIGATORIA)</string>
     <string name="section_user_password">PASSWORD UTENTE (FACOLTATIVA)</string>
     <string name="section_permissions">AUTORIZZAZIONI</string>
     <string name="section_enter_password">INSERISCI PASSWORD</string>

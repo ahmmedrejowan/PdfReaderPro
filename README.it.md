@@ -228,7 +228,7 @@ GNU General Public License for more details.
 
 - Firma i documenti disegnando, digitando o scegliendo un'immagine della tua firma, dal lettore o da Strumenti
 - Le firme sono salvate per documento, gestite da un unico pannello e scritte nel file o in una copia
-- Traduzioni in russo, tedesco, spagnolo, francese, italiano e portoghese (#91, #93, #95)
+- Traduzioni in russo, tedesco, spagnolo, francese, italiano, portoghese, turco, polacco, irlandese e giapponese (#91, #93, #95, #98)
 - Scegli la lingua dell'app nell'impostazione di Android per la lingua delle app
 - I traduttori come Google Traduttore compaiono nel menu di selezione del testo (#78)
 - Avanzamento della stampa e salvataggio di una copia senza password

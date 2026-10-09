@@ -37,6 +37,19 @@ jobs:
         id: changelog
         run: python3 .github/scripts/changelog_release.py CHANGELOG.md >> "$GITHUB_OUTPUT"
 
+      # The APK reports versionName as its version. A release whose APK says
+      # something else keeps offering itself as an update, so both must agree.
+      - name: Check the app version matches the changelog
+        env:
+          VERSION: ${{ steps.changelog.outputs.version }}
+        run: |
+          APP_VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
+          if [ "$APP_VERSION" != "$VERSION" ]; then
+            echo "::error file=app/build.gradle.kts::versionName is '$APP_VERSION' but the newest CHANGELOG.md entry is '$VERSION'. Update both in the docs commit."
+            exit 1
+          fi
+          echo "versionName and CHANGELOG.md both say $VERSION"
+
       - name: Check if this version is already released
         id: tag
         env:

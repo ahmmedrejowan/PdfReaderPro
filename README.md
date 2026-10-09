@@ -228,7 +228,7 @@ GNU General Public License for more details.
 
 - Sign documents by drawing, typing or picking an image of your signature, from the reader or Tools
 - Signatures are kept per document, managed from one sheet, and written into the file or a copy
-- Russian, German, Spanish, French, Italian and Portuguese translations (#91, #93, #95)
+- Russian, German, Spanish, French, Italian, Portuguese, Turkish, Polish, Irish and Japanese translations (#91, #93, #95, #98)
 - Choose the app's language in Android's per-app language setting
 - Translators like Google Translate appear in the text selection menu (#78)
 - Print progress, and saving a copy without the password

@@ -228,7 +228,7 @@ GNU General Public License for more details.
 
 - Assine documentos desenhando, escrevendo ou escolhendo uma imagem da sua assinatura, no leitor ou nas Ferramentas
 - As assinaturas ficam guardadas por documento, são geridas num único painel e escritas no ficheiro ou numa cópia
-- Traduções para russo, alemão, espanhol, francês, italiano e português (#91, #93, #95)
+- Traduções para russo, alemão, espanhol, francês, italiano, português, turco, polaco, irlandês e japonês (#91, #93, #95, #98)
 - Escolha o idioma da app na definição de idioma por app do Android
 - Tradutores como o Google Tradutor aparecem no menu de seleção de texto (#78)
 - Progresso de impressão e guardar uma cópia sem palavra-passe

@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Signatures** - Sign a document by drawing, typing or picking an image of your signature, from the reader or from Tools; signatures are kept per document, managed from one sheet, and written into the file after a confirmation or saved into a copy
-- **Translations** - Russian, German, Spanish, French, Italian and Portuguese (#91, #93, #95)
+- **Translations** - Russian, German, Spanish, French, Italian, Portuguese, Turkish, Polish, Irish and Japanese (#91, #93, #95, #98)
 - **App Language** - The app's languages are offered in Android's per-app language setting (Android 13 and later)
 - **Translate Selected Text** - Translators and other text apps, such as Google Translate, appear in the text selection menu (closes #78)
 - **Print Progress** - Printing shows how far the pages have been prepared
@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Menu Button** - The page slider no longer covers the reader's ⋮ button (closes #79)
 - **Crash Screen** - The crash screen now appears after any crash instead of the app freezing
 - **Try Again** - Try Again on the reader's error screen opens the document again
+- **Settings in Your Language** - Scroll mode, reading theme and the update interval in Settings are shown in the app's language instead of English
 
 ---
 

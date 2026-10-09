@@ -58,7 +58,7 @@
     <string name="delete">Eliminar</string>
     <string name="do_you_want_to_delete_this_file">¿Quieres eliminar este archivo?</string>
     <string name="cancel">Cancelar</string>
-    <string name="dismiss">Descartar</string>
+    <string name="dismiss">Cerrar</string>
     <string name="size_t">Tamaño:</string>
     <string name="last_modified_t">Última modificación:</string>
     <string name="pages_t">Páginas:</string>
@@ -302,7 +302,7 @@
     <string name="save_with_highlights_desc">Escribir los resaltados en un nuevo archivo PDF</string>
     <string name="bake_highlights_title">Guardar una copia con los resaltados</string>
     <string name="bake_highlights_body">Esto escribe tus %d resaltados en un nuevo archivo PDF, para que aparezcan también en otros lectores de PDF. Tus resaltados en esta aplicación se conservan de todos modos.</string>
-    <string name="bake_highlights_caveat">Una vez que un PDF contiene resaltados, anotaciones de texto o tinta, algunas funciones de edición dejan de funcionar. Tú eligirás dónde guardar la copia.</string>
+    <string name="bake_highlights_caveat">Una vez que un PDF contiene resaltados, anotaciones de texto o tinta, algunas funciones de edición dejan de funcionar. Tú elegirás dónde guardar la copia.</string>
     <string name="bake_highlights_confirm_check">Entiendo que esto crea una copia separada</string>
     <string name="bake_highlights_action">Guardar copia</string>
     <string name="bake_highlights_done">%d resaltados guardados en la copia</string>
@@ -703,7 +703,7 @@
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Volver atrás</string>
     <string name="cd_close">Cerrar</string>
-    <string name="cd_dismiss">Descartar</string>
+    <string name="cd_dismiss">Cerrar</string>
     <string name="cd_menu">Menú</string>
     <string name="cd_options">Opciones</string>
     <string name="cd_expand">Expandir</string>
@@ -971,7 +971,7 @@
     <string name="view_options">Opciones de vista</string>
     <string name="customize_reading_layout">Personaliza tu diseño de lectura</string>
     <string name="scroll_mode">Modo de desplazamiento</string>
-    <string name="wrapped">Continuo</string>
+    <string name="wrapped">En cuadrícula</string>
     <string name="single_page_mode">Página única</string>
     <string name="spread_mode">Doble página</string>
     <string name="single_layout">Simple</string>
@@ -982,7 +982,7 @@
     <string name="center_align">Centro</string>
     <string name="right_align">Derecha</string>
     <string name="option_selected">Seleccionado</string>
-    <string name="snap_to_page">Ajustar a la página</string>
+    <string name="snap_to_page">Alinear con las páginas</string>
     <string name="snap_to_page_desc">Alinear automáticamente a los límites de las páginas</string>
     <string name="single_page_arrangement">Disposición de página única</string>
     <string name="single_page_arrangement_desc">Eliminar los márgenes entre páginas</string>
@@ -1309,7 +1309,7 @@
     <string name="onboarding_welcome_desc">Un lector de PDF limpio y ligero, diseñado para la simplicidad. Código abierto, sin anuncios y respeta tu privacidad.</string>
     <string name="onboarding_all_pdfs">Todos tus PDF\nen un solo lugar</string>
     <string name="onboarding_all_pdfs_desc">Descubre automáticamente los PDF de tu dispositivo. Navega por carpetas, ordena por nombre, fecha o tamaño, y encuentra cualquier documento al instante con la búsqueda.</string>
-    <string name="onboarding_powerful">Lector potente\n&amp; herramientas PDF</string>
+    <string name="onboarding_powerful">Lector potente\ny herramientas PDF</string>
     <string name="onboarding_powerful_desc">Busca texto, personaliza temas y ajusta la configuración de pantalla. Además, herramientas integradas para combinar, dividir, comprimir y organizar tus PDF.</string>
     <string name="onboarding_storage">Se requiere acceso\nal almacenamiento</string>
     <string name="onboarding_storage_desc">Concede acceso para escanear y mostrar tus archivos PDF. Tus documentos permanecen privados y nunca se suben.</string>
@@ -1584,7 +1584,7 @@
     <string name="split_options_title">Opciones</string>
     <string name="split_will_create_one_pdf">Creará 1 archivo PDF</string>
     <string name="split_will_create_pdfs">Creará %1$d archivos PDF</string>
-    <string name="split_every_one_page">Dividir cada 1 página</string>
+    <string name="split_every_one_page">Dividir en cada página</string>
     <string name="split_every_n_pages">Dividir cada %1$d páginas</string>
     <string name="split_will_create_one_file_max">Creará 1 archivo (máx.: %1$d páginas)</string>
     <string name="split_will_create_files_max">Creará %1$d archivos (máx.: %2$d páginas)</string>
@@ -1640,8 +1640,8 @@
     <string name="hex_prefix">#</string>
     <string name="hex_help">Introduce 6 caracteres hexadecimales (0-9, A-F)</string>
     <string name="color_r">R</string>
-    <string name="color_g">V</string>
-    <string name="color_b">A</string>
+    <string name="color_g">G</string>
+    <string name="color_b">B</string>
     <string name="skip_first_pages">Omitir las primeras N páginas</string>
 
     <!-- Input Validation Messages -->
