@@ -69,6 +69,7 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.util.FormattingUtils
 import com.rejowan.pdfreaderpro.data.local.database.entity.BookmarkEntity
 import kotlinx.coroutines.delay
+import androidx.activity.compose.BackHandler
 
 private val AccentRed = Color(0xFFEF5350)
 private val AccentPurple = Color(0xFF9575CD)
@@ -139,6 +140,9 @@ private fun BookmarksSideSheet(
     onDeleteBookmark: (BookmarkEntity) -> Unit,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

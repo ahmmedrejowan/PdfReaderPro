@@ -138,6 +138,7 @@ import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material.icons.rounded.Translate
 import com.rejowan.pdfreaderpro.util.AppLanguage
+import androidx.activity.compose.BackHandler
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -1181,6 +1182,9 @@ private fun PickerSideSheet(
     onSelect: (Int) -> Unit,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -1503,6 +1507,9 @@ private fun BrightnessSideSheet(
     onBrightnessChange: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -1825,6 +1832,9 @@ private fun AboutSheet(
     onDismiss: () -> Unit,
     content: @Composable () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 

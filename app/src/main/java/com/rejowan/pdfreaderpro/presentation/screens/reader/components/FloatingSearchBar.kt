@@ -55,6 +55,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rejowan.pdfreaderpro.R
+import androidx.compose.ui.res.pluralStringResource
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentGreen = Color(0xFF81C784)
@@ -79,10 +80,7 @@ fun FloatingSearchBar(
     val contentColor = if (isDarkMode) Color.White else Color.Black
     val subtleColor = if (isDarkMode) Color.White.copy(alpha = 0.5f) else Color.Black.copy(alpha = 0.5f)
 
-    val matchingHighlightsText = stringResource(
-        R.string.cd_matching_highlights,
-        highlightMatchCount
-    )
+    val matchingHighlightsText = pluralStringResource(R.plurals.cd_matching_highlights, highlightMatchCount, highlightMatchCount)
 
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current

@@ -96,6 +96,7 @@ import com.rejowan.pdfreaderpro.util.FileOperations
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
+import androidx.compose.ui.res.pluralStringResource
 
 private val FolderAmber = Color(0xFFFFB74D)
 private val FolderAmberDark = Color(0xFFF57C00)
@@ -464,7 +465,7 @@ private fun BatchDeleteConfirmSheet(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = stringResource(R.string.delete_files_count, count),
+                text = pluralStringResource(R.plurals.delete_files_count, count, count),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )

@@ -128,7 +128,6 @@
     <string name="no_recent">Gan comhaid le déanaí</string>
     <string name="add_favorites_hint">Cuir PDFanna le ceanáin chun iad a fheiceáil anseo</string>
     <string name="open_pdf_hint">Oscail roinnt PDFanna chun iad a fheiceáil anseo</string>
-    <string name="delete_count_files">Scrios comhaid (%d)?</string>
     <string name="delete_warning">Ní féidir an gníomh seo a chealú. Scriosfar na comhaid go buan ó do ghléas.</string>
 
     <!-- Folders Screen -->
@@ -294,18 +293,15 @@
     <string name="delete_highlight">Scrios aibhsiú</string>
     <string name="highlight_page">Leathanach %d</string>
     <string name="highlight_count">%d aibhsiú</string>
-    <string name="highlights_count">Aibhsithe: %d</string>
     <string name="view_manage_highlights">Féach ar aibhsithe agus bainistigh iad</string>
     <string name="highlight_in_file">Sábháilte sa chomhad</string>
     <string name="search_highlights">Cuardaigh aibhsithe</string>
     <string name="save_with_highlights">Sábháil cóip le haibhsithe</string>
     <string name="save_with_highlights_desc">Scríobh aibhsithe i gcomhad PDF nua</string>
     <string name="bake_highlights_title">Sábháil cóip le haibhsithe</string>
-    <string name="bake_highlights_body">Scríobhann sé seo d\'aibhsithe (%d) i gcomhad PDF nua, ionas go dtaispeánfar iad i léitheoirí PDF eile freisin. Coinnítear do chuid aibhsithe san aip seo ar aon chaoi.</string>
     <string name="bake_highlights_caveat">Nuair a bhíonn aibhsithe, nótaí téacs nó dúigh i PDF, stopann roinnt gnéithe eagarthóireachta ag obair air. Roghnóidh tú cá háit a sábhálfar an chóip.</string>
     <string name="bake_highlights_confirm_check">Tuigim go gcruthaíonn sé seo cóip ar leith</string>
     <string name="bake_highlights_action">Sábháil cóip</string>
-    <string name="bake_highlights_done">Aibhsithe sábháilte sa chóip: %d</string>
     <string name="bake_highlights_failed">Níorbh fhéidir an chóip a shábháil: %s</string>
     <string name="save_decrypted_copy">Sábháil cóip gan an focal faire</string>
     <string name="save_decrypted_copy_desc">Scríobh cóip neamhchosanta den doiciméad seo</string>
@@ -459,7 +455,6 @@
     <string name="compress_high_desc">Uaschomhbhrú, comhad níos lú</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$d leathanach • %2$s</string>
     <string name="compress_share_pdf">Roinn PDF</string>
     <string name="compress_empty_title">Comhbhrúigh Comhad PDF</string>
     <string name="compress_empty_desc">Roghnaigh comhad PDF chun a mhéid a laghdú agus cáilíocht á coinneáil</string>
@@ -474,7 +469,6 @@
     <string name="compressed_size">Méid Comhbhrúite</string>
     <string name="compressed_size_reduced">Méid Laghdaithe</string>
     <string name="saved_format">(%1$s sábháilte)</string>
-    <string name="pages_count_format">%1$d leathanach</string>
 
     <!-- Rotate -->
     <string name="rotation">Rothlú</string>
@@ -527,8 +521,6 @@
     <string name="position_center">Lár</string>
     <string name="position_tiled">Tíláilte</string>
     <string name="watermark_added">Cuireadh Comhartha Uisce leis!</string>
-    <string name="applied_to_pages">Cuireadh i bhfeidhm ar %1$d leathanach</string>
-    <string name="pages_size_dash_format">%1$d leathanach - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Roghnaigh leathanaigh le baint</string>
@@ -582,7 +574,6 @@
     <string name="title_page_selection_custom">Saincheaptha</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">%1$d de %2$d leathanach uimhrithe</string>
     <string name="adding_numbers">Uimhreacha á gcur leis…</string>
 
     <!-- Images to PDF -->
@@ -880,7 +871,6 @@
     <string name="file_info_desc">Féach ar shonraí agus airíonna an chomhaid</string>
     <string name="delete_action">Scrios</string>
     <string name="delete_desc">Bain an comhad seo go buan</string>
-    <string name="pages_count">%d leathanach</string>
     <string name="cd_toggle_scroll_direction">Scoránaigh treo scrollaithe</string>
     <string name="cd_fit_to_screen">Oiriúnaigh don scáileán</string>
 
@@ -1146,7 +1136,6 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Cuardaigh sa doiciméad…</string>
-    <string name="cd_matching_highlights">Aibhsithe meaitseála: %1$d</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Roghanna Amhairc</string>
@@ -1191,7 +1180,6 @@
     <string name="delete_pdf">Scrios PDF</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">Scrios comhaid (%d)?</string>
     <string name="delete_files_warning">Ní féidir an gníomh seo a chealú. Scriosfar na comhaid go buan ó do ghléas.</string>
 
     <!-- Settings Screen -->
@@ -1452,9 +1440,7 @@
     <string name="no_password_protection">Gan Chosaint Focal Faire</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">Gach %d leathanach</string>
     <string name="selected_of_count">%1$d de %2$d roghnaithe</string>
-    <string name="pages_modified">%d leathanach • Mionathraithe</string>
     <string name="page_numbers_label">Uimhreacha leathanach</string>
     <string name="page_numbers_hint">m.sh., 1-5, 8, 10-12</string>
     <string name="all_pages_label">Gach Leathanach (%d)</string>
@@ -1467,7 +1453,6 @@
     <string name="page_selection_all">Gach leathanach (1-%1$d)</string>
     <string name="page_selection_range">Leathanaigh %1$d-%2$d</string>
     <string name="page_selection_custom">Leathanaigh %1$s</string>
-    <string name="page_selection_custom_long">Leathanaigh %1$s… (%2$d leathanach)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Brúigh go fada agus tarraing leathanaigh chun athordú</string>
@@ -1504,7 +1489,6 @@
 
     <!-- Image to PDF -->
     <string name="images_selected">Íomhánna roghnaithe: %d</string>
-    <string name="create_pdf_pages">Cruthaigh PDF (%d leathanach)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">Bun Clé</string>
@@ -1533,7 +1517,6 @@
     <string name="select_pages_to_remove_hint">Tapáil leathanaigh chun iad a roghnú lena mbaint</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$d leathanach • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1544,21 +1527,15 @@
     <string name="to_page">Go dtí</string>
     <string name="page_numbers_example">m.sh., 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Iontráil uimhreacha leathanach nó raonta scartha le camóga</string>
-    <string name="files_selected_count">Comhaid roghnaithe: %1$d</string>
     <string name="merge_empty_title">Cumaisc Comhaid PDF</string>
     <string name="merge_empty_desc">Roghnaigh iliomad comhad PDF chun iad a chumasc ina ndoiciméad amháin</string>
-    <string name="file_size_pages">%1$s • %2$d leathanach</string>
-    <string name="pages_partial_format">%1$d/%2$d leathanach</string>
-    <string name="pages_all_format">Gach %1$d leathanach</string>
     <string name="add_more_files">Cuir tuilleadh comhad leis</string>
     <string name="saved_to_path">Sábháladh i: %1$s</string>
     <string name="merging_pdfs">PDFanna á gcumasc…</string>
     <string name="merge_complete">Cumasc Críochnaithe!</string>
     <string name="merge_more_files">Cumaisc Tuilleadh Comhad</string>
     <string name="select_pages">Roghnaigh Leathanaigh</string>
-    <string name="total_pages_format">Iomlán: %1$d leathanach</string>
     <string name="selection_mode">Mód Roghnaithe</string>
-    <string name="all_pages_included">Áireofar gach %1$d leathanach</string>
     <string name="pages_range_info">Áireofar leathanaigh %1$s go %2$s</string>
 
     <!-- Split Screen -->
@@ -1570,7 +1547,6 @@
     <string name="extract_pages_help">Cruthaíonn sé aon PDF amháin le leathanaigh roghnaithe. Leathanaigh: 1-%d</string>
     <string name="output_prefix_label">Réimír aschuir</string>
     <string name="split_another_pdf">Scoilt PDF Eile</string>
-    <string name="pages_count_with_mode">%1$d leathanach • %2$s</string>
     <string name="split_empty_title">Scoilt Comhad PDF</string>
     <string name="split_empty_desc">Roghnaigh comhad PDF chun é a roinnt ina iliomad codanna nó chun leathanaigh ar leith a bhaint amach</string>
     <string name="split_mode_title">Mód Roinnte</string>
@@ -1590,7 +1566,6 @@
     <string name="split_will_create_one_file_max">Cruthófar 1 chomhad (uasmhéid: %1$d leathanach)</string>
     <string name="split_will_create_files_max">Comhaid le cruthú: %1$d (uasmhéid: %2$d leathanach)</string>
     <string name="split_into_individual_pages">Scoilt ina leathanaigh aonair</string>
-    <string name="split_will_create_separate_pdfs">Comhaid PDF ar leith le cruthú: %1$d</string>
     <string name="split_will_create_one_page_pdf">Cruthófar 1 PDF le 1 leathanach</string>
     <string name="split_will_create_one_pdf_pages">Cruthófar 1 PDF le %1$d leathanach</string>
     <string name="splitting_pdf">PDF á roinnt…</string>
@@ -1687,4 +1662,179 @@
     <string name="no_browser_found">Níor aimsíodh aon bhrabhsálaí chun an nasc a oscailt</string>
     <string name="choose_language">Roghnaigh teanga na haipe</string>
     <string name="language_follow_system">Úsáid teanga an fhóin</string>
+    <plurals name="delete_count_files">
+        <item quantity="one">Scrios comhaid (%d)?</item>
+        <item quantity="two">Scrios comhaid (%d)?</item>
+        <item quantity="few">Scrios comhaid (%d)?</item>
+        <item quantity="many">Scrios comhaid (%d)?</item>
+        <item quantity="other">Scrios comhaid (%d)?</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="one">Aibhsithe: %d</item>
+        <item quantity="two">Aibhsithe: %d</item>
+        <item quantity="few">Aibhsithe: %d</item>
+        <item quantity="many">Aibhsithe: %d</item>
+        <item quantity="other">Aibhsithe: %d</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="one">Scríobhann sé seo d\'aibhsithe (%d) i gcomhad PDF nua, ionas go dtaispeánfar iad i léitheoirí PDF eile freisin. Coinnítear do chuid aibhsithe san aip seo ar aon chaoi.</item>
+        <item quantity="two">Scríobhann sé seo d\'aibhsithe (%d) i gcomhad PDF nua, ionas go dtaispeánfar iad i léitheoirí PDF eile freisin. Coinnítear do chuid aibhsithe san aip seo ar aon chaoi.</item>
+        <item quantity="few">Scríobhann sé seo d\'aibhsithe (%d) i gcomhad PDF nua, ionas go dtaispeánfar iad i léitheoirí PDF eile freisin. Coinnítear do chuid aibhsithe san aip seo ar aon chaoi.</item>
+        <item quantity="many">Scríobhann sé seo d\'aibhsithe (%d) i gcomhad PDF nua, ionas go dtaispeánfar iad i léitheoirí PDF eile freisin. Coinnítear do chuid aibhsithe san aip seo ar aon chaoi.</item>
+        <item quantity="other">Scríobhann sé seo d\'aibhsithe (%d) i gcomhad PDF nua, ionas go dtaispeánfar iad i léitheoirí PDF eile freisin. Coinnítear do chuid aibhsithe san aip seo ar aon chaoi.</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="one">Aibhsithe sábháilte sa chóip: %d</item>
+        <item quantity="two">Aibhsithe sábháilte sa chóip: %d</item>
+        <item quantity="few">Aibhsithe sábháilte sa chóip: %d</item>
+        <item quantity="many">Aibhsithe sábháilte sa chóip: %d</item>
+        <item quantity="other">Aibhsithe sábháilte sa chóip: %d</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="one">%1$d leathanach • %2$s</item>
+        <item quantity="two">%1$d leathanach • %2$s</item>
+        <item quantity="few">%1$d leathanach • %2$s</item>
+        <item quantity="many">%1$d leathanach • %2$s</item>
+        <item quantity="other">%1$d leathanach • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="one">%1$d leathanach</item>
+        <item quantity="two">%1$d leathanach</item>
+        <item quantity="few">%1$d leathanach</item>
+        <item quantity="many">%1$d leathanach</item>
+        <item quantity="other">%1$d leathanach</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="one">Cuireadh i bhfeidhm ar %1$d leathanach</item>
+        <item quantity="two">Cuireadh i bhfeidhm ar %1$d leathanach</item>
+        <item quantity="few">Cuireadh i bhfeidhm ar %1$d leathanach</item>
+        <item quantity="many">Cuireadh i bhfeidhm ar %1$d leathanach</item>
+        <item quantity="other">Cuireadh i bhfeidhm ar %1$d leathanach</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="one">%1$d leathanach - %2$s</item>
+        <item quantity="two">%1$d leathanach - %2$s</item>
+        <item quantity="few">%1$d leathanach - %2$s</item>
+        <item quantity="many">%1$d leathanach - %2$s</item>
+        <item quantity="other">%1$d leathanach - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="one">%1$d de %2$d leathanach uimhrithe</item>
+        <item quantity="two">%1$d de %2$d leathanach uimhrithe</item>
+        <item quantity="few">%1$d de %2$d leathanach uimhrithe</item>
+        <item quantity="many">%1$d de %2$d leathanach uimhrithe</item>
+        <item quantity="other">%1$d de %2$d leathanach uimhrithe</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="one">%d leathanach</item>
+        <item quantity="two">%d leathanach</item>
+        <item quantity="few">%d leathanach</item>
+        <item quantity="many">%d leathanach</item>
+        <item quantity="other">%d leathanach</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="one">Aibhsithe meaitseála: %1$d</item>
+        <item quantity="two">Aibhsithe meaitseála: %1$d</item>
+        <item quantity="few">Aibhsithe meaitseála: %1$d</item>
+        <item quantity="many">Aibhsithe meaitseála: %1$d</item>
+        <item quantity="other">Aibhsithe meaitseála: %1$d</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="one">Scrios comhaid (%d)?</item>
+        <item quantity="two">Scrios comhaid (%d)?</item>
+        <item quantity="few">Scrios comhaid (%d)?</item>
+        <item quantity="many">Scrios comhaid (%d)?</item>
+        <item quantity="other">Scrios comhaid (%d)?</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="one">Gach %d leathanach</item>
+        <item quantity="two">Gach %d leathanach</item>
+        <item quantity="few">Gach %d leathanach</item>
+        <item quantity="many">Gach %d leathanach</item>
+        <item quantity="other">Gach %d leathanach</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="one">%d leathanach • Mionathraithe</item>
+        <item quantity="two">%d leathanach • Mionathraithe</item>
+        <item quantity="few">%d leathanach • Mionathraithe</item>
+        <item quantity="many">%d leathanach • Mionathraithe</item>
+        <item quantity="other">%d leathanach • Mionathraithe</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="one">Leathanaigh %1$s… (%2$d leathanach)</item>
+        <item quantity="two">Leathanaigh %1$s… (%2$d leathanach)</item>
+        <item quantity="few">Leathanaigh %1$s… (%2$d leathanach)</item>
+        <item quantity="many">Leathanaigh %1$s… (%2$d leathanach)</item>
+        <item quantity="other">Leathanaigh %1$s… (%2$d leathanach)</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="one">Cruthaigh PDF (%d leathanach)</item>
+        <item quantity="two">Cruthaigh PDF (%d leathanach)</item>
+        <item quantity="few">Cruthaigh PDF (%d leathanach)</item>
+        <item quantity="many">Cruthaigh PDF (%d leathanach)</item>
+        <item quantity="other">Cruthaigh PDF (%d leathanach)</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="one">%1$d leathanach • %2$s</item>
+        <item quantity="two">%1$d leathanach • %2$s</item>
+        <item quantity="few">%1$d leathanach • %2$s</item>
+        <item quantity="many">%1$d leathanach • %2$s</item>
+        <item quantity="other">%1$d leathanach • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="one">Comhaid roghnaithe: %1$d</item>
+        <item quantity="two">Comhaid roghnaithe: %1$d</item>
+        <item quantity="few">Comhaid roghnaithe: %1$d</item>
+        <item quantity="many">Comhaid roghnaithe: %1$d</item>
+        <item quantity="other">Comhaid roghnaithe: %1$d</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="one">%1$s • %2$d leathanach</item>
+        <item quantity="two">%1$s • %2$d leathanach</item>
+        <item quantity="few">%1$s • %2$d leathanach</item>
+        <item quantity="many">%1$s • %2$d leathanach</item>
+        <item quantity="other">%1$s • %2$d leathanach</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="one">%1$d/%2$d leathanach</item>
+        <item quantity="two">%1$d/%2$d leathanach</item>
+        <item quantity="few">%1$d/%2$d leathanach</item>
+        <item quantity="many">%1$d/%2$d leathanach</item>
+        <item quantity="other">%1$d/%2$d leathanach</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="one">Gach %1$d leathanach</item>
+        <item quantity="two">Gach %1$d leathanach</item>
+        <item quantity="few">Gach %1$d leathanach</item>
+        <item quantity="many">Gach %1$d leathanach</item>
+        <item quantity="other">Gach %1$d leathanach</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="one">Iomlán: %1$d leathanach</item>
+        <item quantity="two">Iomlán: %1$d leathanach</item>
+        <item quantity="few">Iomlán: %1$d leathanach</item>
+        <item quantity="many">Iomlán: %1$d leathanach</item>
+        <item quantity="other">Iomlán: %1$d leathanach</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="one">Áireofar gach %1$d leathanach</item>
+        <item quantity="two">Áireofar gach %1$d leathanach</item>
+        <item quantity="few">Áireofar gach %1$d leathanach</item>
+        <item quantity="many">Áireofar gach %1$d leathanach</item>
+        <item quantity="other">Áireofar gach %1$d leathanach</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="one">%1$d leathanach • %2$s</item>
+        <item quantity="two">%1$d leathanach • %2$s</item>
+        <item quantity="few">%1$d leathanach • %2$s</item>
+        <item quantity="many">%1$d leathanach • %2$s</item>
+        <item quantity="other">%1$d leathanach • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="one">Comhaid PDF ar leith le cruthú: %1$d</item>
+        <item quantity="two">Comhaid PDF ar leith le cruthú: %1$d</item>
+        <item quantity="few">Comhaid PDF ar leith le cruthú: %1$d</item>
+        <item quantity="many">Comhaid PDF ar leith le cruthú: %1$d</item>
+        <item quantity="other">Comhaid PDF ar leith le cruthú: %1$d</item>
+    </plurals>
 </resources>

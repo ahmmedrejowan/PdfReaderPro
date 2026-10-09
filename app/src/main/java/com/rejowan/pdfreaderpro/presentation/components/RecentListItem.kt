@@ -215,7 +215,8 @@ fun RecentListItem(
 @Composable
 internal fun formatTimeAgo(timestamp: Long): String {
     val now = System.currentTimeMillis()
-    if (now - timestamp < DateUtils.MINUTE_IN_MILLIS) return stringResource(R.string.just_now)
+    // Only a moment in the past is "just now"; DateUtils words future times itself.
+    if (now - timestamp in 0 until DateUtils.MINUTE_IN_MILLIS) return stringResource(R.string.just_now)
     return DateUtils.getRelativeTimeSpanString(
         timestamp,
         now,

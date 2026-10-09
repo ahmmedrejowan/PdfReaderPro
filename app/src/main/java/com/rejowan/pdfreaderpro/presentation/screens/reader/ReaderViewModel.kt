@@ -1725,7 +1725,7 @@ class ReaderViewModel(
                 }
                 _events.send(
                     ReaderEvent.ShowMessage(
-                        applicationContext.getString(R.string.bake_highlights_done, written)
+                        applicationContext.resources.getQuantityString(R.plurals.bake_highlights_done, written, written)
                     )
                 )
             } catch (e: Exception) {

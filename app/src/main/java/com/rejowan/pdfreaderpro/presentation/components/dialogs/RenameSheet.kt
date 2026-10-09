@@ -64,6 +64,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
+import androidx.activity.compose.BackHandler
 
 // Accent color for rename
 private val AccentBlue = Color(0xFF64B5F6)
@@ -116,6 +117,9 @@ private fun RenameSideSheet(
     onDismiss: () -> Unit,
     onRename: (String) -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

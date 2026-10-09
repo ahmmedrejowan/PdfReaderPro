@@ -95,6 +95,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors - consistent with app design system
 private val AccentAmber = Color(0xFFFFB74D)     // Split theme color
@@ -129,7 +130,7 @@ fun SplitScreen(
                         Text(stringResource(R.string.tool_split_pdf))
                         state.sourceFile?.let { file ->
                             Text(
-                                stringResource(R.string.pages_count_with_mode, file.pageCount, stringResource(state.splitMode.displayNameRes())),
+                                pluralStringResource(R.plurals.pages_count_with_mode, file.pageCount, file.pageCount, stringResource(state.splitMode.displayNameRes())),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -440,7 +441,7 @@ private fun SourceFileCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    stringResource(R.string.pages_size_format, sourceFile.pageCount, formatFileSize(sourceFile.size)),
+                    pluralStringResource(R.plurals.pages_size_format, sourceFile.pageCount, sourceFile.pageCount, formatFileSize(sourceFile.size)),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -710,7 +711,7 @@ private fun SplitOptionsSection(
                                 fontWeight = FontWeight.Medium
                             )
                             Text(
-                                stringResource(R.string.split_will_create_separate_pdfs, state.sourceFile?.pageCount ?: 0),
+                                pluralStringResource(R.plurals.split_will_create_separate_pdfs, state.sourceFile?.pageCount ?: 0, state.sourceFile?.pageCount ?: 0),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

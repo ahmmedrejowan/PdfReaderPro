@@ -65,6 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
+import androidx.activity.compose.BackHandler
 
 // Design colors
 private val AccentBlue = Color(0xFF64B5F6)
@@ -88,6 +89,10 @@ fun TopBarMenuPanel(
     onDismiss: () -> Unit
 ) {
     if (!isVisible) return
+
+    // Back closes the panel the same way tapping outside it does. Registered
+    // only while visible, since the panel stays composed when hidden.
+    BackHandler { onDismiss() }
 
     var isAnimatedVisible by remember { mutableStateOf(false) }
 

@@ -7,8 +7,9 @@ on:
       - '**.md'
       - 'docs/**'
       - '.github/ISSUE_TEMPLATE/**'
+  # Contributor PRs target feature, so they get the same checks as master.
   pull_request:
-    branches: [master]
+    branches: [master, feature]
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -19,6 +20,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Seconds instead of a full build: tells a translator exactly which string
+  # breaks the build (missing, placeholder, unescaped apostrophe, plural form).
+  translations:
+    name: Translations
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Check translations against English
+        run: python3 .github/scripts/check_translations.py
+
   ci:
     name: Lint, Test & Build
     runs-on: ubuntu-latest
@@ -29,6 +44,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+
+      # The wrapper jar runs on every build, so make sure it is a genuine Gradle
+      # release and not one changed in a pull request.
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
 
       - name: Set up JDK 21
         uses: actions/setup-java@v5

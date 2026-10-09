@@ -50,15 +50,25 @@ jobs:
           fi
           echo "versionName and CHANGELOG.md both say $VERSION"
 
+      # A published release with its APK means the work is done. A tag on its own
+      # is left over from an interrupted run, and skipping on it would block the
+      # release for good, so that stops with instructions instead.
       - name: Check if this version is already released
         id: tag
         env:
           VERSION: ${{ steps.changelog.outputs.version }}
           RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+          APK_NAME: ${{ steps.changelog.outputs.apk_name }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+          ASSETS=$(gh release view "v$VERSION" --json isDraft,assets \
+            --jq 'select(.isDraft | not) | .assets[].name' 2>/dev/null || true)
+          if printf '%s\n' "$ASSETS" | grep -qx "$APK_NAME"; then
             echo "::notice::v$VERSION is already released, nothing to do. Add a new version to CHANGELOG.md to release again."
             echo "skip=true" >> "$GITHUB_OUTPUT"
+          elif git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "::error::Tag v$VERSION exists but has no published release with $APK_NAME. Delete the tag (git push --delete origin v$VERSION) and any draft release, then run again."
+            exit 1
           else
             echo "Releasing v$VERSION ($RELEASE_TYPE)"
             echo "skip=false" >> "$GITHUB_OUTPUT"

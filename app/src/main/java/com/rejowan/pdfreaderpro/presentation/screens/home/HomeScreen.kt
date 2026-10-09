@@ -104,6 +104,7 @@ import android.os.Environment
 import android.provider.Settings
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.res.pluralStringResource
 
 // Bottom Navigation Items
 enum class BottomNavItem(
@@ -711,7 +712,7 @@ private fun BatchDeleteConfirmSheet(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = stringResource(R.string.delete_count_files, count),
+                text = pluralStringResource(R.plurals.delete_count_files, count, count),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )

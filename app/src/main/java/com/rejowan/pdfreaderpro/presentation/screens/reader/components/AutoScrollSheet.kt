@@ -61,6 +61,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import androidx.annotation.StringRes
+import androidx.activity.compose.BackHandler
 
 private val AccentBlue = Color(0xFF64B5F6)
 
@@ -128,6 +129,9 @@ private fun AutoScrollSideSheet(
     onStartAutoScroll: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
     var selectedSpeed by remember { mutableFloatStateOf(currentSpeed) }
 

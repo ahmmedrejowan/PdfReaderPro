@@ -128,7 +128,6 @@
     <string name="no_recent">最近のファイルはありません</string>
     <string name="add_favorites_hint">PDFをお気に入りに追加するとここに表示されます</string>
     <string name="open_pdf_hint">いくつかのPDFを開くとここに表示されます</string>
-    <string name="delete_count_files">%d個のファイルを削除しますか？</string>
     <string name="delete_warning">この操作は元に戻せません。ファイルはデバイスから完全に削除されます。</string>
 
     <!-- Folders Screen -->
@@ -294,18 +293,15 @@
     <string name="delete_highlight">ハイライトを削除</string>
     <string name="highlight_page">%dページ</string>
     <string name="highlight_count">%d件のハイライト</string>
-    <string name="highlights_count">%d件のハイライト</string>
     <string name="view_manage_highlights">ハイライトの表示と管理</string>
     <string name="highlight_in_file">ファイルに保存済み</string>
     <string name="search_highlights">ハイライトを検索</string>
     <string name="save_with_highlights">ハイライト付きのコピーを保存</string>
     <string name="save_with_highlights_desc">ハイライトを新しいPDFファイルに書き込む</string>
     <string name="bake_highlights_title">ハイライト付きのコピーを保存</string>
-    <string name="bake_highlights_body">これにより、%d件のハイライトが新しいPDFファイルに書き込まれ、他のPDFリーダーでも表示されるようになります。このアプリ内のハイライトはそのまま保持されます。</string>
     <string name="bake_highlights_caveat">PDFにハイライト、テキスト、またはインク注釈が含まれると、一部の編集機能が動作しなくなります。コピーの保存先を選択します。</string>
     <string name="bake_highlights_confirm_check">別のコピーが作成されることを理解しています</string>
     <string name="bake_highlights_action">コピーを保存</string>
-    <string name="bake_highlights_done">%d件のハイライトをコピーに保存しました</string>
     <string name="bake_highlights_failed">コピーを保存できませんでした：%s</string>
     <string name="save_decrypted_copy">パスワードなしのコピーを保存</string>
     <string name="save_decrypted_copy_desc">このドキュメントの保護されていないコピーを書き込む</string>
@@ -459,7 +455,6 @@
     <string name="compress_high_desc">最大圧縮、より小さいファイル</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$dページ • %2$s</string>
     <string name="compress_share_pdf">PDFを共有</string>
     <string name="compress_empty_title">PDFファイルを圧縮</string>
     <string name="compress_empty_desc">品質を維持しながらファイルサイズを削減するPDFファイルを選択してください</string>
@@ -474,7 +469,6 @@
     <string name="compressed_size">圧縮後のサイズ</string>
     <string name="compressed_size_reduced">サイズ削減</string>
     <string name="saved_format">（%1$s節約）</string>
-    <string name="pages_count_format">%1$dページ</string>
 
     <!-- Rotate -->
     <string name="rotation">回転</string>
@@ -527,8 +521,6 @@
     <string name="position_center">中央</string>
     <string name="position_tiled">タイル</string>
     <string name="watermark_added">透かしを追加しました！</string>
-    <string name="applied_to_pages">%1$dページに適用しました</string>
-    <string name="pages_size_dash_format">%1$dページ - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">削除するページを選択</string>
@@ -582,7 +574,6 @@
     <string name="title_page_selection_custom">カスタム</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">%1$d / %2$dページに番号を付けました</string>
     <string name="adding_numbers">番号を追加中…</string>
 
     <!-- Images to PDF -->
@@ -879,7 +870,6 @@
     <string name="file_info_desc">ファイルの詳細とプロパティを表示</string>
     <string name="delete_action">削除</string>
     <string name="delete_desc">このファイルを完全に削除</string>
-    <string name="pages_count">%dページ</string>
     <string name="cd_toggle_scroll_direction">スクロール方向を切り替え</string>
     <string name="cd_fit_to_screen">画面に合わせる</string>
 
@@ -1145,7 +1135,6 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">ドキュメント内を検索…</string>
-    <string name="cd_matching_highlights">%1$d件の一致するハイライト</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">表示オプション</string>
@@ -1190,7 +1179,6 @@
     <string name="delete_pdf">PDFを削除</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">%d個のファイルを削除しますか？</string>
     <string name="delete_files_warning">この操作は元に戻せません。ファイルはデバイスから完全に削除されます。</string>
 
     <!-- Settings Screen -->
@@ -1451,9 +1439,7 @@
     <string name="no_password_protection">パスワード保護なし</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">すべての%dページ</string>
     <string name="selected_of_count">%1$d / %2$dを選択中</string>
-    <string name="pages_modified">%dページ • 変更済み</string>
     <string name="page_numbers_label">ページ番号</string>
     <string name="page_numbers_hint">例：1-5、8、10-12</string>
     <string name="all_pages_label">すべてのページ（%d）</string>
@@ -1466,7 +1452,6 @@
     <string name="page_selection_all">すべてのページ（1-%1$d）</string>
     <string name="page_selection_range">%1$d-%2$dページ</string>
     <string name="page_selection_custom">%1$sページ</string>
-    <string name="page_selection_custom_long">%1$sページ…（%2$dページ）</string>
 
     <!-- Reorder -->
     <string name="drag_hint">長押ししてページをドラッグして並べ替え</string>
@@ -1503,7 +1488,6 @@
 
     <!-- Image to PDF -->
     <string name="images_selected">%d枚の画像を選択中</string>
-    <string name="create_pdf_pages">PDFを作成（%dページ）</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">左下</string>
@@ -1532,7 +1516,6 @@
     <string name="select_pages_to_remove_hint">ページをタップして削除するページを選択</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$dページ • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1526,15 @@
     <string name="to_page">まで</string>
     <string name="page_numbers_example">例：1、3、5-8、12</string>
     <string name="page_numbers_help">ページ番号または範囲をカンマで区切って入力</string>
-    <string name="files_selected_count">%1$dファイルを選択中</string>
     <string name="merge_empty_title">PDFファイルを結合</string>
     <string name="merge_empty_desc">複数のPDFファイルを選択して1つのドキュメントに結合</string>
-    <string name="file_size_pages">%1$s • %2$dページ</string>
-    <string name="pages_partial_format">%1$d/%2$dページ</string>
-    <string name="pages_all_format">すべての%1$dページ</string>
     <string name="add_more_files">さらにファイルを追加</string>
     <string name="saved_to_path">保存先：%1$s</string>
     <string name="merging_pdfs">PDFを結合中…</string>
     <string name="merge_complete">結合完了！</string>
     <string name="merge_more_files">さらにファイルを結合</string>
     <string name="select_pages">ページを選択</string>
-    <string name="total_pages_format">合計：%1$dページ</string>
     <string name="selection_mode">選択モード</string>
-    <string name="all_pages_included">すべての%1$dページが含まれます</string>
     <string name="pages_range_info">%1$sから%2$sページが含まれます</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1546,6 @@
     <string name="extract_pages_help">選択したページで単一のPDFを作成します。ページ：1-%d</string>
     <string name="output_prefix_label">出力プレフィックス</string>
     <string name="split_another_pdf">別のPDFを分割</string>
-    <string name="pages_count_with_mode">%1$dページ • %2$s</string>
     <string name="split_empty_title">PDFファイルを分割</string>
     <string name="split_empty_desc">PDFファイルを選択して複数の部分に分割するか、特定のページを抽出</string>
     <string name="split_mode_title">分割モード</string>
@@ -1589,7 +1565,6 @@
     <string name="split_will_create_one_file_max">1つのファイルを作成（最大：%1$dページ）</string>
     <string name="split_will_create_files_max">%1$d個のファイルを作成（最大：%2$dページ）</string>
     <string name="split_into_individual_pages">個別のページに分割</string>
-    <string name="split_will_create_separate_pdfs">%1$d個の別々のPDFファイルを作成します</string>
     <string name="split_will_create_one_page_pdf">1ページのPDFを1つ作成します</string>
     <string name="split_will_create_one_pdf_pages">%1$dページのPDFを1つ作成します</string>
     <string name="splitting_pdf">PDFを分割中…</string>
@@ -1684,4 +1659,79 @@
     <string name="no_browser_found">リンクを開くためのブラウザが見つかりませんでした</string>
     <string name="choose_language">アプリの言語を選択</string>
     <string name="language_follow_system">端末の言語を使用</string>
+    <plurals name="delete_count_files">
+        <item quantity="other">%d個のファイルを削除しますか？</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="other">%d件のハイライト</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="other">これにより、%d件のハイライトが新しいPDFファイルに書き込まれ、他のPDFリーダーでも表示されるようになります。このアプリ内のハイライトはそのまま保持されます。</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="other">%d件のハイライトをコピーに保存しました</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="other">%1$dページ • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="other">%1$dページ</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="other">%1$dページに適用しました</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="other">%1$dページ - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="other">%1$d / %2$dページに番号を付けました</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="other">%dページ</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="other">%1$d件の一致するハイライト</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="other">%d個のファイルを削除しますか？</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="other">すべての%dページ</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="other">%dページ • 変更済み</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="other">%1$sページ…（%2$dページ）</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="other">PDFを作成（%dページ）</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="other">%1$dページ • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="other">%1$dファイルを選択中</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="other">%1$s • %2$dページ</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="other">%1$d/%2$dページ</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="other">すべての%1$dページ</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="other">合計：%1$dページ</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="other">すべての%1$dページが含まれます</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="other">%1$dページ • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="other">%1$d個の別々のPDFファイルを作成します</item>
+    </plurals>
 </resources>

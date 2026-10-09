@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.domain.model.PdfFolder
 import kotlinx.coroutines.delay
+import androidx.activity.compose.BackHandler
 
 private val AccentAmber = Color(0xFFFFB74D)
 private val AccentBlue = Color(0xFF64B5F6)
@@ -133,6 +134,9 @@ private fun FolderOptionsSideSheet(
     onDismiss: () -> Unit,
     onOpenClick: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

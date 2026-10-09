@@ -376,6 +376,8 @@ class VersionUtilsTest {
     fun `a pre-release APK name keeps its full version`() {
         assertEquals("v2.5.0-beta.1", VersionUtils.extractVersionFromFileName("PdfReaderPro-v2.5.0-beta.1.apk"))
         assertEquals("v2.5.0", VersionUtils.extractVersionFromFileName("PdfReaderPro-v2.5.0.apk"))
+        // Pre-release parts may contain hyphens too.
+        assertEquals("v2.5.0-beta-2", VersionUtils.extractVersionFromFileName("PdfReaderPro-v2.5.0-beta-2.apk"))
     }
     // endregion
 }

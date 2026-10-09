@@ -75,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.util.ApkDownloadManager
 import java.util.Locale
+import androidx.activity.compose.BackHandler
 
 /**
  * A sheet that shows download progress for APK updates.
@@ -91,6 +92,9 @@ fun DownloadProgressSheet(
     onInstall: () -> Unit,
     onRequestPermission: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 

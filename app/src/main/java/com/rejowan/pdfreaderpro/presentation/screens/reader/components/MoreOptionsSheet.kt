@@ -71,6 +71,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
+import androidx.activity.compose.BackHandler
 
 // Design colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -195,6 +196,9 @@ private fun MoreOptionsSideSheet(
     onDocumentInfoClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

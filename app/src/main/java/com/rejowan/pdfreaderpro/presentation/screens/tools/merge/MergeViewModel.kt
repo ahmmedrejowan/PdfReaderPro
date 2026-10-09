@@ -38,7 +38,7 @@ sealed class PageSelection {
         is Custom -> if (pages.size <= 5) {
             context.getString(R.string.page_selection_custom, pages.joinToString(", "))
         } else {
-            context.getString(R.string.page_selection_custom_long, pages.take(4).joinToString(", "), pages.size)
+            context.resources.getQuantityString(R.plurals.page_selection_custom_long, pages.size, pages.take(4).joinToString(", "), pages.size)
         }
     }
 
@@ -72,6 +72,8 @@ data class MergeState(
     val isProcessing: Boolean = false,
     val progress: Float = 0f,
     val error: String? = null,
+    /** True only when the merge itself failed; validation and skipped-file notices can't be retried. */
+    val canRetry: Boolean = false,
     val result: MergeResult? = null
 )
 
@@ -164,7 +166,8 @@ class MergeViewModel(
                 } else null
                 current.copy(
                     selectedFiles = current.selectedFiles + filteredNew,
-                    error = errorMessage
+                    error = errorMessage,
+                    canRetry = false
                 )
             }
         }
@@ -210,7 +213,8 @@ class MergeViewModel(
                 } else null
                 current.copy(
                     selectedFiles = current.selectedFiles + filteredNew,
-                    error = errorMessage
+                    error = errorMessage,
+                    canRetry = false
                 )
             }
         }
@@ -289,12 +293,12 @@ class MergeViewModel(
     fun merge() {
         val currentState = _state.value
         if (currentState.selectedFiles.size < 2) {
-            _state.update { it.copy(error = context.getString(R.string.error_select_two_files)) }
+            _state.update { it.copy(error = context.getString(R.string.error_select_two_files), canRetry = false) }
             return
         }
 
         if (currentState.outputFileName.isBlank()) {
-            _state.update { it.copy(error = context.getString(R.string.error_enter_output_name)) }
+            _state.update { it.copy(error = context.getString(R.string.error_enter_output_name), canRetry = false) }
             return
         }
 
@@ -304,12 +308,12 @@ class MergeViewModel(
         }
         if (emptySelectionFiles.isNotEmpty()) {
             val fileNames = emptySelectionFiles.joinToString(", ") { it.name }
-            _state.update { it.copy(error = context.getString(R.string.error_no_pages_selected, fileNames)) }
+            _state.update { it.copy(error = context.getString(R.string.error_no_pages_selected, fileNames), canRetry = false) }
             return
         }
 
         viewModelScope.launch {
-            _state.update { it.copy(isProcessing = true, progress = 0f, error = null) }
+            _state.update { it.copy(isProcessing = true, progress = 0f, error = null, canRetry = false) }
 
             val outputDir = getOutputDirectory()
             var outputPath = "$outputDir/${currentState.outputFileName}.pdf"
@@ -361,7 +365,8 @@ class MergeViewModel(
                     _state.update {
                         it.copy(
                             isProcessing = false,
-                            error = error.message ?: context.getString(R.string.error_merge_failed)
+                            error = error.message ?: context.getString(R.string.error_merge_failed),
+                            canRetry = true
                         )
                     }
                 }
@@ -374,7 +379,7 @@ class MergeViewModel(
     }
 
     fun clearError() {
-        _state.update { it.copy(error = null) }
+        _state.update { it.copy(error = null, canRetry = false) }
     }
 
     fun reset() {

@@ -128,7 +128,6 @@
     <string name="no_recent">No recent files</string>
     <string name="add_favorites_hint">Add PDFs to favorites to see them here</string>
     <string name="open_pdf_hint">Open some PDFs to see them here</string>
-    <string name="delete_count_files">Delete %d files?</string>
     <string name="delete_warning">This action cannot be undone. The files will be permanently deleted from your device.</string>
 
     <!-- Folders Screen -->
@@ -294,18 +293,15 @@
     <string name="delete_highlight">Delete highlight</string>
     <string name="highlight_page">Page %d</string>
     <string name="highlight_count">%d highlight</string>
-    <string name="highlights_count">%d highlights</string>
     <string name="view_manage_highlights">View and manage highlights</string>
     <string name="highlight_in_file">Saved in the file</string>
     <string name="search_highlights">Search highlights</string>
     <string name="save_with_highlights">Save a copy with highlights</string>
     <string name="save_with_highlights_desc">Write highlights into a new PDF file</string>
     <string name="bake_highlights_title">Save a copy with highlights</string>
-    <string name="bake_highlights_body">This writes your %d highlights into a new PDF file, so they show up in other PDF readers too. Your highlights in this app are kept either way.</string>
     <string name="bake_highlights_caveat">Once a PDF contains highlight, text or ink annotations, some editing features stop working on it. You will choose where to save the copy.</string>
     <string name="bake_highlights_confirm_check">I understand this creates a separate copy</string>
     <string name="bake_highlights_action">Save copy</string>
-    <string name="bake_highlights_done">Saved %d highlights into the copy</string>
     <string name="bake_highlights_failed">Could not save the copy: %s</string>
     <string name="save_decrypted_copy">Save a copy without the password</string>
     <string name="save_decrypted_copy_desc">Write an unprotected copy of this document</string>
@@ -459,7 +455,6 @@
     <string name="compress_high_desc">Maximum compression, smaller file</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$d pages • %2$s</string>
     <string name="compress_share_pdf">Share PDF</string>
     <string name="compress_empty_title">Compress PDF File</string>
     <string name="compress_empty_desc">Select a PDF file to reduce its file size while maintaining quality</string>
@@ -474,7 +469,6 @@
     <string name="compressed_size">Compressed Size</string>
     <string name="compressed_size_reduced">Size Reduced</string>
     <string name="saved_format">(%1$s saved)</string>
-    <string name="pages_count_format">%1$d pages</string>
 
     <!-- Rotate -->
     <string name="rotation">Rotation</string>
@@ -527,8 +521,6 @@
     <string name="position_center">Center</string>
     <string name="position_tiled">Tiled</string>
     <string name="watermark_added">Watermark Added!</string>
-    <string name="applied_to_pages">Applied to %1$d pages</string>
-    <string name="pages_size_dash_format">%1$d pages - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Select pages to remove</string>
@@ -582,7 +574,6 @@
     <string name="title_page_selection_custom">Custom</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">Numbered %1$d of %2$d pages</string>
     <string name="adding_numbers">Adding Numbers…</string>
 
     <!-- Images to PDF -->
@@ -879,7 +870,6 @@
     <string name="file_info_desc">View file details and properties</string>
     <string name="delete_action">Delete</string>
     <string name="delete_desc">Permanently remove this file</string>
-    <string name="pages_count">%d pages</string>
     <string name="cd_toggle_scroll_direction">Toggle scroll direction</string>
     <string name="cd_fit_to_screen">Fit to screen</string>
 
@@ -1145,7 +1135,6 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Search in document…</string>
-    <string name="cd_matching_highlights">%1$d matching highlights</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">View Options</string>
@@ -1190,7 +1179,6 @@
     <string name="delete_pdf">Delete PDF</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">Delete %d files?</string>
     <string name="delete_files_warning">This action cannot be undone. The files will be permanently deleted from your device.</string>
 
     <!-- Settings Screen -->
@@ -1451,9 +1439,7 @@
     <string name="no_password_protection">No Password Protection</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">All %d pages</string>
     <string name="selected_of_count">%1$d of %2$d selected</string>
-    <string name="pages_modified">%d pages • Modified</string>
     <string name="page_numbers_label">Page numbers</string>
     <string name="page_numbers_hint">e.g., 1-5, 8, 10-12</string>
     <string name="all_pages_label">All Pages (%d)</string>
@@ -1466,7 +1452,6 @@
     <string name="page_selection_all">All pages (1-%1$d)</string>
     <string name="page_selection_range">Pages %1$d-%2$d</string>
     <string name="page_selection_custom">Pages %1$s</string>
-    <string name="page_selection_custom_long">Pages %1$s… (%2$d pages)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Long press and drag pages to reorder</string>
@@ -1503,7 +1488,6 @@
 
     <!-- Image to PDF -->
     <string name="images_selected">%d image(s) selected</string>
-    <string name="create_pdf_pages">Create PDF (%d pages)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">Bottom Left</string>
@@ -1532,7 +1516,6 @@
     <string name="select_pages_to_remove_hint">Tap pages to select them for removal</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$d pages • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1526,15 @@
     <string name="to_page">To</string>
     <string name="page_numbers_example">e.g., 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Enter page numbers or ranges separated by commas</string>
-    <string name="files_selected_count">%1$d files selected</string>
     <string name="merge_empty_title">Merge PDF Files</string>
     <string name="merge_empty_desc">Select multiple PDF files to combine them into a single document</string>
-    <string name="file_size_pages">%1$s • %2$d pages</string>
-    <string name="pages_partial_format">%1$d/%2$d pages</string>
-    <string name="pages_all_format">All %1$d pages</string>
     <string name="add_more_files">Add more files</string>
     <string name="saved_to_path">Saved to: %1$s</string>
     <string name="merging_pdfs">Merging PDFs…</string>
     <string name="merge_complete">Merge Complete!</string>
     <string name="merge_more_files">Merge More Files</string>
     <string name="select_pages">Select Pages</string>
-    <string name="total_pages_format">Total: %1$d pages</string>
     <string name="selection_mode">Selection Mode</string>
-    <string name="all_pages_included">All %1$d pages will be included</string>
     <string name="pages_range_info">Pages %1$s to %2$s will be included</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1546,6 @@
     <string name="extract_pages_help">Creates a single PDF with selected pages. Pages: 1-%d</string>
     <string name="output_prefix_label">Output prefix</string>
     <string name="split_another_pdf">Split Another PDF</string>
-    <string name="pages_count_with_mode">%1$d pages • %2$s</string>
     <string name="split_empty_title">Split PDF File</string>
     <string name="split_empty_desc">Select a PDF file to split into multiple parts or extract specific pages</string>
     <string name="split_mode_title">Split Mode</string>
@@ -1589,7 +1565,6 @@
     <string name="split_will_create_one_file_max">Will create 1 file (max: %1$d pages)</string>
     <string name="split_will_create_files_max">Will create %1$d files (max: %2$d pages)</string>
     <string name="split_into_individual_pages">Split into individual pages</string>
-    <string name="split_will_create_separate_pdfs">Will create %1$d separate PDF files</string>
     <string name="split_will_create_one_page_pdf">Will create 1 PDF with 1 page</string>
     <string name="split_will_create_one_pdf_pages">Will create 1 PDF with %1$d pages</string>
     <string name="splitting_pdf">Splitting PDF…</string>
@@ -1684,4 +1659,104 @@
     <string name="no_browser_found">No browser found to open the link</string>
     <string name="choose_language">Choose the app\'s language</string>
     <string name="language_follow_system">Use your phone\'s language</string>
+    <plurals name="delete_count_files">
+        <item quantity="one">Delete %d file?</item>
+        <item quantity="other">Delete %d files?</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="one">%d highlight</item>
+        <item quantity="other">%d highlights</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="one">This writes your %d highlight into a new PDF file, so it shows up in other PDF readers too. Your highlight in this app is kept either way.</item>
+        <item quantity="other">This writes your %d highlights into a new PDF file, so they show up in other PDF readers too. Your highlights in this app are kept either way.</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="one">Saved %d highlight into the copy</item>
+        <item quantity="other">Saved %d highlights into the copy</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="one">%1$d page • %2$s</item>
+        <item quantity="other">%1$d pages • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="one">%1$d page</item>
+        <item quantity="other">%1$d pages</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="one">Applied to %1$d page</item>
+        <item quantity="other">Applied to %1$d pages</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="one">%1$d page - %2$s</item>
+        <item quantity="other">%1$d pages - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="one">Numbered %1$d of %2$d page</item>
+        <item quantity="other">Numbered %1$d of %2$d pages</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="one">%d page</item>
+        <item quantity="other">%d pages</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="one">%1$d matching highlight</item>
+        <item quantity="other">%1$d matching highlights</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="one">Delete %d file?</item>
+        <item quantity="other">Delete %d files?</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="one">%d page</item>
+        <item quantity="other">All %d pages</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="one">%d page • Modified</item>
+        <item quantity="other">%d pages • Modified</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="one">Pages %1$s… (%2$d page)</item>
+        <item quantity="other">Pages %1$s… (%2$d pages)</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="one">Create PDF (%d page)</item>
+        <item quantity="other">Create PDF (%d pages)</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="one">%1$d page • %2$s</item>
+        <item quantity="other">%1$d pages • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="one">%1$d file selected</item>
+        <item quantity="other">%1$d files selected</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="one">%1$s • %2$d page</item>
+        <item quantity="other">%1$s • %2$d pages</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="one">%1$d/%2$d page</item>
+        <item quantity="other">%1$d/%2$d pages</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="one">%1$d page</item>
+        <item quantity="other">All %1$d pages</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="one">Total: %1$d page</item>
+        <item quantity="other">Total: %1$d pages</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="one">The %1$d page will be included</item>
+        <item quantity="other">All %1$d pages will be included</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="one">%1$d page • %2$s</item>
+        <item quantity="other">%1$d pages • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="one">Will create %1$d separate PDF file</item>
+        <item quantity="other">Will create %1$d separate PDF files</item>
+    </plurals>
 </resources>

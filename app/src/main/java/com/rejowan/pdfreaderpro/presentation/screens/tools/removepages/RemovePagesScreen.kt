@@ -93,6 +93,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors
 private val AccentRed = Color(0xFFEF5350)  // Remove pages theme color
@@ -135,7 +136,7 @@ fun RemovePagesScreen(
                                 )
                             } else {
                                 Text(
-                                    stringResource(R.string.pages_count_format, file.pageCount),
+                                    pluralStringResource(R.plurals.pages_count_format, file.pageCount, file.pageCount),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -1031,7 +1032,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_size_format, result.newPageCount, formatFileSize(result.fileSize)),
+                        pluralStringResource(R.plurals.pages_size_format, result.newPageCount, result.newPageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1057,7 +1058,7 @@ private fun SuccessState(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    stringResource(R.string.pages_count_format, result.originalPageCount),
+                    pluralStringResource(R.plurals.pages_count_format, result.originalPageCount, result.originalPageCount),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1069,7 +1070,7 @@ private fun SuccessState(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    stringResource(R.string.pages_count_format, result.newPageCount),
+                    pluralStringResource(R.plurals.pages_count_format, result.newPageCount, result.newPageCount),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),

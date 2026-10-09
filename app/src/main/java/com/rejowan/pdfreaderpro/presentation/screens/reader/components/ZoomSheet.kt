@@ -77,6 +77,7 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScreenOrientation
 import kotlinx.coroutines.delay
+import androidx.activity.compose.BackHandler
 
 // Design colors
 private val AccentTeal = Color(0xFF4DB6AC)
@@ -181,6 +182,9 @@ private fun ZoomSideSheet(
     onDoubleTapZoomChange: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

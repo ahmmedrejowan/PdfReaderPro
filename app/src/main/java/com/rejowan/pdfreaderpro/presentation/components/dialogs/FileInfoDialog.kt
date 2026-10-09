@@ -60,6 +60,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.util.FormattingUtils
+import androidx.activity.compose.BackHandler
 
 // Accent colors matching UI guide
 private val AccentPurple = Color(0xFF9575CD)
@@ -109,6 +110,9 @@ private fun FileInfoSideSheet(
     pdfFile: PdfFile,
     onDismiss: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

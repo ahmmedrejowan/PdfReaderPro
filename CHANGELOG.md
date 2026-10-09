@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Counts for One** - Page, file and highlight counts read correctly for a single item ("1 page" instead of "1 pages"), in every language
+- **Back in Landscape** - Back closes the side panels in landscape instead of leaving the screen behind them, which in the reader closed the document
+- **Merge Retry** - Retry appears after a failed merge in every language, and no longer after a notice about a skipped file
+
 ---
 
 ## [2.5.0] - 2026-10-09

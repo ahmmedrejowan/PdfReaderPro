@@ -128,7 +128,6 @@
     <string name="no_recent">Aucun fichier récent</string>
     <string name="add_favorites_hint">Ajoutez des PDF aux favoris pour les voir ici</string>
     <string name="open_pdf_hint">Ouvrez quelques PDF pour les voir ici</string>
-    <string name="delete_count_files">Supprimer %d fichiers ?</string>
     <string name="delete_warning">Cette action est irréversible. Les fichiers seront définitivement supprimés de votre appareil.</string>
 
     <!-- Folders Screen -->
@@ -294,18 +293,15 @@
     <string name="delete_highlight">Supprimer le surlignage</string>
     <string name="highlight_page">Page %d</string>
     <string name="highlight_count">%d surlignage</string>
-    <string name="highlights_count">%d surlignages</string>
     <string name="view_manage_highlights">Afficher et gérer les surlignages</string>
     <string name="highlight_in_file">Enregistré dans le fichier</string>
     <string name="search_highlights">Rechercher dans les surlignages</string>
     <string name="save_with_highlights">Enregistrer une copie avec les surlignages</string>
     <string name="save_with_highlights_desc">Écrire les surlignages dans un nouveau fichier PDF</string>
     <string name="bake_highlights_title">Enregistrer une copie avec les surlignages</string>
-    <string name="bake_highlights_body">Cela écrit vos %d surlignages dans un nouveau fichier PDF, afin qu\'ils apparaissent aussi dans les autres lecteurs PDF. Vos surlignages dans cette application sont conservés dans tous les cas.</string>
     <string name="bake_highlights_caveat">Une fois qu\'un PDF contient des surlignages, des annotations textuelles ou à l\'encre, certaines fonctions d\'édition cessent de fonctionner. Vous choisirez où enregistrer la copie.</string>
     <string name="bake_highlights_confirm_check">Je comprends que cela crée une copie séparée</string>
     <string name="bake_highlights_action">Enregistrer la copie</string>
-    <string name="bake_highlights_done">%d surlignages enregistrés dans la copie</string>
     <string name="bake_highlights_failed">Impossible d\'enregistrer la copie : %s</string>
     <string name="save_decrypted_copy">Enregistrer une copie sans le mot de passe</string>
     <string name="save_decrypted_copy_desc">Écrire une copie non protégée de ce document</string>
@@ -459,7 +455,6 @@
     <string name="compress_high_desc">Compression maximale, fichier plus petit</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$d pages • %2$s</string>
     <string name="compress_share_pdf">Partager le PDF</string>
     <string name="compress_empty_title">Compresser un fichier PDF</string>
     <string name="compress_empty_desc">Sélectionnez un fichier PDF pour réduire sa taille tout en conservant la qualité</string>
@@ -474,7 +469,6 @@
     <string name="compressed_size">Taille compressée</string>
     <string name="compressed_size_reduced">Taille réduite</string>
     <string name="saved_format">(%1$s économisés)</string>
-    <string name="pages_count_format">%1$d pages</string>
 
     <!-- Rotate -->
     <string name="rotation">Rotation</string>
@@ -527,8 +521,6 @@
     <string name="position_center">Centre</string>
     <string name="position_tiled">Mosaïque</string>
     <string name="watermark_added">Filigrane ajouté !</string>
-    <string name="applied_to_pages">Appliqué à %1$d pages</string>
-    <string name="pages_size_dash_format">%1$d pages - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Sélectionnez les pages à supprimer</string>
@@ -582,7 +574,6 @@
     <string name="title_page_selection_custom">Personnalisé</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">%1$d pages sur %2$d numérotées</string>
     <string name="adding_numbers">Ajout des numéros…</string>
 
     <!-- Images to PDF -->
@@ -879,7 +870,6 @@
     <string name="file_info_desc">Afficher les détails et propriétés du fichier</string>
     <string name="delete_action">Supprimer</string>
     <string name="delete_desc">Supprimer définitivement ce fichier</string>
-    <string name="pages_count">%d pages</string>
     <string name="cd_toggle_scroll_direction">Basculer la direction du défilement</string>
     <string name="cd_fit_to_screen">Ajuster à l\'écran</string>
 
@@ -1145,7 +1135,6 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Rechercher dans le document…</string>
-    <string name="cd_matching_highlights">%1$d surlignages correspondants</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Options d\'affichage</string>
@@ -1190,7 +1179,6 @@
     <string name="delete_pdf">Supprimer le PDF</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">Supprimer %d fichiers ?</string>
     <string name="delete_files_warning">Cette action est irréversible. Les fichiers seront définitivement supprimés de votre appareil.</string>
 
     <!-- Settings Screen -->
@@ -1451,9 +1439,7 @@
     <string name="no_password_protection">Aucune protection par mot de passe</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">Toutes les %d pages</string>
     <string name="selected_of_count">%1$d sur %2$d sélectionnées</string>
-    <string name="pages_modified">%d pages • Modifié</string>
     <string name="page_numbers_label">Numéros de page</string>
     <string name="page_numbers_hint">ex. : 1-5, 8, 10-12</string>
     <string name="all_pages_label">Toutes les pages (%d)</string>
@@ -1466,7 +1452,6 @@
     <string name="page_selection_all">Toutes les pages (1-%1$d)</string>
     <string name="page_selection_range">Pages %1$d-%2$d</string>
     <string name="page_selection_custom">Pages %1$s</string>
-    <string name="page_selection_custom_long">Pages %1$s… (%2$d pages)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Appuyez longuement et faites glisser les pages pour les réorganiser</string>
@@ -1503,7 +1488,6 @@
 
     <!-- Image to PDF -->
     <string name="images_selected">%d image(s) sélectionnée(s)</string>
-    <string name="create_pdf_pages">Créer un PDF (%d pages)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">En bas à gauche</string>
@@ -1532,7 +1516,6 @@
     <string name="select_pages_to_remove_hint">Appuyez sur les pages pour les sélectionner en vue de leur suppression</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$d pages • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1526,15 @@
     <string name="to_page">À</string>
     <string name="page_numbers_example">ex. : 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Saisissez des numéros de page ou des plages séparés par des virgules</string>
-    <string name="files_selected_count">%1$d fichiers sélectionnés</string>
     <string name="merge_empty_title">Fusionner des fichiers PDF</string>
     <string name="merge_empty_desc">Sélectionnez plusieurs fichiers PDF pour les combiner en un seul document</string>
-    <string name="file_size_pages">%1$s • %2$d pages</string>
-    <string name="pages_partial_format">%1$d/%2$d pages</string>
-    <string name="pages_all_format">Toutes les %1$d pages</string>
     <string name="add_more_files">Ajouter plus de fichiers</string>
     <string name="saved_to_path">Enregistré dans : %1$s</string>
     <string name="merging_pdfs">Fusion des PDF…</string>
     <string name="merge_complete">Fusion terminée !</string>
     <string name="merge_more_files">Fusionner d\'autres fichiers</string>
     <string name="select_pages">Sélectionner les pages</string>
-    <string name="total_pages_format">Total : %1$d pages</string>
     <string name="selection_mode">Mode de sélection</string>
-    <string name="all_pages_included">Toutes les %1$d pages seront incluses</string>
     <string name="pages_range_info">Les pages %1$s à %2$s seront incluses</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1546,6 @@
     <string name="extract_pages_help">Crée un seul PDF avec les pages sélectionnées. Pages : 1-%d</string>
     <string name="output_prefix_label">Préfixe de sortie</string>
     <string name="split_another_pdf">Diviser un autre PDF</string>
-    <string name="pages_count_with_mode">%1$d pages • %2$s</string>
     <string name="split_empty_title">Diviser un fichier PDF</string>
     <string name="split_empty_desc">Sélectionnez un fichier PDF à diviser en plusieurs parties ou pour extraire des pages spécifiques</string>
     <string name="split_mode_title">Mode de division</string>
@@ -1589,7 +1565,6 @@
     <string name="split_will_create_one_file_max">Créera 1 fichier (max : %1$d pages)</string>
     <string name="split_will_create_files_max">Créera %1$d fichiers (max : %2$d pages)</string>
     <string name="split_into_individual_pages">Diviser en pages individuelles</string>
-    <string name="split_will_create_separate_pdfs">Créera %1$d fichiers PDF séparés</string>
     <string name="split_will_create_one_page_pdf">Créera 1 PDF avec 1 page</string>
     <string name="split_will_create_one_pdf_pages">Créera 1 PDF avec %1$d pages</string>
     <string name="splitting_pdf">Division du PDF…</string>
@@ -1685,4 +1660,129 @@
     <string name="no_browser_found">Aucun navigateur trouvé pour ouvrir le lien</string>
     <string name="choose_language">Choisissez la langue de l\'application</string>
     <string name="language_follow_system">Utiliser la langue du téléphone</string>
+    <plurals name="delete_count_files">
+        <item quantity="one">Supprimer %d fichier ?</item>
+        <item quantity="many">Supprimer %d fichiers ?</item>
+        <item quantity="other">Supprimer %d fichiers ?</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="one">%d surlignage</item>
+        <item quantity="many">%d surlignages</item>
+        <item quantity="other">%d surlignages</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="one">Cela écrit votre %d surlignage dans un nouveau fichier PDF, afin qu\'il apparaisse aussi dans les autres lecteurs PDF. Votre surlignage dans cette application est conservé dans tous les cas.</item>
+        <item quantity="many">Cela écrit vos %d surlignages dans un nouveau fichier PDF, afin qu\'ils apparaissent aussi dans les autres lecteurs PDF. Vos surlignages dans cette application sont conservés dans tous les cas.</item>
+        <item quantity="other">Cela écrit vos %d surlignages dans un nouveau fichier PDF, afin qu\'ils apparaissent aussi dans les autres lecteurs PDF. Vos surlignages dans cette application sont conservés dans tous les cas.</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="one">%d surlignage enregistré dans la copie</item>
+        <item quantity="many">%d surlignages enregistrés dans la copie</item>
+        <item quantity="other">%d surlignages enregistrés dans la copie</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="one">%1$d page • %2$s</item>
+        <item quantity="many">%1$d pages • %2$s</item>
+        <item quantity="other">%1$d pages • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="one">%1$d page</item>
+        <item quantity="many">%1$d pages</item>
+        <item quantity="other">%1$d pages</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="one">Appliqué à %1$d page</item>
+        <item quantity="many">Appliqué à %1$d pages</item>
+        <item quantity="other">Appliqué à %1$d pages</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="one">%1$d page - %2$s</item>
+        <item quantity="many">%1$d pages - %2$s</item>
+        <item quantity="other">%1$d pages - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="one">%1$d page sur %2$d numérotée</item>
+        <item quantity="many">%1$d pages sur %2$d numérotées</item>
+        <item quantity="other">%1$d pages sur %2$d numérotées</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="one">%d page</item>
+        <item quantity="many">%d pages</item>
+        <item quantity="other">%d pages</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="one">%1$d surlignage correspondant</item>
+        <item quantity="many">%1$d surlignages correspondants</item>
+        <item quantity="other">%1$d surlignages correspondants</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="one">Supprimer %d fichier ?</item>
+        <item quantity="many">Supprimer %d fichiers ?</item>
+        <item quantity="other">Supprimer %d fichiers ?</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="one">%d page</item>
+        <item quantity="many">Toutes les %d pages</item>
+        <item quantity="other">Toutes les %d pages</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="one">%d page • Modifié</item>
+        <item quantity="many">%d pages • Modifié</item>
+        <item quantity="other">%d pages • Modifié</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="one">Pages %1$s… (%2$d page)</item>
+        <item quantity="many">Pages %1$s… (%2$d pages)</item>
+        <item quantity="other">Pages %1$s… (%2$d pages)</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="one">Créer un PDF (%d page)</item>
+        <item quantity="many">Créer un PDF (%d pages)</item>
+        <item quantity="other">Créer un PDF (%d pages)</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="one">%1$d page • %2$s</item>
+        <item quantity="many">%1$d pages • %2$s</item>
+        <item quantity="other">%1$d pages • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="one">%1$d fichier sélectionné</item>
+        <item quantity="many">%1$d fichiers sélectionnés</item>
+        <item quantity="other">%1$d fichiers sélectionnés</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="one">%1$s • %2$d page</item>
+        <item quantity="many">%1$s • %2$d pages</item>
+        <item quantity="other">%1$s • %2$d pages</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="one">%1$d/%2$d page</item>
+        <item quantity="many">%1$d/%2$d pages</item>
+        <item quantity="other">%1$d/%2$d pages</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="one">%1$d page</item>
+        <item quantity="many">Toutes les %1$d pages</item>
+        <item quantity="other">Toutes les %1$d pages</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="one">Total : %1$d page</item>
+        <item quantity="many">Total : %1$d pages</item>
+        <item quantity="other">Total : %1$d pages</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="one">%1$d page sera incluse</item>
+        <item quantity="many">Toutes les %1$d pages seront incluses</item>
+        <item quantity="other">Toutes les %1$d pages seront incluses</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="one">%1$d page • %2$s</item>
+        <item quantity="many">%1$d pages • %2$s</item>
+        <item quantity="other">%1$d pages • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="one">Créera %1$d fichier PDF séparé</item>
+        <item quantity="many">Créera %1$d fichiers PDF séparés</item>
+        <item quantity="other">Créera %1$d fichiers PDF séparés</item>
+    </plurals>
 </resources>

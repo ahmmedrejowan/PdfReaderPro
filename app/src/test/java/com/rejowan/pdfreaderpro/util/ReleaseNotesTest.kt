@@ -92,4 +92,11 @@ class ReleaseNotesTest {
             blocks
         )
     }
+
+    @Test
+    fun `an indented section heading still ends what's new`() {
+        val notes = ReleaseNotes.whatsNew("## What's New\n- Fixed a crash\n\n  ## Download\n| File | Size |")
+
+        assertEquals("- Fixed a crash", notes)
+    }
 }

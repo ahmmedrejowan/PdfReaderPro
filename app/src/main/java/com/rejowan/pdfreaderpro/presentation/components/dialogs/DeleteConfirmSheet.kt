@@ -58,6 +58,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import kotlinx.coroutines.launch
+import androidx.activity.compose.BackHandler
 
 private val AccentRed = Color(0xFFEF5350)
 
@@ -128,6 +129,9 @@ private fun DeleteConfirmSideSheet(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
+    // Back closes the panel the same way tapping outside it does.
+    BackHandler { onDismiss() }
+
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

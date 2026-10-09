@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit reviews pull requests into master. Keep the review itself (its
+# inline findings have caught real bugs) and drop the extras around it.
+language: en-US
+
+reviews:
+  profile: chill
+
+  # The PR description is written by hand; don't append a generated summary.
+  high_level_summary: false
+
+  # Keep the walkthrough short: no diagrams, file tables, effort estimates,
+  # label/reviewer suggestions or related-item lists.
+  collapse_walkthrough: true
+  sequence_diagrams: false
+  changed_files_summary: false
+  estimate_code_review_effort: false
+  related_issues: false
+  related_prs: false
+  suggested_labels: false
+  suggested_reviewers: false
+  in_progress_fortune: false
+  poem: false
+
+  # Not worth an AI review, and they push large PRs past the 100-file limit
+  # that makes CodeRabbit skip the whole review:
+  # translations (reviewed separately), the bundled PDF.js viewer and its data,
+  # and the translated READMEs.
+  path_filters:
+    - "!app/src/main/res/values-*/strings.xml"
+    - "!app/src/main/assets/com/rejowan/mozilla/**"
+    - "!README.*.md"
+
+  auto_review:
+    enabled: true
+    drafts: false

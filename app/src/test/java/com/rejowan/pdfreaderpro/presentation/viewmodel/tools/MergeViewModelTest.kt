@@ -255,7 +255,7 @@ class MergeViewModelTest {
 
     @Test
     fun `PageSelection Custom toDisplayString truncates for many pages`() {
-        every { context.getString(R.string.page_selection_custom_long, "1, 2, 3, 4", 7) } returns "Pages 1, 2, 3, 4… (7 pages)"
+        every { context.resources.getQuantityString(R.plurals.page_selection_custom_long, 7, "1, 2, 3, 4", 7) } returns "Pages 1, 2, 3, 4… (7 pages)"
         val selection = PageSelection.Custom(listOf(1, 2, 3, 4, 5, 6, 7))
         val display = selection.toDisplayString(context, 10)
         assertTrue(display.contains("…"))
@@ -328,6 +328,7 @@ class MergeViewModelTest {
         viewModel.state.test {
             val state = awaitItem()
             assertEquals("Select at least 2 PDF files", state.error)
+            assertFalse(state.canRetry)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -719,6 +720,8 @@ class MergeViewModelTest {
         assertEquals("the second document is damaged", vm.state.value.error)
         assertFalse(vm.state.value.isProcessing)
         assertNull(vm.state.value.result)
+        // The merge itself failed, so trying again makes sense.
+        assertTrue(vm.state.value.canRetry)
     }
 
     @Test
@@ -846,6 +849,8 @@ class MergeViewModelTest {
 
         assertTrue(vm.state.value.selectedFiles.isEmpty())
         assertTrue(vm.state.value.error!!.contains("locked.pdf"))
+        // A skipped file is a notice, not a failed merge; Retry would merge without it.
+        assertFalse(vm.state.value.canRetry)
     }
 
     @Test
