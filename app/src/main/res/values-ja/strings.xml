@@ -1682,4 +1682,6 @@
     <string name="crash_report_subject">PDF Reader Pro クラッシュレポート</string>
     <string name="report_on_github">GitHubで報告する</string>
     <string name="no_browser_found">リンクを開くためのブラウザが見つかりませんでした</string>
+    <string name="choose_language">アプリの言語を選択</string>
+    <string name="language_follow_system">端末の言語を使用</string>
 </resources>

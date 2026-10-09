@@ -1683,4 +1683,6 @@
     <string name="crash_report_subject">Informe de fallo de PDF Reader Pro</string>
     <string name="report_on_github">Informar en GitHub</string>
     <string name="no_browser_found">No se encontró un navegador para abrir el enlace</string>
+    <string name="choose_language">Elige el idioma de la app</string>
+    <string name="language_follow_system">Usar el idioma del teléfono</string>
 </resources>

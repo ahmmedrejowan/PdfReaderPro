@@ -118,6 +118,8 @@ ksp {
 dependencies {
     // Core Android
     implementation(libs.androidx.core.ktx)
+    // Per-app language on every Android version (AppCompatDelegate.setApplicationLocales)
+    implementation(libs.androidx.appcompat)
 
     // Compose
     implementation(platform(libs.compose.bom))

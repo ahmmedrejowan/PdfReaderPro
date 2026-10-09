@@ -81,6 +81,17 @@
             android:theme="@style/Theme.PDFReaderPro"
             android:configChanges="orientation|screenSize" />
 
+        <!-- Stores the in-app language choice before Android 13, which has no
+             system per-app language. Android 13+ keeps it itself. -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
+
     </application>
 
 </manifest>

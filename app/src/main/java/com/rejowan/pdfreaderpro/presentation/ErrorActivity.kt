@@ -10,7 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.widget.Toast
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.horizontalScroll
@@ -58,12 +58,14 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.theme.PdfReaderProTheme
 import com.rejowan.pdfreaderpro.util.CrashIssueLink
 import com.rejowan.pdfreaderpro.util.GlobalErrorHandler
+import com.rejowan.pdfreaderpro.util.AppLanguage
 
-class ErrorActivity : ComponentActivity() {
+class ErrorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalErrorHandler.isCrashScreenProcess = true
         super.onCreate(savedInstanceState)
+        AppLanguage.syncDefaultLocale()
         enableEdgeToEdge()
 
         val errorMessage = intent.getStringExtra(EXTRA_ERROR_MESSAGE) ?: getString(R.string.unexpected_error)

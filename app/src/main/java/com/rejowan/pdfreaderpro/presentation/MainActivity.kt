@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
@@ -39,8 +39,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import com.rejowan.pdfreaderpro.util.AppLanguage
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val preferencesRepository: PreferencesRepository by inject()
 
@@ -66,6 +67,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        AppLanguage.syncDefaultLocale()
         enableEdgeToEdge()
 
         // Keep splash visible while loading preferences
