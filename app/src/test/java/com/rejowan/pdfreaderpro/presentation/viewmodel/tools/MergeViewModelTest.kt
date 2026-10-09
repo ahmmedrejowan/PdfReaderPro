@@ -328,6 +328,7 @@ class MergeViewModelTest {
         viewModel.state.test {
             val state = awaitItem()
             assertEquals("Select at least 2 PDF files", state.error)
+            assertFalse(state.canRetry)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -719,6 +720,8 @@ class MergeViewModelTest {
         assertEquals("the second document is damaged", vm.state.value.error)
         assertFalse(vm.state.value.isProcessing)
         assertNull(vm.state.value.result)
+        // The merge itself failed, so trying again makes sense.
+        assertTrue(vm.state.value.canRetry)
     }
 
     @Test
@@ -846,6 +849,8 @@ class MergeViewModelTest {
 
         assertTrue(vm.state.value.selectedFiles.isEmpty())
         assertTrue(vm.state.value.error!!.contains("locked.pdf"))
+        // A skipped file is a notice, not a failed merge; Retry would merge without it.
+        assertFalse(vm.state.value.canRetry)
     }
 
     @Test

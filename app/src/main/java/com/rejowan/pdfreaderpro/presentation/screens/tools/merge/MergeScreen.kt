@@ -310,6 +310,7 @@ fun MergeScreen(
                         progress = state.progress,
                         canMerge = state.selectedFiles.size >= 2,
                         error = state.error,
+                        canRetry = state.canRetry,
                         onMerge = { viewModel.merge() },
                         onClearError = { viewModel.clearError() }
                     )
@@ -671,23 +672,12 @@ private fun MergeBottomSection(
     progress: Float,
     canMerge: Boolean,
     error: String?,
+    canRetry: Boolean,
     onMerge: () -> Unit,
     onClearError: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
-    // Check if error is recoverable (storage/network issues allow retry)
-    val isRecoverableError = error != null && (
-        error.contains("storage", ignoreCase = true) ||
-        error.contains("space", ignoreCase = true) ||
-        error.contains("network", ignoreCase = true) ||
-        error.contains("timeout", ignoreCase = true) ||
-        error.contains("try again", ignoreCase = true) ||
-        error.contains("памят", ignoreCase = true) ||
-        error.contains("мест", ignoreCase = true) ||
-        error.contains("сет", ignoreCase = true) ||
-        error.contains("повтор", ignoreCase = true)
-    )
 
     Column(
         modifier = Modifier
@@ -718,7 +708,7 @@ private fun MergeBottomSection(
                         color = AccentRed,
                         modifier = Modifier.weight(1f)
                     )
-                    if (isRecoverableError && !isProcessing) {
+                    if (canRetry && !isProcessing) {
                         TextButton(
                             onClick = {
                                 onClearError()
