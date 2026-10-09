@@ -107,7 +107,6 @@
     <string name="no_recent">কোনো সাম্প্রতিক ফাইল নেই</string>
     <string name="add_favorites_hint">এখানে দেখতে PDF প্রিয়তে যোগ করুন</string>
     <string name="open_pdf_hint">এখানে দেখতে কিছু PDF খুলুন</string>
-    <string name="delete_count_files">%d টি ফাইল ডিলিট করবেন?</string>
     <string name="delete_warning">এই কাজটি আর ফেরানো যাবে না। ফাইলগুলো আপনার ডিভাইস থেকে চিরতরে ডিলিট হয়ে যাবে।</string>
     <string name="all_folders">সব ফোল্ডার</string>
     <string name="search_folders">ফোল্ডার সার্চ করুন…</string>
@@ -248,18 +247,15 @@
     <string name="delete_highlight">হাইলাইট ডিলিট করুন</string>
     <string name="highlight_page">পেজ %d</string>
     <string name="highlight_count">%d টি হাইলাইট</string>
-    <string name="highlights_count">%d টি হাইলাইট</string>
     <string name="view_manage_highlights">হাইলাইট দেখুন ও ম্যানেজ করুন</string>
     <string name="highlight_in_file">ফাইলে সেভ করা</string>
     <string name="search_highlights">হাইলাইট সার্চ করুন</string>
     <string name="save_with_highlights">হাইলাইটসহ একটি কপি সেভ করুন</string>
     <string name="save_with_highlights_desc">হাইলাইটগুলো একটি নতুন PDF ফাইলে লিখুন</string>
     <string name="bake_highlights_title">হাইলাইটসহ একটি কপি সেভ করুন</string>
-    <string name="bake_highlights_body">এটি আপনার %d টি হাইলাইট একটি নতুন PDF ফাইলে লিখবে, ফলে অন্য PDF রিডারেও সেগুলো দেখা যাবে। যেভাবেই হোক, এই অ্যাপে আপনার হাইলাইটগুলো থেকে যাবে।</string>
     <string name="bake_highlights_caveat">কোনো PDF-এ হাইলাইট, টেক্সট বা কালির অ্যানোটেশন থাকলে কিছু এডিট ফিচার আর কাজ করে না। কপিটি কোথায় সেভ করবেন তা আপনি বেছে নেবেন।</string>
     <string name="bake_highlights_confirm_check">আমি বুঝেছি যে এটি একটি আলাদা কপি তৈরি করবে</string>
     <string name="bake_highlights_action">কপি সেভ করুন</string>
-    <string name="bake_highlights_done">কপিতে %d টি হাইলাইট সেভ করা হয়েছে</string>
     <string name="bake_highlights_failed">কপিটি সেভ করা যায়নি: %s</string>
     <string name="save_decrypted_copy">পাসওয়ার্ড ছাড়া একটি কপি সেভ করুন</string>
     <string name="save_decrypted_copy_desc">এই ডকুমেন্টের পাসওয়ার্ড ছাড়া একটি কপি তৈরি করুন</string>
@@ -395,7 +391,6 @@
     <string name="compress_medium_desc">কম্প্রেশন ও কোয়ালিটির ভারসাম্য</string>
     <string name="compress_high_label">বেশি</string>
     <string name="compress_high_desc">সবচেয়ে বেশি কম্প্রেশন, ছোট ফাইল</string>
-    <string name="compress_page_info">%1$d পেজ • %2$s</string>
     <string name="compress_share_pdf">PDF শেয়ার করুন</string>
     <string name="compress_empty_title">PDF ফাইল কম্প্রেস করুন</string>
     <string name="compress_empty_desc">কোয়ালিটি ঠিক রেখে ফাইলের সাইজ কমাতে একটি PDF ফাইল সিলেক্ট করুন</string>
@@ -410,7 +405,6 @@
     <string name="compressed_size">কম্প্রেস করা সাইজ</string>
     <string name="compressed_size_reduced">সাইজ কমেছে</string>
     <string name="saved_format">(%1$s কমেছে)</string>
-    <string name="pages_count_format">%1$d পেজ</string>
     <string name="rotation">রোটেশন</string>
     <string name="rotate_left">বামে রোটেট করুন</string>
     <string name="rotate_right">ডানে রোটেট করুন</string>
@@ -457,8 +451,6 @@
     <string name="position_center">মাঝখানে</string>
     <string name="position_tiled">টাইল করা</string>
     <string name="watermark_added">ওয়াটারমার্ক যোগ হয়েছে!</string>
-    <string name="applied_to_pages">%1$d পেজে অ্যাপ্লাই করা হয়েছে</string>
-    <string name="pages_size_dash_format">%1$d পেজ - %2$s</string>
     <string name="select_pages_to_remove">যে পেজগুলো সরাবেন সেগুলো সিলেক্ট করুন</string>
     <string name="remove_selected">সিলেক্ট করাগুলো সরান</string>
     <string name="remove_more">আরেকটি PDF থেকে পেজ সরান</string>
@@ -496,7 +488,6 @@
     <string name="page_selection_even">জোড়</string>
     <string name="page_selection_skip_first">প্রথমটি বাদ দিন</string>
     <string name="title_page_selection_custom">কাস্টম</string>
-    <string name="numbered_pages_format">%2$d টি পেজের মধ্যে %1$d টিতে নম্বর দেওয়া হয়েছে</string>
     <string name="adding_numbers">নম্বর যোগ করা হচ্ছে…</string>
     <string name="add_images">কনভার্ট করতে ছবি যোগ করুন</string>
     <string name="image_quality">ছবির কোয়ালিটি</string>
@@ -753,7 +744,6 @@
     <string name="file_info_desc">ফাইলের বিস্তারিত তথ্য দেখুন</string>
     <string name="delete_action">ডিলিট করুন</string>
     <string name="delete_desc">এই ফাইলটি পুরোপুরি ডিলিট করুন</string>
-    <string name="pages_count">%d টি পেজ</string>
     <string name="cd_toggle_scroll_direction">স্ক্রলের দিক বদলান</string>
     <string name="cd_fit_to_screen">স্ক্রিন অনুযায়ী ফিট করুন</string>
     <string name="folder_options">ফোল্ডারের অপশন</string>
@@ -975,7 +965,6 @@
     <string name="try_again_message">এই PDF লোড করার সময় কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।</string>
     <string name="cd_page_thumbnails">পেজের থাম্বনেইল</string>
     <string name="search_in_document">ডকুমেন্টে সার্চ করুন…</string>
-    <string name="cd_matching_highlights">%1$d টি মিলে যাওয়া হাইলাইট</string>
     <string name="cd_view_options">দেখার অপশন</string>
     <string name="cd_zoom">জুম</string>
     <string name="cd_display_settings">ডিসপ্লে সেটিংস</string>
@@ -1008,7 +997,6 @@
     <string name="full_screen_mode">ফুল স্ক্রিন মোড</string>
     <string name="auto_rotate_enabled">অটো-রোটেট চালু আছে</string>
     <string name="delete_pdf">PDF ডিলিট করুন</string>
-    <string name="delete_files_count">%d টি ফাইল ডিলিট করবেন?</string>
     <string name="delete_files_warning">এটা আর ফেরানো যাবে না। ফাইলগুলো আপনার ডিভাইস থেকে চিরতরে ডিলিট হয়ে যাবে।</string>
     <string name="reader_section">রিডার</string>
     <string name="about_section">সম্পর্কে</string>
@@ -1227,9 +1215,7 @@
     <string name="password_protected">পাসওয়ার্ড সুরক্ষিত</string>
     <string name="not_protected">সুরক্ষিত নয়</string>
     <string name="no_password_protection">কোনো পাসওয়ার্ড সুরক্ষা নেই</string>
-    <string name="all_pages_count">সব %d টি পেজ</string>
     <string name="selected_of_count">%2$d টির মধ্যে %1$d টি সিলেক্ট করা</string>
-    <string name="pages_modified">%d টি পেজ • পরিবর্তিত</string>
     <string name="page_numbers_label">পেজ নম্বর</string>
     <string name="page_numbers_hint">যেমন, 1-5, 8, 10-12</string>
     <string name="all_pages_label">সব পেজ (%d)</string>
@@ -1242,7 +1228,6 @@
     <string name="page_selection_all">সব পেজ (1-%1$d)</string>
     <string name="page_selection_range">পেজ %1$d-%2$d</string>
     <string name="page_selection_custom">পেজ %1$s</string>
-    <string name="page_selection_custom_long">পেজ %1$s… (%2$d টি পেজ)</string>
     <string name="drag_hint">ক্রম বদলাতে পেজ চেপে ধরে টেনে আনুন</string>
     <string name="format_png">PNG</string>
     <string name="format_jpg">JPG</string>
@@ -1267,7 +1252,6 @@
     <string name="files_selected">%d টি ফাইল সিলেক্ট করা</string>
     <string name="files_merged">%d টি ফাইল মার্জ হয়েছে</string>
     <string name="images_selected">%d টি ছবি সিলেক্ট করা</string>
-    <string name="create_pdf_pages">PDF তৈরি করুন (%d টি পেজ)</string>
     <string name="position_bottom_left">নিচে বামে</string>
     <string name="position_bottom_center">নিচে মাঝখানে</string>
     <string name="position_bottom_right">নিচে ডানে</string>
@@ -1288,7 +1272,6 @@
     <string name="remove_selected_pages">%d টি পেজ সরান</string>
     <string name="remove_pages_btn">পেজ সরান</string>
     <string name="select_pages_to_remove_hint">সরানোর জন্য পেজে ট্যাপ করে সিলেক্ট করুন</string>
-    <string name="pages_size_format">%1$d টি পেজ • %2$s</string>
     <string name="pdf_extension">.pdf</string>
     <string name="select_pdfs">PDF সিলেক্ট করুন</string>
     <string name="output_filename_label">আউটপুট ফাইলের নাম</string>
@@ -1297,21 +1280,15 @@
     <string name="to_page">পর্যন্ত</string>
     <string name="page_numbers_example">যেমন, 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">কমা দিয়ে আলাদা করে পেজ নম্বর বা রেঞ্জ লিখুন</string>
-    <string name="files_selected_count">%1$d টি ফাইল সিলেক্ট করা</string>
     <string name="merge_empty_title">PDF ফাইল মার্জ করুন</string>
     <string name="merge_empty_desc">একটি ডকুমেন্টে মার্জ করতে একাধিক PDF ফাইল সিলেক্ট করুন</string>
-    <string name="file_size_pages">%1$s • %2$d টি পেজ</string>
-    <string name="pages_partial_format">%1$d/%2$d টি পেজ</string>
-    <string name="pages_all_format">সব %1$d টি পেজ</string>
     <string name="add_more_files">আরও ফাইল যোগ করুন</string>
     <string name="saved_to_path">সেভ হয়েছে: %1$s</string>
     <string name="merging_pdfs">PDF মার্জ করা হচ্ছে…</string>
     <string name="merge_complete">মার্জ করা হয়ে গেছে!</string>
     <string name="merge_more_files">আরও ফাইল মার্জ করুন</string>
     <string name="select_pages">পেজ সিলেক্ট করুন</string>
-    <string name="total_pages_format">মোট: %1$d টি পেজ</string>
     <string name="selection_mode">সিলেকশন মোড</string>
-    <string name="all_pages_included">সব %1$d টি পেজ থাকবে</string>
     <string name="pages_range_info">পেজ %1$s থেকে %2$s থাকবে</string>
     <string name="change">পরিবর্তন করুন</string>
     <string name="page_ranges_label">পেজ রেঞ্জ</string>
@@ -1321,7 +1298,6 @@
     <string name="extract_pages_help">সিলেক্ট করা পেজ নিয়ে একটি PDF তৈরি হবে। পেজ: 1-%d</string>
     <string name="output_prefix_label">আউটপুট প্রিফিক্স</string>
     <string name="split_another_pdf">আরেকটি PDF স্প্লিট করুন</string>
-    <string name="pages_count_with_mode">%1$d টি পেজ • %2$s</string>
     <string name="split_empty_title">PDF ফাইল স্প্লিট করুন</string>
     <string name="split_empty_desc">একাধিক অংশে স্প্লিট করতে বা নির্দিষ্ট পেজ আলাদা করতে একটি PDF ফাইল সিলেক্ট করুন</string>
     <string name="split_mode_title">স্প্লিট মোড</string>
@@ -1341,7 +1317,6 @@
     <string name="split_will_create_one_file_max">১টি ফাইল তৈরি হবে (সর্বোচ্চ: %1$d টি পেজ)</string>
     <string name="split_will_create_files_max">%1$d টি ফাইল তৈরি হবে (সর্বোচ্চ: %2$d টি পেজ)</string>
     <string name="split_into_individual_pages">আলাদা আলাদা পেজে স্প্লিট করুন</string>
-    <string name="split_will_create_separate_pdfs">%1$d টি আলাদা PDF ফাইল তৈরি হবে</string>
     <string name="split_will_create_one_page_pdf">১ পেজের ১টি PDF তৈরি হবে</string>
     <string name="split_will_create_one_pdf_pages">%1$d পেজের ১টি PDF তৈরি হবে</string>
     <string name="splitting_pdf">PDF স্প্লিট করা হচ্ছে…</string>
@@ -1429,4 +1404,104 @@
     <string name="no_browser_found">লিংক খোলার জন্য কোনো ব্রাউজার পাওয়া যায়নি</string>
     <string name="choose_language">অ্যাপের ভাষা বেছে নিন</string>
     <string name="language_follow_system">ফোনের ভাষা ব্যবহার করুন</string>
+    <plurals name="delete_count_files">
+        <item quantity="one">%d টি ফাইল ডিলিট করবেন?</item>
+        <item quantity="other">%d টি ফাইল ডিলিট করবেন?</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="one">%d টি হাইলাইট</item>
+        <item quantity="other">%d টি হাইলাইট</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="one">এটি আপনার %d টি হাইলাইট একটি নতুন PDF ফাইলে লিখবে, ফলে অন্য PDF রিডারেও সেগুলো দেখা যাবে। যেভাবেই হোক, এই অ্যাপে আপনার হাইলাইটগুলো থেকে যাবে।</item>
+        <item quantity="other">এটি আপনার %d টি হাইলাইট একটি নতুন PDF ফাইলে লিখবে, ফলে অন্য PDF রিডারেও সেগুলো দেখা যাবে। যেভাবেই হোক, এই অ্যাপে আপনার হাইলাইটগুলো থেকে যাবে।</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="one">কপিতে %d টি হাইলাইট সেভ করা হয়েছে</item>
+        <item quantity="other">কপিতে %d টি হাইলাইট সেভ করা হয়েছে</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="one">%1$d পেজ • %2$s</item>
+        <item quantity="other">%1$d পেজ • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="one">%1$d পেজ</item>
+        <item quantity="other">%1$d পেজ</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="one">%1$d পেজে অ্যাপ্লাই করা হয়েছে</item>
+        <item quantity="other">%1$d পেজে অ্যাপ্লাই করা হয়েছে</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="one">%1$d পেজ - %2$s</item>
+        <item quantity="other">%1$d পেজ - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="one">%2$d টি পেজের মধ্যে %1$d টিতে নম্বর দেওয়া হয়েছে</item>
+        <item quantity="other">%2$d টি পেজের মধ্যে %1$d টিতে নম্বর দেওয়া হয়েছে</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="one">%d টি পেজ</item>
+        <item quantity="other">%d টি পেজ</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="one">%1$d টি মিলে যাওয়া হাইলাইট</item>
+        <item quantity="other">%1$d টি মিলে যাওয়া হাইলাইট</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="one">%d টি ফাইল ডিলিট করবেন?</item>
+        <item quantity="other">%d টি ফাইল ডিলিট করবেন?</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="one">সব %d টি পেজ</item>
+        <item quantity="other">সব %d টি পেজ</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="one">%d টি পেজ • পরিবর্তিত</item>
+        <item quantity="other">%d টি পেজ • পরিবর্তিত</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="one">পেজ %1$s… (%2$d টি পেজ)</item>
+        <item quantity="other">পেজ %1$s… (%2$d টি পেজ)</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="one">PDF তৈরি করুন (%d টি পেজ)</item>
+        <item quantity="other">PDF তৈরি করুন (%d টি পেজ)</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="one">%1$d টি পেজ • %2$s</item>
+        <item quantity="other">%1$d টি পেজ • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="one">%1$d টি ফাইল সিলেক্ট করা</item>
+        <item quantity="other">%1$d টি ফাইল সিলেক্ট করা</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="one">%1$s • %2$d টি পেজ</item>
+        <item quantity="other">%1$s • %2$d টি পেজ</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="one">%1$d/%2$d টি পেজ</item>
+        <item quantity="other">%1$d/%2$d টি পেজ</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="one">সব %1$d টি পেজ</item>
+        <item quantity="other">সব %1$d টি পেজ</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="one">মোট: %1$d টি পেজ</item>
+        <item quantity="other">মোট: %1$d টি পেজ</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="one">সব %1$d টি পেজ থাকবে</item>
+        <item quantity="other">সব %1$d টি পেজ থাকবে</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="one">%1$d টি পেজ • %2$s</item>
+        <item quantity="other">%1$d টি পেজ • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="one">%1$d টি আলাদা PDF ফাইল তৈরি হবে</item>
+        <item quantity="other">%1$d টি আলাদা PDF ফাইল তৈরি হবে</item>
+    </plurals>
 </resources>

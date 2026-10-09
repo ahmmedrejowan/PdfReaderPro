@@ -128,7 +128,6 @@
     <string name="no_recent">Нет недавних файлов</string>
     <string name="add_favorites_hint">Добавьте PDF в избранное, чтобы видеть их здесь</string>
     <string name="open_pdf_hint">Откройте несколько PDF, чтобы видеть их здесь</string>
-    <string name="delete_count_files">Удалить файлы (%d)?</string>
     <string name="delete_warning">Это действие нельзя отменить. Файлы будут безвозвратно удалены с вашего устройства.</string>
 
     <!-- Folders Screen -->
@@ -294,18 +293,15 @@
     <string name="delete_highlight">Удалить выделение</string>
     <string name="highlight_page">Страница %d</string>
     <string name="highlight_count">%d выделение</string>
-    <string name="highlights_count">Выделений: %d</string>
     <string name="view_manage_highlights">Просмотр и управление выделениями</string>
     <string name="highlight_in_file">Сохранено в файле</string>
     <string name="search_highlights">Поиск выделений</string>
     <string name="save_with_highlights">Сохранить копию с выделениями</string>
     <string name="save_with_highlights_desc">Записать выделения в новый PDF-файл</string>
     <string name="bake_highlights_title">Сохранить копию с выделениями</string>
-    <string name="bake_highlights_body">Выделения (%d) будут записаны в новый PDF-файл, чтобы они отображались и в других программах для чтения PDF. Ваши выделения в этом приложении сохранятся в любом случае.</string>
     <string name="bake_highlights_caveat">Если PDF содержит выделения, текстовые или рукописные аннотации, некоторые функции редактирования для него перестают работать. Вы сможете выбрать, куда сохранить копию.</string>
     <string name="bake_highlights_confirm_check">Я понимаю, что создаётся отдельная копия</string>
     <string name="bake_highlights_action">Сохранить копию</string>
-    <string name="bake_highlights_done">Выделений сохранено в копию: %d</string>
     <string name="bake_highlights_failed">Не удалось сохранить копию: %s</string>
     <string name="save_decrypted_copy">Сохранить копию без пароля</string>
     <string name="save_decrypted_copy_desc">Записать незащищённую копию этого документа</string>
@@ -459,7 +455,6 @@
     <string name="compress_high_desc">Максимальное сжатие, меньший файл</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">Страниц: %1$d • %2$s</string>
     <string name="compress_share_pdf">Поделиться PDF</string>
     <string name="compress_empty_title">Сжать PDF-файл</string>
     <string name="compress_empty_desc">Выберите PDF-файл, чтобы уменьшить его размер, сохраняя качество</string>
@@ -474,7 +469,6 @@
     <string name="compressed_size">Сжатый размер</string>
     <string name="compressed_size_reduced">Размер уменьшен</string>
     <string name="saved_format">(сохранено %1$s)</string>
-    <string name="pages_count_format">Страниц: %1$d</string>
 
     <!-- Rotate -->
     <string name="rotation">Поворот</string>
@@ -527,8 +521,6 @@
     <string name="position_center">По центру</string>
     <string name="position_tiled">Мозаикой</string>
     <string name="watermark_added">Водяной знак добавлен!</string>
-    <string name="applied_to_pages">Применено к страницам: %1$d</string>
-    <string name="pages_size_dash_format">Страниц: %1$d - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Выберите страницы для удаления</string>
@@ -582,7 +574,6 @@
     <string name="title_page_selection_custom">Выборочно</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">Пронумеровано страниц: %1$d из %2$d</string>
     <string name="adding_numbers">Добавление номеров…</string>
 
     <!-- Images to PDF -->
@@ -879,7 +870,6 @@
     <string name="file_info_desc">Просмотреть детали и свойства файла</string>
     <string name="delete_action">Удалить</string>
     <string name="delete_desc">Безвозвратно удалить этот файл</string>
-    <string name="pages_count">Страниц: %d</string>
     <string name="cd_toggle_scroll_direction">Переключить направление прокрутки</string>
     <string name="cd_fit_to_screen">По размеру экрана</string>
 
@@ -1145,7 +1135,6 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Поиск в документе…</string>
-    <string name="cd_matching_highlights">Совпадающих выделений: %1$d</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Опции просмотра</string>
@@ -1190,7 +1179,6 @@
     <string name="delete_pdf">Удалить PDF</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">Удалить файлы (%d)?</string>
     <string name="delete_files_warning">Это действие нельзя отменить. Файлы будут безвозвратно удалены с вашего устройства.</string>
 
     <!-- Settings Screen -->
@@ -1451,9 +1439,7 @@
     <string name="no_password_protection">Без защиты паролем</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">Все страницы (%d)</string>
     <string name="selected_of_count">Выбрано %1$d из %2$d</string>
-    <string name="pages_modified">Страниц: %d • Изменено</string>
     <string name="page_numbers_label">Номера страниц</string>
     <string name="page_numbers_hint">например, 1-5, 8, 10-12</string>
     <string name="all_pages_label">Все страницы (%d)</string>
@@ -1466,7 +1452,6 @@
     <string name="page_selection_all">Все страницы (1-%1$d)</string>
     <string name="page_selection_range">Страницы %1$d-%2$d</string>
     <string name="page_selection_custom">Страницы %1$s</string>
-    <string name="page_selection_custom_long">Страницы %1$s… (всего: %2$d)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Долгое нажатие и перетаскивание страниц для изменения порядка</string>
@@ -1503,7 +1488,6 @@
 
     <!-- Image to PDF -->
     <string name="images_selected">Выбрано изображений: %d</string>
-    <string name="create_pdf_pages">Создать PDF (страниц: %d)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">Снизу слева</string>
@@ -1532,7 +1516,6 @@
     <string name="select_pages_to_remove_hint">Нажмите на страницы, чтобы выбрать их для удаления</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">Страниц: %1$d • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1526,15 @@
     <string name="to_page">По</string>
     <string name="page_numbers_example">например, 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Введите номера страниц или диапазоны через запятую</string>
-    <string name="files_selected_count">Выбрано файлов: %1$d</string>
     <string name="merge_empty_title">Объединить PDF-файлы</string>
     <string name="merge_empty_desc">Выберите несколько PDF-файлов, чтобы объединить их в один документ</string>
-    <string name="file_size_pages">%1$s • страниц: %2$d</string>
-    <string name="pages_partial_format">Страниц: %1$d/%2$d</string>
-    <string name="pages_all_format">Все страницы (%1$d)</string>
     <string name="add_more_files">Добавить ещё файлы</string>
     <string name="saved_to_path">Сохранено в: %1$s</string>
     <string name="merging_pdfs">Объединение PDF…</string>
     <string name="merge_complete">Объединение завершено!</string>
     <string name="merge_more_files">Объединить ещё файлы</string>
     <string name="select_pages">Выбрать страницы</string>
-    <string name="total_pages_format">Всего страниц: %1$d</string>
     <string name="selection_mode">Режим выбора</string>
-    <string name="all_pages_included">Будут включены все страницы (%1$d)</string>
     <string name="pages_range_info">Будут включены страницы с %1$s по %2$s</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1546,6 @@
     <string name="extract_pages_help">Создаёт один PDF с выбранными страницами. Страницы: 1-%d</string>
     <string name="output_prefix_label">Префикс выходного файла</string>
     <string name="split_another_pdf">Разделить другой PDF</string>
-    <string name="pages_count_with_mode">Страниц: %1$d • %2$s</string>
     <string name="split_empty_title">Разделить PDF-файл</string>
     <string name="split_empty_desc">Выберите PDF-файл, чтобы разделить его на несколько частей или извлечь определённые страницы</string>
     <string name="split_mode_title">Режим разделения</string>
@@ -1589,7 +1565,6 @@
     <string name="split_will_create_one_file_max">Будет создан 1 файл (макс. страниц: %1$d)</string>
     <string name="split_will_create_files_max">Будет создано файлов: %1$d (макс. страниц: %2$d)</string>
     <string name="split_into_individual_pages">Разделить на отдельные страницы</string>
-    <string name="split_will_create_separate_pdfs">Будет создано отдельных PDF-файлов: %1$d</string>
     <string name="split_will_create_one_page_pdf">Будет создан 1 PDF с 1 страницей</string>
     <string name="split_will_create_one_pdf_pages">Будет создан 1 PDF (страниц: %1$d)</string>
     <string name="splitting_pdf">Разделение PDF…</string>
@@ -1686,4 +1661,154 @@
     <string name="no_browser_found">Не найден браузер для открытия ссылки</string>
     <string name="choose_language">Выберите язык приложения</string>
     <string name="language_follow_system">Язык телефона</string>
+    <plurals name="delete_count_files">
+        <item quantity="one">Удалить файлы (%d)?</item>
+        <item quantity="few">Удалить файлы (%d)?</item>
+        <item quantity="many">Удалить файлы (%d)?</item>
+        <item quantity="other">Удалить файлы (%d)?</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="one">Выделений: %d</item>
+        <item quantity="few">Выделений: %d</item>
+        <item quantity="many">Выделений: %d</item>
+        <item quantity="other">Выделений: %d</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="one">Выделения (%d) будут записаны в новый PDF-файл, чтобы они отображались и в других программах для чтения PDF. Ваши выделения в этом приложении сохранятся в любом случае.</item>
+        <item quantity="few">Выделения (%d) будут записаны в новый PDF-файл, чтобы они отображались и в других программах для чтения PDF. Ваши выделения в этом приложении сохранятся в любом случае.</item>
+        <item quantity="many">Выделения (%d) будут записаны в новый PDF-файл, чтобы они отображались и в других программах для чтения PDF. Ваши выделения в этом приложении сохранятся в любом случае.</item>
+        <item quantity="other">Выделения (%d) будут записаны в новый PDF-файл, чтобы они отображались и в других программах для чтения PDF. Ваши выделения в этом приложении сохранятся в любом случае.</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="one">Выделений сохранено в копию: %d</item>
+        <item quantity="few">Выделений сохранено в копию: %d</item>
+        <item quantity="many">Выделений сохранено в копию: %d</item>
+        <item quantity="other">Выделений сохранено в копию: %d</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="one">Страниц: %1$d • %2$s</item>
+        <item quantity="few">Страниц: %1$d • %2$s</item>
+        <item quantity="many">Страниц: %1$d • %2$s</item>
+        <item quantity="other">Страниц: %1$d • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="one">Страниц: %1$d</item>
+        <item quantity="few">Страниц: %1$d</item>
+        <item quantity="many">Страниц: %1$d</item>
+        <item quantity="other">Страниц: %1$d</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="one">Применено к страницам: %1$d</item>
+        <item quantity="few">Применено к страницам: %1$d</item>
+        <item quantity="many">Применено к страницам: %1$d</item>
+        <item quantity="other">Применено к страницам: %1$d</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="one">Страниц: %1$d - %2$s</item>
+        <item quantity="few">Страниц: %1$d - %2$s</item>
+        <item quantity="many">Страниц: %1$d - %2$s</item>
+        <item quantity="other">Страниц: %1$d - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="one">Пронумеровано страниц: %1$d из %2$d</item>
+        <item quantity="few">Пронумеровано страниц: %1$d из %2$d</item>
+        <item quantity="many">Пронумеровано страниц: %1$d из %2$d</item>
+        <item quantity="other">Пронумеровано страниц: %1$d из %2$d</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="one">Страниц: %d</item>
+        <item quantity="few">Страниц: %d</item>
+        <item quantity="many">Страниц: %d</item>
+        <item quantity="other">Страниц: %d</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="one">Совпадающих выделений: %1$d</item>
+        <item quantity="few">Совпадающих выделений: %1$d</item>
+        <item quantity="many">Совпадающих выделений: %1$d</item>
+        <item quantity="other">Совпадающих выделений: %1$d</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="one">Удалить файлы (%d)?</item>
+        <item quantity="few">Удалить файлы (%d)?</item>
+        <item quantity="many">Удалить файлы (%d)?</item>
+        <item quantity="other">Удалить файлы (%d)?</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="one">Все страницы (%d)</item>
+        <item quantity="few">Все страницы (%d)</item>
+        <item quantity="many">Все страницы (%d)</item>
+        <item quantity="other">Все страницы (%d)</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="one">Страниц: %d • Изменено</item>
+        <item quantity="few">Страниц: %d • Изменено</item>
+        <item quantity="many">Страниц: %d • Изменено</item>
+        <item quantity="other">Страниц: %d • Изменено</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="one">Страницы %1$s… (всего: %2$d)</item>
+        <item quantity="few">Страницы %1$s… (всего: %2$d)</item>
+        <item quantity="many">Страницы %1$s… (всего: %2$d)</item>
+        <item quantity="other">Страницы %1$s… (всего: %2$d)</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="one">Создать PDF (страниц: %d)</item>
+        <item quantity="few">Создать PDF (страниц: %d)</item>
+        <item quantity="many">Создать PDF (страниц: %d)</item>
+        <item quantity="other">Создать PDF (страниц: %d)</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="one">Страниц: %1$d • %2$s</item>
+        <item quantity="few">Страниц: %1$d • %2$s</item>
+        <item quantity="many">Страниц: %1$d • %2$s</item>
+        <item quantity="other">Страниц: %1$d • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="one">Выбрано файлов: %1$d</item>
+        <item quantity="few">Выбрано файлов: %1$d</item>
+        <item quantity="many">Выбрано файлов: %1$d</item>
+        <item quantity="other">Выбрано файлов: %1$d</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="one">%1$s • страниц: %2$d</item>
+        <item quantity="few">%1$s • страниц: %2$d</item>
+        <item quantity="many">%1$s • страниц: %2$d</item>
+        <item quantity="other">%1$s • страниц: %2$d</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="one">Страниц: %1$d/%2$d</item>
+        <item quantity="few">Страниц: %1$d/%2$d</item>
+        <item quantity="many">Страниц: %1$d/%2$d</item>
+        <item quantity="other">Страниц: %1$d/%2$d</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="one">Все страницы (%1$d)</item>
+        <item quantity="few">Все страницы (%1$d)</item>
+        <item quantity="many">Все страницы (%1$d)</item>
+        <item quantity="other">Все страницы (%1$d)</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="one">Всего страниц: %1$d</item>
+        <item quantity="few">Всего страниц: %1$d</item>
+        <item quantity="many">Всего страниц: %1$d</item>
+        <item quantity="other">Всего страниц: %1$d</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="one">Будут включены все страницы (%1$d)</item>
+        <item quantity="few">Будут включены все страницы (%1$d)</item>
+        <item quantity="many">Будут включены все страницы (%1$d)</item>
+        <item quantity="other">Будут включены все страницы (%1$d)</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="one">Страниц: %1$d • %2$s</item>
+        <item quantity="few">Страниц: %1$d • %2$s</item>
+        <item quantity="many">Страниц: %1$d • %2$s</item>
+        <item quantity="other">Страниц: %1$d • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="one">Будет создано отдельных PDF-файлов: %1$d</item>
+        <item quantity="few">Будет создано отдельных PDF-файлов: %1$d</item>
+        <item quantity="many">Будет создано отдельных PDF-файлов: %1$d</item>
+        <item quantity="other">Будет создано отдельных PDF-файлов: %1$d</item>
+    </plurals>
 </resources>

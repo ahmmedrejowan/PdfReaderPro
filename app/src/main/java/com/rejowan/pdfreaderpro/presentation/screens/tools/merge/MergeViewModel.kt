@@ -38,7 +38,7 @@ sealed class PageSelection {
         is Custom -> if (pages.size <= 5) {
             context.getString(R.string.page_selection_custom, pages.joinToString(", "))
         } else {
-            context.getString(R.string.page_selection_custom_long, pages.take(4).joinToString(", "), pages.size)
+            context.resources.getQuantityString(R.plurals.page_selection_custom_long, pages.size, pages.take(4).joinToString(", "), pages.size)
         }
     }
 

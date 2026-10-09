@@ -255,7 +255,7 @@ class MergeViewModelTest {
 
     @Test
     fun `PageSelection Custom toDisplayString truncates for many pages`() {
-        every { context.getString(R.string.page_selection_custom_long, "1, 2, 3, 4", 7) } returns "Pages 1, 2, 3, 4… (7 pages)"
+        every { context.resources.getQuantityString(R.plurals.page_selection_custom_long, 7, "1, 2, 3, 4", 7) } returns "Pages 1, 2, 3, 4… (7 pages)"
         val selection = PageSelection.Custom(listOf(1, 2, 3, 4, 5, 6, 7))
         val display = selection.toDisplayString(context, 10)
         assertTrue(display.contains("…"))

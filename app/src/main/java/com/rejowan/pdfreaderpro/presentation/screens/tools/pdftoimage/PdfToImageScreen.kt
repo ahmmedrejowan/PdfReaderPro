@@ -86,6 +86,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD) // PDF to Image theme
@@ -498,7 +499,7 @@ private fun SourceFileCard(sourceFile: SourceFile) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    stringResource(R.string.pages_size_format, sourceFile.pageCount, formatFileSize(sourceFile.size)),
+                    pluralStringResource(R.plurals.pages_size_format, sourceFile.pageCount, sourceFile.pageCount, formatFileSize(sourceFile.size)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

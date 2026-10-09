@@ -100,6 +100,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors
 private val AccentOrange = Color(0xFFFF9800)  // Rotate theme color
@@ -137,7 +138,7 @@ fun RotateScreen(
                         state.sourceFile?.let { file ->
                             val selectedCount = file.pages.count { it.isSelected }
                             val selectionText = when (state.selectionMode) {
-                                PageSelectionMode.ALL_PAGES -> stringResource(R.string.all_pages_count, file.pageCount)
+                                PageSelectionMode.ALL_PAGES -> pluralStringResource(R.plurals.all_pages_count, file.pageCount, file.pageCount)
                                 PageSelectionMode.SELECTED_PAGES -> stringResource(R.string.selected_of_count, selectedCount, file.pageCount)
                             }
                             Text(
@@ -903,7 +904,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
+                        pluralStringResource(R.plurals.pages_size_format, result.pageCount, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

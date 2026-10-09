@@ -95,6 +95,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)   // Compress theme color
@@ -131,7 +132,7 @@ fun CompressScreen(
                         Text(stringResource(R.string.tool_compress_pdf))
                         state.sourceFile?.let { file ->
                             Text(
-                                stringResource(R.string.compress_page_info, file.pageCount, formatFileSize(file.size)),
+                                pluralStringResource(R.plurals.compress_page_info, file.pageCount, file.pageCount, formatFileSize(file.size)),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -444,7 +445,7 @@ private fun SourceFileCard(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        stringResource(R.string.compress_page_info, sourceFile.pageCount, formatFileSize(sourceFile.size)),
+                        pluralStringResource(R.plurals.compress_page_info, sourceFile.pageCount, sourceFile.pageCount, formatFileSize(sourceFile.size)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -990,7 +991,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_count_format, result.pageCount),
+                        pluralStringResource(R.plurals.pages_count_format, result.pageCount, result.pageCount),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

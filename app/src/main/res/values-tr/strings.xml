@@ -128,7 +128,6 @@
     <string name="no_recent">Son kullanılan dosya yok</string>
     <string name="add_favorites_hint">Burada görmek için PDF\'leri favorilere ekleyin</string>
     <string name="open_pdf_hint">Burada görmek için bazı PDF\'leri açın</string>
-    <string name="delete_count_files">%d dosya silinsin mi?</string>
     <string name="delete_warning">Bu işlem geri alınamaz. Dosyalar cihazınızdan kalıcı olarak silinecek.</string>
 
     <!-- Folders Screen -->
@@ -294,18 +293,15 @@
     <string name="delete_highlight">Vurguyu sil</string>
     <string name="highlight_page">Sayfa %d</string>
     <string name="highlight_count">%d vurgu</string>
-    <string name="highlights_count">%d vurgu</string>
     <string name="view_manage_highlights">Vurguları görüntüle ve yönet</string>
     <string name="highlight_in_file">Dosyada kayıtlı</string>
     <string name="search_highlights">Vurgularda ara</string>
     <string name="save_with_highlights">Vurgularla birlikte bir kopya kaydet</string>
     <string name="save_with_highlights_desc">Vurguları yeni bir PDF dosyasına yaz</string>
     <string name="bake_highlights_title">Vurgularla birlikte bir kopya kaydet</string>
-    <string name="bake_highlights_body">Bu, %d vurgunuzu yeni bir PDF dosyasına yazar, böylece diğer PDF okuyucularda da görünürler. Bu uygulamadaki vurgularınız her iki durumda da korunur.</string>
     <string name="bake_highlights_caveat">Bir PDF vurgu, metin veya mürekkep ek açıklamaları içerdiğinde, bazı düzenleme özellikleri çalışmayı durdurur. Kopyayı nereye kaydedeceğinizi siz seçeceksiniz.</string>
     <string name="bake_highlights_confirm_check">Bunun ayrı bir kopya oluşturduğunu anlıyorum</string>
     <string name="bake_highlights_action">Kopyayı kaydet</string>
-    <string name="bake_highlights_done">%d vurgu kopyaya kaydedildi</string>
     <string name="bake_highlights_failed">Kopya kaydedilemedi: %s</string>
     <string name="save_decrypted_copy">Parolasız bir kopya kaydet</string>
     <string name="save_decrypted_copy_desc">Bu belgenin korumasız bir kopyasını yaz</string>
@@ -459,7 +455,6 @@
     <string name="compress_high_desc">Maksimum sıkıştırma, daha küçük dosya</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$d sayfa • %2$s</string>
     <string name="compress_share_pdf">PDF Paylaş</string>
     <string name="compress_empty_title">PDF Dosyasını Sıkıştır</string>
     <string name="compress_empty_desc">Kaliteyi korurken dosya boyutunu azaltmak için bir PDF dosyası seçin</string>
@@ -474,7 +469,6 @@
     <string name="compressed_size">Sıkıştırılmış Boyut</string>
     <string name="compressed_size_reduced">Boyut Azaltıldı</string>
     <string name="saved_format">(%1$s tasarruf edildi)</string>
-    <string name="pages_count_format">%1$d sayfa</string>
 
     <!-- Rotate -->
     <string name="rotation">Döndürme</string>
@@ -527,8 +521,6 @@
     <string name="position_center">Orta</string>
     <string name="position_tiled">Döşemeli</string>
     <string name="watermark_added">Filigran Eklendi!</string>
-    <string name="applied_to_pages">%1$d sayfaya uygulandı</string>
-    <string name="pages_size_dash_format">%1$d sayfa - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Kaldırılacak sayfaları seçin</string>
@@ -582,7 +574,6 @@
     <string name="title_page_selection_custom">Özel</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">%1$d / %2$d sayfa numaralandırıldı</string>
     <string name="adding_numbers">Numaralar ekleniyor…</string>
 
     <!-- Images to PDF -->
@@ -879,7 +870,6 @@
     <string name="file_info_desc">Dosya ayrıntılarını ve özelliklerini görüntüle</string>
     <string name="delete_action">Sil</string>
     <string name="delete_desc">Bu dosyayı kalıcı olarak kaldır</string>
-    <string name="pages_count">%d sayfa</string>
     <string name="cd_toggle_scroll_direction">Kaydırma yönünü değiştir</string>
     <string name="cd_fit_to_screen">Ekrana sığdır</string>
 
@@ -1145,7 +1135,6 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Belgede ara…</string>
-    <string name="cd_matching_highlights">%1$d eşleşen vurgu</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Görünüm Seçenekleri</string>
@@ -1190,7 +1179,6 @@
     <string name="delete_pdf">PDF\'i Sil</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">%d dosya silinsin mi?</string>
     <string name="delete_files_warning">Bu işlem geri alınamaz. Dosyalar cihazınızdan kalıcı olarak silinecek.</string>
 
     <!-- Settings Screen -->
@@ -1451,9 +1439,7 @@
     <string name="no_password_protection">Parola Koruması Yok</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">Tüm %d sayfa</string>
     <string name="selected_of_count">%1$d / %2$d seçildi</string>
-    <string name="pages_modified">%d sayfa • Değiştirildi</string>
     <string name="page_numbers_label">Sayfa numaraları</string>
     <string name="page_numbers_hint">örn., 1-5, 8, 10-12</string>
     <string name="all_pages_label">Tüm Sayfalar (%d)</string>
@@ -1466,7 +1452,6 @@
     <string name="page_selection_all">Tüm sayfalar (1-%1$d)</string>
     <string name="page_selection_range">Sayfalar %1$d-%2$d</string>
     <string name="page_selection_custom">Sayfalar %1$s</string>
-    <string name="page_selection_custom_long">Sayfalar %1$s… (%2$d sayfa)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Yeniden sıralamak için sayfalara uzun basın ve sürükleyin</string>
@@ -1503,7 +1488,6 @@
 
     <!-- Image to PDF -->
     <string name="images_selected">%d görsel seçildi</string>
-    <string name="create_pdf_pages">PDF Oluştur (%d sayfa)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">Sol Alt</string>
@@ -1532,7 +1516,6 @@
     <string name="select_pages_to_remove_hint">Kaldırmak için sayfaları seçmek üzere dokunun</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$d sayfa • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1526,15 @@
     <string name="to_page">Bitiş</string>
     <string name="page_numbers_example">örn., 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Virgülle ayrılmış sayfa numaraları veya aralıkları girin</string>
-    <string name="files_selected_count">%1$d dosya seçildi</string>
     <string name="merge_empty_title">PDF Dosyalarını Birleştir</string>
     <string name="merge_empty_desc">Tek bir belgede birleştirmek için birden fazla PDF dosyası seçin</string>
-    <string name="file_size_pages">%1$s • %2$d sayfa</string>
-    <string name="pages_partial_format">%1$d/%2$d sayfa</string>
-    <string name="pages_all_format">Tüm %1$d sayfa</string>
     <string name="add_more_files">Daha fazla dosya ekle</string>
     <string name="saved_to_path">Kaydedildi: %1$s</string>
     <string name="merging_pdfs">PDF\'ler birleştiriliyor…</string>
     <string name="merge_complete">Birleştirme Tamamlandı!</string>
     <string name="merge_more_files">Daha Fazla Dosya Birleştir</string>
     <string name="select_pages">Sayfaları Seç</string>
-    <string name="total_pages_format">Toplam: %1$d sayfa</string>
     <string name="selection_mode">Seçim Modu</string>
-    <string name="all_pages_included">Tüm %1$d sayfa dahil edilecek</string>
     <string name="pages_range_info">%1$s ile %2$s arasındaki sayfalar dahil edilecek</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1546,6 @@
     <string name="extract_pages_help">Seçilen sayfalarla tek bir PDF oluşturur. Sayfalar: 1-%d</string>
     <string name="output_prefix_label">Çıktı öneki</string>
     <string name="split_another_pdf">Başka Bir PDF Böl</string>
-    <string name="pages_count_with_mode">%1$d sayfa • %2$s</string>
     <string name="split_empty_title">PDF Dosyasını Böl</string>
     <string name="split_empty_desc">Birden fazla parçaya bölmek veya belirli sayfaları çıkarmak için bir PDF dosyası seçin</string>
     <string name="split_mode_title">Bölme Modu</string>
@@ -1589,7 +1565,6 @@
     <string name="split_will_create_one_file_max">1 dosya oluşturulacak (maks: %1$d sayfa)</string>
     <string name="split_will_create_files_max">%1$d dosya oluşturulacak (maks: %2$d sayfa)</string>
     <string name="split_into_individual_pages">Tek tek sayfalara böl</string>
-    <string name="split_will_create_separate_pdfs">%1$d ayrı PDF dosyası oluşturulacak</string>
     <string name="split_will_create_one_page_pdf">1 sayfalı 1 PDF oluşturulacak</string>
     <string name="split_will_create_one_pdf_pages">%1$d sayfalı 1 PDF oluşturulacak</string>
     <string name="splitting_pdf">PDF bölünüyor…</string>
@@ -1684,4 +1659,104 @@
     <string name="no_browser_found">Bağlantıyı açmak için tarayıcı bulunamadı</string>
     <string name="choose_language">Uygulama dilini seçin</string>
     <string name="language_follow_system">Telefonun dilini kullan</string>
+    <plurals name="delete_count_files">
+        <item quantity="one">%d dosya silinsin mi?</item>
+        <item quantity="other">%d dosya silinsin mi?</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="one">%d vurgu</item>
+        <item quantity="other">%d vurgu</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="one">Bu, %d vurgunuzu yeni bir PDF dosyasına yazar, böylece diğer PDF okuyucularda da görünürler. Bu uygulamadaki vurgularınız her iki durumda da korunur.</item>
+        <item quantity="other">Bu, %d vurgunuzu yeni bir PDF dosyasına yazar, böylece diğer PDF okuyucularda da görünürler. Bu uygulamadaki vurgularınız her iki durumda da korunur.</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="one">%d vurgu kopyaya kaydedildi</item>
+        <item quantity="other">%d vurgu kopyaya kaydedildi</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="one">%1$d sayfa • %2$s</item>
+        <item quantity="other">%1$d sayfa • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="one">%1$d sayfa</item>
+        <item quantity="other">%1$d sayfa</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="one">%1$d sayfaya uygulandı</item>
+        <item quantity="other">%1$d sayfaya uygulandı</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="one">%1$d sayfa - %2$s</item>
+        <item quantity="other">%1$d sayfa - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="one">%1$d / %2$d sayfa numaralandırıldı</item>
+        <item quantity="other">%1$d / %2$d sayfa numaralandırıldı</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="one">%d sayfa</item>
+        <item quantity="other">%d sayfa</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="one">%1$d eşleşen vurgu</item>
+        <item quantity="other">%1$d eşleşen vurgu</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="one">%d dosya silinsin mi?</item>
+        <item quantity="other">%d dosya silinsin mi?</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="one">Tüm %d sayfa</item>
+        <item quantity="other">Tüm %d sayfa</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="one">%d sayfa • Değiştirildi</item>
+        <item quantity="other">%d sayfa • Değiştirildi</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="one">Sayfalar %1$s… (%2$d sayfa)</item>
+        <item quantity="other">Sayfalar %1$s… (%2$d sayfa)</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="one">PDF Oluştur (%d sayfa)</item>
+        <item quantity="other">PDF Oluştur (%d sayfa)</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="one">%1$d sayfa • %2$s</item>
+        <item quantity="other">%1$d sayfa • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="one">%1$d dosya seçildi</item>
+        <item quantity="other">%1$d dosya seçildi</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="one">%1$s • %2$d sayfa</item>
+        <item quantity="other">%1$s • %2$d sayfa</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="one">%1$d/%2$d sayfa</item>
+        <item quantity="other">%1$d/%2$d sayfa</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="one">Tüm %1$d sayfa</item>
+        <item quantity="other">Tüm %1$d sayfa</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="one">Toplam: %1$d sayfa</item>
+        <item quantity="other">Toplam: %1$d sayfa</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="one">Tüm %1$d sayfa dahil edilecek</item>
+        <item quantity="other">Tüm %1$d sayfa dahil edilecek</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="one">%1$d sayfa • %2$s</item>
+        <item quantity="other">%1$d sayfa • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="one">%1$d ayrı PDF dosyası oluşturulacak</item>
+        <item quantity="other">%1$d ayrı PDF dosyası oluşturulacak</item>
+    </plurals>
 </resources>

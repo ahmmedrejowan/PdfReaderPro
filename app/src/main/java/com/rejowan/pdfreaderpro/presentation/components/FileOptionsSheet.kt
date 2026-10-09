@@ -73,6 +73,7 @@ import com.rejowan.pdfreaderpro.domain.model.PdfFile
 import com.rejowan.pdfreaderpro.util.FormattingUtils
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors matching UI guide
 private val AccentAmber = Color(0xFFFFB74D)
@@ -419,7 +420,7 @@ private fun FileOptionsHeader(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
                 Text(
-                    text = stringResource(R.string.pages_count, pdfFile.pageCount),
+                    text = pluralStringResource(R.plurals.pages_count, pdfFile.pageCount, pdfFile.pageCount),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

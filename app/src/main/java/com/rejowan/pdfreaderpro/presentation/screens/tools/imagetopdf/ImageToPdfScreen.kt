@@ -86,6 +86,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors
 private val AccentTeal = Color(0xFF26A69A) // Image to PDF theme
@@ -509,7 +510,7 @@ private fun ConvertBottomSection(
         ) {
             Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_decorative))
             Spacer(modifier = Modifier.width(8.dp))
-            Text(stringResource(R.string.create_pdf_pages, imageCount))
+            Text(pluralStringResource(R.plurals.create_pdf_pages, imageCount, imageCount))
         }
     }
 }
@@ -593,7 +594,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
+                        pluralStringResource(R.plurals.pages_size_format, result.pageCount, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

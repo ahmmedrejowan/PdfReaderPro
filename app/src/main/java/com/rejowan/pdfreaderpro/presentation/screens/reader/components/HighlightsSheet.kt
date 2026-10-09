@@ -69,6 +69,7 @@ import com.rejowan.pdfreaderpro.data.mapper.asOpaqueSwatch
 import com.rejowan.pdfreaderpro.domain.model.Highlight
 import com.rejowan.pdfreaderpro.presentation.screens.reader.HighlightColors
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.res.pluralStringResource
 
 private val PANEL_WIDTH = 320.dp
 private val OUTER_CORNER = 20.dp
@@ -347,7 +348,7 @@ private fun HighlightsHeader(count: Int) {
                     text = if (count == 1) {
                         stringResource(R.string.highlight_count, count)
                     } else {
-                        stringResource(R.string.highlights_count, count)
+                        pluralStringResource(R.plurals.highlights_count, count, count)
                     },
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)

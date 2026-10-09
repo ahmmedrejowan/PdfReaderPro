@@ -94,6 +94,7 @@ import org.koin.androidx.compose.koinViewModel
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyGridState
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors
 private val AccentIndigo = Color(0xFF7986CB)  // Reorder theme color
@@ -129,7 +130,7 @@ fun ReorderScreen(
                         Text(stringResource(R.string.tool_reorder_pages))
                         state.sourceFile?.let { file ->
                             Text(
-                                if (state.hasChanges) stringResource(R.string.pages_modified, file.pageCount) else stringResource(R.string.pages_count, file.pageCount),
+                                if (state.hasChanges) pluralStringResource(R.plurals.pages_modified, file.pageCount, file.pageCount) else pluralStringResource(R.plurals.pages_count, file.pageCount, file.pageCount),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = if (state.hasChanges) AccentIndigo else MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -699,7 +700,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
+                        pluralStringResource(R.plurals.pages_size_format, result.pageCount, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

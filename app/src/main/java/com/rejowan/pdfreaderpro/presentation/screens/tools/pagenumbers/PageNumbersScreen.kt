@@ -100,6 +100,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors
 private val AccentOrange = Color(0xFFFF9800) // Page numbers theme color
@@ -1327,7 +1328,7 @@ private fun SuccessState(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            stringResource(R.string.numbered_pages_format, result.numberedPages, result.pageCount),
+            pluralStringResource(R.plurals.numbered_pages_format, result.pageCount, result.numberedPages, result.pageCount),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -1365,7 +1366,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
+                        pluralStringResource(R.plurals.pages_size_format, result.pageCount, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

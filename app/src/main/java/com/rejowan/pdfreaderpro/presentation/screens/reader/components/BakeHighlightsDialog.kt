@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
+import androidx.compose.ui.res.pluralStringResource
 
 /**
  * Confirms writing highlights into the PDF itself.
@@ -74,7 +75,7 @@ fun BakeHighlightsDialog(
         text = {
             Column {
                 Text(
-                    text = stringResource(R.string.bake_highlights_body, highlightCount),
+                    text = pluralStringResource(R.plurals.bake_highlights_body, highlightCount, highlightCount),
                     style = MaterialTheme.typography.bodyMedium
                 )
 

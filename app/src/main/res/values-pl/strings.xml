@@ -128,7 +128,6 @@
     <string name="no_recent">Brak ostatnich plików</string>
     <string name="add_favorites_hint">Dodaj pliki PDF do ulubionych, aby zobaczyć je tutaj</string>
     <string name="open_pdf_hint">Otwórz kilka plików PDF, aby zobaczyć je tutaj</string>
-    <string name="delete_count_files">Usunąć pliki (%d)?</string>
     <string name="delete_warning">Ta operacja jest nieodwracalna. Pliki zostaną trwale usunięte z urządzenia.</string>
 
     <!-- Folders Screen -->
@@ -294,18 +293,15 @@
     <string name="delete_highlight">Usuń wyróżnienie</string>
     <string name="highlight_page">Strona %d</string>
     <string name="highlight_count">%d wyróżnienie</string>
-    <string name="highlights_count">Wyróżnienia: %d</string>
     <string name="view_manage_highlights">Przeglądaj wyróżnienia i zarządzaj nimi</string>
     <string name="highlight_in_file">Zapisane w pliku</string>
     <string name="search_highlights">Szukaj w wyróżnieniach</string>
     <string name="save_with_highlights">Zapisz kopię z wyróżnieniami</string>
     <string name="save_with_highlights_desc">Zapisz wyróżnienia w nowym pliku PDF</string>
     <string name="bake_highlights_title">Zapisz kopię z wyróżnieniami</string>
-    <string name="bake_highlights_body">Spowoduje to zapisanie Twoich %d wyróżnień w nowym pliku PDF, dzięki czemu będą widoczne również w innych czytnikach PDF. Twoje wyróżnienia w tej aplikacji zostaną zachowane tak czy inaczej.</string>
     <string name="bake_highlights_caveat">Gdy plik PDF zawiera wyróżnienia, adnotacje tekstowe lub odręczne, niektóre funkcje edycji przestają działać. Wybierzesz miejsce zapisania kopii.</string>
     <string name="bake_highlights_confirm_check">Rozumiem, że tworzy to osobną kopię</string>
     <string name="bake_highlights_action">Zapisz kopię</string>
-    <string name="bake_highlights_done">Zapisano wyróżnienia w kopii: %d</string>
     <string name="bake_highlights_failed">Nie udało się zapisać kopii: %s</string>
     <string name="save_decrypted_copy">Zapisz kopię bez hasła</string>
     <string name="save_decrypted_copy_desc">Zapisz niezabezpieczoną kopię tego dokumentu</string>
@@ -459,7 +455,6 @@
     <string name="compress_high_desc">Maksymalna kompresja, mniejszy plik</string>
 
     <!-- Compress Screen -->
-    <string name="compress_page_info">%1$d str. • %2$s</string>
     <string name="compress_share_pdf">Udostępnij PDF</string>
     <string name="compress_empty_title">Skompresuj plik PDF</string>
     <string name="compress_empty_desc">Wybierz plik PDF, aby zmniejszyć jego rozmiar zachowując jakość</string>
@@ -474,7 +469,6 @@
     <string name="compressed_size">Rozmiar po kompresji</string>
     <string name="compressed_size_reduced">Rozmiar zmniejszony</string>
     <string name="saved_format">(zaoszczędzono %1$s)</string>
-    <string name="pages_count_format">%1$d str.</string>
 
     <!-- Rotate -->
     <string name="rotation">Obrót</string>
@@ -527,8 +521,6 @@
     <string name="position_center">Środek</string>
     <string name="position_tiled">Kafelkowy</string>
     <string name="watermark_added">Znak wodny dodany!</string>
-    <string name="applied_to_pages">Zastosowano do stron: %1$d</string>
-    <string name="pages_size_dash_format">%1$d str. - %2$s</string>
 
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Wybierz strony do usunięcia</string>
@@ -582,7 +574,6 @@
     <string name="title_page_selection_custom">Niestandardowe</string>
 
     <!-- Success -->
-    <string name="numbered_pages_format">Ponumerowano %1$d z %2$d stron</string>
     <string name="adding_numbers">Dodawanie numerów…</string>
 
     <!-- Images to PDF -->
@@ -879,7 +870,6 @@
     <string name="file_info_desc">Wyświetl szczegóły i właściwości pliku</string>
     <string name="delete_action">Usuń</string>
     <string name="delete_desc">Trwale usuń ten plik</string>
-    <string name="pages_count">%d str.</string>
     <string name="cd_toggle_scroll_direction">Przełącz kierunek przewijania</string>
     <string name="cd_fit_to_screen">Dopasuj do ekranu</string>
 
@@ -1145,7 +1135,6 @@
 
     <!-- Floating Search Bar -->
     <string name="search_in_document">Szukaj w dokumencie…</string>
-    <string name="cd_matching_highlights">Pasujące wyróżnienia: %1$d</string>
 
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Opcje widoku</string>
@@ -1190,7 +1179,6 @@
     <string name="delete_pdf">Usuń PDF</string>
 
     <!-- Folder Detail Screen -->
-    <string name="delete_files_count">Usunąć pliki (%d)?</string>
     <string name="delete_files_warning">Ta operacja jest nieodwracalna. Pliki zostaną trwale usunięte z urządzenia.</string>
 
     <!-- Settings Screen -->
@@ -1451,9 +1439,7 @@
     <string name="no_password_protection">Brak ochrony hasłem</string>
 
     <!-- Page Selection -->
-    <string name="all_pages_count">Wszystkie strony (%d)</string>
     <string name="selected_of_count">Wybrano %1$d z %2$d</string>
-    <string name="pages_modified">%d str. • Zmodyfikowano</string>
     <string name="page_numbers_label">Numery stron</string>
     <string name="page_numbers_hint">np. 1-5, 8, 10-12</string>
     <string name="all_pages_label">Wszystkie strony (%d)</string>
@@ -1466,7 +1452,6 @@
     <string name="page_selection_all">Wszystkie strony (1-%1$d)</string>
     <string name="page_selection_range">Strony %1$d-%2$d</string>
     <string name="page_selection_custom">Strony %1$s</string>
-    <string name="page_selection_custom_long">Strony %1$s… (%2$d str.)</string>
 
     <!-- Reorder -->
     <string name="drag_hint">Przytrzymaj i przeciągnij strony, aby zmienić kolejność</string>
@@ -1503,7 +1488,6 @@
 
     <!-- Image to PDF -->
     <string name="images_selected">Wybrane obrazy: %d</string>
-    <string name="create_pdf_pages">Utwórz PDF (%d str.)</string>
 
     <!-- Page Numbers -->
     <string name="position_bottom_left">Lewy dolny</string>
@@ -1532,7 +1516,6 @@
     <string name="select_pages_to_remove_hint">Dotknij stron, aby wybrać je do usunięcia</string>
 
     <!-- File Info in Results -->
-    <string name="pages_size_format">%1$d str. • %2$s</string>
 
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
@@ -1543,21 +1526,15 @@
     <string name="to_page">Do</string>
     <string name="page_numbers_example">np. 1, 3, 5-8, 12</string>
     <string name="page_numbers_help">Wprowadź numery stron lub zakresy oddzielone przecinkami</string>
-    <string name="files_selected_count">Wybrane pliki: %1$d</string>
     <string name="merge_empty_title">Scal pliki PDF</string>
     <string name="merge_empty_desc">Wybierz wiele plików PDF, aby połączyć je w jeden dokument</string>
-    <string name="file_size_pages">%1$s • %2$d str.</string>
-    <string name="pages_partial_format">%1$d/%2$d str.</string>
-    <string name="pages_all_format">Wszystkie strony (%1$d)</string>
     <string name="add_more_files">Dodaj więcej plików</string>
     <string name="saved_to_path">Zapisano w: %1$s</string>
     <string name="merging_pdfs">Scalanie plików PDF…</string>
     <string name="merge_complete">Scalanie zakończone!</string>
     <string name="merge_more_files">Scal więcej plików</string>
     <string name="select_pages">Wybierz strony</string>
-    <string name="total_pages_format">Liczba stron: %1$d</string>
     <string name="selection_mode">Tryb wyboru</string>
-    <string name="all_pages_included">Zostaną uwzględnione wszystkie strony (%1$d)</string>
     <string name="pages_range_info">Zostaną uwzględnione strony od %1$s do %2$s</string>
 
     <!-- Split Screen -->
@@ -1569,7 +1546,6 @@
     <string name="extract_pages_help">Tworzy pojedynczy plik PDF z wybranymi stronami. Strony: 1-%d</string>
     <string name="output_prefix_label">Prefiks wyjściowy</string>
     <string name="split_another_pdf">Podziel inny plik PDF</string>
-    <string name="pages_count_with_mode">%1$d str. • %2$s</string>
     <string name="split_empty_title">Podziel plik PDF</string>
     <string name="split_empty_desc">Wybierz plik PDF, aby podzielić go na wiele części lub wyodrębnić konkretne strony</string>
     <string name="split_mode_title">Tryb dzielenia</string>
@@ -1589,7 +1565,6 @@
     <string name="split_will_create_one_file_max">Utworzy 1 plik (maks.: %1$d str.)</string>
     <string name="split_will_create_files_max">Pliki do utworzenia: %1$d (maks.: %2$d str.)</string>
     <string name="split_into_individual_pages">Podziel na pojedyncze strony</string>
-    <string name="split_will_create_separate_pdfs">Pliki PDF do utworzenia: %1$d</string>
     <string name="split_will_create_one_page_pdf">Utworzy 1 PDF z 1 stroną</string>
     <string name="split_will_create_one_pdf_pages">Utworzy 1 PDF z %1$d stronami</string>
     <string name="splitting_pdf">Dzielenie pliku PDF…</string>
@@ -1686,4 +1661,154 @@
     <string name="no_browser_found">Nie znaleziono przeglądarki do otwarcia linku</string>
     <string name="choose_language">Wybierz język aplikacji</string>
     <string name="language_follow_system">Użyj języka telefonu</string>
+    <plurals name="delete_count_files">
+        <item quantity="one">Usunąć pliki (%d)?</item>
+        <item quantity="few">Usunąć pliki (%d)?</item>
+        <item quantity="many">Usunąć pliki (%d)?</item>
+        <item quantity="other">Usunąć pliki (%d)?</item>
+    </plurals>
+    <plurals name="highlights_count">
+        <item quantity="one">Wyróżnienia: %d</item>
+        <item quantity="few">Wyróżnienia: %d</item>
+        <item quantity="many">Wyróżnienia: %d</item>
+        <item quantity="other">Wyróżnienia: %d</item>
+    </plurals>
+    <plurals name="bake_highlights_body">
+        <item quantity="one">Spowoduje to zapisanie Twoich wyróżnień (%d) w nowym pliku PDF, dzięki czemu będą widoczne również w innych czytnikach PDF. Twoje wyróżnienia w tej aplikacji zostaną zachowane tak czy inaczej.</item>
+        <item quantity="few">Spowoduje to zapisanie Twoich wyróżnień (%d) w nowym pliku PDF, dzięki czemu będą widoczne również w innych czytnikach PDF. Twoje wyróżnienia w tej aplikacji zostaną zachowane tak czy inaczej.</item>
+        <item quantity="many">Spowoduje to zapisanie Twoich wyróżnień (%d) w nowym pliku PDF, dzięki czemu będą widoczne również w innych czytnikach PDF. Twoje wyróżnienia w tej aplikacji zostaną zachowane tak czy inaczej.</item>
+        <item quantity="other">Spowoduje to zapisanie Twoich wyróżnień (%d) w nowym pliku PDF, dzięki czemu będą widoczne również w innych czytnikach PDF. Twoje wyróżnienia w tej aplikacji zostaną zachowane tak czy inaczej.</item>
+    </plurals>
+    <plurals name="bake_highlights_done">
+        <item quantity="one">Zapisano wyróżnienia w kopii: %d</item>
+        <item quantity="few">Zapisano wyróżnienia w kopii: %d</item>
+        <item quantity="many">Zapisano wyróżnienia w kopii: %d</item>
+        <item quantity="other">Zapisano wyróżnienia w kopii: %d</item>
+    </plurals>
+    <plurals name="compress_page_info">
+        <item quantity="one">%1$d str. • %2$s</item>
+        <item quantity="few">%1$d str. • %2$s</item>
+        <item quantity="many">%1$d str. • %2$s</item>
+        <item quantity="other">%1$d str. • %2$s</item>
+    </plurals>
+    <plurals name="pages_count_format">
+        <item quantity="one">%1$d str.</item>
+        <item quantity="few">%1$d str.</item>
+        <item quantity="many">%1$d str.</item>
+        <item quantity="other">%1$d str.</item>
+    </plurals>
+    <plurals name="applied_to_pages">
+        <item quantity="one">Zastosowano do stron: %1$d</item>
+        <item quantity="few">Zastosowano do stron: %1$d</item>
+        <item quantity="many">Zastosowano do stron: %1$d</item>
+        <item quantity="other">Zastosowano do stron: %1$d</item>
+    </plurals>
+    <plurals name="pages_size_dash_format">
+        <item quantity="one">%1$d str. - %2$s</item>
+        <item quantity="few">%1$d str. - %2$s</item>
+        <item quantity="many">%1$d str. - %2$s</item>
+        <item quantity="other">%1$d str. - %2$s</item>
+    </plurals>
+    <plurals name="numbered_pages_format">
+        <item quantity="one">Ponumerowano strony: %1$d z %2$d</item>
+        <item quantity="few">Ponumerowano strony: %1$d z %2$d</item>
+        <item quantity="many">Ponumerowano strony: %1$d z %2$d</item>
+        <item quantity="other">Ponumerowano strony: %1$d z %2$d</item>
+    </plurals>
+    <plurals name="pages_count">
+        <item quantity="one">%d str.</item>
+        <item quantity="few">%d str.</item>
+        <item quantity="many">%d str.</item>
+        <item quantity="other">%d str.</item>
+    </plurals>
+    <plurals name="cd_matching_highlights">
+        <item quantity="one">Pasujące wyróżnienia: %1$d</item>
+        <item quantity="few">Pasujące wyróżnienia: %1$d</item>
+        <item quantity="many">Pasujące wyróżnienia: %1$d</item>
+        <item quantity="other">Pasujące wyróżnienia: %1$d</item>
+    </plurals>
+    <plurals name="delete_files_count">
+        <item quantity="one">Usunąć pliki (%d)?</item>
+        <item quantity="few">Usunąć pliki (%d)?</item>
+        <item quantity="many">Usunąć pliki (%d)?</item>
+        <item quantity="other">Usunąć pliki (%d)?</item>
+    </plurals>
+    <plurals name="all_pages_count">
+        <item quantity="one">Wszystkie strony (%d)</item>
+        <item quantity="few">Wszystkie strony (%d)</item>
+        <item quantity="many">Wszystkie strony (%d)</item>
+        <item quantity="other">Wszystkie strony (%d)</item>
+    </plurals>
+    <plurals name="pages_modified">
+        <item quantity="one">%d str. • Zmodyfikowano</item>
+        <item quantity="few">%d str. • Zmodyfikowano</item>
+        <item quantity="many">%d str. • Zmodyfikowano</item>
+        <item quantity="other">%d str. • Zmodyfikowano</item>
+    </plurals>
+    <plurals name="page_selection_custom_long">
+        <item quantity="one">Strony %1$s… (%2$d str.)</item>
+        <item quantity="few">Strony %1$s… (%2$d str.)</item>
+        <item quantity="many">Strony %1$s… (%2$d str.)</item>
+        <item quantity="other">Strony %1$s… (%2$d str.)</item>
+    </plurals>
+    <plurals name="create_pdf_pages">
+        <item quantity="one">Utwórz PDF (%d str.)</item>
+        <item quantity="few">Utwórz PDF (%d str.)</item>
+        <item quantity="many">Utwórz PDF (%d str.)</item>
+        <item quantity="other">Utwórz PDF (%d str.)</item>
+    </plurals>
+    <plurals name="pages_size_format">
+        <item quantity="one">%1$d str. • %2$s</item>
+        <item quantity="few">%1$d str. • %2$s</item>
+        <item quantity="many">%1$d str. • %2$s</item>
+        <item quantity="other">%1$d str. • %2$s</item>
+    </plurals>
+    <plurals name="files_selected_count">
+        <item quantity="one">Wybrane pliki: %1$d</item>
+        <item quantity="few">Wybrane pliki: %1$d</item>
+        <item quantity="many">Wybrane pliki: %1$d</item>
+        <item quantity="other">Wybrane pliki: %1$d</item>
+    </plurals>
+    <plurals name="file_size_pages">
+        <item quantity="one">%1$s • %2$d str.</item>
+        <item quantity="few">%1$s • %2$d str.</item>
+        <item quantity="many">%1$s • %2$d str.</item>
+        <item quantity="other">%1$s • %2$d str.</item>
+    </plurals>
+    <plurals name="pages_partial_format">
+        <item quantity="one">%1$d/%2$d str.</item>
+        <item quantity="few">%1$d/%2$d str.</item>
+        <item quantity="many">%1$d/%2$d str.</item>
+        <item quantity="other">%1$d/%2$d str.</item>
+    </plurals>
+    <plurals name="pages_all_format">
+        <item quantity="one">Wszystkie strony (%1$d)</item>
+        <item quantity="few">Wszystkie strony (%1$d)</item>
+        <item quantity="many">Wszystkie strony (%1$d)</item>
+        <item quantity="other">Wszystkie strony (%1$d)</item>
+    </plurals>
+    <plurals name="total_pages_format">
+        <item quantity="one">Liczba stron: %1$d</item>
+        <item quantity="few">Liczba stron: %1$d</item>
+        <item quantity="many">Liczba stron: %1$d</item>
+        <item quantity="other">Liczba stron: %1$d</item>
+    </plurals>
+    <plurals name="all_pages_included">
+        <item quantity="one">Zostaną uwzględnione wszystkie strony (%1$d)</item>
+        <item quantity="few">Zostaną uwzględnione wszystkie strony (%1$d)</item>
+        <item quantity="many">Zostaną uwzględnione wszystkie strony (%1$d)</item>
+        <item quantity="other">Zostaną uwzględnione wszystkie strony (%1$d)</item>
+    </plurals>
+    <plurals name="pages_count_with_mode">
+        <item quantity="one">%1$d str. • %2$s</item>
+        <item quantity="few">%1$d str. • %2$s</item>
+        <item quantity="many">%1$d str. • %2$s</item>
+        <item quantity="other">%1$d str. • %2$s</item>
+    </plurals>
+    <plurals name="split_will_create_separate_pdfs">
+        <item quantity="one">Pliki PDF do utworzenia: %1$d</item>
+        <item quantity="few">Pliki PDF do utworzenia: %1$d</item>
+        <item quantity="many">Pliki PDF do utworzenia: %1$d</item>
+        <item quantity="other">Pliki PDF do utworzenia: %1$d</item>
+    </plurals>
 </resources>

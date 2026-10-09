@@ -68,6 +68,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.res.pluralStringResource
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentBlue = Color(0xFF64B5F6)
@@ -262,7 +263,7 @@ private fun PdfInfoContent(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             StatChip(
-                label = stringResource(R.string.pages_count, info.pageCount),
+                label = pluralStringResource(R.plurals.pages_count, info.pageCount, info.pageCount),
                 color = AccentBlue,
                 modifier = Modifier.weight(1f)
             )

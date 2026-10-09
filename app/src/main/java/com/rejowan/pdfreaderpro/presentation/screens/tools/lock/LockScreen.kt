@@ -89,6 +89,7 @@ import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors
 private val AccentAmber = Color(0xFFFFB74D)  // Lock theme color
@@ -122,7 +123,7 @@ fun LockScreen(
                         Text(stringResource(R.string.tool_lock_pdf))
                         state.sourceFile?.let { file ->
                             Text(
-                                stringResource(R.string.pages_count, file.pageCount),
+                                pluralStringResource(R.plurals.pages_count, file.pageCount, file.pageCount),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -575,7 +576,7 @@ private fun SourceFileCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_size_format, sourceFile.pageCount, formatFileSize(sourceFile.size)),
+                        pluralStringResource(R.plurals.pages_size_format, sourceFile.pageCount, sourceFile.pageCount, formatFileSize(sourceFile.size)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -784,7 +785,7 @@ private fun SuccessState(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
+                        pluralStringResource(R.plurals.pages_size_format, result.pageCount, result.pageCount, formatFileSize(result.fileSize)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

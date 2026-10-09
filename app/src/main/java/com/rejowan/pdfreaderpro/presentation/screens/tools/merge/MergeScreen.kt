@@ -113,6 +113,7 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.res.pluralStringResource
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)    // Primary actions (merge)
@@ -170,7 +171,7 @@ fun MergeScreen(
                         Text(stringResource(R.string.tool_merge_pdfs))
                         if (state.selectedFiles.isNotEmpty()) {
                             Text(
-                                stringResource(R.string.files_selected_count, state.selectedFiles.size),
+                                pluralStringResource(R.plurals.files_selected_count, state.selectedFiles.size, state.selectedFiles.size),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -520,7 +521,7 @@ private fun MergeFileItem(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        stringResource(R.string.file_size_pages, formatFileSize(file.size), file.pageCount),
+                        pluralStringResource(R.plurals.file_size_pages, file.pageCount, formatFileSize(file.size), file.pageCount),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -564,9 +565,9 @@ private fun MergeFileItem(
                 ActionChip(
                     icon = Icons.Default.Pages,
                     label = if (isPartialSelection) {
-                        stringResource(R.string.pages_partial_format, selectedPageCount, file.pageCount)
+                        pluralStringResource(R.plurals.pages_partial_format, file.pageCount, selectedPageCount, file.pageCount)
                     } else {
-                        stringResource(R.string.pages_all_format, file.pageCount)
+                        pluralStringResource(R.plurals.pages_all_format, file.pageCount, file.pageCount)
                     },
                     color = AccentAmber,
                     isHighlighted = isPartialSelection,
@@ -939,7 +940,7 @@ private fun SuccessState(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    stringResource(R.string.pages_size_format, result.pageCount, formatFileSize(result.fileSize)),
+                    pluralStringResource(R.plurals.pages_size_format, result.pageCount, result.pageCount, formatFileSize(result.fileSize)),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1283,7 +1284,7 @@ private fun PageSelectionContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    stringResource(R.string.total_pages_format, file.pageCount),
+                    pluralStringResource(R.plurals.total_pages_format, file.pageCount, file.pageCount),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -1366,7 +1367,7 @@ private fun PageSelectionContent(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            stringResource(R.string.all_pages_included, file.pageCount),
+                            pluralStringResource(R.plurals.all_pages_included, file.pageCount, file.pageCount),
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Medium
                             ),
