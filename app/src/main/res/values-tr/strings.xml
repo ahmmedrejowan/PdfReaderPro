@@ -1680,6 +1680,6 @@
     <string name="copy_details">Ayrıntıları kopyala</string>
     <string name="crash_details_copied">Çökme ayrıntıları kopyalandı</string>
     <string name="crash_report_subject">PDF Reader Pro çökme raporu</string>
-    <string name="report_on_github">GitHub'da bildir</string>
+    <string name="report_on_github">GitHub\'da bildir</string>
     <string name="no_browser_found">Bağlantıyı açmak için tarayıcı bulunamadı</string>
 </resources>
