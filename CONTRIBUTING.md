@@ -63,6 +63,19 @@ app/src/main/java/com/rejowan/pdfreaderpro/
 └── util/            # Helpers
 ```
 
+## Releasing (maintainers)
+
+Every release, full or pre-release, starts with a docs commit as the last commit before it. That commit updates everything a version change touches:
+
+- `versionName` and `versionCode` in `app/build.gradle.kts` (the code goes up for every release, pre-releases included)
+- a new `## [x.y.z] - YYYY-MM-DD` entry at the top of `CHANGELOG.md`, below `[Unreleased]`, such as `## [2.5.0]` or `## [2.5.0-beta.1]`
+- the in-app changelog (`ChangelogContent` in `SettingsScreenContent.kt`)
+- the changelog section of every README
+
+Then run **Actions > Release > Run workflow** and pick **Full release** or **Pre-release**. Nothing else is typed in: the version is the newest `CHANGELOG.md` entry and its text becomes the release's What's New. If that version is already released, the run skips without building anything.
+
+Full releases are marked Latest and offered by the in-app update check. Pre-releases are signed the same way but are never offered to users, since the update check only looks at the latest full release.
+
 ## Questions?
 
 - Need help? Ask in [Discussions Q&A](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/categories/q-a)

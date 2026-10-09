@@ -224,6 +224,19 @@ GNU General Public License for more details.
 
 ## Changelog
 
+### v2.5.0 (2026-10-09)
+
+- Sign documents by drawing, typing or picking an image of your signature, from the reader or Tools
+- Signatures are kept per document, managed from one sheet, and written into the file or a copy
+- Russian, German, Spanish, French, Italian and Portuguese translations (#91, #93, #95)
+- Choose the app's language in Android's per-app language setting
+- Translators like Google Translate appear in the text selection menu (#78)
+- Print progress, and saving a copy without the password
+- Crash screen with full details to copy, share or report on GitHub
+- Fixed Japanese, Chinese and Korean PDFs that showed an error instead of opening (#89)
+- Fixed Document Info crashing in landscape and the page slider covering the menu button (#80, #79)
+- Updated core libraries (Kotlin 2.4.20, AGP 9.4.1, Gradle 9.8.0)
+
 ### v2.4.0 (2026-08-15)
 
 - Highlight text in five colours, saved per document (#41)
