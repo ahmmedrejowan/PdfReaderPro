@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Back to Page** - After Go to page, the contents, a bookmark or a link inside the document, a chip below the top bar takes you back to the page you left (#88)
-- **Tools from the Reader** - PDF Tools in the reader's More Options opens split, compress, rotate and the other tools on the open document (#105)
+- **Tools from the Reader** - PDF Tools in the reader's More Options opens split, compress, rotate and the other tools on the open document; with Overwrite Original, the tool safely replaces the document itself (#105)
 - **Hide Hidden Files** - A setting to leave out files and folders whose names start with a dot (#6)
 - **Keep Image Colors** - In the Dark and Black reading themes, pictures can keep their own colors instead of being inverted; switch it on in Display Settings (#87)
 
