@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [2.6.0] - 2026-10-23
+
 ### Added
 - **Back to Page** - After Go to page, the contents, a bookmark or a link inside the document, a chip below the top bar takes you back to the page you left (#88)
 - **Tools from the Reader** - PDF Tools in the reader's More Options opens split, compress, rotate and the other tools on the open document (#105)

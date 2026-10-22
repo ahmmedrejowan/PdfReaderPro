@@ -227,6 +227,18 @@ GNU General Public License for more details.
 
 ## Journal des modifications
 
+### v2.6.0 (23/10/2026)
+
+- Retour à la page : après un saut, une puce ramène à la page quittée (#88)
+- Ouvrir les outils PDF depuis le lecteur sur le document ouvert (#105)
+- Conserver les couleurs des images avec les thèmes Sombre et Noir (#87)
+- Option pour masquer les fichiers et dossiers dont le nom commence par un point (#6)
+- Les documents courts s'affichent au centre de l'écran (#105)
+- Corrigé : la première page et les sauts ne passent plus sous la barre du haut (#105)
+- Corrigé : les fichiers signés ne disparaissent plus du sélecteur de fichiers des autres applis
+- Corrigé : les décomptes d'un seul élément (« 1 page »), et Retour ferme les panneaux latéraux en paysage
+- Corrigé : Réessayer sur l'écran Fusionner dans toutes les langues
+
 ### v2.5.0 (09/10/2026)
 
 - Signez vos documents en dessinant, en tapant ou en choisissant une image de votre signature, depuis le lecteur ou les Outils

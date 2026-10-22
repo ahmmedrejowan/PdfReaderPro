@@ -227,6 +227,18 @@ GNU General Public License for more details.
 
 ## Registro de cambios
 
+### v2.6.0 (23/10/2026)
+
+- Volver a la página: tras un salto, un botón te lleva a la página que dejaste (#88)
+- Abre las herramientas PDF desde el lector con el documento abierto (#105)
+- Mantener los colores de las imágenes en los temas Oscuro y Negro (#87)
+- Ajuste para ocultar archivos y carpetas cuyo nombre empieza por un punto (#6)
+- Los documentos cortos se muestran en el centro de la pantalla (#105)
+- Corregido: la primera página y los saltos ya no quedan bajo la barra superior (#105)
+- Corregido: los archivos firmados ya no desaparecen del selector de archivos de otras apps
+- Corregidos los recuentos de un solo elemento («1 página»), y Atrás cierra los paneles laterales en horizontal
+- Corregido Reintentar en la pantalla Combinar en todos los idiomas
+
 ### v2.5.0 (09/10/2026)
 
 - Firma documentos dibujando, escribiendo o eligiendo una imagen de tu firma, desde el lector o desde Herramientas

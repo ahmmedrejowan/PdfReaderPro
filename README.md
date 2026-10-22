@@ -227,6 +227,18 @@ GNU General Public License for more details.
 
 ## Changelog
 
+### v2.6.0 (2026-10-23)
+
+- Back to page: after a jump, a chip takes you back to the page you left (#88)
+- Open the PDF tools from the reader on the open document (#105)
+- Keep image colors in the Dark and Black reading themes (#87)
+- A setting to hide files and folders whose names start with a dot (#6)
+- Short documents sit in the middle of the screen (#105)
+- Fixed the first page and jumps landing under the top bar (#105)
+- Fixed signed files disappearing from other apps' file pickers
+- Fixed counts for a single item ("1 page"), and Back now closes side panels in landscape
+- Fixed Retry on the Merge screen in every language
+
 ### v2.5.0 (2026-10-09)
 
 - Sign documents by drawing, typing or picking an image of your signature, from the reader or Tools
