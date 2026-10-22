@@ -764,9 +764,11 @@ fun ReaderScreen(
         DisplaySheet(
             brightness = state.brightness,
             keepScreenOn = state.keepScreenOn,
+            keepImageColors = state.keepImageColors,
             currentTheme = state.readingTheme,
             onBrightnessChange = { viewModel.onAction(ReaderAction.SetBrightness(it)) },
             onKeepScreenOnChange = { viewModel.onAction(ReaderAction.SetKeepScreenOn(it)) },
+            onKeepImageColorsChange = { viewModel.onAction(ReaderAction.SetKeepImageColors(it)) },
             onThemeChange = { viewModel.onAction(ReaderAction.SetReadingTheme(it)) },
             onDismiss = { viewModel.onAction(ReaderAction.HideDisplaySheet) }
         )

@@ -995,6 +995,8 @@
     <string name="low_brightness">Brillo bajo</string>
     <string name="high_brightness">Brillo alto</string>
     <string name="prevent_screen_off">Evitar que la pantalla se apague</string>
+    <string name="keep_image_colors">Mantener colores de imágenes</string>
+    <string name="keep_image_colors_desc">Mostrar las imágenes con sus colores reales</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Ir a la página</string>

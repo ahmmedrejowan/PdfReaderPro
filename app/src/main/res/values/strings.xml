@@ -995,6 +995,8 @@
     <string name="low_brightness">Low brightness</string>
     <string name="high_brightness">High brightness</string>
     <string name="prevent_screen_off">Prevent screen from turning off</string>
+    <string name="keep_image_colors">Keep Image Colors</string>
+    <string name="keep_image_colors_desc">Show pictures in their real colors</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Jump to Page</string>

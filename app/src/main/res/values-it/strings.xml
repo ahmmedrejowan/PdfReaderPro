@@ -995,6 +995,8 @@
     <string name="low_brightness">Luminosità bassa</string>
     <string name="high_brightness">Luminosità alta</string>
     <string name="prevent_screen_off">Impedisci lo spegnimento dello schermo</string>
+    <string name="keep_image_colors">Mantieni i colori delle immagini</string>
+    <string name="keep_image_colors_desc">Mostra le immagini con i loro colori reali</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Vai alla pagina</string>

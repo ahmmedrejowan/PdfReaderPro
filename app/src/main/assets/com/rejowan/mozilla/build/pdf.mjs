@@ -9201,6 +9201,10 @@ class CanvasGraphics {
     }
     const scaled = this._scaleImage(imgToPaint, getCurrentTransformInverse(ctx));
     ctx.imageSmoothingEnabled = getImageSmoothingEnabled(getCurrentTransform(ctx), imgData.interpolate);
+    // PDF Reader Pro: see pdfReaderImageFilter in helper_methods.js.
+    if (globalThis.pdfReaderImageFilter) {
+      ctx.filter = globalThis.pdfReaderImageFilter;
+    }
     drawImageAtIntegerCoords(ctx, scaled.img, 0, 0, scaled.paintWidth, scaled.paintHeight, 0, -height, width, height);
     this.compose();
     this.restore();
@@ -9225,6 +9229,10 @@ class CanvasGraphics {
       ctx.save();
       ctx.transform(...entry.transform);
       ctx.scale(1, -1);
+      // PDF Reader Pro: see pdfReaderImageFilter in helper_methods.js.
+      if (globalThis.pdfReaderImageFilter) {
+        ctx.filter = globalThis.pdfReaderImageFilter;
+      }
       drawImageAtIntegerCoords(ctx, imgToPaint, entry.x, entry.y, entry.w, entry.h, 0, -1, 1, 1);
       ctx.restore();
     }

@@ -995,6 +995,8 @@
     <string name="low_brightness">Низкая яркость</string>
     <string name="high_brightness">Высокая яркость</string>
     <string name="prevent_screen_off">Не выключать экран</string>
+    <string name="keep_image_colors">Сохранять цвета изображений</string>
+    <string name="keep_image_colors_desc">Показывать изображения в настоящих цветах</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Перейти к странице</string>

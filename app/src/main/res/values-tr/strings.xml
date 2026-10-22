@@ -995,6 +995,8 @@
     <string name="low_brightness">Düşük parlaklık</string>
     <string name="high_brightness">Yüksek parlaklık</string>
     <string name="prevent_screen_off">Ekranın kapanmasını önle</string>
+    <string name="keep_image_colors">Görsel renklerini koru</string>
+    <string name="keep_image_colors_desc">Görselleri gerçek renkleriyle göster</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Sayfaya Git</string>

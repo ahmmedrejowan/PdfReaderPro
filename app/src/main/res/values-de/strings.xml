@@ -995,6 +995,8 @@
     <string name="low_brightness">Niedrige Helligkeit</string>
     <string name="high_brightness">Hohe Helligkeit</string>
     <string name="prevent_screen_off">Ausschalten des Bildschirms verhindern</string>
+    <string name="keep_image_colors">Bildfarben beibehalten</string>
+    <string name="keep_image_colors_desc">Bilder in ihren echten Farben anzeigen</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Zu Seite springen</string>

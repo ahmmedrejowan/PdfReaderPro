@@ -995,6 +995,8 @@
     <string name="low_brightness">低い明るさ</string>
     <string name="high_brightness">高い明るさ</string>
     <string name="prevent_screen_off">画面がオフになるのを防ぐ</string>
+    <string name="keep_image_colors">画像の色を保持</string>
+    <string name="keep_image_colors_desc">画像を本来の色で表示します</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">ページへ移動</string>

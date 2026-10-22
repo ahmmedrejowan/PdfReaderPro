@@ -995,6 +995,8 @@
     <string name="low_brightness">Brilho baixo</string>
     <string name="high_brightness">Brilho alto</string>
     <string name="prevent_screen_off">Impedir que o ecrã se desligue</string>
+    <string name="keep_image_colors">Manter as cores das imagens</string>
+    <string name="keep_image_colors_desc">Mostrar as imagens nas cores reais</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Ir para a página</string>

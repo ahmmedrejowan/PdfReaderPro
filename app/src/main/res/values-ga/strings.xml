@@ -996,6 +996,8 @@
     <string name="low_brightness">Gile íseal</string>
     <string name="high_brightness">Gile ard</string>
     <string name="prevent_screen_off">Cuir cosc ar an scáileán dul as</string>
+    <string name="keep_image_colors">Coinnigh dathanna na n-íomhánna</string>
+    <string name="keep_image_colors_desc">Taispeáin íomhánna ina bhfíordhathanna</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Léim go Leathanach</string>

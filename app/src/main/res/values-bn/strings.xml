@@ -845,6 +845,8 @@
     <string name="low_brightness">কম ব্রাইটনেস</string>
     <string name="high_brightness">বেশি ব্রাইটনেস</string>
     <string name="prevent_screen_off">স্ক্রিন বন্ধ হতে দেবেন না</string>
+    <string name="keep_image_colors">ছবির রঙ ঠিক রাখুন</string>
+    <string name="keep_image_colors_desc">ছবি আসল রঙে দেখান</string>
     <string name="jump_to_page_title">পেজে যান</string>
     <string name="enter_page_range">একটি পেজ নম্বর লিখুন (1 - %d)</string>
     <string name="page_number_placeholder">পেজ নম্বর</string>

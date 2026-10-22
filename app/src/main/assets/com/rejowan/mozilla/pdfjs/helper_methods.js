@@ -345,7 +345,32 @@ function selectSpreadEven() {
 }
 
 // Reading theme functions
+let currentReadingTheme = 'light';
+let keepImageColors = false;
+
+/**
+ * The dark and black themes invert whole pages, pictures included. To show
+ * pictures in their own colors, PDF.js (build/pdf.mjs, patched) draws each one
+ * through pdfReaderImageFilter, an inversion that the page's filter undoes.
+ */
+function updateImageFilter() {
+    const inverting = currentReadingTheme === 'dark' || currentReadingTheme === 'black';
+    const filter = keepImageColors && inverting ? 'invert(1) hue-rotate(180deg)' : null;
+    if ((globalThis.pdfReaderImageFilter || null) === filter) return;
+    globalThis.pdfReaderImageFilter = filter;
+    // Pages already drawn keep their old pixels until they render again.
+    PDFViewerApplication.pdfViewer?.refresh();
+}
+
+function setKeepImageColors(keep) {
+    keepImageColors = keep;
+    updateImageFilter();
+}
+
 function setReadingTheme(theme) {
+    currentReadingTheme = theme;
+    updateImageFilter();
+
     const viewer = document.getElementById('viewer');
     const viewerContainer = document.getElementById('viewerContainer');
 

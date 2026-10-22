@@ -995,6 +995,8 @@
     <string name="low_brightness">Niska jasność</string>
     <string name="high_brightness">Wysoka jasność</string>
     <string name="prevent_screen_off">Zapobiegaj wyłączaniu ekranu</string>
+    <string name="keep_image_colors">Zachowaj kolory obrazów</string>
+    <string name="keep_image_colors_desc">Pokazuj obrazy w ich prawdziwych kolorach</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Przejdź do strony</string>

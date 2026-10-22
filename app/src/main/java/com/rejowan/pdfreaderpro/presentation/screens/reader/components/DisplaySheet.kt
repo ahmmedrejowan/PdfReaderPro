@@ -40,6 +40,7 @@ import androidx.compose.material.icons.rounded.Brightness6
 import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.BrightnessMedium
+import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.runtime.mutableFloatStateOf
@@ -67,6 +68,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -79,15 +81,18 @@ import androidx.activity.compose.BackHandler
 
 // Design colors
 private val AccentAmber = Color(0xFFFFB74D)
+private val AccentTeal = Color(0xFF4DB6AC)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplaySheet(
     brightness: Float,
     keepScreenOn: Boolean,
+    keepImageColors: Boolean,
     currentTheme: ReadingTheme,
     onBrightnessChange: (Float) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
+    onKeepImageColorsChange: (Boolean) -> Unit,
     onThemeChange: (ReadingTheme) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -99,9 +104,11 @@ fun DisplaySheet(
         DisplaySideSheet(
             brightness = brightness,
             keepScreenOn = keepScreenOn,
+            keepImageColors = keepImageColors,
             currentTheme = currentTheme,
             onBrightnessChange = onBrightnessChange,
             onKeepScreenOnChange = onKeepScreenOnChange,
+            onKeepImageColorsChange = onKeepImageColorsChange,
             onThemeChange = onThemeChange,
             onDismiss = onDismiss
         )
@@ -110,9 +117,11 @@ fun DisplaySheet(
         DisplayBottomSheet(
             brightness = brightness,
             keepScreenOn = keepScreenOn,
+            keepImageColors = keepImageColors,
             currentTheme = currentTheme,
             onBrightnessChange = onBrightnessChange,
             onKeepScreenOnChange = onKeepScreenOnChange,
+            onKeepImageColorsChange = onKeepImageColorsChange,
             onThemeChange = onThemeChange,
             onDismiss = onDismiss
         )
@@ -124,9 +133,11 @@ fun DisplaySheet(
 private fun DisplayBottomSheet(
     brightness: Float,
     keepScreenOn: Boolean,
+    keepImageColors: Boolean,
     currentTheme: ReadingTheme,
     onBrightnessChange: (Float) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
+    onKeepImageColorsChange: (Boolean) -> Unit,
     onThemeChange: (ReadingTheme) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -142,9 +153,11 @@ private fun DisplayBottomSheet(
         DisplaySheetContent(
             brightness = brightness,
             keepScreenOn = keepScreenOn,
+            keepImageColors = keepImageColors,
             currentTheme = currentTheme,
             onBrightnessChange = onBrightnessChange,
             onKeepScreenOnChange = onKeepScreenOnChange,
+            onKeepImageColorsChange = onKeepImageColorsChange,
             onThemeChange = onThemeChange,
             modifier = Modifier.padding(bottom = 24.dp)
         )
@@ -155,9 +168,11 @@ private fun DisplayBottomSheet(
 private fun DisplaySideSheet(
     brightness: Float,
     keepScreenOn: Boolean,
+    keepImageColors: Boolean,
     currentTheme: ReadingTheme,
     onBrightnessChange: (Float) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
+    onKeepImageColorsChange: (Boolean) -> Unit,
     onThemeChange: (ReadingTheme) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -216,9 +231,11 @@ private fun DisplaySideSheet(
                 DisplaySheetContent(
                     brightness = brightness,
                     keepScreenOn = keepScreenOn,
+                    keepImageColors = keepImageColors,
                     currentTheme = currentTheme,
                     onBrightnessChange = onBrightnessChange,
                     onKeepScreenOnChange = onKeepScreenOnChange,
+                    onKeepImageColorsChange = onKeepImageColorsChange,
                     onThemeChange = onThemeChange,
                     modifier = Modifier
                         .fillMaxSize()
@@ -237,9 +254,11 @@ private fun DisplaySideSheet(
 private fun DisplaySheetContent(
     brightness: Float,
     keepScreenOn: Boolean,
+    keepImageColors: Boolean,
     currentTheme: ReadingTheme,
     onBrightnessChange: (Float) -> Unit,
     onKeepScreenOnChange: (Boolean) -> Unit,
+    onKeepImageColorsChange: (Boolean) -> Unit,
     onThemeChange: (ReadingTheme) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -264,6 +283,20 @@ private fun DisplaySheetContent(
             animationDelay = 50
         )
 
+        // Only the inverting themes change image colors.
+        if (currentTheme == ReadingTheme.DARK || currentTheme == ReadingTheme.BLACK) {
+            Spacer(modifier = Modifier.height(8.dp))
+            ToggleRow(
+                icon = Icons.Rounded.Image,
+                title = stringResource(R.string.keep_image_colors),
+                subtitle = stringResource(R.string.keep_image_colors_desc),
+                checked = keepImageColors,
+                onCheckedChange = onKeepImageColorsChange,
+                accent = AccentTeal,
+                animationDelay = 0
+            )
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         Spacer(modifier = Modifier.height(12.dp))
@@ -284,9 +317,13 @@ private fun DisplaySheetContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         // Keep Screen On Toggle
-        KeepScreenOnRow(
-            keepScreenOn = keepScreenOn,
-            onKeepScreenOnChange = onKeepScreenOnChange,
+        ToggleRow(
+            icon = Icons.Rounded.BrightnessMedium,
+            title = stringResource(R.string.keep_screen_on),
+            subtitle = stringResource(R.string.prevent_screen_off),
+            checked = keepScreenOn,
+            onCheckedChange = onKeepScreenOnChange,
+            accent = AccentAmber,
             animationDelay = 250
         )
     }
@@ -796,9 +833,13 @@ private fun BrightnessSlider(
 }
 
 @Composable
-private fun KeepScreenOnRow(
-    keepScreenOn: Boolean,
-    onKeepScreenOnChange: (Boolean) -> Unit,
+private fun ToggleRow(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    accent: Color,
     animationDelay: Int,
     modifier: Modifier = Modifier
 ) {
@@ -812,7 +853,7 @@ private fun KeepScreenOnRow(
     val scale by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0.95f,
         animationSpec = tween(250, easing = FastOutSlowInEasing),
-        label = "keep screen scale"
+        label = "toggle row scale"
     )
 
     Surface(
@@ -830,7 +871,7 @@ private fun KeepScreenOnRow(
         ) {
             Surface(
                 shape = CircleShape,
-                color = AccentAmber.copy(alpha = 0.12f),
+                color = accent.copy(alpha = 0.12f),
                 modifier = Modifier.size(32.dp)
             ) {
                 Box(
@@ -838,9 +879,9 @@ private fun KeepScreenOnRow(
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.BrightnessMedium,
+                        imageVector = icon,
                         contentDescription = stringResource(R.string.cd_decorative),
-                        tint = AccentAmber,
+                        tint = accent,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -850,25 +891,25 @@ private fun KeepScreenOnRow(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = stringResource(R.string.keep_screen_on),
+                    text = title,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = stringResource(R.string.prevent_screen_off),
+                    text = subtitle,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
 
             Switch(
-                checked = keepScreenOn,
-                onCheckedChange = onKeepScreenOnChange,
+                checked = checked,
+                onCheckedChange = onCheckedChange,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = AccentAmber,
-                    checkedTrackColor = AccentAmber.copy(alpha = 0.5f)
+                    checkedThumbColor = accent,
+                    checkedTrackColor = accent.copy(alpha = 0.5f)
                 )
             )
         }

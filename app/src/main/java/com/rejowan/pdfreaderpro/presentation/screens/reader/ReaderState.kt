@@ -133,6 +133,9 @@ data class ReaderState(
     // Show the page scrubber on scroll while the toolbar is hidden
     val scrubberOnScroll: Boolean = false,
 
+    // In the dark and black themes, show images in their own colors
+    val keepImageColors: Boolean = false,
+
     // Tap the sides of the page to move between pages
     val tapToTurnPage: Boolean = false,
 
@@ -391,6 +394,7 @@ sealed class ReaderAction {
     data class SetReadingTheme(val theme: ReadingTheme) : ReaderAction()
     data class SetAutoHideToolbar(val enabled: Boolean) : ReaderAction()
     data class SetScrubberOnScroll(val enabled: Boolean) : ReaderAction()
+    data class SetKeepImageColors(val enabled: Boolean) : ReaderAction()
     data class SetTapToTurnPage(val enabled: Boolean) : ReaderAction()
     data class SetLockHorizontalScroll(val enabled: Boolean) : ReaderAction()
     data class OpenLink(val url: String) : ReaderAction()

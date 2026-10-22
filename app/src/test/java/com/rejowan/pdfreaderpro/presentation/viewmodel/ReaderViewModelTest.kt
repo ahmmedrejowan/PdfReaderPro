@@ -3053,4 +3053,18 @@ class ReaderViewModelTest {
     }
     // endregion
 
+    // region Image colors in the dark themes
+    @Test
+    fun `keeping image colors is saved and sent to the viewer`() = runTest {
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.onAction(ReaderAction.SetKeepImageColors(true))
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.keepImageColors)
+        verify { viewer.ui.setKeepImageColors(true) }
+        coVerify { preferencesRepository.setReaderKeepImageColors(true) }
+    }
+    // endregion
 }

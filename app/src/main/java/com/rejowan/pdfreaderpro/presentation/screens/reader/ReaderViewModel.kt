@@ -154,6 +154,7 @@ class ReaderViewModel(
                     readingTheme = mapDomainReadingTheme(prefs.readerTheme),
                     autoHideToolbar = prefs.readerAutoHideToolbar,
                     scrubberOnScroll = prefs.readerScrubberOnScroll,
+                    keepImageColors = prefs.readerKeepImageColors,
                     tapToTurnPage = prefs.readerTapToTurnPage,
                     keepScreenOn = prefs.readerKeepScreenOn,
                     isSnapEnabled = prefs.readerSnapToPages,
@@ -437,6 +438,7 @@ class ReaderViewModel(
                     DomainReadingTheme.DARK -> "dark"
                     DomainReadingTheme.BLACK -> "black"
                 }
+                viewer.ui.setKeepImageColors(prefs.readerKeepImageColors)
                 viewer.ui.setReadingTheme(themeName)
 
                 // Apply snap to pages
@@ -1024,6 +1026,14 @@ class ReaderViewModel(
                 _state.update { it.copy(autoHideToolbar = action.enabled) }
                 viewModelScope.launch {
                     preferencesRepository.setReaderAutoHideToolbar(action.enabled)
+                }
+            }
+
+            is ReaderAction.SetKeepImageColors -> {
+                _state.update { it.copy(keepImageColors = action.enabled) }
+                pdfViewer?.ui?.setKeepImageColors(action.enabled)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderKeepImageColors(action.enabled)
                 }
             }
 
