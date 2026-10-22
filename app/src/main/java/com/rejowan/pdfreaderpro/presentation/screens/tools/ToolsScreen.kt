@@ -99,7 +99,7 @@ data class PdfTool(
     val isEnabled: Boolean = false
 )
 
-private val pdfTools = listOf(
+internal val pdfTools = listOf(
     PdfTool(
         "merge",
         R.string.tool_merge_pdfs,

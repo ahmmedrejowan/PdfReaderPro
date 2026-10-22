@@ -79,6 +79,18 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorStat
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingControlBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingSearchBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReturnToPageChip
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderToolsSheet
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToUnlockTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRemovePagesTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToWatermarkTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPageNumbersTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPdfToImageTool
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageScrubber
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
@@ -868,6 +880,31 @@ fun ReaderScreen(
         )
     }
 
+    // Tools for this document, from More Options
+    if (state.isToolsSheetVisible) {
+        ReaderToolsSheet(
+            isPasswordProtected = state.isPasswordProtected,
+            onToolClick = { toolId ->
+                viewModel.onAction(ReaderAction.HideToolsSheet)
+                val path = viewModel.pdfPath
+                when (toolId) {
+                    "merge" -> navController.navigateToMergeTool(listOf(path))
+                    "split" -> navController.navigateToSplitTool(path)
+                    "compress" -> navController.navigateToCompressTool(path)
+                    "rotate" -> navController.navigateToRotateTool(path)
+                    "reorder" -> navController.navigateToReorderTool(path)
+                    "lock_pdf" -> navController.navigateToLockTool(path)
+                    "unlock_pdf" -> navController.navigateToUnlockTool(path)
+                    "remove_pages" -> navController.navigateToRemovePagesTool(path)
+                    "watermark" -> navController.navigateToWatermarkTool(path)
+                    "page_numbers" -> navController.navigateToPageNumbersTool(path)
+                    "pdf_to_img" -> navController.navigateToPdfToImageTool(path)
+                }
+            },
+            onDismiss = { viewModel.onAction(ReaderAction.HideToolsSheet) }
+        )
+    }
+
     // More Options Sheet
     if (state.isMoreOptionsSheetVisible) {
         MoreOptionsSheet(
@@ -896,6 +933,10 @@ fun ReaderScreen(
             },
             onShareClick = {
                 viewModel.onAction(ReaderAction.ShareDocument)
+            },
+            showTools = state.showTools,
+            onToolsClick = {
+                viewModel.onAction(ReaderAction.ShowToolsSheet)
             },
             onPrintClick = {
                 viewModel.printDocument()

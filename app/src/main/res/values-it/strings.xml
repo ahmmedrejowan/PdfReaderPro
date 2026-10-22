@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">Strumenti PDF</string>
+    <string name="reader_pdf_tools_desc">Dividi, comprimi, ruota e altro</string>
+    <string name="reader_pdf_tools_subtitle">Usa uno strumento su questo documento</string>
     <string name="merge_pdfs">Unisci PDF</string>
     <string name="split_pdf">Dividi PDF</string>
     <string name="compress_pdf">Comprimi PDF</string>

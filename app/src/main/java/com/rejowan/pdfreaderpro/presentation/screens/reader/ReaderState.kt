@@ -120,6 +120,9 @@ data class ReaderState(
     val isDisplaySheetVisible: Boolean = false,
     val isBookmarksSheetVisible: Boolean = false,
     val isMoreOptionsSheetVisible: Boolean = false,
+    val isToolsSheetVisible: Boolean = false,
+    /** Follows the Show Tools Tab setting, which turns the app into a reader only. */
+    val showTools: Boolean = true,
 
     // Screen orientation
     val screenOrientation: ScreenOrientation = ScreenOrientation.AUTO,
@@ -384,6 +387,8 @@ sealed class ReaderAction {
     data object HideBookmarksSheet : ReaderAction()
     data object ShowMoreOptionsSheet : ReaderAction()
     data object HideMoreOptionsSheet : ReaderAction()
+    data object ShowToolsSheet : ReaderAction()
+    data object HideToolsSheet : ReaderAction()
 
     // Reading settings
     data class SetBrightness(val brightness: Float) : ReaderAction()

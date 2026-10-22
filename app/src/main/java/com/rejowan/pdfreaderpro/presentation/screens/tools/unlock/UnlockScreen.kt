@@ -1,5 +1,8 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.unlock
 
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.LaunchedEffect
+import android.net.Uri
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -104,6 +107,15 @@ fun UnlockScreen(
     viewModel: UnlockViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    // A file handed over by the reader opens straight away, once.
+    var initialFileLoaded by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(initialFilePath) {
+        if (!initialFileLoaded && !initialFilePath.isNullOrBlank()) {
+            initialFileLoaded = true
+            viewModel.setSourceFile(Uri.fromFile(File(initialFilePath)))
+        }
+    }
     val context = LocalContext.current
     val sharePdfLabel = stringResource(R.string.share_pdf)
     val focusManager = LocalFocusManager.current

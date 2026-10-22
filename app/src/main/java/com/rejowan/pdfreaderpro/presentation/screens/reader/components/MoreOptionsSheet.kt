@@ -33,6 +33,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.Draw
 import androidx.compose.material.icons.rounded.FormatColorFill
 import androidx.compose.material.icons.rounded.Info
@@ -94,6 +95,8 @@ fun MoreOptionsSheet(
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
     onShareClick: () -> Unit,
+    showTools: Boolean,
+    onToolsClick: () -> Unit,
     onDocumentInfoClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -113,6 +116,8 @@ fun MoreOptionsSheet(
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
             onShareClick = onShareClick,
+            showTools = showTools,
+            onToolsClick = onToolsClick,
             onDocumentInfoClick = onDocumentInfoClick,
             onDismiss = onDismiss
         )
@@ -129,6 +134,8 @@ fun MoreOptionsSheet(
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
             onShareClick = onShareClick,
+            showTools = showTools,
+            onToolsClick = onToolsClick,
             onDocumentInfoClick = onDocumentInfoClick,
             onDismiss = onDismiss
         )
@@ -149,6 +156,8 @@ private fun MoreOptionsBottomSheet(
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
     onShareClick: () -> Unit,
+    showTools: Boolean,
+    onToolsClick: () -> Unit,
     onDocumentInfoClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -173,6 +182,8 @@ private fun MoreOptionsBottomSheet(
             onGoToPageClick = onGoToPageClick,
             onPrintClick = onPrintClick,
             onShareClick = onShareClick,
+            showTools = showTools,
+            onToolsClick = onToolsClick,
             onDocumentInfoClick = onDocumentInfoClick,
             onDismiss = onDismiss,
             modifier = Modifier.padding(bottom = 24.dp)
@@ -193,6 +204,8 @@ private fun MoreOptionsSideSheet(
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
     onShareClick: () -> Unit,
+    showTools: Boolean,
+    onToolsClick: () -> Unit,
     onDocumentInfoClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -256,6 +269,8 @@ private fun MoreOptionsSideSheet(
                     onGoToPageClick = onGoToPageClick,
                     onPrintClick = onPrintClick,
                     onShareClick = onShareClick,
+                    showTools = showTools,
+                    onToolsClick = onToolsClick,
                     onDocumentInfoClick = onDocumentInfoClick,
                     onDismiss = onDismiss,
                     modifier = Modifier
@@ -284,6 +299,8 @@ private fun MoreOptionsSheetContent(
     onGoToPageClick: () -> Unit,
     onPrintClick: () -> Unit,
     onShareClick: () -> Unit,
+    showTools: Boolean,
+    onToolsClick: () -> Unit,
     onDocumentInfoClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
@@ -430,6 +447,22 @@ private fun MoreOptionsSheetContent(
         )
 
         Spacer(modifier = Modifier.height(6.dp))
+
+        if (showTools) {
+            OptionItem(
+                icon = Icons.Rounded.Build,
+                title = stringResource(R.string.pdf_tools),
+                subtitle = stringResource(R.string.reader_pdf_tools_desc),
+                accentColor = AccentPurple,
+                onClick = {
+                    onDismiss()
+                    onToolsClick()
+                },
+                animationDelay = 175
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        }
 
         OptionItem(
             icon = Icons.Rounded.Print,

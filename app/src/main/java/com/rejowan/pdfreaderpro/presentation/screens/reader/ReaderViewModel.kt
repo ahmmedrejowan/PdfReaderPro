@@ -155,6 +155,7 @@ class ReaderViewModel(
                     autoHideToolbar = prefs.readerAutoHideToolbar,
                     scrubberOnScroll = prefs.readerScrubberOnScroll,
                     keepImageColors = prefs.readerKeepImageColors,
+                    showTools = prefs.showToolsTab,
                     tapToTurnPage = prefs.readerTapToTurnPage,
                     keepScreenOn = prefs.readerKeepScreenOn,
                     isSnapEnabled = prefs.readerSnapToPages,
@@ -935,6 +936,8 @@ class ReaderViewModel(
             is ReaderAction.HideBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = false) }
             is ReaderAction.ShowMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = true) }
             is ReaderAction.HideMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = false) }
+            is ReaderAction.ShowToolsSheet -> _state.update { it.copy(isToolsSheetVisible = true) }
+            is ReaderAction.HideToolsSheet -> _state.update { it.copy(isToolsSheetVisible = false) }
 
             is ReaderAction.SetBrightness -> {
                 _state.update { it.copy(brightness = action.brightness) }

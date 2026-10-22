@@ -1,5 +1,10 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.pdftoimage
 
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import android.net.Uri
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -102,6 +107,15 @@ fun PdfToImageScreen(
     viewModel: PdfToImageViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    // A file handed over by the reader opens straight away, once.
+    var initialFileLoaded by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(initialFilePath) {
+        if (!initialFileLoaded && !initialFilePath.isNullOrBlank()) {
+            initialFileLoaded = true
+            viewModel.setSourceFile(Uri.fromFile(File(initialFilePath)))
+        }
+    }
     val context = LocalContext.current
     val shareImagesLabel = stringResource(R.string.share_images)
     val shareImageLabel = stringResource(R.string.share_image)

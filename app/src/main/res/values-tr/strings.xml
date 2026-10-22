@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">PDF Araçları</string>
+    <string name="reader_pdf_tools_desc">Bölme, sıkıştırma, döndürme ve daha fazlası</string>
+    <string name="reader_pdf_tools_subtitle">Bu belgede bir araç kullan</string>
     <string name="merge_pdfs">PDF\'leri Birleştir</string>
     <string name="split_pdf">PDF Böl</string>
     <string name="compress_pdf">PDF Sıkıştır</string>

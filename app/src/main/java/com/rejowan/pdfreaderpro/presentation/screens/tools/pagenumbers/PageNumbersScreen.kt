@@ -1,5 +1,8 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.pagenumbers
 
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.LaunchedEffect
+import android.net.Uri
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -126,6 +129,15 @@ fun PageNumbersScreen(
     viewModel: PageNumbersViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    // A file handed over by the reader opens straight away, once.
+    var initialFileLoaded by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(initialFilePath) {
+        if (!initialFileLoaded && !initialFilePath.isNullOrBlank()) {
+            initialFileLoaded = true
+            viewModel.setSourceFile(Uri.fromFile(File(initialFilePath)))
+        }
+    }
     val context = LocalContext.current
     val sharePdfLabel = stringResource(R.string.share_pdf)
     val focusManager = LocalFocusManager.current

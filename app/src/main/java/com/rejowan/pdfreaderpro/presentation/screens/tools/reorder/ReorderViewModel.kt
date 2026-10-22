@@ -324,6 +324,8 @@ class ReorderViewModel(
     }
 
     private fun getFileNameFromUri(uri: Uri): String? {
+        // A file the reader handed over has no provider to ask.
+        if (uri.scheme == "file") return uri.lastPathSegment
         return try {
             context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
                 val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)

@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">Инструменты PDF</string>
+    <string name="reader_pdf_tools_desc">Разделение, сжатие, поворот и другое</string>
+    <string name="reader_pdf_tools_subtitle">Применить инструмент к этому документу</string>
     <string name="merge_pdfs">Объединить PDF</string>
     <string name="split_pdf">Разделить PDF</string>
     <string name="compress_pdf">Сжать PDF</string>

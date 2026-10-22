@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">PDFツール</string>
+    <string name="reader_pdf_tools_desc">分割、圧縮、回転など</string>
+    <string name="reader_pdf_tools_subtitle">このドキュメントでツールを使用</string>
     <string name="merge_pdfs">PDFを結合</string>
     <string name="split_pdf">PDFを分割</string>
     <string name="compress_pdf">PDFを圧縮</string>

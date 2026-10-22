@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">Uirlisí PDF</string>
+    <string name="reader_pdf_tools_desc">Scoilt, comhbhrúigh, rothlaigh agus tuilleadh</string>
+    <string name="reader_pdf_tools_subtitle">Úsáid uirlis ar an doiciméad seo</string>
     <string name="merge_pdfs">Cumaisc PDFanna</string>
     <string name="split_pdf">Scoilt PDF</string>
     <string name="compress_pdf">Comhbhrúigh PDF</string>
