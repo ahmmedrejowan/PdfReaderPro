@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **First Page Under the Top Bar** - On lower-density screens the first page no longer starts under the top bar, and the last one scrolls clear of the controls (#105)
 - **Jumps Under the Top Bar** - Go to page, the contents, bookmarks and links inside a document no longer land under the top bar (#105)
+- **Overwrite Original** - Tools that overwrite the original no longer hold up the screen on large files, and a failed write leaves the original as it was
 - **Signed Files in Other Apps** - A PDF with signatures saved into it no longer disappears from other apps' file pickers
 - **Counts for One** - Page, file and highlight counts read correctly for a single item ("1 page" instead of "1 pages"), in every language
 - **Back in Landscape** - Back closes the side panels in landscape instead of leaving the screen behind them, which in the reader closed the document
