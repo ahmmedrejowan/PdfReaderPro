@@ -2042,6 +2042,11 @@ class ReaderViewModel(
                     } finally {
                         if (staging.exists()) staging.delete()
                     }
+                    // Renaming over the file drops it from the media index, which
+                    // hides it from other apps' file pickers until it is scanned.
+                    android.media.MediaScannerConnection.scanFile(
+                        applicationContext, arrayOf(target.path), arrayOf("application/pdf"), null
+                    )
                 }
                 // They are part of the document now, so they stop being pending.
                 signatureDao.deleteAllFor(pdfPath)
