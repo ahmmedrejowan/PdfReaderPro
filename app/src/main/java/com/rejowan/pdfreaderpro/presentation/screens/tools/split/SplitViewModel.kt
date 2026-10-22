@@ -418,6 +418,13 @@ class SplitViewModel(
 
     private fun copyUriToCache(uri: Uri): String? {
         return try {
+            // A file the reader handed over is read where it is, as the other
+            // tools do. Copying it could also land on itself when it already
+            // sits in split_temp, and truncate it.
+            if (uri.scheme == "file") {
+                return uri.path
+            }
+
             val inputStream = context.contentResolver.openInputStream(uri) ?: return null
             val fileName = getFileNameFromUri(uri) ?: "temp_${System.currentTimeMillis()}.pdf"
             val cacheFile = File(context.cacheDir, "split_temp/$fileName")

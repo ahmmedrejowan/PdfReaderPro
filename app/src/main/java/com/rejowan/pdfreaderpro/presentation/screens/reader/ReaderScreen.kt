@@ -207,7 +207,10 @@ fun ReaderScreen(
     // which match dp.
     var topBarBottomPx by remember { mutableFloatStateOf(0f) }
     val topInset = if (state.isToolbarVisible && !state.isFullScreen) {
-        with(density) { topBarBottomPx.toDp().value.toInt() } + BACK_CHIP_CLEARANCE_DP
+        with(density) {
+            if (topBarBottomPx > 0f) topBarBottomPx.toDp().value.toInt()
+            else WindowInsets.statusBars.getTop(density).toDp().value.toInt() + 72
+        } + BACK_CHIP_CLEARANCE_DP
     } else 0
     LaunchedEffect(topInset, state.isLoading) {
         viewModel.setTopInset(topInset)
@@ -425,6 +428,9 @@ fun ReaderScreen(
                         ui.toolbarEnabled = false
                         ui.isSideBarOpen = false
                         setContentPadding(topPadding, bottomPadding)
+                        // Before loading, so reopening at the last page read lands
+                        // below the top bar too.
+                        setTopInset(topInset)
                         loadFromFile(viewModel.pdfPath)
                     }
 
