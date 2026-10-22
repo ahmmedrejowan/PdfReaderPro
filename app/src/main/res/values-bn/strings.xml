@@ -339,7 +339,7 @@
     <string name="confirm_exit">আপনি কি নিশ্চিত যে বের হতে চান?</string>
     <string name="exit">বের হন</string>
     <string name="pdf_tools">PDF টুলস</string>
-    <string name="reader_pdf_tools_desc">স্প্লিট, কম্প্রেস, রোটেট আর আরও অনেক কিছু</string>
+    <string name="reader_pdf_tools_desc">স্প্লিট, কম্প্রেস, রোটেট আরও অনেক কিছু</string>
     <string name="reader_pdf_tools_subtitle">এই ডকুমেন্টে একটা টুল চালান</string>
     <string name="merge_pdfs">PDF মার্জ করুন</string>
     <string name="split_pdf">PDF স্প্লিট করুন</string>

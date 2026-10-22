@@ -393,7 +393,7 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">Инструменты PDF</string>
-    <string name="reader_pdf_tools_desc">Разделение, сжатие, поворот и другое</string>
+    <string name="reader_pdf_tools_desc">Разделение, сжатие, поворот и многое другое</string>
     <string name="reader_pdf_tools_subtitle">Применить инструмент к этому документу</string>
     <string name="merge_pdfs">Объединить PDF</string>
     <string name="split_pdf">Разделить PDF</string>
@@ -1206,7 +1206,7 @@
     <string name="double_tap_zoom_subtitle">Уровень масштаба при двойном нажатии</string>
     <string name="show_tools_tab">Показывать вкладку инструментов</string>
     <string name="show_tools_tab_subtitle">Скрыть, чтобы использовать приложение только как PDF-читалку</string>
-    <string name="hide_hidden_files">Скрывать скрытые файлы</string>
+    <string name="hide_hidden_files">Не показывать скрытые файлы</string>
     <string name="hide_hidden_files_subtitle">Пропускать файлы и папки, имя которых начинается с точки</string>
     <string name="tap_to_check">Нажмите, чтобы проверить обновления</string>
     <string name="checking">Проверка…</string>

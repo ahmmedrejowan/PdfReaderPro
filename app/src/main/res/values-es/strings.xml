@@ -1206,7 +1206,7 @@
     <string name="double_tap_zoom_subtitle">Nivel de zoom al hacer doble toque</string>
     <string name="show_tools_tab">Mostrar pestaña Herramientas</string>
     <string name="show_tools_tab_subtitle">Ocultar para usar la aplicación solo como lector de PDF</string>
-    <string name="hide_hidden_files">Ocultar archivos ocultos</string>
+    <string name="hide_hidden_files">No mostrar archivos ocultos</string>
     <string name="hide_hidden_files_subtitle">Omitir archivos y carpetas cuyo nombre empieza por un punto</string>
     <string name="tap_to_check">Toca para buscar actualizaciones</string>
     <string name="checking">Comprobando…</string>

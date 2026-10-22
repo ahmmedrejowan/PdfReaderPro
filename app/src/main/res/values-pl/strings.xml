@@ -394,7 +394,7 @@
     <!-- Tools Screen -->
     <string name="pdf_tools">Narzędzia PDF</string>
     <string name="reader_pdf_tools_desc">Dziel, kompresuj, obracaj i więcej</string>
-    <string name="reader_pdf_tools_subtitle">Użyj narzędzia na tym dokumencie</string>
+    <string name="reader_pdf_tools_subtitle">Użyj narzędzia do tego dokumentu</string>
     <string name="merge_pdfs">Scal pliki PDF</string>
     <string name="split_pdf">Podziel PDF</string>
     <string name="compress_pdf">Skompresuj PDF</string>
@@ -1206,7 +1206,7 @@
     <string name="double_tap_zoom_subtitle">Poziom powiększenia po dwukrotnym dotknięciu</string>
     <string name="show_tools_tab">Pokaż kartę Narzędzia</string>
     <string name="show_tools_tab_subtitle">Ukryj, aby używać aplikacji tylko jako czytnika PDF</string>
-    <string name="hide_hidden_files">Ukryj ukryte pliki</string>
+    <string name="hide_hidden_files">Nie pokazuj ukrytych plików</string>
     <string name="hide_hidden_files_subtitle">Pomijaj pliki i foldery, których nazwa zaczyna się od kropki</string>
     <string name="tap_to_check">Dotknij, aby sprawdzić aktualizacje</string>
     <string name="checking">Sprawdzanie…</string>
