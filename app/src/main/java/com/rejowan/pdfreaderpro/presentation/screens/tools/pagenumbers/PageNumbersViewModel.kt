@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.annotation.StringRes
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
+import com.rejowan.pdfreaderpro.util.FileOperations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -300,11 +301,7 @@ class PageNumbersViewModel(
                 onSuccess = {
                     if (tempPath != null) {
                         try {
-                            val tempFile = File(tempPath)
-                            val originalFile = File(outputPath)
-                            originalFile.delete()
-                            tempFile.copyTo(originalFile, overwrite = true)
-                            tempFile.delete()
+                            FileOperations.replaceFile(context, File(tempPath), File(outputPath))
                         } catch (e: Exception) {
                             Timber.e(e, "Failed to replace original file")
                             _state.update { it.copy(isProcessing = false, error = context.getString(R.string.error_failed_replace_original)) }

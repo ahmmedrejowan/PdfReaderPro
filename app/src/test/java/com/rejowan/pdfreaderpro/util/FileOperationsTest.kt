@@ -654,4 +654,37 @@ class FileOperationsTest {
         unmockkStatic(FileProvider::class)
     }
     // endregion
+
+    // region replaceFile
+    @Test
+    fun `replaceFile puts the new bytes in place and removes the source`() {
+        val dir = createTempDir()
+        val target = File(dir, "doc.pdf").apply { writeText("original") }
+        val source = File(dir, "doc.tmp").apply { writeText("compressed") }
+
+        FileOperations.replaceFile(context, source, target)
+
+        assertEquals("compressed", target.readText())
+        assertFalse(source.exists())
+        assertFalse(File(dir, "doc.pdf.replacing").exists())
+        dir.deleteRecursively()
+    }
+
+    @Test
+    fun `replaceFile leaves the original alone when the new file cannot be read`() {
+        val dir = createTempDir()
+        val target = File(dir, "doc.pdf").apply { writeText("original") }
+        val missing = File(dir, "gone.tmp")
+
+        assertThrows(Exception::class.java) {
+            FileOperations.replaceFile(context, missing, target)
+        }
+
+        assertEquals("original", target.readText())
+        dir.deleteRecursively()
+    }
+
+    private fun createTempDir(): File =
+        java.nio.file.Files.createTempDirectory("replace-file-test").toFile()
+    // endregion
 }

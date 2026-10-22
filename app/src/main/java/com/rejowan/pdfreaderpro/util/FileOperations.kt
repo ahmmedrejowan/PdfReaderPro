@@ -2,6 +2,7 @@ package com.rejowan.pdfreaderpro.util
 
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.core.content.FileProvider
@@ -285,6 +286,30 @@ object FileOperations {
         } catch (e: Exception) {
             0L
         }
+    }
+
+    /**
+     * Replaces [target] with [source], for tools that overwrite the original.
+     * The original is never missing: the new bytes are written beside it first
+     * and then renamed over it. If the rename is refused, they are copied over
+     * it instead, and the staging copy is kept should that copy fail, so the
+     * result can still be recovered. [source] is removed once it is in place.
+     *
+     * @throws java.io.IOException when the replacement could not be written;
+     * the original is then left as it was, unless the fallback copy failed part way.
+     */
+    fun replaceFile(context: Context, source: File, target: File) {
+        val staging = File(target.parentFile, "${target.name}.replacing")
+        source.copyTo(staging, overwrite = true)
+        if (!staging.renameTo(target)) {
+            staging.inputStream().use { input ->
+                target.outputStream().use { output -> input.copyTo(output) }
+            }
+            staging.delete()
+        }
+        source.delete()
+        // Replacing the file drops it from the media index until it is scanned.
+        MediaScannerConnection.scanFile(context, arrayOf(target.path), arrayOf("application/pdf"), null)
     }
 
     fun fileExists(filePath: String): Boolean {
