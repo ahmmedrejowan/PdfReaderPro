@@ -1204,6 +1204,8 @@
     <string name="double_tap_zoom_subtitle">Çift dokunulduğunda yakınlaştırma seviyesi</string>
     <string name="show_tools_tab">Araçlar Sekmesini Göster</string>
     <string name="show_tools_tab_subtitle">Uygulamayı yalnızca PDF okuyucu olarak kullanmak için gizle</string>
+    <string name="hide_hidden_files">Gizli dosyaları gizle</string>
+    <string name="hide_hidden_files_subtitle">Adı nokta ile başlayan dosya ve klasörleri atla</string>
     <string name="tap_to_check">Güncellemeleri kontrol etmek için dokunun</string>
     <string name="checking">Kontrol ediliyor…</string>
     <string name="update_available_version">Güncelleme mevcut: v%s</string>

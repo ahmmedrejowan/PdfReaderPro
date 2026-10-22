@@ -1204,6 +1204,8 @@
     <string name="double_tap_zoom_subtitle">Niveau de zoom lors d\'un double appui</string>
     <string name="show_tools_tab">Afficher l\'onglet Outils</string>
     <string name="show_tools_tab_subtitle">Masquer pour utiliser l\'application uniquement comme lecteur PDF</string>
+    <string name="hide_hidden_files">Masquer les fichiers cachés</string>
+    <string name="hide_hidden_files_subtitle">Ignorer les fichiers et dossiers dont le nom commence par un point</string>
     <string name="tap_to_check">Appuyez pour vérifier les mises à jour</string>
     <string name="checking">Vérification…</string>
     <string name="update_available_version">Mise à jour disponible : v%s</string>

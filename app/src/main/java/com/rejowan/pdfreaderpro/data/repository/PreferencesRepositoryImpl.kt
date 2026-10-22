@@ -32,6 +32,7 @@ class PreferencesRepositoryImpl(
         val DEFAULT_SORT_OPTION = stringPreferencesKey("default_sort_option")
         val REMEMBER_PASSWORDS = booleanPreferencesKey("remember_passwords")
         val SHOW_TOOLS_TAB = booleanPreferencesKey("show_tools_tab")
+        val HIDE_HIDDEN_FILES = booleanPreferencesKey("hide_hidden_files")
         val UPDATE_CHECK_INTERVAL = stringPreferencesKey("update_check_interval")
 
         // Reader settings
@@ -59,6 +60,7 @@ class PreferencesRepositoryImpl(
             defaultSortOption = prefs[Keys.DEFAULT_SORT_OPTION]?.let { SortOption.valueOf(it) } ?: SortOption.NAME_ASC,
             rememberPasswords = prefs[Keys.REMEMBER_PASSWORDS] ?: true,
             showToolsTab = prefs[Keys.SHOW_TOOLS_TAB] ?: true,
+            hideHiddenFiles = prefs[Keys.HIDE_HIDDEN_FILES] ?: false,
             updateCheckInterval = prefs[Keys.UPDATE_CHECK_INTERVAL]?.let { UpdateCheckInterval.valueOf(it) } ?: UpdateCheckInterval.WEEKLY,
 
             // Reader settings
@@ -104,6 +106,10 @@ class PreferencesRepositoryImpl(
 
     override suspend fun setShowToolsTab(enabled: Boolean) {
         dataStore.edit { it[Keys.SHOW_TOOLS_TAB] = enabled }
+    }
+
+    override suspend fun setHideHiddenFiles(enabled: Boolean) {
+        dataStore.edit { it[Keys.HIDE_HIDDEN_FILES] = enabled }
     }
 
     override suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval) {

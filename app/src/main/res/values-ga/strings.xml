@@ -1205,6 +1205,8 @@
     <string name="double_tap_zoom_subtitle">Leibhéal súmála nuair a thapáiltear go dúbailte</string>
     <string name="show_tools_tab">Taispeáin Cluaisín Uirlisí</string>
     <string name="show_tools_tab_subtitle">Folaigh chun an aip a úsáid mar léitheoir PDF amháin</string>
+    <string name="hide_hidden_files">Folaigh comhaid fholaithe</string>
+    <string name="hide_hidden_files_subtitle">Fág comhaid agus fillteáin a dtosaíonn a n-ainm le ponc ar lár</string>
     <string name="tap_to_check">Tapáil chun nuashonruithe a sheiceáil</string>
     <string name="checking">Á sheiceáil…</string>
     <string name="update_available_version">Nuashonrú ar fáil: v%s</string>

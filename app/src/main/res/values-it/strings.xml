@@ -1204,6 +1204,8 @@
     <string name="double_tap_zoom_subtitle">Livello di zoom al doppio tocco</string>
     <string name="show_tools_tab">Mostra scheda Strumenti</string>
     <string name="show_tools_tab_subtitle">Nascondi per utilizzare l\'app solo come lettore PDF</string>
+    <string name="hide_hidden_files">Nascondi file nascosti</string>
+    <string name="hide_hidden_files_subtitle">Ignora file e cartelle il cui nome inizia con un punto</string>
     <string name="tap_to_check">Tocca per controllare gli aggiornamenti</string>
     <string name="checking">Controllo in corso…</string>
     <string name="update_available_version">Aggiornamento disponibile: v%s</string>

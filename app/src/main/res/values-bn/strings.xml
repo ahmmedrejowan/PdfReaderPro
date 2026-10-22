@@ -1020,6 +1020,8 @@
     <string name="double_tap_zoom_subtitle">ডাবল ট্যাপ করলে জুমের মাত্রা</string>
     <string name="show_tools_tab">টুলস ট্যাব দেখান</string>
     <string name="show_tools_tab_subtitle">অ্যাপটি শুধু PDF রিডার হিসেবে ব্যবহার করতে লুকিয়ে রাখুন</string>
+    <string name="hide_hidden_files">লুকানো ফাইল দেখাবেন না</string>
+    <string name="hide_hidden_files_subtitle">যেসব ফাইল আর ফোল্ডারের নাম ডট দিয়ে শুরু, সেগুলো বাদ দিন</string>
     <string name="tap_to_check">আপডেট চেক করতে ট্যাপ করুন</string>
     <string name="checking">চেক করা হচ্ছে…</string>
     <string name="update_available_version">আপডেট পাওয়া যাচ্ছে: v%s</string>

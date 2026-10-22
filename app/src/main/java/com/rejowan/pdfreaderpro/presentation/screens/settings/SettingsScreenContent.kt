@@ -267,6 +267,18 @@ fun SettingsScreenContent(
             animationDelay = 75
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsToggleItem(
+            icon = Icons.Rounded.VisibilityOff,
+            title = stringResource(R.string.hide_hidden_files),
+            subtitle = stringResource(R.string.hide_hidden_files_subtitle),
+            checked = preferences.hideHiddenFiles,
+            accentColor = AccentPurple,
+            onCheckedChange = { viewModel.setHideHiddenFiles(it) },
+            animationDelay = 80
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
 
         // Reader Section

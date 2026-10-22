@@ -1204,6 +1204,8 @@
     <string name="double_tap_zoom_subtitle">Poziom powiększenia po dwukrotnym dotknięciu</string>
     <string name="show_tools_tab">Pokaż kartę Narzędzia</string>
     <string name="show_tools_tab_subtitle">Ukryj, aby używać aplikacji tylko jako czytnika PDF</string>
+    <string name="hide_hidden_files">Ukryj ukryte pliki</string>
+    <string name="hide_hidden_files_subtitle">Pomijaj pliki i foldery, których nazwa zaczyna się od kropki</string>
     <string name="tap_to_check">Dotknij, aby sprawdzić aktualizacje</string>
     <string name="checking">Sprawdzanie…</string>
     <string name="update_available_version">Dostępna aktualizacja: v%s</string>
