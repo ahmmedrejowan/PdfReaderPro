@@ -1652,8 +1652,9 @@ class PdfViewer @JvmOverloads constructor(
      * have space at the top and bottom, allowing content to scroll
      * without being cut off by overlaying UI elements.
      *
-     * @param top Top padding in pixels
-     * @param bottom Bottom padding in pixels
+     * @param top Top padding in CSS pixels, which match dp since the viewer's
+     * page uses the device width
+     * @param bottom Bottom padding in CSS pixels
      */
     fun setContentPadding(top: Int, bottom: Int) {
         if (!isInitialized) return

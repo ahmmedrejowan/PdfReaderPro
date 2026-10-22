@@ -398,6 +398,11 @@ class ReaderViewModel(
         }
     }
 
+    /** See [PdfViewer.setContentPadding]. */
+    fun setContentPadding(top: Int, bottom: Int) {
+        pdfViewer?.setContentPadding(top, bottom)
+    }
+
     /** See [PdfViewer.setTopInset]. */
     fun setTopInset(inset: Int) {
         pdfViewer?.setTopInset(inset)

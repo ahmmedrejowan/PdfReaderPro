@@ -44,6 +44,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -199,7 +200,6 @@ fun ReaderScreen(
         }
     }
 
-    // Calculate content padding for PDF viewer (in pixels)
     val density = LocalDensity.current
 
     // Jumps land below the top bar while it shows, and below the Back to page
@@ -214,8 +214,21 @@ fun ReaderScreen(
     }
     val statusBarHeightPx = WindowInsets.statusBars.getTop(density)
     val navBarHeightPx = WindowInsets.navigationBars.getBottom(density)
-    val topPaddingPx = statusBarHeightPx + with(density) { 6.dp.roundToPx() }
-    val bottomPaddingPx = navBarHeightPx + with(density) { 6.dp.roundToPx() }
+    // Room at the start and end of the document, so the first page starts
+    // below the top bar and the last one can scroll clear of the control bar.
+    // In CSS pixels (dp); until the bars are measured, their usual size.
+    var controlBarGapPx by remember { mutableFloatStateOf(0f) }
+    val topPadding = with(density) {
+        if (topBarBottomPx > 0f) topBarBottomPx.toDp().value.toInt() + 8
+        else statusBarHeightPx.toDp().value.toInt() + 80
+    }
+    val bottomPadding = with(density) {
+        if (controlBarGapPx > 0f) controlBarGapPx.toDp().value.toInt() + 8
+        else navBarHeightPx.toDp().value.toInt() + 88
+    }
+    LaunchedEffect(topPadding, bottomPadding, state.isLoading) {
+        viewModel.setContentPadding(topPadding, bottomPadding)
+    }
 
     // Handle immersive mode - hide system bars when toolbar is hidden or in full screen
     val shouldBeImmersive = !state.isToolbarVisible || state.isFullScreen
@@ -411,7 +424,7 @@ fun ReaderScreen(
                     onReady {
                         ui.toolbarEnabled = false
                         ui.isSideBarOpen = false
-                        setContentPadding(topPaddingPx, bottomPaddingPx)
+                        setContentPadding(topPadding, bottomPadding)
                         loadFromFile(viewModel.pdfPath)
                     }
 
@@ -634,6 +647,13 @@ fun ReaderScreen(
                     visible = state.isToolbarVisible && !state.isFullScreen,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
+                        .onGloballyPositioned { coordinates ->
+                            // From the bar's top to the bottom of the screen;
+                            // hidden, the bar measures nothing, so keep the last.
+                            val root = coordinates.findRootCoordinates().size.height
+                            val top = coordinates.boundsInRoot().top
+                            if (coordinates.size.height > 0) controlBarGapPx = root - top
+                        }
                         .windowInsetsPadding(WindowInsets.navigationBars)
                         .padding(bottom = 16.dp),
                     enter = slideInVertically(
