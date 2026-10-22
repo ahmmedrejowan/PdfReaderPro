@@ -1665,6 +1665,7 @@ class PdfViewer @JvmOverloads constructor(
                     container.style.paddingTop = '${top}px';
                     container.style.paddingBottom = '${bottom}px';
                 }
+                if (typeof centerShortDocument === 'function') centerShortDocument();
             })();
         """.trimIndent()
         webView.evaluateJavascript(js, null)

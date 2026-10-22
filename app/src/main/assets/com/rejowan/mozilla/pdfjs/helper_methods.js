@@ -2100,3 +2100,22 @@ function sliceByOverlap(text, left, width, overlapLeft, overlapRight) {
     return kept.length > 0 ? kept.join(" ") : text;
 }
 // #endregion
+
+/**
+ * Centers the document vertically when all of it fits on screen, by giving the
+ * viewer a top margin of half the free space. A taller document gets no margin
+ * and scrolls as usual.
+ */
+function centerShortDocument() {
+    // The lazy viewer and viewerContainer proxies are not Elements, which
+    // getComputedStyle needs, so look the elements up directly.
+    const pages = document.getElementById("viewer");
+    const container = document.getElementById("viewerContainer");
+    if (!pages || !container) return;
+    pages.style.marginTop = "";
+    const style = getComputedStyle(container);
+    const available = container.clientHeight
+        - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    const free = available - pages.offsetHeight;
+    if (free > 1) pages.style.marginTop = `${Math.floor(free / 2)}px`;
+}

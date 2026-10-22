@@ -301,6 +301,14 @@ function setupHelper() {
         loadAttachments();
     });
 
+    // A document shorter than the screen sits in the middle instead of at the
+    // top, clear of the floating bars. Recomputed whenever the layout can change.
+    const scheduleCentering = () => requestAnimationFrame(() => requestAnimationFrame(centerShortDocument));
+    ["pagesloaded", "scalechanging", "scrollmodechanged", "spreadmodechanged"].forEach((name) =>
+        PDFViewerApplication.eventBus.on(name, scheduleCentering)
+    );
+    window.addEventListener("resize", scheduleCentering);
+
     viewerContainer.addEventListener("scroll", () => {
         let currentOffset;
         let totalScrollable;
