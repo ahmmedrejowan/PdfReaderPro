@@ -657,7 +657,7 @@ class FileOperationsTest {
 
     // region replaceFile
     @Test
-    fun `replaceFile puts the new bytes in place and removes the source`() {
+    fun `replaceFile puts the new bytes in place and removes the source`() = kotlinx.coroutines.test.runTest {
         val dir = createTempDir()
         val target = File(dir, "doc.pdf").apply { writeText("original") }
         val source = File(dir, "doc.tmp").apply { writeText("compressed") }
@@ -671,16 +671,41 @@ class FileOperationsTest {
     }
 
     @Test
-    fun `replaceFile leaves the original alone when the new file cannot be read`() {
+    fun `replaceFile leaves the original alone when the new file cannot be read`() = kotlinx.coroutines.test.runTest {
         val dir = createTempDir()
         val target = File(dir, "doc.pdf").apply { writeText("original") }
         val missing = File(dir, "gone.tmp")
 
-        assertThrows(Exception::class.java) {
-            FileOperations.replaceFile(context, missing, target)
-        }
+        val failure = runCatching { FileOperations.replaceFile(context, missing, target) }
 
+        assertTrue(failure.isFailure)
         assertEquals("original", target.readText())
+        dir.deleteRecursively()
+    }
+
+    @Test
+    fun `the fallback copy replaces the original and leaves no backup`() {
+        val dir = createTempDir()
+        val target = File(dir, "doc.pdf").apply { writeText("original") }
+        val staging = File(dir, "doc.pdf.replacing").apply { writeText("new") }
+
+        FileOperations.copyOverKeepingBackup(staging, target)
+
+        assertEquals("new", target.readText())
+        assertFalse(File(dir, "doc.pdf.backup").exists())
+        dir.deleteRecursively()
+    }
+
+    @Test
+    fun `the fallback copy keeps the original when the copy fails`() {
+        val dir = createTempDir()
+        val target = File(dir, "doc.pdf").apply { writeText("original") }
+
+        val failure = runCatching { FileOperations.copyOverKeepingBackup(File(dir, "gone"), target) }
+
+        assertTrue(failure.isFailure)
+        assertEquals("original", target.readText())
+        assertFalse(File(dir, "doc.pdf.backup").exists())
         dir.deleteRecursively()
     }
 

@@ -6,6 +6,8 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -290,26 +292,40 @@ object FileOperations {
 
     /**
      * Replaces [target] with [source], for tools that overwrite the original.
-     * The original is never missing: the new bytes are written beside it first
-     * and then renamed over it. If the rename is refused, they are copied over
-     * it instead, and the staging copy is kept should that copy fail, so the
-     * result can still be recovered. [source] is removed once it is in place.
+     * The new bytes are written beside the original and renamed over it, so the
+     * original is never missing. If the rename is refused, the bytes are copied
+     * over it instead, from a backup that restores the original should that
+     * copy fail. [source] is removed once it is in place. Runs on the IO
+     * dispatcher.
      *
      * @throws java.io.IOException when the replacement could not be written;
-     * the original is then left as it was, unless the fallback copy failed part way.
+     * the original is then left as it was.
      */
-    fun replaceFile(context: Context, source: File, target: File) {
+    suspend fun replaceFile(context: Context, source: File, target: File) = withContext(Dispatchers.IO) {
         val staging = File(target.parentFile, "${target.name}.replacing")
-        source.copyTo(staging, overwrite = true)
-        if (!staging.renameTo(target)) {
-            staging.inputStream().use { input ->
-                target.outputStream().use { output -> input.copyTo(output) }
-            }
-            staging.delete()
+        try {
+            source.copyTo(staging, overwrite = true)
+            if (!staging.renameTo(target)) copyOverKeepingBackup(staging, target)
+        } finally {
+            if (staging.exists()) staging.delete()
         }
         source.delete()
         // Replacing the file drops it from the media index until it is scanned.
         MediaScannerConnection.scanFile(context, arrayOf(target.path), arrayOf("application/pdf"), null)
+    }
+
+    /** Copies [from] over [target], putting the original back if the copy fails. */
+    internal fun copyOverKeepingBackup(from: File, target: File) {
+        val backup = File(target.parentFile, "${target.name}.backup")
+        target.copyTo(backup, overwrite = true)
+        try {
+            from.copyTo(target, overwrite = true)
+        } catch (e: Exception) {
+            backup.copyTo(target, overwrite = true)
+            throw e
+        } finally {
+            backup.delete()
+        }
     }
 
     fun fileExists(filePath: String): Boolean {

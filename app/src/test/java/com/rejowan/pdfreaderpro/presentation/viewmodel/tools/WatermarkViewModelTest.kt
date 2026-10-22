@@ -1177,7 +1177,7 @@ class WatermarkViewModelTest {
         }
 
         vm.applyWatermark()
-        advanceUntilIdle()
+        awaitFinished { vm.state.value.isProcessing }
 
         assertNotEquals(sourcePath, target.captured)
         assertFalse(java.io.File(target.captured).exists())
@@ -1206,4 +1206,14 @@ class WatermarkViewModelTest {
         assertEquals(1f, vm.state.value.progress, 0.001f)
     }
     // endregion
+
+    /** Replacing the original runs on the IO dispatcher, outside the test scheduler. */
+    private fun TestScope.awaitFinished(isBusy: () -> Boolean) {
+        repeat(500) {
+            advanceUntilIdle()
+            if (!isBusy()) return
+            Thread.sleep(10)
+        }
+        throw AssertionError("still working after 5 seconds")
+    }
 }
