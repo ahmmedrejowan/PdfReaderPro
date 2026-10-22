@@ -42,6 +42,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
@@ -186,6 +189,17 @@ fun ReaderScreen(
 
     // Calculate content padding for PDF viewer (in pixels)
     val density = LocalDensity.current
+
+    // Jumps land below the top bar while it shows, and below the Back to page
+    // chip that a jump brings up under it. The viewer works in CSS pixels,
+    // which match dp.
+    var topBarBottomPx by remember { mutableFloatStateOf(0f) }
+    val topInset = if (state.isToolbarVisible && !state.isFullScreen) {
+        with(density) { topBarBottomPx.toDp().value.toInt() } + BACK_CHIP_CLEARANCE_DP
+    } else 0
+    LaunchedEffect(topInset, state.isLoading) {
+        viewModel.setTopInset(topInset)
+    }
     val statusBarHeightPx = WindowInsets.statusBars.getTop(density)
     val navBarHeightPx = WindowInsets.navigationBars.getBottom(density)
     val topPaddingPx = statusBarHeightPx + with(density) { 6.dp.roundToPx() }
@@ -478,7 +492,13 @@ fun ReaderScreen(
                     onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
                     onMenuClick = { viewModel.onAction(ReaderAction.ShowTopBarMenu) },
                     isDarkMode = isDarkMode,
-                    modifier = Modifier.align(Alignment.TopCenter)
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .onGloballyPositioned { coordinates ->
+                            // Hidden, the bar measures nothing; keep the last real size.
+                            val bottom = coordinates.boundsInRoot().bottom
+                            if (bottom > 0f) topBarBottomPx = bottom
+                        }
                 )
 
                 // Search bar at top (replaces top bar when active)
@@ -959,3 +979,6 @@ fun ReaderScreen(
  * matched back by id.
  */
 private const val MENU_ID_HIGHLIGHT = 0x48_4C_47_31
+
+/** The Back to page chip's height and gap below the top bar. */
+private const val BACK_CHIP_CLEARANCE_DP = 60

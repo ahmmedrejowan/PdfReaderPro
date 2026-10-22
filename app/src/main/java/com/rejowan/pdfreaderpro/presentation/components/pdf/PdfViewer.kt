@@ -1671,6 +1671,15 @@ class PdfViewer @JvmOverloads constructor(
         webView.evaluateJavascript(js, null)
     }
 
+    /**
+     * Space in CSS pixels that a jump to a page or a link leaves above its
+     * target, so a bar floating over the top of the view does not cover it.
+     */
+    fun setTopInset(inset: Int) {
+        if (!isInitialized) return
+        webView.evaluateJavascript("globalThis.pdfReaderTopInset = $inset;", null)
+    }
+
     fun saveState(outState: Bundle) {
         webView.saveState(outState)
     }

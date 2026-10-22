@@ -397,6 +397,11 @@ class ReaderViewModel(
         }
     }
 
+    /** See [PdfViewer.setTopInset]. */
+    fun setTopInset(inset: Int) {
+        pdfViewer?.setTopInset(inset)
+    }
+
     fun setPdfViewer(viewer: PdfViewer) {
         pdfViewer = viewer
         setupPdfViewerListeners(viewer)

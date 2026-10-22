@@ -160,6 +160,8 @@ function scrollIntoView(element, spot, scrollMatches = false) {
       parent.scrollLeft = offsetX;
     }
   }
+  // PDF Reader Pro: land below the floating top bar (see setTopInset in helper_methods.js).
+  offsetY -= globalThis.pdfReaderTopInset || 0;
   parent.scrollTop = offsetY;
 }
 function watchScroll(viewAreaElement, callback, abortSignal = undefined) {
