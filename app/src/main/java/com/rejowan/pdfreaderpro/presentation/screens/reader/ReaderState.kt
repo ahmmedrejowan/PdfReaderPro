@@ -23,6 +23,8 @@ data class ReaderState(
 
     // Navigation
     val currentPage: Int = 0,
+    /** Page (0-based) to offer going back to after a jump, or null. */
+    val returnPage: Int? = null,
 
     // Zoom and scroll
     val zoom: Float = 1f,
@@ -333,6 +335,9 @@ sealed class ReaderAction {
 
     // Navigation
     data class GoToPage(val page: Int) : ReaderAction()
+    /** A deliberate jump, such as Go to page, that can be undone with [ReturnToPreviousPage]. */
+    data class JumpToPage(val page: Int) : ReaderAction()
+    data object ReturnToPreviousPage : ReaderAction()
     data object NextPage : ReaderAction()
     data object PreviousPage : ReaderAction()
 

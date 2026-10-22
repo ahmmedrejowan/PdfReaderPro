@@ -65,6 +65,8 @@ fun PageScrubber(
     isVisible: Boolean,
     onPageChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    // A page picked in the jump sheet, as opposed to dragging the slider.
+    onPageJump: (Int) -> Unit = onPageChange,
     isHorizontal: Boolean = false,
     isDarkMode: Boolean = true
 ) {
@@ -74,6 +76,7 @@ fun PageScrubber(
             totalPages = totalPages,
             isVisible = isVisible,
             onPageChange = onPageChange,
+            onPageJump = onPageJump,
             modifier = modifier,
             isDarkMode = isDarkMode
         )
@@ -83,6 +86,7 @@ fun PageScrubber(
             totalPages = totalPages,
             isVisible = isVisible,
             onPageChange = onPageChange,
+            onPageJump = onPageJump,
             modifier = modifier,
             isDarkMode = isDarkMode
         )
@@ -95,6 +99,7 @@ private fun VerticalPageScrubber(
     totalPages: Int,
     isVisible: Boolean,
     onPageChange: (Int) -> Unit,
+    onPageJump: (Int) -> Unit,
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
 ) {
@@ -247,7 +252,7 @@ private fun VerticalPageScrubber(
             totalPages = totalPages,
             onDismiss = { showJumpToPageSheet = false },
             onPageSelected = { page ->
-                onPageChange(page - 1)
+                onPageJump(page - 1)
                 showJumpToPageSheet = false
             }
         )
@@ -260,6 +265,7 @@ private fun HorizontalPageScrubber(
     totalPages: Int,
     isVisible: Boolean,
     onPageChange: (Int) -> Unit,
+    onPageJump: (Int) -> Unit,
     modifier: Modifier = Modifier,
     isDarkMode: Boolean = true
 ) {
@@ -417,7 +423,7 @@ private fun HorizontalPageScrubber(
             totalPages = totalPages,
             onDismiss = { showJumpToPageSheet = false },
             onPageSelected = { page ->
-                onPageChange(page - 1)
+                onPageJump(page - 1)
                 showJumpToPageSheet = false
             }
         )

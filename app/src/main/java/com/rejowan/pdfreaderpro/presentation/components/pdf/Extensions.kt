@@ -121,6 +121,7 @@ fun PdfViewer.addListener(
     onDoubleClick: ((x: Float, y: Float) -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
     onLinkClick: ((link: String) -> Unit)? = null,
+    onInternalJump: ((fromPage: Int) -> Unit)? = null,
     onSnapChange: ((snapPage: Boolean) -> Unit)? = null,
     onSinglePageArrangementChange: ((requestedArrangement: Boolean, appliedArrangement: Boolean) -> Unit)? = null,
     onEditorHighlightColorChange: ((highlightColor: Int) -> Unit)? = null,
@@ -252,6 +253,10 @@ fun PdfViewer.addListener(
 
         override fun onLinkClick(link: String) {
             onLinkClick?.invoke(link)
+        }
+
+        override fun onInternalJump(fromPage: Int) {
+            onInternalJump?.invoke(fromPage)
         }
 
         override fun onSnapChange(snapPage: Boolean) {

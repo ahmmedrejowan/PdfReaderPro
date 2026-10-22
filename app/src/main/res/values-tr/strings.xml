@@ -1086,6 +1086,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Sayfaya git</string>
+    <string name="back_to_page">%d. sayfaya dön</string>
     <string name="enter_page">Sayfa numarasını girin (1-%d)</string>
     <string name="invalid_page">Lütfen geçerli bir sayfa numarası girin</string>
     <string name="go">Git</string>

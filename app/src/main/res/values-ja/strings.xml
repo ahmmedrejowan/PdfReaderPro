@@ -1086,6 +1086,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">ページへ移動</string>
+    <string name="back_to_page">%dページに戻る</string>
     <string name="enter_page">ページ番号を入力（1-%d）</string>
     <string name="invalid_page">有効なページ番号を入力してください</string>
     <string name="go">移動</string>

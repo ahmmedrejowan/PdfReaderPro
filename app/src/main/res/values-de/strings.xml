@@ -1086,6 +1086,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Zu Seite gehen</string>
+    <string name="back_to_page">Zurück zu Seite %d</string>
     <string name="enter_page">Seitenzahl eingeben (1-%d)</string>
     <string name="invalid_page">Bitte geben Sie eine gültige Seitenzahl ein</string>
     <string name="go">Los</string>

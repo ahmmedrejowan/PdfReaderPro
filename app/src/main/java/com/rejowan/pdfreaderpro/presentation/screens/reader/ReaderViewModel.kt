@@ -720,6 +720,10 @@ class ReaderViewModel(
                     }
                 }
             },
+            onInternalJump = { fromPage ->
+                // Viewer pages are 1-based.
+                rememberReturnPage(fromPage - 1, null)
+            },
             onLinkClick = { link ->
                 onAction(ReaderAction.OpenLink(link))
             }
@@ -747,10 +751,16 @@ class ReaderViewModel(
         return result
     }
 
+    /** Offers a way back to [from] after a jump, unless the jump stays on that page. */
+    private fun rememberReturnPage(from: Int, to: Int?) {
+        if (from != to) _state.update { it.copy(returnPage = from) }
+    }
+
     /**
      * Navigate to an outline item using its page number.
      */
     fun navigateToOutlineItem(item: OutlineItem) {
+        rememberReturnPage(_state.value.currentPage, item.page)
         // page is 0-based, goToPage expects 1-based
         _state.update { it.copy(currentPage = item.page) }
         pdfViewer?.goToPage(item.page + 1)
@@ -812,6 +822,17 @@ class ReaderViewModel(
                 // Our state uses 0-based, library uses 1-based
                 _state.update { it.copy(currentPage = action.page) }
                 pdfViewer?.goToPage(action.page + 1)
+            }
+            is ReaderAction.JumpToPage -> {
+                rememberReturnPage(_state.value.currentPage, action.page)
+                _state.update { it.copy(currentPage = action.page) }
+                pdfViewer?.goToPage(action.page + 1)
+            }
+            is ReaderAction.ReturnToPreviousPage -> {
+                val back = _state.value.returnPage ?: return
+                // Keep the page being left, so the chip can take the reader back again.
+                _state.update { it.copy(returnPage = it.currentPage, currentPage = back) }
+                pdfViewer?.goToPage(back + 1)
             }
             is ReaderAction.NextPage -> {
                 pdfViewer?.goToNextPage()
@@ -1369,6 +1390,7 @@ class ReaderViewModel(
 
             is ReaderAction.GoToBookmark -> {
                 val page = action.bookmark.pageNumber
+                rememberReturnPage(_state.value.currentPage, page)
                 _state.update { state ->
                     val isBookmarked = state.bookmarks.any { it.pageNumber == page }
                     state.copy(

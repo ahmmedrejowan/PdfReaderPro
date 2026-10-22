@@ -1086,6 +1086,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Go to page</string>
+    <string name="back_to_page">Back to page %d</string>
     <string name="enter_page">Enter page number (1-%d)</string>
     <string name="invalid_page">Please enter a valid page number</string>
     <string name="go">Go</string>

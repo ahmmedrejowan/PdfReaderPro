@@ -918,6 +918,7 @@
     <string name="remove_from_favourites_question">প্রিয় থেকে সরাবেন?</string>
     <string name="remove_from_list_message">এটি আপনার তালিকা থেকে সরিয়ে দেবে</string>
     <string name="go_to_page">পেজে যান</string>
+    <string name="back_to_page">%d নম্বর পেজে ফিরে যান</string>
     <string name="enter_page">পেজ নম্বর লিখুন (1-%d)</string>
     <string name="invalid_page">একটি সঠিক পেজ নম্বর লিখুন</string>
     <string name="go">যান</string>

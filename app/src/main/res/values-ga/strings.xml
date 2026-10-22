@@ -1087,6 +1087,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Téigh go leathanach</string>
+    <string name="back_to_page">Ar ais go leathanach %d</string>
     <string name="enter_page">Iontráil uimhir leathanaigh (1-%d)</string>
     <string name="invalid_page">Iontráil uimhir leathanaigh bhailí, le do thoil</string>
     <string name="go">Téigh</string>
