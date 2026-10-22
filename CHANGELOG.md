@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Back to Page** - After Go to page, the contents, a bookmark or a link inside the document, a chip below the top bar takes you back to the page you left (#88)
+- **Keep Image Colors** - In the Dark and Black reading themes, pictures can keep their own colors instead of being inverted; switch it on in Display Settings (#87)
+
+### Changed
+- **Short Documents** - A document shorter than the screen sits in the middle instead of at the top (#105)
+
 ### Fixed
+- **Signed Files in Other Apps** - A PDF with signatures saved into it no longer disappears from other apps' file pickers
 - **Counts for One** - Page, file and highlight counts read correctly for a single item ("1 page" instead of "1 pages"), in every language
 - **Back in Landscape** - Back closes the side panels in landscape instead of leaving the screen behind them, which in the reader closed the document
 - **Merge Retry** - Retry appears after a failed merge in every language, and no longer after a notice about a skipped file
