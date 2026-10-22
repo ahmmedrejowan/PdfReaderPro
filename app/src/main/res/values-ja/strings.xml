@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">PDFツール</string>
+    <string name="reader_pdf_tools_desc">分割、圧縮、回転など</string>
+    <string name="reader_pdf_tools_subtitle">このドキュメントでツールを使用</string>
     <string name="merge_pdfs">PDFを結合</string>
     <string name="split_pdf">PDFを分割</string>
     <string name="compress_pdf">PDFを圧縮</string>
@@ -995,6 +997,8 @@
     <string name="low_brightness">低い明るさ</string>
     <string name="high_brightness">高い明るさ</string>
     <string name="prevent_screen_off">画面がオフになるのを防ぐ</string>
+    <string name="keep_image_colors">画像の色を保持</string>
+    <string name="keep_image_colors_desc">画像を本来の色で表示します</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">ページへ移動</string>
@@ -1086,6 +1090,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">ページへ移動</string>
+    <string name="back_to_page">%dページに戻る</string>
     <string name="enter_page">ページ番号を入力（1-%d）</string>
     <string name="invalid_page">有効なページ番号を入力してください</string>
     <string name="go">移動</string>
@@ -1201,6 +1206,8 @@
     <string name="double_tap_zoom_subtitle">ダブルタップ時のズームレベル</string>
     <string name="show_tools_tab">ツールタブを表示</string>
     <string name="show_tools_tab_subtitle">非表示にしてPDFリーダーとしてのみアプリを使用</string>
+    <string name="hide_hidden_files">隠しファイルを非表示</string>
+    <string name="hide_hidden_files_subtitle">名前がドットで始まるファイルとフォルダを除外します</string>
     <string name="tap_to_check">タップしてアップデートを確認</string>
     <string name="checking">確認中…</string>
     <string name="update_available_version">アップデートがあります：v%s</string>

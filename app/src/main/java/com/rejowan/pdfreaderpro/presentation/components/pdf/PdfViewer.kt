@@ -1652,8 +1652,9 @@ class PdfViewer @JvmOverloads constructor(
      * have space at the top and bottom, allowing content to scroll
      * without being cut off by overlaying UI elements.
      *
-     * @param top Top padding in pixels
-     * @param bottom Bottom padding in pixels
+     * @param top Top padding in CSS pixels, which match dp since the viewer's
+     * page uses the device width
+     * @param bottom Bottom padding in CSS pixels
      */
     fun setContentPadding(top: Int, bottom: Int) {
         if (!isInitialized) return
@@ -1665,9 +1666,19 @@ class PdfViewer @JvmOverloads constructor(
                     container.style.paddingTop = '${top}px';
                     container.style.paddingBottom = '${bottom}px';
                 }
+                if (typeof centerShortDocument === 'function') centerShortDocument();
             })();
         """.trimIndent()
         webView.evaluateJavascript(js, null)
+    }
+
+    /**
+     * Space in CSS pixels that a jump to a page or a link leaves above its
+     * target, so a bar floating over the top of the view does not cover it.
+     */
+    fun setTopInset(inset: Int) {
+        if (!isInitialized) return
+        webView.evaluateJavascript("globalThis.pdfReaderTopInset = $inset;", null)
     }
 
     fun saveState(outState: Bundle) {

@@ -40,7 +40,10 @@
 Вы можете скачать последнюю версию APK отсюда
 
 <a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest">
-<img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+<img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+</a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro">
+<img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" width="224px" align="center"/>
 </a>
 
 Ознакомьтесь с разделом [релизов](https://github.com/ahmmedrejowan/PdfReaderPro/releases) для получения дополнительной информации.
@@ -223,6 +226,18 @@ GNU General Public License for more details.
 ---
 
 ## История изменений
+
+### v2.6.0 (2026-10-23)
+
+- «Вернуться на страницу»: после перехода кнопка возвращает на прежнюю страницу (#88)
+- Инструменты PDF открываются прямо из читалки для открытого документа (#105)
+- Сохранение цветов изображений в тёмной и чёрной темах (#87)
+- Настройка, чтобы скрывать файлы и папки, имя которых начинается с точки (#6)
+- Короткие документы показываются по центру экрана (#105)
+- Исправлено: первая страница и переходы больше не уходят под верхнюю панель (#105)
+- Исправлено: подписанные файлы больше не пропадают из выбора файлов в других приложениях
+- Исправлены счётчики для одного элемента («1 страница»), а «Назад» закрывает боковые панели в альбомной ориентации
+- Исправлена кнопка «Повторить» на экране объединения на всех языках
 
 ### v2.5.0 (2026-10-09)
 

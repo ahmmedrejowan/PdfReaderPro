@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">PDF-Werkzeuge</string>
+    <string name="reader_pdf_tools_desc">Aufteilen, komprimieren, drehen und mehr</string>
+    <string name="reader_pdf_tools_subtitle">Ein Werkzeug auf dieses Dokument anwenden</string>
     <string name="merge_pdfs">PDFs zusammenführen</string>
     <string name="split_pdf">PDF aufteilen</string>
     <string name="compress_pdf">PDF komprimieren</string>
@@ -995,6 +997,8 @@
     <string name="low_brightness">Niedrige Helligkeit</string>
     <string name="high_brightness">Hohe Helligkeit</string>
     <string name="prevent_screen_off">Ausschalten des Bildschirms verhindern</string>
+    <string name="keep_image_colors">Bildfarben beibehalten</string>
+    <string name="keep_image_colors_desc">Bilder in ihren echten Farben anzeigen</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Zu Seite springen</string>
@@ -1086,6 +1090,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Zu Seite gehen</string>
+    <string name="back_to_page">Zurück zu Seite %d</string>
     <string name="enter_page">Seitenzahl eingeben (1-%d)</string>
     <string name="invalid_page">Bitte geben Sie eine gültige Seitenzahl ein</string>
     <string name="go">Los</string>
@@ -1201,6 +1206,8 @@
     <string name="double_tap_zoom_subtitle">Zoomstufe beim Doppeltippen</string>
     <string name="show_tools_tab">Werkzeuge-Tab anzeigen</string>
     <string name="show_tools_tab_subtitle">Ausblenden, um die App nur als PDF-Reader zu verwenden</string>
+    <string name="hide_hidden_files">Versteckte Dateien ausblenden</string>
+    <string name="hide_hidden_files_subtitle">Dateien und Ordner überspringen, deren Name mit einem Punkt beginnt</string>
     <string name="tap_to_check">Tippen, um nach Updates zu suchen</string>
     <string name="checking">Wird überprüft…</string>
     <string name="update_available_version">Update verfügbar: v%s</string>

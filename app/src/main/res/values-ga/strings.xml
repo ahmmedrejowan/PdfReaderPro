@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">Uirlisí PDF</string>
+    <string name="reader_pdf_tools_desc">Scoilt, comhbhrúigh, rothlaigh agus tuilleadh</string>
+    <string name="reader_pdf_tools_subtitle">Úsáid uirlis ar an doiciméad seo</string>
     <string name="merge_pdfs">Cumaisc PDFanna</string>
     <string name="split_pdf">Scoilt PDF</string>
     <string name="compress_pdf">Comhbhrúigh PDF</string>
@@ -996,6 +998,8 @@
     <string name="low_brightness">Gile íseal</string>
     <string name="high_brightness">Gile ard</string>
     <string name="prevent_screen_off">Cuir cosc ar an scáileán dul as</string>
+    <string name="keep_image_colors">Coinnigh Dathanna na nÍomhánna</string>
+    <string name="keep_image_colors_desc">Taispeáin íomhánna ina bhfíordhathanna</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Léim go Leathanach</string>
@@ -1087,6 +1091,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Téigh go leathanach</string>
+    <string name="back_to_page">Ar ais go leathanach %d</string>
     <string name="enter_page">Iontráil uimhir leathanaigh (1-%d)</string>
     <string name="invalid_page">Iontráil uimhir leathanaigh bhailí, le do thoil</string>
     <string name="go">Téigh</string>
@@ -1202,6 +1207,8 @@
     <string name="double_tap_zoom_subtitle">Leibhéal súmála nuair a thapáiltear go dúbailte</string>
     <string name="show_tools_tab">Taispeáin Cluaisín Uirlisí</string>
     <string name="show_tools_tab_subtitle">Folaigh chun an aip a úsáid mar léitheoir PDF amháin</string>
+    <string name="hide_hidden_files">Folaigh Comhaid Fholaithe</string>
+    <string name="hide_hidden_files_subtitle">Fág comhaid agus fillteáin a dtosaíonn a n-ainm le ponc ar lár</string>
     <string name="tap_to_check">Tapáil chun nuashonruithe a sheiceáil</string>
     <string name="checking">Á sheiceáil…</string>
     <string name="update_available_version">Nuashonrú ar fáil: v%s</string>

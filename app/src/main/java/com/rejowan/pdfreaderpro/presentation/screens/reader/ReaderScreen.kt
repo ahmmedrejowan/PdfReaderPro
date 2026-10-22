@@ -42,6 +42,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.findRootCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
@@ -75,6 +79,19 @@ import com.rejowan.pdfreaderpro.presentation.screens.reader.components.EnhancedT
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ErrorState
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingControlBar
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.FloatingSearchBar
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReturnToPageChip
+import com.rejowan.pdfreaderpro.presentation.screens.reader.components.ReaderToolsSheet
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToSplitTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRotateTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReorderTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToLockTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToUnlockTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRemovePagesTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToWatermarkTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPageNumbersTool
+import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPdfToImageTool
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageScrubber
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
@@ -183,12 +200,38 @@ fun ReaderScreen(
         }
     }
 
-    // Calculate content padding for PDF viewer (in pixels)
     val density = LocalDensity.current
+
+    // Jumps land below the top bar while it shows, and below the Back to page
+    // chip that a jump brings up under it. The viewer works in CSS pixels,
+    // which match dp.
+    var topBarBottomPx by remember { mutableFloatStateOf(0f) }
+    val topInset = if (state.isToolbarVisible && !state.isFullScreen) {
+        with(density) {
+            if (topBarBottomPx > 0f) topBarBottomPx.toDp().value.toInt()
+            else WindowInsets.statusBars.getTop(density).toDp().value.toInt() + 72
+        } + BACK_CHIP_CLEARANCE_DP
+    } else 0
+    LaunchedEffect(topInset, state.isLoading) {
+        viewModel.setTopInset(topInset)
+    }
     val statusBarHeightPx = WindowInsets.statusBars.getTop(density)
     val navBarHeightPx = WindowInsets.navigationBars.getBottom(density)
-    val topPaddingPx = statusBarHeightPx + with(density) { 6.dp.roundToPx() }
-    val bottomPaddingPx = navBarHeightPx + with(density) { 6.dp.roundToPx() }
+    // Room at the start and end of the document, so the first page starts
+    // below the top bar and the last one can scroll clear of the control bar.
+    // In CSS pixels (dp); until the bars are measured, their usual size.
+    var controlBarGapPx by remember { mutableFloatStateOf(0f) }
+    val topPadding = with(density) {
+        if (topBarBottomPx > 0f) topBarBottomPx.toDp().value.toInt() + 8
+        else statusBarHeightPx.toDp().value.toInt() + 80
+    }
+    val bottomPadding = with(density) {
+        if (controlBarGapPx > 0f) controlBarGapPx.toDp().value.toInt() + 8
+        else navBarHeightPx.toDp().value.toInt() + 88
+    }
+    LaunchedEffect(topPadding, bottomPadding, state.isLoading) {
+        viewModel.setContentPadding(topPadding, bottomPadding)
+    }
 
     // Handle immersive mode - hide system bars when toolbar is hidden or in full screen
     val shouldBeImmersive = !state.isToolbarVisible || state.isFullScreen
@@ -384,7 +427,10 @@ fun ReaderScreen(
                     onReady {
                         ui.toolbarEnabled = false
                         ui.isSideBarOpen = false
-                        setContentPadding(topPaddingPx, bottomPaddingPx)
+                        setContentPadding(topPadding, bottomPadding)
+                        // Before loading, so reopening at the last page read lands
+                        // below the top bar too.
+                        setTopInset(topInset)
                         loadFromFile(viewModel.pdfPath)
                     }
 
@@ -477,7 +523,13 @@ fun ReaderScreen(
                     onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
                     onMenuClick = { viewModel.onAction(ReaderAction.ShowTopBarMenu) },
                     isDarkMode = isDarkMode,
-                    modifier = Modifier.align(Alignment.TopCenter)
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .onGloballyPositioned { coordinates ->
+                            // Hidden, the bar measures nothing; keep the last real size.
+                            val bottom = coordinates.boundsInRoot().bottom
+                            if (bottom > 0f) topBarBottomPx = bottom
+                        }
                 )
 
                 // Search bar at top (replaces top bar when active)
@@ -517,6 +569,18 @@ fun ReaderScreen(
                     )
                 }
 
+                // Way back after a jump, just below the top bar
+                ReturnToPageChip(
+                    isVisible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen &&
+                        state.returnPage != null && state.returnPage != state.currentPage,
+                    page = (state.returnPage ?: 0) + 1,
+                    onClick = { viewModel.onAction(ReaderAction.ReturnToPreviousPage) },
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .windowInsetsPadding(WindowInsets.statusBars)
+                        .padding(start = 16.dp, top = 80.dp)
+                )
+
                 // Page scrubber (shows with toolbar OR when scrolling in immersive mode)
                 // Vertical scrubber on right edge for vertical scroll mode
                 // Horizontal scrubber above bottom bar for horizontal scroll mode
@@ -534,6 +598,7 @@ fun ReaderScreen(
                     totalPages = state.totalPages,
                     isVisible = showScrubber,
                     onPageChange = { viewModel.onAction(ReaderAction.GoToPage(it)) },
+                    onPageJump = { viewModel.onAction(ReaderAction.JumpToPage(it)) },
                     isHorizontal = isHorizontalScroll,
                     isDarkMode = isDarkMode,
                     modifier = if (isHorizontalScroll) {
@@ -588,6 +653,13 @@ fun ReaderScreen(
                     visible = state.isToolbarVisible && !state.isFullScreen,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
+                        .onGloballyPositioned { coordinates ->
+                            // From the bar's top to the bottom of the screen;
+                            // hidden, the bar measures nothing, so keep the last.
+                            val root = coordinates.findRootCoordinates().size.height
+                            val top = coordinates.boundsInRoot().top
+                            if (coordinates.size.height > 0) controlBarGapPx = root - top
+                        }
                         .windowInsetsPadding(WindowInsets.navigationBars)
                         .padding(bottom = 16.dp),
                     enter = slideInVertically(
@@ -664,7 +736,7 @@ fun ReaderScreen(
             currentPage = state.currentPage + 1,
             totalPages = state.totalPages,
             onPageSelected = {
-                viewModel.onAction(ReaderAction.GoToPage(it - 1))
+                viewModel.onAction(ReaderAction.JumpToPage(it - 1))
                 viewModel.onAction(ReaderAction.HidePageJumpDialog)
             },
             onDismiss = { viewModel.onAction(ReaderAction.HidePageJumpDialog) }
@@ -750,9 +822,11 @@ fun ReaderScreen(
         DisplaySheet(
             brightness = state.brightness,
             keepScreenOn = state.keepScreenOn,
+            keepImageColors = state.keepImageColors,
             currentTheme = state.readingTheme,
             onBrightnessChange = { viewModel.onAction(ReaderAction.SetBrightness(it)) },
             onKeepScreenOnChange = { viewModel.onAction(ReaderAction.SetKeepScreenOn(it)) },
+            onKeepImageColorsChange = { viewModel.onAction(ReaderAction.SetKeepImageColors(it)) },
             onThemeChange = { viewModel.onAction(ReaderAction.SetReadingTheme(it)) },
             onDismiss = { viewModel.onAction(ReaderAction.HideDisplaySheet) }
         )
@@ -832,6 +906,31 @@ fun ReaderScreen(
         )
     }
 
+    // Tools for this document, from More Options
+    if (state.isToolsSheetVisible) {
+        ReaderToolsSheet(
+            isPasswordProtected = state.isPasswordProtected,
+            onToolClick = { toolId ->
+                viewModel.onAction(ReaderAction.HideToolsSheet)
+                val path = viewModel.pdfPath
+                when (toolId) {
+                    "merge" -> navController.navigateToMergeTool(listOf(path))
+                    "split" -> navController.navigateToSplitTool(path)
+                    "compress" -> navController.navigateToCompressTool(path)
+                    "rotate" -> navController.navigateToRotateTool(path)
+                    "reorder" -> navController.navigateToReorderTool(path)
+                    "lock_pdf" -> navController.navigateToLockTool(path)
+                    "unlock_pdf" -> navController.navigateToUnlockTool(path)
+                    "remove_pages" -> navController.navigateToRemovePagesTool(path)
+                    "watermark" -> navController.navigateToWatermarkTool(path)
+                    "page_numbers" -> navController.navigateToPageNumbersTool(path)
+                    "pdf_to_img" -> navController.navigateToPdfToImageTool(path)
+                }
+            },
+            onDismiss = { viewModel.onAction(ReaderAction.HideToolsSheet) }
+        )
+    }
+
     // More Options Sheet
     if (state.isMoreOptionsSheetVisible) {
         MoreOptionsSheet(
@@ -860,6 +959,10 @@ fun ReaderScreen(
             },
             onShareClick = {
                 viewModel.onAction(ReaderAction.ShareDocument)
+            },
+            showTools = state.showTools,
+            onToolsClick = {
+                viewModel.onAction(ReaderAction.ShowToolsSheet)
             },
             onPrintClick = {
                 viewModel.printDocument()
@@ -943,3 +1046,6 @@ fun ReaderScreen(
  * matched back by id.
  */
 private const val MENU_ID_HIGHLIGHT = 0x48_4C_47_31
+
+/** The Back to page chip's height and gap below the top bar. */
+private const val BACK_CHIP_CLEARANCE_DP = 60

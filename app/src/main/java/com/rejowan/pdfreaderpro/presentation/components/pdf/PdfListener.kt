@@ -173,6 +173,12 @@ interface PdfListener {
     fun onLinkClick(link: String) {}
 
     /**
+     * Called when a link inside the document moves to another place in it.
+     * @param fromPage The 1-based page that was showing before the jump.
+     */
+    fun onInternalJump(fromPage: Int) {}
+
+    /**
      * Called when the snap-to-page setting changes.
      * @param snapPage `true` if snapping is enabled, `false` otherwise.
      */

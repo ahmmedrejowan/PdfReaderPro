@@ -115,6 +115,14 @@ class UiSettings internal constructor(private val webView: WebView) {
     }
 
     /**
+     * In the dark and black reading themes, shows images in their own colors
+     * instead of inverting them with the page.
+     */
+    fun setKeepImageColors(keep: Boolean) {
+        webView callDirectly "setKeepImageColors"(keep)
+    }
+
+    /**
      * Auto-scroll controls for hands-free reading.
      */
     val autoScroll = AutoScroll()

@@ -339,6 +339,8 @@
     <string name="confirm_exit">আপনি কি নিশ্চিত যে বের হতে চান?</string>
     <string name="exit">বের হন</string>
     <string name="pdf_tools">PDF টুলস</string>
+    <string name="reader_pdf_tools_desc">স্প্লিট, কম্প্রেস, রোটেট আরও অনেক কিছু</string>
+    <string name="reader_pdf_tools_subtitle">এই ডকুমেন্টে একটা টুল চালান</string>
     <string name="merge_pdfs">PDF মার্জ করুন</string>
     <string name="split_pdf">PDF স্প্লিট করুন</string>
     <string name="compress_pdf">PDF কম্প্রেস করুন</string>
@@ -845,6 +847,8 @@
     <string name="low_brightness">কম ব্রাইটনেস</string>
     <string name="high_brightness">বেশি ব্রাইটনেস</string>
     <string name="prevent_screen_off">স্ক্রিন বন্ধ হতে দেবেন না</string>
+    <string name="keep_image_colors">ছবির রঙ ঠিক রাখুন</string>
+    <string name="keep_image_colors_desc">ছবি আসল রঙে দেখান</string>
     <string name="jump_to_page_title">পেজে যান</string>
     <string name="enter_page_range">একটি পেজ নম্বর লিখুন (1 - %d)</string>
     <string name="page_number_placeholder">পেজ নম্বর</string>
@@ -918,6 +922,7 @@
     <string name="remove_from_favourites_question">প্রিয় থেকে সরাবেন?</string>
     <string name="remove_from_list_message">এটি আপনার তালিকা থেকে সরিয়ে দেবে</string>
     <string name="go_to_page">পেজে যান</string>
+    <string name="back_to_page">%d নম্বর পেজে ফিরে যান</string>
     <string name="enter_page">পেজ নম্বর লিখুন (1-%d)</string>
     <string name="invalid_page">একটি সঠিক পেজ নম্বর লিখুন</string>
     <string name="go">যান</string>
@@ -1017,6 +1022,8 @@
     <string name="double_tap_zoom_subtitle">ডাবল ট্যাপ করলে জুমের মাত্রা</string>
     <string name="show_tools_tab">টুলস ট্যাব দেখান</string>
     <string name="show_tools_tab_subtitle">অ্যাপটি শুধু PDF রিডার হিসেবে ব্যবহার করতে লুকিয়ে রাখুন</string>
+    <string name="hide_hidden_files">লুকানো ফাইল দেখাবেন না</string>
+    <string name="hide_hidden_files_subtitle">যেসব ফাইল আর ফোল্ডারের নাম ডট দিয়ে শুরু, সেগুলো বাদ দিন</string>
     <string name="tap_to_check">আপডেট চেক করতে ট্যাপ করুন</string>
     <string name="checking">চেক করা হচ্ছে…</string>
     <string name="update_available_version">আপডেট পাওয়া যাচ্ছে: v%s</string>

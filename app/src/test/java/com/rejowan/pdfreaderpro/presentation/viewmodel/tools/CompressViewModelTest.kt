@@ -591,7 +591,7 @@ class CompressViewModelTest {
         }
 
         vm.compress()
-        advanceUntilIdle()
+        awaitFinished { vm.state.value.isProcessing }
 
         assertNotEquals(sourcePath, target.captured)
         assertFalse(java.io.File(target.captured).exists())
@@ -695,4 +695,14 @@ class CompressViewModelTest {
         assertNull(vm.state.value.sourceFile)
     }
     // endregion
+
+    /** Replacing the original runs on the IO dispatcher, outside the test scheduler. */
+    private fun TestScope.awaitFinished(isBusy: () -> Boolean) {
+        repeat(500) {
+            advanceUntilIdle()
+            if (!isBusy()) return
+            Thread.sleep(10)
+        }
+        throw AssertionError("still working after 5 seconds")
+    }
 }

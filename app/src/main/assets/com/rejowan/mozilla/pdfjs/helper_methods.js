@@ -345,7 +345,32 @@ function selectSpreadEven() {
 }
 
 // Reading theme functions
+let currentReadingTheme = 'light';
+let keepImageColors = false;
+
+/**
+ * The dark and black themes invert whole pages, pictures included. To show
+ * pictures in their own colors, PDF.js (build/pdf.mjs, patched) draws each one
+ * through pdfReaderImageFilter, an inversion that the page's filter undoes.
+ */
+function updateImageFilter() {
+    const inverting = currentReadingTheme === 'dark' || currentReadingTheme === 'black';
+    const filter = keepImageColors && inverting ? 'invert(1) hue-rotate(180deg)' : null;
+    if ((globalThis.pdfReaderImageFilter || null) === filter) return;
+    globalThis.pdfReaderImageFilter = filter;
+    // Pages already drawn keep their old pixels until they render again.
+    PDFViewerApplication.pdfViewer?.refresh();
+}
+
+function setKeepImageColors(keep) {
+    keepImageColors = keep;
+    updateImageFilter();
+}
+
 function setReadingTheme(theme) {
+    currentReadingTheme = theme;
+    updateImageFilter();
+
     const viewer = document.getElementById('viewer');
     const viewerContainer = document.getElementById('viewerContainer');
 
@@ -2100,3 +2125,22 @@ function sliceByOverlap(text, left, width, overlapLeft, overlapRight) {
     return kept.length > 0 ? kept.join(" ") : text;
 }
 // #endregion
+
+/**
+ * Centers the document vertically when all of it fits on screen, by giving the
+ * viewer a top margin of half the free space. A taller document gets no margin
+ * and scrolls as usual.
+ */
+function centerShortDocument() {
+    // The lazy viewer and viewerContainer proxies are not Elements, which
+    // getComputedStyle needs, so look the elements up directly.
+    const pages = document.getElementById("viewer");
+    const container = document.getElementById("viewerContainer");
+    if (!pages || !container) return;
+    pages.style.marginTop = "";
+    const style = getComputedStyle(container);
+    const available = container.clientHeight
+        - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    const free = available - pages.offsetHeight;
+    if (free > 1) pages.style.marginTop = `${Math.floor(free / 2)}px`;
+}

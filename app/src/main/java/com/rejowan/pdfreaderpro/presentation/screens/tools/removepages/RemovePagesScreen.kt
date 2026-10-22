@@ -1,5 +1,7 @@
 package com.rejowan.pdfreaderpro.presentation.screens.tools.removepages
 
+import androidx.compose.runtime.LaunchedEffect
+import android.net.Uri
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -108,6 +110,14 @@ fun RemovePagesScreen(
     viewModel: RemovePagesViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    // A file handed over by the reader opens straight away, unless one is
+    // already loaded: the view model outlives a rotation, but not the process.
+    LaunchedEffect(initialFilePath) {
+        if (viewModel.state.value.sourceFile == null && !initialFilePath.isNullOrBlank()) {
+            viewModel.setSourceFile(Uri.fromFile(File(initialFilePath)))
+        }
+    }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 

@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">Инструменты PDF</string>
+    <string name="reader_pdf_tools_desc">Разделение, сжатие, поворот и многое другое</string>
+    <string name="reader_pdf_tools_subtitle">Применить инструмент к этому документу</string>
     <string name="merge_pdfs">Объединить PDF</string>
     <string name="split_pdf">Разделить PDF</string>
     <string name="compress_pdf">Сжать PDF</string>
@@ -995,6 +997,8 @@
     <string name="low_brightness">Низкая яркость</string>
     <string name="high_brightness">Высокая яркость</string>
     <string name="prevent_screen_off">Не выключать экран</string>
+    <string name="keep_image_colors">Сохранять цвета изображений</string>
+    <string name="keep_image_colors_desc">Показывать изображения в настоящих цветах</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Перейти к странице</string>
@@ -1086,6 +1090,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Перейти к странице</string>
+    <string name="back_to_page">Вернуться на страницу %d</string>
     <string name="enter_page">Введите номер страницы (1-%d)</string>
     <string name="invalid_page">Пожалуйста, введите корректный номер страницы</string>
     <string name="go">Перейти</string>
@@ -1201,6 +1206,8 @@
     <string name="double_tap_zoom_subtitle">Уровень масштаба при двойном нажатии</string>
     <string name="show_tools_tab">Показывать вкладку инструментов</string>
     <string name="show_tools_tab_subtitle">Скрыть, чтобы использовать приложение только как PDF-читалку</string>
+    <string name="hide_hidden_files">Не показывать скрытые файлы</string>
+    <string name="hide_hidden_files_subtitle">Пропускать файлы и папки, имя которых начинается с точки</string>
     <string name="tap_to_check">Нажмите, чтобы проверить обновления</string>
     <string name="checking">Проверка…</string>
     <string name="update_available_version">Доступно обновление: v%s</string>

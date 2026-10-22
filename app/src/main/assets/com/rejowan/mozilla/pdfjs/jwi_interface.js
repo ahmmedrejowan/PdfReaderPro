@@ -15,6 +15,7 @@ try {
         onPageRendered() { },
         onPasswordDialogChange() { },
         onLinkClick() { },
+        onInternalJump() { },
         onSingleClick(x, y, width, height) { },
         getValidCustomProtocols() { return ""; },
         onDoubleClick(x, y) { },

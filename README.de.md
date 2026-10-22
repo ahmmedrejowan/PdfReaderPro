@@ -40,7 +40,10 @@
 Sie können die neueste APK hier herunterladen
 
 <a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest">
-<img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+<img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+</a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro">
+<img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" width="224px" align="center"/>
 </a>
 
 Weitere Details finden Sie im Bereich [Releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases).
@@ -223,6 +226,18 @@ GNU General Public License for more details.
 ---
 
 ## Änderungsprotokoll
+
+### v2.6.0 (23.10.2026)
+
+- Zurück zur Seite: Nach einem Sprung führt ein Chip zurück zur vorherigen Seite (#88)
+- PDF-Werkzeuge direkt im Reader für das geöffnete Dokument (#105)
+- Bildfarben in den Lesethemen Dunkel und Schwarz beibehalten (#87)
+- Einstellung zum Ausblenden von Dateien und Ordnern, deren Name mit einem Punkt beginnt (#6)
+- Kurze Dokumente stehen in der Mitte des Bildschirms (#105)
+- Erste Seite und Sprünge landen nicht mehr unter der oberen Leiste (#105)
+- Signierte Dateien verschwinden nicht mehr aus der Dateiauswahl anderer Apps
+- Anzahlen für ein einzelnes Element korrigiert („1 Seite“), und Zurück schließt Seitenleisten im Querformat
+- Wiederholen auf dem Zusammenführen-Bildschirm funktioniert in jeder Sprache
 
 ### v2.5.0 (09.10.2026)
 

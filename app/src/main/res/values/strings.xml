@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">PDF Tools</string>
+    <string name="reader_pdf_tools_desc">Split, compress, rotate and more</string>
+    <string name="reader_pdf_tools_subtitle">Use a tool on this document</string>
     <string name="merge_pdfs">Merge PDFs</string>
     <string name="split_pdf">Split PDF</string>
     <string name="compress_pdf">Compress PDF</string>
@@ -995,6 +997,8 @@
     <string name="low_brightness">Low brightness</string>
     <string name="high_brightness">High brightness</string>
     <string name="prevent_screen_off">Prevent screen from turning off</string>
+    <string name="keep_image_colors">Keep Image Colors</string>
+    <string name="keep_image_colors_desc">Show pictures in their real colors</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Jump to Page</string>
@@ -1086,6 +1090,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Go to page</string>
+    <string name="back_to_page">Back to page %d</string>
     <string name="enter_page">Enter page number (1-%d)</string>
     <string name="invalid_page">Please enter a valid page number</string>
     <string name="go">Go</string>
@@ -1201,6 +1206,8 @@
     <string name="double_tap_zoom_subtitle">Zoom level when double tapping</string>
     <string name="show_tools_tab">Show Tools Tab</string>
     <string name="show_tools_tab_subtitle">Hide to use the app as a PDF reader only</string>
+    <string name="hide_hidden_files">Hide Hidden Files</string>
+    <string name="hide_hidden_files_subtitle">Skip files and folders whose names start with a dot</string>
     <string name="tap_to_check">Tap to check for updates</string>
     <string name="checking">Checking…</string>
     <string name="update_available_version">Update available: v%s</string>

@@ -40,7 +40,10 @@
 Pode transferir o APK mais recente aqui
 
 <a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest">
-<img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+<img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+</a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro">
+<img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" width="224px" align="center"/>
 </a>
 
 Consulte a secção de [releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases) para mais detalhes.
@@ -223,6 +226,18 @@ GNU General Public License for more details.
 ---
 
 ## Registo de alterações
+
+### v2.6.0 (23/10/2026)
+
+- Voltar à página: depois de um salto, um botão leva de volta à página anterior (#88)
+- Abrir as ferramentas PDF a partir do leitor no documento aberto (#105)
+- Manter as cores das imagens nos temas Escuro e Preto (#87)
+- Definição para ocultar ficheiros e pastas cujo nome começa por um ponto (#6)
+- Os documentos curtos aparecem no centro do ecrã (#105)
+- Corrigido: a primeira página e os saltos já não ficam sob a barra superior (#105)
+- Corrigido: os ficheiros assinados já não desaparecem do seletor de ficheiros de outras aplicações
+- Corrigidas as contagens de um só item («1 página»), e Voltar fecha os painéis laterais na horizontal
+- Corrigido Tentar novamente no ecrã Unir em todos os idiomas
 
 ### v2.5.0 (09/10/2026)
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.annotation.StringRes
 import com.rejowan.pdfreaderpro.R
+import com.rejowan.pdfreaderpro.util.FileOperations
 import com.rejowan.pdfreaderpro.domain.repository.PdfToolsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -361,11 +362,7 @@ class RotateViewModel(
                 onSuccess = {
                     if (tempPath != null) {
                         try {
-                            val tempFile = File(tempPath)
-                            val originalFile = File(outputPath)
-                            originalFile.delete()
-                            tempFile.copyTo(originalFile, overwrite = true)
-                            tempFile.delete()
+                            FileOperations.replaceFile(context, File(tempPath), File(outputPath))
                         } catch (e: Exception) {
                             Timber.e(e, "Failed to replace original file")
                             _state.update { it.copy(isProcessing = false, error = context.getString(R.string.error_failed_replace_original)) }
@@ -446,6 +443,8 @@ class RotateViewModel(
     }
 
     private fun getFileNameFromUri(uri: Uri): String? {
+        // A file the reader handed over has no provider to ask.
+        if (uri.scheme == "file") return uri.lastPathSegment
         return try {
             context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
                 val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)

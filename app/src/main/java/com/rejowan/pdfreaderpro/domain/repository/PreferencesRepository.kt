@@ -22,6 +22,7 @@ interface PreferencesRepository {
     suspend fun setDefaultSortOption(option: SortOption)
     suspend fun setRememberPasswords(enabled: Boolean)
     suspend fun setShowToolsTab(enabled: Boolean)
+    suspend fun setHideHiddenFiles(enabled: Boolean)
     suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval)
 
     // Reader settings
@@ -34,6 +35,7 @@ interface PreferencesRepository {
     suspend fun setReaderTheme(theme: ReadingTheme)
     suspend fun setReaderSnapToPages(enabled: Boolean)
     suspend fun setReaderScrubberOnScroll(enabled: Boolean)
+    suspend fun setReaderKeepImageColors(enabled: Boolean)
     suspend fun setReaderScreenOrientation(orientation: ScreenOrientation)
     suspend fun setReaderTapToTurnPage(enabled: Boolean)
 }

@@ -291,4 +291,57 @@ class PdfFileRepositoryTest {
         }
     }
     // endregion
+
+    // region Hidden files
+    @Test
+    fun `a file inside a dot folder is hidden`() {
+        assertTrue(PdfFileRepositoryImpl.isHidden("/storage/emulated/0/.cache/doc.pdf"))
+    }
+
+    @Test
+    fun `a file whose name starts with a dot is hidden`() {
+        assertTrue(PdfFileRepositoryImpl.isHidden("/storage/emulated/0/Download/.draft.pdf"))
+    }
+
+    @Test
+    fun `an ordinary file is not hidden`() {
+        assertFalse(PdfFileRepositoryImpl.isHidden("/storage/emulated/0/Download/report.v2.pdf"))
+    }
+
+    @Test
+    fun `hidden files are left out only when asked`() = runTest {
+        val hide = kotlinx.coroutines.flow.MutableStateFlow(false)
+        repository = PdfFileRepositoryImpl(context = context, hideHiddenFiles = hide)
+        seed(
+            repository,
+            pdf("/storage/emulated/0/Download/visible.pdf"),
+            pdf("/storage/emulated/0/.hidden/secret.pdf")
+        )
+
+        repository.getAllPdfFiles().test {
+            assertEquals(2, awaitItem().size)
+            hide.value = true
+            assertEquals(listOf("visible.pdf"), awaitItem().map { it.name })
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun pdf(path: String) = PdfFile(
+        id = path.hashCode().toLong(),
+        name = path.substringAfterLast('/'),
+        path = path,
+        uri = mockUri,
+        size = 1L,
+        dateModified = 0L,
+        dateAdded = 0L,
+        parentFolder = path.substringBeforeLast('/')
+    )
+
+    @Suppress("UNCHECKED_CAST")
+    private fun seed(repo: PdfFileRepositoryImpl, vararg files: PdfFile) {
+        val field = PdfFileRepositoryImpl::class.java.getDeclaredField("_pdfFiles")
+        field.isAccessible = true
+        (field.get(repo) as kotlinx.coroutines.flow.MutableStateFlow<List<PdfFile>>).value = files.toList()
+    }
+    // endregion
 }

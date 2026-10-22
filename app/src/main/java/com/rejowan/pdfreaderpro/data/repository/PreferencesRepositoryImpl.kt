@@ -32,6 +32,7 @@ class PreferencesRepositoryImpl(
         val DEFAULT_SORT_OPTION = stringPreferencesKey("default_sort_option")
         val REMEMBER_PASSWORDS = booleanPreferencesKey("remember_passwords")
         val SHOW_TOOLS_TAB = booleanPreferencesKey("show_tools_tab")
+        val HIDE_HIDDEN_FILES = booleanPreferencesKey("hide_hidden_files")
         val UPDATE_CHECK_INTERVAL = stringPreferencesKey("update_check_interval")
 
         // Reader settings
@@ -44,6 +45,7 @@ class PreferencesRepositoryImpl(
         val READER_THEME = stringPreferencesKey("reader_theme")
         val READER_SNAP_TO_PAGES = booleanPreferencesKey("reader_snap_to_pages")
         val READER_SCRUBBER_ON_SCROLL = booleanPreferencesKey("reader_scrubber_on_scroll")
+        val READER_KEEP_IMAGE_COLORS = booleanPreferencesKey("reader_keep_image_colors")
         val READER_SCREEN_ORIENTATION = stringPreferencesKey("reader_screen_orientation")
         val READER_TAP_TO_TURN_PAGE = booleanPreferencesKey("reader_tap_to_turn_page")
     }
@@ -58,6 +60,7 @@ class PreferencesRepositoryImpl(
             defaultSortOption = prefs[Keys.DEFAULT_SORT_OPTION]?.let { SortOption.valueOf(it) } ?: SortOption.NAME_ASC,
             rememberPasswords = prefs[Keys.REMEMBER_PASSWORDS] ?: true,
             showToolsTab = prefs[Keys.SHOW_TOOLS_TAB] ?: true,
+            hideHiddenFiles = prefs[Keys.HIDE_HIDDEN_FILES] ?: false,
             updateCheckInterval = prefs[Keys.UPDATE_CHECK_INTERVAL]?.let { UpdateCheckInterval.valueOf(it) } ?: UpdateCheckInterval.WEEKLY,
 
             // Reader settings
@@ -70,6 +73,7 @@ class PreferencesRepositoryImpl(
             readerTheme = prefs[Keys.READER_THEME]?.let { ReadingTheme.valueOf(it) } ?: ReadingTheme.LIGHT,
             readerSnapToPages = prefs[Keys.READER_SNAP_TO_PAGES] ?: false,
             readerScrubberOnScroll = prefs[Keys.READER_SCRUBBER_ON_SCROLL] ?: false,
+            readerKeepImageColors = prefs[Keys.READER_KEEP_IMAGE_COLORS] ?: false,
             readerScreenOrientation = prefs[Keys.READER_SCREEN_ORIENTATION]?.let { ScreenOrientation.valueOf(it) } ?: ScreenOrientation.AUTO,
             readerTapToTurnPage = prefs[Keys.READER_TAP_TO_TURN_PAGE] ?: false
         )
@@ -104,6 +108,10 @@ class PreferencesRepositoryImpl(
         dataStore.edit { it[Keys.SHOW_TOOLS_TAB] = enabled }
     }
 
+    override suspend fun setHideHiddenFiles(enabled: Boolean) {
+        dataStore.edit { it[Keys.HIDE_HIDDEN_FILES] = enabled }
+    }
+
     override suspend fun setUpdateCheckInterval(interval: UpdateCheckInterval) {
         dataStore.edit { it[Keys.UPDATE_CHECK_INTERVAL] = interval.name }
     }
@@ -123,6 +131,10 @@ class PreferencesRepositoryImpl(
 
     override suspend fun setReaderScrubberOnScroll(enabled: Boolean) {
         dataStore.edit { it[Keys.READER_SCRUBBER_ON_SCROLL] = enabled }
+    }
+
+    override suspend fun setReaderKeepImageColors(enabled: Boolean) {
+        dataStore.edit { it[Keys.READER_KEEP_IMAGE_COLORS] = enabled }
     }
 
     override suspend fun setReaderQuickZoomPreset(preset: QuickZoomPreset) {

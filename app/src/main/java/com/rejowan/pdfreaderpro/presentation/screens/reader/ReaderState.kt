@@ -23,6 +23,8 @@ data class ReaderState(
 
     // Navigation
     val currentPage: Int = 0,
+    /** Page (0-based) to offer going back to after a jump, or null. */
+    val returnPage: Int? = null,
 
     // Zoom and scroll
     val zoom: Float = 1f,
@@ -118,6 +120,9 @@ data class ReaderState(
     val isDisplaySheetVisible: Boolean = false,
     val isBookmarksSheetVisible: Boolean = false,
     val isMoreOptionsSheetVisible: Boolean = false,
+    val isToolsSheetVisible: Boolean = false,
+    /** Follows the Show Tools Tab setting, which turns the app into a reader only. */
+    val showTools: Boolean = true,
 
     // Screen orientation
     val screenOrientation: ScreenOrientation = ScreenOrientation.AUTO,
@@ -130,6 +135,9 @@ data class ReaderState(
 
     // Show the page scrubber on scroll while the toolbar is hidden
     val scrubberOnScroll: Boolean = false,
+
+    // In the dark and black themes, show images in their own colors
+    val keepImageColors: Boolean = false,
 
     // Tap the sides of the page to move between pages
     val tapToTurnPage: Boolean = false,
@@ -333,6 +341,9 @@ sealed class ReaderAction {
 
     // Navigation
     data class GoToPage(val page: Int) : ReaderAction()
+    /** A deliberate jump, such as Go to page, that can be undone with [ReturnToPreviousPage]. */
+    data class JumpToPage(val page: Int) : ReaderAction()
+    data object ReturnToPreviousPage : ReaderAction()
     data object NextPage : ReaderAction()
     data object PreviousPage : ReaderAction()
 
@@ -376,6 +387,8 @@ sealed class ReaderAction {
     data object HideBookmarksSheet : ReaderAction()
     data object ShowMoreOptionsSheet : ReaderAction()
     data object HideMoreOptionsSheet : ReaderAction()
+    data object ShowToolsSheet : ReaderAction()
+    data object HideToolsSheet : ReaderAction()
 
     // Reading settings
     data class SetBrightness(val brightness: Float) : ReaderAction()
@@ -386,6 +399,7 @@ sealed class ReaderAction {
     data class SetReadingTheme(val theme: ReadingTheme) : ReaderAction()
     data class SetAutoHideToolbar(val enabled: Boolean) : ReaderAction()
     data class SetScrubberOnScroll(val enabled: Boolean) : ReaderAction()
+    data class SetKeepImageColors(val enabled: Boolean) : ReaderAction()
     data class SetTapToTurnPage(val enabled: Boolean) : ReaderAction()
     data class SetLockHorizontalScroll(val enabled: Boolean) : ReaderAction()
     data class OpenLink(val url: String) : ReaderAction()

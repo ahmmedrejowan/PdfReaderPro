@@ -24,8 +24,8 @@ android {
         applicationId = "com.rejowan.pdfreaderpro"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 10
-        versionName = "2.5.0"
+        versionCode = 11
+        versionName = "2.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -76,6 +76,13 @@ android {
         // Android framework stubs return defaults instead of throwing, so the PDF
         // rendering paths can be driven from JVM tests with the classes mocked.
         unitTests.isReturnDefaultValues = true
+        unitTests.all { test ->
+            // BundledPdfJsPatchesTest reads these files directly, so a PDF.js
+            // upgrade has to re-run it rather than leave it up to date.
+            test.inputs.dir("src/main/assets/com/rejowan/mozilla")
+                .withPropertyName("bundledPdfJs")
+                .withPathSensitivity(PathSensitivity.RELATIVE)
+        }
     }
 
     androidResources {

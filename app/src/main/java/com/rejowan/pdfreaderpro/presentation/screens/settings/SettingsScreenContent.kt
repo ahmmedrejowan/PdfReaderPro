@@ -267,6 +267,18 @@ fun SettingsScreenContent(
             animationDelay = 75
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsToggleItem(
+            icon = Icons.Rounded.VisibilityOff,
+            title = stringResource(R.string.hide_hidden_files),
+            subtitle = stringResource(R.string.hide_hidden_files_subtitle),
+            checked = preferences.hideHiddenFiles,
+            accentColor = AccentPurple,
+            onCheckedChange = { viewModel.setHideHiddenFiles(it) },
+            animationDelay = 80
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
 
         // Reader Section
@@ -1958,9 +1970,28 @@ private fun ChangelogContent() {
                 .verticalScroll(rememberScrollState())
         ) {
             ChangelogVersionItem(
-                version = "2.5.0",
+                version = "2.6.0",
                 date = "October 2026",
                 isLatest = true,
+                changes = listOf(
+                    "Back to page: after a jump, a chip takes you back to the page you left",
+                    "Open the PDF tools from the reader on the open document",
+                    "Keep image colors in the Dark and Black reading themes",
+                    "A setting to hide files and folders whose names start with a dot",
+                    "Short documents sit in the middle of the screen",
+                    "Fixed the first page and jumps landing under the top bar",
+                    "Fixed signed files disappearing from other apps' file pickers",
+                    "Fixed counts for a single item, and Back now closes side panels in landscape",
+                    "Fixed Retry on the Merge screen in every language"
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ChangelogVersionItem(
+                version = "2.5.0",
+                date = "October 2026",
+                isLatest = false,
                 changes = listOf(
                     "Sign documents by drawing, typing or picking an image of your signature",
                     "Signatures are kept per document and can be written into the file or a copy",

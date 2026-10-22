@@ -13,27 +13,36 @@ import com.rejowan.pdfreaderpro.util.PdfThumbnailManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
 class PdfFileRepositoryImpl(
-    private val context: Context
+    private val context: Context,
+    /** Whether to leave out files and folders whose names start with a dot. */
+    hideHiddenFiles: Flow<Boolean> = flowOf(false)
 ) : PdfFileRepository {
 
     private val _pdfFiles = MutableStateFlow<List<PdfFile>>(emptyList())
 
-    override fun getAllPdfFiles(): Flow<List<PdfFile>> = _pdfFiles
+    /** The library as shown: every PDF found, less hidden ones when asked. */
+    private val visiblePdfs: Flow<List<PdfFile>> = combine(_pdfFiles, hideHiddenFiles) { files, hide ->
+        if (hide) files.filterNot { isHidden(it.path) } else files
+    }
+
+    override fun getAllPdfFiles(): Flow<List<PdfFile>> = visiblePdfs
 
     override fun getPdfsByFolder(folderPath: String): Flow<List<PdfFile>> {
-        return _pdfFiles.map { files ->
+        return visiblePdfs.map { files ->
             files.filter { it.parentFolder == folderPath }
         }
     }
 
     override fun searchPdfs(query: String): Flow<List<PdfFile>> {
-        return _pdfFiles.map { files ->
+        return visiblePdfs.map { files ->
             if (query.isBlank()) {
                 emptyList()
             } else {
@@ -45,7 +54,7 @@ class PdfFileRepositoryImpl(
     }
 
     override fun getPdfFolders(): Flow<List<PdfFolder>> {
-        return _pdfFiles.map { files ->
+        return visiblePdfs.map { files ->
             files.groupBy { it.parentFolder }
                 .map { (path, pdfs) ->
                     PdfFolder(
@@ -189,5 +198,11 @@ class PdfFileRepositoryImpl(
         }
 
         return pdfList
+    }
+
+    companion object {
+        /** A file is hidden when it, or any folder above it, starts with a dot. */
+        internal fun isHidden(path: String): Boolean =
+            path.split('/').any { it.startsWith(".") && it != "." && it != ".." }
     }
 }

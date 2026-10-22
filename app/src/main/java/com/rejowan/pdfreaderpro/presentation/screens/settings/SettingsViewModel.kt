@@ -292,6 +292,12 @@ class SettingsViewModel(
         }
     }
 
+    fun setHideHiddenFiles(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setHideHiddenFiles(enabled)
+        }
+    }
+
     // Reader settings
     fun setReaderBrightness(brightness: Float) {
         viewModelScope.launch {

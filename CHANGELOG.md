@@ -7,7 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [2.6.0] - 2026-10-23
+
+### Added
+- **Back to Page** - After Go to page, the contents, a bookmark or a link inside the document, a chip below the top bar takes you back to the page you left (#88)
+- **Tools from the Reader** - PDF Tools in the reader's More Options opens split, compress, rotate and the other tools on the open document; with Overwrite Original, the tool safely replaces the document itself (#105)
+- **Hide Hidden Files** - A setting to leave out files and folders whose names start with a dot (#6)
+- **Keep Image Colors** - In the Dark and Black reading themes, pictures can keep their own colors instead of being inverted; switch it on in Display Settings (#87)
+
+### Changed
+- **Short Documents** - A document shorter than the screen sits in the middle instead of at the top (#105)
+
 ### Fixed
+- **First Page Under the Top Bar** - On lower-density screens the first page no longer starts under the top bar, and the last one scrolls clear of the controls (#105)
+- **Jumps Under the Top Bar** - Go to page, the contents, bookmarks and links inside a document no longer land under the top bar (#105)
+- **Overwrite Original** - Tools that overwrite the original no longer hold up the screen on large files, and a failed write leaves the original as it was
+- **Signed Files in Other Apps** - A PDF with signatures saved into it no longer disappears from other apps' file pickers
 - **Counts for One** - Page, file and highlight counts read correctly for a single item ("1 page" instead of "1 pages"), in every language
 - **Back in Landscape** - Back closes the side panels in landscape instead of leaving the screen behind them, which in the reader closed the document
 - **Merge Retry** - Retry appears after a failed merge in every language, and no longer after a notice about a skipped file

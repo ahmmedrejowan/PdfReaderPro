@@ -40,7 +40,10 @@
 Puoi scaricare l\'APK più recente da qui
 
 <a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest">
-<img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+<img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
+</a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro">
+<img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" width="224px" align="center"/>
 </a>
 
 Consulta la sezione [releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases) per maggiori dettagli.
@@ -223,6 +226,18 @@ GNU General Public License for more details.
 ---
 
 ## Registro delle modifiche
+
+### v2.6.0 (23/10/2026)
+
+- Torna alla pagina: dopo un salto, un chip riporta alla pagina precedente (#88)
+- Apri gli strumenti PDF dal lettore sul documento aperto (#105)
+- Mantieni i colori delle immagini nei temi Scuro e Nero (#87)
+- Impostazione per nascondere file e cartelle il cui nome inizia con un punto (#6)
+- I documenti brevi sono al centro dello schermo (#105)
+- Corretto: la prima pagina e i salti non finiscono più sotto la barra superiore (#105)
+- Corretto: i file firmati non spariscono più dal selettore di file delle altre app
+- Corretti i conteggi per un solo elemento («1 pagina»), e Indietro chiude i pannelli laterali in orizzontale
+- Corretto Riprova nella schermata Unisci in tutte le lingue
 
 ### v2.5.0 (09/10/2026)
 

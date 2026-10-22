@@ -2983,4 +2983,88 @@ class ReaderViewModelTest {
         assertTrue(vm.state.value.isLoading)
     }
     // endregion
+
+    // region Going back after a jump
+    @Test
+    fun `go to page offers a way back to the page that was left`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.JumpToPage(7))
+
+        assertEquals(7, vm.state.value.currentPage)
+        assertEquals(0, vm.state.value.returnPage)
+    }
+
+    @Test
+    fun `going back returns to the page and offers the jump again`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.GoToPage(2))
+        vm.onAction(ReaderAction.JumpToPage(7))
+
+        vm.onAction(ReaderAction.ReturnToPreviousPage)
+
+        assertEquals(2, vm.state.value.currentPage)
+        assertEquals(7, vm.state.value.returnPage)
+        verify { viewer.goToPage(3) }
+    }
+
+    @Test
+    fun `dragging the page slider does not offer a way back`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        advanceUntilIdle()
+
+        vm.onAction(ReaderAction.GoToPage(7))
+
+        assertNull(vm.state.value.returnPage)
+    }
+
+    @Test
+    fun `a jump to the page already showing offers no way back`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        advanceUntilIdle()
+        vm.onAction(ReaderAction.GoToPage(4))
+
+        vm.onAction(ReaderAction.JumpToPage(4))
+
+        assertNull(vm.state.value.returnPage)
+    }
+
+    @Test
+    fun `a link inside the document offers a way back to its page`() = runTest {
+        val vm = createViewModel()
+        val listener = attachViewer(vm)
+        listener.onPageLoadSuccess(10)
+        advanceUntilIdle()
+
+        // The viewer reports 1-based pages.
+        listener.onInternalJump(4)
+
+        assertEquals(3, vm.state.value.returnPage)
+    }
+    // endregion
+
+    // region Image colors in the dark themes
+    @Test
+    fun `keeping image colors is saved and sent to the viewer`() = runTest {
+        val vm = createViewModel()
+        attachViewer(vm)
+
+        vm.onAction(ReaderAction.SetKeepImageColors(true))
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.keepImageColors)
+        verify { viewer.ui.setKeepImageColors(true) }
+        coVerify { preferencesRepository.setReaderKeepImageColors(true) }
+    }
+    // endregion
 }

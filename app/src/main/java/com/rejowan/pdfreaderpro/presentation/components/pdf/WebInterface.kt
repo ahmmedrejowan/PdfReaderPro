@@ -138,6 +138,11 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
+    fun onInternalJump(fromPage: Int) = post {
+        pdfViewer.listeners.forEach { it.onInternalJump(fromPage) }
+    }
+
+    @JavascriptInterface
     fun getValidCustomProtocols(): String = pdfViewer.allowedCustomProtocols.joinToString { it }
 
     @JavascriptInterface

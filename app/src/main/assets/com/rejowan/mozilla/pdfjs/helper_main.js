@@ -301,6 +301,23 @@ function setupHelper() {
         loadAttachments();
     });
 
+    // A link inside the document jumps away from the page being read; report
+    // that page so the reader can offer a way back.
+    const linkService = PDFViewerApplication.pdfLinkService;
+    const goToDestination = linkService.goToDestination.bind(linkService);
+    linkService.goToDestination = (dest) => {
+        JWI.onInternalJump(PDFViewerApplication.page);
+        return goToDestination(dest);
+    };
+
+    // A document shorter than the screen sits in the middle instead of at the
+    // top, clear of the floating bars. Recomputed whenever the layout can change.
+    const scheduleCentering = () => requestAnimationFrame(() => requestAnimationFrame(centerShortDocument));
+    ["pagesloaded", "scalechanging", "scrollmodechanged", "spreadmodechanged"].forEach((name) =>
+        PDFViewerApplication.eventBus.on(name, scheduleCentering)
+    );
+    window.addEventListener("resize", scheduleCentering);
+
     viewerContainer.addEventListener("scroll", () => {
         let currentOffset;
         let totalScrollable;

@@ -393,6 +393,8 @@
 
     <!-- Tools Screen -->
     <string name="pdf_tools">Ferramentas de PDF</string>
+    <string name="reader_pdf_tools_desc">Dividir, comprimir, rodar e mais</string>
+    <string name="reader_pdf_tools_subtitle">Usar uma ferramenta neste documento</string>
     <string name="merge_pdfs">Combinar PDFs</string>
     <string name="split_pdf">Dividir PDF</string>
     <string name="compress_pdf">Comprimir PDF</string>
@@ -995,6 +997,8 @@
     <string name="low_brightness">Brilho baixo</string>
     <string name="high_brightness">Brilho alto</string>
     <string name="prevent_screen_off">Impedir que o ecrã se desligue</string>
+    <string name="keep_image_colors">Manter as cores das imagens</string>
+    <string name="keep_image_colors_desc">Mostrar as imagens nas cores reais</string>
 
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Ir para a página</string>
@@ -1086,6 +1090,7 @@
 
     <!-- Reader Components -->
     <string name="go_to_page">Ir para a página</string>
+    <string name="back_to_page">Voltar à página %d</string>
     <string name="enter_page">Introduza o número da página (1-%d)</string>
     <string name="invalid_page">Introduza um número de página válido</string>
     <string name="go">Ir</string>
@@ -1201,6 +1206,8 @@
     <string name="double_tap_zoom_subtitle">Nível de zoom ao fazer duplo toque</string>
     <string name="show_tools_tab">Mostrar separador Ferramentas</string>
     <string name="show_tools_tab_subtitle">Ocultar para utilizar a aplicação apenas como leitor de PDF</string>
+    <string name="hide_hidden_files">Não mostrar ficheiros ocultos</string>
+    <string name="hide_hidden_files_subtitle">Ignorar ficheiros e pastas cujo nome começa por um ponto</string>
     <string name="tap_to_check">Toque para verificar atualizações</string>
     <string name="checking">A verificar…</string>
     <string name="update_available_version">Atualização disponível: v%s</string>

@@ -154,6 +154,8 @@ class ReaderViewModel(
                     readingTheme = mapDomainReadingTheme(prefs.readerTheme),
                     autoHideToolbar = prefs.readerAutoHideToolbar,
                     scrubberOnScroll = prefs.readerScrubberOnScroll,
+                    keepImageColors = prefs.readerKeepImageColors,
+                    showTools = prefs.showToolsTab,
                     tapToTurnPage = prefs.readerTapToTurnPage,
                     keepScreenOn = prefs.readerKeepScreenOn,
                     isSnapEnabled = prefs.readerSnapToPages,
@@ -396,6 +398,16 @@ class ReaderViewModel(
         }
     }
 
+    /** See [PdfViewer.setContentPadding]. */
+    fun setContentPadding(top: Int, bottom: Int) {
+        pdfViewer?.setContentPadding(top, bottom)
+    }
+
+    /** See [PdfViewer.setTopInset]. */
+    fun setTopInset(inset: Int) {
+        pdfViewer?.setTopInset(inset)
+    }
+
     fun setPdfViewer(viewer: PdfViewer) {
         pdfViewer = viewer
         setupPdfViewerListeners(viewer)
@@ -437,6 +449,7 @@ class ReaderViewModel(
                     DomainReadingTheme.DARK -> "dark"
                     DomainReadingTheme.BLACK -> "black"
                 }
+                viewer.ui.setKeepImageColors(prefs.readerKeepImageColors)
                 viewer.ui.setReadingTheme(themeName)
 
                 // Apply snap to pages
@@ -720,6 +733,10 @@ class ReaderViewModel(
                     }
                 }
             },
+            onInternalJump = { fromPage ->
+                // Viewer pages are 1-based.
+                rememberReturnPage(fromPage - 1, null)
+            },
             onLinkClick = { link ->
                 onAction(ReaderAction.OpenLink(link))
             }
@@ -747,10 +764,16 @@ class ReaderViewModel(
         return result
     }
 
+    /** Offers a way back to [from] after a jump, unless the jump stays on that page. */
+    private fun rememberReturnPage(from: Int, to: Int?) {
+        if (from != to) _state.update { it.copy(returnPage = from) }
+    }
+
     /**
      * Navigate to an outline item using its page number.
      */
     fun navigateToOutlineItem(item: OutlineItem) {
+        rememberReturnPage(_state.value.currentPage, item.page)
         // page is 0-based, goToPage expects 1-based
         _state.update { it.copy(currentPage = item.page) }
         pdfViewer?.goToPage(item.page + 1)
@@ -812,6 +835,17 @@ class ReaderViewModel(
                 // Our state uses 0-based, library uses 1-based
                 _state.update { it.copy(currentPage = action.page) }
                 pdfViewer?.goToPage(action.page + 1)
+            }
+            is ReaderAction.JumpToPage -> {
+                rememberReturnPage(_state.value.currentPage, action.page)
+                _state.update { it.copy(currentPage = action.page) }
+                pdfViewer?.goToPage(action.page + 1)
+            }
+            is ReaderAction.ReturnToPreviousPage -> {
+                val back = _state.value.returnPage ?: return
+                // Keep the page being left, so the chip can take the reader back again.
+                _state.update { it.copy(returnPage = it.currentPage, currentPage = back) }
+                pdfViewer?.goToPage(back + 1)
             }
             is ReaderAction.NextPage -> {
                 pdfViewer?.goToNextPage()
@@ -907,6 +941,8 @@ class ReaderViewModel(
             is ReaderAction.HideBookmarksSheet -> _state.update { it.copy(isBookmarksSheetVisible = false) }
             is ReaderAction.ShowMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = true) }
             is ReaderAction.HideMoreOptionsSheet -> _state.update { it.copy(isMoreOptionsSheetVisible = false) }
+            is ReaderAction.ShowToolsSheet -> _state.update { it.copy(isToolsSheetVisible = true) }
+            is ReaderAction.HideToolsSheet -> _state.update { it.copy(isToolsSheetVisible = false) }
 
             is ReaderAction.SetBrightness -> {
                 _state.update { it.copy(brightness = action.brightness) }
@@ -1003,6 +1039,14 @@ class ReaderViewModel(
                 _state.update { it.copy(autoHideToolbar = action.enabled) }
                 viewModelScope.launch {
                     preferencesRepository.setReaderAutoHideToolbar(action.enabled)
+                }
+            }
+
+            is ReaderAction.SetKeepImageColors -> {
+                _state.update { it.copy(keepImageColors = action.enabled) }
+                pdfViewer?.ui?.setKeepImageColors(action.enabled)
+                viewModelScope.launch {
+                    preferencesRepository.setReaderKeepImageColors(action.enabled)
                 }
             }
 
@@ -1369,6 +1413,7 @@ class ReaderViewModel(
 
             is ReaderAction.GoToBookmark -> {
                 val page = action.bookmark.pageNumber
+                rememberReturnPage(_state.value.currentPage, page)
                 _state.update { state ->
                     val isBookmarked = state.bookmarks.any { it.pageNumber == page }
                     state.copy(
@@ -2042,6 +2087,11 @@ class ReaderViewModel(
                     } finally {
                         if (staging.exists()) staging.delete()
                     }
+                    // Renaming over the file drops it from the media index, which
+                    // hides it from other apps' file pickers until it is scanned.
+                    android.media.MediaScannerConnection.scanFile(
+                        applicationContext, arrayOf(target.path), arrayOf("application/pdf"), null
+                    )
                 }
                 // They are part of the document now, so they stop being pending.
                 signatureDao.deleteAllFor(pdfPath)
