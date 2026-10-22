@@ -85,6 +85,76 @@ Then run **Actions > Release > Run workflow** and pick **Full release** or **Pre
 
 Full releases are marked Latest and offered by the in-app update check. Pre-releases are signed the same way but are never offered to users, since the update check only looks at the latest full release.
 
+## Upgrading PDF.js (maintainers)
+
+The reader runs Mozilla's PDF.js **5.3.31** from `app/src/main/assets/com/rejowan/mozilla/`. A few
+features need small edits inside the vendored files themselves, because they run before, or deep
+inside, code the app can reach from its own scripts (`pdfjs/helper_main.js`,
+`pdfjs/helper_methods.js`).
+
+**When PDF.js is upgraded, these edits are lost.** Re-apply each one below, then update the version
+in `BundledPdfJsPatchesTest`, which fails until every patch is back in place.
+
+Each edit in the code carries a comment starting with `PDF Reader Pro:` (except the option
+defaults, which are plain values), so a search for that text finds them.
+
+### 1. Signature editor turned on
+
+**File:** `pdfjs/pdf_viewer.mjs`
+**Feature:** Signatures (draw, type or image), added in 2.5.0
+
+PDF.js ships a full signature editor but keeps it behind `enableSignatureEditor`, which defaults to
+`false`. The option is read once while the viewer starts, before any app script runs, so the
+default is flipped in the bundle. It appears twice; change both:
+
+- in `defaultOptions` (the `AppOptions` schema): `enableSignatureEditor: { value: true, ... }`
+- in `BasePreferences` defaults: `enableSignatureEditor: true,`
+
+### 2. Images keep their colors in dark themes
+
+**File:** `build/pdf.mjs`
+**Feature:** Keep Image Colors (Display Settings, Dark and Black themes)
+
+The dark and black reading themes invert whole pages with a CSS filter, pictures included. To undo
+that for pictures only, each image is drawn through `globalThis.pdfReaderImageFilter` (an inversion)
+when it is set, and the page's own inversion turns it back. `helper_methods.js` sets the variable in
+`updateImageFilter()` and re-renders the pages.
+
+In `CanvasGraphics`, just before the `drawImageAtIntegerCoords(...)` call in both
+`paintInlineImageXObject` and `paintInlineImageXObjectGroup` (which `paintImageXObject` and
+`paintImageXObjectRepeat` go through):
+
+```js
+// PDF Reader Pro: see pdfReaderImageFilter in helper_methods.js.
+if (globalThis.pdfReaderImageFilter) {
+  ctx.filter = globalThis.pdfReaderImageFilter;
+}
+```
+
+PDF.js's own `pageColors` option looked like a fit, but in this version it filters the whole
+finished canvas, images included, so it cannot keep their colors.
+
+### 3. Jumps land below the floating top bar
+
+**File:** `pdfjs/pdf_viewer.mjs`
+**Feature:** Go to page, contents, bookmarks, Back to page and links land below the top bar
+
+PDF.js scrolls a target to the very top of the view, under the reader's floating bars. While they
+show, the reader passes their height through `PdfViewer.setTopInset`, stored as
+`globalThis.pdfReaderTopInset`. In the module-level `scrollIntoView(element, spot, ...)` function,
+just before `parent.scrollTop = offsetY;`:
+
+```js
+// PDF Reader Pro: land below the floating top bar (see setTopInset in helper_methods.js).
+offsetY -= globalThis.pdfReaderTopInset || 0;
+```
+
+### Also from the PDF.js release: character maps
+
+Not an edit, but easy to miss: `web/cmaps/` holds the character maps that Japanese, Chinese and
+Korean PDFs need (#89). They come from the `pdfjs-dist` package, not the viewer download, so copy
+them from the same version when upgrading.
+
 ## Questions?
 
 - Need help? Ask in [Discussions Q&A](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/categories/q-a)
