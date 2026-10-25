@@ -1139,8 +1139,8 @@
     <string name="get_in_touch">Téigh i dteagmháil leis an bhforbróir</string>
     <string name="github_repository">Stór GitHub</string>
     <string name="view_source_code">Féach ar an gcód foinseach</string>
-    <string name="help_translate">Help Translate</string>
-    <string name="help_translate_desc">Translate the app into your language on Crowdin</string>
+    <string name="help_translate">Cabhraigh leis an Aistriúchán</string>
+    <string name="help_translate_desc">Aistrigh an aip go do theanga ar Crowdin</string>
     <string name="choose_appearance">Roghnaigh cuma na haipe</string>
     <string name="always_light">Úsáid téama geal i gcónaí</string>
     <string name="always_dark">Úsáid téama dorcha i gcónaí</string>
@@ -1546,7 +1546,7 @@
     <string name="crash_report_subject">Tuarascáil tuairte PDF Reader Pro</string>
     <string name="report_on_github">Tuairiscigh ar GitHub</string>
     <string name="no_browser_found">Níor aimsíodh aon bhrabhsálaí chun an nasc a oscailt</string>
-    <string name="no_app_to_open">No app found to open this</string>
+    <string name="no_app_to_open">Níor aimsíodh aip chun é seo a oscailt</string>
     <string name="choose_language">Roghnaigh teanga na haipe</string>
     <string name="language_follow_system">Úsáid teanga an fhóin</string>
     <plurals name="delete_count_files">
