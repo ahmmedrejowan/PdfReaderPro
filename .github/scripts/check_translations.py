@@ -38,6 +38,7 @@ PLURALS = {
     "pt": ({"one", "other"}, {"many"}),
     "ru": ({"one", "few", "many", "other"}, set()),
     "tr": ({"one", "other"}, set()),
+    "zh": ({"other"}, set()),
 }
 
 errors = 0

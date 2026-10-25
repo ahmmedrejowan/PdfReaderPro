@@ -13,7 +13,7 @@ import java.util.Locale
 object AppLanguage {
 
     /** Languages the app is translated into; English is the default resources. */
-    val supported = listOf("en", "bn", "de", "es", "fr", "ga", "it", "ja", "pl", "pt", "ru", "tr")
+    val supported = listOf("en", "bn", "de", "es", "fr", "ga", "it", "ja", "pl", "pt", "ru", "tr", "zh")
 
     /** The chosen language tag, or null when the app follows the system. */
     fun current(): String? = AppCompatDelegate.getApplicationLocales()[0]?.language
