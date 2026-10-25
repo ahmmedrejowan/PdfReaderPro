@@ -1239,6 +1239,8 @@
     <string name="get_in_touch">Geliştiriciyle iletişime geçin</string>
     <string name="github_repository">GitHub Deposu</string>
     <string name="view_source_code">Kaynak kodunu görüntüle</string>
+    <string name="help_translate">Çeviriye Yardım Et</string>
+    <string name="help_translate_desc">Uygulamayı Crowdin\'de kendi dilinize çevirin</string>
     <string name="choose_appearance">Uygulama görünümünü seçin</string>
     <string name="always_light">Her zaman açık tema kullan</string>
     <string name="always_dark">Her zaman koyu tema kullan</string>

@@ -1239,6 +1239,8 @@
     <string name="get_in_touch">開発者に連絡を取る</string>
     <string name="github_repository">GitHubリポジトリ</string>
     <string name="view_source_code">ソースコードを表示</string>
+    <string name="help_translate">翻訳に協力する</string>
+    <string name="help_translate_desc">Crowdin でアプリをあなたの言語に翻訳</string>
     <string name="choose_appearance">アプリの外観を選択</string>
     <string name="always_light">常にライトテーマを使用</string>
     <string name="always_dark">常にダークテーマを使用</string>

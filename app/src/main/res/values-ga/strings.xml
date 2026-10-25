@@ -1240,6 +1240,8 @@
     <string name="get_in_touch">Téigh i dteagmháil leis an bhforbróir</string>
     <string name="github_repository">Stór GitHub</string>
     <string name="view_source_code">Féach ar an gcód foinseach</string>
+    <string name="help_translate">Cabhraigh leis an Aistriúchán</string>
+    <string name="help_translate_desc">Aistrigh an aip go do theanga ar Crowdin</string>
     <string name="choose_appearance">Roghnaigh cuma na haipe</string>
     <string name="always_light">Úsáid téama geal i gcónaí</string>
     <string name="always_dark">Úsáid téama dorcha i gcónaí</string>

@@ -1053,6 +1053,8 @@
     <string name="get_in_touch">ডেভেলপারের সাথে যোগাযোগ করুন</string>
     <string name="github_repository">GitHub রিপোজিটরি</string>
     <string name="view_source_code">সোর্স কোড দেখুন</string>
+    <string name="help_translate">অনুবাদে সাহায্য করুন</string>
+    <string name="help_translate_desc">Crowdin-এ অ্যাপটি আপনার ভাষায় অনুবাদ করুন</string>
     <string name="choose_appearance">অ্যাপের থিম বেছে নিন</string>
     <string name="always_light">সবসময় লাইট থিম ব্যবহার করুন</string>
     <string name="always_dark">সবসময় ডার্ক থিম ব্যবহার করুন</string>

@@ -566,6 +566,23 @@ fun SettingsScreenContent(
             animationDelay = 1000
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SettingsOptionItem(
+            icon = Icons.Rounded.Translate,
+            title = stringResource(R.string.help_translate),
+            subtitle = stringResource(R.string.help_translate_desc),
+            accentColor = AccentPurple,
+            onClick = {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    "https://crowdin.com/project/pdf-reader-pro".toUri()
+                )
+                context.startActivity(intent)
+            },
+            animationDelay = 1050
+        )
+
         Spacer(modifier = Modifier.height(32.dp))
     }
 

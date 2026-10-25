@@ -1239,6 +1239,8 @@
     <string name="get_in_touch">Entrez en contact avec le développeur</string>
     <string name="github_repository">Dépôt GitHub</string>
     <string name="view_source_code">Afficher le code source</string>
+    <string name="help_translate">Aider à traduire</string>
+    <string name="help_translate_desc">Traduisez l\'app dans votre langue sur Crowdin</string>
     <string name="choose_appearance">Choisir l\'apparence de l\'application</string>
     <string name="always_light">Toujours utiliser le thème clair</string>
     <string name="always_dark">Toujours utiliser le thème sombre</string>
