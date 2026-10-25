@@ -1139,8 +1139,8 @@
     <string name="get_in_touch">与开发者取得联系</string>
     <string name="github_repository">GitHub 仓库</string>
     <string name="view_source_code">查看源代码</string>
-    <string name="help_translate">Help Translate</string>
-    <string name="help_translate_desc">Translate the app into your language on Crowdin</string>
+    <string name="help_translate">帮助翻译</string>
+    <string name="help_translate_desc">在 Crowdin 上将应用翻译成你的语言</string>
     <string name="choose_appearance">选择应用外观</string>
     <string name="always_light">始终使用浅色主题</string>
     <string name="always_dark">始终使用深色主题</string>
@@ -1542,7 +1542,7 @@
     <string name="crash_report_subject">PDF Reader Pro 崩溃报告</string>
     <string name="report_on_github">在 GitHub 上报告</string>
     <string name="no_browser_found">没有找到可以打开此链接的浏览器</string>
-    <string name="no_app_to_open">No app found to open this</string>
+    <string name="no_app_to_open">未找到可打开此内容的应用</string>
     <string name="choose_language">选择应用的语言</string>
     <string name="language_follow_system">使用手机的语言</string>
     <plurals name="delete_count_files">
