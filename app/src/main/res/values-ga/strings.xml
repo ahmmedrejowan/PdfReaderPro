@@ -1,43 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PDF Reader Pro</string>
     <string name="hello_blank_fragment">Dia duit a fhragmint fholamh</string>
-
-
     <string name="intro_title_1">Déan iniúchadh ar PDFanna gan stró</string>
     <string name="intro_sub_title_1">Tum isteach i ndomhan na PDFanna le léitheoireacht gan stró</string>
-
     <string name="intro_title_2">Do Bhailiúchán PDF</string>
     <string name="intro_sub_title_2">Aimsigh agus rochtainigh go héifeachtúil ar aon PDF is mian leat</string>
-
     <string name="intro_title_3">Saincheap do Eispéireas PDF</string>
     <string name="intro_sub_title_3">Saincheap, cuardaigh agus déan iniúchadh ar ghnéithe casta PDF.</string>
-
     <string name="greeting_with_emoji">%1$s %2$s</string>
-
     <string name="let_s_start">Tosaímis</string>
-
     <string name="permission_normal_title">Faighimid na PDFanna sin</string>
     <string name="permission_allowed_title">Táimid réidh</string>
     <string name="permission_error_title">Tharla earráid éigin</string>
-
     <string name="permission_normal_sub_title">Ceadaigh rochtain stórála, agus ligfimid duit rochtain, cuardach agus scagadh a dhéanamh mar is mian leat agus go leor eile.</string>
     <string name="permission_allowed_sub_title">Léim isteach san aip</string>
     <string name="permission_error_sub_title">Níorbh fhéidir linn an cead a fháil i gceart. B\'fhéidir gur chuaigh rud éigin mícheart.</string>
-
-
     <string name="permission_below_11_normal_description">Cliceáil an cnaipe Ceadaigh sa chéad chomhéadan eile.</string>
     <string name="permission_above_11_normal_description">Cas an lasc ar an gcéad leathanach eile</string>
-
     <string name="permission_error_description">Cas an lasc ar an gcéad leathanach eile</string>
-
-
     <string name="allow_access">Ceadaigh Rochtain</string>
     <string name="lets_go">Téimis</string>
     <string name="try_again">Bain triail eile as</string>
-
     <string name="app_settings">Socruithe na hAipe</string>
     <string name="how_to_allow_access">Conas Rochtain a Cheadú</string>
-
     <string name="settings">Socruithe</string>
     <string name="search_pdf">Cuardaigh PDF</string>
     <string name="overview">Forbhreathnú PDF</string>
@@ -75,7 +61,6 @@
     <string name="jump">Léim</string>
     <string name="enter_page_number">Iontráil Uimhir Leathanaigh</string>
     <string name="remove">Bain</string>
-
     <!-- Common Actions -->
     <string name="done">Déanta</string>
     <string name="save">Sábháil</string>
@@ -103,18 +88,28 @@
     <string name="select_file">Roghnaigh Comhad</string>
     <string name="select_pdf">Roghnaigh PDF</string>
     <string name="select_images">Roghnaigh Íomhánna</string>
-
     <!-- Sort Options -->
     <string name="sort_files">Sórtáil Comhaid</string>
     <string name="sort_folders">Sórtáil Fillteáin</string>
     <string name="choose_sort_pdfs">Roghnaigh conas do PDFanna a eagrú</string>
     <string name="choose_sort_folders">Roghnaigh conas fillteáin a eagrú</string>
+    <string name="sort_desc_name">Sórtáil de réir ainm comhaid</string>
+    <string name="sort_desc_date">Sórtáil de réir dáta athraithe</string>
+    <string name="sort_desc_size">Sórtáil de réir méide</string>
+    <string name="sort_newest">Is nua</string>
+    <string name="sort_oldest">Is sine</string>
+    <string name="sort_largest">Is mó</string>
+    <string name="sort_smallest">Is lú</string>
+    <string name="folder_sort_desc_name">Sórtáil de réir ainm fillteáin</string>
+    <string name="folder_sort_title_count">Líon na PDFanna</string>
+    <string name="folder_sort_desc_count">Sórtáil de réir líon na PDFanna</string>
+    <string name="sort_most">An líon is mó</string>
+    <string name="sort_least">An líon is lú</string>
     <string name="sort_by_name">De réir Ainm</string>
     <string name="sort_by_date">De réir Dáta</string>
     <string name="sort_by_size">De réir Méide</string>
     <string name="sort_ascending">Suas</string>
     <string name="sort_descending">Anuas</string>
-
     <!-- Home Screen -->
     <string name="good_morning">Maidin mhaith</string>
     <string name="good_afternoon">Tráthnóna maith</string>
@@ -129,7 +124,6 @@
     <string name="add_favorites_hint">Cuir PDFanna le ceanáin chun iad a fheiceáil anseo</string>
     <string name="open_pdf_hint">Oscail roinnt PDFanna chun iad a fheiceáil anseo</string>
     <string name="delete_warning">Ní féidir an gníomh seo a chealú. Scriosfar na comhaid go buan ó do ghléas.</string>
-
     <!-- Folders Screen -->
     <string name="all_folders">Gach Fillteán</string>
     <string name="search_folders">Cuardaigh fillteáin…</string>
@@ -143,7 +137,6 @@
     <string name="sort_folders_desc">Sórtáil fillteáin</string>
     <string name="clear_search">Glan cuardach</string>
     <string name="close_search">Dún cuardach</string>
-
     <!-- Search Screen -->
     <string name="search_your_pdfs">Cuardaigh do PDFanna…</string>
     <string name="search_your_pdfs_hint">Cuardaigh do PDFanna...</string>
@@ -162,7 +155,6 @@
     <string name="tip_search_folder_desc">Iontráil ainm fillteáin chun gach PDF ann a aimsiú</string>
     <string name="tip_partial_matches_title">Oibríonn meaitseálacha páirteacha</string>
     <string name="tip_partial_matches_desc">Ní gá an t-ainm cruinn a bheith agat — bain triail as focail níos giorra</string>
-
     <!-- File Info -->
     <string name="file_information">Eolas Comhaid</string>
     <string name="file_name">Ainm Comhaid</string>
@@ -171,24 +163,20 @@
     <string name="page_count">Líon Leathanach</string>
     <string name="last_modified">Athraithe go Deireanach</string>
     <string name="created">Cruthaithe</string>
-
     <!-- Delete Confirmation -->
     <string name="delete_file">Scrios Comhad</string>
     <string name="delete_files">Scrios Comhaid</string>
     <string name="action_cannot_be_undone">Ní féidir an gníomh seo a chealú</string>
     <string name="confirm_delete_file">An bhfuil tú cinnte gur mhaith leat an comhad seo a scriosadh go buan?</string>
     <string name="confirm_delete_files">An bhfuil tú cinnte gur mhaith leat na comhaid seo a scriosadh go buan?</string>
-
     <!-- Rename -->
     <string name="rename_file">Athainmnigh Comhad</string>
     <string name="new_name">Ainm Nua</string>
-
     <!-- Stats -->
     <string name="library_statistics">Staitisticí Leabharlainne</string>
     <string name="total_files">Comhaid Iomlána</string>
     <string name="favorite_files">Comhaid Cheanáin</string>
     <string name="recent_files">Comhaid le Déanaí</string>
-
     <!-- Settings Screen -->
     <string name="appearance">Cuma</string>
     <string name="reader">Léitheoir</string>
@@ -231,13 +219,11 @@
     <string name="creator_title">Forbróir Android Sinsearach</string>
     <string name="creator_description">Cruthaíodh PDF Reader Pro chun eispéireas léitheoireachta PDF saor in aisce, foinse oscailte agus dírithe ar phríobháideachas a sholáthar. Le gnéithe cosúil le leabharmharcanna, ceanáin, téamaí léitheoireachta agus socruithe inchoigeartaithe, tá sé mar aidhm aige a bheith ina réiteach PDF iomlán d\'úsáideoirí Android.</string>
     <string name="gnu_license">GNU General Public License v3.0</string>
-
     <!-- Tool categories -->
     <string name="tool_category_organize">Eagraigh</string>
     <string name="tool_category_edit">Cuir in eagar</string>
     <string name="tool_category_security">Slándáil</string>
     <string name="tool_category_convert">Tiontaigh</string>
-
     <!-- Tools -->
     <string name="tool_split_pdf">Scoilt PDF</string>
     <string name="tool_split_desc">Scoilt PDF ina iliomad comhad</string>
@@ -255,7 +241,6 @@
     <string name="tool_unlock_desc">Bain an focal faire ón PDF</string>
     <string name="tool_pdf_to_image">PDF go hÍomhánna</string>
     <string name="tool_pdf_to_image_desc">Easpórtáil leathanaigh PDF mar chomhaid íomhá</string>
-
     <!-- Update Sheet -->
     <string name="update_available">Nuashonrú ar Fáil</string>
     <string name="current">Reatha</string>
@@ -263,14 +248,12 @@
     <string name="whats_new">Cad atá Nua</string>
     <string name="skip_version">Scipeáil an leagan seo</string>
     <string name="download_update">Íoslódáil Nuashonrú</string>
-
     <!-- Download Progress -->
     <string name="downloading">Á íoslódáil…</string>
     <string name="download_complete">Íoslódáil Críochnaithe</string>
     <string name="download_failed">Theip ar an Íoslódáil</string>
     <string name="install">Suiteáil</string>
     <string name="retry">Bain triail eile as</string>
-
     <!-- Reader Screen -->
     <string name="page_of">Leathanach %1$d de %2$d</string>
     <string name="bookmarks">Leabharmharcanna</string>
@@ -357,11 +340,9 @@
     <string name="close_highlight_nav">Stop ag siúl trí aibhsithe</string>
     <string name="no_matching_highlights">Gan meaitseálacha</string>
     <string name="no_matching_highlights_hint">Bain triail as cuardach nó dath difriúil</string>
-
     <string name="lock_horizontal_scroll">Glasáil scrollú cothrománach</string>
     <string name="lock_horizontal_scroll_desc">Coinnigh an leathanach mar atá sé nuair atá súmáilte</string>
     <string name="lock_horizontal_scroll_unavailable">Níl sé ar fáil ach le scrollú ingearach</string>
-
     <string name="table_of_contents">Clár na nÁbhar</string>
     <string name="no_table_of_contents">Gan clár na n-ábhar</string>
     <string name="attachments">Ceangaltáin</string>
@@ -380,17 +361,14 @@
     <string name="search_text">Cuardaigh téacs…</string>
     <string name="no_matches">Gan meaitseálacha</string>
     <string name="match_count">%1$d de %2$d</string>
-
     <!-- Remove Favorite -->
     <string name="remove_favorite">Bain Ceanán</string>
     <string name="remove_from_favorites">Bain ó Cheanáin</string>
     <string name="confirm_remove_favorite">An bhfuil tú cinnte gur mhaith leat an comhad seo a bhaint ó cheanáin?</string>
-
     <!-- Exit Confirmation -->
     <string name="exit_app">Scoir den Aip</string>
     <string name="confirm_exit">An bhfuil tú cinnte gur mhaith leat scor?</string>
     <string name="exit">Scoir</string>
-
     <!-- Tools Screen -->
     <string name="pdf_tools">Uirlisí PDF</string>
     <string name="reader_pdf_tools_desc">Scoilt, comhbhrúigh, rothlaigh agus tuilleadh</string>
@@ -407,7 +385,6 @@
     <string name="add_page_numbers">Cuir Uimhreacha Leathanach leis</string>
     <string name="images_to_pdf">Íomhánna go PDF</string>
     <string name="pdf_to_images">PDF go hÍomhánna</string>
-
     <!-- Tool Common -->
     <string name="select_source_file">Roghnaigh comhad PDF chun tosú</string>
     <string name="processing">Á phróiseáil…</string>
@@ -421,14 +398,12 @@
     <string name="page_range">Raon Leathanach</string>
     <string name="page_range_hint">m.sh., 1-3, 5, 7-10</string>
     <string name="invalid_page_range">Raon leathanach neamhbhailí</string>
-
     <!-- Merge -->
     <string name="add_pdfs">Cuir PDFanna leis le cumasc</string>
     <string name="drag_to_reorder">Tarraing chun athordú</string>
     <string name="merge_files">Cumaisc Comhaid</string>
     <string name="merge_more">Cumaisc Tuilleadh</string>
     <string name="merged_successfully">Cumascadh na PDFanna go rathúil</string>
-
     <!-- Split -->
     <string name="split_mode">Mód Scoilte</string>
     <string name="split_by_pages">Scoilt de réir Leathanach</string>
@@ -438,7 +413,6 @@
     <string name="split">Scoilt</string>
     <string name="split_more">Scoilt Tuilleadh</string>
     <string name="split_successfully">Scoilteadh an PDF go rathúil</string>
-
     <!-- Compress -->
     <string name="compression_level">Leibhéal Comhbhrúite</string>
     <string name="low">Íseal</string>
@@ -455,7 +429,6 @@
     <string name="compress_medium_desc">Comhbhrú agus cáilíocht cothromaithe</string>
     <string name="compress_high_label">Ard</string>
     <string name="compress_high_desc">Uaschomhbhrú, comhad níos lú</string>
-
     <!-- Compress Screen -->
     <string name="compress_share_pdf">Roinn PDF</string>
     <string name="compress_empty_title">Comhbhrúigh Comhad PDF</string>
@@ -471,7 +444,6 @@
     <string name="compressed_size">Méid Comhbhrúite</string>
     <string name="compressed_size_reduced">Méid Laghdaithe</string>
     <string name="saved_format">(%1$s sábháilte)</string>
-
     <!-- Rotate -->
     <string name="rotation">Rothlú</string>
     <string name="rotate_left">Rothlaigh ar Chlé</string>
@@ -482,7 +454,6 @@
     <string name="apply_to_all">Cuir i bhfeidhm ar Gach Leathanach</string>
     <string name="rotate_more">Rothlaigh Tuilleadh</string>
     <string name="rotated_successfully">Rothlaíodh an PDF go rathúil</string>
-
     <!-- Lock/Unlock -->
     <string name="password">Focal Faire</string>
     <string name="enter_password">Iontráil Focal Faire</string>
@@ -502,7 +473,6 @@
     <string name="incorrect_password">Focal faire mícheart</string>
     <string name="pdf_not_protected">Níl an PDF seo cosanta le focal faire</string>
     <string name="pdf_protected">Tá an PDF seo cosanta le focal faire</string>
-
     <!-- Watermark -->
     <string name="watermark">Comhartha Uisce</string>
     <string name="text_watermark">Comhartha Uisce Téacs</string>
@@ -523,18 +493,15 @@
     <string name="position_center">Lár</string>
     <string name="position_tiled">Tíláilte</string>
     <string name="watermark_added">Cuireadh Comhartha Uisce leis!</string>
-
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Roghnaigh leathanaigh le baint</string>
     <string name="remove_selected">Bain na Cinn Roghnaithe</string>
     <string name="remove_more">Bain Tuilleadh</string>
-
     <!-- Reorder -->
     <string name="drag_to_reorder_pages">Tarraing leathanaigh chun athordú</string>
     <string name="reorder">Athordaigh</string>
     <string name="reorder_more">Athordaigh Tuilleadh</string>
     <string name="reordered_successfully">Athordaíodh na leathanaigh go rathúil</string>
-
     <!-- Page Numbers -->
     <string name="number_format">Formáid Uimhreach</string>
     <string name="start_number">Uimhir Thosaigh</string>
@@ -548,7 +515,6 @@
     <string name="section_apply_to_pages">CUIR I bhFEIDHM AR LEATHANAIGH</string>
     <string name="horizontal_margin">Imeall Cothrománach</string>
     <string name="vertical_margin">Imeall Ingearach</string>
-
     <!-- Formats -->
     <string name="format_number_only">Uimhir amháin</string>
     <string name="format_number_only_example">1</string>
@@ -560,31 +526,25 @@
     <string name="format_dash_x_example">- 1 -</string>
     <string name="format_custom">Saincheaptha</string>
     <string name="format_custom_example">L.1</string>
-
     <!-- Preview -->
     <string name="preview_info_format">%1$s • %2$dpt • %3$s</string>
-
     <!-- Color picker -->
     <string name="pick_color">Roghnaigh Dath</string>
     <string name="page_number_color">Dath uimhir leathanaigh</string>
-
     <!-- Page selection -->
     <string name="page_numbers_selection_all">Gach ceann (%1$d)</string>
     <string name="page_selection_odd">Corr</string>
     <string name="page_selection_even">Cothrom</string>
     <string name="page_selection_skip_first">Scipeáil an Chéad Cheann</string>
     <string name="title_page_selection_custom">Saincheaptha</string>
-
     <!-- Success -->
     <string name="adding_numbers">Uimhreacha á gcur leis…</string>
-
     <!-- Images to PDF -->
     <string name="add_images">Cuir íomhánna leis le tiontú</string>
     <string name="image_quality">Cáilíocht Íomhá</string>
     <string name="convert">Tiontaigh</string>
     <string name="convert_more">Tiontaigh Tuilleadh</string>
     <string name="converted_successfully">Tiontaíodh íomhánna go PDF</string>
-
     <!-- PDF to Images -->
     <string name="output_format">Formáid Aschuir</string>
     <string name="png">PNG</string>
@@ -599,7 +559,6 @@
     <string name="share_images">Roinn Íomhánna</string>
     <string name="share_image">Roinn Íomhá</string>
     <string name="view_image">Féach ar Íomhá</string>
-
     <!-- Error Messages -->
     <string name="error_loading_pdf">Earráid agus an PDF á lódáil</string>
     <string name="error_file_not_found">Níor aimsíodh an comhad</string>
@@ -663,7 +622,6 @@
     <string name="error_enter_watermark_text">Iontráil téacs an chomhartha uisce, le do thoil</string>
     <string name="error_select_watermark_image">Roghnaigh íomhá comhartha uisce, le do thoil</string>
     <string name="error_add_watermark_failed">Theip ar an gcomhartha uisce a chur leis</string>
-
     <!-- Error Recovery Hints -->
     <string name="error_hint_corrupted_pdf">D\'fhéidir go bhfuil an comhad damáistithe. Bain triail as é a íoslódáil arís.</string>
     <string name="error_hint_invalid_pdf">Ní doiciméad PDF bailí é seo.</string>
@@ -675,16 +633,13 @@
     <string name="error_hint_timeout">Thóg an oibríocht ró-fhada. Bain triail eile as.</string>
     <string name="error_hint_out_of_memory">Dún aipeanna eile agus bain triail eile as le comhad níos lú.</string>
     <string name="error_hint_generic">Bain triail eile as. Má leanann an fhadhb, atosaigh an aip.</string>
-
     <!-- PDF Thumbnail -->
     <string name="pdf">PDF</string>
     <string name="pdf_thumbnail">Mionsamhail PDF</string>
     <string name="loading">Á lódáil…</string>
-
     <!-- Misc -->
     <string name="pdf_reader_pro">PDF Reader Pro</string>
     <string name="no_pdf_data">Ní bhfuarthas aon sonraí PDF</string>
-
     <!-- Content Descriptions - Accessibility -->
     <string name="sort_files_desc">Sórtáil comhaid</string>
     <string name="library_stats_desc">Staitisticí leabharlainne</string>
@@ -692,7 +647,6 @@
     <string name="list_view">Amharc liosta</string>
     <string name="more">Tuilleadh</string>
     <string name="favorite">Ceanán</string>
-
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Téigh siar</string>
     <string name="cd_close">Dún</string>
@@ -701,8 +655,6 @@
     <string name="cd_options">Roghanna</string>
     <string name="cd_expand">Leathnaigh</string>
     <string name="cd_collapse">Laghdaigh</string>
-    <string name="cd_close_selection">Dún roghnú</string>
-
     <!-- Content Descriptions - Actions -->
     <string name="cd_add">Cuir leis</string>
     <string name="cd_remove">Bain</string>
@@ -735,7 +687,6 @@
     <string name="cd_retry">Bain triail eile as</string>
     <string name="cd_back">Siar</string>
     <string name="cd_more_options">Tuilleadh roghanna</string>
-
     <!-- Content Descriptions - PDF Reader -->
     <string name="cd_zoom_in">Súmáil isteach</string>
     <string name="cd_zoom_out">Súmáil amach</string>
@@ -759,7 +710,6 @@
     <string name="cd_play">Seinn</string>
     <string name="cd_pause">Cuir ar sos</string>
     <string name="cd_stop">Stop</string>
-
     <!-- Content Descriptions - Files -->
     <string name="cd_pdf_file">Comhad PDF</string>
     <string name="cd_folder">Fillteán</string>
@@ -771,7 +721,6 @@
     <string name="cd_folder_options">Roghanna fillteáin</string>
     <string name="cd_selected">Roghnaithe</string>
     <string name="cd_not_selected">Gan roghnú</string>
-
     <!-- Content Descriptions - Status -->
     <string name="cd_loading">Á lódáil</string>
     <string name="cd_success">Rath</string>
@@ -786,7 +735,6 @@
     <string name="cd_toggle">Scoránaigh</string>
     <string name="cd_enabled">Cumasaithe</string>
     <string name="cd_disabled">Díchumasaithe</string>
-
     <!-- Content Descriptions - PDF Tools -->
     <string name="cd_merge_pdfs">Cumaisc PDFanna</string>
     <string name="cd_split_pdf">Scoilt PDF</string>
@@ -804,7 +752,6 @@
     <string name="cd_page_number">Leathanach %1$d</string>
     <string name="cd_page_selected">Roghnaíodh leathanach %1$d</string>
     <string name="cd_page_not_selected">Níor roghnaíodh leathanach %1$d</string>
-
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">Lógó PDF Reader Pro</string>
     <string name="cd_decorative">Íomhá mhaisiúil</string>
@@ -816,11 +763,9 @@
     <string name="cd_color_picker">Roghnaitheoir datha</string>
     <string name="cd_slider">Sleamhnán</string>
     <string name="cd_dropdown">Roghchlár anuas</string>
-
     <!-- Navigation -->
     <string name="home">Baile</string>
     <string name="tools">Uirlisí</string>
-
     <!-- Empty States -->
     <string name="no_pdfs_title">Níl aon PDF anseo fós</string>
     <string name="no_pdfs_message">Níorbh fhéidir linn aon chomhad PDF a aimsiú ar do ghléas. Bain triail as scanadh arís nó cuir roinnt PDFanna leis chun tosú!</string>
@@ -836,7 +781,6 @@
     <string name="no_folders_message">Taispeánfar fillteáin PDF anseo nuair a scanófar do chomhaid. Aimsímis iad!</string>
     <string name="permission_title">Teastaíonn do chead uainn</string>
     <string name="permission_message">Chun do chomhaid PDF a thaispeáint anseo, ceadaigh rochtain ar do stóras le do thoil</string>
-
     <!-- Stats Sheet -->
     <string name="library_stats">Staitisticí Leabharlainne</string>
     <string name="library_stats_subtitle">Do bhailiúchán PDF ar aon amharc</string>
@@ -847,16 +791,13 @@
     <string name="percent_of_library">%d%% de do leabharlann</string>
     <string name="no_files_yet">gan comhaid fós</string>
     <string name="recently_opened">osclaíodh le déanaí</string>
-
     <!-- Exit Confirmation -->
     <string name="stay">Fan</string>
     <string name="exit_confirm_message">An bhfuil tú cinnte gur mhaith leat an aip a dhúnadh?</string>
-
     <!-- Rename Sheet -->
     <string name="file_name_label">Ainm comhaid</string>
     <string name="invalid_file_name">Ainm comhaid neamhbhailí</string>
     <string name="pdf_extension_hint">Cuirfear an síneadh .pdf leis go huathoibríoch</string>
-
     <!-- File Options -->
     <string name="quick_actions">Gníomhartha Tapa</string>
     <string name="add_to_favorites">Cuir le Ceanáin</string>
@@ -875,7 +816,6 @@
     <string name="delete_desc">Bain an comhad seo go buan</string>
     <string name="cd_toggle_scroll_direction">Scoránaigh treo scrollaithe</string>
     <string name="cd_fit_to_screen">Oiriúnaigh don scáileán</string>
-
     <!-- Folder Options -->
     <string name="folder_options">Roghanna Fillteáin</string>
     <string name="pdf_files">Comhaid PDF</string>
@@ -888,7 +828,6 @@
     <string name="copy_path">Cóipeáil an Chonair</string>
     <string name="copy_path_desc">Cóipeáil suíomh an fhillteáin chuig an ngearrthaisce</string>
     <string name="path_copied">Cóipeáladh an chonair chuig an ngearrthaisce</string>
-
     <!-- Download Progress -->
     <string name="download_progress">Dul Chun Cinn na hÍoslódála</string>
     <string name="starting_download">Íoslódáil á tosú…</string>
@@ -904,10 +843,8 @@
     <string name="later">Níos déanaí</string>
     <string name="download_cancelled">Cealaíodh an Íoslódáil</string>
     <string name="try_again_settings">Is féidir leat triail eile a bhaint as níos déanaí ó na Socruithe</string>
-
     <!-- Update Sheet -->
     <string name="no_release_notes">Níl aon nótaí scaoilte ar fáil.</string>
-
     <!-- Recent Items -->
     <string name="item_selected">Roghnaithe</string>
     <string name="item_not_selected">Gan roghnú</string>
@@ -917,31 +854,26 @@
     <string name="minutes_ago">%d nóim ó shin</string>
     <string name="hours_ago">%d u. ó shin</string>
     <string name="days_ago">%d lá ó shin</string>
-
     <!-- Permission Bottom Sheet -->
     <string name="quick_access_needed">Rochtain thapa ag teastáil</string>
     <string name="storage_access_message">Ceadaigh rochtain stórála ionas gur féidir linn do chomhaid PDF a aimsiú agus a thaispeáint</string>
     <string name="open_settings">Oscail Socruithe</string>
     <string name="not_now">Ní anois</string>
-
     <!-- Bottom navigation -->
     <string name="nav_home">Baile</string>
     <string name="nav_folders">Fillteáin</string>
     <string name="nav_tools">Uirlisí</string>
     <string name="nav_settings">Socruithe</string>
-
     <!-- Home sub-tabs -->
     <string name="home_tab_recent">Le Déanaí</string>
     <string name="home_tab_favorites">Ceanáin</string>
     <string name="home_tab_all_files">Gach Comhad</string>
-
     <!-- Error Activity -->
     <string name="unexpected_error">Tharla earráid gan choinne</string>
     <string name="something_went_wrong">Ó! Chuaigh rud éigin mícheart</string>
     <string name="go_back">Téigh Siar</string>
     <string name="restart_app">Atosaigh an Aip</string>
     <string name="close_app">Dún an Aip</string>
-
     <!-- Password Dialog -->
     <string name="password_required">Focal Faire ag Teastáil</string>
     <string name="password_protected_message">Tá an PDF seo cosanta le focal faire. Iontráil an focal faire chun é a oscailt.</string>
@@ -949,7 +881,6 @@
     <string name="hide_password">Folaigh an focal faire</string>
     <string name="show_password">Taispeáin an focal faire</string>
     <string name="remember_password">Cuimhnigh ar an bhfocal faire don chomhad seo</string>
-
     <!-- More Options Sheet -->
     <string name="additional_tools">Uirlisí agus gníomhartha breise</string>
     <string name="view_manage_bookmarks">Féach ar leathanaigh shábháilte agus bainistigh iad</string>
@@ -959,7 +890,6 @@
     <string name="print_document">Priontáil an doiciméad seo</string>
     <string name="document_info">Eolas Doiciméid</string>
     <string name="view_file_details">Féach ar shonraí agus meiteashonraí an chomhaid</string>
-
     <!-- View Mode Sheet -->
     <string name="view_options">Roghanna Amhairc</string>
     <string name="customize_reading_layout">Saincheap do leagan amach léitheoireachta</string>
@@ -987,7 +917,6 @@
     <string name="scrubber_on_scroll_desc">Taispeáin an sleamhnán leathanach agus tú ag scrollú nuair atá an barra uirlisí i bhfolach</string>
     <string name="tap_to_turn_page">Tapáil chun Leathanach a Chasadh</string>
     <string name="tap_to_turn_page_desc">Tapáil taobhanna an leathanaigh chun bogadh idir leathanaigh</string>
-
     <!-- Display Sheet -->
     <string name="display_settings">Socruithe Taispeána</string>
     <string name="theme_brightness_options">Téama, gile agus roghanna scáileáin</string>
@@ -1000,13 +929,11 @@
     <string name="prevent_screen_off">Cuir cosc ar an scáileán dul as</string>
     <string name="keep_image_colors">Coinnigh Dathanna na nÍomhánna</string>
     <string name="keep_image_colors_desc">Taispeáin íomhánna ina bhfíordhathanna</string>
-
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Léim go Leathanach</string>
     <string name="enter_page_range">Iontráil uimhir leathanaigh (1 - %d)</string>
     <string name="page_number_placeholder">Uimhir leathanaigh</string>
     <string name="enter_valid_page">Iontráil uimhir idir 1 agus %d, le do thoil</string>
-
     <!-- Auto Scroll Sheet -->
     <string name="auto_scroll_title">Scrollú Uathoibríoch</string>
     <string name="hands_free_reading">Mód léitheoireachta gan lámha</string>
@@ -1021,7 +948,6 @@
     <string name="faster">Níos Tapúla</string>
     <string name="start_auto_scroll">Tosaigh Scrollú Uathoibríoch</string>
     <string name="auto_scroll_hint">Tapáil an scáileán chun sos/atosú. Úsáid forleagan chun stopadh.</string>
-
     <!-- Zoom Sheet -->
     <string name="zoom_display">Súmáil agus Taispeáint</string>
     <string name="adjust_view_orientation">Coigeartaigh méid agus treoshuíomh an amhairc</string>
@@ -1032,14 +958,12 @@
     <string name="lock_portrait">Glasáil i mód portráide</string>
     <string name="lock_landscape">Glasáil i mód tírdhreacha</string>
     <string name="current_zoom_label">Súmáil Reatha</string>
-
     <!-- Bookmarks Sheet -->
     <string name="bookmark_count">%d leabharmharc</string>
     <string name="bookmarks_count">%d leabharmharc</string>
     <string name="delete_bookmark">Scrios leabharmharc</string>
     <string name="bookmark_hint">Tapáil an deilbhín leabharmhairc chun leathanaigh a shábháil</string>
     <string name="page_number_title">Leathanach %d</string>
-
     <!-- PDF Info Dialog -->
     <string name="document_information">Eolas Doiciméid</string>
     <string name="pdf_version_label">PDF %s</string>
@@ -1062,7 +986,6 @@
     <string name="xfa_label">XFA</string>
     <string name="web_optimized">Optamaithe don Ghréasán</string>
     <string name="location_section">Suíomh</string>
-
     <!-- Top Bar Menu Panel -->
     <string name="document_options">Roghanna Doiciméid</string>
     <string name="share_print_manage">Roinn, priontáil agus bainistigh</string>
@@ -1080,15 +1003,12 @@
     <string name="remove_from_favourites_desc">Bain ó do liosta ceanán</string>
     <string name="add_to_favourites_desc">Cuir le do liosta ceanán</string>
     <string name="delete_file_permanently">Scrios an comhad seo go buan</string>
-
     <!-- Delete Confirm Dialog -->
     <string name="delete_pdf_question">Scrios PDF?</string>
     <string name="action_cannot_undo">Ní féidir an gníomh seo a chealú</string>
-
     <!-- Remove Favorite Sheet -->
     <string name="remove_from_favourites_question">Bain ó Cheanáin?</string>
     <string name="remove_from_list_message">Bainfidh sé seo ó do liosta é</string>
-
     <!-- Reader Components -->
     <string name="go_to_page">Téigh go leathanach</string>
     <string name="back_to_page">Ar ais go leathanach %d</string>
@@ -1138,16 +1058,13 @@
     <string name="error_loading">Earráid agus an PDF á lódáil</string>
     <string name="try_again_message">Chuaigh rud éigin mícheart agus an PDF seo á lódáil. Bain triail eile as, le do thoil.</string>
     <string name="cd_page_thumbnails">Mionsamhlacha Leathanach</string>
-
     <!-- Floating Search Bar -->
     <string name="search_in_document">Cuardaigh sa doiciméad…</string>
-
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Roghanna Amhairc</string>
     <string name="cd_zoom">Súmáil</string>
     <string name="cd_display_settings">Socruithe Taispeána</string>
     <string name="cd_control_more_options">Tuilleadh Roghanna</string>
-
     <!-- Reader Sidebar -->
     <string name="reading">Léitheoireacht</string>
     <string name="settings_label">Socruithe</string>
@@ -1159,10 +1076,8 @@
     <string name="rotation_locked">Rothlú glasáilte</string>
     <string name="auto_rotate">Rothlaigh go huathoibríoch</string>
     <string name="swipe_to_close">Svaidhpeáil ar dheis chun dúnadh</string>
-
     <!-- Tools Screen -->
     <string name="coming_soon">Go luath</string>
-
     <!-- Enhanced Table of Contents -->
     <string name="document_navigation">Nascleanúint Doiciméid</string>
     <string name="no_contents_available">Níl aon Ábhar ar Fáil</string>
@@ -1177,16 +1092,13 @@
     <string name="toc_tab_attachments">Ceangaltáin</string>
     <string name="attachment_type_hint">Comhad %1$s · Tapáil chun oscailt</string>
     <string name="attachment_tap_hint">Tapáil chun oscailt</string>
-
     <!-- Settings Panel (Reader) -->
     <string name="reading_settings">Socruithe Léitheoireachta</string>
     <string name="full_screen_mode">Mód Lánscáileáin</string>
     <string name="auto_rotate_enabled">Rothlú uathoibríoch cumasaithe</string>
     <string name="delete_pdf">Scrios PDF</string>
-
     <!-- Folder Detail Screen -->
     <string name="delete_files_warning">Ní féidir an gníomh seo a chealú. Scriosfar na comhaid go buan ó do ghléas.</string>
-
     <!-- Settings Screen -->
     <string name="reader_section">Léitheoir</string>
     <string name="about_section">Maidir le</string>
@@ -1220,7 +1132,6 @@
     <string name="about_developer">Maidir leis an bhforbróir</string>
     <string name="app_license">Ceadúnas na hAipe</string>
     <string name="follow_system_brightness">Lean gile an chórais</string>
-
     <!-- Settings Screen - Remaining strings -->
     <string name="install_pending_update">Suiteáil Nuashonrú atá ar Feitheamh</string>
     <string name="install_downloaded_version">Suiteáil v%s íoslódáilte</string>
@@ -1228,6 +1139,8 @@
     <string name="get_in_touch">Téigh i dteagmháil leis an bhforbróir</string>
     <string name="github_repository">Stór GitHub</string>
     <string name="view_source_code">Féach ar an gcód foinseach</string>
+    <string name="help_translate">Cabhraigh leis an Aistriúchán</string>
+    <string name="help_translate_desc">Aistrigh an aip go do theanga ar Crowdin</string>
     <string name="choose_appearance">Roghnaigh cuma na haipe</string>
     <string name="always_light">Úsáid téama geal i gcónaí</string>
     <string name="always_dark">Úsáid téama dorcha i gcónaí</string>
@@ -1275,7 +1188,6 @@
     <string name="set_custom_level">Socraigh leibhéal saincheaptha</string>
     <string name="custom">Saincheaptha</string>
     <string name="app_logo">Lógó na hAipe</string>
-
     <!-- Privacy Policy -->
     <string name="no_data_collection">Gan bailiú ná roinnt sonraí</string>
     <string name="no_analytics">Gan anailísíocht ná rianú</string>
@@ -1291,7 +1203,6 @@
     <string name="privacy_password_content">Má roghnaíonn tú focail faire a shábháil do PDFanna cosanta, stóráiltear go háitiúil iad ag úsáid stórála criptithe. Ní fhágann focail faire do ghléas riamh.</string>
     <string name="privacy_update_title">Seiceáil Nuashonruithe</string>
     <string name="privacy_update_content">Is féidir leis an aip nuashonruithe a sheiceáil go roghnach trí API poiblí GitHub. Ní fhaigheann an ghné seo ach eolas faoin scaoileadh agus ní sheolann sí aon sonraí pearsanta, aitheantóirí gléis ná staitisticí úsáide. Is féidir leat seiceálacha nuashonruithe uathoibríocha a dhíchumasú sna Socruithe nó seiceáil de láimh aon uair is mian leat.</string>
-
     <!-- GPL License Terms -->
     <string name="gpl_freedom_use">Saoirse an bogearra a úsáid chun aon chríche</string>
     <string name="gpl_freedom_study">Saoirse staidéar a dhéanamh ar an gcód foinseach agus é a mhionathrú</string>
@@ -1299,7 +1210,6 @@
     <string name="gpl_freedom_modify">Saoirse leaganacha mionathraithe a dháileadh</string>
     <string name="gpl_derivative">Caithfidh saothair dhíorthaithe a bheith foinse oscailte faoi GPL v3.0</string>
     <string name="gpl_notice">PDF Reader Pro - Amharcóir PDF Foinse Oscailte\nCopyright (C) %d K M Rejowan Ahmmed\n\nIs bogearra saor é an clár seo: is féidir leat é a athdháileadh agus/nó a mhionathrú faoi théarmaí an GNU General Public License mar a fhoilsíonn an Free Software Foundation, cibé acu leagan 3 den Cheadúnas, nó (de réir do rogha) aon leagan níos déanaí.\n\nDáiltear an clár seo le súil go mbeidh sé úsáideach, ach GAN AON BHARÁNTAS; gan fiú an barántas intuigthe INDÍOLTACHTA nó OIRIÚNACHTA DO CHRÍCH AR LEITH. Féach ar an GNU General Public License le haghaidh tuilleadh sonraí.</string>
-
     <!-- Onboarding -->
     <string name="onboarding_welcome">Fáilte go\nPDF Reader Pro</string>
     <string name="onboarding_welcome_desc">Léitheoir PDF glan, éadrom a tógadh le haghaidh simplíochta. Foinse oscailte, gan fhógraí, agus meas ar do phríobháideachas.</string>
@@ -1311,26 +1221,20 @@
     <string name="onboarding_storage_desc">Tabhair cead chun do chomhaid PDF a scanadh agus a thaispeáint. Fanann do dhoiciméid phríobháideach agus ní uaslódáiltear riamh iad.</string>
     <string name="onboarding_grant_access">Tabhair Rochtain</string>
     <string name="onboarding_continue">Lean ar aghaidh</string>
-
     <!-- Folder -->
     <string name="folder_empty">Tá an fillteán seo folamh</string>
     <string name="no_pdf_in_folder">Níor aimsíodh aon chomhaid PDF san fhillteán seo.</string>
-
     <!-- Settings - Update Interval (renamed) -->
     <string name="auto_check_interval">Eatramh Seiceála Uathoibríche</string>
-
     <!-- Install pending -->
     <string name="pending_update_ready">Tá v%1$s réidh le suiteáil</string>
-
     <!-- Creator links -->
     <string name="link_website">Suíomh Gréasáin</string>
     <string name="link_email">Ríomhphost</string>
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
-
     <!-- Selected -->
     <string name="selected">Roghnaithe</string>
-
     <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">Réamhamharc</string>
     <string name="cd_view">Amharc</string>
@@ -1348,7 +1252,6 @@
     <string name="cd_show_password">Taispeáin focal faire</string>
     <string name="cd_hide_password">Folaigh focal faire</string>
     <string name="cd_favorite">Ceanán</string>
-
     <!-- Tool Screen Titles -->
     <string name="tool_lock_pdf">Glasáil PDF</string>
     <string name="tool_compress_pdf">Comhbhrúigh PDF</string>
@@ -1359,13 +1262,11 @@
     <string name="tool_add_watermark">Cuir Comhartha Uisce leis</string>
     <string name="tool_rotate_pdf_pages">Rothlaigh Leathanaigh PDF</string>
     <string name="tool_reorder_pdf_pages">Athordaigh Leathanaigh PDF</string>
-
     <!-- Tool Screen Subtitles/Descriptions -->
     <string name="tool_lock_desc">Cuir cosaint focal faire leis chun rochtain neamhúdaraithe a chosc</string>
     <string name="tool_merge_desc">Cumaisc iliomad comhad PDF in aon cheann amháin</string>
     <string name="tool_pdf_to_images_desc">Easpórtáil leathanaigh PDF mar chomhaid íomhá</string>
     <string name="tool_image_to_pdf_desc">Tiontaigh do chuid íomhánna ina ndoiciméad PDF amháin</string>
-
     <!-- Common Tool Actions -->
     <string name="new_file">Comhad Nua</string>
     <string name="new_export">Easpórtáil Nua</string>
@@ -1377,7 +1278,6 @@
     <string name="save_reordered_pdf">Sábháil PDF Athordaithe</string>
     <string name="create_pdf">Cruthaigh PDF</string>
     <string name="overwrite_original_file">Forscríobh an bunchomhad</string>
-
     <!-- Loading/Processing Messages -->
     <string name="loading_pages">Leathanaigh á lódáil…</string>
     <string name="loading_pdf">PDF á lódáil…</string>
@@ -1394,7 +1294,6 @@
     <string name="removing_pages">Á mbaint…</string>
     <string name="adding_page_numbers">Uimhreacha leathanach á gcur leis…</string>
     <string name="adding_watermark">Comhartha uisce á chur leis…</string>
-
     <!-- Success Messages -->
     <string name="rotation_complete">Rothlú Críochnaithe!</string>
     <string name="pages_reordered">Leathanaigh Athordaithe!</string>
@@ -1406,7 +1305,6 @@
     <string name="images_exported">Íomhánna Easpórtáilte!</string>
     <string name="pdf_created">PDF Cruthaithe!</string>
     <string name="page_numbers_added">Uimhreacha Leathanach Curtha leis!</string>
-
     <!-- Success Descriptions -->
     <string name="pages_rotated_count">Rothlaíodh %d leathanach</string>
     <string name="pdf_saved_new_order">Sábháladh do PDF leis an ord nua leathanach</string>
@@ -1415,7 +1313,6 @@
     <string name="images_created_count">Íomhánna %2$s cruthaithe: %1$d</string>
     <string name="images_converted_count">Íomhánna tiontaithe: %d</string>
     <string name="pages_removed_count">Baineadh %d leathanach</string>
-
     <!-- Section Labels -->
     <string name="section_rotation">ROTHLÚ</string>
     <string name="section_select_pages">ROGHNAIGH LEATHANAIGH</string>
@@ -1433,19 +1330,16 @@
     <string name="section_watermark_type">CINEÁL COMHARTHA UISCE</string>
     <string name="section_text_settings">SOCRUITHE TÉACS</string>
     <string name="section_start_page">LEATHANACH TOSAIGH</string>
-
     <!-- Password Descriptions -->
     <string name="owner_password_desc">Focal faire lánrochtana do cheadanna eagarthóireachta</string>
     <string name="user_password_desc">Riachtanach chun an PDF a oscailt. Fág folamh chun gan focal faire oscailte a bheith ann.</string>
     <string name="enter_password_desc">Iontráil an focal faire chun an PDF seo a dhíghlasáil</string>
     <string name="permissions_desc">Cad is féidir le húsáideoirí a dhéanamh agus iad ag oscailt le focal faire úsáideora</string>
     <string name="allow_copying_content">Ceadaigh Ábhar a Chóipeáil</string>
-
     <!-- Protection Status -->
     <string name="password_protected">Cosanta le focal faire</string>
     <string name="not_protected">Gan chosaint</string>
     <string name="no_password_protection">Gan Chosaint Focal Faire</string>
-
     <!-- Page Selection -->
     <string name="selected_of_count">%1$d de %2$d roghnaithe</string>
     <string name="page_numbers_label">Uimhreacha leathanach</string>
@@ -1460,17 +1354,14 @@
     <string name="page_selection_all">Gach leathanach (1-%1$d)</string>
     <string name="page_selection_range">Leathanaigh %1$d-%2$d</string>
     <string name="page_selection_custom">Leathanaigh %1$s</string>
-
     <!-- Reorder -->
     <string name="drag_hint">Brúigh go fada agus tarraing leathanaigh chun athordú</string>
-
     <!-- Format Options -->
     <string name="format_png">PNG</string>
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Cáilíocht gan chailliúint</string>
     <string name="format_smaller_size">Méid comhaid níos lú</string>
     <string name="will_create_images">Íomhánna %2$s le cruthú: %1$d</string>
-
     <!-- Compression Levels -->
     <string name="compression_low">Íseal</string>
     <string name="compression_medium">Meánach</string>
@@ -1480,23 +1371,19 @@
     <string name="compression_medium_desc">Cáilíocht agus méid cothromaithe</string>
     <string name="compression_high_desc">Comhad níos lú, cáilíocht laghdaithe</string>
     <string name="compression_extreme_desc">An comhad is lú, an cháilíocht is ísle</string>
-
     <!-- Split Modes -->
     <string name="split_extract_pages">Bain Leathanaigh amach</string>
     <string name="split_single_pages">Leathanaigh Aonair</string>
     <string name="split_range_desc">Scoilt ina aon PDF amháin ó raon leathanach</string>
     <string name="split_extract_desc">Bain leathanaigh ar leith amach mar PDF nua</string>
     <string name="split_single_desc">Gach leathanach mar chomhad PDF ar leith</string>
-
     <!-- Merge -->
     <string name="no_pdfs_selected">Níor Roghnaíodh Aon PDFanna</string>
     <string name="add_pdfs_to_merge">Cuir dhá chomhad PDF nó níos mó leis chun iad a chumasc ina ndoiciméad amháin</string>
     <string name="files_selected">Comhaid roghnaithe: %d</string>
     <string name="files_merged">Comhaid cumasctha: %d</string>
-
     <!-- Image to PDF -->
     <string name="images_selected">Íomhánna roghnaithe: %d</string>
-
     <!-- Page Numbers -->
     <string name="position_bottom_left">Bun Clé</string>
     <string name="position_bottom_center">Bun Lár</string>
@@ -1507,7 +1394,6 @@
     <string name="format_simple">1, 2, 3</string>
     <string name="format_dash">- 1 -</string>
     <string name="format_page_of">Leathanach 1 de N</string>
-
     <!-- Watermark -->
     <string name="watermark_text_label">Téacs an Chomhartha Uisce</string>
     <string name="watermark_text_hint">Iontráil téacs an chomhartha uisce</string>
@@ -1516,15 +1402,12 @@
     <string name="scale">Scála</string>
     <string name="watermark_preview_area">Limistéar réamhamhairc an chomhartha uisce</string>
     <string name="no_image_selected">Níor roghnaíodh aon íomhá</string>
-
     <!-- Remove Pages -->
     <string name="pages_to_remove">%d leathanach le baint</string>
     <string name="remove_selected_pages">Bain %d Leathanach</string>
     <string name="remove_pages_btn">Bain Leathanaigh</string>
     <string name="select_pages_to_remove_hint">Tapáil leathanaigh chun iad a roghnú lena mbaint</string>
-
     <!-- File Info in Results -->
-
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
     <string name="select_pdfs">Roghnaigh PDFanna</string>
@@ -1544,7 +1427,6 @@
     <string name="select_pages">Roghnaigh Leathanaigh</string>
     <string name="selection_mode">Mód Roghnaithe</string>
     <string name="pages_range_info">Áireofar leathanaigh %1$s go %2$s</string>
-
     <!-- Split Screen -->
     <string name="change">Athraigh</string>
     <string name="page_ranges_label">Raonta Leathanach</string>
@@ -1579,7 +1461,6 @@
     <string name="split_complete">Scoilt Críochnaithe!</string>
     <string name="one_file_created">Cruthaíodh 1 chomhad</string>
     <string name="files_created_count">Comhaid cruthaithe: %1$d</string>
-
     <!-- Remove Pages Screen -->
     <string name="select_page_range">Roghnaigh Raon Leathanach</string>
     <string name="select_action">Roghnaigh</string>
@@ -1613,7 +1494,6 @@
     <string name="removing">Á mbaint…</string>
     <string name="pages_removed">Leathanaigh Bainte!</string>
     <string name="one_page_removed">Baineadh 1 leathanach</string>
-
     <!-- Page Numbers Screen -->
     <string name="prefix_label">Réimír</string>
     <string name="prefix_hint">m.sh., Leathanach</string>
@@ -1626,7 +1506,6 @@
     <string name="color_g">G</string>
     <string name="color_b">B</string>
     <string name="skip_first_pages">Scipeáil an chéad N leathanach</string>
-
     <!-- Input Validation Messages -->
     <string name="validation_password_required">Tá focal faire riachtanach</string>
     <string name="validation_password_too_short">Caithfidh an focal faire %1$d charachtar ar a laghad a bheith ann</string>
@@ -1650,7 +1529,6 @@
     <string name="validation_color_invalid">Luach datha neamhbhailí</string>
     <string name="validation_color_range">Caithfidh luach an datha a bheith 0-255</string>
     <string name="password_min_hint">Íosmhéid 4 charachtar ag teastáil</string>
-
     <plurals name="sign_unsaved_count">
         <item quantity="one">%d síniú gan sábháil</item>
         <item quantity="two">%d shíniú gan sábháil</item>
@@ -1660,6 +1538,7 @@
     </plurals>
     <string name="sort_alphabetical">Aibítreach</string>
     <string name="sort_date_modified">Dáta Athraithe</string>
+    <string name="cd_close_selection">Dún roghnú</string>
     <string name="folder_label">Fillteán</string>
     <string name="crash_details">Sonraí na tuairte</string>
     <string name="copy_details">Cóipeáil sonraí</string>
@@ -1667,6 +1546,7 @@
     <string name="crash_report_subject">Tuarascáil tuairte PDF Reader Pro</string>
     <string name="report_on_github">Tuairiscigh ar GitHub</string>
     <string name="no_browser_found">Níor aimsíodh aon bhrabhsálaí chun an nasc a oscailt</string>
+    <string name="no_app_to_open">Níor aimsíodh aip chun é seo a oscailt</string>
     <string name="choose_language">Roghnaigh teanga na haipe</string>
     <string name="language_follow_system">Úsáid teanga an fhóin</string>
     <plurals name="delete_count_files">
@@ -1843,5 +1723,12 @@
         <item quantity="few">Comhaid PDF ar leith le cruthú: %1$d</item>
         <item quantity="many">Comhaid PDF ar leith le cruthú: %1$d</item>
         <item quantity="other">Comhaid PDF ar leith le cruthú: %1$d</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="two">%d PDF</item>
+        <item quantity="few">%d PDF</item>
+        <item quantity="many">%d PDF</item>
+        <item quantity="other">%d PDF</item>
     </plurals>
 </resources>

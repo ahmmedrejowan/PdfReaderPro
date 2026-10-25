@@ -28,18 +28,17 @@ Don't worry about getting everything perfect - we can work through it together i
 
 ### Want to Translate?
 
-1. Copy `app/src/main/res/values/strings.xml` to `app/src/main/res/values-<code>/strings.xml` (for example `values-it`), or edit an existing language
-2. Translate the text only; keep every placeholder (`%s`, `%1$d`) and write apostrophes as `\'`
-3. Add the language code to `AppLanguage.supported` so it appears in the app's language setting
-4. Open the Pull Request against the `feature` branch
+Translations are managed on **[Crowdin](https://crowdin.com/project/pdf-reader-pro)**. Sign in, pick your language and translate in the browser; no Git or Android Studio needed. Crowdin collects the work into a pull request against the `feature` branch, where a quick translation check makes sure every placeholder and plural still fits.
 
-A quick translation check runs on every PR and points to any string that would break the build.
+Please translate there rather than editing the `strings.xml` files directly, since Crowdin is where the translations live and changes made only in the repository can be overwritten.
+
+Missing your language, or not sure about a string? Ask in the [translation discussion](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/108) and it can be added. Maintainers add it as a target language in Crowdin and its code to `AppLanguage.supported`, so it appears in the app's language setting.
 
 ## Setting Up Locally
 
 **You'll need:**
 - Android Studio (Ladybug or newer)
-- JDK 17
+- JDK 21 (Android Studio's bundled runtime works)
 
 **Quick start:**
 ```bash

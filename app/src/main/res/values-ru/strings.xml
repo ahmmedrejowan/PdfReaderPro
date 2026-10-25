@@ -1,43 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PDF Reader Pro</string>
     <string name="hello_blank_fragment">Привет, пустой фрагмент</string>
-
-
     <string name="intro_title_1">Изучайте PDF без усилий</string>
     <string name="intro_sub_title_1">Погрузитесь в мир PDF с лёгким чтением</string>
-
     <string name="intro_title_2">Ваша коллекция PDF</string>
     <string name="intro_sub_title_2">Эффективно находите и открывайте любой нужный PDF</string>
-
     <string name="intro_title_3">Настройте свой опыт работы с PDF</string>
     <string name="intro_sub_title_3">Настраивайте, ищите и изучайте расширенные функции PDF.</string>
-
     <string name="greeting_with_emoji">%1$s %2$s</string>
-
     <string name="let_s_start">Начнём</string>
-
     <string name="permission_normal_title">Давайте найдём ваши PDF</string>
     <string name="permission_allowed_title">Всё готово</string>
     <string name="permission_error_title">Произошла ошибка</string>
-
     <string name="permission_normal_sub_title">Разрешите доступ к хранилищу, и мы позволим вам открывать, искать и фильтровать PDF по вашему желанию и многое другое.</string>
     <string name="permission_allowed_sub_title">Перейдём в приложение</string>
     <string name="permission_error_sub_title">Не удалось получить разрешение. Возможно, что-то пошло не так.</string>
-
-
     <string name="permission_below_11_normal_description">Нажмите кнопку «Разрешить» в следующем диалоге.</string>
     <string name="permission_above_11_normal_description">Включите переключатель на следующей странице</string>
-
     <string name="permission_error_description">Включите переключатель на следующей странице</string>
-
-
     <string name="allow_access">Разрешить доступ</string>
     <string name="lets_go">Поехали</string>
     <string name="try_again">Попробовать снова</string>
-
     <string name="app_settings">Настройки приложения</string>
     <string name="how_to_allow_access">Как разрешить доступ</string>
-
     <string name="settings">Настройки</string>
     <string name="search_pdf">Поиск PDF</string>
     <string name="overview">Обзор PDF</string>
@@ -75,7 +61,6 @@
     <string name="jump">Перейти</string>
     <string name="enter_page_number">Введите номер страницы</string>
     <string name="remove">Удалить</string>
-
     <!-- Common Actions -->
     <string name="done">Готово</string>
     <string name="save">Сохранить</string>
@@ -103,18 +88,28 @@
     <string name="select_file">Выбрать файл</string>
     <string name="select_pdf">Выбрать PDF</string>
     <string name="select_images">Выбрать изображения</string>
-
     <!-- Sort Options -->
     <string name="sort_files">Сортировать файлы</string>
     <string name="sort_folders">Сортировать папки</string>
     <string name="choose_sort_pdfs">Выберите способ организации PDF</string>
     <string name="choose_sort_folders">Выберите способ организации папок</string>
+    <string name="sort_desc_name">Сортировать по имени файла</string>
+    <string name="sort_desc_date">Сортировать по дате изменения</string>
+    <string name="sort_desc_size">Сортировать по размеру</string>
+    <string name="sort_newest">Сначала новые</string>
+    <string name="sort_oldest">Сначала старые</string>
+    <string name="sort_largest">Сначала большие</string>
+    <string name="sort_smallest">Сначала маленькие</string>
+    <string name="folder_sort_desc_name">Сортировать по имени папки</string>
+    <string name="folder_sort_title_count">Количество PDF</string>
+    <string name="folder_sort_desc_count">Сортировать по количеству PDF</string>
+    <string name="sort_most">Больше</string>
+    <string name="sort_least">Меньше</string>
     <string name="sort_by_name">По имени</string>
     <string name="sort_by_date">По дате</string>
     <string name="sort_by_size">По размеру</string>
     <string name="sort_ascending">По возрастанию</string>
     <string name="sort_descending">По убыванию</string>
-
     <!-- Home Screen -->
     <string name="good_morning">Доброе утро</string>
     <string name="good_afternoon">Добрый день</string>
@@ -129,7 +124,6 @@
     <string name="add_favorites_hint">Добавьте PDF в избранное, чтобы видеть их здесь</string>
     <string name="open_pdf_hint">Откройте несколько PDF, чтобы видеть их здесь</string>
     <string name="delete_warning">Это действие нельзя отменить. Файлы будут безвозвратно удалены с вашего устройства.</string>
-
     <!-- Folders Screen -->
     <string name="all_folders">Все папки</string>
     <string name="search_folders">Поиск папок…</string>
@@ -143,7 +137,6 @@
     <string name="sort_folders_desc">Сортировать папки</string>
     <string name="clear_search">Очистить поиск</string>
     <string name="close_search">Закрыть поиск</string>
-
     <!-- Search Screen -->
     <string name="search_your_pdfs">Поиск ваших PDF…</string>
     <string name="search_your_pdfs_hint">Поиск ваших PDF...</string>
@@ -162,7 +155,6 @@
     <string name="tip_search_folder_desc">Введите имя папки, чтобы найти все PDF в ней</string>
     <string name="tip_partial_matches_title">Частичные совпадения работают</string>
     <string name="tip_partial_matches_desc">Точное имя не обязательно — попробуйте более короткие слова</string>
-
     <!-- File Info -->
     <string name="file_information">Информация о файле</string>
     <string name="file_name">Имя файла</string>
@@ -171,24 +163,20 @@
     <string name="page_count">Количество страниц</string>
     <string name="last_modified">Последнее изменение</string>
     <string name="created">Создан</string>
-
     <!-- Delete Confirmation -->
     <string name="delete_file">Удалить файл</string>
     <string name="delete_files">Удалить файлы</string>
     <string name="action_cannot_be_undone">Это действие нельзя отменить</string>
     <string name="confirm_delete_file">Вы уверены, что хотите безвозвратно удалить этот файл?</string>
     <string name="confirm_delete_files">Вы уверены, что хотите безвозвратно удалить эти файлы?</string>
-
     <!-- Rename -->
     <string name="rename_file">Переименовать файл</string>
     <string name="new_name">Новое имя</string>
-
     <!-- Stats -->
     <string name="library_statistics">Статистика библиотеки</string>
     <string name="total_files">Всего файлов</string>
     <string name="favorite_files">Избранные файлы</string>
     <string name="recent_files">Недавние файлы</string>
-
     <!-- Settings Screen -->
     <string name="appearance">Внешний вид</string>
     <string name="reader">Чтение</string>
@@ -231,13 +219,11 @@
     <string name="creator_title">Старший Android-разработчик</string>
     <string name="creator_description">PDF Reader Pro был создан, чтобы обеспечить бесплатный, открытый и ориентированный на конфиденциальность опыт чтения PDF. С такими функциями, как закладки, избранное, темы чтения и настраиваемые параметры, он стремится быть полноценным решением для работы с PDF на Android.</string>
     <string name="gnu_license">GNU General Public License v3.0</string>
-
     <!-- Tool categories -->
     <string name="tool_category_organize">Организация</string>
     <string name="tool_category_edit">Редактирование</string>
     <string name="tool_category_security">Безопасность</string>
     <string name="tool_category_convert">Конвертация</string>
-
     <!-- Tools -->
     <string name="tool_split_pdf">Разделить PDF</string>
     <string name="tool_split_desc">Разделить PDF на несколько файлов</string>
@@ -255,7 +241,6 @@
     <string name="tool_unlock_desc">Удалить пароль из PDF</string>
     <string name="tool_pdf_to_image">PDF в изображения</string>
     <string name="tool_pdf_to_image_desc">Экспортировать страницы PDF как изображения</string>
-
     <!-- Update Sheet -->
     <string name="update_available">Доступно обновление</string>
     <string name="current">Текущая</string>
@@ -263,14 +248,12 @@
     <string name="whats_new">Что нового</string>
     <string name="skip_version">Пропустить эту версию</string>
     <string name="download_update">Скачать обновление</string>
-
     <!-- Download Progress -->
     <string name="downloading">Скачивание…</string>
     <string name="download_complete">Скачивание завершено</string>
     <string name="download_failed">Ошибка скачивания</string>
     <string name="install">Установить</string>
     <string name="retry">Повторить</string>
-
     <!-- Reader Screen -->
     <string name="page_of">Страница %1$d из %2$d</string>
     <string name="bookmarks">Закладки</string>
@@ -357,11 +340,9 @@
     <string name="close_highlight_nav">Остановить переход по выделениям</string>
     <string name="no_matching_highlights">Нет совпадений</string>
     <string name="no_matching_highlights_hint">Попробуйте другой запрос или цвет</string>
-
     <string name="lock_horizontal_scroll">Заблокировать горизонтальную прокрутку</string>
     <string name="lock_horizontal_scroll_desc">Удерживать страницу на месте при увеличении</string>
     <string name="lock_horizontal_scroll_unavailable">Доступно только при вертикальной прокрутке</string>
-
     <string name="table_of_contents">Оглавление</string>
     <string name="no_table_of_contents">Нет оглавления</string>
     <string name="attachments">Вложения</string>
@@ -380,17 +361,14 @@
     <string name="search_text">Поиск текста…</string>
     <string name="no_matches">Нет совпадений</string>
     <string name="match_count">%1$d из %2$d</string>
-
     <!-- Remove Favorite -->
     <string name="remove_favorite">Удалить из избранного</string>
     <string name="remove_from_favorites">Удалить из избранного</string>
     <string name="confirm_remove_favorite">Вы уверены, что хотите удалить этот файл из избранного?</string>
-
     <!-- Exit Confirmation -->
     <string name="exit_app">Выйти из приложения</string>
     <string name="confirm_exit">Вы уверены, что хотите выйти?</string>
     <string name="exit">Выйти</string>
-
     <!-- Tools Screen -->
     <string name="pdf_tools">Инструменты PDF</string>
     <string name="reader_pdf_tools_desc">Разделение, сжатие, поворот и многое другое</string>
@@ -407,7 +385,6 @@
     <string name="add_page_numbers">Добавить номера страниц</string>
     <string name="images_to_pdf">Изображения в PDF</string>
     <string name="pdf_to_images">PDF в изображения</string>
-
     <!-- Tool Common -->
     <string name="select_source_file">Выберите PDF-файл для начала работы</string>
     <string name="processing">Обработка…</string>
@@ -421,14 +398,12 @@
     <string name="page_range">Диапазон страниц</string>
     <string name="page_range_hint">например, 1-3, 5, 7-10</string>
     <string name="invalid_page_range">Неверный диапазон страниц</string>
-
     <!-- Merge -->
     <string name="add_pdfs">Добавить PDF для объединения</string>
     <string name="drag_to_reorder">Перетащите для изменения порядка</string>
     <string name="merge_files">Объединить файлы</string>
     <string name="merge_more">Объединить ещё</string>
     <string name="merged_successfully">PDF успешно объединены</string>
-
     <!-- Split -->
     <string name="split_mode">Режим разделения</string>
     <string name="split_by_pages">Разделить по страницам</string>
@@ -438,7 +413,6 @@
     <string name="split">Разделить</string>
     <string name="split_more">Разделить ещё</string>
     <string name="split_successfully">PDF успешно разделён</string>
-
     <!-- Compress -->
     <string name="compression_level">Уровень сжатия</string>
     <string name="low">Низкий</string>
@@ -455,7 +429,6 @@
     <string name="compress_medium_desc">Сбалансированное сжатие и качество</string>
     <string name="compress_high_label">Высокий</string>
     <string name="compress_high_desc">Максимальное сжатие, меньший файл</string>
-
     <!-- Compress Screen -->
     <string name="compress_share_pdf">Поделиться PDF</string>
     <string name="compress_empty_title">Сжать PDF-файл</string>
@@ -471,7 +444,6 @@
     <string name="compressed_size">Сжатый размер</string>
     <string name="compressed_size_reduced">Размер уменьшен</string>
     <string name="saved_format">(сохранено %1$s)</string>
-
     <!-- Rotate -->
     <string name="rotation">Поворот</string>
     <string name="rotate_left">Повернуть влево</string>
@@ -482,7 +454,6 @@
     <string name="apply_to_all">Применить ко всем страницам</string>
     <string name="rotate_more">Повернуть ещё</string>
     <string name="rotated_successfully">PDF успешно повёрнут</string>
-
     <!-- Lock/Unlock -->
     <string name="password">Пароль</string>
     <string name="enter_password">Введите пароль</string>
@@ -502,7 +473,6 @@
     <string name="incorrect_password">Неверный пароль</string>
     <string name="pdf_not_protected">Этот PDF не защищён паролем</string>
     <string name="pdf_protected">Этот PDF защищён паролем</string>
-
     <!-- Watermark -->
     <string name="watermark">Водяной знак</string>
     <string name="text_watermark">Текстовый водяной знак</string>
@@ -523,18 +493,15 @@
     <string name="position_center">По центру</string>
     <string name="position_tiled">Мозаикой</string>
     <string name="watermark_added">Водяной знак добавлен!</string>
-
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Выберите страницы для удаления</string>
     <string name="remove_selected">Удалить выбранные</string>
     <string name="remove_more">Удалить ещё</string>
-
     <!-- Reorder -->
     <string name="drag_to_reorder_pages">Перетащите страницы для изменения порядка</string>
     <string name="reorder">Изменить порядок</string>
     <string name="reorder_more">Изменить порядок ещё</string>
     <string name="reordered_successfully">Порядок страниц успешно изменён</string>
-
     <!-- Page Numbers -->
     <string name="number_format">Формат номера</string>
     <string name="start_number">Начальный номер</string>
@@ -548,7 +515,6 @@
     <string name="section_apply_to_pages">ПРИМЕНИТЬ К СТРАНИЦАМ</string>
     <string name="horizontal_margin">Горизонтальный отступ</string>
     <string name="vertical_margin">Вертикальный отступ</string>
-
     <!-- Formats -->
     <string name="format_number_only">Только номер</string>
     <string name="format_number_only_example">1</string>
@@ -560,31 +526,25 @@
     <string name="format_dash_x_example">- 1 -</string>
     <string name="format_custom">Свой</string>
     <string name="format_custom_example">С.1</string>
-
     <!-- Preview -->
     <string name="preview_info_format">%1$s • %2$dpt • %3$s</string>
-
     <!-- Color picker -->
     <string name="pick_color">Выбрать цвет</string>
     <string name="page_number_color">Цвет номера страницы</string>
-
     <!-- Page selection -->
     <string name="page_numbers_selection_all">Все (%1$d)</string>
     <string name="page_selection_odd">Нечётные</string>
     <string name="page_selection_even">Чётные</string>
     <string name="page_selection_skip_first">Пропустить первую</string>
     <string name="title_page_selection_custom">Выборочно</string>
-
     <!-- Success -->
     <string name="adding_numbers">Добавление номеров…</string>
-
     <!-- Images to PDF -->
     <string name="add_images">Добавить изображения для конвертации</string>
     <string name="image_quality">Качество изображения</string>
     <string name="convert">Конвертировать</string>
     <string name="convert_more">Конвертировать ещё</string>
     <string name="converted_successfully">Изображения сконвертированы в PDF</string>
-
     <!-- PDF to Images -->
     <string name="output_format">Выходной формат</string>
     <string name="png">PNG</string>
@@ -599,7 +559,6 @@
     <string name="share_images">Поделиться изображениями</string>
     <string name="share_image">Поделиться изображением</string>
     <string name="view_image">Просмотреть изображение</string>
-
     <!-- Error Messages -->
     <string name="error_loading_pdf">Ошибка загрузки PDF</string>
     <string name="error_file_not_found">Файл не найден</string>
@@ -663,7 +622,6 @@
     <string name="error_enter_watermark_text">Пожалуйста, введите текст водяного знака</string>
     <string name="error_select_watermark_image">Пожалуйста, выберите изображение водяного знака</string>
     <string name="error_add_watermark_failed">Не удалось добавить водяной знак</string>
-
     <!-- Error Recovery Hints -->
     <string name="error_hint_corrupted_pdf">Файл может быть повреждён. Попробуйте скачать его заново.</string>
     <string name="error_hint_invalid_pdf">Этот файл не является корректным PDF-документом.</string>
@@ -675,16 +633,13 @@
     <string name="error_hint_timeout">Операция заняла слишком много времени. Попробуйте снова.</string>
     <string name="error_hint_out_of_memory">Закройте другие приложения и попробуйте снова с меньшим файлом.</string>
     <string name="error_hint_generic">Пожалуйста, попробуйте снова. Если проблема сохраняется, перезапустите приложение.</string>
-
     <!-- PDF Thumbnail -->
     <string name="pdf">PDF</string>
     <string name="pdf_thumbnail">Миниатюра PDF</string>
     <string name="loading">Загрузка…</string>
-
     <!-- Misc -->
     <string name="pdf_reader_pro">PDF Reader Pro</string>
     <string name="no_pdf_data">Данные PDF не получены</string>
-
     <!-- Content Descriptions - Accessibility -->
     <string name="sort_files_desc">Сортировать файлы</string>
     <string name="library_stats_desc">Статистика библиотеки</string>
@@ -692,7 +647,6 @@
     <string name="list_view">Список</string>
     <string name="more">Ещё</string>
     <string name="favorite">В избранное</string>
-
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Назад</string>
     <string name="cd_close">Закрыть</string>
@@ -701,7 +655,6 @@
     <string name="cd_options">Опции</string>
     <string name="cd_expand">Развернуть</string>
     <string name="cd_collapse">Свернуть</string>
-
     <!-- Content Descriptions - Actions -->
     <string name="cd_add">Добавить</string>
     <string name="cd_remove">Удалить</string>
@@ -734,7 +687,6 @@
     <string name="cd_retry">Повторить</string>
     <string name="cd_back">Назад</string>
     <string name="cd_more_options">Ещё</string>
-
     <!-- Content Descriptions - PDF Reader -->
     <string name="cd_zoom_in">Увеличить</string>
     <string name="cd_zoom_out">Уменьшить</string>
@@ -758,7 +710,6 @@
     <string name="cd_play">Запустить</string>
     <string name="cd_pause">Пауза</string>
     <string name="cd_stop">Стоп</string>
-
     <!-- Content Descriptions - Files -->
     <string name="cd_pdf_file">PDF-файл</string>
     <string name="cd_folder">Папка</string>
@@ -770,7 +721,6 @@
     <string name="cd_folder_options">Опции папки</string>
     <string name="cd_selected">Выбрано</string>
     <string name="cd_not_selected">Не выбрано</string>
-
     <!-- Content Descriptions - Status -->
     <string name="cd_loading">Загрузка</string>
     <string name="cd_success">Успех</string>
@@ -785,7 +735,6 @@
     <string name="cd_toggle">Переключить</string>
     <string name="cd_enabled">Включено</string>
     <string name="cd_disabled">Отключено</string>
-
     <!-- Content Descriptions - PDF Tools -->
     <string name="cd_merge_pdfs">Объединить PDF</string>
     <string name="cd_split_pdf">Разделить PDF</string>
@@ -803,7 +752,6 @@
     <string name="cd_page_number">Страница %1$d</string>
     <string name="cd_page_selected">Страница %1$d выбрана</string>
     <string name="cd_page_not_selected">Страница %1$d не выбрана</string>
-
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">Логотип PDF Reader Pro</string>
     <string name="cd_decorative">Декоративное изображение</string>
@@ -815,11 +763,9 @@
     <string name="cd_color_picker">Выбор цвета</string>
     <string name="cd_slider">Ползунок</string>
     <string name="cd_dropdown">Выпадающее меню</string>
-
     <!-- Navigation -->
     <string name="home">Главная</string>
     <string name="tools">Инструменты</string>
-
     <!-- Empty States -->
     <string name="no_pdfs_title">Здесь пока нет PDF</string>
     <string name="no_pdfs_message">Не удалось найти ни одного PDF-файла на вашем устройстве. Попробуйте выполнить поиск снова или добавьте PDF-файлы для начала работы!</string>
@@ -835,7 +781,6 @@
     <string name="no_folders_message">Папки с PDF появятся здесь после сканирования файлов. Давайте их найдём!</string>
     <string name="permission_title">Нужно ваше разрешение</string>
     <string name="permission_message">Чтобы показать ваши PDF-файлы здесь, пожалуйста, разрешите доступ к хранилищу</string>
-
     <!-- Stats Sheet -->
     <string name="library_stats">Статистика библиотеки</string>
     <string name="library_stats_subtitle">Краткий обзор вашей коллекции PDF</string>
@@ -846,16 +791,13 @@
     <string name="percent_of_library">%d%% вашей библиотеки</string>
     <string name="no_files_yet">пока нет файлов</string>
     <string name="recently_opened">недавно открытые</string>
-
     <!-- Exit Confirmation -->
     <string name="stay">Остаться</string>
     <string name="exit_confirm_message">Вы уверены, что хотите закрыть приложение?</string>
-
     <!-- Rename Sheet -->
     <string name="file_name_label">Имя файла</string>
     <string name="invalid_file_name">Неверное имя файла</string>
     <string name="pdf_extension_hint">Расширение .pdf будет добавлено автоматически</string>
-
     <!-- File Options -->
     <string name="quick_actions">Быстрые действия</string>
     <string name="add_to_favorites">Добавить в избранное</string>
@@ -874,7 +816,6 @@
     <string name="delete_desc">Безвозвратно удалить этот файл</string>
     <string name="cd_toggle_scroll_direction">Переключить направление прокрутки</string>
     <string name="cd_fit_to_screen">По размеру экрана</string>
-
     <!-- Folder Options -->
     <string name="folder_options">Опции папки</string>
     <string name="pdf_files">PDF-файлы</string>
@@ -887,7 +828,6 @@
     <string name="copy_path">Копировать путь</string>
     <string name="copy_path_desc">Скопировать расположение папки в буфер обмена</string>
     <string name="path_copied">Путь скопирован в буфер обмена</string>
-
     <!-- Download Progress -->
     <string name="download_progress">Прогресс скачивания</string>
     <string name="starting_download">Начало скачивания…</string>
@@ -903,10 +843,8 @@
     <string name="later">Позже</string>
     <string name="download_cancelled">Скачивание отменено</string>
     <string name="try_again_settings">Вы можете попробовать снова позже в настройках</string>
-
     <!-- Update Sheet -->
     <string name="no_release_notes">Нет примечаний к выпуску.</string>
-
     <!-- Recent Items -->
     <string name="item_selected">Выбрано</string>
     <string name="item_not_selected">Не выбрано</string>
@@ -916,31 +854,26 @@
     <string name="minutes_ago">%d мин назад</string>
     <string name="hours_ago">%d ч назад</string>
     <string name="days_ago">%d дн назад</string>
-
     <!-- Permission Bottom Sheet -->
     <string name="quick_access_needed">Требуется быстрый доступ</string>
     <string name="storage_access_message">Разрешите доступ к хранилищу, чтобы мы могли находить и отображать ваши PDF-файлы</string>
     <string name="open_settings">Открыть настройки</string>
     <string name="not_now">Не сейчас</string>
-
     <!-- Bottom navigation -->
     <string name="nav_home">Главная</string>
     <string name="nav_folders">Папки</string>
     <string name="nav_tools">Инструменты</string>
     <string name="nav_settings">Настройки</string>
-
     <!-- Home sub-tabs -->
     <string name="home_tab_recent">Недавние</string>
     <string name="home_tab_favorites">Избранное</string>
     <string name="home_tab_all_files">Все файлы</string>
-
     <!-- Error Activity -->
     <string name="unexpected_error">Произошла непредвиденная ошибка</string>
     <string name="something_went_wrong">Упс! Что-то пошло не так</string>
     <string name="go_back">Назад</string>
     <string name="restart_app">Перезапустить приложение</string>
     <string name="close_app">Закрыть приложение</string>
-
     <!-- Password Dialog -->
     <string name="password_required">Требуется пароль</string>
     <string name="password_protected_message">Этот PDF защищён паролем. Введите пароль, чтобы открыть его.</string>
@@ -948,7 +881,6 @@
     <string name="hide_password">Скрыть пароль</string>
     <string name="show_password">Показать пароль</string>
     <string name="remember_password">Запомнить пароль для этого файла</string>
-
     <!-- More Options Sheet -->
     <string name="additional_tools">Дополнительные инструменты и действия</string>
     <string name="view_manage_bookmarks">Просмотр и управление сохранёнными страницами</string>
@@ -958,7 +890,6 @@
     <string name="print_document">Распечатать этот документ</string>
     <string name="document_info">Информация о документе</string>
     <string name="view_file_details">Просмотреть детали и метаданные файла</string>
-
     <!-- View Mode Sheet -->
     <string name="view_options">Опции просмотра</string>
     <string name="customize_reading_layout">Настройте разметку чтения</string>
@@ -986,7 +917,6 @@
     <string name="scrubber_on_scroll_desc">Показывать ползунок страниц во время прокрутки, когда панель инструментов скрыта</string>
     <string name="tap_to_turn_page">Нажатие для перелистывания</string>
     <string name="tap_to_turn_page_desc">Нажимайте по краям страницы для перехода между страницами</string>
-
     <!-- Display Sheet -->
     <string name="display_settings">Настройки отображения</string>
     <string name="theme_brightness_options">Тема, яркость и параметры экрана</string>
@@ -999,13 +929,11 @@
     <string name="prevent_screen_off">Не выключать экран</string>
     <string name="keep_image_colors">Сохранять цвета изображений</string>
     <string name="keep_image_colors_desc">Показывать изображения в настоящих цветах</string>
-
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Перейти к странице</string>
     <string name="enter_page_range">Введите номер страницы (1 - %d)</string>
     <string name="page_number_placeholder">Номер страницы</string>
     <string name="enter_valid_page">Пожалуйста, введите число от 1 до %d</string>
-
     <!-- Auto Scroll Sheet -->
     <string name="auto_scroll_title">Автопрокрутка</string>
     <string name="hands_free_reading">Режим чтения без рук</string>
@@ -1020,7 +948,6 @@
     <string name="faster">Быстрее</string>
     <string name="start_auto_scroll">Начать автопрокрутку</string>
     <string name="auto_scroll_hint">Нажмите на экран, чтобы приостановить или продолжить. Для остановки используйте панель управления.</string>
-
     <!-- Zoom Sheet -->
     <string name="zoom_display">Масштаб и отображение</string>
     <string name="adjust_view_orientation">Настроить размер и ориентацию просмотра</string>
@@ -1031,14 +958,12 @@
     <string name="lock_portrait">Заблокировать портретный режим</string>
     <string name="lock_landscape">Заблокировать альбомный режим</string>
     <string name="current_zoom_label">Текущий масштаб</string>
-
     <!-- Bookmarks Sheet -->
     <string name="bookmark_count">%d закладка</string>
     <string name="bookmarks_count">Закладок: %d</string>
     <string name="delete_bookmark">Удалить закладку</string>
     <string name="bookmark_hint">Нажмите значок закладки, чтобы сохранить страницы</string>
     <string name="page_number_title">Страница %d</string>
-
     <!-- PDF Info Dialog -->
     <string name="document_information">Информация о документе</string>
     <string name="pdf_version_label">PDF %s</string>
@@ -1061,7 +986,6 @@
     <string name="xfa_label">XFA</string>
     <string name="web_optimized">Оптимизирован для веба</string>
     <string name="location_section">Расположение</string>
-
     <!-- Top Bar Menu Panel -->
     <string name="document_options">Опции документа</string>
     <string name="share_print_manage">Отправка, печать и управление</string>
@@ -1079,15 +1003,12 @@
     <string name="remove_from_favourites_desc">Удалить из списка избранного</string>
     <string name="add_to_favourites_desc">Добавить в список избранного</string>
     <string name="delete_file_permanently">Безвозвратно удалить этот файл</string>
-
     <!-- Delete Confirm Dialog -->
     <string name="delete_pdf_question">Удалить PDF?</string>
     <string name="action_cannot_undo">Это действие нельзя отменить</string>
-
     <!-- Remove Favorite Sheet -->
     <string name="remove_from_favourites_question">Удалить из избранного?</string>
     <string name="remove_from_list_message">Это удалит файл из вашего списка</string>
-
     <!-- Reader Components -->
     <string name="go_to_page">Перейти к странице</string>
     <string name="back_to_page">Вернуться на страницу %d</string>
@@ -1137,16 +1058,13 @@
     <string name="error_loading">Ошибка загрузки PDF</string>
     <string name="try_again_message">Что-то пошло не так при загрузке этого PDF. Пожалуйста, попробуйте снова.</string>
     <string name="cd_page_thumbnails">Миниатюры страниц</string>
-
     <!-- Floating Search Bar -->
     <string name="search_in_document">Поиск в документе…</string>
-
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Опции просмотра</string>
     <string name="cd_zoom">Масштаб</string>
     <string name="cd_display_settings">Настройки отображения</string>
     <string name="cd_control_more_options">Ещё</string>
-
     <!-- Reader Sidebar -->
     <string name="reading">Чтение</string>
     <string name="settings_label">Настройки</string>
@@ -1158,10 +1076,8 @@
     <string name="rotation_locked">Поворот заблокирован</string>
     <string name="auto_rotate">Автоповорот</string>
     <string name="swipe_to_close">Проведите вправо, чтобы закрыть</string>
-
     <!-- Tools Screen -->
     <string name="coming_soon">Скоро</string>
-
     <!-- Enhanced Table of Contents -->
     <string name="document_navigation">Навигация по документу</string>
     <string name="no_contents_available">Содержание недоступно</string>
@@ -1176,16 +1092,13 @@
     <string name="toc_tab_attachments">Вложения</string>
     <string name="attachment_type_hint">Файл %1$s · Нажмите, чтобы открыть</string>
     <string name="attachment_tap_hint">Нажмите, чтобы открыть</string>
-
     <!-- Settings Panel (Reader) -->
     <string name="reading_settings">Настройки чтения</string>
     <string name="full_screen_mode">Полноэкранный режим</string>
     <string name="auto_rotate_enabled">Автоповорот включён</string>
     <string name="delete_pdf">Удалить PDF</string>
-
     <!-- Folder Detail Screen -->
     <string name="delete_files_warning">Это действие нельзя отменить. Файлы будут безвозвратно удалены с вашего устройства.</string>
-
     <!-- Settings Screen -->
     <string name="reader_section">Чтение</string>
     <string name="about_section">О приложении</string>
@@ -1219,7 +1132,6 @@
     <string name="about_developer">О разработчике</string>
     <string name="app_license">Лицензия приложения</string>
     <string name="follow_system_brightness">Следовать системной яркости</string>
-
     <!-- Settings Screen - Remaining strings -->
     <string name="install_pending_update">Установить ожидающее обновление</string>
     <string name="install_downloaded_version">Установить скачанную v%s</string>
@@ -1227,6 +1139,8 @@
     <string name="get_in_touch">Свяжитесь с разработчиком</string>
     <string name="github_repository">Репозиторий GitHub</string>
     <string name="view_source_code">Просмотреть исходный код</string>
+    <string name="help_translate">Помочь с переводом</string>
+    <string name="help_translate_desc">Переведите приложение на свой язык в Crowdin</string>
     <string name="choose_appearance">Выберите внешний вид приложения</string>
     <string name="always_light">Всегда использовать светлую тему</string>
     <string name="always_dark">Всегда использовать тёмную тему</string>
@@ -1274,7 +1188,6 @@
     <string name="set_custom_level">Установить свой уровень</string>
     <string name="custom">Свой</string>
     <string name="app_logo">Логотип приложения</string>
-
     <!-- Privacy Policy -->
     <string name="no_data_collection">Никакого сбора или передачи данных</string>
     <string name="no_analytics">Никакой аналитики или отслеживания</string>
@@ -1290,7 +1203,6 @@
     <string name="privacy_password_content">Если вы решите сохранить пароли для защищённых PDF-файлов, они хранятся локально с использованием шифрованного хранилища. Пароли никогда не покидают ваше устройство.</string>
     <string name="privacy_update_title">Проверка обновлений</string>
     <string name="privacy_update_content">Приложение может по желанию проверять обновления через публичный API GitHub. Эта функция только получает информацию о выпусках и не отправляет никаких персональных данных, идентификаторов устройств или статистики использования. Вы можете отключить автоматическую проверку обновлений в настройках или проверять вручную, когда захотите.</string>
-
     <!-- GPL License Terms -->
     <string name="gpl_freedom_use">Свобода использования программного обеспечения для любых целей</string>
     <string name="gpl_freedom_study">Свобода изучения и изменения исходного кода</string>
@@ -1298,7 +1210,6 @@
     <string name="gpl_freedom_modify">Свобода распространения изменённых версий</string>
     <string name="gpl_derivative">Производные работы должны быть открытыми под GPL v3.0</string>
     <string name="gpl_notice">PDF Reader Pro — открытая PDF-читалка\nCopyright (C) %d K M Rejowan Ahmmed\n\nЭта программа является свободным программным обеспечением: вы можете распространять и/или изменять её на условиях Стандартной общественной лицензии GNU, опубликованной Фондом свободного программного обеспечения, либо версии 3 лицензии, либо (по вашему выбору) любой более поздней версии.\n\nЭта программа распространяется в надежде, что она будет полезной, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемой гарантии ТОВАРНОЙ ПРИГОДНОСТИ или ПРИГОДНОСТИ ДЛЯ КОНКРЕТНОЙ ЦЕЛИ. Подробнее см. Стандартную общественную лицензию GNU.</string>
-
     <!-- Onboarding -->
     <string name="onboarding_welcome">Добро пожаловать в\nPDF Reader Pro</string>
     <string name="onboarding_welcome_desc">Чистая, лёгкая PDF-читалка, созданная для простоты. Открытый исходный код, без рекламы и с уважением к вашей конфиденциальности.</string>
@@ -1310,26 +1221,20 @@
     <string name="onboarding_storage_desc">Предоставьте доступ для сканирования и отображения ваших PDF-файлов. Ваши документы остаются конфиденциальными и никогда не загружаются.</string>
     <string name="onboarding_grant_access">Предоставить доступ</string>
     <string name="onboarding_continue">Продолжить</string>
-
     <!-- Folder -->
     <string name="folder_empty">Эта папка пуста</string>
     <string name="no_pdf_in_folder">В этой папке не найдено PDF-файлов.</string>
-
     <!-- Settings - Update Interval (renamed) -->
     <string name="auto_check_interval">Интервал автопроверки</string>
-
     <!-- Install pending -->
     <string name="pending_update_ready">v%1$s готова к установке</string>
-
     <!-- Creator links -->
     <string name="link_website">Сайт</string>
     <string name="link_email">Email</string>
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
-
     <!-- Selected -->
     <string name="selected">Выбрано</string>
-
     <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">Предпросмотр</string>
     <string name="cd_view">Просмотр</string>
@@ -1347,7 +1252,6 @@
     <string name="cd_show_password">Показать пароль</string>
     <string name="cd_hide_password">Скрыть пароль</string>
     <string name="cd_favorite">В избранное</string>
-
     <!-- Tool Screen Titles -->
     <string name="tool_lock_pdf">Заблокировать PDF</string>
     <string name="tool_compress_pdf">Сжать PDF</string>
@@ -1358,13 +1262,11 @@
     <string name="tool_add_watermark">Добавить водяной знак</string>
     <string name="tool_rotate_pdf_pages">Повернуть страницы PDF</string>
     <string name="tool_reorder_pdf_pages">Изменить порядок страниц PDF</string>
-
     <!-- Tool Screen Subtitles/Descriptions -->
     <string name="tool_lock_desc">Добавить защиту паролем для предотвращения несанкционированного доступа</string>
     <string name="tool_merge_desc">Объединить несколько PDF-файлов в один</string>
     <string name="tool_pdf_to_images_desc">Экспортировать страницы PDF как изображения</string>
     <string name="tool_image_to_pdf_desc">Конвертировать ваши изображения в один PDF-документ</string>
-
     <!-- Common Tool Actions -->
     <string name="new_file">Новый файл</string>
     <string name="new_export">Новый экспорт</string>
@@ -1376,7 +1278,6 @@
     <string name="save_reordered_pdf">Сохранить PDF с новым порядком</string>
     <string name="create_pdf">Создать PDF</string>
     <string name="overwrite_original_file">Перезаписать исходный файл</string>
-
     <!-- Loading/Processing Messages -->
     <string name="loading_pages">Загрузка страниц…</string>
     <string name="loading_pdf">Загрузка PDF…</string>
@@ -1393,7 +1294,6 @@
     <string name="removing_pages">Удаление…</string>
     <string name="adding_page_numbers">Добавление номеров страниц…</string>
     <string name="adding_watermark">Добавление водяного знака…</string>
-
     <!-- Success Messages -->
     <string name="rotation_complete">Поворот завершён!</string>
     <string name="pages_reordered">Порядок страниц изменён!</string>
@@ -1405,7 +1305,6 @@
     <string name="images_exported">Изображения экспортированы!</string>
     <string name="pdf_created">PDF создан!</string>
     <string name="page_numbers_added">Номера страниц добавлены!</string>
-
     <!-- Success Descriptions -->
     <string name="pages_rotated_count">Повёрнуто страниц: %d</string>
     <string name="pdf_saved_new_order">Ваш PDF сохранён с новым порядком страниц</string>
@@ -1414,7 +1313,6 @@
     <string name="images_created_count">Создано изображений %2$s: %1$d</string>
     <string name="images_converted_count">Сконвертировано изображений: %d</string>
     <string name="pages_removed_count">Удалено страниц: %d</string>
-
     <!-- Section Labels -->
     <string name="section_rotation">ПОВОРОТ</string>
     <string name="section_select_pages">ВЫБЕРИТЕ СТРАНИЦЫ</string>
@@ -1432,19 +1330,16 @@
     <string name="section_watermark_type">ТИП ВОДЯНОГО ЗНАКА</string>
     <string name="section_text_settings">НАСТРОЙКИ ТЕКСТА</string>
     <string name="section_start_page">НАЧАЛЬНАЯ СТРАНИЦА</string>
-
     <!-- Password Descriptions -->
     <string name="owner_password_desc">Пароль полного доступа для разрешений на редактирование</string>
     <string name="user_password_desc">Требуется для открытия PDF. Оставьте пустым, чтобы не запрашивать пароль при открытии.</string>
     <string name="enter_password_desc">Введите пароль для разблокировки этого PDF</string>
     <string name="permissions_desc">Что пользователи могут делать при открытии с пользовательским паролем</string>
     <string name="allow_copying_content">Разрешить копирование содержимого</string>
-
     <!-- Protection Status -->
     <string name="password_protected">Защищён паролем</string>
     <string name="not_protected">Не защищён</string>
     <string name="no_password_protection">Без защиты паролем</string>
-
     <!-- Page Selection -->
     <string name="selected_of_count">Выбрано %1$d из %2$d</string>
     <string name="page_numbers_label">Номера страниц</string>
@@ -1459,17 +1354,14 @@
     <string name="page_selection_all">Все страницы (1-%1$d)</string>
     <string name="page_selection_range">Страницы %1$d-%2$d</string>
     <string name="page_selection_custom">Страницы %1$s</string>
-
     <!-- Reorder -->
     <string name="drag_hint">Долгое нажатие и перетаскивание страниц для изменения порядка</string>
-
     <!-- Format Options -->
     <string name="format_png">PNG</string>
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Качество без потерь</string>
     <string name="format_smaller_size">Меньший размер файла</string>
     <string name="will_create_images">Будет создано изображений %2$s: %1$d</string>
-
     <!-- Compression Levels -->
     <string name="compression_low">Низкий</string>
     <string name="compression_medium">Средний</string>
@@ -1479,23 +1371,19 @@
     <string name="compression_medium_desc">Сбалансированное качество и размер</string>
     <string name="compression_high_desc">Меньший файл, сниженное качество</string>
     <string name="compression_extreme_desc">Самый маленький файл, самое низкое качество</string>
-
     <!-- Split Modes -->
     <string name="split_extract_pages">Извлечь страницы</string>
     <string name="split_single_pages">Отдельные страницы</string>
     <string name="split_range_desc">Разделить на один PDF из диапазона страниц</string>
     <string name="split_extract_desc">Извлечь определённые страницы как новый PDF</string>
     <string name="split_single_desc">Каждая страница как отдельный PDF-файл</string>
-
     <!-- Merge -->
     <string name="no_pdfs_selected">PDF не выбраны</string>
     <string name="add_pdfs_to_merge">Добавьте два или более PDF-файла, чтобы объединить их в один документ</string>
     <string name="files_selected">Выбрано файлов: %d</string>
     <string name="files_merged">Объединено файлов: %d</string>
-
     <!-- Image to PDF -->
     <string name="images_selected">Выбрано изображений: %d</string>
-
     <!-- Page Numbers -->
     <string name="position_bottom_left">Снизу слева</string>
     <string name="position_bottom_center">Снизу по центру</string>
@@ -1506,7 +1394,6 @@
     <string name="format_simple">1, 2, 3</string>
     <string name="format_dash">- 1 -</string>
     <string name="format_page_of">Страница 1 из N</string>
-
     <!-- Watermark -->
     <string name="watermark_text_label">Текст водяного знака</string>
     <string name="watermark_text_hint">Введите текст водяного знака</string>
@@ -1515,15 +1402,12 @@
     <string name="scale">Масштаб</string>
     <string name="watermark_preview_area">Область предпросмотра водяного знака</string>
     <string name="no_image_selected">Изображение не выбрано</string>
-
     <!-- Remove Pages -->
     <string name="pages_to_remove">Страниц для удаления: %d</string>
     <string name="remove_selected_pages">Удалить страницы (%d)</string>
     <string name="remove_pages_btn">Удалить страницы</string>
     <string name="select_pages_to_remove_hint">Нажмите на страницы, чтобы выбрать их для удаления</string>
-
     <!-- File Info in Results -->
-
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
     <string name="select_pdfs">Выбрать PDF</string>
@@ -1543,7 +1427,6 @@
     <string name="select_pages">Выбрать страницы</string>
     <string name="selection_mode">Режим выбора</string>
     <string name="pages_range_info">Будут включены страницы с %1$s по %2$s</string>
-
     <!-- Split Screen -->
     <string name="change">Изменить</string>
     <string name="page_ranges_label">Диапазоны страниц</string>
@@ -1578,7 +1461,6 @@
     <string name="split_complete">Разделение завершено!</string>
     <string name="one_file_created">Создан 1 файл</string>
     <string name="files_created_count">Создано файлов: %1$d</string>
-
     <!-- Remove Pages Screen -->
     <string name="select_page_range">Выбрать диапазон страниц</string>
     <string name="select_action">Выбрать</string>
@@ -1612,7 +1494,6 @@
     <string name="removing">Удаление…</string>
     <string name="pages_removed">Страницы удалены!</string>
     <string name="one_page_removed">1 страница удалена</string>
-
     <!-- Page Numbers Screen -->
     <string name="prefix_label">Префикс</string>
     <string name="prefix_hint">например, Страница</string>
@@ -1625,7 +1506,6 @@
     <string name="color_g">G</string>
     <string name="color_b">B</string>
     <string name="skip_first_pages">Пропустить первые N страниц</string>
-
     <!-- Input Validation Messages -->
     <string name="validation_password_required">Требуется пароль</string>
     <string name="validation_password_too_short">Пароль должен содержать минимум %1$d символов</string>
@@ -1649,7 +1529,6 @@
     <string name="validation_color_invalid">Неверное значение цвета</string>
     <string name="validation_color_range">Значение цвета должно быть 0-255</string>
     <string name="password_min_hint">Требуется минимум 4 символа</string>
-
     <plurals name="sign_unsaved_count">
         <item quantity="one">%d подпись не сохранена</item>
         <item quantity="few">%d подписи не сохранены</item>
@@ -1666,6 +1545,7 @@
     <string name="crash_report_subject">Отчёт о сбое PDF Reader Pro</string>
     <string name="report_on_github">Сообщить на GitHub</string>
     <string name="no_browser_found">Не найден браузер для открытия ссылки</string>
+    <string name="no_app_to_open">Не найдено приложение, чтобы открыть это</string>
     <string name="choose_language">Выберите язык приложения</string>
     <string name="language_follow_system">Язык телефона</string>
     <plurals name="delete_count_files">
@@ -1817,5 +1697,11 @@
         <item quantity="few">Будет создано отдельных PDF-файлов: %1$d</item>
         <item quantity="many">Будет создано отдельных PDF-файлов: %1$d</item>
         <item quantity="other">Будет создано отдельных PDF-файлов: %1$d</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="few">%d PDF</item>
+        <item quantity="many">%d PDF</item>
+        <item quantity="other">%d PDF</item>
     </plurals>
 </resources>

@@ -1,6 +1,9 @@
 package com.rejowan.pdfreaderpro.presentation.components
 
 import android.graphics.Bitmap
+import androidx.compose.ui.res.pluralStringResource
+import com.rejowan.pdfreaderpro.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -67,7 +70,7 @@ fun PdfThumbnail(
                 // Show actual thumbnail
                 Image(
                     bitmap = requireNotNull(thumbnail).asImageBitmap(),
-                    contentDescription = "PDF thumbnail",
+                    contentDescription = stringResource(R.string.pdf_thumbnail),
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(10.dp)),
@@ -155,7 +158,7 @@ fun PdfThumbnailGrid(
                 // Show actual thumbnail
                 Image(
                     bitmap = requireNotNull(thumbnail).asImageBitmap(),
-                    contentDescription = "PDF thumbnail",
+                    contentDescription = stringResource(R.string.pdf_thumbnail),
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
@@ -203,7 +206,7 @@ fun PdfThumbnailGrid(
                                 color = PdfRed.copy(alpha = 0.15f)
                             ) {
                                 Text(
-                                    text = "$pageCount pages",
+                                    text = pluralStringResource(R.plurals.pages_count, pageCount, pageCount),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = PdfRed.copy(alpha = 0.8f),
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)

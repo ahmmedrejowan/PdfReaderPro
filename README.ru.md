@@ -12,6 +12,7 @@
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg?style=flat)](https://www.android.com/)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
+[![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-purple.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Latest-blue.svg)](https://developer.android.com/jetpack/compose)
 </div>
@@ -109,7 +110,7 @@ app/
 - **Асинхронность**: Kotlin Coroutines + StateFlow
 - **Навигация**: Jetpack Navigation Compose
 - **Рендеринг PDF**: Собственный PDF.js WebView
-- **Обработка PDF**: iText 7
+- **Обработка PDF**: iText 9
 - **Загрузка изображений**: Coil
 - **Хранение данных**: DataStore Preferences
 
@@ -118,11 +119,11 @@ app/
 ## Требования
 
 - **Минимальный SDK**: API 24 (Android 7.0 Nougat)
-- **Целевой SDK**: API 36 (Android 16)
-- **Compile SDK**: API 36
-- **Gradle**: 9.4.0
-- **AGP**: 9.1.0
-- **Kotlin**: 2.3.10
+- **Целевой SDK**: API 37
+- **Compile SDK**: API 37
+- **Gradle**: 9.8.0
+- **AGP**: 9.4.1
+- **Kotlin**: 2.4.20
 - **Java**: 21
 
 ### Разрешения
@@ -159,6 +160,16 @@ app/
 # Запустить инструментальные тесты
 ./gradlew connectedAndroidTest
 ```
+
+---
+
+## Переводы
+
+[![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
+
+PDF Reader Pro доступен на языках: English, বাংলা, 中文, Deutsch, Español, Français, Gaeilge, Italiano, 日本語, Polski, Português, Русский и Türkçe.
+
+Переводы делает сообщество на **[Crowdin](https://crowdin.com/project/pdf-reader-pro)**: войдите, выберите свой язык и переводите прямо в браузере, без программирования. Вашего языка нет или есть вопрос? Присоединяйтесь к [обсуждению переводов](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/108).
 
 ---
 
@@ -199,6 +210,7 @@ GNU General Public License for more details.
 
 ## Сообщество
 
+- [Wiki](https://github.com/ahmmedrejowan/PdfReaderPro/wiki) - руководства по использованию и сборке приложения
 - [Обсуждения](https://github.com/ahmmedrejowan/PdfReaderPro/discussions) — задавайте вопросы, делитесь идеями
 - [Issues](https://github.com/ahmmedrejowan/PdfReaderPro/issues) — сообщайте об ошибках, запрашивайте функции
 - [Релизы](https://github.com/ahmmedrejowan/PdfReaderPro/releases) — скачивайте последние версии

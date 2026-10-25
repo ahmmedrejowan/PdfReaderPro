@@ -109,6 +109,18 @@
     <string name="sort_folders">Sort Folders</string>
     <string name="choose_sort_pdfs">Choose how to organize your PDFs</string>
     <string name="choose_sort_folders">Choose how to organize folders</string>
+    <string name="sort_desc_name">Sort by file name</string>
+    <string name="sort_desc_date">Sort by last modified time</string>
+    <string name="sort_desc_size">Sort by storage size</string>
+    <string name="sort_newest">Newest</string>
+    <string name="sort_oldest">Oldest</string>
+    <string name="sort_largest">Largest</string>
+    <string name="sort_smallest">Smallest</string>
+    <string name="folder_sort_desc_name">Sort by folder name</string>
+    <string name="folder_sort_title_count">PDF Count</string>
+    <string name="folder_sort_desc_count">Sort by number of PDFs</string>
+    <string name="sort_most">Most</string>
+    <string name="sort_least">Least</string>
     <string name="sort_by_name">By Name</string>
     <string name="sort_by_date">By Date</string>
     <string name="sort_by_size">By Size</string>
@@ -1227,6 +1239,8 @@
     <string name="get_in_touch">Get in touch with the developer</string>
     <string name="github_repository">GitHub Repository</string>
     <string name="view_source_code">View source code</string>
+    <string name="help_translate">Help Translate</string>
+    <string name="help_translate_desc">Translate the app into your language on Crowdin</string>
     <string name="choose_appearance">Choose app appearance</string>
     <string name="always_light">Always use light theme</string>
     <string name="always_dark">Always use dark theme</string>
@@ -1664,6 +1678,7 @@
     <string name="crash_report_subject">PDF Reader Pro crash report</string>
     <string name="report_on_github">Report on GitHub</string>
     <string name="no_browser_found">No browser found to open the link</string>
+    <string name="no_app_to_open">No app found to open this</string>
     <string name="choose_language">Choose the app\'s language</string>
     <string name="language_follow_system">Use your phone\'s language</string>
     <plurals name="delete_count_files">
@@ -1765,5 +1780,9 @@
     <plurals name="split_will_create_separate_pdfs">
         <item quantity="one">Will create %1$d separate PDF file</item>
         <item quantity="other">Will create %1$d separate PDF files</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="other">%d PDFs</item>
     </plurals>
 </resources>

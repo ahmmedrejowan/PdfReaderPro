@@ -12,6 +12,7 @@
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg?style=flat)](https://www.android.com/)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
+[![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-purple.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Latest-blue.svg)](https://developer.android.com/jetpack/compose)
 </div>
@@ -109,7 +110,7 @@ app/
 - **Async**: Kotlin Coroutines + StateFlow
 - **Navigation**: Jetpack Navigation Compose
 - **PDF Rendering**: Custom PDF.js WebView
-- **PDF Processing**: iText 7
+- **PDF Processing**: iText 9
 - **Image Loading**: Coil
 - **Data Storage**: DataStore Preferences
 
@@ -118,11 +119,11 @@ app/
 ## Requirements
 
 - **Minimum SDK**: API 24 (Android 7.0 Nougat)
-- **Target SDK**: API 36 (Android 16)
-- **Compile SDK**: API 36
-- **Gradle**: 9.4.0
-- **AGP**: 9.1.0
-- **Kotlin**: 2.3.10
+- **Target SDK**: API 37
+- **Compile SDK**: API 37
+- **Gradle**: 9.8.0
+- **AGP**: 9.4.1
+- **Kotlin**: 2.4.20
 - **Java**: 21
 
 ### Permissions
@@ -159,6 +160,16 @@ To build and run the project, follow these steps:
 # Run instrumented tests
 ./gradlew connectedAndroidTest
 ```
+
+---
+
+## Translations
+
+[![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
+
+PDF Reader Pro is available in English, বাংলা, 中文, Deutsch, Español, Français, Gaeilge, Italiano, 日本語, Polski, Português, Русский and Türkçe.
+
+Translations are made by the community on **[Crowdin](https://crowdin.com/project/pdf-reader-pro)**: sign in, pick your language and translate in the browser, no coding needed. Missing your language or have a question? Join the [translation discussion](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/108).
 
 ---
 
@@ -199,6 +210,7 @@ GNU General Public License for more details.
 
 ## Community
 
+- [Wiki](https://github.com/ahmmedrejowan/PdfReaderPro/wiki) - Guides for using and building the app
 - [Discussions](https://github.com/ahmmedrejowan/PdfReaderPro/discussions) - Ask questions, share ideas
 - [Issues](https://github.com/ahmmedrejowan/PdfReaderPro/issues) - Report bugs, request features
 - [Releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases) - Download latest versions

@@ -1520,7 +1520,7 @@ private fun PageSelector(
             FilterChip(
                 selected = selectedSelection == PageSelection.CUSTOM,
                 onClick = { onSelectionChange(PageSelection.CUSTOM) },
-                label = { Text(stringResource(R.string.page_selection_custom), style = MaterialTheme.typography.labelSmall) },
+                label = { Text(stringResource(R.string.title_page_selection_custom), style = MaterialTheme.typography.labelSmall) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentCyan.copy(alpha = 0.2f),
                     selectedLabelColor = AccentCyan
