@@ -1139,8 +1139,8 @@
     <string name="get_in_touch">Свяжитесь с разработчиком</string>
     <string name="github_repository">Репозиторий GitHub</string>
     <string name="view_source_code">Просмотреть исходный код</string>
-    <string name="help_translate">Помочь с переводом</string>
-    <string name="help_translate_desc">Переведите приложение на свой язык в Crowdin</string>
+    <string name="help_translate">Help Translate</string>
+    <string name="help_translate_desc">Translate the app into your language on Crowdin</string>
     <string name="choose_appearance">Выберите внешний вид приложения</string>
     <string name="always_light">Всегда использовать светлую тему</string>
     <string name="always_dark">Всегда использовать тёмную тему</string>
@@ -1545,7 +1545,7 @@
     <string name="crash_report_subject">Отчёт о сбое PDF Reader Pro</string>
     <string name="report_on_github">Сообщить на GitHub</string>
     <string name="no_browser_found">Не найден браузер для открытия ссылки</string>
-    <string name="no_app_to_open">Не найдено приложение, чтобы открыть это</string>
+    <string name="no_app_to_open">No app found to open this</string>
     <string name="choose_language">Выберите язык приложения</string>
     <string name="language_follow_system">Язык телефона</string>
     <plurals name="delete_count_files">
