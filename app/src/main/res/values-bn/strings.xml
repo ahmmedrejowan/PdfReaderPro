@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PDF Reader Pro</string>
     <string name="hello_blank_fragment">হ্যালো, খালি ফ্র্যাগমেন্ট</string>
@@ -60,6 +61,7 @@
     <string name="jump">যান</string>
     <string name="enter_page_number">পেজ নম্বর লিখুন</string>
     <string name="remove">সরান</string>
+    <!-- Common Actions -->
     <string name="done">সম্পন্ন</string>
     <string name="save">সেভ করুন</string>
     <string name="close">বন্ধ করুন</string>
@@ -86,6 +88,7 @@
     <string name="select_file">ফাইল সিলেক্ট করুন</string>
     <string name="select_pdf">PDF সিলেক্ট করুন</string>
     <string name="select_images">ছবি সিলেক্ট করুন</string>
+    <!-- Sort Options -->
     <string name="sort_files">ফাইল সাজান</string>
     <string name="sort_folders">ফোল্ডার সাজান</string>
     <string name="choose_sort_pdfs">আপনার PDF গুলো কীভাবে সাজাবেন তা বেছে নিন</string>
@@ -107,6 +110,7 @@
     <string name="sort_by_size">সাইজ অনুযায়ী</string>
     <string name="sort_ascending">ছোট থেকে বড়</string>
     <string name="sort_descending">বড় থেকে ছোট</string>
+    <!-- Home Screen -->
     <string name="good_morning">শুভ সকাল</string>
     <string name="good_afternoon">শুভ বিকাল</string>
     <string name="good_evening">শুভ সন্ধ্যা</string>
@@ -120,6 +124,7 @@
     <string name="add_favorites_hint">এখানে দেখতে PDF প্রিয়তে যোগ করুন</string>
     <string name="open_pdf_hint">এখানে দেখতে কিছু PDF খুলুন</string>
     <string name="delete_warning">এই কাজটি আর ফেরানো যাবে না। ফাইলগুলো আপনার ডিভাইস থেকে চিরতরে ডিলিট হয়ে যাবে।</string>
+    <!-- Folders Screen -->
     <string name="all_folders">সব ফোল্ডার</string>
     <string name="search_folders">ফোল্ডার সার্চ করুন…</string>
     <string name="search_folders_hint">ফোল্ডার সার্চ করুন...</string>
@@ -132,6 +137,7 @@
     <string name="sort_folders_desc">ফোল্ডার সাজান</string>
     <string name="clear_search">সার্চ মুছুন</string>
     <string name="close_search">সার্চ বন্ধ করুন</string>
+    <!-- Search Screen -->
     <string name="search_your_pdfs">আপনার PDF সার্চ করুন…</string>
     <string name="search_your_pdfs_hint">আপনার PDF সার্চ করুন...</string>
     <string name="recent_searches">সাম্প্রতিক সার্চ</string>
@@ -149,6 +155,7 @@
     <string name="tip_search_folder_desc">কোনো ফোল্ডারের সব PDF খুঁজে পেতে ফোল্ডারের নাম লিখুন</string>
     <string name="tip_partial_matches_title">আংশিক মিলেও কাজ হয়</string>
     <string name="tip_partial_matches_desc">হুবহু নাম লাগবে না, ছোট শব্দ দিয়ে চেষ্টা করুন</string>
+    <!-- File Info -->
     <string name="file_information">ফাইলের তথ্য</string>
     <string name="file_name">ফাইলের নাম</string>
     <string name="file_path">ফাইলের পাথ</string>
@@ -156,17 +163,21 @@
     <string name="page_count">পেজ সংখ্যা</string>
     <string name="last_modified">শেষ পরিবর্তন</string>
     <string name="created">তৈরি হয়েছে</string>
+    <!-- Delete Confirmation -->
     <string name="delete_file">ফাইল ডিলিট করুন</string>
     <string name="delete_files">ফাইলগুলো ডিলিট করুন</string>
     <string name="action_cannot_be_undone">এই কাজটি আর ফেরানো যাবে না</string>
     <string name="confirm_delete_file">আপনি কি নিশ্চিত যে এই ফাইলটি চিরতরে ডিলিট করতে চান?</string>
     <string name="confirm_delete_files">আপনি কি নিশ্চিত যে এই ফাইলগুলো চিরতরে ডিলিট করতে চান?</string>
+    <!-- Rename -->
     <string name="rename_file">ফাইল রিনেম করুন</string>
     <string name="new_name">নতুন নাম</string>
+    <!-- Stats -->
     <string name="library_statistics">লাইব্রেরির পরিসংখ্যান</string>
     <string name="total_files">মোট ফাইল</string>
     <string name="favorite_files">প্রিয় ফাইল</string>
     <string name="recent_files">সাম্প্রতিক ফাইল</string>
+    <!-- Settings Screen -->
     <string name="appearance">অ্যাপিয়ারেন্স</string>
     <string name="reader">রিডার</string>
     <string name="updates">আপডেট</string>
@@ -208,10 +219,12 @@
     <string name="creator_title">সিনিয়র Android ডেভেলপার</string>
     <string name="creator_description">PDF Reader Pro তৈরি করা হয়েছে একটি ফ্রি, ওপেন সোর্স এবং গোপনীয়তা-কেন্দ্রিক PDF পড়ার অভিজ্ঞতা দেওয়ার জন্য। বুকমার্ক, প্রিয়, পড়ার থিম এবং কাস্টমাইজ করা যায় এমন সেটিংসের মতো ফিচার নিয়ে এটি Android ব্যবহারকারীদের জন্য একটি পূর্ণাঙ্গ PDF অ্যাপ হতে চায়।</string>
     <string name="gnu_license">GNU General Public License v3.0</string>
+    <!-- Tool categories -->
     <string name="tool_category_organize">সাজানো</string>
     <string name="tool_category_edit">এডিট</string>
     <string name="tool_category_security">নিরাপত্তা</string>
     <string name="tool_category_convert">কনভার্ট</string>
+    <!-- Tools -->
     <string name="tool_split_pdf">PDF স্প্লিট করুন</string>
     <string name="tool_split_desc">একটি PDF-কে একাধিক ফাইলে স্প্লিট করুন</string>
     <string name="tool_compress_desc">কোয়ালিটি ঠিক রেখে ফাইলের সাইজ কমান</string>
@@ -228,17 +241,20 @@
     <string name="tool_unlock_desc">PDF থেকে পাসওয়ার্ড সরান</string>
     <string name="tool_pdf_to_image">PDF থেকে ছবি</string>
     <string name="tool_pdf_to_image_desc">PDF-এর পেজগুলো ছবি হিসেবে এক্সপোর্ট করুন</string>
+    <!-- Update Sheet -->
     <string name="update_available">নতুন আপডেট এসেছে</string>
     <string name="current">বর্তমান</string>
     <string name="new_version">নতুন</string>
     <string name="whats_new">নতুন কী আছে</string>
     <string name="skip_version">এই ভার্সনটি স্কিপ করুন</string>
     <string name="download_update">আপডেট ডাউনলোড করুন</string>
+    <!-- Download Progress -->
     <string name="downloading">ডাউনলোড হচ্ছে…</string>
     <string name="download_complete">ডাউনলোড হয়ে গেছে</string>
     <string name="download_failed">ডাউনলোড করা যায়নি</string>
     <string name="install">ইনস্টল করুন</string>
     <string name="retry">আবার চেষ্টা করুন</string>
+    <!-- Reader Screen -->
     <string name="page_of">পেজ %1$d / %2$d</string>
     <string name="bookmarks">বুকমার্ক</string>
     <string name="no_bookmarks">কোনো বুকমার্ক নেই</string>
@@ -246,6 +262,7 @@
     <string name="remove_bookmark">বুকমার্ক সরান</string>
     <string name="bookmark_added">বুকমার্ক যোগ হয়েছে</string>
     <string name="bookmark_removed">বুকমার্ক সরানো হয়েছে</string>
+    <!-- Highlights -->
     <string name="highlight">হাইলাইট করুন</string>
     <string name="highlights">হাইলাইট</string>
     <string name="no_highlights">কোনো হাইলাইট নেই</string>
@@ -344,12 +361,15 @@
     <string name="search_text">টেক্সট সার্চ করুন…</string>
     <string name="no_matches">কোনো মিল নেই</string>
     <string name="match_count">%1$d / %2$d</string>
+    <!-- Remove Favorite -->
     <string name="remove_favorite">প্রিয় থেকে সরান</string>
     <string name="remove_from_favorites">প্রিয় থেকে সরান</string>
     <string name="confirm_remove_favorite">আপনি কি নিশ্চিত যে এই ফাইলটি প্রিয় থেকে সরাতে চান?</string>
+    <!-- Exit Confirmation -->
     <string name="exit_app">অ্যাপ থেকে বের হন</string>
     <string name="confirm_exit">আপনি কি নিশ্চিত যে বের হতে চান?</string>
     <string name="exit">বের হন</string>
+    <!-- Tools Screen -->
     <string name="pdf_tools">PDF টুলস</string>
     <string name="reader_pdf_tools_desc">স্প্লিট, কম্প্রেস, রোটেট আরও অনেক কিছু</string>
     <string name="reader_pdf_tools_subtitle">এই ডকুমেন্টে একটা টুল চালান</string>
@@ -365,6 +385,7 @@
     <string name="add_page_numbers">পেজ নম্বর যোগ করুন</string>
     <string name="images_to_pdf">ছবি থেকে PDF</string>
     <string name="pdf_to_images">PDF থেকে ছবি</string>
+    <!-- Tool Common -->
     <string name="select_source_file">শুরু করতে একটি PDF ফাইল সিলেক্ট করুন</string>
     <string name="processing">প্রসেস হচ্ছে…</string>
     <string name="success">সফল হয়েছে!</string>
@@ -377,11 +398,13 @@
     <string name="page_range">পেজ রেঞ্জ</string>
     <string name="page_range_hint">যেমন, 1-3, 5, 7-10</string>
     <string name="invalid_page_range">পেজ রেঞ্জ সঠিক নয়</string>
+    <!-- Merge -->
     <string name="add_pdfs">মার্জ করতে PDF যোগ করুন</string>
     <string name="drag_to_reorder">ক্রম বদলাতে টেনে নিন</string>
     <string name="merge_files">ফাইল মার্জ করুন</string>
     <string name="merge_more">আরও PDF মার্জ করুন</string>
     <string name="merged_successfully">PDF সফলভাবে মার্জ হয়েছে</string>
+    <!-- Split -->
     <string name="split_mode">স্প্লিট মোড</string>
     <string name="split_by_pages">পেজ অনুযায়ী স্প্লিট করুন</string>
     <string name="split_by_range">রেঞ্জ অনুযায়ী স্প্লিট করুন</string>
@@ -390,6 +413,7 @@
     <string name="split">স্প্লিট করুন</string>
     <string name="split_more">আরেকটি PDF স্প্লিট করুন</string>
     <string name="split_successfully">PDF সফলভাবে স্প্লিট হয়েছে</string>
+    <!-- Compress -->
     <string name="compression_level">কম্প্রেশনের মাত্রা</string>
     <string name="low">কম</string>
     <string name="medium">মাঝারি</string>
@@ -405,6 +429,7 @@
     <string name="compress_medium_desc">কম্প্রেশন ও কোয়ালিটির ভারসাম্য</string>
     <string name="compress_high_label">বেশি</string>
     <string name="compress_high_desc">সবচেয়ে বেশি কম্প্রেশন, ছোট ফাইল</string>
+    <!-- Compress Screen -->
     <string name="compress_share_pdf">PDF শেয়ার করুন</string>
     <string name="compress_empty_title">PDF ফাইল কম্প্রেস করুন</string>
     <string name="compress_empty_desc">কোয়ালিটি ঠিক রেখে ফাইলের সাইজ কমাতে একটি PDF ফাইল সিলেক্ট করুন</string>
@@ -419,6 +444,7 @@
     <string name="compressed_size">কম্প্রেস করা সাইজ</string>
     <string name="compressed_size_reduced">সাইজ কমেছে</string>
     <string name="saved_format">(%1$s কমেছে)</string>
+    <!-- Rotate -->
     <string name="rotation">রোটেশন</string>
     <string name="rotate_left">বামে রোটেট করুন</string>
     <string name="rotate_right">ডানে রোটেট করুন</string>
@@ -428,6 +454,7 @@
     <string name="apply_to_all">সব পেজে অ্যাপ্লাই করুন</string>
     <string name="rotate_more">আরেকটি PDF রোটেট করুন</string>
     <string name="rotated_successfully">PDF সফলভাবে রোটেট হয়েছে</string>
+    <!-- Lock/Unlock -->
     <string name="password">পাসওয়ার্ড</string>
     <string name="enter_password">পাসওয়ার্ড লিখুন</string>
     <string name="user_password">ব্যবহারকারীর পাসওয়ার্ড</string>
@@ -446,6 +473,7 @@
     <string name="incorrect_password">পাসওয়ার্ড ভুল</string>
     <string name="pdf_not_protected">এই PDF পাসওয়ার্ড দিয়ে সুরক্ষিত নয়</string>
     <string name="pdf_protected">এই PDF পাসওয়ার্ড দিয়ে সুরক্ষিত</string>
+    <!-- Watermark -->
     <string name="watermark">ওয়াটারমার্ক</string>
     <string name="text_watermark">টেক্সট ওয়াটারমার্ক</string>
     <string name="image_watermark">ছবির ওয়াটারমার্ক</string>
@@ -465,13 +493,16 @@
     <string name="position_center">মাঝখানে</string>
     <string name="position_tiled">টাইল করা</string>
     <string name="watermark_added">ওয়াটারমার্ক যোগ হয়েছে!</string>
+    <!-- Remove Pages -->
     <string name="select_pages_to_remove">যে পেজগুলো সরাবেন সেগুলো সিলেক্ট করুন</string>
     <string name="remove_selected">সিলেক্ট করাগুলো সরান</string>
     <string name="remove_more">আরেকটি PDF থেকে পেজ সরান</string>
+    <!-- Reorder -->
     <string name="drag_to_reorder_pages">ক্রম বদলাতে পেজ টেনে নিন</string>
     <string name="reorder">ক্রম বদলান</string>
     <string name="reorder_more">আরেকটি PDF-এর ক্রম বদলান</string>
     <string name="reordered_successfully">পেজের ক্রম সফলভাবে বদলানো হয়েছে</string>
+    <!-- Page Numbers -->
     <string name="number_format">নম্বরের ফরম্যাট</string>
     <string name="start_number">শুরুর নম্বর</string>
     <string name="number_position">অবস্থান</string>
@@ -484,6 +515,7 @@
     <string name="section_apply_to_pages">যেসব পেজে প্রয়োগ হবে</string>
     <string name="horizontal_margin">আনুভূমিক মার্জিন</string>
     <string name="vertical_margin">উল্লম্ব মার্জিন</string>
+    <!-- Formats -->
     <string name="format_number_only">শুধু সংখ্যা</string>
     <string name="format_number_only_example">1</string>
     <string name="format_page_x">পেজ X</string>
@@ -494,20 +526,26 @@
     <string name="format_dash_x_example">- 1 -</string>
     <string name="format_custom">কাস্টম</string>
     <string name="format_custom_example">P.1</string>
+    <!-- Preview -->
     <string name="preview_info_format">%1$s • %2$dpt • %3$s</string>
+    <!-- Color picker -->
     <string name="pick_color">কালার বেছে নিন</string>
     <string name="page_number_color">পেজ নম্বরের কালার</string>
+    <!-- Page selection -->
     <string name="page_numbers_selection_all">সব (%1$d)</string>
     <string name="page_selection_odd">বিজোড়</string>
     <string name="page_selection_even">জোড়</string>
     <string name="page_selection_skip_first">প্রথমটি বাদ দিন</string>
     <string name="title_page_selection_custom">কাস্টম</string>
+    <!-- Success -->
     <string name="adding_numbers">নম্বর যোগ করা হচ্ছে…</string>
+    <!-- Images to PDF -->
     <string name="add_images">কনভার্ট করতে ছবি যোগ করুন</string>
     <string name="image_quality">ছবির কোয়ালিটি</string>
     <string name="convert">কনভার্ট করুন</string>
     <string name="convert_more">আরও কনভার্ট করুন</string>
     <string name="converted_successfully">ছবিগুলো PDF-এ কনভার্ট হয়েছে</string>
+    <!-- PDF to Images -->
     <string name="output_format">আউটপুট ফরম্যাট</string>
     <string name="png">PNG</string>
     <string name="jpg">JPG</string>
@@ -521,6 +559,7 @@
     <string name="share_images">ছবিগুলো শেয়ার করুন</string>
     <string name="share_image">ছবি শেয়ার করুন</string>
     <string name="view_image">ছবি দেখুন</string>
+    <!-- Error Messages -->
     <string name="error_loading_pdf">PDF লোড করতে সমস্যা হয়েছে</string>
     <string name="error_file_not_found">ফাইল পাওয়া যায়নি</string>
     <string name="error_permission_denied">পারমিশন দেওয়া হয়নি</string>
@@ -583,6 +622,7 @@
     <string name="error_enter_watermark_text">ওয়াটারমার্কের লেখা লিখুন</string>
     <string name="error_select_watermark_image">ওয়াটারমার্কের জন্য একটি ছবি সিলেক্ট করুন</string>
     <string name="error_add_watermark_failed">ওয়াটারমার্ক যোগ করা যায়নি</string>
+    <!-- Error Recovery Hints -->
     <string name="error_hint_corrupted_pdf">ফাইলটি নষ্ট হতে পারে। আবার ডাউনলোড করে দেখুন।</string>
     <string name="error_hint_invalid_pdf">এই ফাইলটি সঠিক PDF ডকুমেন্ট নয়।</string>
     <string name="error_hint_password_required">এই PDF খুলতে পাসওয়ার্ড লিখুন।</string>
@@ -593,17 +633,21 @@
     <string name="error_hint_timeout">কাজটিতে অনেক বেশি সময় লেগেছে। আবার চেষ্টা করুন।</string>
     <string name="error_hint_out_of_memory">অন্য অ্যাপগুলো বন্ধ করে ছোট কোনো ফাইল দিয়ে আবার চেষ্টা করুন।</string>
     <string name="error_hint_generic">আবার চেষ্টা করুন। সমস্যা থেকে গেলে অ্যাপটি রিস্টার্ট করুন।</string>
+    <!-- PDF Thumbnail -->
     <string name="pdf">PDF</string>
     <string name="pdf_thumbnail">PDF থাম্বনেইল</string>
     <string name="loading">লোড হচ্ছে…</string>
+    <!-- Misc -->
     <string name="pdf_reader_pro">PDF Reader Pro</string>
     <string name="no_pdf_data">কোনো PDF ডেটা পাওয়া যায়নি</string>
+    <!-- Content Descriptions - Accessibility -->
     <string name="sort_files_desc">ফাইল সাজান</string>
     <string name="library_stats_desc">লাইব্রেরির পরিসংখ্যান</string>
     <string name="grid_view">গ্রিড ভিউ</string>
     <string name="list_view">লিস্ট ভিউ</string>
     <string name="more">আরও</string>
     <string name="favorite">প্রিয়</string>
+    <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">ফিরে যান</string>
     <string name="cd_close">বন্ধ করুন</string>
     <string name="cd_dismiss">বন্ধ করুন</string>
@@ -611,6 +655,7 @@
     <string name="cd_options">অপশন</string>
     <string name="cd_expand">বড় করুন</string>
     <string name="cd_collapse">ছোট করুন</string>
+    <!-- Content Descriptions - Actions -->
     <string name="cd_add">যোগ করুন</string>
     <string name="cd_remove">সরান</string>
     <string name="cd_delete">ডিলিট করুন</string>
@@ -642,6 +687,7 @@
     <string name="cd_retry">আবার চেষ্টা করুন</string>
     <string name="cd_back">ফিরে যান</string>
     <string name="cd_more_options">আরও অপশন</string>
+    <!-- Content Descriptions - PDF Reader -->
     <string name="cd_zoom_in">জুম ইন</string>
     <string name="cd_zoom_out">জুম আউট</string>
     <string name="cd_fit_width">প্রস্থ অনুযায়ী ফিট করুন</string>
@@ -664,6 +710,7 @@
     <string name="cd_play">চালু করুন</string>
     <string name="cd_pause">পজ করুন</string>
     <string name="cd_stop">থামান</string>
+    <!-- Content Descriptions - Files -->
     <string name="cd_pdf_file">PDF ফাইল</string>
     <string name="cd_folder">ফোল্ডার</string>
     <string name="cd_image">ছবি</string>
@@ -674,6 +721,7 @@
     <string name="cd_folder_options">ফোল্ডারের অপশন</string>
     <string name="cd_selected">সিলেক্ট করা হয়েছে</string>
     <string name="cd_not_selected">সিলেক্ট করা হয়নি</string>
+    <!-- Content Descriptions - Status -->
     <string name="cd_loading">লোড হচ্ছে</string>
     <string name="cd_success">সফল</string>
     <string name="cd_error">সমস্যা</string>
@@ -687,6 +735,7 @@
     <string name="cd_toggle">চালু/বন্ধ</string>
     <string name="cd_enabled">চালু</string>
     <string name="cd_disabled">বন্ধ</string>
+    <!-- Content Descriptions - PDF Tools -->
     <string name="cd_merge_pdfs">PDF মার্জ করুন</string>
     <string name="cd_split_pdf">PDF স্প্লিট করুন</string>
     <string name="cd_compress_pdf">PDF কম্প্রেস করুন</string>
@@ -703,6 +752,7 @@
     <string name="cd_page_number">পেজ %1$d</string>
     <string name="cd_page_selected">পেজ %1$d সিলেক্ট করা হয়েছে</string>
     <string name="cd_page_not_selected">পেজ %1$d সিলেক্ট করা হয়নি</string>
+    <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">PDF Reader Pro লোগো</string>
     <string name="cd_decorative">সাজানোর ছবি</string>
     <string name="cd_illustration">ইলাস্ট্রেশন</string>
@@ -713,8 +763,10 @@
     <string name="cd_color_picker">কালার পিকার</string>
     <string name="cd_slider">স্লাইডার</string>
     <string name="cd_dropdown">ড্রপডাউন মেনু</string>
+    <!-- Navigation -->
     <string name="home">হোম</string>
     <string name="tools">টুলস</string>
+    <!-- Empty States -->
     <string name="no_pdfs_title">এখানে এখনো কোনো PDF নেই</string>
     <string name="no_pdfs_message">আপনার ডিভাইসে কোনো PDF ফাইল পাওয়া যায়নি। আবার স্ক্যান করে দেখুন বা শুরু করতে কিছু PDF যোগ করুন!</string>
     <string name="scan_for_pdfs">PDF স্ক্যান করুন</string>
@@ -729,6 +781,7 @@
     <string name="no_folders_message">আপনার ফাইলগুলো স্ক্যান হলে PDF ফোল্ডারগুলো এখানে দেখাবে। চলুন খুঁজে বের করি!</string>
     <string name="permission_title">আপনার পারমিশন লাগবে</string>
     <string name="permission_message">আপনার PDF ফাইলগুলো এখানে দেখাতে স্টোরেজ অ্যাক্সেসের পারমিশন দিন</string>
+    <!-- Stats Sheet -->
     <string name="library_stats">লাইব্রেরির পরিসংখ্যান</string>
     <string name="library_stats_subtitle">এক নজরে আপনার PDF কালেকশন</string>
     <string name="total_pdfs">মোট PDF</string>
@@ -738,11 +791,14 @@
     <string name="percent_of_library">আপনার লাইব্রেরির %d%%</string>
     <string name="no_files_yet">এখনো কোনো ফাইল নেই</string>
     <string name="recently_opened">সম্প্রতি খোলা</string>
+    <!-- Exit Confirmation -->
     <string name="stay">থাকুন</string>
     <string name="exit_confirm_message">আপনি কি সত্যিই অ্যাপটি বন্ধ করতে চান?</string>
+    <!-- Rename Sheet -->
     <string name="file_name_label">ফাইলের নাম</string>
     <string name="invalid_file_name">ফাইলের নাম সঠিক নয়</string>
     <string name="pdf_extension_hint">.pdf এক্সটেনশন নিজে থেকেই যোগ হবে</string>
+    <!-- File Options -->
     <string name="quick_actions">কুইক অ্যাকশন</string>
     <string name="add_to_favorites">প্রিয়তে যোগ করুন</string>
     <string name="remove_from_favorites_action">প্রিয় থেকে সরান</string>
@@ -760,6 +816,7 @@
     <string name="delete_desc">এই ফাইলটি পুরোপুরি ডিলিট করুন</string>
     <string name="cd_toggle_scroll_direction">স্ক্রলের দিক বদলান</string>
     <string name="cd_fit_to_screen">স্ক্রিন অনুযায়ী ফিট করুন</string>
+    <!-- Folder Options -->
     <string name="folder_options">ফোল্ডারের অপশন</string>
     <string name="pdf_files">PDF ফাইল</string>
     <string name="file_singular">%d টি ফাইল</string>
@@ -771,6 +828,7 @@
     <string name="copy_path">পাথ কপি করুন</string>
     <string name="copy_path_desc">ফোল্ডারের লোকেশন ক্লিপবোর্ডে কপি করুন</string>
     <string name="path_copied">পাথ ক্লিপবোর্ডে কপি হয়েছে</string>
+    <!-- Download Progress -->
     <string name="download_progress">ডাউনলোড প্রোগ্রেস</string>
     <string name="starting_download">ডাউনলোড শুরু হচ্ছে…</string>
     <string name="downloading_update">আপডেট ডাউনলোড হচ্ছে</string>
@@ -785,7 +843,9 @@
     <string name="later">পরে</string>
     <string name="download_cancelled">ডাউনলোড বাতিল হয়েছে</string>
     <string name="try_again_settings">আপনি পরে সেটিংস থেকে আবার চেষ্টা করতে পারেন</string>
+    <!-- Update Sheet -->
     <string name="no_release_notes">কোনো রিলিজ নোট নেই।</string>
+    <!-- Recent Items -->
     <string name="item_selected">সিলেক্ট করা হয়েছে</string>
     <string name="item_not_selected">সিলেক্ট করা হয়নি</string>
     <string name="page_progress">পেজ %1$d/%2$d</string>
@@ -794,28 +854,34 @@
     <string name="minutes_ago">%d মি. আগে</string>
     <string name="hours_ago">%d ঘ. আগে</string>
     <string name="days_ago">%d দিন আগে</string>
+    <!-- Permission Bottom Sheet -->
     <string name="quick_access_needed">অ্যাক্সেস দরকার</string>
     <string name="storage_access_message">আপনার PDF ফাইলগুলো খুঁজে দেখাতে স্টোরেজ অ্যাক্সেসের পারমিশন দিন</string>
     <string name="open_settings">সেটিংস খুলুন</string>
     <string name="not_now">এখন না</string>
+    <!-- Bottom navigation -->
     <string name="nav_home">হোম</string>
     <string name="nav_folders">ফোল্ডার</string>
     <string name="nav_tools">টুলস</string>
     <string name="nav_settings">সেটিংস</string>
+    <!-- Home sub-tabs -->
     <string name="home_tab_recent">সাম্প্রতিক</string>
     <string name="home_tab_favorites">প্রিয়</string>
     <string name="home_tab_all_files">সব ফাইল</string>
+    <!-- Error Activity -->
     <string name="unexpected_error">হঠাৎ একটি সমস্যা হয়েছে</string>
     <string name="something_went_wrong">দুঃখিত! কিছু একটা সমস্যা হয়েছে</string>
     <string name="go_back">ফিরে যান</string>
     <string name="restart_app">অ্যাপ রিস্টার্ট করুন</string>
     <string name="close_app">অ্যাপ বন্ধ করুন</string>
+    <!-- Password Dialog -->
     <string name="password_required">পাসওয়ার্ড লাগবে</string>
     <string name="password_protected_message">এই PDF-এ পাসওয়ার্ড দেওয়া আছে। খুলতে পাসওয়ার্ড লিখুন।</string>
     <string name="incorrect_password_error">ভুল পাসওয়ার্ড</string>
     <string name="hide_password">পাসওয়ার্ড লুকান</string>
     <string name="show_password">পাসওয়ার্ড দেখান</string>
     <string name="remember_password">এই ফাইলের পাসওয়ার্ড মনে রাখুন</string>
+    <!-- More Options Sheet -->
     <string name="additional_tools">আরও টুলস ও অ্যাকশন</string>
     <string name="view_manage_bookmarks">সেভ করা পেজ দেখুন ও ম্যানেজ করুন</string>
     <string name="auto_scroll_desc">হাত না লাগিয়ে পড়ার মোড</string>
@@ -824,6 +890,7 @@
     <string name="print_document">এই ডকুমেন্ট প্রিন্ট করুন</string>
     <string name="document_info">ডকুমেন্টের তথ্য</string>
     <string name="view_file_details">ফাইলের বিস্তারিত ও মেটাডেটা দেখুন</string>
+    <!-- View Mode Sheet -->
     <string name="view_options">ভিউ অপশন</string>
     <string name="customize_reading_layout">আপনার পড়ার লেআউট কাস্টমাইজ করুন</string>
     <string name="scroll_mode">স্ক্রল মোড</string>
@@ -850,6 +917,7 @@
     <string name="scrubber_on_scroll_desc">টুলবার লুকানো থাকলে স্ক্রলের সময় পেজ স্লাইডার দেখান</string>
     <string name="tap_to_turn_page">ট্যাপ করে পেজ উল্টান</string>
     <string name="tap_to_turn_page_desc">পেজ বদলাতে পেজের দুই পাশে ট্যাপ করুন</string>
+    <!-- Display Sheet -->
     <string name="display_settings">ডিসপ্লে সেটিংস</string>
     <string name="theme_brightness_options">থিম, ব্রাইটনেস ও স্ক্রিনের অপশন</string>
     <string name="light_theme">লাইট</string>
@@ -861,10 +929,12 @@
     <string name="prevent_screen_off">স্ক্রিন বন্ধ হতে দেবেন না</string>
     <string name="keep_image_colors">ছবির রঙ ঠিক রাখুন</string>
     <string name="keep_image_colors_desc">ছবি আসল রঙে দেখান</string>
+    <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">পেজে যান</string>
     <string name="enter_page_range">একটি পেজ নম্বর লিখুন (1 - %d)</string>
     <string name="page_number_placeholder">পেজ নম্বর</string>
     <string name="enter_valid_page">1 থেকে %d এর মধ্যে একটি সংখ্যা লিখুন</string>
+    <!-- Auto Scroll Sheet -->
     <string name="auto_scroll_title">অটো-স্ক্রল</string>
     <string name="hands_free_reading">হাত না লাগিয়ে পড়ার মোড</string>
     <string name="speed_presets">স্পিড প্রিসেট</string>
@@ -878,6 +948,7 @@
     <string name="faster">আরও দ্রুত</string>
     <string name="start_auto_scroll">অটো-স্ক্রল শুরু করুন</string>
     <string name="auto_scroll_hint">থামাতে/আবার চালাতে স্ক্রিনে ট্যাপ করুন। বন্ধ করতে ওভারলে ব্যবহার করুন।</string>
+    <!-- Zoom Sheet -->
     <string name="zoom_display">জুম ও ডিসপ্লে</string>
     <string name="adjust_view_orientation">ভিউয়ের সাইজ ও ওরিয়েন্টেশন ঠিক করুন</string>
     <string name="screen_orientation">স্ক্রিন ওরিয়েন্টেশন</string>
@@ -887,11 +958,13 @@
     <string name="lock_portrait">পোর্ট্রেট মোডে লক করুন</string>
     <string name="lock_landscape">ল্যান্ডস্কেপ মোডে লক করুন</string>
     <string name="current_zoom_label">বর্তমান জুম</string>
+    <!-- Bookmarks Sheet -->
     <string name="bookmark_count">%d টি বুকমার্ক</string>
     <string name="bookmarks_count">%d টি বুকমার্ক</string>
     <string name="delete_bookmark">বুকমার্ক ডিলিট করুন</string>
     <string name="bookmark_hint">পেজ সেভ করতে বুকমার্ক আইকনে ট্যাপ করুন</string>
     <string name="page_number_title">পেজ %d</string>
+    <!-- PDF Info Dialog -->
     <string name="document_information">ডকুমেন্টের তথ্য</string>
     <string name="pdf_version_label">PDF %s</string>
     <string name="document_section">ডকুমেন্ট</string>
@@ -913,6 +986,7 @@
     <string name="xfa_label">XFA</string>
     <string name="web_optimized">ওয়েবের জন্য অপ্টিমাইজড</string>
     <string name="location_section">লোকেশন</string>
+    <!-- Top Bar Menu Panel -->
     <string name="document_options">ডকুমেন্টের অপশন</string>
     <string name="share_print_manage">শেয়ার, প্রিন্ট ও ম্যানেজ করুন</string>
     <string name="document_actions">ডকুমেন্টের অ্যাকশন</string>
@@ -929,10 +1003,13 @@
     <string name="remove_from_favourites_desc">আপনার প্রিয় তালিকা থেকে সরান</string>
     <string name="add_to_favourites_desc">আপনার প্রিয় তালিকায় যোগ করুন</string>
     <string name="delete_file_permanently">এই ফাইলটি পুরোপুরি ডিলিট করুন</string>
+    <!-- Delete Confirm Dialog -->
     <string name="delete_pdf_question">PDF ডিলিট করবেন?</string>
     <string name="action_cannot_undo">এটি আর ফেরানো যাবে না</string>
+    <!-- Remove Favorite Sheet -->
     <string name="remove_from_favourites_question">প্রিয় থেকে সরাবেন?</string>
     <string name="remove_from_list_message">এটি আপনার তালিকা থেকে সরিয়ে দেবে</string>
+    <!-- Reader Components -->
     <string name="go_to_page">পেজে যান</string>
     <string name="back_to_page">%d নম্বর পেজে ফিরে যান</string>
     <string name="enter_page">পেজ নম্বর লিখুন (1-%d)</string>
@@ -981,11 +1058,14 @@
     <string name="error_loading">PDF লোড করতে সমস্যা হয়েছে</string>
     <string name="try_again_message">এই PDF লোড করার সময় কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।</string>
     <string name="cd_page_thumbnails">পেজের থাম্বনেইল</string>
+    <!-- Floating Search Bar -->
     <string name="search_in_document">ডকুমেন্টে সার্চ করুন…</string>
+    <!-- Floating Control Bar -->
     <string name="cd_view_options">দেখার অপশন</string>
     <string name="cd_zoom">জুম</string>
     <string name="cd_display_settings">ডিসপ্লে সেটিংস</string>
     <string name="cd_control_more_options">আরও অপশন</string>
+    <!-- Reader Sidebar -->
     <string name="reading">পড়া</string>
     <string name="settings_label">সেটিংস</string>
     <string name="progress">অগ্রগতি</string>
@@ -996,7 +1076,9 @@
     <string name="rotation_locked">রোটেশন লক করা হয়েছে</string>
     <string name="auto_rotate">অটো-রোটেট</string>
     <string name="swipe_to_close">বন্ধ করতে ডানে সোয়াইপ করুন</string>
+    <!-- Tools Screen -->
     <string name="coming_soon">শিগগিরই</string>
+    <!-- Enhanced Table of Contents -->
     <string name="document_navigation">ডকুমেন্ট নেভিগেশন</string>
     <string name="no_contents_available">কোনো সূচি নেই</string>
     <string name="no_toc_message">এই PDF-এ কোনো সূচিপত্র নেই</string>
@@ -1010,11 +1092,14 @@
     <string name="toc_tab_attachments">অ্যাটাচমেন্ট</string>
     <string name="attachment_type_hint">%1$s ফাইল · খুলতে ট্যাপ করুন</string>
     <string name="attachment_tap_hint">খুলতে ট্যাপ করুন</string>
+    <!-- Settings Panel (Reader) -->
     <string name="reading_settings">পড়ার সেটিংস</string>
     <string name="full_screen_mode">ফুল স্ক্রিন মোড</string>
     <string name="auto_rotate_enabled">অটো-রোটেট চালু আছে</string>
     <string name="delete_pdf">PDF ডিলিট করুন</string>
+    <!-- Folder Detail Screen -->
     <string name="delete_files_warning">এটা আর ফেরানো যাবে না। ফাইলগুলো আপনার ডিভাইস থেকে চিরতরে ডিলিট হয়ে যাবে।</string>
+    <!-- Settings Screen -->
     <string name="reader_section">রিডার</string>
     <string name="about_section">সম্পর্কে</string>
     <string name="app_name_full">PDF Reader Pro</string>
@@ -1047,6 +1132,7 @@
     <string name="about_developer">ডেভেলপার সম্পর্কে</string>
     <string name="app_license">অ্যাপ লাইসেন্স</string>
     <string name="follow_system_brightness">সিস্টেমের ব্রাইটনেস অনুসরণ করুন</string>
+    <!-- Settings Screen - Remaining strings -->
     <string name="install_pending_update">পেন্ডিং আপডেট ইনস্টল করুন</string>
     <string name="install_downloaded_version">ডাউনলোড করা v%s ইনস্টল করুন</string>
     <string name="contact_developer">ডেভেলপারের সাথে যোগাযোগ</string>
@@ -1100,6 +1186,7 @@
     <string name="set_custom_level">কাস্টম লেভেল সেট করুন</string>
     <string name="custom">কাস্টম</string>
     <string name="app_logo">অ্যাপের লোগো</string>
+    <!-- Privacy Policy -->
     <string name="no_data_collection">কোনো ডেটা সংগ্রহ বা শেয়ার করা হয় না</string>
     <string name="no_analytics">কোনো অ্যানালিটিক্স বা ট্র্যাকিং নেই</string>
     <string name="optional_updates">শুধু চাইলে আপডেট চেক</string>
@@ -1114,12 +1201,14 @@
     <string name="privacy_password_content">সুরক্ষিত PDF-এর পাসওয়ার্ড সেভ করতে চাইলে সেগুলো এনক্রিপ্ট করা স্টোরেজে আপনার ডিভাইসেই রাখা হয়। পাসওয়ার্ড কখনো আপনার ডিভাইসের বাইরে যায় না।</string>
     <string name="privacy_update_title">আপডেট চেক</string>
     <string name="privacy_update_content">অ্যাপটি চাইলে GitHub-এর পাবলিক API দিয়ে আপডেট চেক করতে পারে। এই ফিচার শুধু রিলিজের তথ্য আনে এবং কোনো ব্যক্তিগত ডেটা, ডিভাইস আইডি বা ব্যবহারের পরিসংখ্যান পাঠায় না। আপনি সেটিংসে অটো আপডেট চেক বন্ধ করতে পারেন অথবা যখন খুশি নিজে চেক করতে পারেন।</string>
+    <!-- GPL License Terms -->
     <string name="gpl_freedom_use">যেকোনো উদ্দেশ্যে সফটওয়্যারটি ব্যবহারের স্বাধীনতা</string>
     <string name="gpl_freedom_study">সোর্স কোড পড়া ও পরিবর্তনের স্বাধীনতা</string>
     <string name="gpl_freedom_distribute">কপি বিতরণের স্বাধীনতা</string>
     <string name="gpl_freedom_modify">পরিবর্তিত ভার্সন বিতরণের স্বাধীনতা</string>
     <string name="gpl_derivative">উদ্ভূত কাজও GPL v3.0-এর অধীনে ওপেন সোর্স হতে হবে</string>
     <string name="gpl_notice">PDF Reader Pro - ওপেন সোর্স PDF ভিউয়ার\nCopyright (C) %d K M Rejowan Ahmmed\n\nএই প্রোগ্রামটি একটি মুক্ত সফটওয়্যার: Free Software Foundation প্রকাশিত GNU General Public License-এর ভার্সন 3 অথবা (আপনার ইচ্ছামতো) পরবর্তী যেকোনো ভার্সনের শর্ত অনুযায়ী আপনি এটি আবার বিতরণ এবং/অথবা পরিবর্তন করতে পারেন।\n\nএই প্রোগ্রামটি কাজে লাগবে এই আশায় বিতরণ করা হয়েছে, তবে কোনো ধরনের ওয়ারেন্টি ছাড়াই; এমনকি বাণিজ্যিক উপযোগিতা বা কোনো নির্দিষ্ট উদ্দেশ্যে উপযুক্ততার অন্তর্নিহিত ওয়ারেন্টিও নেই। বিস্তারিত জানতে GNU General Public License দেখুন।</string>
+    <!-- Onboarding -->
     <string name="onboarding_welcome">স্বাগতম\nPDF Reader Pro-তে</string>
     <string name="onboarding_welcome_desc">সরলতার জন্য তৈরি একটি পরিচ্ছন্ন, হালকা PDF রিডার। ওপেন সোর্স, বিজ্ঞাপনমুক্ত এবং আপনার গোপনীয়তাকে সম্মান করে।</string>
     <string name="onboarding_all_pdfs">আপনার সব PDF\nএক জায়গায়</string>
@@ -1130,15 +1219,21 @@
     <string name="onboarding_storage_desc">আপনার PDF ফাইল খুঁজে দেখাতে অ্যাক্সেস দিন। আপনার ডকুমেন্ট গোপন থাকে এবং কখনো আপলোড করা হয় না।</string>
     <string name="onboarding_grant_access">অ্যাক্সেস দিন</string>
     <string name="onboarding_continue">চালিয়ে যান</string>
+    <!-- Folder -->
     <string name="folder_empty">এই ফোল্ডারটি খালি</string>
     <string name="no_pdf_in_folder">এই ফোল্ডারে কোনো PDF ফাইল পাওয়া যায়নি।</string>
+    <!-- Settings - Update Interval (renamed) -->
     <string name="auto_check_interval">অটো চেকের ব্যবধান</string>
+    <!-- Install pending -->
     <string name="pending_update_ready">v%1$s ইনস্টলের জন্য প্রস্তুত</string>
+    <!-- Creator links -->
     <string name="link_website">ওয়েবসাইট</string>
     <string name="link_email">ইমেইল</string>
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
+    <!-- Selected -->
     <string name="selected">সিলেক্ট করা</string>
+    <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">প্রিভিউ</string>
     <string name="cd_view">দেখুন</string>
     <string name="cd_sort">সাজান</string>
@@ -1155,6 +1250,7 @@
     <string name="cd_show_password">পাসওয়ার্ড দেখান</string>
     <string name="cd_hide_password">পাসওয়ার্ড লুকান</string>
     <string name="cd_favorite">প্রিয়</string>
+    <!-- Tool Screen Titles -->
     <string name="tool_lock_pdf">PDF লক করুন</string>
     <string name="tool_compress_pdf">PDF কম্প্রেস করুন</string>
     <string name="tool_merge_pdfs">PDF মার্জ করুন</string>
@@ -1164,10 +1260,12 @@
     <string name="tool_add_watermark">ওয়াটারমার্ক যোগ করুন</string>
     <string name="tool_rotate_pdf_pages">PDF পেজ রোটেট করুন</string>
     <string name="tool_reorder_pdf_pages">PDF পেজের ক্রম বদলান</string>
+    <!-- Tool Screen Subtitles/Descriptions -->
     <string name="tool_lock_desc">অন্য কেউ যেন খুলতে না পারে, তাই পাসওয়ার্ড দিয়ে লক করুন</string>
     <string name="tool_merge_desc">একাধিক PDF ফাইল মার্জ করে একটি বানান</string>
     <string name="tool_pdf_to_images_desc">PDF-এর পেজগুলো ছবি ফাইল হিসেবে এক্সপোর্ট করুন</string>
     <string name="tool_image_to_pdf_desc">আপনার ছবিগুলো একটি PDF ডকুমেন্টে কনভার্ট করুন</string>
+    <!-- Common Tool Actions -->
     <string name="new_file">নতুন ফাইল</string>
     <string name="new_export">নতুন এক্সপোর্ট</string>
     <string name="new_conversion">নতুন কনভার্শন</string>
@@ -1178,6 +1276,7 @@
     <string name="save_reordered_pdf">নতুন ক্রমে PDF সেভ করুন</string>
     <string name="create_pdf">PDF তৈরি করুন</string>
     <string name="overwrite_original_file">মূল ফাইলের উপর লিখুন</string>
+    <!-- Loading/Processing Messages -->
     <string name="loading_pages">পেজ লোড হচ্ছে…</string>
     <string name="loading_pdf">PDF লোড হচ্ছে…</string>
     <string name="checking_pdf">PDF চেক করা হচ্ছে…</string>
@@ -1193,6 +1292,7 @@
     <string name="removing_pages">সরানো হচ্ছে…</string>
     <string name="adding_page_numbers">পেজ নম্বর যোগ করা হচ্ছে…</string>
     <string name="adding_watermark">ওয়াটারমার্ক যোগ করা হচ্ছে…</string>
+    <!-- Success Messages -->
     <string name="rotation_complete">রোটেট করা হয়ে গেছে!</string>
     <string name="pages_reordered">পেজের ক্রম বদলানো হয়েছে!</string>
     <string name="pdf_locked">PDF লক করা হয়েছে!</string>
@@ -1203,6 +1303,7 @@
     <string name="images_exported">ছবি এক্সপোর্ট করা হয়েছে!</string>
     <string name="pdf_created">PDF তৈরি করা হয়েছে!</string>
     <string name="page_numbers_added">পেজ নম্বর যোগ করা হয়েছে!</string>
+    <!-- Success Descriptions -->
     <string name="pages_rotated_count">%d টি পেজ রোটেট করা হয়েছে</string>
     <string name="pdf_saved_new_order">আপনার PDF নতুন পেজ ক্রমে সেভ করা হয়েছে</string>
     <string name="pdf_password_protected">আপনার PDF এখন পাসওয়ার্ড দিয়ে সুরক্ষিত</string>
@@ -1210,6 +1311,7 @@
     <string name="images_created_count">%1$d টি %2$s ছবি তৈরি হয়েছে</string>
     <string name="images_converted_count">%d টি ছবি কনভার্ট করা হয়েছে</string>
     <string name="pages_removed_count">%d টি পেজ সরানো হয়েছে</string>
+    <!-- Section Labels -->
     <string name="section_rotation">রোটেশন</string>
     <string name="section_select_pages">পেজ সিলেক্ট করুন</string>
     <string name="section_owner_password">মালিকের পাসওয়ার্ড (দিতেই হবে)</string>
@@ -1226,14 +1328,17 @@
     <string name="section_watermark_type">ওয়াটারমার্কের ধরন</string>
     <string name="section_text_settings">টেক্সট সেটিংস</string>
     <string name="section_start_page">শুরুর পেজ</string>
+    <!-- Password Descriptions -->
     <string name="owner_password_desc">এডিট করার পারমিশনসহ পুরো অ্যাক্সেসের পাসওয়ার্ড</string>
     <string name="user_password_desc">PDF খুলতে লাগবে। খোলার পাসওয়ার্ড না চাইলে খালি রাখুন।</string>
     <string name="enter_password_desc">এই PDF আনলক করতে পাসওয়ার্ড দিন</string>
     <string name="permissions_desc">ব্যবহারকারীর পাসওয়ার্ড দিয়ে খুললে ব্যবহারকারীরা যা করতে পারবেন</string>
     <string name="allow_copying_content">কনটেন্ট কপি করতে দিন</string>
+    <!-- Protection Status -->
     <string name="password_protected">পাসওয়ার্ড সুরক্ষিত</string>
     <string name="not_protected">সুরক্ষিত নয়</string>
     <string name="no_password_protection">কোনো পাসওয়ার্ড সুরক্ষা নেই</string>
+    <!-- Page Selection -->
     <string name="selected_of_count">%2$d টির মধ্যে %1$d টি সিলেক্ট করা</string>
     <string name="page_numbers_label">পেজ নম্বর</string>
     <string name="page_numbers_hint">যেমন, 1-5, 8, 10-12</string>
@@ -1247,12 +1352,15 @@
     <string name="page_selection_all">সব পেজ (1-%1$d)</string>
     <string name="page_selection_range">পেজ %1$d-%2$d</string>
     <string name="page_selection_custom">পেজ %1$s</string>
+    <!-- Reorder -->
     <string name="drag_hint">ক্রম বদলাতে পেজ চেপে ধরে টেনে আনুন</string>
+    <!-- Format Options -->
     <string name="format_png">PNG</string>
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">কোয়ালিটি একটুও কমে না</string>
     <string name="format_smaller_size">ছোট ফাইল সাইজ</string>
     <string name="will_create_images">%1$d টি %2$s ছবি তৈরি হবে</string>
+    <!-- Compression Levels -->
     <string name="compression_low">কম</string>
     <string name="compression_medium">মাঝারি</string>
     <string name="compression_high">বেশি</string>
@@ -1261,16 +1369,20 @@
     <string name="compression_medium_desc">কোয়ালিটি ও সাইজের ভারসাম্য</string>
     <string name="compression_high_desc">ছোট ফাইল, কোয়ালিটি একটু কম</string>
     <string name="compression_extreme_desc">সবচেয়ে ছোট ফাইল, সবচেয়ে কম কোয়ালিটি</string>
+    <!-- Split Modes -->
     <string name="split_extract_pages">পেজ আলাদা করুন</string>
     <string name="split_single_pages">একক পেজ</string>
     <string name="split_range_desc">পেজ রেঞ্জ থেকে একটি PDF-এ স্প্লিট করুন</string>
     <string name="split_extract_desc">নির্দিষ্ট পেজগুলো নতুন PDF হিসেবে আলাদা করুন</string>
     <string name="split_single_desc">প্রতিটি পেজ আলাদা PDF ফাইল হিসেবে</string>
+    <!-- Merge -->
     <string name="no_pdfs_selected">কোনো PDF সিলেক্ট করা হয়নি</string>
     <string name="add_pdfs_to_merge">একটি ডকুমেন্টে মার্জ করতে দুই বা তার বেশি PDF ফাইল যোগ করুন</string>
     <string name="files_selected">%d টি ফাইল সিলেক্ট করা</string>
     <string name="files_merged">%d টি ফাইল মার্জ হয়েছে</string>
+    <!-- Image to PDF -->
     <string name="images_selected">%d টি ছবি সিলেক্ট করা</string>
+    <!-- Page Numbers -->
     <string name="position_bottom_left">নিচে বামে</string>
     <string name="position_bottom_center">নিচে মাঝখানে</string>
     <string name="position_bottom_right">নিচে ডানে</string>
@@ -1280,6 +1392,7 @@
     <string name="format_simple">1, 2, 3</string>
     <string name="format_dash">- 1 -</string>
     <string name="format_page_of">পেজ 1 / N</string>
+    <!-- Watermark -->
     <string name="watermark_text_label">ওয়াটারমার্ক টেক্সট</string>
     <string name="watermark_text_hint">ওয়াটারমার্ক টেক্সট লিখুন</string>
     <string name="watermark_type_text">টেক্সট</string>
@@ -1287,10 +1400,13 @@
     <string name="scale">স্কেল</string>
     <string name="watermark_preview_area">ওয়াটারমার্ক প্রিভিউ এলাকা</string>
     <string name="no_image_selected">কোনো ছবি সিলেক্ট করা হয়নি</string>
+    <!-- Remove Pages -->
     <string name="pages_to_remove">%d টি পেজ সরানো হবে</string>
     <string name="remove_selected_pages">%d টি পেজ সরান</string>
     <string name="remove_pages_btn">পেজ সরান</string>
     <string name="select_pages_to_remove_hint">সরানোর জন্য পেজে ট্যাপ করে সিলেক্ট করুন</string>
+    <!-- File Info in Results -->
+    <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
     <string name="select_pdfs">PDF সিলেক্ট করুন</string>
     <string name="output_filename_label">আউটপুট ফাইলের নাম</string>
@@ -1309,6 +1425,7 @@
     <string name="select_pages">পেজ সিলেক্ট করুন</string>
     <string name="selection_mode">সিলেকশন মোড</string>
     <string name="pages_range_info">পেজ %1$s থেকে %2$s থাকবে</string>
+    <!-- Split Screen -->
     <string name="change">পরিবর্তন করুন</string>
     <string name="page_ranges_label">পেজ রেঞ্জ</string>
     <string name="page_ranges_example">যেমন, 1-5, 6-10, 11-15</string>
@@ -1342,6 +1459,7 @@
     <string name="split_complete">স্প্লিট করা হয়ে গেছে!</string>
     <string name="one_file_created">১টি ফাইল তৈরি হয়েছে</string>
     <string name="files_created_count">%1$d টি ফাইল তৈরি হয়েছে</string>
+    <!-- Remove Pages Screen -->
     <string name="select_page_range">পেজ রেঞ্জ সিলেক্ট করুন</string>
     <string name="select_action">সিলেক্ট করুন</string>
     <string name="selected_for_removal_format">সরানোর জন্য %2$d টির মধ্যে %1$d টি সিলেক্ট করা</string>
@@ -1374,6 +1492,7 @@
     <string name="removing">সরানো হচ্ছে…</string>
     <string name="pages_removed">পেজ সরানো হয়েছে!</string>
     <string name="one_page_removed">১টি পেজ সরানো হয়েছে</string>
+    <!-- Page Numbers Screen -->
     <string name="prefix_label">প্রিফিক্স</string>
     <string name="prefix_hint">যেমন, পেজ</string>
     <string name="suffix_label">সাফিক্স</string>
@@ -1385,6 +1504,7 @@
     <string name="color_g">G</string>
     <string name="color_b">B</string>
     <string name="skip_first_pages">প্রথম N পেজ বাদ দিন</string>
+    <!-- Input Validation Messages -->
     <string name="validation_password_required">পাসওয়ার্ড দিতে হবে</string>
     <string name="validation_password_too_short">পাসওয়ার্ড কমপক্ষে %1$d অক্ষরের হতে হবে</string>
     <string name="validation_password_too_long">পাসওয়ার্ড %1$d অক্ষরের বেশি হতে পারবে না</string>
