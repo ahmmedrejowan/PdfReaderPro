@@ -1,9 +1,4 @@
-# Crowdin (https://crowdin.com/project/pdf-reader-pro) syncs the English strings
-# from the feature branch and opens translation pull requests into it.
-# %two_letters_code% gives the folder names the app already uses: values-zh,
-# values-pt, values-bn and so on.
 files:
   - source: /app/src/main/res/values/strings.xml
     translation: /app/src/main/res/values-%two_letters_code%/strings.xml
-    # Android strings format, so plurals, escapes and translatable="false" are understood.
     type: android
