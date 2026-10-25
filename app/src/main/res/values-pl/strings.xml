@@ -1,43 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PDF Reader Pro</string>
     <string name="hello_blank_fragment">Witaj pusty fragmencie</string>
-
-
     <string name="intro_title_1">Przeglądaj pliki PDF bez przeszkód</string>
     <string name="intro_sub_title_1">Zanurz się w świecie plików PDF dzięki bezproblemowemu czytaniu</string>
-
     <string name="intro_title_2">Twoja kolekcja plików PDF</string>
     <string name="intro_sub_title_2">Efektywnie znajdź i uzyskaj dostęp do dowolnego pliku PDF</string>
-
     <string name="intro_title_3">Dostosuj swoje doświadczenie z PDF</string>
     <string name="intro_sub_title_3">Dostosuj, wyszukuj i odkrywaj zaawansowane funkcje PDF.</string>
-
     <string name="greeting_with_emoji">%1$s %2$s</string>
-
     <string name="let_s_start">Zacznijmy</string>
-
     <string name="permission_normal_title">Zdobądźmy te pliki PDF</string>
     <string name="permission_allowed_title">Wszystko gotowe</string>
     <string name="permission_error_title">Wystąpił błąd</string>
-
     <string name="permission_normal_sub_title">Zezwól na dostęp do pamięci, a my umożliwimy Ci dostęp, wyszukiwanie i filtrowanie według własnych preferencji oraz wiele więcej.</string>
     <string name="permission_allowed_sub_title">Przejdźmy do aplikacji</string>
     <string name="permission_error_sub_title">Nie udało się prawidłowo uzyskać uprawnienia. Może coś poszło nie tak.</string>
-
-
     <string name="permission_below_11_normal_description">Kliknij przycisk Zezwól w następnym oknie dialogowym.</string>
     <string name="permission_above_11_normal_description">Włącz przełącznik na następnej stronie</string>
-
     <string name="permission_error_description">Włącz przełącznik na następnej stronie</string>
-
-
     <string name="allow_access">Zezwól na dostęp</string>
     <string name="lets_go">Zaczynamy</string>
     <string name="try_again">Spróbuj ponownie</string>
-
     <string name="app_settings">Ustawienia aplikacji</string>
     <string name="how_to_allow_access">Jak zezwolić na dostęp</string>
-
     <string name="settings">Ustawienia</string>
     <string name="search_pdf">Szukaj PDF</string>
     <string name="overview">Przegląd PDF</string>
@@ -75,7 +61,6 @@
     <string name="jump">Przejdź</string>
     <string name="enter_page_number">Wprowadź numer strony</string>
     <string name="remove">Usuń</string>
-
     <!-- Common Actions -->
     <string name="done">Gotowe</string>
     <string name="save">Zapisz</string>
@@ -103,7 +88,6 @@
     <string name="select_file">Wybierz plik</string>
     <string name="select_pdf">Wybierz PDF</string>
     <string name="select_images">Wybierz obrazy</string>
-
     <!-- Sort Options -->
     <string name="sort_files">Sortuj pliki</string>
     <string name="sort_folders">Sortuj foldery</string>
@@ -126,7 +110,6 @@
     <string name="sort_by_size">Według rozmiaru</string>
     <string name="sort_ascending">Rosnąco</string>
     <string name="sort_descending">Malejąco</string>
-
     <!-- Home Screen -->
     <string name="good_morning">Dzień dobry</string>
     <string name="good_afternoon">Dzień dobry</string>
@@ -141,7 +124,6 @@
     <string name="add_favorites_hint">Dodaj pliki PDF do ulubionych, aby zobaczyć je tutaj</string>
     <string name="open_pdf_hint">Otwórz kilka plików PDF, aby zobaczyć je tutaj</string>
     <string name="delete_warning">Ta operacja jest nieodwracalna. Pliki zostaną trwale usunięte z urządzenia.</string>
-
     <!-- Folders Screen -->
     <string name="all_folders">Wszystkie foldery</string>
     <string name="search_folders">Szukaj folderów…</string>
@@ -155,7 +137,6 @@
     <string name="sort_folders_desc">Sortuj foldery</string>
     <string name="clear_search">Wyczyść wyszukiwanie</string>
     <string name="close_search">Zamknij wyszukiwanie</string>
-
     <!-- Search Screen -->
     <string name="search_your_pdfs">Szukaj w plikach PDF…</string>
     <string name="search_your_pdfs_hint">Szukaj w plikach PDF...</string>
@@ -174,7 +155,6 @@
     <string name="tip_search_folder_desc">Wpisz nazwę folderu, aby znaleźć wszystkie pliki PDF w nim zawarte</string>
     <string name="tip_partial_matches_title">Częściowe dopasowania działają</string>
     <string name="tip_partial_matches_desc">Nie musisz znać dokładnej nazwy — spróbuj krótszych słów</string>
-
     <!-- File Info -->
     <string name="file_information">Informacje o pliku</string>
     <string name="file_name">Nazwa pliku</string>
@@ -183,24 +163,20 @@
     <string name="page_count">Liczba stron</string>
     <string name="last_modified">Ostatnia modyfikacja</string>
     <string name="created">Utworzono</string>
-
     <!-- Delete Confirmation -->
     <string name="delete_file">Usuń plik</string>
     <string name="delete_files">Usuń pliki</string>
     <string name="action_cannot_be_undone">Ta operacja jest nieodwracalna</string>
     <string name="confirm_delete_file">Czy na pewno chcesz trwale usunąć ten plik?</string>
     <string name="confirm_delete_files">Czy na pewno chcesz trwale usunąć te pliki?</string>
-
     <!-- Rename -->
     <string name="rename_file">Zmień nazwę pliku</string>
     <string name="new_name">Nowa nazwa</string>
-
     <!-- Stats -->
     <string name="library_statistics">Statystyki biblioteki</string>
     <string name="total_files">Całkowita liczba plików</string>
     <string name="favorite_files">Ulubione pliki</string>
     <string name="recent_files">Ostatnie pliki</string>
-
     <!-- Settings Screen -->
     <string name="appearance">Wygląd</string>
     <string name="reader">Czytnik</string>
@@ -243,13 +219,11 @@
     <string name="creator_title">Starszy programista Android</string>
     <string name="creator_description">PDF Reader Pro został stworzony, aby zapewnić darmowe, otwarte i skupione na prywatności doświadczenie czytania plików PDF. Dzięki funkcjom takim jak zakładki, ulubione, motywy czytania i konfigurowalne ustawienia, ma być kompletnym rozwiązaniem PDF dla użytkowników Androida.</string>
     <string name="gnu_license">GNU General Public License v3.0</string>
-
     <!-- Tool categories -->
     <string name="tool_category_organize">Organizuj</string>
     <string name="tool_category_edit">Edytuj</string>
     <string name="tool_category_security">Bezpieczeństwo</string>
     <string name="tool_category_convert">Konwertuj</string>
-
     <!-- Tools -->
     <string name="tool_split_pdf">Podziel PDF</string>
     <string name="tool_split_desc">Podziel plik PDF na wiele plików</string>
@@ -267,7 +241,6 @@
     <string name="tool_unlock_desc">Usuń hasło z pliku PDF</string>
     <string name="tool_pdf_to_image">PDF na obrazy</string>
     <string name="tool_pdf_to_image_desc">Eksportuj strony PDF jako pliki obrazów</string>
-
     <!-- Update Sheet -->
     <string name="update_available">Dostępna aktualizacja</string>
     <string name="current">Aktualna</string>
@@ -275,14 +248,12 @@
     <string name="whats_new">Co nowego</string>
     <string name="skip_version">Pomiń tę wersję</string>
     <string name="download_update">Pobierz aktualizację</string>
-
     <!-- Download Progress -->
     <string name="downloading">Pobieranie…</string>
     <string name="download_complete">Pobieranie zakończone</string>
     <string name="download_failed">Pobieranie nie powiodło się</string>
     <string name="install">Zainstaluj</string>
     <string name="retry">Ponów</string>
-
     <!-- Reader Screen -->
     <string name="page_of">Strona %1$d z %2$d</string>
     <string name="bookmarks">Zakładki</string>
@@ -369,11 +340,9 @@
     <string name="close_highlight_nav">Zatrzymaj przechodzenie przez wyróżnienia</string>
     <string name="no_matching_highlights">Brak dopasowań</string>
     <string name="no_matching_highlights_hint">Spróbuj innego wyszukiwania lub koloru</string>
-
     <string name="lock_horizontal_scroll">Zablokuj przewijanie poziome</string>
     <string name="lock_horizontal_scroll_desc">Utrzymaj stronę w miejscu przy powiększeniu</string>
     <string name="lock_horizontal_scroll_unavailable">Dostępne tylko przy przewijaniu pionowym</string>
-
     <string name="table_of_contents">Spis treści</string>
     <string name="no_table_of_contents">Brak spisu treści</string>
     <string name="attachments">Załączniki</string>
@@ -392,17 +361,14 @@
     <string name="search_text">Szukaj tekstu…</string>
     <string name="no_matches">Brak dopasowań</string>
     <string name="match_count">%1$d z %2$d</string>
-
     <!-- Remove Favorite -->
     <string name="remove_favorite">Usuń z ulubionych</string>
     <string name="remove_from_favorites">Usuń z ulubionych</string>
     <string name="confirm_remove_favorite">Czy na pewno chcesz usunąć ten plik z ulubionych?</string>
-
     <!-- Exit Confirmation -->
     <string name="exit_app">Wyjdź z aplikacji</string>
     <string name="confirm_exit">Czy na pewno chcesz wyjść?</string>
     <string name="exit">Wyjdź</string>
-
     <!-- Tools Screen -->
     <string name="pdf_tools">Narzędzia PDF</string>
     <string name="reader_pdf_tools_desc">Dziel, kompresuj, obracaj i więcej</string>
@@ -419,7 +385,6 @@
     <string name="add_page_numbers">Dodaj numery stron</string>
     <string name="images_to_pdf">Obrazy na PDF</string>
     <string name="pdf_to_images">PDF na obrazy</string>
-
     <!-- Tool Common -->
     <string name="select_source_file">Wybierz plik PDF, aby rozpocząć</string>
     <string name="processing">Przetwarzanie…</string>
@@ -433,14 +398,12 @@
     <string name="page_range">Zakres stron</string>
     <string name="page_range_hint">np. 1-3, 5, 7-10</string>
     <string name="invalid_page_range">Nieprawidłowy zakres stron</string>
-
     <!-- Merge -->
     <string name="add_pdfs">Dodaj pliki PDF do scalenia</string>
     <string name="drag_to_reorder">Przeciągnij, aby zmienić kolejność</string>
     <string name="merge_files">Scal pliki</string>
     <string name="merge_more">Scal inne pliki</string>
     <string name="merged_successfully">Pliki PDF zostały pomyślnie scalone</string>
-
     <!-- Split -->
     <string name="split_mode">Tryb dzielenia</string>
     <string name="split_by_pages">Podziel według stron</string>
@@ -450,7 +413,6 @@
     <string name="split">Podziel</string>
     <string name="split_more">Podziel inny plik</string>
     <string name="split_successfully">Plik PDF został pomyślnie podzielony</string>
-
     <!-- Compress -->
     <string name="compression_level">Poziom kompresji</string>
     <string name="low">Niski</string>
@@ -467,7 +429,6 @@
     <string name="compress_medium_desc">Zrównoważona kompresja i jakość</string>
     <string name="compress_high_label">Wysoki</string>
     <string name="compress_high_desc">Maksymalna kompresja, mniejszy plik</string>
-
     <!-- Compress Screen -->
     <string name="compress_share_pdf">Udostępnij PDF</string>
     <string name="compress_empty_title">Skompresuj plik PDF</string>
@@ -483,7 +444,6 @@
     <string name="compressed_size">Rozmiar po kompresji</string>
     <string name="compressed_size_reduced">Rozmiar zmniejszony</string>
     <string name="saved_format">(zaoszczędzono %1$s)</string>
-
     <!-- Rotate -->
     <string name="rotation">Obrót</string>
     <string name="rotate_left">Obróć w lewo</string>
@@ -494,7 +454,6 @@
     <string name="apply_to_all">Zastosuj do wszystkich stron</string>
     <string name="rotate_more">Obróć inny plik</string>
     <string name="rotated_successfully">Plik PDF został pomyślnie obrócony</string>
-
     <!-- Lock/Unlock -->
     <string name="password">Hasło</string>
     <string name="enter_password">Wprowadź hasło</string>
@@ -514,7 +473,6 @@
     <string name="incorrect_password">Nieprawidłowe hasło</string>
     <string name="pdf_not_protected">Ten plik PDF nie jest chroniony hasłem</string>
     <string name="pdf_protected">Ten plik PDF jest chroniony hasłem</string>
-
     <!-- Watermark -->
     <string name="watermark">Znak wodny</string>
     <string name="text_watermark">Znak wodny tekstowy</string>
@@ -535,18 +493,15 @@
     <string name="position_center">Środek</string>
     <string name="position_tiled">Kafelkowy</string>
     <string name="watermark_added">Znak wodny dodany!</string>
-
     <!-- Remove Pages -->
     <string name="select_pages_to_remove">Wybierz strony do usunięcia</string>
     <string name="remove_selected">Usuń zaznaczone</string>
     <string name="remove_more">Usuń strony z innego pliku</string>
-
     <!-- Reorder -->
     <string name="drag_to_reorder_pages">Przeciągnij strony, aby zmienić kolejność</string>
     <string name="reorder">Zmień kolejność</string>
     <string name="reorder_more">Zmień kolejność w innym pliku</string>
     <string name="reordered_successfully">Kolejność stron została pomyślnie zmieniona</string>
-
     <!-- Page Numbers -->
     <string name="number_format">Format numeru</string>
     <string name="start_number">Numer początkowy</string>
@@ -560,7 +515,6 @@
     <string name="section_apply_to_pages">ZASTOSUJ DO STRON</string>
     <string name="horizontal_margin">Margines poziomy</string>
     <string name="vertical_margin">Margines pionowy</string>
-
     <!-- Formats -->
     <string name="format_number_only">Tylko numer</string>
     <string name="format_number_only_example">1</string>
@@ -572,31 +526,25 @@
     <string name="format_dash_x_example">- 1 -</string>
     <string name="format_custom">Niestandardowy</string>
     <string name="format_custom_example">S.1</string>
-
     <!-- Preview -->
     <string name="preview_info_format">%1$s • %2$dpt • %3$s</string>
-
     <!-- Color picker -->
     <string name="pick_color">Wybierz kolor</string>
     <string name="page_number_color">Kolor numeru strony</string>
-
     <!-- Page selection -->
     <string name="page_numbers_selection_all">Wszystkie (%1$d)</string>
     <string name="page_selection_odd">Nieparzyste</string>
     <string name="page_selection_even">Parzyste</string>
     <string name="page_selection_skip_first">Pomiń pierwszą</string>
     <string name="title_page_selection_custom">Niestandardowe</string>
-
     <!-- Success -->
     <string name="adding_numbers">Dodawanie numerów…</string>
-
     <!-- Images to PDF -->
     <string name="add_images">Dodaj obrazy do konwersji</string>
     <string name="image_quality">Jakość obrazu</string>
     <string name="convert">Konwertuj</string>
     <string name="convert_more">Konwertuj inne pliki</string>
     <string name="converted_successfully">Obrazy zostały przekonwertowane na PDF</string>
-
     <!-- PDF to Images -->
     <string name="output_format">Format wyjściowy</string>
     <string name="png">PNG</string>
@@ -611,7 +559,6 @@
     <string name="share_images">Udostępnij obrazy</string>
     <string name="share_image">Udostępnij obraz</string>
     <string name="view_image">Wyświetl obraz</string>
-
     <!-- Error Messages -->
     <string name="error_loading_pdf">Błąd podczas ładowania pliku PDF</string>
     <string name="error_file_not_found">Nie znaleziono pliku</string>
@@ -675,7 +622,6 @@
     <string name="error_enter_watermark_text">Wprowadź tekst znaku wodnego</string>
     <string name="error_select_watermark_image">Wybierz obraz znaku wodnego</string>
     <string name="error_add_watermark_failed">Nie udało się dodać znaku wodnego</string>
-
     <!-- Error Recovery Hints -->
     <string name="error_hint_corrupted_pdf">Plik może być uszkodzony. Spróbuj pobrać go ponownie.</string>
     <string name="error_hint_invalid_pdf">Ten plik nie jest prawidłowym dokumentem PDF.</string>
@@ -687,16 +633,13 @@
     <string name="error_hint_timeout">Operacja trwała zbyt długo. Spróbuj ponownie.</string>
     <string name="error_hint_out_of_memory">Zamknij inne aplikacje i spróbuj ponownie z mniejszym plikiem.</string>
     <string name="error_hint_generic">Spróbuj ponownie. Jeśli problem nadal występuje, uruchom ponownie aplikację.</string>
-
     <!-- PDF Thumbnail -->
     <string name="pdf">PDF</string>
     <string name="pdf_thumbnail">Miniatura PDF</string>
     <string name="loading">Ładowanie…</string>
-
     <!-- Misc -->
     <string name="pdf_reader_pro">PDF Reader Pro</string>
     <string name="no_pdf_data">Nie otrzymano danych PDF</string>
-
     <!-- Content Descriptions - Accessibility -->
     <string name="sort_files_desc">Sortuj pliki</string>
     <string name="library_stats_desc">Statystyki biblioteki</string>
@@ -704,7 +647,6 @@
     <string name="list_view">Widok listy</string>
     <string name="more">Więcej</string>
     <string name="favorite">Ulubione</string>
-
     <!-- Content Descriptions - Navigation -->
     <string name="cd_navigate_back">Wróć</string>
     <string name="cd_close">Zamknij</string>
@@ -713,7 +655,6 @@
     <string name="cd_options">Opcje</string>
     <string name="cd_expand">Rozwiń</string>
     <string name="cd_collapse">Zwiń</string>
-
     <!-- Content Descriptions - Actions -->
     <string name="cd_add">Dodaj</string>
     <string name="cd_remove">Usuń</string>
@@ -746,7 +687,6 @@
     <string name="cd_retry">Ponów</string>
     <string name="cd_back">Wstecz</string>
     <string name="cd_more_options">Więcej opcji</string>
-
     <!-- Content Descriptions - PDF Reader -->
     <string name="cd_zoom_in">Powiększ</string>
     <string name="cd_zoom_out">Pomniejsz</string>
@@ -770,7 +710,6 @@
     <string name="cd_play">Odtwórz</string>
     <string name="cd_pause">Wstrzymaj</string>
     <string name="cd_stop">Zatrzymaj</string>
-
     <!-- Content Descriptions - Files -->
     <string name="cd_pdf_file">Plik PDF</string>
     <string name="cd_folder">Folder</string>
@@ -782,7 +721,6 @@
     <string name="cd_folder_options">Opcje folderu</string>
     <string name="cd_selected">Zaznaczone</string>
     <string name="cd_not_selected">Niezaznaczone</string>
-
     <!-- Content Descriptions - Status -->
     <string name="cd_loading">Ładowanie</string>
     <string name="cd_success">Sukces</string>
@@ -797,7 +735,6 @@
     <string name="cd_toggle">Przełącz</string>
     <string name="cd_enabled">Włączone</string>
     <string name="cd_disabled">Wyłączone</string>
-
     <!-- Content Descriptions - PDF Tools -->
     <string name="cd_merge_pdfs">Scal pliki PDF</string>
     <string name="cd_split_pdf">Podziel PDF</string>
@@ -815,7 +752,6 @@
     <string name="cd_page_number">Strona %1$d</string>
     <string name="cd_page_selected">Strona %1$d zaznaczona</string>
     <string name="cd_page_not_selected">Strona %1$d niezaznaczona</string>
-
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">Logo PDF Reader Pro</string>
     <string name="cd_decorative">Obraz dekoracyjny</string>
@@ -827,11 +763,9 @@
     <string name="cd_color_picker">Wybór koloru</string>
     <string name="cd_slider">Suwak</string>
     <string name="cd_dropdown">Menu rozwijane</string>
-
     <!-- Navigation -->
     <string name="home">Strona główna</string>
     <string name="tools">Narzędzia</string>
-
     <!-- Empty States -->
     <string name="no_pdfs_title">Jeszcze nie ma tu plików PDF</string>
     <string name="no_pdfs_message">Nie znaleźliśmy żadnych plików PDF na Twoim urządzeniu. Spróbuj ponownie przeskanować lub dodaj kilka plików PDF, aby rozpocząć!</string>
@@ -847,7 +781,6 @@
     <string name="no_folders_message">Foldery PDF pojawią się tutaj po przeskanowaniu plików. Znajdźmy je!</string>
     <string name="permission_title">Potrzebujemy Twojej zgody</string>
     <string name="permission_message">Aby wyświetlić tutaj swoje pliki PDF, zezwól na dostęp do pamięci</string>
-
     <!-- Stats Sheet -->
     <string name="library_stats">Statystyki biblioteki</string>
     <string name="library_stats_subtitle">Twoja kolekcja PDF w skrócie</string>
@@ -858,16 +791,13 @@
     <string name="percent_of_library">%d%% Twojej biblioteki</string>
     <string name="no_files_yet">brak plików</string>
     <string name="recently_opened">ostatnio otwierane</string>
-
     <!-- Exit Confirmation -->
     <string name="stay">Zostań</string>
     <string name="exit_confirm_message">Czy na pewno chcesz zamknąć aplikację?</string>
-
     <!-- Rename Sheet -->
     <string name="file_name_label">Nazwa pliku</string>
     <string name="invalid_file_name">Nieprawidłowa nazwa pliku</string>
     <string name="pdf_extension_hint">Rozszerzenie .pdf zostanie dodane automatycznie</string>
-
     <!-- File Options -->
     <string name="quick_actions">Szybkie akcje</string>
     <string name="add_to_favorites">Dodaj do ulubionych</string>
@@ -886,7 +816,6 @@
     <string name="delete_desc">Trwale usuń ten plik</string>
     <string name="cd_toggle_scroll_direction">Przełącz kierunek przewijania</string>
     <string name="cd_fit_to_screen">Dopasuj do ekranu</string>
-
     <!-- Folder Options -->
     <string name="folder_options">Opcje folderu</string>
     <string name="pdf_files">Pliki PDF</string>
@@ -899,7 +828,6 @@
     <string name="copy_path">Kopiuj ścieżkę</string>
     <string name="copy_path_desc">Skopiuj lokalizację folderu do schowka</string>
     <string name="path_copied">Ścieżka skopiowana do schowka</string>
-
     <!-- Download Progress -->
     <string name="download_progress">Postęp pobierania</string>
     <string name="starting_download">Rozpoczynanie pobierania…</string>
@@ -915,10 +843,8 @@
     <string name="later">Później</string>
     <string name="download_cancelled">Pobieranie anulowane</string>
     <string name="try_again_settings">Możesz spróbować ponownie później w Ustawieniach</string>
-
     <!-- Update Sheet -->
     <string name="no_release_notes">Brak informacji o wydaniu.</string>
-
     <!-- Recent Items -->
     <string name="item_selected">Zaznaczone</string>
     <string name="item_not_selected">Niezaznaczone</string>
@@ -928,31 +854,26 @@
     <string name="minutes_ago">%d min temu</string>
     <string name="hours_ago">%d godz. temu</string>
     <string name="days_ago">%d d temu</string>
-
     <!-- Permission Bottom Sheet -->
     <string name="quick_access_needed">Wymagany szybki dostęp</string>
     <string name="storage_access_message">Zezwól na dostęp do pamięci, abyśmy mogli znaleźć i wyświetlić Twoje pliki PDF</string>
     <string name="open_settings">Otwórz ustawienia</string>
     <string name="not_now">Nie teraz</string>
-
     <!-- Bottom navigation -->
     <string name="nav_home">Strona główna</string>
     <string name="nav_folders">Foldery</string>
     <string name="nav_tools">Narzędzia</string>
     <string name="nav_settings">Ustawienia</string>
-
     <!-- Home sub-tabs -->
     <string name="home_tab_recent">Ostatnie</string>
     <string name="home_tab_favorites">Ulubione</string>
     <string name="home_tab_all_files">Wszystkie pliki</string>
-
     <!-- Error Activity -->
     <string name="unexpected_error">Wystąpił nieoczekiwany błąd</string>
     <string name="something_went_wrong">Ups! Coś poszło nie tak</string>
     <string name="go_back">Wróć</string>
     <string name="restart_app">Uruchom ponownie aplikację</string>
     <string name="close_app">Zamknij aplikację</string>
-
     <!-- Password Dialog -->
     <string name="password_required">Wymagane hasło</string>
     <string name="password_protected_message">Ten plik PDF jest chroniony hasłem. Wprowadź hasło, aby go otworzyć.</string>
@@ -960,7 +881,6 @@
     <string name="hide_password">Ukryj hasło</string>
     <string name="show_password">Pokaż hasło</string>
     <string name="remember_password">Zapamiętaj hasło dla tego pliku</string>
-
     <!-- More Options Sheet -->
     <string name="additional_tools">Dodatkowe narzędzia i akcje</string>
     <string name="view_manage_bookmarks">Przeglądaj zapisane strony i zarządzaj nimi</string>
@@ -970,7 +890,6 @@
     <string name="print_document">Wydrukuj ten dokument</string>
     <string name="document_info">Informacje o dokumencie</string>
     <string name="view_file_details">Wyświetl szczegóły pliku i metadane</string>
-
     <!-- View Mode Sheet -->
     <string name="view_options">Opcje widoku</string>
     <string name="customize_reading_layout">Dostosuj układ czytania</string>
@@ -998,7 +917,6 @@
     <string name="scrubber_on_scroll_desc">Pokaż suwak stron podczas przewijania, gdy pasek narzędzi jest ukryty</string>
     <string name="tap_to_turn_page">Dotknij, aby przewrócić stronę</string>
     <string name="tap_to_turn_page_desc">Dotknij boków strony, aby przechodzić między stronami</string>
-
     <!-- Display Sheet -->
     <string name="display_settings">Ustawienia ekranu</string>
     <string name="theme_brightness_options">Motyw, jasność i opcje ekranu</string>
@@ -1011,13 +929,11 @@
     <string name="prevent_screen_off">Zapobiegaj wyłączaniu ekranu</string>
     <string name="keep_image_colors">Zachowaj kolory obrazów</string>
     <string name="keep_image_colors_desc">Pokazuj obrazy w ich prawdziwych kolorach</string>
-
     <!-- Page Jump Sheet -->
     <string name="jump_to_page_title">Przejdź do strony</string>
     <string name="enter_page_range">Wprowadź numer strony (1 - %d)</string>
     <string name="page_number_placeholder">Numer strony</string>
     <string name="enter_valid_page">Wprowadź liczbę z zakresu od 1 do %d</string>
-
     <!-- Auto Scroll Sheet -->
     <string name="auto_scroll_title">Automatyczne przewijanie</string>
     <string name="hands_free_reading">Tryb czytania bez użycia rąk</string>
@@ -1032,7 +948,6 @@
     <string name="faster">Szybciej</string>
     <string name="start_auto_scroll">Rozpocznij automatyczne przewijanie</string>
     <string name="auto_scroll_hint">Dotknij ekranu, aby wstrzymać/wznowić. Użyj nakładki, aby zatrzymać.</string>
-
     <!-- Zoom Sheet -->
     <string name="zoom_display">Powiększenie i ekran</string>
     <string name="adjust_view_orientation">Dostosuj rozmiar i orientację widoku</string>
@@ -1043,14 +958,12 @@
     <string name="lock_portrait">Zablokuj w trybie pionowym</string>
     <string name="lock_landscape">Zablokuj w trybie poziomym</string>
     <string name="current_zoom_label">Bieżące powiększenie</string>
-
     <!-- Bookmarks Sheet -->
     <string name="bookmark_count">%d zakładka</string>
     <string name="bookmarks_count">Zakładki: %d</string>
     <string name="delete_bookmark">Usuń zakładkę</string>
     <string name="bookmark_hint">Dotknij ikony zakładki, aby zapisać strony</string>
     <string name="page_number_title">Strona %d</string>
-
     <!-- PDF Info Dialog -->
     <string name="document_information">Informacje o dokumencie</string>
     <string name="pdf_version_label">PDF %s</string>
@@ -1073,7 +986,6 @@
     <string name="xfa_label">XFA</string>
     <string name="web_optimized">Zoptymalizowany pod kątem sieci web</string>
     <string name="location_section">Lokalizacja</string>
-
     <!-- Top Bar Menu Panel -->
     <string name="document_options">Opcje dokumentu</string>
     <string name="share_print_manage">Udostępniaj, drukuj i zarządzaj</string>
@@ -1091,15 +1003,12 @@
     <string name="remove_from_favourites_desc">Usuń z listy ulubionych</string>
     <string name="add_to_favourites_desc">Dodaj do listy ulubionych</string>
     <string name="delete_file_permanently">Trwale usuń ten plik</string>
-
     <!-- Delete Confirm Dialog -->
     <string name="delete_pdf_question">Usunąć PDF?</string>
     <string name="action_cannot_undo">Tej operacji nie można cofnąć</string>
-
     <!-- Remove Favorite Sheet -->
     <string name="remove_from_favourites_question">Usunąć z ulubionych?</string>
     <string name="remove_from_list_message">Spowoduje to usunięcie z Twojej listy</string>
-
     <!-- Reader Components -->
     <string name="go_to_page">Przejdź do strony</string>
     <string name="back_to_page">Wróć do strony %d</string>
@@ -1149,16 +1058,13 @@
     <string name="error_loading">Błąd podczas ładowania pliku PDF</string>
     <string name="try_again_message">Coś poszło nie tak podczas ładowania tego pliku PDF. Spróbuj ponownie.</string>
     <string name="cd_page_thumbnails">Miniatury stron</string>
-
     <!-- Floating Search Bar -->
     <string name="search_in_document">Szukaj w dokumencie…</string>
-
     <!-- Floating Control Bar -->
     <string name="cd_view_options">Opcje widoku</string>
     <string name="cd_zoom">Powiększenie</string>
     <string name="cd_display_settings">Ustawienia ekranu</string>
     <string name="cd_control_more_options">Więcej opcji</string>
-
     <!-- Reader Sidebar -->
     <string name="reading">Czytanie</string>
     <string name="settings_label">Ustawienia</string>
@@ -1170,10 +1076,8 @@
     <string name="rotation_locked">Obrót zablokowany</string>
     <string name="auto_rotate">Automatyczny obrót</string>
     <string name="swipe_to_close">Przesuń w prawo, aby zamknąć</string>
-
     <!-- Tools Screen -->
     <string name="coming_soon">Wkrótce</string>
-
     <!-- Enhanced Table of Contents -->
     <string name="document_navigation">Nawigacja w dokumencie</string>
     <string name="no_contents_available">Brak dostępnej zawartości</string>
@@ -1188,16 +1092,13 @@
     <string name="toc_tab_attachments">Załączniki</string>
     <string name="attachment_type_hint">Plik %1$s · Dotknij, aby otworzyć</string>
     <string name="attachment_tap_hint">Dotknij, aby otworzyć</string>
-
     <!-- Settings Panel (Reader) -->
     <string name="reading_settings">Ustawienia czytania</string>
     <string name="full_screen_mode">Tryb pełnoekranowy</string>
     <string name="auto_rotate_enabled">Automatyczny obrót włączony</string>
     <string name="delete_pdf">Usuń PDF</string>
-
     <!-- Folder Detail Screen -->
     <string name="delete_files_warning">Ta operacja jest nieodwracalna. Pliki zostaną trwale usunięte z urządzenia.</string>
-
     <!-- Settings Screen -->
     <string name="reader_section">Czytnik</string>
     <string name="about_section">O aplikacji</string>
@@ -1231,7 +1132,6 @@
     <string name="about_developer">O programiście</string>
     <string name="app_license">Licencja aplikacji</string>
     <string name="follow_system_brightness">Podążaj za jasnością systemową</string>
-
     <!-- Settings Screen - Remaining strings -->
     <string name="install_pending_update">Zainstaluj oczekującą aktualizację</string>
     <string name="install_downloaded_version">Zainstaluj pobraną wersję %s</string>
@@ -1286,7 +1186,6 @@
     <string name="set_custom_level">Ustaw niestandardowy poziom</string>
     <string name="custom">Niestandardowy</string>
     <string name="app_logo">Logo aplikacji</string>
-
     <!-- Privacy Policy -->
     <string name="no_data_collection">Brak gromadzenia lub udostępniania danych</string>
     <string name="no_analytics">Brak analityki lub śledzenia</string>
@@ -1302,7 +1201,6 @@
     <string name="privacy_password_content">Jeśli zdecydujesz się zapisywać hasła do chronionych plików PDF, są one przechowywane lokalnie przy użyciu szyfrowanego magazynu. Hasła nigdy nie opuszczają Twojego urządzenia.</string>
     <string name="privacy_update_title">Sprawdzanie aktualizacji</string>
     <string name="privacy_update_content">Aplikacja może opcjonalnie sprawdzać aktualizacje za pośrednictwem publicznego API GitHub. Ta funkcja pobiera wyłącznie informacje o wydaniu i nie wysyła żadnych danych osobowych, identyfikatorów urządzenia ani statystyk użytkowania. Możesz wyłączyć automatyczne sprawdzanie aktualizacji w Ustawieniach lub sprawdzać ręcznie, kiedy chcesz.</string>
-
     <!-- GPL License Terms -->
     <string name="gpl_freedom_use">Wolność używania oprogramowania w dowolnym celu</string>
     <string name="gpl_freedom_study">Wolność studiowania i modyfikowania kodu źródłowego</string>
@@ -1310,7 +1208,6 @@
     <string name="gpl_freedom_modify">Wolność rozpowszechniania zmodyfikowanych wersji</string>
     <string name="gpl_derivative">Prace pochodne muszą być open source na licencji GPL v3.0</string>
     <string name="gpl_notice">PDF Reader Pro — czytnik PDF o otwartym kodzie źródłowym\nCopyright (C) %d K M Rejowan Ahmmed\n\nTen program jest wolnym oprogramowaniem: możesz go rozpowszechniać i/lub modyfikować na warunkach Powszechnej Licencji Publicznej GNU opublikowanej przez Free Software Foundation, albo wersji 3 tej licencji, albo (według Twojego wyboru) dowolnej późniejszej wersji.\n\nTen program jest rozpowszechniany w nadziei, że będzie użyteczny, ale BEZ ŻADNEJ GWARANCJI; nawet bez domniemanej gwarancji PRZYDATNOŚCI HANDLOWEJ lub PRZYDATNOŚCI DO OKREŚLONEGO CELU. Szczegóły znajdziesz w Powszechnej Licencji Publicznej GNU.</string>
-
     <!-- Onboarding -->
     <string name="onboarding_welcome">Witaj w\nPDF Reader Pro</string>
     <string name="onboarding_welcome_desc">Czysty, lekki czytnik PDF stworzony z myślą o prostocie. Otwarty kod źródłowy, bez reklam i z szacunkiem dla Twojej prywatności.</string>
@@ -1322,26 +1219,20 @@
     <string name="onboarding_storage_desc">Przyznaj dostęp, aby skanować i wyświetlać pliki PDF. Twoje dokumenty pozostają prywatne i nigdy nie są przesyłane.</string>
     <string name="onboarding_grant_access">Przyznaj dostęp</string>
     <string name="onboarding_continue">Kontynuuj</string>
-
     <!-- Folder -->
     <string name="folder_empty">Ten folder jest pusty</string>
     <string name="no_pdf_in_folder">Nie znaleziono plików PDF w tym folderze.</string>
-
     <!-- Settings - Update Interval (renamed) -->
     <string name="auto_check_interval">Interwał automatycznego sprawdzania</string>
-
     <!-- Install pending -->
     <string name="pending_update_ready">Wersja v%1$s jest gotowa do instalacji</string>
-
     <!-- Creator links -->
     <string name="link_website">Strona internetowa</string>
     <string name="link_email">E-mail</string>
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
-
     <!-- Selected -->
     <string name="selected">Wybrane</string>
-
     <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">Podgląd</string>
     <string name="cd_view">Widok</string>
@@ -1359,7 +1250,6 @@
     <string name="cd_show_password">Pokaż hasło</string>
     <string name="cd_hide_password">Ukryj hasło</string>
     <string name="cd_favorite">Ulubione</string>
-
     <!-- Tool Screen Titles -->
     <string name="tool_lock_pdf">Zablokuj PDF</string>
     <string name="tool_compress_pdf">Skompresuj PDF</string>
@@ -1370,13 +1260,11 @@
     <string name="tool_add_watermark">Dodaj znak wodny</string>
     <string name="tool_rotate_pdf_pages">Obróć strony PDF</string>
     <string name="tool_reorder_pdf_pages">Zmień kolejność stron PDF</string>
-
     <!-- Tool Screen Subtitles/Descriptions -->
     <string name="tool_lock_desc">Dodaj ochronę hasłem, aby zapobiec nieautoryzowanemu dostępowi</string>
     <string name="tool_merge_desc">Połącz wiele plików PDF w jeden</string>
     <string name="tool_pdf_to_images_desc">Eksportuj strony PDF jako pliki obrazów</string>
     <string name="tool_image_to_pdf_desc">Konwertuj swoje obrazy na pojedynczy dokument PDF</string>
-
     <!-- Common Tool Actions -->
     <string name="new_file">Nowy plik</string>
     <string name="new_export">Nowy eksport</string>
@@ -1388,7 +1276,6 @@
     <string name="save_reordered_pdf">Zapisz plik PDF o nowej kolejności</string>
     <string name="create_pdf">Utwórz PDF</string>
     <string name="overwrite_original_file">Nadpisz oryginalny plik</string>
-
     <!-- Loading/Processing Messages -->
     <string name="loading_pages">Ładowanie stron…</string>
     <string name="loading_pdf">Ładowanie pliku PDF…</string>
@@ -1405,7 +1292,6 @@
     <string name="removing_pages">Usuwanie…</string>
     <string name="adding_page_numbers">Dodawanie numerów stron…</string>
     <string name="adding_watermark">Dodawanie znaku wodnego…</string>
-
     <!-- Success Messages -->
     <string name="rotation_complete">Obrót zakończony!</string>
     <string name="pages_reordered">Kolejność stron zmieniona!</string>
@@ -1417,7 +1303,6 @@
     <string name="images_exported">Obrazy wyeksportowane!</string>
     <string name="pdf_created">Plik PDF utworzony!</string>
     <string name="page_numbers_added">Numery stron dodane!</string>
-
     <!-- Success Descriptions -->
     <string name="pages_rotated_count">Obrócone strony: %d</string>
     <string name="pdf_saved_new_order">Twój plik PDF został zapisany z nową kolejnością stron</string>
@@ -1426,7 +1311,6 @@
     <string name="images_created_count">Utworzone obrazy %2$s: %1$d</string>
     <string name="images_converted_count">Przekonwertowane obrazy: %d</string>
     <string name="pages_removed_count">Usunięte strony: %d</string>
-
     <!-- Section Labels -->
     <string name="section_rotation">OBRÓT</string>
     <string name="section_select_pages">WYBIERZ STRONY</string>
@@ -1444,19 +1328,16 @@
     <string name="section_watermark_type">TYP ZNAKU WODNEGO</string>
     <string name="section_text_settings">USTAWIENIA TEKSTU</string>
     <string name="section_start_page">STRONA POCZĄTKOWA</string>
-
     <!-- Password Descriptions -->
     <string name="owner_password_desc">Hasło pełnego dostępu do uprawnień edycji</string>
     <string name="user_password_desc">Wymagane do otwarcia pliku PDF. Pozostaw puste, aby nie wymagać hasła przy otwieraniu.</string>
     <string name="enter_password_desc">Wprowadź hasło, aby odblokować ten plik PDF</string>
     <string name="permissions_desc">Co użytkownicy mogą robić po otwarciu za pomocą hasła użytkownika</string>
     <string name="allow_copying_content">Zezwól na kopiowanie zawartości</string>
-
     <!-- Protection Status -->
     <string name="password_protected">Chroniony hasłem</string>
     <string name="not_protected">Niechroniony</string>
     <string name="no_password_protection">Brak ochrony hasłem</string>
-
     <!-- Page Selection -->
     <string name="selected_of_count">Wybrano %1$d z %2$d</string>
     <string name="page_numbers_label">Numery stron</string>
@@ -1471,17 +1352,14 @@
     <string name="page_selection_all">Wszystkie strony (1-%1$d)</string>
     <string name="page_selection_range">Strony %1$d-%2$d</string>
     <string name="page_selection_custom">Strony %1$s</string>
-
     <!-- Reorder -->
     <string name="drag_hint">Przytrzymaj i przeciągnij strony, aby zmienić kolejność</string>
-
     <!-- Format Options -->
     <string name="format_png">PNG</string>
     <string name="format_jpg">JPG</string>
     <string name="format_lossless">Jakość bezstratna</string>
     <string name="format_smaller_size">Mniejszy rozmiar pliku</string>
     <string name="will_create_images">Obrazy %2$s do utworzenia: %1$d</string>
-
     <!-- Compression Levels -->
     <string name="compression_low">Niski</string>
     <string name="compression_medium">Średni</string>
@@ -1491,23 +1369,19 @@
     <string name="compression_medium_desc">Zrównoważona jakość i rozmiar</string>
     <string name="compression_high_desc">Mniejszy plik, obniżona jakość</string>
     <string name="compression_extreme_desc">Najmniejszy plik, najniższa jakość</string>
-
     <!-- Split Modes -->
     <string name="split_extract_pages">Wyodrębnij strony</string>
     <string name="split_single_pages">Pojedyncze strony</string>
     <string name="split_range_desc">Podziel na pojedynczy PDF z zakresu stron</string>
     <string name="split_extract_desc">Wyodrębnij konkretne strony jako nowy PDF</string>
     <string name="split_single_desc">Każda strona jako oddzielny plik PDF</string>
-
     <!-- Merge -->
     <string name="no_pdfs_selected">Nie wybrano plików PDF</string>
     <string name="add_pdfs_to_merge">Dodaj dwa lub więcej plików PDF, aby scalić je w jeden dokument</string>
     <string name="files_selected">Wybrane pliki: %d</string>
     <string name="files_merged">Scalone pliki: %d</string>
-
     <!-- Image to PDF -->
     <string name="images_selected">Wybrane obrazy: %d</string>
-
     <!-- Page Numbers -->
     <string name="position_bottom_left">Lewy dolny</string>
     <string name="position_bottom_center">Dolny środkowy</string>
@@ -1518,7 +1392,6 @@
     <string name="format_simple">1, 2, 3</string>
     <string name="format_dash">- 1 -</string>
     <string name="format_page_of">Strona 1 z N</string>
-
     <!-- Watermark -->
     <string name="watermark_text_label">Tekst znaku wodnego</string>
     <string name="watermark_text_hint">Wprowadź tekst znaku wodnego</string>
@@ -1527,15 +1400,12 @@
     <string name="scale">Skala</string>
     <string name="watermark_preview_area">Obszar podglądu znaku wodnego</string>
     <string name="no_image_selected">Nie wybrano obrazu</string>
-
     <!-- Remove Pages -->
     <string name="pages_to_remove">Strony do usunięcia: %d</string>
     <string name="remove_selected_pages">Usuń strony (%d)</string>
     <string name="remove_pages_btn">Usuń strony</string>
     <string name="select_pages_to_remove_hint">Dotknij stron, aby wybrać je do usunięcia</string>
-
     <!-- File Info in Results -->
-
     <!-- Merge Screen -->
     <string name="pdf_extension">.pdf</string>
     <string name="select_pdfs">Wybierz pliki PDF</string>
@@ -1555,7 +1425,6 @@
     <string name="select_pages">Wybierz strony</string>
     <string name="selection_mode">Tryb wyboru</string>
     <string name="pages_range_info">Zostaną uwzględnione strony od %1$s do %2$s</string>
-
     <!-- Split Screen -->
     <string name="change">Zmień</string>
     <string name="page_ranges_label">Zakresy stron</string>
@@ -1590,7 +1459,6 @@
     <string name="split_complete">Dzielenie zakończone!</string>
     <string name="one_file_created">Utworzono 1 plik</string>
     <string name="files_created_count">Utworzone pliki: %1$d</string>
-
     <!-- Remove Pages Screen -->
     <string name="select_page_range">Wybierz zakres stron</string>
     <string name="select_action">Wybierz</string>
@@ -1624,7 +1492,6 @@
     <string name="removing">Usuwanie…</string>
     <string name="pages_removed">Strony usunięte!</string>
     <string name="one_page_removed">Usunięto 1 stronę</string>
-
     <!-- Page Numbers Screen -->
     <string name="prefix_label">Prefiks</string>
     <string name="prefix_hint">np. Strona</string>
@@ -1637,7 +1504,6 @@
     <string name="color_g">G</string>
     <string name="color_b">B</string>
     <string name="skip_first_pages">Pomiń pierwsze N stron</string>
-
     <!-- Input Validation Messages -->
     <string name="validation_password_required">Hasło jest wymagane</string>
     <string name="validation_password_too_short">Minimalna liczba znaków hasła: %1$d</string>
@@ -1661,7 +1527,6 @@
     <string name="validation_color_invalid">Nieprawidłowa wartość koloru</string>
     <string name="validation_color_range">Wartość koloru musi wynosić 0-255</string>
     <string name="password_min_hint">Wymagane minimum 4 znaki</string>
-
     <plurals name="sign_unsaved_count">
         <item quantity="one">%d podpis niezapisany</item>
         <item quantity="few">%d podpisy niezapisane</item>
