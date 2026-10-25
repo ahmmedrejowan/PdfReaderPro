@@ -1,6 +1,7 @@
 # Crowdin adds [ci skip] to its commit messages by default, which stops CI
 # (and the translation check) from running on its pull requests.
 append_commit_message: false
+commit_message: "New translations %original_file_name% (%language%)"
 
 files:
   - source: /app/src/main/res/values/strings.xml
