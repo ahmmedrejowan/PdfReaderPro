@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Chinese** - The app is available in Simplified Chinese (#107)
+
 ---
 
 ## [2.6.0] - 2026-10-23
