@@ -109,6 +109,18 @@
     <string name="sort_folders">Sortuj foldery</string>
     <string name="choose_sort_pdfs">Wybierz sposób organizacji plików PDF</string>
     <string name="choose_sort_folders">Wybierz sposób organizacji folderów</string>
+    <string name="sort_desc_name">Sortuj według nazwy pliku</string>
+    <string name="sort_desc_date">Sortuj według daty modyfikacji</string>
+    <string name="sort_desc_size">Sortuj według rozmiaru</string>
+    <string name="sort_newest">Najnowsze</string>
+    <string name="sort_oldest">Najstarsze</string>
+    <string name="sort_largest">Największe</string>
+    <string name="sort_smallest">Najmniejsze</string>
+    <string name="folder_sort_desc_name">Sortuj według nazwy folderu</string>
+    <string name="folder_sort_title_count">Liczba plików PDF</string>
+    <string name="folder_sort_desc_count">Sortuj według liczby plików PDF</string>
+    <string name="sort_most">Najwięcej</string>
+    <string name="sort_least">Najmniej</string>
     <string name="sort_by_name">Według nazwy</string>
     <string name="sort_by_date">Według daty</string>
     <string name="sort_by_size">Według rozmiaru</string>
@@ -1817,5 +1829,11 @@
         <item quantity="few">Pliki PDF do utworzenia: %1$d</item>
         <item quantity="many">Pliki PDF do utworzenia: %1$d</item>
         <item quantity="other">Pliki PDF do utworzenia: %1$d</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="few">%d PDF</item>
+        <item quantity="many">%d PDF</item>
+        <item quantity="other">%d PDF</item>
     </plurals>
 </resources>

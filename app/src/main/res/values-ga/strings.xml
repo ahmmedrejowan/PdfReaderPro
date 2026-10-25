@@ -109,6 +109,18 @@
     <string name="sort_folders">Sórtáil Fillteáin</string>
     <string name="choose_sort_pdfs">Roghnaigh conas do PDFanna a eagrú</string>
     <string name="choose_sort_folders">Roghnaigh conas fillteáin a eagrú</string>
+    <string name="sort_desc_name">Sórtáil de réir ainm comhaid</string>
+    <string name="sort_desc_date">Sórtáil de réir dáta athraithe</string>
+    <string name="sort_desc_size">Sórtáil de réir méide</string>
+    <string name="sort_newest">Is nua</string>
+    <string name="sort_oldest">Is sine</string>
+    <string name="sort_largest">Is mó</string>
+    <string name="sort_smallest">Is lú</string>
+    <string name="folder_sort_desc_name">Sórtáil de réir ainm fillteáin</string>
+    <string name="folder_sort_title_count">Líon na PDFanna</string>
+    <string name="folder_sort_desc_count">Sórtáil de réir líon na PDFanna</string>
+    <string name="sort_most">An líon is mó</string>
+    <string name="sort_least">An líon is lú</string>
     <string name="sort_by_name">De réir Ainm</string>
     <string name="sort_by_date">De réir Dáta</string>
     <string name="sort_by_size">De réir Méide</string>
@@ -1843,5 +1855,12 @@
         <item quantity="few">Comhaid PDF ar leith le cruthú: %1$d</item>
         <item quantity="many">Comhaid PDF ar leith le cruthú: %1$d</item>
         <item quantity="other">Comhaid PDF ar leith le cruthú: %1$d</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="two">%d PDF</item>
+        <item quantity="few">%d PDF</item>
+        <item quantity="many">%d PDF</item>
+        <item quantity="other">%d PDF</item>
     </plurals>
 </resources>

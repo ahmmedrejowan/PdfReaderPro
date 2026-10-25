@@ -109,6 +109,18 @@
     <string name="sort_folders">Ordner sortieren</string>
     <string name="choose_sort_pdfs">Wählen Sie, wie Ihre PDFs organisiert werden sollen</string>
     <string name="choose_sort_folders">Wählen Sie, wie Ordner organisiert werden sollen</string>
+    <string name="sort_desc_name">Nach Dateiname sortieren</string>
+    <string name="sort_desc_date">Nach Änderungsdatum sortieren</string>
+    <string name="sort_desc_size">Nach Dateigröße sortieren</string>
+    <string name="sort_newest">Neueste</string>
+    <string name="sort_oldest">Älteste</string>
+    <string name="sort_largest">Größte</string>
+    <string name="sort_smallest">Kleinste</string>
+    <string name="folder_sort_desc_name">Nach Ordnername sortieren</string>
+    <string name="folder_sort_title_count">Anzahl der PDFs</string>
+    <string name="folder_sort_desc_count">Nach Anzahl der PDFs sortieren</string>
+    <string name="sort_most">Meiste</string>
+    <string name="sort_least">Wenigste</string>
     <string name="sort_by_name">Nach Name</string>
     <string name="sort_by_date">Nach Datum</string>
     <string name="sort_by_size">Nach Größe</string>
@@ -1765,5 +1777,9 @@
     <plurals name="split_will_create_separate_pdfs">
         <item quantity="one">Erstellt %1$d separate PDF-Datei</item>
         <item quantity="other">Erstellt %1$d separate PDF-Dateien</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="other">%d PDFs</item>
     </plurals>
 </resources>

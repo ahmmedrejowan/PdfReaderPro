@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.rejowan.pdfreaderpro.R
@@ -136,7 +137,7 @@ fun FolderItem(
                         color = FolderAmber.copy(alpha = 0.2f)
                     ) {
                         Text(
-                            text = "${folder.pdfCount} PDF${if (folder.pdfCount != 1) "s" else ""}",
+                            text = pluralStringResource(R.plurals.pdf_count_short, folder.pdfCount, folder.pdfCount),
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.Medium
                             ),

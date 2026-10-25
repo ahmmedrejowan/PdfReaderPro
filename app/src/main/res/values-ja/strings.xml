@@ -109,6 +109,18 @@
     <string name="sort_folders">フォルダを並べ替え</string>
     <string name="choose_sort_pdfs">PDFの整理方法を選択</string>
     <string name="choose_sort_folders">フォルダの整理方法を選択</string>
+    <string name="sort_desc_name">ファイル名で並べ替え</string>
+    <string name="sort_desc_date">更新日時で並べ替え</string>
+    <string name="sort_desc_size">サイズで並べ替え</string>
+    <string name="sort_newest">新しい順</string>
+    <string name="sort_oldest">古い順</string>
+    <string name="sort_largest">大きい順</string>
+    <string name="sort_smallest">小さい順</string>
+    <string name="folder_sort_desc_name">フォルダ名で並べ替え</string>
+    <string name="folder_sort_title_count">PDF の数</string>
+    <string name="folder_sort_desc_count">PDF の数で並べ替え</string>
+    <string name="sort_most">多い順</string>
+    <string name="sort_least">少ない順</string>
     <string name="sort_by_name">名前順</string>
     <string name="sort_by_date">日付順</string>
     <string name="sort_by_size">サイズ順</string>
@@ -1740,5 +1752,8 @@
     </plurals>
     <plurals name="split_will_create_separate_pdfs">
         <item quantity="other">%1$d個の別々のPDFファイルを作成します</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="other">%d 件の PDF</item>
     </plurals>
 </resources>

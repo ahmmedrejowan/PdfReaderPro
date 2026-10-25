@@ -109,6 +109,18 @@
     <string name="sort_folders">Ordenar carpetas</string>
     <string name="choose_sort_pdfs">Elige cómo organizar tus PDF</string>
     <string name="choose_sort_folders">Elige cómo organizar las carpetas</string>
+    <string name="sort_desc_name">Ordenar por nombre de archivo</string>
+    <string name="sort_desc_date">Ordenar por fecha de modificación</string>
+    <string name="sort_desc_size">Ordenar por tamaño</string>
+    <string name="sort_newest">Más recientes</string>
+    <string name="sort_oldest">Más antiguos</string>
+    <string name="sort_largest">Más grandes</string>
+    <string name="sort_smallest">Más pequeños</string>
+    <string name="folder_sort_desc_name">Ordenar por nombre de carpeta</string>
+    <string name="folder_sort_title_count">Número de PDF</string>
+    <string name="folder_sort_desc_count">Ordenar por número de PDF</string>
+    <string name="sort_most">Más</string>
+    <string name="sort_least">Menos</string>
     <string name="sort_by_name">Por nombre</string>
     <string name="sort_by_date">Por fecha</string>
     <string name="sort_by_size">Por tamaño</string>
@@ -1791,5 +1803,10 @@
         <item quantity="one">Creará %1$d archivo PDF separado</item>
         <item quantity="many">Creará %1$d archivos PDF separados</item>
         <item quantity="other">Creará %1$d archivos PDF separados</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="many">%d PDF</item>
+        <item quantity="other">%d PDF</item>
     </plurals>
 </resources>

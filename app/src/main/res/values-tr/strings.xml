@@ -109,6 +109,18 @@
     <string name="sort_folders">Klasörleri Sırala</string>
     <string name="choose_sort_pdfs">PDF\'lerinizi nasıl düzenleyeceğinizi seçin</string>
     <string name="choose_sort_folders">Klasörlerinizi nasıl düzenleyeceğinizi seçin</string>
+    <string name="sort_desc_name">Dosya adına göre sırala</string>
+    <string name="sort_desc_date">Değiştirilme tarihine göre sırala</string>
+    <string name="sort_desc_size">Boyuta göre sırala</string>
+    <string name="sort_newest">En yeni</string>
+    <string name="sort_oldest">En eski</string>
+    <string name="sort_largest">En büyük</string>
+    <string name="sort_smallest">En küçük</string>
+    <string name="folder_sort_desc_name">Klasör adına göre sırala</string>
+    <string name="folder_sort_title_count">PDF Sayısı</string>
+    <string name="folder_sort_desc_count">PDF sayısına göre sırala</string>
+    <string name="sort_most">En çok</string>
+    <string name="sort_least">En az</string>
     <string name="sort_by_name">Ada Göre</string>
     <string name="sort_by_date">Tarihe Göre</string>
     <string name="sort_by_size">Boyuta Göre</string>
@@ -1765,5 +1777,9 @@
     <plurals name="split_will_create_separate_pdfs">
         <item quantity="one">%1$d ayrı PDF dosyası oluşturulacak</item>
         <item quantity="other">%1$d ayrı PDF dosyası oluşturulacak</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="other">%d PDF</item>
     </plurals>
 </resources>

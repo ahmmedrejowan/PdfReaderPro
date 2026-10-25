@@ -90,6 +90,18 @@
     <string name="sort_folders">ফোল্ডার সাজান</string>
     <string name="choose_sort_pdfs">আপনার PDF গুলো কীভাবে সাজাবেন তা বেছে নিন</string>
     <string name="choose_sort_folders">ফোল্ডারগুলো কীভাবে সাজাবেন তা বেছে নিন</string>
+    <string name="sort_desc_name">ফাইলের নাম অনুযায়ী সাজান</string>
+    <string name="sort_desc_date">শেষ বদলানোর সময় অনুযায়ী সাজান</string>
+    <string name="sort_desc_size">সাইজ অনুযায়ী সাজান</string>
+    <string name="sort_newest">নতুন আগে</string>
+    <string name="sort_oldest">পুরনো আগে</string>
+    <string name="sort_largest">বড় আগে</string>
+    <string name="sort_smallest">ছোট আগে</string>
+    <string name="folder_sort_desc_name">ফোল্ডারের নাম অনুযায়ী সাজান</string>
+    <string name="folder_sort_title_count">PDF সংখ্যা</string>
+    <string name="folder_sort_desc_count">PDF সংখ্যা অনুযায়ী সাজান</string>
+    <string name="sort_most">বেশি আগে</string>
+    <string name="sort_least">কম আগে</string>
     <string name="sort_by_name">নাম অনুযায়ী</string>
     <string name="sort_by_date">তারিখ অনুযায়ী</string>
     <string name="sort_by_size">সাইজ অনুযায়ী</string>
@@ -1510,5 +1522,9 @@
     <plurals name="split_will_create_separate_pdfs">
         <item quantity="one">%1$d টি আলাদা PDF ফাইল তৈরি হবে</item>
         <item quantity="other">%1$d টি আলাদা PDF ফাইল তৈরি হবে</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d টি PDF</item>
+        <item quantity="other">%d টি PDF</item>
     </plurals>
 </resources>

@@ -109,6 +109,18 @@
     <string name="sort_folders">文件夹排序</string>
     <string name="choose_sort_pdfs">选择 PDF 的排列方式</string>
     <string name="choose_sort_folders">选择文件夹的排列方式</string>
+    <string name="sort_desc_name">按文件名排序</string>
+    <string name="sort_desc_date">按修改时间排序</string>
+    <string name="sort_desc_size">按文件大小排序</string>
+    <string name="sort_newest">最新</string>
+    <string name="sort_oldest">最早</string>
+    <string name="sort_largest">最大</string>
+    <string name="sort_smallest">最小</string>
+    <string name="folder_sort_desc_name">按文件夹名称排序</string>
+    <string name="folder_sort_title_count">PDF 数量</string>
+    <string name="folder_sort_desc_count">按 PDF 数量排序</string>
+    <string name="sort_most">最多</string>
+    <string name="sort_least">最少</string>
     <string name="sort_by_name">按名称</string>
     <string name="sort_by_date">按日期</string>
     <string name="sort_by_size">按大小</string>
@@ -1739,5 +1751,8 @@
     </plurals>
     <plurals name="split_will_create_separate_pdfs">
         <item quantity="other">将创建 %1$d 个单独的 PDF 文件</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="other">%d 个 PDF</item>
     </plurals>
 </resources>

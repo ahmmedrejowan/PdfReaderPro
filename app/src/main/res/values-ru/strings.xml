@@ -109,6 +109,18 @@
     <string name="sort_folders">Сортировать папки</string>
     <string name="choose_sort_pdfs">Выберите способ организации PDF</string>
     <string name="choose_sort_folders">Выберите способ организации папок</string>
+    <string name="sort_desc_name">Сортировать по имени файла</string>
+    <string name="sort_desc_date">Сортировать по дате изменения</string>
+    <string name="sort_desc_size">Сортировать по размеру</string>
+    <string name="sort_newest">Сначала новые</string>
+    <string name="sort_oldest">Сначала старые</string>
+    <string name="sort_largest">Сначала большие</string>
+    <string name="sort_smallest">Сначала маленькие</string>
+    <string name="folder_sort_desc_name">Сортировать по имени папки</string>
+    <string name="folder_sort_title_count">Количество PDF</string>
+    <string name="folder_sort_desc_count">Сортировать по количеству PDF</string>
+    <string name="sort_most">Больше</string>
+    <string name="sort_least">Меньше</string>
     <string name="sort_by_name">По имени</string>
     <string name="sort_by_date">По дате</string>
     <string name="sort_by_size">По размеру</string>
@@ -1817,5 +1829,11 @@
         <item quantity="few">Будет создано отдельных PDF-файлов: %1$d</item>
         <item quantity="many">Будет создано отдельных PDF-файлов: %1$d</item>
         <item quantity="other">Будет создано отдельных PDF-файлов: %1$d</item>
+    </plurals>
+    <plurals name="pdf_count_short">
+        <item quantity="one">%d PDF</item>
+        <item quantity="few">%d PDF</item>
+        <item quantity="many">%d PDF</item>
+        <item quantity="other">%d PDF</item>
     </plurals>
 </resources>

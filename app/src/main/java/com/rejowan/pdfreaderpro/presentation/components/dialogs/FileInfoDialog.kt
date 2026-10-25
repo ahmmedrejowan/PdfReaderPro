@@ -1,6 +1,7 @@
 package com.rejowan.pdfreaderpro.presentation.components.dialogs
 
 import android.content.res.Configuration
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.rejowan.pdfreaderpro.R
 import androidx.compose.animation.AnimatedVisibility
@@ -234,7 +235,7 @@ private fun FileInfoContent(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             StatChip(
-                label = "${pdfFile.pageCount} pages",
+                label = pluralStringResource(R.plurals.pages_count, pdfFile.pageCount, pdfFile.pageCount),
                 color = AccentBlue,
                 modifier = Modifier.weight(1f)
             )
