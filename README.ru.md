@@ -163,6 +163,16 @@ app/
 
 ---
 
+## Переводы
+
+[![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
+
+PDF Reader Pro доступен на языках: English, বাংলা, 中文, Deutsch, Español, Français, Gaeilge, Italiano, 日本語, Polski, Português, Русский и Türkçe.
+
+Переводы делает сообщество на **[Crowdin](https://crowdin.com/project/pdf-reader-pro)**: войдите, выберите свой язык и переводите прямо в браузере, без программирования. Вашего языка нет или есть вопрос? Присоединяйтесь к [обсуждению переводов](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/108).
+
+---
+
 ## Участие в разработке
 
 Мы приветствуем вклад! Пожалуйста, прочитайте [CONTRIBUTING.md](CONTRIBUTING.md) для получения рекомендаций.

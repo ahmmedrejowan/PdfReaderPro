@@ -163,6 +163,16 @@ To build and run the project, follow these steps:
 
 ---
 
+## Translations
+
+[![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
+
+PDF Reader Pro is available in English, বাংলা, 中文, Deutsch, Español, Français, Gaeilge, Italiano, 日本語, Polski, Português, Русский and Türkçe.
+
+Translations are made by the community on **[Crowdin](https://crowdin.com/project/pdf-reader-pro)**: sign in, pick your language and translate in the browser, no coding needed. Missing your language or have a question? Join the [translation discussion](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/108).
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.

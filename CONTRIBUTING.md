@@ -32,7 +32,7 @@ Translations are managed on **[Crowdin](https://crowdin.com/project/pdf-reader-p
 
 Please translate there rather than editing the `strings.xml` files directly, since Crowdin is where the translations live and changes made only in the repository can be overwritten.
 
-Missing your language? Ask in [Discussions](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/categories/ideas) and it can be added. Maintainers add it as a target language in Crowdin and its code to `AppLanguage.supported`, so it appears in the app's language setting.
+Missing your language, or not sure about a string? Ask in the [translation discussion](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/108) and it can be added. Maintainers add it as a target language in Crowdin and its code to `AppLanguage.supported`, so it appears in the app's language setting.
 
 ## Setting Up Locally
 
