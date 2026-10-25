@@ -5,3 +5,5 @@
 files:
   - source: /app/src/main/res/values/strings.xml
     translation: /app/src/main/res/values-%two_letters_code%/strings.xml
+    # Android strings format, so plurals, escapes and translatable="false" are understood.
+    type: android
