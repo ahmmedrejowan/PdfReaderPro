@@ -38,7 +38,7 @@ Missing your language, or not sure about a string? Ask in the [translation discu
 
 **You'll need:**
 - Android Studio (Ladybug or newer)
-- JDK 17
+- JDK 21 (Android Studio's bundled runtime works)
 
 **Quick start:**
 ```bash

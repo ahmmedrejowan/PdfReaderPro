@@ -110,7 +110,7 @@ app/
 - **Async**: Kotlin Coroutines + StateFlow
 - **Navigation**: Jetpack Navigation Compose
 - **PDF Rendering**: Custom PDF.js WebView
-- **PDF Processing**: iText 7
+- **PDF Processing**: iText 9
 - **Image Loading**: Coil
 - **Data Storage**: DataStore Preferences
 
@@ -119,11 +119,11 @@ app/
 ## Requirements
 
 - **Minimum SDK**: API 24 (Android 7.0 Nougat)
-- **Target SDK**: API 36 (Android 16)
-- **Compile SDK**: API 36
-- **Gradle**: 9.4.0
-- **AGP**: 9.1.0
-- **Kotlin**: 2.3.10
+- **Target SDK**: API 37
+- **Compile SDK**: API 37
+- **Gradle**: 9.8.0
+- **AGP**: 9.4.1
+- **Kotlin**: 2.4.20
 - **Java**: 21
 
 ### Permissions
@@ -210,6 +210,7 @@ GNU General Public License for more details.
 
 ## Community
 
+- [Wiki](https://github.com/ahmmedrejowan/PdfReaderPro/wiki) - Guides for using and building the app
 - [Discussions](https://github.com/ahmmedrejowan/PdfReaderPro/discussions) - Ask questions, share ideas
 - [Issues](https://github.com/ahmmedrejowan/PdfReaderPro/issues) - Report bugs, request features
 - [Releases](https://github.com/ahmmedrejowan/PdfReaderPro/releases) - Download latest versions
