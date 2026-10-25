@@ -1543,6 +1543,7 @@
     <string name="crash_report_subject">Rapport de plantage de PDF Reader Pro</string>
     <string name="report_on_github">Signaler sur GitHub</string>
     <string name="no_browser_found">Aucun navigateur trouvé pour ouvrir le lien</string>
+    <string name="no_app_to_open">Aucune appli pour ouvrir ceci</string>
     <string name="choose_language">Choisissez la langue de l\'application</string>
     <string name="language_follow_system">Utiliser la langue du téléphone</string>
     <plurals name="delete_count_files">

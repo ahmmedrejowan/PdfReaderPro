@@ -1,7 +1,10 @@
 package com.rejowan.pdfreaderpro.presentation.screens.settings
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -544,7 +547,7 @@ fun SettingsScreenContent(
                     data = "mailto:kmrejowan@gmail.com".toUri()
                     putExtra(Intent.EXTRA_SUBJECT, "PDF Reader Pro Feedback")
                 }
-                context.startActivity(intent)
+                context.startActivitySafely(intent)
             },
             animationDelay = 950
         )
@@ -561,7 +564,7 @@ fun SettingsScreenContent(
                     Intent.ACTION_VIEW,
                     "https://github.com/ahmmedrejowan/PdfReaderPro".toUri()
                 )
-                context.startActivity(intent)
+                context.startActivitySafely(intent)
             },
             animationDelay = 1000
         )
@@ -578,7 +581,7 @@ fun SettingsScreenContent(
                     Intent.ACTION_VIEW,
                     "https://crowdin.com/project/pdf-reader-pro".toUri()
                 )
-                context.startActivity(intent)
+                context.startActivitySafely(intent)
             },
             animationDelay = 1050
         )
@@ -832,7 +835,7 @@ fun SettingsScreenContent(
             },
             onRequestPermission = {
                 viewModel.openInstallPermissionSettings()?.let { intent ->
-                    context.startActivity(intent)
+                    context.startActivitySafely(intent)
                 }
             }
         )
@@ -2539,7 +2542,7 @@ private fun CreatorContent() {
                     accentColor = AccentBlue,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://rejowan.com".toUri())
-                        context.startActivity(intent)
+                        context.startActivitySafely(intent)
                     }
                 )
 
@@ -2554,7 +2557,7 @@ private fun CreatorContent() {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                             data = "mailto:kmrejowan@gmail.com".toUri()
                         }
-                        context.startActivity(intent)
+                        context.startActivitySafely(intent)
                     }
                 )
 
@@ -2567,7 +2570,7 @@ private fun CreatorContent() {
                     accentColor = AccentPurple,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://github.com/ahmmedrejowan".toUri())
-                        context.startActivity(intent)
+                        context.startActivitySafely(intent)
                     }
                 )
 
@@ -2580,7 +2583,7 @@ private fun CreatorContent() {
                     accentColor = AccentTeal,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://linkedin.com/in/ahmmedrejowan".toUri())
-                        context.startActivity(intent)
+                        context.startActivitySafely(intent)
                     }
                 )
             }
@@ -2708,7 +2711,7 @@ private fun AppLicenseContent() {
                         Intent.ACTION_VIEW,
                         "https://www.gnu.org/licenses/gpl-3.0.en.html".toUri()
                     )
-                    context.startActivity(intent)
+                    context.startActivitySafely(intent)
                 },
             shape = RoundedCornerShape(12.dp),
             color = MaterialTheme.colorScheme.primary
@@ -2844,5 +2847,14 @@ private fun DoubleTapZoomSheet(
                 )
             }
         }
+    }
+}
+
+/** Opens a link, mail app or system screen, with a message instead of a crash when nothing can handle it. */
+private fun Context.startActivitySafely(intent: Intent) {
+    try {
+        startActivity(intent)
+    } catch (_: ActivityNotFoundException) {
+        Toast.makeText(this, R.string.no_app_to_open, Toast.LENGTH_SHORT).show()
     }
 }

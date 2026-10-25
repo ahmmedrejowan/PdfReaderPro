@@ -1543,6 +1543,7 @@
     <string name="crash_report_subject">PDF Reader Pro ক্র্যাশ রিপোর্ট</string>
     <string name="report_on_github">GitHub-এ রিপোর্ট করুন</string>
     <string name="no_browser_found">লিংক খোলার জন্য কোনো ব্রাউজার পাওয়া যায়নি</string>
+    <string name="no_app_to_open">এটা খোলার মতো কোনো অ্যাপ পাওয়া যায়নি</string>
     <string name="choose_language">অ্যাপের ভাষা বেছে নিন</string>
     <string name="language_follow_system">ফোনের ভাষা ব্যবহার করুন</string>
     <plurals name="delete_count_files">
