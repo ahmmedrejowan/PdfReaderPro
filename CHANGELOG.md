@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Chinese** - The app is available in Simplified Chinese (#107)
 
+### Fixed
+- **Untranslated Text** - Sort options, folder counts and page counts in file info were always in English; they now follow the app's language, and the Watermark page option no longer shows a placeholder
+
 ---
 
 ## [2.6.0] - 2026-10-23
