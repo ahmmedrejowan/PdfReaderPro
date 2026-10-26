@@ -36,37 +36,30 @@
 
 ## Скачать
 
-![GitHub Release](https://img.shields.io/github/v/release/ahmmedrejowan/PdfReaderPro)
+<p align="center">
+<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest"><img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" height="72"/></a>&nbsp;&nbsp;
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro"><img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" height="72"/></a>
+</p>
 
-Вы можете скачать последнюю версию APK отсюда
+<p align="center">
+<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/ahmmedrejowan/PdfReaderPro"/></a>
+<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/ahmmedrejowan/PdfReaderPro/total"/></a>
+<img alt="Android 7.0+" src="https://img.shields.io/badge/Android-7.0%2B-3DDC84?logo=android&amp;logoColor=white"/>
+</p>
 
-<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest">
-<img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" width="224px" align="center"/>
-</a>
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro">
-<img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" width="224px" align="center"/>
-</a>
-
-Ознакомьтесь с разделом [релизов](https://github.com/ahmmedrejowan/PdfReaderPro/releases) для получения дополнительной информации.
-
-
-<a href="https://www.producthunt.com/products/pdf-reader-pro-2?utm_source=badge-follow&utm_medium=badge&utm_source=badge-pdf&#0045;reader&#0045;pro&#0045;2" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1273411&theme=light" alt="PDF&#0032;Reader&#0032;Pro - Modern&#0032;PDF&#0032;Viewer&#0032;for&#0032;Android | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+Скачайте APK с GitHub или добавьте приложение в Obtainium, чтобы получать обновления автоматически. Приложение также умеет само проверять обновления.
 
 ---
 
 ## Скриншоты
 
-| Кадры | Кадры | Кадры |
-|-------|-------|-------|
-| ![Скриншот 1](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot1.webp) | ![Скриншот 2](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot2.webp) | ![Скриншот 3](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot3.webp) |
-| ![Скриншот 4](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot4.webp) | ![Скриншот 5](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot5.webp) | ![Скриншот 6](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot6.webp) |
-| ![Скриншот 7](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot7.webp) | ![Скриншот 8](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot8.webp) | ![Скриншот 9](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot9.webp) |
-| ![Скриншот 10](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot10.webp) | ![Скриншот 11](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot11.webp) | ![Скриншот 12](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot12.webp) |
-| ![Скриншот 13](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot13.webp) | ![Скриншот 14](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot14.webp) | ![Скриншот 15](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot15.webp) |
-| ![Скриншот 16](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot16.webp) | ![Скриншот 17](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot17.webp) | ![Скриншот 18](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot18.webp) |
-| ![Скриншот 19](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot19.webp) | ![Скриншот 20](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot20.webp) | ![Скриншот 21](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot21.webp) |
-| ![Скриншот 22](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot22.webp) | ![Скриншот 23](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot23.webp) | ![Скриншот 24](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot24.webp) |
-| ![Скриншот 25](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot25.webp) | ![Скриншот 26](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot26.webp) | ![Скриншот 27](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot27.webp) |
+| | | | |
+|---|---|---|---|
+| ![Screenshot 1](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot1.webp) | ![Screenshot 6](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot6.webp) | ![Screenshot 9](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot9.webp) | ![Screenshot 7](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot7.webp) |
+| ![Screenshot 14](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot14.webp) | ![Screenshot 15](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot15.webp) | ![Screenshot 17](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot17.webp) | ![Screenshot 19](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot19.webp) |
+| ![Screenshot 22](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot22.webp) | ![Screenshot 25](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot25.webp) | ![Screenshot 26](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot26.webp) | ![Screenshot 27](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot27.webp) |
+
+Больше скриншотов всех экранов есть в [вики](https://github.com/ahmmedrejowan/PdfReaderPro/wiki/Screenshots).
 
 ---
 
@@ -190,6 +183,23 @@ PDF Reader Pro доступен на 13 языках:
 
 ---
 
+## Специальные возможности
+
+PDF Reader Pro работает с TalkBack и системным размером шрифта. Полная поддержка программ чтения с экрана появится в первой версии после 2.6.0.
+
+| Область | Поддержка |
+|---|---|
+| Чтение с экрана (TalkBack) | ✅ У всех кнопок есть подписи; параметры сообщают своё состояние; заголовки и живые объявления |
+| Озвучивание PDF | ✅ Текст и ссылки PDF (кроме сканов, состоящих только из изображений) |
+| Размер шрифта | ✅ Следует системному размеру шрифта |
+| Тёмные и контрастные темы | ✅ Тёмная, Чёрная (AMOLED) и Сепия |
+| Жесты | ⚠️ Порядок страниц меняется только перетаскиванием; у ползунка страниц есть «Перейти к странице» |
+| Switch Access и клавиатура | ❔ Ещё не проверено |
+
+Подробности есть на [странице вики о специальных возможностях](https://github.com/ahmmedrejowan/PdfReaderPro/wiki/Accessibility). Что-то неудобно? Напишите в [обсуждении специальных возможностей](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/114).
+
+---
+
 ## Участие в разработке
 
 Мы приветствуем вклад! Пожалуйста, прочитайте [CONTRIBUTING.md](CONTRIBUTING.md) для получения рекомендаций.
@@ -231,6 +241,8 @@ GNU General Public License for more details.
 - [Обсуждения](https://github.com/ahmmedrejowan/PdfReaderPro/discussions) — задавайте вопросы, делитесь идеями
 - [Issues](https://github.com/ahmmedrejowan/PdfReaderPro/issues) — сообщайте об ошибках, запрашивайте функции
 - [Релизы](https://github.com/ahmmedrejowan/PdfReaderPro/releases) — скачивайте последние версии
+
+<a href="https://www.producthunt.com/products/pdf-reader-pro-2?utm_source=badge-follow&utm_medium=badge&utm_source=badge-pdf&#0045;reader&#0045;pro&#0045;2" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1273411&theme=light" alt="PDF&#0032;Reader&#0032;Pro - Modern&#0032;PDF&#0032;Viewer&#0032;for&#0032;Android | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
 ---
 
@@ -290,50 +302,6 @@ GNU General Public License for more details.
 - Сохранение копии с выделениями, записанными в PDF как настоящие аннотации (#41)
 - Выделения, уже присутствующие в файле, отображаются в списке и доступны для поиска, только для чтения (#41)
 - Блокировка горизонтальной прокрутки при увеличении, сохраняется для каждого документа (#74)
-
-### v2.3.0 (2026-07-19)
-
-- Настройка для скрытия ползунка страниц, появляющегося при прокрутке (#54)
-- Поиск внутри PDF теперь проходит через каждое совпадение на всех страницах, с центрированием активного совпадения (#40)
-- Исправлена проблема с открытием некоторых PDF, когда путь к файлу содержал апостроф (#57)
-- Обновлены основные библиотеки (Kotlin 2.4.10, AGP 9.2.1, Android SDK 37)
-
-### v2.2.0 (2026-04-23)
-
-- Опция темы «чёрный AMOLED» (Внешний вид → Тема)
-- Настраиваемый уровень масштаба при двойном нажатии (1.1×–5×) с ползунком
-- Двойное нажатие теперь увеличивает масштаб к точке нажатия
-- Настройка для скрытия вкладки «Инструменты» из нижней навигации
-- «Запомнить пароль» теперь автоматически заполняется при повторном открытии (#43)
-- Увеличенная типографика и более свободные интервалы в панелях просмотрщика (#44)
-- Элементы интерфейса просмотрщика и главной навигации теперь корректно следуют выбранной теме приложения
-
-### v2.1.3 (2026-03-24)
-
-- Совместимость сборки с F-Droid (удалён JVM toolchain)
-
-### v2.1.2 (2026-03-24)
-
-- Исправлена совместимость сборки со стандартным OpenJDK
-
-### v2.1.1 (2026-03-24)
-
-- Метаданные F-Droid и структура fastlane для листинга в магазине приложений
-
-### v2.1.0 (2026-03-23)
-
-- Горизонтальный ползунок страниц для режима горизонтальной прокрутки
-- Глобальные настройки для привязки к страницам и ориентации экрана
-- Упрощённые параметры режима просмотра
-
-### v2.0.0 (2026-03-07) — Полная переработка
-
-- Полная переработка UI на Jetpack Compose и Material 3
-- 12 инструментов PDF (объединение, разделение, сжатие, поворот и другие)
-- Улучшенный просмотрщик с автопрокруткой, закладками и ночным режимом
-- Clean Architecture с MVVM
-- Собственный движок рендеринга на основе PDF.js
-- 100% Kotlin, 100% офлайн
 
 Полную историю версий см. в [CHANGELOG.md](CHANGELOG.md).
 
