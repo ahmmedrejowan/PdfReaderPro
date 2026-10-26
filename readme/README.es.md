@@ -187,13 +187,13 @@ Las traducciones las hace la comunidad en **[Crowdin](https://crowdin.com/projec
 
 PDF Reader Pro funciona con TalkBack y con el tamaño de letra del sistema. La compatibilidad completa con lectores de pantalla llega en la primera versión posterior a la 2.6.0.
 
-| Área                                             | Support                                                                                       |
+| Área                                             | Compatibilidad                                                                                |
 | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
 | Lector de pantalla (TalkBack) | ✅ Todos los botones tienen etiqueta; las opciones dicen su estado; títulos y avisos en vivo   |
 | Leer PDFs en voz alta                            | ✅ El texto y los enlaces de un PDF (no PDFs escaneados solo de imágenes)   |
 | Tamaño de letra                                  | ✅ Sigue el tamaño de letra del sistema                                                        |
 | Temas oscuros y de alto contraste                | ✅ Oscuro, Negro (AMOLED) y Sepia                                           |
-| Gestures                                         | ⚠️ Reordenar páginas solo se hace arrastrando; el deslizador de páginas ofrece Ir a la página |
+| Gestos                                           | ⚠️ Reordenar páginas solo se hace arrastrando; el deslizador de páginas ofrece Ir a la página |
 | Accesibilidad con interruptores y teclado        | ❔ Aún sin probar                                                                              |
 
 Más detalles en la [página de accesibilidad de la wiki](https://github.com/ahmmedrejowan/PdfReaderPro/wiki/Accessibility). ¿Algo difícil de usar? Cuéntanoslo en la [discusión sobre accesibilidad](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/114).
