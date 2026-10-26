@@ -10,7 +10,7 @@
     <string name="intro_sub_title_3">自定义、搜索并探索高级 PDF 功能。</string>
     <string name="greeting_with_emoji">%1$s %2$s</string>
     <string name="let_s_start">开始吧</string>
-    <string name="permission_normal_title">来找找你的 PDF 吧</string>
+    <string name="permission_normal_title">来获取你的 PDF 吧</string>
     <string name="permission_allowed_title">一切就绪</string>
     <string name="permission_error_title">出现了错误</string>
     <string name="permission_normal_sub_title">允许访问存储空间后，你就可以随心访问、搜索和筛选 PDF，还有更多功能。</string>
@@ -150,7 +150,7 @@
     <string name="files_found">找到 %d 个文件</string>
     <string name="options">选项</string>
     <string name="tip_search_filename_title">按文件名搜索</string>
-    <string name="tip_search_filename_desc">输入 PDF 名称的一部分即可快速找到</string>
+    <string name="tip_search_filename_desc">输入部分 PDF 名称即可快速找到</string>
     <string name="tip_search_folder_title">按文件夹搜索</string>
     <string name="tip_search_folder_desc">输入文件夹名称，找到其中的所有 PDF</string>
     <string name="tip_partial_matches_title">支持部分匹配</string>
