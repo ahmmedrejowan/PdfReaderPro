@@ -187,13 +187,13 @@ Les traductions sont réalisées par la communauté sur **[Crowdin](https://crow
 
 PDF Reader Pro fonctionne avec TalkBack et la taille de police du système. La prise en charge complète des lecteurs d'écran arrive dans la première version après la 2.6.0.
 
-| Domaine                                       | Support                                                                                               |
+| Domaine                                       | Prise en charge                                                                                       |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | Lecteur d'écran (TalkBack) | ✅ Tous les boutons ont un libellé ; les options annoncent leur état ; titres et annonces en direct    |
 | Lecture des PDF à voix haute                  | ✅ Le texte et les liens d'un PDF (pas les PDF numérisés composés d'images)         |
 | Taille de police                              | ✅ Suit la taille de police du système                                                                 |
 | Thèmes sombres et à fort contraste            | ✅ Sombre, Noir (AMOLED) et Sépia                                                   |
-| Gestures                                      | ⚠️ Réorganiser les pages se fait uniquement par glisser ; le curseur de pages propose Aller à la page |
+| Gestes                                        | ⚠️ Réorganiser les pages se fait uniquement par glisser ; le curseur de pages propose Aller à la page |
 | Switch Access et clavier                      | ❔ Pas encore testé                                                                                    |
 
 Détails sur la [page Accessibilité du wiki](https://github.com/ahmmedrejowan/PdfReaderPro/wiki/Accessibility). Quelque chose de difficile à utiliser ? Dites-le-nous dans la [discussion sur l'accessibilité](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/114).
