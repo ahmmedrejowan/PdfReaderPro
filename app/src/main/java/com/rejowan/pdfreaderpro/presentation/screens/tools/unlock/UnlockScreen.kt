@@ -258,7 +258,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.LockOpen,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentTeal
             )
@@ -336,7 +336,7 @@ private fun UnlockContent(
                 ) {
                     Icon(
                         Icons.Default.LockOpen,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(24.dp),
                         tint = AccentGreen
                     )
@@ -520,7 +520,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         if (sourceFile.isPasswordProtected) Icons.Default.Lock else Icons.Default.LockOpen,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(28.dp),
                         tint = if (sourceFile.isPasswordProtected) AccentAmber else AccentGreen
                     )
@@ -680,7 +680,7 @@ private fun SuccessState(
                 }
                 Icon(
                     Icons.Default.LockOpen,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = AccentGreen
                 )

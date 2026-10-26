@@ -818,7 +818,6 @@
 
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">PDF Reader Pro logo</string>
-    <string name="cd_decorative">Decorative image</string>
     <string name="cd_illustration">Illustration</string>
     <string name="cd_sort_ascending">Sort ascending</string>
     <string name="cd_sort_descending">Sort descending</string>

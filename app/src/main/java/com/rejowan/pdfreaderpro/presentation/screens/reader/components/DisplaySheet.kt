@@ -343,7 +343,7 @@ private fun DisplaySheetHeader(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Palette,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -722,7 +722,7 @@ private fun BrightnessOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -880,7 +880,7 @@ private fun ToggleRow(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         tint = accent,
                         modifier = Modifier.size(16.dp)
                     )

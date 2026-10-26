@@ -404,7 +404,7 @@ private fun ExitConfirmContent(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))

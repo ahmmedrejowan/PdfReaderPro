@@ -75,7 +75,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.Brightness6,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -114,7 +114,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.SwapVert,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -171,7 +171,7 @@ fun SettingsPanel(
                     } else {
                         Icons.Default.ScreenRotation
                     },
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -206,7 +206,7 @@ fun SettingsPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.Fullscreen,
-                    contentDescription = stringResource(R.string.cd_decorative)
+                    contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.full_screen_mode))

@@ -404,7 +404,7 @@ private fun MenuOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(7.dp)
                         .size(16.dp),
@@ -436,7 +436,7 @@ private fun MenuOptionItem(
             // Arrow
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = if (isDestructive)
                     accentColor.copy(alpha = 0.5f)

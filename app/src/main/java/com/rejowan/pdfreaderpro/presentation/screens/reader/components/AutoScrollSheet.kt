@@ -290,7 +290,7 @@ private fun AutoScrollSheetContent(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Speed,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(16.dp)
             )

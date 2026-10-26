@@ -280,7 +280,7 @@ private fun EmptyState(onSelectImages: () -> Unit) {
             onClick = onSelectImages,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.Image, contentDescription = stringResource(R.string.cd_decorative))
+            Icon(Icons.Default.Image, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_images))
         }
@@ -328,7 +328,7 @@ private fun ImageListContent(
                     ) {
                         Icon(
                             Icons.Default.Add,
-                            contentDescription = stringResource(R.string.cd_decorative),
+                            contentDescription = null,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -508,7 +508,7 @@ private fun ConvertBottomSection(
             onClick = onConvert,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_decorative))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(pluralStringResource(R.plurals.create_pdf_pages, imageCount, imageCount))
         }
@@ -614,7 +614,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -626,7 +626,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

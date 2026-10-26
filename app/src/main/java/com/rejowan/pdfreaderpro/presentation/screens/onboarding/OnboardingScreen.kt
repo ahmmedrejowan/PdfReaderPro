@@ -745,7 +745,7 @@ fun OnboardingScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
                                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-                                contentDescription = stringResource(R.string.cd_decorative),
+                                contentDescription = null,
                                 modifier = Modifier.size(20.dp)
                             )
                         }

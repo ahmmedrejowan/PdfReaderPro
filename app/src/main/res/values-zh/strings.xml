@@ -754,7 +754,6 @@
     <string name="cd_page_not_selected">未选择第 %1$d 页</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">PDF Reader Pro 标志</string>
-    <string name="cd_decorative">装饰图片</string>
     <string name="cd_illustration">插图</string>
     <string name="cd_sort_ascending">升序排列</string>
     <string name="cd_sort_descending">降序排列</string>

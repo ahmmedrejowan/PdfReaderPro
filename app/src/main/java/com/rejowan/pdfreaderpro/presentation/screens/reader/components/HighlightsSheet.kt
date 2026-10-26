@@ -325,7 +325,7 @@ private fun HighlightsHeader(count: Int) {
         ) {
             Icon(
                 imageVector = Icons.Rounded.FormatColorFill,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -536,7 +536,7 @@ private fun EmptyState(
             Box(contentAlignment = Alignment.Center, modifier = Modifier.size(56.dp)) {
                 Icon(
                     imageVector = Icons.Rounded.FormatColorFill,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(28.dp)
                 )

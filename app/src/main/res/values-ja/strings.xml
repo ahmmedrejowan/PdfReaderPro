@@ -754,7 +754,6 @@
     <string name="cd_page_not_selected">%1$dページ未選択</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">PDF Reader Proのロゴ</string>
-    <string name="cd_decorative">装飾画像</string>
     <string name="cd_illustration">イラスト</string>
     <string name="cd_sort_ascending">昇順に並べ替え</string>
     <string name="cd_sort_descending">降順に並べ替え</string>

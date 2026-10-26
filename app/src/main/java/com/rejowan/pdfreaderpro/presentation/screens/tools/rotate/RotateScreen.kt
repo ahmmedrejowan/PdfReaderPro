@@ -392,7 +392,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.RotateRight,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentOrange
             )
@@ -422,7 +422,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_decorative))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -494,7 +494,7 @@ private fun RotationChip(
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.RotateRight,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .size(18.dp)
                     .rotate(angle.degrees.toFloat() - 90f),
@@ -668,7 +668,7 @@ private fun PageThumbnailItem(
                 ) {
                     Icon(
                         Icons.Default.PictureAsPdf,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(32.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
@@ -823,7 +823,7 @@ private fun RotateBottomSection(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                Icon(Icons.AutoMirrored.Filled.RotateRight, contentDescription = stringResource(R.string.cd_decorative))
+                Icon(Icons.AutoMirrored.Filled.RotateRight, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(stringResource(if (isProcessing) R.string.rotating else R.string.rotate_pages))
@@ -898,7 +898,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Description,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(20.dp),
                     tint = AccentOrange
                 )
@@ -934,7 +934,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -946,7 +946,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

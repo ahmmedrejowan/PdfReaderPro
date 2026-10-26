@@ -720,7 +720,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Folder,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = AccentPurple
                 )

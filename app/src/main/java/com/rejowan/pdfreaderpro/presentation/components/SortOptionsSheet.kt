@@ -282,7 +282,7 @@ private fun SortSheetHeader(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Sort,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -362,7 +362,7 @@ private fun SortCategoryCard(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier
                             .padding(6.dp)
                             .size(16.dp),

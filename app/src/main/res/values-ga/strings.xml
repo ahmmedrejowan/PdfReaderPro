@@ -754,7 +754,6 @@
     <string name="cd_page_not_selected">Níor roghnaíodh leathanach %1$d</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">Lógó PDF Reader Pro</string>
-    <string name="cd_decorative">Íomhá mhaisiúil</string>
     <string name="cd_illustration">Léaráid</string>
     <string name="cd_sort_ascending">Sórtáil ag ardú</string>
     <string name="cd_sort_descending">Sórtáil ag íslithe</string>

@@ -84,6 +84,7 @@ fun ZoomControlPill(
             // Zoom out
             QuickActionButton(
                 icon = Icons.Rounded.Remove,
+                contentDescription = stringResource(R.string.cd_zoom_out),
                 onClick = onZoomOut,
                 contentColor = contentColor
             )
@@ -109,6 +110,7 @@ fun ZoomControlPill(
             // Zoom in
             QuickActionButton(
                 icon = Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.cd_zoom_in),
                 onClick = onZoomIn,
                 contentColor = contentColor
             )
@@ -256,6 +258,7 @@ fun QuickActionsColumn(
 @Composable
 private fun QuickActionButton(
     icon: ImageVector,
+    contentDescription: String,
     onClick: () -> Unit,
     contentColor: Color,
     modifier: Modifier = Modifier
@@ -269,7 +272,7 @@ private fun QuickActionButton(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = stringResource(R.string.cd_decorative),
+            contentDescription = contentDescription,
             tint = contentColor,
             modifier = Modifier.size(20.dp)
         )

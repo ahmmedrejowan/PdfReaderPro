@@ -457,7 +457,7 @@ private fun BatchDeleteConfirmSheet(
         ) {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(48.dp),
                 tint = Color(0xFFEF5350)
             )
@@ -553,7 +553,7 @@ private fun FolderDetailHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Description,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(16.dp),
                         tint = SoftBlue
                     )
@@ -579,7 +579,7 @@ private fun FolderDetailHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Folder,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(16.dp),
                         tint = FolderAmber
                     )

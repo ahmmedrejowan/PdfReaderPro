@@ -224,12 +224,14 @@ fun FloatingSearchBar(
                     if (resultCount > 0 && !isSearching) {
                         SearchNavButton(
                             icon = Icons.Rounded.KeyboardArrowUp,
+                            contentDescription = stringResource(R.string.cd_previous_result),
                             onClick = onPreviousResult,
                             enabled = currentIndex > 1,
                             contentColor = contentColor
                         )
                         SearchNavButton(
                             icon = Icons.Rounded.KeyboardArrowDown,
+                            contentDescription = stringResource(R.string.cd_next_result),
                             onClick = onNextResult,
                             enabled = currentIndex < resultCount,
                             contentColor = contentColor
@@ -285,6 +287,7 @@ private fun ResultCountChip(
 @Composable
 private fun SearchNavButton(
     icon: ImageVector,
+    contentDescription: String,
     onClick: () -> Unit,
     enabled: Boolean,
     contentColor: Color,
@@ -302,7 +305,7 @@ private fun SearchNavButton(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = stringResource(R.string.cd_decorative),
+            contentDescription = contentDescription,
             tint = if (enabled) contentColor else contentColor.copy(alpha = 0.3f),
             modifier = Modifier.size(22.dp)
         )

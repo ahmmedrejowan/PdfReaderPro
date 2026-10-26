@@ -188,7 +188,7 @@ fun PdfListItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Folder,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(14.dp),
                         tint = SoftGray.copy(alpha = 0.7f)
                     )

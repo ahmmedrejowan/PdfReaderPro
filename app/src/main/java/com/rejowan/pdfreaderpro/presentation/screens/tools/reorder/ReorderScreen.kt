@@ -250,7 +250,7 @@ fun ReorderScreen(
                             ) {
                                 Icon(
                                     Icons.Default.SwapVert,
-                                    contentDescription = stringResource(R.string.cd_decorative),
+                                    contentDescription = null,
                                     modifier = Modifier.size(18.dp),
                                     tint = AccentIndigo
                                 )
@@ -619,7 +619,7 @@ private fun ReorderBottomSection(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                Icon(Icons.Default.SwapVert, contentDescription = stringResource(R.string.cd_decorative))
+                Icon(Icons.Default.SwapVert, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(stringResource(if (isProcessing) R.string.saving else R.string.save_reordered_pdf))

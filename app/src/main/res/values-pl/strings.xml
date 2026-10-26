@@ -754,7 +754,6 @@
     <string name="cd_page_not_selected">Strona %1$d niezaznaczona</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">Logo PDF Reader Pro</string>
-    <string name="cd_decorative">Obraz dekoracyjny</string>
     <string name="cd_illustration">Ilustracja</string>
     <string name="cd_sort_ascending">Sortuj rosnąco</string>
     <string name="cd_sort_descending">Sortuj malejąco</string>

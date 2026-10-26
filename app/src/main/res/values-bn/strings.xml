@@ -754,7 +754,6 @@
     <string name="cd_page_not_selected">পেজ %1$d সিলেক্ট করা হয়নি</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">PDF Reader Pro লোগো</string>
-    <string name="cd_decorative">সাজানোর ছবি</string>
     <string name="cd_illustration">ইলাস্ট্রেশন</string>
     <string name="cd_sort_ascending">ছোট থেকে বড় সাজান</string>
     <string name="cd_sort_descending">বড় থেকে ছোট সাজান</string>

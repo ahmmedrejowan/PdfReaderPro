@@ -427,7 +427,7 @@ private fun InfoSection(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 tint = accentColor,
                 modifier = Modifier.size(14.dp)
             )

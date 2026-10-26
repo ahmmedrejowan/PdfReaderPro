@@ -111,7 +111,7 @@ fun SelectionActionBar(
                     ) {
                         Icon(
                             Icons.Default.SelectAll,
-                            contentDescription = stringResource(R.string.cd_decorative),
+                            contentDescription = null,
                             modifier = Modifier.size(18.dp),
                             tint = if (selectedCount == totalCount) SelectionBlue
                             else MaterialTheme.colorScheme.onSurfaceVariant

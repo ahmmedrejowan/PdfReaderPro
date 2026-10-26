@@ -866,7 +866,7 @@ private fun SplitBottomSection(
         ) {
             Icon(
                 Icons.Default.FolderOpen,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )

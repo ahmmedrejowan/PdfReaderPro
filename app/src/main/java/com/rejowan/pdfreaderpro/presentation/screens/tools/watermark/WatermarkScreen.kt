@@ -588,7 +588,7 @@ private fun WatermarkTypeTabs(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.TextFields,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = if (selectedType == WatermarkType.TEXT)
                         AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
@@ -620,7 +620,7 @@ private fun WatermarkTypeTabs(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.Image,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = if (selectedType == WatermarkType.IMAGE)
                         AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
@@ -1453,7 +1453,7 @@ private fun WatermarkElement(
             } else {
                 Icon(
                     Icons.Default.Image,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .size(if (isTiled) 16.dp else 28.dp)
                         .graphicsLayer { alpha = 0.3f },

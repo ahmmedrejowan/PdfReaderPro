@@ -265,7 +265,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Lock,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentAmber
             )
@@ -295,7 +295,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_decorative))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -513,7 +513,7 @@ private fun LockContent(
             modifier = Modifier.fillMaxWidth(),
             enabled = !state.isProcessing
         ) {
-            Icon(Icons.Default.Lock, contentDescription = stringResource(R.string.cd_decorative))
+            Icon(Icons.Default.Lock, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.tool_lock_pdf))
         }
@@ -605,7 +605,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         Icons.Outlined.Visibility,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
@@ -822,7 +822,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Outlined.Visibility,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -834,7 +834,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Share,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))

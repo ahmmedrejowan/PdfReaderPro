@@ -754,7 +754,6 @@
     <string name="cd_page_not_selected">Sayfa %1$d seçilmedi</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">PDF Reader Pro logosu</string>
-    <string name="cd_decorative">Dekoratif görsel</string>
     <string name="cd_illustration">İllüstrasyon</string>
     <string name="cd_sort_ascending">Artan sırala</string>
     <string name="cd_sort_descending">Azalan sırala</string>

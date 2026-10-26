@@ -600,7 +600,7 @@ private fun ActionChip(
     ) {
         Icon(
             icon,
-            contentDescription = stringResource(R.string.cd_decorative),
+            contentDescription = null,
             modifier = Modifier.size(16.dp),
             tint = color
         )

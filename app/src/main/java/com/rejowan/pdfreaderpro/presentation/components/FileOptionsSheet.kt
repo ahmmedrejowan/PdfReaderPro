@@ -503,7 +503,7 @@ private fun FileActionCard(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
