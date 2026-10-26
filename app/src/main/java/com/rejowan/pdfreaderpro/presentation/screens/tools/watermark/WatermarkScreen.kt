@@ -58,6 +58,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import android.content.res.Configuration
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -94,6 +95,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -196,11 +198,10 @@ fun WatermarkScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -311,7 +312,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.WaterDrop,
-                contentDescription = stringResource(R.string.cd_add_watermark),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentCyan
             )
@@ -341,7 +342,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }

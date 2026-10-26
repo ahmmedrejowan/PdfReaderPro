@@ -529,7 +529,7 @@ private fun SortOptionChip(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
-                            contentDescription = stringResource(R.string.cd_selected),
+                            contentDescription = null,
                             modifier = Modifier.size(9.dp),
                             tint = Color.White
                         )

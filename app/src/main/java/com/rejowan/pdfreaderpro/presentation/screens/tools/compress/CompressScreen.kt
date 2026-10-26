@@ -22,7 +22,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -83,6 +83,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -171,11 +172,10 @@ fun CompressScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -364,7 +364,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Compress,
-                contentDescription = stringResource(R.string.cd_compress_pdf),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentPurple
             )
@@ -393,7 +393,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -500,7 +500,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         Icons.Default.SwapVert,
-                        contentDescription = stringResource(R.string.cd_select_files),
+                        contentDescription = null,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))

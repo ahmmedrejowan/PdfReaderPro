@@ -716,7 +716,6 @@
     <string name="cd_image">ছবি</string>
     <string name="cd_file_thumbnail">ফাইলের থাম্বনেইল</string>
     <string name="cd_add_files">ফাইল যোগ করুন</string>
-    <string name="cd_select_files">ফাইল সিলেক্ট করুন</string>
     <string name="cd_file_options">ফাইলের অপশন</string>
     <string name="cd_folder_options">ফোল্ডারের অপশন</string>
     <string name="cd_selected">সিলেক্ট করা হয়েছে</string>
@@ -739,14 +738,10 @@
     <string name="cd_split_pdf">PDF স্প্লিট করুন</string>
     <string name="cd_compress_pdf">PDF কম্প্রেস করুন</string>
     <string name="cd_rotate_pdf">PDF রোটেট করুন</string>
-    <string name="cd_reorder_pages">পেজের ক্রম বদলান</string>
-    <string name="cd_remove_pages">পেজ সরান</string>
     <string name="cd_add_watermark">ওয়াটারমার্ক যোগ করুন</string>
     <string name="cd_add_page_numbers">পেজ নম্বর যোগ করুন</string>
     <string name="cd_lock_pdf">PDF লক করুন</string>
     <string name="cd_unlock_pdf">PDF আনলক করুন</string>
-    <string name="cd_pdf_to_image">PDF-কে ছবিতে কনভার্ট করুন</string>
-    <string name="cd_image_to_pdf">ছবিকে PDF-এ কনভার্ট করুন</string>
     <string name="cd_page_preview">পেজের প্রিভিউ</string>
     <string name="cd_page_number">পেজ %1$d</string>
     <string name="cd_page_selected">পেজ %1$d সিলেক্ট করা হয়েছে</string>
@@ -1232,7 +1227,6 @@
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
     <!-- Selected -->
-    <string name="selected">সিলেক্ট করা</string>
     <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">প্রিভিউ</string>
     <string name="cd_view">দেখুন</string>

@@ -716,7 +716,6 @@
     <string name="cd_image">Imagem</string>
     <string name="cd_file_thumbnail">Miniatura do ficheiro</string>
     <string name="cd_add_files">Adicionar ficheiros</string>
-    <string name="cd_select_files">Selecionar ficheiros</string>
     <string name="cd_file_options">Opções do ficheiro</string>
     <string name="cd_folder_options">Opções da pasta</string>
     <string name="cd_selected">Selecionado</string>
@@ -739,14 +738,10 @@
     <string name="cd_split_pdf">Dividir PDF</string>
     <string name="cd_compress_pdf">Comprimir PDF</string>
     <string name="cd_rotate_pdf">Rodar PDF</string>
-    <string name="cd_reorder_pages">Reordenar páginas</string>
-    <string name="cd_remove_pages">Remover páginas</string>
     <string name="cd_add_watermark">Adicionar marca de água</string>
     <string name="cd_add_page_numbers">Adicionar números de página</string>
     <string name="cd_lock_pdf">Bloquear PDF</string>
     <string name="cd_unlock_pdf">Desbloquear PDF</string>
-    <string name="cd_pdf_to_image">Converter PDF em imagem</string>
-    <string name="cd_image_to_pdf">Converter imagem em PDF</string>
     <string name="cd_page_preview">Pré-visualização da página</string>
     <string name="cd_page_number">Página %1$d</string>
     <string name="cd_page_selected">Página %1$d selecionada</string>
@@ -1232,7 +1227,6 @@
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
     <!-- Selected -->
-    <string name="selected">Selecionado</string>
     <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">Pré-visualizar</string>
     <string name="cd_view">Ver</string>

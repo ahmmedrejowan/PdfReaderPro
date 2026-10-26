@@ -17,7 +17,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -85,6 +85,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -177,11 +178,10 @@ fun RemovePagesScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -338,7 +338,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.DeleteSweep,
-                contentDescription = stringResource(R.string.cd_remove_pages),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentRed
             )
@@ -368,7 +368,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }

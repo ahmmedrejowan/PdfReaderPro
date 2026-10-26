@@ -366,7 +366,7 @@ private fun EmptyState(
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.CallMerge,
-                contentDescription = stringResource(R.string.cd_merge_pdfs),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentBlue
             )

@@ -16,9 +16,9 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,11 +44,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rejowan.pdfreaderpro.R
 import kotlin.math.roundToInt
 
 private val AccentPurple = Color(0xFF9575CD)
@@ -227,6 +232,7 @@ private fun VerticalPageScrubber(
                 ) {
                     VerticalDropletThumb(
                         pageNumber = displayPage,
+                        totalPages = totalPages,
                         isDragging = isDragging,
                         onClick = { showJumpToPageSheet = true }
                     )
@@ -239,7 +245,8 @@ private fun VerticalPageScrubber(
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
                 color = textColor,
-                modifier = Modifier.padding(top = 0.dp, end = 0.dp),
+                // The thumb already says "Page N of total".
+                modifier = Modifier.padding(top = 0.dp, end = 0.dp).clearAndSetSemantics {},
                 textAlign = TextAlign.End
             )
         }
@@ -398,6 +405,7 @@ private fun HorizontalPageScrubber(
                 ) {
                     HorizontalDropletThumb(
                         pageNumber = displayPage,
+                        totalPages = totalPages,
                         isDragging = isDragging,
                         onClick = { showJumpToPageSheet = true }
                     )
@@ -410,7 +418,8 @@ private fun HorizontalPageScrubber(
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
                 color = textColor,
-                modifier = Modifier.padding(start = 4.dp, bottom = 4.dp),
+                // The thumb already says "Page N of total".
+                modifier = Modifier.padding(start = 4.dp, bottom = 4.dp).clearAndSetSemantics {},
                 textAlign = TextAlign.End
             )
         }
@@ -511,11 +520,14 @@ private val HorizontalDropletShape = GenericShape { size, _ ->
 @Composable
 private fun VerticalDropletThumb(
     pageNumber: Int,
+    totalPages: Int,
     isDragging: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val bgColor = if (isDragging) AccentPurple else AccentPurple.copy(alpha = 0.95f)
+    val pageLabel = stringResource(R.string.page_of, pageNumber, totalPages)
+    val jumpLabel = stringResource(R.string.jump_to_page)
 
     Surface(
         modifier = modifier
@@ -525,8 +537,11 @@ private fun VerticalDropletThumb(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = !isDragging,
+                onClickLabel = jumpLabel,
                 onClick = onClick
-            ),
+            )
+            // The thumb only shows a number; say which page of how many.
+            .semantics { contentDescription = pageLabel },
         shape = VerticalDropletShape,
         color = bgColor,
         shadowElevation = if (isDragging) 8.dp else 4.dp
@@ -537,6 +552,7 @@ private fun VerticalDropletThumb(
         ) {
             Text(
                 text = "$pageNumber",
+                modifier = Modifier.clearAndSetSemantics {},
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -550,11 +566,14 @@ private fun VerticalDropletThumb(
 @Composable
 private fun HorizontalDropletThumb(
     pageNumber: Int,
+    totalPages: Int,
     isDragging: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val bgColor = if (isDragging) AccentPurple else AccentPurple.copy(alpha = 0.95f)
+    val pageLabel = stringResource(R.string.page_of, pageNumber, totalPages)
+    val jumpLabel = stringResource(R.string.jump_to_page)
 
     Surface(
         modifier = modifier
@@ -564,8 +583,11 @@ private fun HorizontalDropletThumb(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = !isDragging,
+                onClickLabel = jumpLabel,
                 onClick = onClick
-            ),
+            )
+            // The thumb only shows a number; say which page of how many.
+            .semantics { contentDescription = pageLabel },
         shape = HorizontalDropletShape,
         color = bgColor,
         shadowElevation = if (isDragging) 8.dp else 4.dp
@@ -576,6 +598,7 @@ private fun HorizontalDropletThumb(
         ) {
             Text(
                 text = "$pageNumber",
+                modifier = Modifier.clearAndSetSemantics {},
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,

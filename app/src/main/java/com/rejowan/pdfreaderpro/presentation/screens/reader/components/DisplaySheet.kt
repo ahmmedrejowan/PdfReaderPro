@@ -575,7 +575,7 @@ private fun ThemeOption(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.cd_selected),
+                        contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(10.dp)
                     )
@@ -766,7 +766,7 @@ private fun BrightnessOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.cd_selected),
+                        contentDescription = null,
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )

@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
@@ -186,7 +187,8 @@ private fun ActionButton(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier),
+            // Disabled rather than unclickable, so TalkBack says "disabled".
+            .clickable(enabled = enabled, role = Role.Button, onClick = onClick),
         color = color.copy(alpha = 0.12f * alpha),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -198,7 +200,7 @@ private fun ActionButton(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = label,
+                contentDescription = null,
                 modifier = Modifier.size(22.dp),
                 tint = color.copy(alpha = alpha)
             )

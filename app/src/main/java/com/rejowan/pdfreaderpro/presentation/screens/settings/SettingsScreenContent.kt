@@ -1478,7 +1478,7 @@ private fun PickerOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.selected),
+                        contentDescription = null,
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -1853,7 +1853,7 @@ private fun BrightnessOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.selected),
+                        contentDescription = null,
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
