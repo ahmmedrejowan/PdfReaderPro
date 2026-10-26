@@ -709,6 +709,7 @@ private fun TextWatermarkSettings(
                 )
             }
             // Custom color picker button
+            val pickerLabel = stringResource(R.string.cd_color_picker)
             Box(
                 modifier = Modifier
                     .size(36.dp)
@@ -721,7 +722,8 @@ private fun TextWatermarkSettings(
                             )
                         )
                     )
-                    .clickable { showColorPicker = true },
+                    .clickable(onClickLabel = pickerLabel) { showColorPicker = true }
+                    .semantics { contentDescription = pickerLabel },
                 contentAlignment = Alignment.Center
             ) {
                 Box(

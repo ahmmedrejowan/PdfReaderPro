@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.liveRegion
 
 private val AccentPurple = Color(0xFF9575CD)
@@ -278,7 +279,8 @@ private fun ResultCountChip(
         stringResource(R.string.no_results)
     }
     Surface(
-        modifier = modifier.semantics {
+        // Replaces the "3/12" text inside, which would otherwise be read too.
+        modifier = modifier.clearAndSetSemantics {
             contentDescription = spoken
             liveRegion = LiveRegionMode.Polite
         },
