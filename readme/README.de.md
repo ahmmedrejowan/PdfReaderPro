@@ -183,7 +183,7 @@ Die Übersetzungen entstehen in der Community auf **[Crowdin](https://crowdin.co
 
 ---
 
-## Accessibility
+## Barrierefreiheit
 
 PDF Reader Pro funktioniert mit TalkBack und der Schriftgröße des Systems. Die volle Screenreader-Unterstützung kommt mit der ersten Version nach 2.6.0.
 
@@ -192,8 +192,8 @@ PDF Reader Pro funktioniert mit TalkBack und der Schriftgröße des Systems. Die
 | Screenreader (TalkBack) | ✅ Alle Schaltflächen beschriftet; Optionen nennen ihren Zustand; Überschriften und Live-Meldungen |
 | PDFs vorlesen                              | ✅ Text und Links einer PDF (keine gescannten, reinen Bild-PDFs)                |
 | Schriftgröße                               | ✅ Folgt der Schriftgröße des Systems                                                              |
-| Dark and high-contrast themes              | ✅ Dunkel, Schwarz (AMOLED) und Sepia                                           |
-| Gestures                                   | ⚠️ Seiten neu anordnen nur per Ziehen; der Seitenregler bietet stattdessen „Zu Seite springen“    |
+| Dunkle und kontrastreiche Designs          | ✅ Dunkel, Schwarz (AMOLED) und Sepia                                           |
+| Gesten                                     | ⚠️ Seiten neu anordnen nur per Ziehen; der Seitenregler bietet stattdessen „Zu Seite springen“    |
 | Schalterzugriff und Tastatur               | ❔ Noch nicht getestet                                                                             |
 
 Details auf der [Wiki-Seite zur Barrierefreiheit](https://github.com/ahmmedrejowan/PdfReaderPro/wiki/Accessibility). Etwas schwer zu bedienen? Schreib uns in der [Diskussion zur Barrierefreiheit](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/114).
