@@ -1,7 +1,7 @@
 [English](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/README.md) | [Русский](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.ru.md) | [Deutsch](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.de.md) | [Español](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.es.md) | [Français](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.fr.md) | [Italiano](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.it.md) | [Português](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.pt.md)
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/logo.png" alt="Логотип PDF Reader Pro" width="120" height="120">
+  <img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/logo.png" alt="PDF Reader Pro Logo" width="120" height="120">
 
 <h3>Современный просмотрщик PDF для Android</h3>
 
@@ -15,11 +15,12 @@
 [![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-purple.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Latest-blue.svg)](https://developer.android.com/jetpack/compose)
+
 </div>
 
 ---
 
-## Возможности
+## Features
 
 - **Просмотр PDF** — плавный рендеринг с масштабированием, прокруткой и навигацией по страницам
 - **12 инструментов PDF** — объединение, разделение, сжатие, поворот, изменение порядка, удаление страниц, добавление номеров страниц, водяных знаков, блокировка/разблокировка, PDF в изображения, изображения в PDF
@@ -36,13 +37,11 @@
 
 ## Скачать
 
-<p align="center">
-<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest"><img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" height="72"/></a>&nbsp;&nbsp;
+<p align="center"><a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest"><img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" height="72"/></a>&nbsp;&nbsp;
 <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro"><img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" height="72"/></a>
 </p>
 
-<p align="center">
-<a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/ahmmedrejowan/PdfReaderPro"/></a>
+<p align="center"><a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/ahmmedrejowan/PdfReaderPro"/></a>
 <a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/ahmmedrejowan/PdfReaderPro/total"/></a>
 <img alt="Android 7.0+" src="https://img.shields.io/badge/Android-7.0%2B-3DDC84?logo=android&amp;logoColor=white"/>
 </p>
@@ -53,9 +52,9 @@
 
 ## Скриншоты
 
-| | | | |
-|---|---|---|---|
-| ![Screenshot 1](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot1.webp) | ![Screenshot 6](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot6.webp) | ![Screenshot 9](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot9.webp) | ![Screenshot 7](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot7.webp) |
+|                                                                                                         |                                                                                                         |                                                                                                         |                                                                                                         |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| ![Screenshot 1](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot1.webp)   | ![Screenshot 6](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot6.webp)   | ![Screenshot 9](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot9.webp)   | ![Screenshot 7](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot7.webp)   |
 | ![Screenshot 14](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot14.webp) | ![Screenshot 15](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot15.webp) | ![Screenshot 17](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot17.webp) | ![Screenshot 19](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot19.webp) |
 | ![Screenshot 22](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot22.webp) | ![Screenshot 25](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot25.webp) | ![Screenshot 26](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot26.webp) | ![Screenshot 27](https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/shot27.webp) |
 
@@ -163,44 +162,45 @@ app/
 PDF Reader Pro доступен на 13 языках:
 
 <!-- Each badge reads progress.N from https://badges.awesome-crowdin.com/stats-17953219-941021.json, where N is the language's position in that file; check the indexes there when adding a language. -->
-| Язык | Название на английском | Код | Прогресс | Crowdin | Участники |
-|---|---|---|---|---|---|
-| English | English | en | Исходный язык | [Перевести](https://crowdin.com/project/pdf-reader-pro) | [@ahmmedrejowan](https://github.com/ahmmedrejowan) |
-| বাংলা | Bengali | bn | [![Bengali translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.0.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/bn) | [@ahmmedrejowan](https://github.com/ahmmedrejowan) |
-| Deutsch | German | de | [![German translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.1.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/de) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Español | Spanish | es | [![Spanish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.2.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/es-ES) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Français | French | fr | [![French translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.3.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/fr) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Gaeilge | Irish | ga | [![Irish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.4.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/ga-IE) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Italiano | Italian | it | [![Italian translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.5.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/it) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| 日本語 | Japanese | ja | [![Japanese translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.6.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/ja) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Polski | Polish | pl | [![Polish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.7.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/pl) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Português | Portuguese | pt | [![Portuguese translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.8.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/pt-PT) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Русский | Russian | ru | [![Russian translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.9.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/ru) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| Türkçe | Turkish | tr | [![Turkish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.10.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/tr) | [@4kvoodoo](https://github.com/4kvoodoo) |
-| 中文 (简体) | Chinese (Simplified) | zh | [![Chinese (Simplified) translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.11.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/zh-CN) | [@ahmmedrejowan](https://github.com/ahmmedrejowan), [@Infinifar](https://github.com/Infinifar) |
+
+| Язык                       | Название на английском                  | Код | Прогресс                                                                                                                                                                                                                                                                                                                                 | Crowdin                                                       | Участники                                                                                                                |
+| -------------------------- | --------------------------------------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| English                    | English                                 | en  | Исходный язык                                                                                                                                                                                                                                                                                                                            | [Перевести](https://crowdin.com/project/pdf-reader-pro)       | [@ahmmedrejowan](https://github.com/ahmmedrejowan)                                                          |
+| বাংলা                      | Bengali                                 | bn  | [![Bengali translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.0.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                  | [Перевести](https://crowdin.com/project/pdf-reader-pro/bn)    | [@ahmmedrejowan](https://github.com/ahmmedrejowan)                                                          |
+| Deutsch                    | German                                  | de  | [![German translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.1.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                   | [Перевести](https://crowdin.com/project/pdf-reader-pro/de)    | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Español                    | Spanish                                 | es  | [![Spanish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.2.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                  | [Перевести](https://crowdin.com/project/pdf-reader-pro/es-ES) | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Français                   | French                                  | fr  | [![French translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.3.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                   | [Перевести](https://crowdin.com/project/pdf-reader-pro/fr)    | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Gaeilge                    | Irish                                   | ga  | [![Irish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.4.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                    | [Перевести](https://crowdin.com/project/pdf-reader-pro/ga-IE) | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Italiano                   | Italian                                 | it  | [![Italian translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.5.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                  | [Перевести](https://crowdin.com/project/pdf-reader-pro/it)    | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| 日本語                        | Japanese                                | ja  | [![Japanese translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.6.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                 | [Перевести](https://crowdin.com/project/pdf-reader-pro/ja)    | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Polski                     | Polish                                  | pl  | [![Polish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.7.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                   | [Перевести](https://crowdin.com/project/pdf-reader-pro/pl)    | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Português                  | Portuguese                              | pt  | [![Portuguese translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.8.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                               | [Перевести](https://crowdin.com/project/pdf-reader-pro/pt-PT) | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Русский                    | Russian                                 | ru  | [![Russian translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.9.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                  | [Перевести](https://crowdin.com/project/pdf-reader-pro/ru)    | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| Türkçe                     | Turkish                                 | tr  | [![Turkish translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.10.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro)                                 | [Перевести](https://crowdin.com/project/pdf-reader-pro/tr)    | [@4kvoodoo](https://github.com/4kvoodoo)                                                                    |
+| 中文 (简体) | Chinese (Simplified) | zh  | [![Chinese (Simplified) translation progress](https://img.shields.io/badge/dynamic/json?color=blue&label=&logo=crowdin&query=%24.progress.11.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-17953219-941021.json)](https://crowdin.com/project/pdf-reader-pro) | [Перевести](https://crowdin.com/project/pdf-reader-pro/zh-CN) | [@ahmmedrejowan](https://github.com/ahmmedrejowan), [@Infinifar](https://github.com/Infinifar) |
 
 Переводы делает сообщество на **[Crowdin](https://crowdin.com/project/pdf-reader-pro)**: войдите, выберите свой язык и переводите прямо в браузере, без программирования. Вашего языка нет или есть вопрос? Присоединяйтесь к [обсуждению переводов](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/108).
 
 ---
 
-## Специальные возможности
+## Возможности
 
 PDF Reader Pro работает с TalkBack и системным размером шрифта. Полная поддержка программ чтения с экрана появится в первой версии после 2.6.0.
 
-| Область | Поддержка |
-|---|---|
-| Чтение с экрана (TalkBack) | ✅ У всех кнопок есть подписи; параметры сообщают своё состояние; заголовки и живые объявления |
-| Озвучивание PDF | ✅ Текст и ссылки PDF (кроме сканов, состоящих только из изображений) |
-| Размер шрифта | ✅ Следует системному размеру шрифта |
-| Тёмные и контрастные темы | ✅ Тёмная, Чёрная (AMOLED) и Сепия |
-| Жесты | ⚠️ Порядок страниц меняется только перетаскиванием; у ползунка страниц есть «Перейти к странице» |
-| Switch Access и клавиатура | ❔ Ещё не проверено |
+| Area                                          | Поддержка                                                                                        |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Чтение с экрана (TalkBack) | ✅ У всех кнопок есть подписи; параметры сообщают своё состояние; заголовки и живые объявления    |
+| Озвучивание PDF                               | ✅ Текст и ссылки PDF (кроме сканов, состоящих только из изображений)          |
+| Размер шрифта                                 | ✅ Следует системному размеру шрифта                                                              |
+| Тёмные и контрастные темы                     | ✅ Тёмная, Чёрная (AMOLED) и Сепия                                             |
+| Gestures                                      | ⚠️ Порядок страниц меняется только перетаскиванием; у ползунка страниц есть «Перейти к странице» |
+| Switch Access и клавиатура                    | ❔ Ещё не проверено                                                                               |
 
 Подробности есть на [странице вики о специальных возможностях](https://github.com/ahmmedrejowan/PdfReaderPro/wiki/Accessibility). Что-то неудобно? Напишите в [обсуждении специальных возможностей](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/114).
 
 ---
 
-## Участие в разработке
+## Contributing
 
 Мы приветствуем вклад! Пожалуйста, прочитайте [CONTRIBUTING.md](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/CONTRIBUTING.md) для получения рекомендаций.
 
