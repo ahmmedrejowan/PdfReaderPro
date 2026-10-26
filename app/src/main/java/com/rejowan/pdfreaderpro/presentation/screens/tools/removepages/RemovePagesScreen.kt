@@ -36,6 +36,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -96,6 +97,7 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 // Accent colors
 private val AccentRed = Color(0xFFEF5350)  // Remove pages theme color
@@ -900,13 +902,13 @@ private fun RemoveBottomSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .toggleable(value = overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentBlue)
             )
             Spacer(modifier = Modifier.width(8.dp))

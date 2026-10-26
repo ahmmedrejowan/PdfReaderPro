@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.Delete
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollMode
@@ -138,6 +140,7 @@ fun SettingsPanel(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .toggleable(value = keepScreenOn, role = Role.Switch, onValueChange = onKeepScreenOnChange)
                     .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -154,7 +157,7 @@ fun SettingsPanel(
                 }
                 Switch(
                     checked = keepScreenOn,
-                    onCheckedChange = onKeepScreenOnChange
+                    onCheckedChange = null
                 )
             }
 
@@ -162,6 +165,7 @@ fun SettingsPanel(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .toggleable(value = isRotationLocked, role = Role.Switch, onValueChange = { onRotationLockChange() })
                     .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -188,7 +192,7 @@ fun SettingsPanel(
                 }
                 Switch(
                     checked = isRotationLocked,
-                    onCheckedChange = { onRotationLockChange() }
+                    onCheckedChange = null
                 )
             }
 

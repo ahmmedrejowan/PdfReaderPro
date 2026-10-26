@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -97,6 +98,7 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)   // Compress theme color
@@ -771,13 +773,13 @@ private fun CompressBottomSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .toggleable(value = overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentTeal)
             )
             Spacer(modifier = Modifier.width(8.dp))

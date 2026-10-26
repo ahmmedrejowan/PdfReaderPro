@@ -78,6 +78,8 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReadingTheme
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
 
 // Design colors
 private val AccentAmber = Color(0xFFFFB74D)
@@ -859,7 +861,9 @@ private fun ToggleRow(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .scale(scale),
+            .scale(scale)
+            .clip(RoundedCornerShape(8.dp))
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
         shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
@@ -906,7 +910,7 @@ private fun ToggleRow(
 
             Switch(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = null,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = accent,
                     checkedTrackColor = accent.copy(alpha = 0.5f)

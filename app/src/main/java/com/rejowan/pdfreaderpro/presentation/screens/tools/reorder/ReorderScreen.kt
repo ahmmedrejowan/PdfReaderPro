@@ -36,6 +36,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -97,6 +98,7 @@ import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyGridState
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 // Accent colors
 private val AccentIndigo = Color(0xFF7986CB)  // Reorder theme color
@@ -572,13 +574,13 @@ private fun ReorderBottomSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .toggleable(value = overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentIndigo)
             )
             Spacer(modifier = Modifier.width(8.dp))

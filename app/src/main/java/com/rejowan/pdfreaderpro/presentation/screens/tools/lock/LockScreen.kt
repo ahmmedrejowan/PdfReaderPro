@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -92,6 +93,7 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 // Accent colors
 private val AccentAmber = Color(0xFFFFB74D)  // Lock theme color
@@ -454,13 +456,13 @@ private fun LockContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!state.overwriteOriginal) }
+                .toggleable(value = state.overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = state.overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentAmber)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -694,13 +696,13 @@ private fun PermissionItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) }
+            .toggleable(value = checked, role = Role.Checkbox, onValueChange = onCheckedChange)
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
             checked = checked,
-            onCheckedChange = onCheckedChange,
+            onCheckedChange = null,
             colors = CheckboxDefaults.colors(
                 checkedColor = AccentAmber
             )

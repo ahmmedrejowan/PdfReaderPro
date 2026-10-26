@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.WarningAmber
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 /**
  * Confirms writing highlights into the PDF itself.
@@ -92,12 +94,12 @@ fun BakeHighlightsDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { isAcknowledged = !isAcknowledged },
+                        .toggleable(value = isAcknowledged, role = Role.Checkbox, onValueChange = { isAcknowledged = it }),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
                         checked = isAcknowledged,
-                        onCheckedChange = { isAcknowledged = it }
+                        onCheckedChange = null
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))

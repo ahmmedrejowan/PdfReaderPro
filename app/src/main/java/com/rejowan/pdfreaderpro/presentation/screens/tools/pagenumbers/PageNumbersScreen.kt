@@ -55,6 +55,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ModalBottomSheet
@@ -103,6 +104,7 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 // Accent colors
 private val AccentOrange = Color(0xFFFF9800) // Page numbers theme color
@@ -596,13 +598,13 @@ private fun PageNumbersContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!state.overwriteOriginal) }
+                .toggleable(value = state.overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = state.overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentOrange)
             )
             Spacer(modifier = Modifier.width(8.dp))

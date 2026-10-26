@@ -58,6 +58,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import android.content.res.Configuration
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -106,6 +107,7 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 // Accent colors
 private val AccentCyan = Color(0xFF00BCD4) // Watermark theme color
@@ -523,13 +525,13 @@ private fun WatermarkContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onOverwriteChange(!state.overwriteOriginal) }
+                    .toggleable(value = state.overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                     .padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = state.overwriteOriginal,
-                    onCheckedChange = onOverwriteChange,
+                    onCheckedChange = null,
                     colors = CheckboxDefaults.colors(checkedColor = AccentCyan)
                 )
                 Spacer(modifier = Modifier.width(8.dp))

@@ -76,6 +76,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.graphics.graphicsLayer
 import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
@@ -102,6 +103,7 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
 
 // Accent colors
 private val AccentOrange = Color(0xFFFF9800)  // Rotate theme color
@@ -776,13 +778,13 @@ private fun RotateBottomSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .toggleable(value = overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentOrange)
             )
             Spacer(modifier = Modifier.width(8.dp))

@@ -142,6 +142,8 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material.icons.rounded.Translate
 import com.rejowan.pdfreaderpro.util.AppLanguage
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -1062,7 +1064,7 @@ private fun SettingsToggleItem(
             .fillMaxWidth()
             .scale(scale)
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onCheckedChange(!checked) },
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
@@ -1107,7 +1109,7 @@ private fun SettingsToggleItem(
 
             Switch(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = null,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = accentColor,
