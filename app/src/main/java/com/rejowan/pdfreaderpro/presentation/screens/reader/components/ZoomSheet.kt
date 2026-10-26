@@ -78,6 +78,9 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScreenOrientation
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Design colors
 private val AccentTeal = Color(0xFF4DB6AC)
@@ -395,7 +398,7 @@ private fun ZoomSheetHeader(
         ) {
             Icon(
                 imageVector = Icons.Rounded.ZoomIn,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -447,7 +450,7 @@ private fun SectionLabel(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
-        modifier = modifier.padding(start = 4.dp)
+        modifier = modifier.padding(start = 4.dp).semantics { heading() }
     )
 }
 
@@ -604,6 +607,7 @@ private fun ZoomPresetChip(
         modifier = modifier
             .scale(scale)
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -634,7 +638,7 @@ private fun ZoomPresetChip(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = contentColor
                 )
@@ -701,6 +705,7 @@ private fun OrientationChip(
         modifier = modifier
             .scale(scale)
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -732,7 +737,7 @@ private fun OrientationChip(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(18.dp),
                         tint = contentColor
                     )

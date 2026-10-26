@@ -66,6 +66,8 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 
 // Design colors
 private val AccentBlue = Color(0xFF64B5F6)
@@ -350,7 +352,7 @@ private fun SectionLabel(
             fontWeight = FontWeight.SemiBold
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f * alpha),
-        modifier = modifier.padding(start = 2.dp)
+        modifier = modifier.padding(start = 2.dp).semantics { heading() }
     )
 }
 
@@ -404,7 +406,7 @@ private fun MenuOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(7.dp)
                         .size(16.dp),
@@ -436,7 +438,7 @@ private fun MenuOptionItem(
             // Arrow
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = if (isDestructive)
                     accentColor.copy(alpha = 0.5f)

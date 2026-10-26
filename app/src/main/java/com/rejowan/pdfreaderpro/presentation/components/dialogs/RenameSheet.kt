@@ -233,7 +233,7 @@ private fun RenameContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.DriveFileRenameOutline,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),

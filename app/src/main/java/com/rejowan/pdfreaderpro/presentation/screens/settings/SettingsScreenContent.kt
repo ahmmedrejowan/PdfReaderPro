@@ -142,6 +142,12 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material.icons.rounded.Translate
 import com.rejowan.pdfreaderpro.util.AppLanguage
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -877,6 +883,7 @@ private fun SectionLabel(
         modifier = modifier
             .scale(scale)
             .padding(start = 4.dp, bottom = 4.dp)
+            .semantics { heading() }
     )
 }
 
@@ -997,7 +1004,7 @@ private fun SettingsOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp),
@@ -1025,7 +1032,7 @@ private fun SettingsOptionItem(
 
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(20.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
@@ -1062,7 +1069,7 @@ private fun SettingsToggleItem(
             .fillMaxWidth()
             .scale(scale)
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onCheckedChange(!checked) },
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
@@ -1079,7 +1086,7 @@ private fun SettingsToggleItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp),
@@ -1107,7 +1114,7 @@ private fun SettingsToggleItem(
 
             Switch(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = null,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = accentColor,
@@ -1313,7 +1320,7 @@ private fun PickerContent(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1405,6 +1412,7 @@ private fun PickerOptionItem(
             .fillMaxWidth()
             .scale(scale)
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -1434,7 +1442,7 @@ private fun PickerOptionItem(
             ) {
                 Icon(
                     imageVector = option.icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1470,7 +1478,7 @@ private fun PickerOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.selected),
+                        contentDescription = null,
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -1628,7 +1636,7 @@ private fun BrightnessContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Brightness6,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1779,6 +1787,7 @@ private fun BrightnessOptionItem(
             .fillMaxWidth()
             .scale(scale)
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -1808,7 +1817,7 @@ private fun BrightnessOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -1844,7 +1853,7 @@ private fun BrightnessOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.selected),
+                        contentDescription = null,
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -2317,7 +2326,7 @@ private fun PrivacyHighlightItem(text: String) {
     ) {
         Icon(
             imageVector = Icons.Rounded.CheckCircle,
-            contentDescription = stringResource(R.string.cd_decorative),
+            contentDescription = null,
             modifier = Modifier.size(18.dp),
             tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
@@ -2614,7 +2623,7 @@ private fun CreatorLinkItem(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(8.dp)
                     .size(18.dp),
@@ -2639,7 +2648,7 @@ private fun CreatorLinkItem(
         }
         Icon(
             imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-            contentDescription = stringResource(R.string.cd_decorative),
+            contentDescription = null,
             modifier = Modifier.size(20.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
         )
@@ -2738,7 +2747,7 @@ private fun LicenseTermItem(text: String) {
     ) {
         Icon(
             imageVector = Icons.Rounded.CheckCircle,
-            contentDescription = stringResource(R.string.cd_decorative),
+            contentDescription = null,
             modifier = Modifier.size(18.dp),
             tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
@@ -2787,7 +2796,7 @@ private fun DoubleTapZoomSheet(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.ZoomIn,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier
                             .padding(6.dp)
                             .size(16.dp),

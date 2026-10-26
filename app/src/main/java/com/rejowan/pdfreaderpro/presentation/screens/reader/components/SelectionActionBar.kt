@@ -41,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.selected
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.data.mapper.asOpaqueSwatch
 import com.rejowan.pdfreaderpro.presentation.components.pdf.model.SelectionAnchor
@@ -159,7 +160,10 @@ fun SelectionActionBar(
                                 shape = CircleShape
                             )
                             .clickable { onHighlight(color) }
-                            .semantics { contentDescription = description },
+                            .semantics {
+                                contentDescription = description
+                                selected = isSelected
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         if (isSelected) {
@@ -203,7 +207,7 @@ fun SelectionActionBar(
     }
 }
 
-private fun colorNameFor(color: Int): Int = when (color) {
+internal fun colorNameFor(color: Int): Int = when (color) {
     HighlightColors.YELLOW -> R.string.highlight_color_yellow
     HighlightColors.GREEN -> R.string.highlight_color_green
     HighlightColors.BLUE -> R.string.highlight_color_blue

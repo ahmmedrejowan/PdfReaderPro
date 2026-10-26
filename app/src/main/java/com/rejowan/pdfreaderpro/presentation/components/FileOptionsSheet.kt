@@ -74,6 +74,8 @@ import com.rejowan.pdfreaderpro.util.FormattingUtils
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors matching UI guide
 private val AccentAmber = Color(0xFFFFB74D)
@@ -440,7 +442,7 @@ private fun SectionLabel(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-        modifier = modifier.padding(start = 4.dp)
+        modifier = modifier.padding(start = 4.dp).semantics { heading() }
     )
 }
 
@@ -503,7 +505,7 @@ private fun FileActionCard(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),

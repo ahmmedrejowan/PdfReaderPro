@@ -716,7 +716,6 @@
     <string name="cd_image">Immagine</string>
     <string name="cd_file_thumbnail">Miniatura del file</string>
     <string name="cd_add_files">Aggiungi file</string>
-    <string name="cd_select_files">Seleziona file</string>
     <string name="cd_file_options">Opzioni del file</string>
     <string name="cd_folder_options">Opzioni della cartella</string>
     <string name="cd_selected">Selezionato</string>
@@ -729,7 +728,6 @@
     <string name="cd_processing">Elaborazione</string>
     <string name="cd_completed">Completato</string>
     <string name="cd_progress">Indicatore di avanzamento</string>
-    <string name="cd_checkbox">Casella di controllo</string>
     <string name="cd_checked">Selezionato</string>
     <string name="cd_unchecked">Non selezionato</string>
     <string name="cd_toggle">Attiva/disattiva</string>
@@ -740,21 +738,16 @@
     <string name="cd_split_pdf">Dividi PDF</string>
     <string name="cd_compress_pdf">Comprimi PDF</string>
     <string name="cd_rotate_pdf">Ruota PDF</string>
-    <string name="cd_reorder_pages">Riordina pagine</string>
-    <string name="cd_remove_pages">Rimuovi pagine</string>
     <string name="cd_add_watermark">Aggiungi filigrana</string>
     <string name="cd_add_page_numbers">Aggiungi numeri di pagina</string>
     <string name="cd_lock_pdf">Blocca PDF</string>
     <string name="cd_unlock_pdf">Sblocca PDF</string>
-    <string name="cd_pdf_to_image">Converti PDF in immagine</string>
-    <string name="cd_image_to_pdf">Converti immagine in PDF</string>
     <string name="cd_page_preview">Anteprima pagina</string>
     <string name="cd_page_number">Pagina %1$d</string>
     <string name="cd_page_selected">Pagina %1$d selezionata</string>
     <string name="cd_page_not_selected">Pagina %1$d non selezionata</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">Logo di PDF Reader Pro</string>
-    <string name="cd_decorative">Immagine decorativa</string>
     <string name="cd_illustration">Illustrazione</string>
     <string name="cd_sort_ascending">Ordina in modo crescente</string>
     <string name="cd_sort_descending">Ordina in modo decrescente</string>
@@ -1234,7 +1227,6 @@
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
     <!-- Selected -->
-    <string name="selected">Selezionato</string>
     <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">Anteprima</string>
     <string name="cd_view">Visualizza</string>
@@ -1649,5 +1641,16 @@
     <plurals name="pdf_count_short">
         <item quantity="one">%d PDF</item>
         <item quantity="other">%d PDF</item>
+    </plurals>
+    <string name="n_selected">Selezionati: %1$d</string>
+    <string name="all_selected">Tutti</string>
+    <string name="color_black">Nero</string>
+    <string name="color_dark_gray">Grigio scuro</string>
+    <string name="color_gray">Grigio</string>
+    <string name="color_purple">Viola</string>
+    <string name="color_amber">Ambra</string>
+    <plurals name="of_n_files">
+        <item quantity="one">di %1$d file</item>
+        <item quantity="other">di %1$d file</item>
     </plurals>
 </resources>

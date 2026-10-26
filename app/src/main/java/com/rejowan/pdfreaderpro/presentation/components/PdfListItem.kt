@@ -188,7 +188,7 @@ fun PdfListItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Folder,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(14.dp),
                         tint = SoftGray.copy(alpha = 0.7f)
                     )
@@ -213,7 +213,7 @@ fun PdfListItem(
                 ) {
                     Icon(
                         imageVector = if (isSelected) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
-                        contentDescription = if (isSelected) "Selected" else "Not selected",
+                        contentDescription = if (isSelected) stringResource(R.string.item_selected) else stringResource(R.string.item_not_selected),
                         modifier = Modifier.size(26.dp),
                         tint = if (isSelected) SelectionBlue else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                     )

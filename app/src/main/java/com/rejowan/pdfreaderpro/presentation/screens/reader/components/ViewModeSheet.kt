@@ -77,6 +77,12 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ScrollMode
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Design colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -478,7 +484,7 @@ private fun SectionLabel(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
-        modifier = modifier.padding(start = 4.dp)
+        modifier = modifier.padding(start = 4.dp).semantics { heading() }
     )
 }
 
@@ -530,6 +536,7 @@ private fun ModeChip(
         modifier = modifier
             .scale(scale)
             .clip(RoundedCornerShape(14.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -621,7 +628,14 @@ private fun ToggleRow(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .scale(scale),
+            .scale(scale)
+            .clip(RoundedCornerShape(14.dp))
+            .toggleable(
+                value = isEnabled && isAvailable,
+                enabled = isAvailable,
+                role = Role.Switch,
+                onValueChange = onToggle
+            ),
         shape = RoundedCornerShape(14.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
@@ -667,7 +681,7 @@ private fun ToggleRow(
 
             Switch(
                 checked = isEnabled && isAvailable,
-                onCheckedChange = onToggle,
+                onCheckedChange = null,
                 enabled = isAvailable,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,

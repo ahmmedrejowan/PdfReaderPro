@@ -32,7 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
@@ -81,13 +83,13 @@ fun SelectionActionBar(
                 // Selection count
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "$selectedCount selected",
+                        text = stringResource(R.string.n_selected, selectedCount),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = SelectionBlue
                     )
                     Text(
-                        text = "of $totalCount files",
+                        text = pluralStringResource(R.plurals.of_n_files, totalCount, totalCount),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -111,14 +113,16 @@ fun SelectionActionBar(
                     ) {
                         Icon(
                             Icons.Default.SelectAll,
-                            contentDescription = stringResource(R.string.cd_decorative),
+                            contentDescription = null,
                             modifier = Modifier.size(18.dp),
                             tint = if (selectedCount == totalCount) SelectionBlue
                             else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = if (selectedCount == totalCount) "All" else "Select All",
+                            text = stringResource(
+                                if (selectedCount == totalCount) R.string.all_selected else R.string.select_all
+                            ),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Medium,
                             color = if (selectedCount == totalCount) SelectionBlue
@@ -183,7 +187,8 @@ private fun ActionButton(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier),
+            // Disabled rather than unclickable, so TalkBack says "disabled".
+            .clickable(enabled = enabled, role = Role.Button, onClick = onClick),
         color = color.copy(alpha = 0.12f * alpha),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -195,7 +200,7 @@ private fun ActionButton(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = label,
+                contentDescription = null,
                 modifier = Modifier.size(22.dp),
                 tint = color.copy(alpha = alpha)
             )

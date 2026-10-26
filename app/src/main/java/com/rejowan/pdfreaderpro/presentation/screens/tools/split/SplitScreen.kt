@@ -18,6 +18,7 @@ import androidx.annotation.StringRes
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -81,7 +82,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -90,6 +90,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
 import androidx.compose.ui.res.stringResource
@@ -97,6 +98,10 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors - consistent with app design system
 private val AccentAmber = Color(0xFFFFB74D)     // Split theme color
@@ -161,11 +166,10 @@ fun SplitScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -369,7 +373,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.CallSplit,
-                contentDescription = stringResource(R.string.cd_split_pdf),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentAmber
             )
@@ -398,7 +402,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -866,7 +870,7 @@ private fun SplitBottomSection(
         ) {
             Icon(
                 Icons.Default.FolderOpen,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -933,7 +937,8 @@ private fun ProcessingOverlay(progress: Float) {
                 Text(
                     stringResource(R.string.splitting_pdf),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -1001,7 +1006,8 @@ private fun SuccessState(
             Text(
                 stringResource(R.string.split_complete),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
             )
 
             Text(

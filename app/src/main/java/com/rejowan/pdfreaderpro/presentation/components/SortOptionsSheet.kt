@@ -73,6 +73,8 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors matching UI guide
 private val AccentPurple = Color(0xFF9575CD)
@@ -282,7 +284,7 @@ private fun SortSheetHeader(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Sort,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -362,7 +364,7 @@ private fun SortCategoryCard(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier
                             .padding(6.dp)
                             .size(16.dp),
@@ -467,6 +469,7 @@ private fun SortOptionChip(
         modifier = modifier
             .scale(scale)
             .clip(RoundedCornerShape(10.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -526,7 +529,7 @@ private fun SortOptionChip(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
-                            contentDescription = stringResource(R.string.cd_selected),
+                            contentDescription = null,
                             modifier = Modifier.size(9.dp),
                             tint = Color.White
                         )

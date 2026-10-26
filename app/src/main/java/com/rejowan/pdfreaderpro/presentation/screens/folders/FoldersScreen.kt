@@ -2,7 +2,6 @@ package com.rejowan.pdfreaderpro.presentation.screens.folders
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.ui.Alignment
@@ -53,6 +53,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -111,11 +112,10 @@ fun FoldersScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            focusManager.clearFocus()
+                        .pointerInput(Unit) {
+                            // A plain tap handler, not clickable: clickable would merge the whole
+                            // screen into one TalkBack item.
+                            detectTapGestures { focusManager.clearFocus() }
                         },
                     contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
@@ -300,7 +300,7 @@ private fun SearchBar(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Search,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(20.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
@@ -416,7 +416,7 @@ private fun EmptySearchState() {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = Icons.Outlined.Search,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(28.dp),
                     tint = FolderAmber
                 )
@@ -460,7 +460,7 @@ private fun StatChip(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp),

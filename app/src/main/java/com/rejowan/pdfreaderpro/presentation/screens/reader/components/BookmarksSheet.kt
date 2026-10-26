@@ -227,7 +227,7 @@ private fun BookmarksSheetContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Bookmark,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -450,7 +450,7 @@ private fun EmptyBookmarksState(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.BookmarkBorder,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = AccentPurple,
                     modifier = Modifier.size(28.dp)
                 )

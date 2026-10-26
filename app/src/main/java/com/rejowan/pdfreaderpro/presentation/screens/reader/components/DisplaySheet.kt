@@ -78,6 +78,12 @@ import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.screens.reader.ReadingTheme
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Design colors
 private val AccentAmber = Color(0xFFFFB74D)
@@ -343,7 +349,7 @@ private fun DisplaySheetHeader(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Palette,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -395,7 +401,7 @@ private fun SectionLabel(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
-        modifier = modifier.padding(start = 4.dp)
+        modifier = modifier.padding(start = 4.dp).semantics { heading() }
     )
 }
 
@@ -505,6 +511,7 @@ private fun ThemeOption(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = AccentAmber),
@@ -568,7 +575,7 @@ private fun ThemeOption(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.cd_selected),
+                        contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(10.dp)
                     )
@@ -693,6 +700,7 @@ private fun BrightnessOptionItem(
             .fillMaxWidth()
             .scale(scale)
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -722,7 +730,7 @@ private fun BrightnessOptionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -758,7 +766,7 @@ private fun BrightnessOptionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.cd_selected),
+                        contentDescription = null,
                         modifier = Modifier.size(12.dp),
                         tint = Color.White
                     )
@@ -859,7 +867,9 @@ private fun ToggleRow(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .scale(scale),
+            .scale(scale)
+            .clip(RoundedCornerShape(8.dp))
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
         shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
@@ -880,7 +890,7 @@ private fun ToggleRow(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         tint = accent,
                         modifier = Modifier.size(16.dp)
                     )
@@ -906,7 +916,7 @@ private fun ToggleRow(
 
             Switch(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = null,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = accent,
                     checkedTrackColor = accent.copy(alpha = 0.5f)

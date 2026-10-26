@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -55,6 +56,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
@@ -332,7 +334,7 @@ private fun SidebarContent(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.WbSunny,
-                                contentDescription = stringResource(R.string.cd_decorative),
+                                contentDescription = null,
                                 modifier = Modifier.size(18.dp),
                                 tint = AccentBlue
                             )
@@ -353,7 +355,7 @@ private fun SidebarContent(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.LightMode,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(16.dp),
                         tint = subtleColor
                     )
@@ -370,7 +372,7 @@ private fun SidebarContent(
                     )
                     Icon(
                         imageVector = Icons.Filled.Brightness6,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(18.dp),
                         tint = subtleColor
                     )
@@ -439,6 +441,7 @@ private fun SettingToggleItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .toggleable(value = isChecked, role = Role.Switch, onValueChange = onCheckedChange)
             .padding(horizontal = 20.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -453,7 +456,7 @@ private fun SettingToggleItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = accentColor
                 )
@@ -476,7 +479,7 @@ private fun SettingToggleItem(
         }
         Switch(
             checked = isChecked,
-            onCheckedChange = onCheckedChange,
+            onCheckedChange = null,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,
                 checkedTrackColor = accentColor,

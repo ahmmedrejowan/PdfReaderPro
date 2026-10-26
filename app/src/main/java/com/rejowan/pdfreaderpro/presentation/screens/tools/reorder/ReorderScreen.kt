@@ -17,7 +17,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +36,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -84,6 +85,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -97,6 +99,11 @@ import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyGridState
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentIndigo = Color(0xFF7986CB)  // Reorder theme color
@@ -173,11 +180,10 @@ fun ReorderScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -250,7 +256,7 @@ fun ReorderScreen(
                             ) {
                                 Icon(
                                     Icons.Default.SwapVert,
-                                    contentDescription = stringResource(R.string.cd_decorative),
+                                    contentDescription = null,
                                     modifier = Modifier.size(18.dp),
                                     tint = AccentIndigo
                                 )
@@ -354,7 +360,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.SwapVert,
-                contentDescription = stringResource(R.string.cd_reorder_pages),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentIndigo
             )
@@ -384,7 +390,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -572,13 +578,13 @@ private fun ReorderBottomSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .toggleable(value = overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentIndigo)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -619,7 +625,7 @@ private fun ReorderBottomSection(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                Icon(Icons.Default.SwapVert, contentDescription = stringResource(R.string.cd_decorative))
+                Icon(Icons.Default.SwapVert, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(stringResource(if (isProcessing) R.string.saving else R.string.save_reordered_pdf))
@@ -665,7 +671,8 @@ private fun SuccessState(
         Text(
             stringResource(R.string.pages_reordered),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -807,7 +814,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.saving),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

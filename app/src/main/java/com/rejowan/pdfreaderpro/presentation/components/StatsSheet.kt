@@ -296,7 +296,7 @@ private fun StatsSheetHeader(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Analytics,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -380,7 +380,7 @@ private fun AnimatedStatCard(
                     ) {
                         Icon(
                             imageVector = icon,
-                            contentDescription = stringResource(R.string.cd_decorative),
+                            contentDescription = null,
                             tint = accentColor,
                             modifier = Modifier
                                 .padding(6.dp)

@@ -56,6 +56,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.liveRegion
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentGreen = Color(0xFF81C784)
@@ -224,12 +227,14 @@ fun FloatingSearchBar(
                     if (resultCount > 0 && !isSearching) {
                         SearchNavButton(
                             icon = Icons.Rounded.KeyboardArrowUp,
+                            contentDescription = stringResource(R.string.cd_previous_result),
                             onClick = onPreviousResult,
                             enabled = currentIndex > 1,
                             contentColor = contentColor
                         )
                         SearchNavButton(
                             icon = Icons.Rounded.KeyboardArrowDown,
+                            contentDescription = stringResource(R.string.cd_next_result),
                             onClick = onNextResult,
                             enabled = currentIndex < resultCount,
                             contentColor = contentColor
@@ -266,8 +271,19 @@ private fun ResultCountChip(
     accentColor: Color,
     modifier: Modifier = Modifier
 ) {
+    // "3/12" would be read as "3 slash 12", so TalkBack gets a sentence instead,
+    // announced politely whenever the count changes.
+    val spoken = if (total > 0) {
+        stringResource(R.string.match_count, current, total)
+    } else {
+        stringResource(R.string.no_results)
+    }
     Surface(
-        modifier = modifier,
+        // Replaces the "3/12" text inside, which would otherwise be read too.
+        modifier = modifier.clearAndSetSemantics {
+            contentDescription = spoken
+            liveRegion = LiveRegionMode.Polite
+        },
         shape = RoundedCornerShape(12.dp),
         color = accentColor.copy(alpha = 0.15f)
     ) {
@@ -285,6 +301,7 @@ private fun ResultCountChip(
 @Composable
 private fun SearchNavButton(
     icon: ImageVector,
+    contentDescription: String,
     onClick: () -> Unit,
     enabled: Boolean,
     contentColor: Color,
@@ -302,7 +319,7 @@ private fun SearchNavButton(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = stringResource(R.string.cd_decorative),
+            contentDescription = contentDescription,
             tint = if (enabled) contentColor else contentColor.copy(alpha = 0.3f),
             modifier = Modifier.size(22.dp)
         )

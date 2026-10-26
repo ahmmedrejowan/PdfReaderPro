@@ -235,7 +235,7 @@ private fun ToolsSheetHeader() {
         ) {
             Icon(
                 imageVector = Icons.Rounded.Build,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -291,7 +291,7 @@ private fun ToolRow(
             ) {
                 Icon(
                     imageVector = tool.icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(7.dp)
                         .size(18.dp),
@@ -317,7 +317,7 @@ private fun ToolRow(
 
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(18.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
             )

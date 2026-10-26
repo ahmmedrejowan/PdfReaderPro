@@ -61,6 +61,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.annotation.StringRes
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
@@ -307,7 +309,7 @@ private fun SectionLabel(
             letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
         ),
         color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
-        modifier = modifier.padding(start = 4.dp, bottom = 4.dp)
+        modifier = modifier.padding(start = 4.dp, bottom = 4.dp).semantics { heading() }
     )
 }
 
@@ -367,7 +369,7 @@ private fun ToolItem(
             ) {
                 Icon(
                     imageVector = tool.icon,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(10.dp)
                         .size(24.dp),
@@ -418,7 +420,7 @@ private fun ToolItem(
             if (tool.isEnabled) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )

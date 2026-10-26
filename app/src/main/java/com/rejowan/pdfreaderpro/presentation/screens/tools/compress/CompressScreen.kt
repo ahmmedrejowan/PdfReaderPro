@@ -22,7 +22,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -82,6 +83,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -97,6 +99,13 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)   // Compress theme color
@@ -163,11 +172,10 @@ fun CompressScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -356,7 +364,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Compress,
-                contentDescription = stringResource(R.string.cd_compress_pdf),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentPurple
             )
@@ -385,7 +393,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -492,7 +500,7 @@ private fun SourceFileCard(
                 ) {
                     Icon(
                         Icons.Default.SwapVert,
-                        contentDescription = stringResource(R.string.cd_select_files),
+                        contentDescription = null,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -560,6 +568,7 @@ private fun CompressionLevelItem(
                     Modifier.border(1.5.dp, accentColor, RoundedCornerShape(12.dp))
                 } else Modifier
             )
+            .semantics { selected = isSelected }
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         color = if (isSelected) {
@@ -609,7 +618,7 @@ private fun CompressionLevelItem(
             if (isSelected) {
                 Icon(
                     Icons.Default.CheckCircle,
-                    contentDescription = stringResource(R.string.cd_checkbox),
+                    contentDescription = null,
                     modifier = Modifier.size(20.dp),
                     tint = accentColor
                 )
@@ -771,13 +780,13 @@ private fun CompressBottomSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onOverwriteChange(!overwriteOriginal) }
+                .toggleable(value = overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = overwriteOriginal,
-                onCheckedChange = onOverwriteChange,
+                onCheckedChange = null,
                 colors = CheckboxDefaults.colors(checkedColor = AccentTeal)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -866,7 +875,8 @@ private fun SuccessState(
         Text(
             stringResource(R.string.compression_complete),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -1113,7 +1123,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.compressing),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

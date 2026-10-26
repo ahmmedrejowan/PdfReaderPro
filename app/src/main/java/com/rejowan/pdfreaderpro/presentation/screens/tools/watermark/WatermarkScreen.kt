@@ -58,6 +58,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import android.content.res.Configuration
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -93,6 +95,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -106,21 +109,29 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentCyan = Color(0xFF00BCD4) // Watermark theme color
 private val AccentGreen = Color(0xFF81C784)
 private val AccentBlue = Color(0xFF64B5F6)
 
-// Preset colors for text watermark
+// Preset colors for text watermark, each with the name TalkBack reads for it
 private val PresetColors = listOf(
-    Color(0xFF808080), // Gray
-    Color(0xFFEF5350), // Red
-    Color(0xFF42A5F5), // Blue
-    Color(0xFF66BB6A), // Green
-    Color(0xFFFFCA28), // Amber
-    Color(0xFFAB47BC), // Purple
-    Color(0xFF000000), // Black
+    Color(0xFF808080) to R.string.color_gray,
+    Color(0xFFEF5350) to R.string.highlight_color_red,
+    Color(0xFF42A5F5) to R.string.highlight_color_blue,
+    Color(0xFF66BB6A) to R.string.highlight_color_green,
+    Color(0xFFFFCA28) to R.string.color_amber,
+    Color(0xFFAB47BC) to R.string.color_purple,
+    Color(0xFF000000) to R.string.color_black,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -187,11 +198,10 @@ fun WatermarkScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -302,7 +312,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.WaterDrop,
-                contentDescription = stringResource(R.string.cd_add_watermark),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentCyan
             )
@@ -332,7 +342,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -523,13 +533,13 @@ private fun WatermarkContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onOverwriteChange(!state.overwriteOriginal) }
+                    .toggleable(value = state.overwriteOriginal, role = Role.Checkbox, onValueChange = onOverwriteChange)
                     .padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = state.overwriteOriginal,
-                    onCheckedChange = onOverwriteChange,
+                    onCheckedChange = null,
                     colors = CheckboxDefaults.colors(checkedColor = AccentCyan)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -588,7 +598,7 @@ private fun WatermarkTypeTabs(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.TextFields,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = if (selectedType == WatermarkType.TEXT)
                         AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
@@ -620,7 +630,7 @@ private fun WatermarkTypeTabs(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.Image,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = if (selectedType == WatermarkType.IMAGE)
                         AccentCyan else MaterialTheme.colorScheme.onSurfaceVariant
@@ -690,14 +700,16 @@ private fun TextWatermarkSettings(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            PresetColors.forEach { color ->
+            PresetColors.forEach { (color, name) ->
                 ColorCircle(
                     color = color,
+                    name = stringResource(name),
                     isSelected = color == textColor,
                     onClick = { onColorChange(color) }
                 )
             }
             // Custom color picker button
+            val pickerLabel = stringResource(R.string.cd_color_picker)
             Box(
                 modifier = Modifier
                     .size(36.dp)
@@ -710,7 +722,8 @@ private fun TextWatermarkSettings(
                             )
                         )
                     )
-                    .clickable { showColorPicker = true },
+                    .clickable(onClickLabel = pickerLabel) { showColorPicker = true }
+                    .semantics { contentDescription = pickerLabel },
                 contentAlignment = Alignment.Center
             ) {
                 Box(
@@ -878,6 +891,7 @@ private fun SettingSlider(
 @Composable
 private fun ColorCircle(
     color: Color,
+    name: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -891,13 +905,17 @@ private fun ColorCircle(
                     Modifier.border(3.dp, AccentCyan, CircleShape)
                 } else Modifier
             )
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .semantics {
+                contentDescription = name
+                selected = isSelected
+            },
         contentAlignment = Alignment.Center
     ) {
         if (isSelected) {
             Icon(
                 Icons.Default.Check,
-                contentDescription = stringResource(R.string.cd_checkbox),
+                contentDescription = null,
                 modifier = Modifier.size(18.dp),
                 tint = if (color == Color.Black || color == Color(0xFF808080)) Color.White else Color.Black
             )
@@ -1453,7 +1471,7 @@ private fun WatermarkElement(
             } else {
                 Icon(
                     Icons.Default.Image,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .size(if (isTiled) 16.dp else 28.dp)
                         .graphicsLayer { alpha = 0.3f },
@@ -1583,7 +1601,8 @@ private fun SuccessState(
         Text(
             stringResource(R.string.watermark_added),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -1724,7 +1743,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.adding_watermark),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

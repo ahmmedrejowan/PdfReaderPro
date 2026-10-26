@@ -335,7 +335,7 @@ private fun TocSheetContent(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Rounded.AttachFile,
-                            contentDescription = stringResource(R.string.cd_decorative),
+                            contentDescription = null,
                             modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -551,7 +551,7 @@ private fun EmptyTocState(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.MenuBook,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = AccentBlue,
                     modifier = Modifier.size(28.dp)
                 )
@@ -628,7 +628,7 @@ private fun AttachmentListItem(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.InsertDriveFile,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(6.dp)
                         .size(16.dp),
@@ -710,7 +710,7 @@ private fun EmptyAttachmentsState(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.AttachFile,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = AccentTeal,
                     modifier = Modifier.size(28.dp)
                 )

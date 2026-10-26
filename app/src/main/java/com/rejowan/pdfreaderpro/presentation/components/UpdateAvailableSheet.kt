@@ -301,7 +301,7 @@ private fun UpdateContent(
 
                 Icon(
                     imageVector = Icons.Rounded.SkipNext,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
 
@@ -421,7 +421,7 @@ private fun UpdateContent(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Schedule,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))

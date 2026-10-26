@@ -97,6 +97,8 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 private val FolderAmber = Color(0xFFFFB74D)
 private val FolderAmberDark = Color(0xFFF57C00)
@@ -457,7 +459,7 @@ private fun BatchDeleteConfirmSheet(
         ) {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(48.dp),
                 tint = Color(0xFFEF5350)
             )
@@ -553,7 +555,7 @@ private fun FolderDetailHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Description,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(16.dp),
                         tint = SoftBlue
                     )
@@ -579,7 +581,7 @@ private fun FolderDetailHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Folder,
-                        contentDescription = stringResource(R.string.cd_decorative),
+                        contentDescription = null,
                         modifier = Modifier.size(16.dp),
                         tint = FolderAmber
                     )
@@ -679,6 +681,7 @@ private fun ViewModeButton(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(6.dp))
+            .semantics { selected = isSelected }
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(6.dp),
         color = backgroundColor,

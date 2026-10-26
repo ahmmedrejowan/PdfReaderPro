@@ -455,7 +455,7 @@ private fun CompletedSection(
         ) {
             Icon(
                 imageVector = Icons.Rounded.InstallMobile,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -503,7 +503,7 @@ private fun CompletedSection(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Security,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -626,7 +626,7 @@ private fun StatusIcon(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier.size(36.dp),
                 tint = iconColor
             )

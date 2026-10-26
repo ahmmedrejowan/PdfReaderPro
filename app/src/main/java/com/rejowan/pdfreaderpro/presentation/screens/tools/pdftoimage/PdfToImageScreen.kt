@@ -17,8 +17,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -79,6 +79,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -89,6 +90,11 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD) // PDF to Image theme
@@ -156,11 +162,10 @@ fun PdfToImageScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
+                .pointerInput(Unit) {
+                    // A plain tap handler, not clickable: clickable would merge the whole
+                    // screen into one TalkBack item.
+                    detectTapGestures { focusManager.clearFocus() }
                 }
         ) {
             when {
@@ -287,7 +292,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
         ) {
             Icon(
                 Icons.Default.Photo,
-                contentDescription = stringResource(R.string.cd_pdf_to_image),
+                contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = AccentPurple
             )
@@ -317,7 +322,7 @@ private fun EmptyState(onSelectFile: () -> Unit) {
             onClick = onSelectFile,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Icon(Icons.Default.PictureAsPdf, contentDescription = stringResource(R.string.cd_select_files))
+            Icon(Icons.Default.PictureAsPdf, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(stringResource(R.string.select_pdf))
         }
@@ -526,7 +531,8 @@ private fun SectionLabel(text: String) {
             fontWeight = FontWeight.SemiBold,
             letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
         ),
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.semantics { heading() }
     )
 }
 
@@ -565,6 +571,7 @@ private fun FormatCard(
                     Modifier.border(2.dp, AccentPurple, RoundedCornerShape(12.dp))
                 } else Modifier
             )
+            .semantics { selected = isSelected }
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) {
@@ -692,7 +699,8 @@ private fun SuccessState(
                 Text(
                     stringResource(R.string.images_exported),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
                 )
                 Text(
                     stringResource(R.string.images_created_count, result.imageCount, result.format),
@@ -720,7 +728,7 @@ private fun SuccessState(
             ) {
                 Icon(
                     Icons.Default.Folder,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     modifier = Modifier.size(18.dp),
                     tint = AccentPurple
                 )
@@ -895,7 +903,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.exporting),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

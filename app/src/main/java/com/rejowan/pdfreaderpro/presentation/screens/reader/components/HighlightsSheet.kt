@@ -70,6 +70,9 @@ import com.rejowan.pdfreaderpro.domain.model.Highlight
 import com.rejowan.pdfreaderpro.presentation.screens.reader.HighlightColors
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 private val PANEL_WIDTH = 320.dp
 private val OUTER_CORNER = 20.dp
@@ -325,7 +328,7 @@ private fun HighlightsHeader(count: Int) {
         ) {
             Icon(
                 imageVector = Icons.Rounded.FormatColorFill,
-                contentDescription = stringResource(R.string.cd_decorative),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(6.dp)
                     .size(16.dp),
@@ -372,12 +375,17 @@ private fun ColorFilterRow(
     ) {
         HighlightColors.ALL.forEach { color ->
             val isSelected = selected == color
+            val description = stringResource(colorNameFor(color))
             Box(
                 modifier = Modifier
                     .size(24.dp)
                     .clip(CircleShape)
                     .background(Color(color.asOpaqueSwatch()))
-                    .clickable { onSelect(color) },
+                    .clickable { onSelect(color) }
+                    .semantics {
+                        contentDescription = description
+                        this.selected = isSelected
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 if (isSelected) {
@@ -536,7 +544,7 @@ private fun EmptyState(
             Box(contentAlignment = Alignment.Center, modifier = Modifier.size(56.dp)) {
                 Icon(
                     imageVector = Icons.Rounded.FormatColorFill,
-                    contentDescription = stringResource(R.string.cd_decorative),
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(28.dp)
                 )

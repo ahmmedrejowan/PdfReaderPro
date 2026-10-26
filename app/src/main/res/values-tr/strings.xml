@@ -716,7 +716,6 @@
     <string name="cd_image">Görsel</string>
     <string name="cd_file_thumbnail">Dosya küçük resmi</string>
     <string name="cd_add_files">Dosya ekle</string>
-    <string name="cd_select_files">Dosya seç</string>
     <string name="cd_file_options">Dosya seçenekleri</string>
     <string name="cd_folder_options">Klasör seçenekleri</string>
     <string name="cd_selected">Seçildi</string>
@@ -729,7 +728,6 @@
     <string name="cd_processing">İşleniyor</string>
     <string name="cd_completed">Tamamlandı</string>
     <string name="cd_progress">İlerleme göstergesi</string>
-    <string name="cd_checkbox">Onay kutusu</string>
     <string name="cd_checked">İşaretli</string>
     <string name="cd_unchecked">İşaretsiz</string>
     <string name="cd_toggle">Değiştir</string>
@@ -740,21 +738,16 @@
     <string name="cd_split_pdf">PDF böl</string>
     <string name="cd_compress_pdf">PDF sıkıştır</string>
     <string name="cd_rotate_pdf">PDF döndür</string>
-    <string name="cd_reorder_pages">Sayfaları yeniden sırala</string>
-    <string name="cd_remove_pages">Sayfaları kaldır</string>
     <string name="cd_add_watermark">Filigran ekle</string>
     <string name="cd_add_page_numbers">Sayfa numaraları ekle</string>
     <string name="cd_lock_pdf">PDF kilitle</string>
     <string name="cd_unlock_pdf">PDF kilidini aç</string>
-    <string name="cd_pdf_to_image">PDF\'i görsele dönüştür</string>
-    <string name="cd_image_to_pdf">Görseli PDF\'e dönüştür</string>
     <string name="cd_page_preview">Sayfa önizlemesi</string>
     <string name="cd_page_number">Sayfa %1$d</string>
     <string name="cd_page_selected">Sayfa %1$d seçildi</string>
     <string name="cd_page_not_selected">Sayfa %1$d seçilmedi</string>
     <!-- Content Descriptions - UI Elements -->
     <string name="cd_app_logo">PDF Reader Pro logosu</string>
-    <string name="cd_decorative">Dekoratif görsel</string>
     <string name="cd_illustration">İllüstrasyon</string>
     <string name="cd_sort_ascending">Artan sırala</string>
     <string name="cd_sort_descending">Azalan sırala</string>
@@ -1234,7 +1227,6 @@
     <string name="link_github">GitHub</string>
     <string name="link_linkedin">LinkedIn</string>
     <!-- Selected -->
-    <string name="selected">Seçildi</string>
     <!-- Additional accessibility strings (unique) -->
     <string name="cd_preview">Önizleme</string>
     <string name="cd_view">Görüntüle</string>
@@ -1649,5 +1641,16 @@
     <plurals name="pdf_count_short">
         <item quantity="one">%d PDF</item>
         <item quantity="other">%d PDF</item>
+    </plurals>
+    <string name="n_selected">%1$d seçildi</string>
+    <string name="all_selected">Tümü</string>
+    <string name="color_black">Siyah</string>
+    <string name="color_dark_gray">Koyu gri</string>
+    <string name="color_gray">Gri</string>
+    <string name="color_purple">Mor</string>
+    <string name="color_amber">Kehribar</string>
+    <plurals name="of_n_files">
+        <item quantity="one">%1$d dosyadan</item>
+        <item quantity="other">%1$d dosyadan</item>
     </plurals>
 </resources>
