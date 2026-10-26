@@ -35,7 +35,7 @@
 
 ---
 
-## Download
+## Transferir
 
 <p align="center"><a href="https://github.com/ahmmedrejowan/PdfReaderPro/releases/latest"><img alt="Get it on GitHub" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/get.png" height="72"/></a>&nbsp;&nbsp;
 <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ahmmedrejowan/PdfReaderPro"><img alt="Get it on Obtainium" src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/obtainium.png" height="72"/></a>
@@ -118,7 +118,7 @@ app/
 - **Kotlin**: 2.4.20
 - **Java**: 21
 
-### Permissions
+### Permissões
 
 - `READ_EXTERNAL_STORAGE` / `READ_MEDIA_DOCUMENTS` – Acesso a ficheiros PDF
 - `WRITE_EXTERNAL_STORAGE` – Guardar PDFs processados (Android 9 e anteriores)
@@ -193,7 +193,7 @@ O PDF Reader Pro funciona com o TalkBack e com o tamanho de letra do sistema. O 
 | Ler PDFs em voz alta                         | ✅ O texto e as ligações de um PDF (não PDFs digitalizados só com imagens) |
 | Tamanho de letra                             | ✅ Segue o tamanho de letra do sistema                                                        |
 | Temas escuros e de alto contraste            | ✅ Escuro, Preto (AMOLED) e Sépia                                          |
-| Gestures                                     | ⚠️ Reordenar páginas só funciona a arrastar; o seletor de páginas oferece Ir para a página   |
+| Gestos                                       | ⚠️ Reordenar páginas só funciona a arrastar; o seletor de páginas oferece Ir para a página   |
 | Acesso por comutador e teclado               | ❔ Ainda não testado                                                                          |
 
 Detalhes na [página de acessibilidade da wiki](https://github.com/ahmmedrejowan/PdfReaderPro/wiki/Accessibility). Algo difícil de usar? Diga-nos na [discussão sobre acessibilidade](https://github.com/ahmmedrejowan/PdfReaderPro/discussions/114).
