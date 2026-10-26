@@ -7,3 +7,11 @@ files:
   - source: /app/src/main/res/values/strings.xml
     translation: /app/src/main/res/values-%two_letters_code%/strings.xml
     type: android
+
+  # The README is translated only into languages that already have one, so
+  # Crowdin never writes a half-English README. To add a language, remove it
+  # from this list once its translation is complete.
+  - source: /README.md
+    translation: /readme/README.%two_letters_code%.md
+    excluded_target_languages: [bn, ga-IE, ja, pl, tr, zh-CN]
+    skip_untranslated_files: true

@@ -1,4 +1,4 @@
-[English](README.md) | [Русский](README.ru.md) | [Deutsch](README.de.md) | [Español](README.es.md) | [Français](README.fr.md) | [Italiano](README.it.md) | [Português](README.pt.md)
+[English](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/README.md) | [Русский](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.ru.md) | [Deutsch](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.de.md) | [Español](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.es.md) | [Français](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.fr.md) | [Italiano](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.it.md) | [Português](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.pt.md)
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/logo.png" alt="Logo de PDF Reader Pro" width="120" height="120">
@@ -11,7 +11,7 @@
 
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg?style=flat)](https://www.android.com/)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
-[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/LICENSE)
 [![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-purple.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Latest-blue.svg)](https://developer.android.com/jetpack/compose)
@@ -67,30 +67,30 @@ D'autres captures de chaque écran sont dans le [wiki](https://github.com/ahmmed
 
 PDF Reader Pro suit les principes de **Clean Architecture** avec le modèle **MVVM** :
 
-```text
+```
 app/
-├── data/                      # Couche de données
+├── data/                      # Data layer
 │   ├── local/
-│   │   ├── database/          # Base de données Room
-│   │   └── preferences/       # Préférences DataStore
-│   └── repository/            # Implémentations des dépôts
+│   │   ├── database/          # Room database
+│   │   └── preferences/       # DataStore preferences
+│   └── repository/            # Repository implementations
 │
-├── domain/                    # Couche de domaine
-│   ├── model/                 # Modèles de domaine
-│   └── repository/            # Interfaces des dépôts
+├── domain/                    # Domain layer
+│   ├── model/                 # Domain models
+│   └── repository/            # Repository interfaces
 │
-├── presentation/              # Couche de présentation (UI)
-│   ├── components/            # Composants Compose réutilisables
-│   ├── navigation/            # Graphe de navigation
-│   ├── screens/               # Écrans d'interface
-│   │   ├── home/              # Accueil avec explorateur de fichiers
-│   │   ├── reader/            # Lecteur PDF
-│   │   ├── tools/             # Outils PDF
-│   │   └── settings/          # Paramètres
-│   └── theme/                 # Thématisation Material 3
+├── presentation/              # Presentation layer (UI)
+│   ├── components/            # Reusable Compose components
+│   ├── navigation/            # Navigation graph
+│   ├── screens/               # UI screens
+│   │   ├── home/              # Home with file browser
+│   │   ├── reader/            # PDF reader
+│   │   ├── tools/             # PDF tools
+│   │   └── settings/          # Settings
+│   └── theme/                 # Material 3 theming
 │
-├── di/                        # Injection de dépendances Koin
-└── util/                      # Utilitaires
+├── di/                        # Koin dependency injection
+└── util/                      # Utilities
 ```
 
 ### Stack technique
@@ -147,10 +147,10 @@ Pour compiler et exécuter le projet, suivez ces étapes :
 ## Tests
 
 ```bash
-# Exécuter les tests unitaires
+# Run unit tests
 ./gradlew test
 
-# Exécuter les tests instrumentés
+# Run instrumented tests
 ./gradlew connectedAndroidTest
 ```
 
@@ -202,7 +202,7 @@ Détails sur la [page Accessibilité du wiki](https://github.com/ahmmedrejowan/P
 
 ## Contribution
 
-Les contributions sont les bienvenues ! Veuillez lire [CONTRIBUTING.md](CONTRIBUTING.md) pour connaître les directives.
+Les contributions sont les bienvenues ! Veuillez lire [CONTRIBUTING.md](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/CONTRIBUTING.md) pour connaître les directives.
 
 ### Démarrage rapide
 
@@ -216,7 +216,7 @@ Les contributions sont les bienvenues ! Veuillez lire [CONTRIBUTING.md](CONTRIBU
 
 ## Licence
 
-```text
+```
 Copyright (C) 2024-2026 K M Rejowan Ahmmed
 
 This program is free software: you can redistribute it and/or modify
@@ -303,6 +303,6 @@ GNU General Public License for more details.
 - Les surlignages déjà présents dans un fichier sont listés et consultables, en lecture seule (#41)
 - Verrouiller le défilement horizontal en zoom, enregistré par document (#74)
 
-Consultez [CHANGELOG.md](CHANGELOG.md) pour l'historique complet des versions.
+Consultez [CHANGELOG.md](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/CHANGELOG.md) pour l'historique complet des versions.
 
 ---

@@ -1,4 +1,4 @@
-[English](README.md) | [Русский](README.ru.md) | [Deutsch](README.de.md) | [Español](README.es.md) | [Français](README.fr.md) | [Italiano](README.it.md) | [Português](README.pt.md)
+[English](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/README.md) | [Русский](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.ru.md) | [Deutsch](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.de.md) | [Español](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.es.md) | [Français](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.fr.md) | [Italiano](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.it.md) | [Português](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/readme/README.pt.md)
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ahmmedrejowan/PdfReaderPro/master/files/logo.png" alt="Логотип PDF Reader Pro" width="120" height="120">
@@ -11,7 +11,7 @@
 
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg?style=flat)](https://www.android.com/)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
-[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/LICENSE)
 [![Crowdin](https://badges.crowdin.net/pdf-reader-pro/localized.svg)](https://crowdin.com/project/pdf-reader-pro)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-purple.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Latest-blue.svg)](https://developer.android.com/jetpack/compose)
@@ -67,30 +67,30 @@
 
 PDF Reader Pro следует принципам **Clean Architecture** с паттерном **MVVM**:
 
-```text
+```
 app/
-├── data/                      # Слой данных
+├── data/                      # Data layer
 │   ├── local/
-│   │   ├── database/          # База данных Room
-│   │   └── preferences/       # Настройки DataStore
-│   └── repository/            # Реализации репозиториев
+│   │   ├── database/          # Room database
+│   │   └── preferences/       # DataStore preferences
+│   └── repository/            # Repository implementations
 │
-├── domain/                    # Слой домена
-│   ├── model/                 # Модели домена
-│   └── repository/            # Интерфейсы репозиториев
+├── domain/                    # Domain layer
+│   ├── model/                 # Domain models
+│   └── repository/            # Repository interfaces
 │
-├── presentation/              # Слой представления (UI)
-│   ├── components/            # Переиспользуемые компоненты Compose
-│   ├── navigation/            # Граф навигации
-│   ├── screens/               # Экраны UI
-│   │   ├── home/              # Главный экран с браузером файлов
-│   │   ├── reader/            # Просмотрщик PDF
-│   │   ├── tools/             # Инструменты PDF
-│   │   └── settings/          # Настройки
-│   └── theme/                 # Темизация Material 3
+├── presentation/              # Presentation layer (UI)
+│   ├── components/            # Reusable Compose components
+│   ├── navigation/            # Navigation graph
+│   ├── screens/               # UI screens
+│   │   ├── home/              # Home with file browser
+│   │   ├── reader/            # PDF reader
+│   │   ├── tools/             # PDF tools
+│   │   └── settings/          # Settings
+│   └── theme/                 # Material 3 theming
 │
-├── di/                        # Внедрение зависимостей Koin
-└── util/                      # Утилиты
+├── di/                        # Koin dependency injection
+└── util/                      # Utilities
 ```
 
 ### Технологический стек
@@ -147,10 +147,10 @@ app/
 ## Тестирование
 
 ```bash
-# Запустить модульные тесты
+# Run unit tests
 ./gradlew test
 
-# Запустить инструментальные тесты
+# Run instrumented tests
 ./gradlew connectedAndroidTest
 ```
 
@@ -202,7 +202,7 @@ PDF Reader Pro работает с TalkBack и системным размеро
 
 ## Участие в разработке
 
-Мы приветствуем вклад! Пожалуйста, прочитайте [CONTRIBUTING.md](CONTRIBUTING.md) для получения рекомендаций.
+Мы приветствуем вклад! Пожалуйста, прочитайте [CONTRIBUTING.md](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/CONTRIBUTING.md) для получения рекомендаций.
 
 ### Быстрый старт
 
@@ -216,7 +216,7 @@ PDF Reader Pro работает с TalkBack и системным размеро
 
 ## Лицензия
 
-```text
+```
 Copyright (C) 2024-2026 K M Rejowan Ahmmed
 
 This program is free software: you can redistribute it and/or modify
@@ -303,6 +303,6 @@ GNU General Public License for more details.
 - Выделения, уже присутствующие в файле, отображаются в списке и доступны для поиска, только для чтения (#41)
 - Блокировка горизонтальной прокрутки при увеличении, сохраняется для каждого документа (#74)
 
-Полную историю версий см. в [CHANGELOG.md](CHANGELOG.md).
+Полную историю версий см. в [CHANGELOG.md](https://github.com/ahmmedrejowan/PdfReaderPro/blob/master/CHANGELOG.md).
 
 ---
