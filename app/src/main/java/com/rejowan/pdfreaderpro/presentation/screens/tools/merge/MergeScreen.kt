@@ -114,6 +114,10 @@ import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)    // Primary actions (merge)
@@ -827,7 +831,8 @@ private fun ProcessingOverlay(progress: Float) {
                 Text(
                     stringResource(R.string.merging_pdfs),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -892,7 +897,8 @@ private fun SuccessState(
         Text(
             stringResource(R.string.merge_complete),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
         )
 
         Spacer(modifier = Modifier.height(16.dp))

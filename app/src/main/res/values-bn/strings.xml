@@ -729,7 +729,6 @@
     <string name="cd_processing">কাজ চলছে</string>
     <string name="cd_completed">সম্পন্ন</string>
     <string name="cd_progress">প্রোগ্রেস ইন্ডিকেটর</string>
-    <string name="cd_checkbox">চেকবক্স</string>
     <string name="cd_checked">চেক করা</string>
     <string name="cd_unchecked">চেক করা নেই</string>
     <string name="cd_toggle">চালু/বন্ধ</string>
@@ -1648,5 +1647,16 @@
     <plurals name="pdf_count_short">
         <item quantity="one">%d টি PDF</item>
         <item quantity="other">%d টি PDF</item>
+    </plurals>
+    <string name="n_selected">%1$d টি সিলেক্ট করা হয়েছে</string>
+    <string name="all_selected">সব</string>
+    <string name="color_black">কালো</string>
+    <string name="color_dark_gray">গাঢ় ধূসর</string>
+    <string name="color_gray">ধূসর</string>
+    <string name="color_purple">বেগুনি</string>
+    <string name="color_amber">অ্যাম্বার</string>
+    <plurals name="of_n_files">
+        <item quantity="one">মোট %1$d টি ফাইলের মধ্যে</item>
+        <item quantity="other">মোট %1$d টি ফাইলের মধ্যে</item>
     </plurals>
 </resources>

@@ -104,22 +104,29 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentOrange = Color(0xFFFF9800) // Page numbers theme color
 private val AccentGreen = Color(0xFF81C784)
 private val AccentBlue = Color(0xFF64B5F6)
 
-// Preset colors for page numbers
+// Preset colors for page numbers, each with the name TalkBack reads for it
 private val PresetColors = listOf(
-    Color(0xFF000000), // Black
-    Color(0xFF424242), // Dark Gray
-    Color(0xFF757575), // Gray
-    Color(0xFFEF5350), // Red
-    Color(0xFF42A5F5), // Blue
-    Color(0xFF66BB6A), // Green
-    Color(0xFFAB47BC), // Purple
+    Color(0xFF000000) to R.string.color_black,
+    Color(0xFF424242) to R.string.color_dark_gray,
+    Color(0xFF757575) to R.string.color_gray,
+    Color(0xFFEF5350) to R.string.highlight_color_red,
+    Color(0xFF42A5F5) to R.string.highlight_color_blue,
+    Color(0xFF66BB6A) to R.string.highlight_color_green,
+    Color(0xFFAB47BC) to R.string.color_purple,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -452,9 +459,10 @@ private fun PageNumbersContent(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            PresetColors.forEach { color ->
+            PresetColors.forEach { (color, name) ->
                 ColorCircle(
                     color = color,
+                    name = stringResource(name),
                     isSelected = color == state.textColor,
                     onClick = { onColorChange(color) }
                 )
@@ -653,7 +661,8 @@ private fun SectionLabel(text: String) {
             fontWeight = FontWeight.SemiBold,
             letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
         ),
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.semantics { heading() }
     )
 }
 
@@ -773,6 +782,7 @@ private fun SettingSlider(
 @Composable
 private fun ColorCircle(
     color: Color,
+    name: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -786,13 +796,17 @@ private fun ColorCircle(
                     Modifier.border(3.dp, AccentOrange, CircleShape)
                 } else Modifier
             )
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .semantics {
+                contentDescription = name
+                selected = isSelected
+            },
         contentAlignment = Alignment.Center
     ) {
         if (isSelected) {
             Icon(
                 Icons.Default.Check,
-                contentDescription = stringResource(R.string.cd_checkbox),
+                contentDescription = null,
                 modifier = Modifier.size(18.dp),
                 tint = if (color == Color.Black || color == Color(0xFF424242)) Color.White else Color.Black
             )
@@ -1334,7 +1348,8 @@ private fun SuccessState(
         Text(
             stringResource(R.string.page_numbers_added),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -1475,7 +1490,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.adding_numbers),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -81,13 +82,13 @@ fun SelectionActionBar(
                 // Selection count
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "$selectedCount selected",
+                        text = stringResource(R.string.n_selected, selectedCount),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = SelectionBlue
                     )
                     Text(
-                        text = "of $totalCount files",
+                        text = pluralStringResource(R.plurals.of_n_files, totalCount, totalCount),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -118,7 +119,9 @@ fun SelectionActionBar(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = if (selectedCount == totalCount) "All" else "Select All",
+                            text = stringResource(
+                                if (selectedCount == totalCount) R.string.all_selected else R.string.select_all
+                            ),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Medium,
                             color = if (selectedCount == totalCount) SelectionBlue

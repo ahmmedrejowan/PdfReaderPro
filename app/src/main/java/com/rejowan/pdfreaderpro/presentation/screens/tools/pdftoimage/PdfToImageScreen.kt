@@ -89,6 +89,11 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD) // PDF to Image theme
@@ -526,7 +531,8 @@ private fun SectionLabel(text: String) {
             fontWeight = FontWeight.SemiBold,
             letterSpacing = MaterialTheme.typography.labelSmall.letterSpacing * 1.5f
         ),
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.semantics { heading() }
     )
 }
 
@@ -565,6 +571,7 @@ private fun FormatCard(
                     Modifier.border(2.dp, AccentPurple, RoundedCornerShape(12.dp))
                 } else Modifier
             )
+            .semantics { selected = isSelected }
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) {
@@ -692,7 +699,8 @@ private fun SuccessState(
                 Text(
                     stringResource(R.string.images_exported),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
                 )
                 Text(
                     stringResource(R.string.images_created_count, result.imageCount, result.format),
@@ -895,7 +903,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.exporting),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

@@ -29,6 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
@@ -136,6 +140,7 @@ private fun CompactTab(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
+            .semantics { selected = isSelected; role = Role.Tab }
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(10.dp),
         color = backgroundColor
@@ -176,6 +181,7 @@ private fun ViewModeIcon(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(6.dp))
+            .semantics { selected = isSelected }
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(6.dp),
         color = backgroundColor,

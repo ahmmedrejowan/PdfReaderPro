@@ -97,6 +97,8 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 private val FolderAmber = Color(0xFFFFB74D)
 private val FolderAmberDark = Color(0xFFF57C00)
@@ -679,6 +681,7 @@ private fun ViewModeButton(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(6.dp))
+            .semantics { selected = isSelected }
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(6.dp),
         color = backgroundColor,

@@ -61,6 +61,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.annotation.StringRes
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import com.rejowan.pdfreaderpro.R
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToCompressTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToMergeTool
@@ -307,7 +309,7 @@ private fun SectionLabel(
             letterSpacing = MaterialTheme.typography.labelMedium.letterSpacing * 1.5f
         ),
         color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
-        modifier = modifier.padding(start = 4.dp, bottom = 4.dp)
+        modifier = modifier.padding(start = 4.dp, bottom = 4.dp).semantics { heading() }
     )
 }
 

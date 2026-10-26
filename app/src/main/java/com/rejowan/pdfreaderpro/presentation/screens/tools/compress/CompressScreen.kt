@@ -98,7 +98,13 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)   // Compress theme color
@@ -562,6 +568,7 @@ private fun CompressionLevelItem(
                     Modifier.border(1.5.dp, accentColor, RoundedCornerShape(12.dp))
                 } else Modifier
             )
+            .semantics { selected = isSelected }
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         color = if (isSelected) {
@@ -611,7 +618,7 @@ private fun CompressionLevelItem(
             if (isSelected) {
                 Icon(
                     Icons.Default.CheckCircle,
-                    contentDescription = stringResource(R.string.cd_checkbox),
+                    contentDescription = null,
                     modifier = Modifier.size(20.dp),
                     tint = accentColor
                 )
@@ -868,7 +875,8 @@ private fun SuccessState(
         Text(
             stringResource(R.string.compression_complete),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -1115,7 +1123,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.compressing),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

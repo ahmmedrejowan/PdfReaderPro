@@ -729,7 +729,6 @@
     <string name="cd_processing">Przetwarzanie</string>
     <string name="cd_completed">Zakończone</string>
     <string name="cd_progress">Wskaźnik postępu</string>
-    <string name="cd_checkbox">Pole wyboru</string>
     <string name="cd_checked">Zaznaczone</string>
     <string name="cd_unchecked">Niezaznaczone</string>
     <string name="cd_toggle">Przełącz</string>
@@ -1702,5 +1701,18 @@
         <item quantity="few">%d PDF</item>
         <item quantity="many">%d PDF</item>
         <item quantity="other">%d PDF</item>
+    </plurals>
+    <string name="n_selected">Zaznaczone: %1$d</string>
+    <string name="all_selected">Wszystkie</string>
+    <string name="color_black">Czarny</string>
+    <string name="color_dark_gray">Ciemnoszary</string>
+    <string name="color_gray">Szary</string>
+    <string name="color_purple">Fioletowy</string>
+    <string name="color_amber">Bursztynowy</string>
+    <plurals name="of_n_files">
+        <item quantity="one">z %1$d pliku</item>
+        <item quantity="few">z %1$d plików</item>
+        <item quantity="many">z %1$d plików</item>
+        <item quantity="other">z %1$d pliku</item>
     </plurals>
 </resources>

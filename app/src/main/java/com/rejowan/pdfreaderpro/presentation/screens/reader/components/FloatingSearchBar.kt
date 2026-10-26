@@ -56,6 +56,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rejowan.pdfreaderpro.R
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
 
 private val AccentPurple = Color(0xFF9575CD)
 private val AccentGreen = Color(0xFF81C784)
@@ -268,8 +270,18 @@ private fun ResultCountChip(
     accentColor: Color,
     modifier: Modifier = Modifier
 ) {
+    // "3/12" would be read as "3 slash 12", so TalkBack gets a sentence instead,
+    // announced politely whenever the count changes.
+    val spoken = if (total > 0) {
+        stringResource(R.string.match_count, current, total)
+    } else {
+        stringResource(R.string.no_results)
+    }
     Surface(
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = spoken
+            liveRegion = LiveRegionMode.Polite
+        },
         shape = RoundedCornerShape(12.dp),
         color = accentColor.copy(alpha = 0.15f)
     ) {

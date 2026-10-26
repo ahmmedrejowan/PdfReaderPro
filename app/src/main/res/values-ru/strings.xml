@@ -729,7 +729,6 @@
     <string name="cd_processing">Обработка</string>
     <string name="cd_completed">Завершено</string>
     <string name="cd_progress">Индикатор выполнения</string>
-    <string name="cd_checkbox">Флажок</string>
     <string name="cd_checked">Отмечено</string>
     <string name="cd_unchecked">Не отмечено</string>
     <string name="cd_toggle">Переключить</string>
@@ -1702,5 +1701,18 @@
         <item quantity="few">%d PDF</item>
         <item quantity="many">%d PDF</item>
         <item quantity="other">%d PDF</item>
+    </plurals>
+    <string name="n_selected">Выбрано: %1$d</string>
+    <string name="all_selected">Все</string>
+    <string name="color_black">Чёрный</string>
+    <string name="color_dark_gray">Тёмно-серый</string>
+    <string name="color_gray">Серый</string>
+    <string name="color_purple">Фиолетовый</string>
+    <string name="color_amber">Янтарный</string>
+    <plurals name="of_n_files">
+        <item quantity="one">из %1$d файла</item>
+        <item quantity="few">из %1$d файлов</item>
+        <item quantity="many">из %1$d файлов</item>
+        <item quantity="other">из %1$d файла</item>
     </plurals>
 </resources>

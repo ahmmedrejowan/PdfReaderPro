@@ -729,7 +729,6 @@
     <string name="cd_processing">İşleniyor</string>
     <string name="cd_completed">Tamamlandı</string>
     <string name="cd_progress">İlerleme göstergesi</string>
-    <string name="cd_checkbox">Onay kutusu</string>
     <string name="cd_checked">İşaretli</string>
     <string name="cd_unchecked">İşaretsiz</string>
     <string name="cd_toggle">Değiştir</string>
@@ -1648,5 +1647,16 @@
     <plurals name="pdf_count_short">
         <item quantity="one">%d PDF</item>
         <item quantity="other">%d PDF</item>
+    </plurals>
+    <string name="n_selected">%1$d seçildi</string>
+    <string name="all_selected">Tümü</string>
+    <string name="color_black">Siyah</string>
+    <string name="color_dark_gray">Koyu gri</string>
+    <string name="color_gray">Gri</string>
+    <string name="color_purple">Mor</string>
+    <string name="color_amber">Kehribar</string>
+    <plurals name="of_n_files">
+        <item quantity="one">%1$d dosyadan</item>
+        <item quantity="other">%1$d dosyadan</item>
     </plurals>
 </resources>

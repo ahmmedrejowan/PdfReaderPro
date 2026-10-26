@@ -97,7 +97,13 @@ import com.rejowan.pdfreaderpro.R
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentRed = Color(0xFFEF5350)  // Remove pages theme color
@@ -727,6 +733,7 @@ private fun PageThumbnailItem(
                     Modifier.border(2.dp, AccentRed, RoundedCornerShape(8.dp))
                 } else Modifier
             )
+            .semantics { selected = page.isSelected }
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
             containerColor = if (page.isSelected) {
@@ -999,7 +1006,8 @@ private fun SuccessState(
         Text(
             stringResource(R.string.pages_removed),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -1180,7 +1188,8 @@ private fun ProcessingOverlay(progress: Float) {
                     stringResource(R.string.removing),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Medium
-                    )
+                    ),
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

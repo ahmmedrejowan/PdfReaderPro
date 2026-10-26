@@ -73,6 +73,8 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.SortOption
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors matching UI guide
 private val AccentPurple = Color(0xFF9575CD)
@@ -467,6 +469,7 @@ private fun SortOptionChip(
         modifier = modifier
             .scale(scale)
             .clip(RoundedCornerShape(10.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),

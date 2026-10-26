@@ -73,6 +73,8 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.domain.model.FolderSortOption
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 private val AccentAmber = Color(0xFFFFB74D)
 private val AccentTeal = Color(0xFF4DB6AC)
@@ -449,6 +451,7 @@ private fun FolderSortOptionChip(
         modifier = modifier
             .scale(scale)
             .clip(RoundedCornerShape(10.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),

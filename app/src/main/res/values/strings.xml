@@ -791,7 +791,6 @@
     <string name="cd_processing">Processing</string>
     <string name="cd_completed">Completed</string>
     <string name="cd_progress">Progress indicator</string>
-    <string name="cd_checkbox">Checkbox</string>
     <string name="cd_checked">Checked</string>
     <string name="cd_unchecked">Unchecked</string>
     <string name="cd_toggle">Toggle</string>
@@ -1783,5 +1782,16 @@
     <plurals name="pdf_count_short">
         <item quantity="one">%d PDF</item>
         <item quantity="other">%d PDFs</item>
+    </plurals>
+    <string name="n_selected">%1$d selected</string>
+    <string name="all_selected">All</string>
+    <string name="color_black">Black</string>
+    <string name="color_dark_gray">Dark gray</string>
+    <string name="color_gray">Gray</string>
+    <string name="color_purple">Purple</string>
+    <string name="color_amber">Amber</string>
+    <plurals name="of_n_files">
+        <item quantity="one">of %1$d file</item>
+        <item quantity="other">of %1$d files</item>
     </plurals>
 </resources>

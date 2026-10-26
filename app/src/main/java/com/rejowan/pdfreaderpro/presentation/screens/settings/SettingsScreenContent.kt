@@ -144,6 +144,10 @@ import com.rejowan.pdfreaderpro.util.AppLanguage
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -879,6 +883,7 @@ private fun SectionLabel(
         modifier = modifier
             .scale(scale)
             .padding(start = 4.dp, bottom = 4.dp)
+            .semantics { heading() }
     )
 }
 
@@ -1407,6 +1412,7 @@ private fun PickerOptionItem(
             .fillMaxWidth()
             .scale(scale)
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),
@@ -1781,6 +1787,7 @@ private fun BrightnessOptionItem(
             .fillMaxWidth()
             .scale(scale)
             .clip(RoundedCornerShape(8.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),

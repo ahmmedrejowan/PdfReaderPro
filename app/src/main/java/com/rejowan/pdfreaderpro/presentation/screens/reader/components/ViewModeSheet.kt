@@ -79,6 +79,10 @@ import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 // Design colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -480,7 +484,7 @@ private fun SectionLabel(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f * alpha),
-        modifier = modifier.padding(start = 4.dp)
+        modifier = modifier.padding(start = 4.dp).semantics { heading() }
     )
 }
 
@@ -532,6 +536,7 @@ private fun ModeChip(
         modifier = modifier
             .scale(scale)
             .clip(RoundedCornerShape(14.dp))
+            .semantics { selected = isSelected }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = accentColor),

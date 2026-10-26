@@ -729,7 +729,6 @@
     <string name="cd_processing">Á phróiseáil</string>
     <string name="cd_completed">Críochnaithe</string>
     <string name="cd_progress">Táscaire dul chun cinn</string>
-    <string name="cd_checkbox">Bosca seiceála</string>
     <string name="cd_checked">Seiceáilte</string>
     <string name="cd_unchecked">Gan seiceáil</string>
     <string name="cd_toggle">Scoránaigh</string>
@@ -1729,5 +1728,19 @@
         <item quantity="few">%d PDF</item>
         <item quantity="many">%d PDF</item>
         <item quantity="other">%d PDF</item>
+    </plurals>
+    <string name="n_selected">Roghnaithe: %1$d</string>
+    <string name="all_selected">Uile</string>
+    <string name="color_black">Dubh</string>
+    <string name="color_dark_gray">Liath dorcha</string>
+    <string name="color_gray">Liath</string>
+    <string name="color_purple">Corcra</string>
+    <string name="color_amber">Ómra</string>
+    <plurals name="of_n_files">
+        <item quantity="one">as %1$d comhad</item>
+        <item quantity="two">as %1$d comhad</item>
+        <item quantity="few">as %1$d comhad</item>
+        <item quantity="many">as %1$d comhad</item>
+        <item quantity="other">as %1$d comhad</item>
     </plurals>
 </resources>

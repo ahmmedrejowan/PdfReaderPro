@@ -73,6 +73,8 @@ import androidx.compose.ui.unit.dp
 import com.rejowan.pdfreaderpro.R
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 
 // Design colors
 private val AccentPurple = Color(0xFF9575CD)
@@ -544,7 +546,7 @@ private fun SectionLabel(
             fontWeight = FontWeight.Medium
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-        modifier = modifier.padding(start = 4.dp)
+        modifier = modifier.padding(start = 4.dp).semantics { heading() }
     )
 }
 
