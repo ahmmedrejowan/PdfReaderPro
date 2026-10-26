@@ -11,8 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Chinese** - The app is available in Simplified Chinese (#107)
 - **Help Translate** - A link in Settings to translate the app on Crowdin
 
+### Changed
+- **Screen Reader Support** - TalkBack no longer reads "Decorative image" on every row, settings and tool options read as one switch or checkbox with their state, selected options and colors are announced, section titles are headings, and search results and tool progress are read out as they change
+
 ### Fixed
-- **Untranslated Text** - Sort options, folder counts and page counts in file info were always in English; they now follow the app's language, and the Watermark page option no longer shows a placeholder
+- **Untranslated Text** - Sort options, folder counts and page counts in file info were always in English; they now follow the app's language, and the Watermark page option no longer shows a placeholder. The file selection bar on Home and Folders is translated too
 
 ---
 
