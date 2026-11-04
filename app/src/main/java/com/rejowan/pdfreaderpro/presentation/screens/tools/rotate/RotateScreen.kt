@@ -111,6 +111,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 // Accent colors
 private val AccentOrange = Color(0xFFFF9800)  // Rotate theme color
@@ -168,7 +169,7 @@ fun RotateScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
@@ -227,7 +228,7 @@ fun RotateScreen(
                             context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onRotateMore = { viewModel.reset() },
-                        onDone = { navController.popBackStack() }
+                        onDone = { navController.popBackStackSafely() }
                     )
                 }
                 state.isLoading -> {

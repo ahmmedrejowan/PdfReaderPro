@@ -95,6 +95,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 // Accent colors
 private val AccentPurple = Color(0xFF9575CD) // PDF to Image theme
@@ -148,7 +149,7 @@ fun PdfToImageScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
@@ -222,7 +223,7 @@ fun PdfToImageScreen(
                             context.startActivity(Intent.createChooser(viewIntent, viewImageLabel))
                         },
                         onExportMore = { viewModel.reset() },
-                        onDone = { navController.popBackStack() }
+                        onDone = { navController.popBackStackSafely() }
                     )
                 }
                 state.isLoading -> {

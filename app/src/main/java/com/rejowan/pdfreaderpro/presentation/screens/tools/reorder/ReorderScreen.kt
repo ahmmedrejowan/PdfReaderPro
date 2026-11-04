@@ -104,6 +104,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 // Accent colors
 private val AccentIndigo = Color(0xFF7986CB)  // Reorder theme color
@@ -155,7 +156,7 @@ fun ReorderScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
@@ -225,7 +226,7 @@ fun ReorderScreen(
                             context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onReorderMore = { viewModel.reset() },
-                        onDone = { navController.popBackStack() }
+                        onDone = { navController.popBackStackSafely() }
                     )
                 }
                 state.isLoading -> {

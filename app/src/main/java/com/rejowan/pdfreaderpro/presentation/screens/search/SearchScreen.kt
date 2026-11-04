@@ -98,6 +98,7 @@ import com.rejowan.pdfreaderpro.presentation.components.dialogs.DeleteConfirmShe
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.FileInfoDialog
 import com.rejowan.pdfreaderpro.presentation.components.dialogs.RenameSheet
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToReader
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 import com.rejowan.pdfreaderpro.util.FileOperations
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -179,7 +180,7 @@ fun SearchScreen(
             query = searchQuery,
             onQueryChange = { viewModel.setSearchQuery(it) },
             onClear = { viewModel.clearSearch() },
-            onBack = { navController.popBackStack() },
+            onBack = { navController.popBackStackSafely() },
             onSearch = { focusManager.clearFocus() },
             focusRequester = focusRequester
         )

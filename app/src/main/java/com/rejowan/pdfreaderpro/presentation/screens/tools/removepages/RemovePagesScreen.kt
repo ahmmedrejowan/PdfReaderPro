@@ -105,6 +105,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 // Accent colors
 private val AccentRed = Color(0xFFEF5350)  // Remove pages theme color
@@ -164,7 +165,7 @@ fun RemovePagesScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
@@ -223,7 +224,7 @@ fun RemovePagesScreen(
                             context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onRemoveMore = { viewModel.reset() },
-                        onDone = { navController.popBackStack() }
+                        onDone = { navController.popBackStackSafely() }
                     )
                 }
                 state.isLoading -> {

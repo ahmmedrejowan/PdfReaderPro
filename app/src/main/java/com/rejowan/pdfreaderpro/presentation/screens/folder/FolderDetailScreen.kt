@@ -99,6 +99,7 @@ import java.util.Locale
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 private val FolderAmber = Color(0xFFFFB74D)
 private val FolderAmberDark = Color(0xFFF57C00)
@@ -184,7 +185,7 @@ fun FolderDetailScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.cd_back)

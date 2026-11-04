@@ -99,6 +99,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 // Accent colors
 private val AccentAmber = Color(0xFFFFB74D)  // Lock theme color
@@ -148,7 +149,7 @@ fun LockScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
@@ -194,7 +195,7 @@ fun LockScreen(
                             context.startActivity(Intent.createChooser(shareIntent, sharePdfLabel))
                         },
                         onLockMore = { viewModel.reset() },
-                        onDone = { navController.popBackStack() }
+                        onDone = { navController.popBackStackSafely() }
                     )
                 }
                 state.isLoading -> {

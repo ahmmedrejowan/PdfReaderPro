@@ -118,6 +118,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 // Accent colors - consistent with app design system
 private val AccentPurple = Color(0xFF9575CD)    // Primary actions (merge)
@@ -183,7 +184,7 @@ fun MergeScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
@@ -259,7 +260,7 @@ fun MergeScreen(
                         viewModel.reset()
                     },
                     onDone = {
-                        navController.popBackStack()
+                        navController.popBackStackSafely()
                     }
                 )
             } else {

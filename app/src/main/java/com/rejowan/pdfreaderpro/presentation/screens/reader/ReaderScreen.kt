@@ -92,6 +92,7 @@ import com.rejowan.pdfreaderpro.presentation.navigation.navigateToRemovePagesToo
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToWatermarkTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPageNumbersTool
 import com.rejowan.pdfreaderpro.presentation.navigation.navigateToPdfToImageTool
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageJumpSheet
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PageScrubber
 import com.rejowan.pdfreaderpro.presentation.screens.reader.components.PasswordDialog
@@ -123,6 +124,17 @@ fun ReaderScreen(
     val context = LocalContext.current
     val view = LocalView.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val activity = context as? Activity
+
+    // Leaves the reader. Opened from another app, the reader is the only screen,
+    // so closing it returns to that app instead of doing nothing.
+    val closeReader: () -> Unit = {
+        if (navController.previousBackStackEntry == null) {
+            activity?.finish()
+        } else {
+            navController.popBackStackSafely()
+        }
+    }
     val isDarkMode = com.rejowan.pdfreaderpro.presentation.theme.LocalIsDarkTheme.current
 
     // SAF launcher for saving document
@@ -163,8 +175,6 @@ fun ReaderScreen(
             viewModel.onAction(ReaderAction.StartSigning)
         }
     }
-
-    val activity = context as? Activity
 
     // Background color for PdfViewer — follows the app theme (true black in Black theme)
     val backgroundColor = MaterialTheme.colorScheme.background
@@ -328,10 +338,10 @@ fun ReaderScreen(
                 }
                 is ReaderEvent.NavigateToPage -> { }
                 is ReaderEvent.DocumentClosed -> {
-                    navController.popBackStack()
+                    closeReader()
                 }
                 is ReaderEvent.DocumentDeleted -> {
-                    navController.popBackStack()
+                    closeReader()
                 }
                 is ReaderEvent.ShareDocument -> {
                     try {
@@ -381,7 +391,7 @@ fun ReaderScreen(
                 viewModel.onAction(ReaderAction.SubmitPassword(password, remember))
             },
             onDismiss = {
-                navController.popBackStack()
+                closeReader()
             }
         )
     }
@@ -392,7 +402,7 @@ fun ReaderScreen(
             ErrorState(
                 message = error,
                 onRetry = { viewModel.onAction(ReaderAction.RetryLoad) },
-                onBack = { navController.popBackStack() }
+                onBack = closeReader
             )
             return
         }
@@ -519,7 +529,7 @@ fun ReaderScreen(
                 ReaderTopBar(
                     title = state.documentTitle ?: "PDF Reader",
                     isVisible = state.isToolbarVisible && !state.isSearchActive && !state.isFullScreen,
-                    onBackClick = { navController.popBackStack() },
+                    onBackClick = closeReader,
                     onSearchClick = { viewModel.onAction(ReaderAction.ToggleSearch) },
                     onMenuClick = { viewModel.onAction(ReaderAction.ShowTopBarMenu) },
                     isDarkMode = isDarkMode,

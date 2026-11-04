@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.rejowan.pdfreaderpro.R
+import com.rejowan.pdfreaderpro.presentation.navigation.popBackStackSafely
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +24,7 @@ fun SettingsScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.settings)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStackSafely() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 }
@@ -32,7 +33,7 @@ fun SettingsScreen(
     ) { paddingValues ->
         // Reuse the shared settings content
         SettingsScreenContent(
-            onBackClick = { navController.popBackStack() },
+            onBackClick = { navController.popBackStackSafely() },
             paddingValues = paddingValues
         )
     }

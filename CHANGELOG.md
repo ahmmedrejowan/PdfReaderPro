@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Screen Reader Support** - TalkBack no longer reads "Decorative image" on every row, settings and tool options read as one switch or checkbox with their state, selected options and colors are announced, section titles are headings, and search results and tool progress are read out as they change
 
 ### Fixed
+- **Blank Screen on Back** - Tapping a screen's back button twice quickly no longer leaves a blank white screen, and Back in a PDF opened from another app returns to that app instead of doing nothing
 - **Untranslated Text** - Sort options, folder counts and page counts in file info were always in English; they now follow the app's language, and the Watermark page option no longer shows a placeholder. The file selection bar on Home and Folders is translated too
 
 ---
